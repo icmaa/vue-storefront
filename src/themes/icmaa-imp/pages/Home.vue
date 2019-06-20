@@ -4,6 +4,11 @@
 
     <promoted-offers />
 
+    <cms-block identifier="navigation-main" />
+    <cms-block identifier="test" />
+    <cms-block identifier="navigation-main" />
+    <cms-block identifier="test" />
+
     <section class="new-collection container px15" v-if="everythingNewCollection && everythingNewCollection.length">
       <div>
         <header class="col-md-12">
@@ -47,6 +52,7 @@ import HeadImage from 'theme/components/core/blocks/MainSlider/HeadImage'
 import Onboard from 'theme/components/theme/blocks/Home/Onboard'
 import PromotedOffers from 'theme/components/theme/blocks/PromotedOffers/PromotedOffers'
 import TileLinks from 'theme/components/theme/blocks/TileLinks/TileLinks'
+import CmsBlock from 'theme/components/core/blocks/ICMAA/Cms/Block.vue'
 import { Logger } from '@vue-storefront/core/lib/logger'
 import { mapGetters } from 'vuex'
 import config from 'config'
@@ -54,6 +60,7 @@ import config from 'config'
 export default {
   mixins: [Home],
   components: {
+    CmsBlock,
     HeadImage,
     Onboard,
     ProductListing,
