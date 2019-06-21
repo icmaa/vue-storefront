@@ -2,8 +2,11 @@ import { ActionTree } from 'vuex'
 import * as types from './mutation-types'
 import RootState from '@vue-storefront/core/types/RootState';
 import BlockState from '../../types/BlockState'
+
 import Axios from 'axios'
 import config from 'config'
+
+import { currentStoreView } from '@vue-storefront/core/lib/multistore'
 import { processURLAddress } from '@vue-storefront/core/helpers'
 import { Logger } from '@vue-storefront/core/lib/logger'
 
@@ -18,18 +21,22 @@ const actions: ActionTree<BlockState, RootState> = {
     const state = context.state
     if (!state.items || state.items.length === 0 || !state.items.find(itm => itm[key] === value)) {
       return new Promise((resolve, reject) => {
+        let params = {
+          'type': 'cms-block',
+          'uid': encodeURIComponent(value),
+          'lang': null
+        }
+
+        let multistore = currentStoreView()
+        if (multistore) {
+          params.lang = multistore.i18n.defaultLocale.toLowerCase()
+        }
+
         Axios.get(
           processURLAddress(config.icmaa_cms.endpoint),
-          {
-            responseType: 'json',
-            params: {
-              'type': 'cms-block',
-              'uid': encodeURIComponent(value)
-            }
-          }
+          { responseType: 'json', params }
         ).then((resp) => {
           let result = resp.data.result;
-
           if (result.length === 0) {
             Logger.error('Empty cms response:', 'icmaa-cms', value)()
             return {}

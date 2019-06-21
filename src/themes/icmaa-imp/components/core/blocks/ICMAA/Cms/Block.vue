@@ -3,7 +3,6 @@
 </template>
 
 <script>
-import { Logger } from '@vue-storefront/core/lib/logger'
 import Block from 'src/modules/icmaa-cms/components/Block'
 
 export default {

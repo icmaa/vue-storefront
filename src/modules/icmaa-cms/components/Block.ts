@@ -1,3 +1,5 @@
+import { Logger } from '@vue-storefront/core/lib/logger'
+
 export default {
   name: 'IcmaaCmsBlock',
   props: {
