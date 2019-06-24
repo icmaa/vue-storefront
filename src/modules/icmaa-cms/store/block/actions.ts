@@ -11,44 +11,36 @@ import { processURLAddress } from '@vue-storefront/core/helpers'
 import { Logger } from '@vue-storefront/core/lib/logger'
 
 const actions: ActionTree<BlockState, RootState> = {
-  /**
-   * @param context
-   * @param {any} key
-   * @param {any} value
-   * @returns {Promise<T> & Promise<any>}
-   */
-  single (context, { value, key = 'identifier' }) {
+  async single (context, { value, key = 'identifier' }): Promise<any> {
     const state = context.state
     if (!state.items || state.items.length === 0 || !state.items.find(itm => itm[key] === value)) {
-      return new Promise((resolve, reject) => {
-        let params = {
-          'type': 'cms-block',
-          'uid': encodeURIComponent(value),
-          'lang': null
+      let params = {
+        'type': 'cms-block',
+        'uid': encodeURIComponent(value),
+        'lang': null
+      }
+
+      let multistore = currentStoreView()
+      if (multistore) {
+        params.lang = multistore.i18n.defaultLocale.toLowerCase()
+      }
+
+      return Axios.get(
+        processURLAddress(config.icmaa_cms.endpoint),
+        { responseType: 'json', params }
+      ).then(resp => {
+        let result = resp.data.result;
+        if (result.length === 0) {
+          Logger.error('Empty cms response:', 'icmaa-cms', value)()
+          return {}
         }
 
-        let multistore = currentStoreView()
-        if (multistore) {
-          params.lang = multistore.i18n.defaultLocale.toLowerCase()
-        }
+        result[key] = value;
+        context.commit(types.ICMAA_CMS_BLOCK_ADD_CMS_BLOCK, result)
 
-        Axios.get(
-          processURLAddress(config.icmaa_cms.endpoint),
-          { responseType: 'json', params }
-        ).then((resp) => {
-          let result = resp.data.result;
-          if (result.length === 0) {
-            Logger.error('Empty cms response:', 'icmaa-cms', value)()
-            return {}
-          }
-
-          result[key] = value;
-          context.commit(types.ICMAA_CMS_BLOCK_ADD_CMS_BLOCK, result)
-
-          return result
-        }).catch(err => {
-          Logger.error(`Error while fetching block "${value}"`, 'icmaa-cms', err)()
-        })
+        return result
+      }).catch(err => {
+        Logger.error(`Error while fetching block "${value}"`, 'icmaa-cms', err)()
       })
     } else {
       return new Promise((resolve, reject) => {
