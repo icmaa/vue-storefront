@@ -1,4 +1,5 @@
-import { Logger } from '@vue-storefront/core/lib/logger'
+import { mapGetters } from 'vuex'
+import BlockStateItem from '../types/BlockState'
 
 export default {
   name: 'IcmaaCmsBlock',
@@ -7,19 +8,19 @@ export default {
       type: String,
       default: null,
       required: true
-    },
-    content: {
-      type: String,
-      default: null,
-      required: false
     }
   },
-  created () {
-    this.$store.dispatch('icmaaCmsBlock/single', { value: this.identifier })
+  async created () {
+    if (!this.block) {
+      await this.$store.dispatch('icmaaCmsBlock/single', { value: this.identifier })
+    }
   },
   computed: {
-    block () {
-      return this.$store.getters['icmaaCmsBlock/blockByIdentifier'](this.identifier)
+    ...mapGetters({
+      blockByIdentifier: 'icmaaCmsBlock/blockByIdentifier'
+    }),
+    block (): BlockStateItem {
+      return this.blockByIdentifier(this.identifier)
     }
   }
 }
