@@ -13,5 +13,6 @@ Add the following line to your themes routes:
 
 ## Todo
 
+[ ] Add custom vuex store  
 [ ] Add caching  
 [ ] Register custom urls
