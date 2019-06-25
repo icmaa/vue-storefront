@@ -26,6 +26,7 @@ import { InstantCheckout } from './instant-checkout'
 import { OrderHistory } from './order-history'
 // ICMAA modules
 import { IcmaaCms } from './icmaa-cms'
+import { IcmaaCategory } from './icmaa-category'
 
 // import { Example } from './module-template'
 
