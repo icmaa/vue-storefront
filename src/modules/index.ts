@@ -80,6 +80,8 @@ export const registerModules: VueStorefrontModule[] = [
   InstantCheckout,
   Url,
   OrderHistory,
-  IcmaaCms
   // Example
+  // ICMAA Modules:
+  IcmaaCms,
+  IcmaaCategory
 ]

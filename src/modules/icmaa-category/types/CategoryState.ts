@@ -8,5 +8,10 @@ export interface CategoryStateListItem {
 }
 
 export interface CategoryStateCategory {
-  id: string
+  id: number,
+  parent_id: number,
+  path: string,
+  children_count: number,
+  url_key: string,
+  slug: string
 }

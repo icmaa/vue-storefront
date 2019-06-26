@@ -12,13 +12,12 @@ export default {
       return String(this.$route.params.parentCategoryId)
     },
     categories: function () {
-      Logger.error('Lorem ipsum', 'DEBUG', this.listByParentId)()
-      return {}
+      return this.listByParentId(this.rootCategoryId)
     }
   },
   methods: {
     fetchCategories () {
-      return this.$store.dispatch('icmaaCategory/list', { parent: this.rootCategoryId })
+      return this.$store.dispatch('icmaaCategory/list', { parentId: this.rootCategoryId })
     }
   },
   serverPrefetch () {
