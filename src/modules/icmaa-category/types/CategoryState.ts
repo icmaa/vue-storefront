@@ -14,5 +14,6 @@ export interface CategoryStateCategory {
   children_count: number,
   url_key: string,
   slug: string,
-  level: number
+  level: number,
+  is_active: boolean
 }

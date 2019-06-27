@@ -8,7 +8,7 @@ import { fetchCategoryById, fetchChildCategories } from '../helpers/fetchCategor
 import { Logger } from '@vue-storefront/core/lib/logger'
 
 const actions: ActionTree<CategoryState, RootState> = {
-  async list (context, { parentId, depth = 2 }): Promise<any> {
+  async list (context, { parentId, crawlDepth = 1 }): Promise<any> {
     if (!context.state.lists.find((item) => item.parent.id === parentId)) {
       let parent = await fetchCategoryById({ parentId })
         .then(resp => {
@@ -37,7 +37,7 @@ const actions: ActionTree<CategoryState, RootState> = {
         return
       }
 
-      let list = await fetchChildCategories({ parentId, level: (parent.level + depth) })
+      let list = await fetchChildCategories({ parentId, level: (parent.level + crawlDepth) })
         .then(resp => resp)
         .catch(error => {
           Logger.error('Error while fetching children of category: ' + parentId, 'icmaaCategoryList', error)()

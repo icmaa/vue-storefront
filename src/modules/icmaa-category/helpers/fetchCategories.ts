@@ -2,6 +2,7 @@ import { CategoryStateCategory } from '../types/CategoryState'
 import SearchQuery from '@vue-storefront/core/lib/search/searchQuery'
 import { SearchResponse } from '@vue-storefront/core/types/search/SearchResponse';
 import { quickSearchByQuery } from '@vue-storefront/core/lib/search'
+import config from 'config'
 
 export const fetchCategoryById = ({ parentId }): Promise<SearchResponse> => {
   let searchQuery = new SearchQuery()
@@ -10,11 +11,11 @@ export const fetchCategoryById = ({ parentId }): Promise<SearchResponse> => {
   return quickSearchByQuery({ entityType: 'category', query: searchQuery, size: 1 })
 }
 
-export const fetchChildCategories = async ({ parentId, level = 1, collectedCategories = [] }): Promise<CategoryStateCategory[]> => {
+export const fetchChildCategories = async ({ parentId, level = 1, onlyShowTargetLevelItems = true, collectedCategories = [] }): Promise<CategoryStateCategory[]> => {
   let searchQuery = new SearchQuery()
   searchQuery.applyFilter({ key: 'parent_id', value: { 'eq': parentId } })
 
-  return quickSearchByQuery({ entityType: 'category', query: searchQuery, size: 1000 })
+  return quickSearchByQuery({ entityType: 'category', query: searchQuery, includeFields: config.entities.category.includeFields, size: 1000 })
     .then(resp => {
       if (resp.items.length > 0 && resp.items[0].level <= level) {
         let childIds = []
@@ -23,7 +24,9 @@ export const fetchChildCategories = async ({ parentId, level = 1, collectedCateg
             childIds.push(item.id)
           }
 
-          collectedCategories.push(item)
+          if (!onlyShowTargetLevelItems || (onlyShowTargetLevelItems && resp.items[0].level === level)) {
+            collectedCategories.push(item)
+          }
         })
 
         if (childIds.length > 0) {

@@ -14,7 +14,7 @@ export default {
       return this.listByParentId(this.rootCategoryId)
     },
     categories: function () {
-      return this.list.list
+      return this.list.list.filter(category => category.is_active === true)
     },
     parent: function () {
       return this.list.parent
@@ -22,7 +22,7 @@ export default {
   },
   methods: {
     fetchCategories () {
-      return this.$store.dispatch('icmaaCategory/list', { parentId: this.rootCategoryId, depth: this.depth })
+      return this.$store.dispatch('icmaaCategory/list', { parentId: this.rootCategoryId, crawlDepth: this.depth })
     }
   },
   serverPrefetch () {
