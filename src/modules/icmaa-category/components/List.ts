@@ -1,23 +1,28 @@
 import { mapState, mapGetters } from 'vuex'
-import { isServer } from '@vue-storefront/core/helpers'
-import config from 'config'
-
-import { Logger } from '@vue-storefront/core/lib/logger';
 
 export default {
   name: 'IcmaaCategoryList',
   computed: {
     ...mapGetters({ listByParentId: 'icmaaCategory/listByParentId' }),
-    rootCategoryId (): string {
-      return String(this.$route.params.parentCategoryId)
+    rootCategoryId (): number {
+      return Number(this.$route.params.parentCategoryId)
+    },
+    depth (): number {
+      return Number(this.$route.query.depth) || 2
+    },
+    list: function () {
+      return this.listByParentId(this.rootCategoryId)
     },
     categories: function () {
-      return this.listByParentId(this.rootCategoryId)
+      return this.list.list
+    },
+    parent: function () {
+      return this.list.parent
     }
   },
   methods: {
     fetchCategories () {
-      return this.$store.dispatch('icmaaCategory/list', { parentId: this.rootCategoryId })
+      return this.$store.dispatch('icmaaCategory/list', { parentId: this.rootCategoryId, depth: this.depth })
     }
   },
   serverPrefetch () {

@@ -13,5 +13,6 @@ export interface CategoryStateCategory {
   path: string,
   children_count: number,
   url_key: string,
-  slug: string
+  slug: string,
+  level: number
 }

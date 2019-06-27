@@ -3,19 +3,14 @@ import RootState from '@vue-storefront/core/types/RootState';
 import CategoryState, { CategoryStateListItem, CategoryStateCategory } from '../types/CategoryState'
 import * as types from './mutation-types'
 import rootStore from '@vue-storefront/core/store'
-import SearchQuery from '@vue-storefront/core/lib/search/searchQuery'
-import { quickSearchByQuery } from '@vue-storefront/core/lib/search'
-import { currentStoreView } from '@vue-storefront/core/lib/multistore'
+import { fetchCategoryById, fetchChildCategories } from '../helpers/fetchCategories'
 
 import { Logger } from '@vue-storefront/core/lib/logger'
 
 const actions: ActionTree<CategoryState, RootState> = {
-  async list (context, { parentId }): Promise<any> {
+  async list (context, { parentId, depth = 2 }): Promise<any> {
     if (!context.state.lists.find((item) => item.parent.id === parentId)) {
-      let parentSearchQuery = new SearchQuery()
-      parentSearchQuery.applyFilter({ key: 'id', value: { 'eq': parentId } })
-
-      let parentCategory = await quickSearchByQuery({ entityType: 'category', query: parentSearchQuery, size: 1 })
+      let parent = await fetchCategoryById({ parentId })
         .then(resp => {
           for (let category of resp.items) {
             if (category.url_path) {
@@ -31,21 +26,27 @@ const actions: ActionTree<CategoryState, RootState> = {
             }
           }
 
-          return resp
+          return resp.items[0]
+        })
+        .catch(error => {
+          Logger.error('Can\'t find category: ' + parentId, 'icmaaCategoryList', error)()
+          return false
         })
 
-      let childrenSearchQuery = new SearchQuery()
-      childrenSearchQuery.applyFilter({ key: 'path', value: { 'regexp': '$' + parentCategory.items[0].path + '.*' } })
+      if (!parent) {
+        return
+      }
 
-      let childeCategories = await quickSearchByQuery({ entityType: 'category', query: childrenSearchQuery })
-        .then(resp => {
-          Logger.error('CATCOUNT', 'DEBUG', resp.total)()
-          for (let category of resp.items) {
-            Logger.error('CAT-PATH', 'DEBUG', category.path)()
-          }
-
-          return resp
+      let list = await fetchChildCategories({ parentId, level: (parent.level + depth) })
+        .then(resp => resp)
+        .catch(error => {
+          Logger.error('Error while fetching children of category: ' + parentId, 'icmaaCategoryList', error)()
         })
+
+      context.commit(
+        types.ICMAA_CATEGORY_LIST_ADD_CATEGORY_LIST,
+        { parent, list }
+      )
     }
   }
 }
