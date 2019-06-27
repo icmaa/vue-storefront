@@ -3,7 +3,12 @@
     <h1>{{ parent.name }}</h1>
     <ul>
       <li :key="category.slug" v-for="category in categories">
-        {{ category.name }} - {{ category.slug }}
+        <router-link
+          :to="localizedRoute({ name: 'category', fullPath: category.url_path, params: { id: category.id, slug: category.slug }})"
+          data-testid="categoryLink"
+        >
+          {{ category.name }}
+        </router-link>
       </li>
     </ul>
   </div>
