@@ -46,7 +46,7 @@ let routes = [
   { name: 'cms-block-demo-page-ssr', path: '/cms-block-demo-page-ssr', component: CmsBlockDemoPageSsr },
   { name: 'cms-page-sync', path: '/cms-page-sync', component: CmsData, props: {identifier: 'about-us', type: 'Page', sync: true} },
   /** ICMAA / Custom pages */
-  { name: 'icmaa-category-list', path: '/icmaa-category-list/:parentCategoryId', component: IcmaaCategoryList }
+  { name: 'icmaa-category-list', path: '/icmaa-category-list/:parentCategoryId/:depth?', component: IcmaaCategoryList }
 ]
 if (!config.products.useShortCatalogUrls) {
   routes = routes.concat([

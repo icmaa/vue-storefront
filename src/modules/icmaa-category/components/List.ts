@@ -1,6 +1,7 @@
 import { mapGetters } from 'vuex'
 import { CategoryStateCategory } from '../types/CategoryState'
 import { extractPrefix } from '../helpers/fetchCategories'
+import { Logger } from '@vue-storefront/core/lib/logger';
 
 interface Letter {
   letter: string,
@@ -16,13 +17,16 @@ export default {
       return Number(this.$route.params.parentCategoryId)
     },
     depth (): number {
-      return Number(this.$route.query.depth) || undefined
+      return Number(this.$route.params.depth || this.$route.query.depth) || undefined
     },
     list: function (): CategoryStateCategory[] {
       return this.sortedListByParentId(this.rootCategoryId)
     },
     parent: function (): CategoryStateCategory {
       return this.list.parent
+    },
+    notEmpty: function (): boolean {
+      return (this.list !== false)
     },
     categories: function (): CategoryStateCategory[] {
       return this.list.list.filter(category => category.is_active === true)
@@ -47,7 +51,9 @@ export default {
   },
   methods: {
     fetchCategories (): Promise<any> {
-      return this.$store.dispatch('icmaaCategory/list', { parentId: this.rootCategoryId, crawlDepth: this.depth })
+      if (this.rootCategoryId) {
+        return this.$store.dispatch('icmaaCategory/list', { parentId: this.rootCategoryId, crawlDepth: this.depth })
+      }
     }
   },
   serverPrefetch (): Promise<any> {

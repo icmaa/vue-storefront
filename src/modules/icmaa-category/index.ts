@@ -13,3 +13,5 @@ const moduleConfig: VueStorefrontModuleConfig = {
 }
 
 export const IcmaaCategory = new VueStorefrontModule(moduleConfig)
+
+export { registerModules } from './urlExtend'

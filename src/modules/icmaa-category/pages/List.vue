@@ -1,5 +1,5 @@
 <template>
-  <div id="category-list" class="px25" v-if="list">
+  <div id="category-list" class="px25" v-if="notEmpty">
     <h1>{{ parent.name }}</h1>
     <ul class="slingrope">
       <li :key="letter.letter" v-for="letter in categoriesGroupedByFirstLetter">

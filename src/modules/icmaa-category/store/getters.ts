@@ -8,11 +8,14 @@ const getters: GetterTree<CategoryState, RootState> = {
   listByParentId: (state) => (id: number): CategoryStateListItem => {
     return state.lists.find(list => list.parent.id === id)
   },
-  sortedListByParentId: (state, getters) => (id: number): CategoryStateListItem => {
+  sortedListByParentId: (state, getters) => (id: number): CategoryStateListItem|boolean => {
     let list = getters.listByParentId(id)
-    list.list.sort(sortByLetter)
+    if (list) {
+      list.list.sort(sortByLetter)
+      return list
+    }
 
-    return list
+    return false
   }
 }
 
