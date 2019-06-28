@@ -38,11 +38,10 @@ export const fetchChildCategories = async ({ parentId, sort = 'position:asc', le
     })
 }
 
+const SORT_PREFIX_REGEXP = /^(the\s)/gmi
+export const extractPrefix = (name) => name.replace(SORT_PREFIX_REGEXP, '')
+
 export const sortByLetter = (a: CategoryStateCategory, b: CategoryStateCategory) => {
-  const SORT_PREFIX_REGEXP = /^(the\s)/gmi
-  const extractPrefix = (name) => name.replace(SORT_PREFIX_REGEXP, '')
-
   const [aName, bName] = [extractPrefix(a.name), extractPrefix(b.name)]
-
   return aName === bName ? 0 : aName < bName ? -1 : 1
 }

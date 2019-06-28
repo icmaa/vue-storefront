@@ -47,6 +47,8 @@ const actions: ActionTree<CategoryState, RootState> = {
         types.ICMAA_CATEGORY_LIST_ADD_CATEGORY_LIST,
         { parent, list }
       )
+
+      return { parent, list }
     }
   }
 }
