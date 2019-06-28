@@ -1,11 +1,14 @@
 <template>
-  <div :class="['category-list']" v-if="list">
+  <div id="category-list" class="px25" v-if="list">
     <h1>{{ parent.name }}</h1>
     <ul class="slingrope">
       <li :key="letter.letter" v-for="letter in categoriesGroupedByFirstLetter">
-        <router-link :to="`#${letter.anchor}`">
-          {{ letter.letter }}
-        </router-link>
+        <router-link :to="`#${letter.anchor}`" v-html="letter.letter" />
+      </li>
+    </ul>
+    <ul class="slingrope-sidebar" :class="{ 'hidden': !scrollbarVisible }">
+      <li :key="letter.letter" v-for="letter in categoriesGroupedByFirstLetter">
+        <router-link :to="`#${letter.anchor}`" v-html="letter.letter" />
       </li>
     </ul>
     <ul class="letters">
@@ -16,9 +19,8 @@
             <router-link
               :to="localizedRoute({ name: 'category', fullPath: category.url_path, params: { id: category.id, slug: category.slug }})"
               data-testid="categoryLink"
-            >
-              {{ category.name }}
-            </router-link>
+              v-html="category.name"
+            />
           </li>
         </ul>
       </li>
@@ -33,6 +35,131 @@
 import List from 'src/modules/icmaa-category/components/List'
 
 export default {
-  mixins: [ List ]
+  mixins: [ List ],
+  data () {
+    return {
+      isScrolling: false,
+      scrollbarVisible: false,
+      scrollTop: 0,
+      showFromY: 222
+    }
+  },
+  beforeMount () {
+    window.addEventListener('scroll', () => {
+      this.isScrolling = true
+    }, { passive: true })
+
+    setInterval(this.hasScrolled, 50)
+  },
+  methods: {
+    hasScrolled () {
+      if (this.isScrolling) {
+        this.scrollTop = window.scrollY
+        this.scrollbarVisible = (this.scrollTop > this.showFromY)
+      }
+
+      this.isScrolling = false
+    }
+  }
 }
 </script>
+
+<style lang="scss">
+
+@import '~theme/css/base/text';
+@import '~theme/css/variables/colors';
+@import '~theme/css/helpers/functions/color';
+$bg-secondary: color(secondary, $colors-background);
+
+#category-list {
+
+  .slingrope {
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+
+    &.hidden,
+    &::-webkit-scrollbar {
+      display: none;
+    }
+
+    &.fixed {
+      top: 55px;
+      z-index: 1000;
+      width: 100%;
+      background: white;
+    }
+
+    li {
+      flex: 40px;
+      flex-grow: 0;
+      flex-shrink: 0;
+      height: 40px;
+      margin: 0 5px 6px 0;
+
+      a {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 40px;
+        background: $bg-secondary;
+        border: 1px solid $bg-secondary;
+        text-decoration: none;
+
+        &:hover {
+          background: transparent;
+        }
+      }
+    }
+  }
+
+  .slingrope-sidebar {
+    position: fixed;
+    right: 0;
+    top: 55px;
+    margin: 0 10px 0;
+    padding: 15px 8px;
+    background: white;
+    list-style: none;
+    text-align: center;
+
+    li {
+      color: $bg-secondary;
+      margin-bottom: 3px;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+
+      a {
+        font-size: 12px;
+      }
+    }
+  }
+
+  .letters {
+    list-style: none;
+    padding: 0;
+
+    &.fixed-nav {
+      margin-top: 40px + 20px;
+    }
+
+    .letter {
+
+      .categories {
+        list-style: none;
+        padding: 0;
+
+        .category {
+          margin-bottom: 10px;
+        }
+      }
+    }
+  }
+}
+</style>
