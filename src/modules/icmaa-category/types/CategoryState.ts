@@ -10,8 +10,10 @@ export interface CategoryStateListItem {
 export interface CategoryStateCategory {
   id: number,
   parent_id: number,
+  name: string,
   path: string,
   children_count: number,
+  url_path: string,
   url_key: string,
   slug: string,
   level: number,

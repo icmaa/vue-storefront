@@ -11,11 +11,11 @@ export const fetchCategoryById = ({ parentId }): Promise<SearchResponse> => {
   return quickSearchByQuery({ entityType: 'category', query: searchQuery, size: 1 })
 }
 
-export const fetchChildCategories = async ({ parentId, level = 1, onlyShowTargetLevelItems = true, collectedCategories = [] }): Promise<CategoryStateCategory[]> => {
+export const fetchChildCategories = async ({ parentId, sort = 'position:asc', level = 1, onlyShowTargetLevelItems = true, collectedCategories = [] }): Promise<CategoryStateCategory[]> => {
   let searchQuery = new SearchQuery()
   searchQuery.applyFilter({ key: 'parent_id', value: { 'eq': parentId } })
 
-  return quickSearchByQuery({ entityType: 'category', query: searchQuery, includeFields: config.entities.category.includeFields, size: 1000 })
+  return quickSearchByQuery({ entityType: 'category', query: searchQuery, sort: sort, includeFields: config.entities.category.includeFields, size: 1000 })
     .then(resp => {
       if (resp.items.length > 0 && resp.items[0].level <= level) {
         let childIds = []
@@ -36,4 +36,13 @@ export const fetchChildCategories = async ({ parentId, level = 1, onlyShowTarget
 
       return collectedCategories
     })
+}
+
+export const sortByLetter = (a: CategoryStateCategory, b: CategoryStateCategory) => {
+  const SORT_PREFIX_REGEXP = /^(the\s)/gmi
+  const extractPrefix = (name) => name.replace(SORT_PREFIX_REGEXP, '')
+
+  const [aName, bName] = [extractPrefix(a.name), extractPrefix(b.name)]
+
+  return aName === bName ? 0 : aName < bName ? -1 : 1
 }

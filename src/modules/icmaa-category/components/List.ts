@@ -1,30 +1,23 @@
-import { mapState, mapGetters } from 'vuex'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'IcmaaCategoryList',
   computed: {
-    ...mapGetters({ listByParentId: 'icmaaCategory/listByParentId' }),
+    ...mapGetters({ sortedListByParentId: 'icmaaCategory/sortedListByParentId' }),
     rootCategoryId (): number {
       return Number(this.$route.params.parentCategoryId)
     },
     depth (): number {
-      return Number(this.$route.query.depth) || 2
+      return Number(this.$route.query.depth) || undefined
     },
     list: function () {
-      return this.listByParentId(this.rootCategoryId)
-    },
-    categories: function () {
-      return this.list.list
-        .filter(category => category.is_active === true)
-        .sort((a, b) => {
-          const extractPrefix = (name) => name.replace(/^(the\s)/gmi, '')
-          const aName = extractPrefix(a.name)
-          const bName = extractPrefix(b.name)
-          return aName === bName ? 0 : aName < bName ? -1 : 1
-        })
+      return this.sortedListByParentId(this.rootCategoryId)
     },
     parent: function () {
       return this.list.parent
+    },
+    categories: function () {
+      return this.list.list.filter(category => category.is_active === true)
     }
   },
   methods: {
