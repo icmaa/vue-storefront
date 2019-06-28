@@ -2,6 +2,12 @@ import { mapGetters } from 'vuex'
 import { CategoryStateCategory } from '../types/CategoryState'
 import { extractPrefix } from '../helpers/fetchCategories'
 
+interface Letter {
+  letter: string,
+  anchor: string,
+  list: CategoryStateCategory[]
+}
+
 export default {
   name: 'IcmaaCategoryList',
   computed: {
@@ -21,16 +27,16 @@ export default {
     categories: function (): CategoryStateCategory[] {
       return this.list.list.filter(category => category.is_active === true)
     },
-    categoriesGroupedByFirstLetter: function (): { letter: string, list: CategoryStateCategory[] }[] {
-      let groups: { letter: string, list: CategoryStateCategory[] }[] = []
+    categoriesGroupedByFirstLetter: function (): Letter[] {
+      let groups: Letter[] = []
 
       this.categories.forEach(category => {
         let firstChar: string = extractPrefix(category.name).charAt(0)
-        let letter: string = /^[a-z]/gmi.test(firstChar) ? firstChar : '#'
+        let letter: string = /^[a-z]/gmi.test(firstChar) ? firstChar.toUpperCase() : '#'
 
         if (!groups.find(g => g.letter === letter)) {
-          let list = []
-          groups.push({ letter, list })
+          let anchor = letter !== '#' ? letter.toLowerCase() : 'numbers'
+          groups.push({ letter, anchor, list: [] })
         }
 
         groups[groups.findIndex(g => g.letter === letter)].list.push(category)
