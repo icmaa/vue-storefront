@@ -56,6 +56,17 @@ export default {
       }
     }
   },
+  async asyncData ({ store, route, context }) {
+    if (!isServer) {
+      await store.dispatch(
+        'icmaaCategory/list',
+        {
+          parentId: route.params.parentCategoryId,
+          crawlDepth: route.params.depth || route.query.depth
+        }
+      )
+    }
+  },
   serverPrefetch (): Promise<any> {
     return this.fetchCategories()
   }
