@@ -14,6 +14,7 @@ const Static = () => import(/* webpackChunkName: "vsf-static" */ 'theme/pages/St
 const CustomCmsPage = () => import(/* webpackChunkName: "vsf-custom-cms" */ 'theme/pages/CustomCmsPage.vue')
 const CmsData = () => import(/* webpackChunkName: "vsf-data" */ 'src/modules/magento-2-cms/components/CmsData')
 
+/** ICMAA / Custom pages */
 const IcmaaCategoryList = () => import(/* webpackChunkName: "vsf-category-list" */ 'src/modules/icmaa-category/pages/List.vue')
 
 let routes = [

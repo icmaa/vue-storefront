@@ -1,7 +1,7 @@
 import { mapGetters } from 'vuex'
 import { CategoryStateCategory } from '../types/CategoryState'
 import { extractPrefix } from '../helpers/fetchCategories'
-import { Logger } from '@vue-storefront/core/lib/logger';
+import { isServer } from '@vue-storefront/core/helpers'
 
 interface Letter {
   letter: string,
@@ -57,6 +57,6 @@ export default {
     }
   },
   serverPrefetch (): Promise<any> {
-    return this.fetchCategories();
+    return this.fetchCategories()
   }
 }
