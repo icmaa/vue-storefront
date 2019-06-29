@@ -3,12 +3,12 @@
     <h1>{{ parent.name }}</h1>
     <ul class="slingrope">
       <li :key="letter.letter" v-for="letter in categoriesGroupedByFirstLetter">
-        <router-link :to="`#${letter.anchor}`" v-html="letter.letter" />
+        <a :href="`#${ letter.anchor }`" v-html="letter.letter" v-scroll-to="`#${ letter.anchor }`" />
       </li>
     </ul>
     <ul class="slingrope-sidebar" :class="{ 'hidden': !scrollbarVisible }">
-      <li :key="letter.letter" v-for="letter in categoriesGroupedByFirstLetter">
-        <router-link :to="`#${letter.anchor}`" v-html="letter.letter" />
+      <li :key="letter.letter" v-for="letter in verticalSlingropeLetters">
+        <a :href="`#${ letter.anchor }`" v-html="letter.letter" v-scroll-to="`#${ letter.anchor }`" />
       </li>
     </ul>
     <ul class="letters">
@@ -42,6 +42,13 @@ export default {
       scrollbarVisible: false,
       scrollTop: 0,
       showFromY: 222
+    }
+  },
+  computed: {
+    verticalSlingropeLetters () {
+      return this.categoriesGroupedByFirstLetter.length > 14
+        ? this.categoriesGroupedByFirstLetter.filter((item, i) => (i === 0 || (i %= 2) === 1))
+        : this.categoriesGroupedByFirstLetter
     }
   },
   beforeMount () {
@@ -92,7 +99,6 @@ $bg-secondary: color(secondary, $colors-background);
     @media (min-width: 768px) {
       width: 100%;
       margin: 0;
-
     }
 
     li {
@@ -126,7 +132,7 @@ $bg-secondary: color(secondary, $colors-background);
 
     position: fixed;
     right: 0;
-    top: 55px;
+    top: calc(50% - (335px / 2));
     margin: 0 10px 0;
     padding: 15px 8px;
     background: white;
@@ -150,6 +156,7 @@ $bg-secondary: color(secondary, $colors-background);
   .letters {
     list-style: none;
     padding: 0;
+    margin-bottom: 25px;
 
     .letter {
 
@@ -164,9 +171,12 @@ $bg-secondary: color(secondary, $colors-background);
 
       @media (min-width: 768px) {
         display: flex;
-        border-bottom: 1px solid $bg-secondary;
-        padding: 0 0 25px 0;
-        margin: 0 0 25px 0;
+
+        &:not(:last-child) {
+          border-bottom: 1px solid $bg-secondary;
+          padding: 0 0 25px 0;
+          margin: 0 0 25px 0;
+        }
 
         &:first-child {
           margin-top: 25px;

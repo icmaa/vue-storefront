@@ -2,6 +2,7 @@ import { ActionTree } from 'vuex';
 import { UrlState } from '@vue-storefront/core/modules/url/types/UrlState'
 import SearchQuery from '@vue-storefront/core/lib/search/searchQuery'
 import { removeStoreCodeFromRoute } from '@vue-storefront/core/lib/multistore'
+import { removeHashFromRoute } from '../helpers'
 import config from 'config'
 import { Logger } from '@vue-storefront/core/lib/logger';
 
@@ -52,6 +53,8 @@ const forCategory = async ({ dispatch }, { url, params }) => {
  */
 const forCustomUrls = async ({ dispatch }, { url, params }) => {
   url = removeStoreCodeFromRoute(url) as string
+  url = removeHashFromRoute(url) as string
+  Logger.error('URL:', 'DEBUG', url)()
   if (config.hasOwnProperty('icmaa_url')) {
     const urlFromConfig = config.icmaa_url.find((item) => item.request_path === url);
     if (urlFromConfig) {
@@ -82,6 +85,6 @@ export const actions: ActionTree<UrlState, any> = {
       return customUrl
     }
 
-    throw new Error('No route found')
+    throw new Error('No route found for:' + url)
   }
 }
