@@ -2,6 +2,7 @@ import { mapGetters } from 'vuex'
 import { CategoryStateCategory } from '../types/CategoryState'
 import { extractPrefix } from '../helpers/fetchCategories'
 import { isServer } from '@vue-storefront/core/helpers'
+import { htmlDecode } from '@vue-storefront/core/store/lib/filters';
 
 interface Letter {
   letter: string,
@@ -69,5 +70,13 @@ export default {
   },
   serverPrefetch (): Promise<any> {
     return this.fetchCategories()
+  },
+  metaInfo () {
+    return !this.notEmpty || {
+      title: htmlDecode(this.parent.meta_title || this.parent.name),
+      meta: this.parent.meta_description
+        ? [{ vmid: 'description', name: 'description', content: htmlDecode(this.parent.meta_description) }]
+        : []
+    }
   }
 }
