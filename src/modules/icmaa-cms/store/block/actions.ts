@@ -8,12 +8,17 @@ import config from 'config'
 
 import { currentStoreView } from '@vue-storefront/core/lib/multistore'
 import { processURLAddress } from '@vue-storefront/core/helpers'
+import { isServer } from '@vue-storefront/core/helpers'
 import { Logger } from '@vue-storefront/core/lib/logger'
 
 const actions: ActionTree<BlockState, RootState> = {
   async single (context, { value, key = 'identifier' }): Promise<any> {
     const state = context.state
     if (!state.items || state.items.length === 0 || !state.items.find(itm => itm[key] === value)) {
+      if (!isServer) {
+        context.commit(types.ICMAA_CMS_BLOCK_ADD_CMS_BLOCK, { identifier: value })
+      }
+
       let params = {
         'type': 'cms-block',
         'uid': encodeURIComponent(value),
@@ -36,10 +41,11 @@ const actions: ActionTree<BlockState, RootState> = {
         }
 
         result[key] = value;
-        context.commit(types.ICMAA_CMS_BLOCK_ADD_CMS_BLOCK, result)
+        context.commit(types.ICMAA_CMS_BLOCK_UPD_CMS_BLOCK, result)
 
         return result
       }).catch(err => {
+        context.commit(types.ICMAA_CMS_BLOCK_RMV_CMS_BLOCK, { identifier: value })
         Logger.error(`Error while fetching block "${value}"`, 'icmaa-cms', err)()
       })
     } else {
