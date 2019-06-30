@@ -12,7 +12,9 @@ const mutations: MutationTree<BlockState> = {
   [types.ICMAA_CMS_BLOCK_UPD_CMS_BLOCK] (state, payload) {
     const index = state.items.findIndex(item => item.identifier === payload.identifier)
     if (index !== -1) {
-      state.items[index] = payload
+      // Need to use slice because otherwise its not reactive
+      // @see https://vuejs.org/v2/guide/list.html#Caveats
+      state.items.splice(index, 1, payload)
     } else {
       state.items.push(payload)
     }
