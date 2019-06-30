@@ -2,6 +2,8 @@ import { ActionTree } from 'vuex'
 import * as types from './mutation-types'
 import RootState from '@vue-storefront/core/types/RootState';
 import BlockState from '../../types/BlockState'
+import { cmsBlockStorageKey } from './'
+import { cacheStorage } from '../../'
 
 import Axios from 'axios'
 import config from 'config'
@@ -14,7 +16,16 @@ import { Logger } from '@vue-storefront/core/lib/logger'
 const actions: ActionTree<BlockState, RootState> = {
   async single (context, { value, key = 'identifier' }): Promise<any> {
     const state = context.state
+
     if (!state.items || state.items.length === 0 || !state.items.find(itm => itm[key] === value)) {
+      const cacheKey = cmsBlockStorageKey + '/' + value
+      if (await cacheStorage.getItem(cacheKey).then(item => item !== null)) {
+        return cacheStorage.getItem(cacheKey).then(result => {
+          context.commit(types.ICMAA_CMS_BLOCK_UPD_CMS_BLOCK, result)
+          return result
+        })
+      }
+
       if (!isServer) {
         context.commit(types.ICMAA_CMS_BLOCK_ADD_CMS_BLOCK, { identifier: value })
       }
@@ -42,6 +53,9 @@ const actions: ActionTree<BlockState, RootState> = {
 
         result[key] = value;
         context.commit(types.ICMAA_CMS_BLOCK_UPD_CMS_BLOCK, result)
+
+        cacheStorage.setItem(cacheKey, result)
+          .catch(error => Logger.error(error, 'icmaa-cms'))
 
         return result
       }).catch(err => {
