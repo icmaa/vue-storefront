@@ -24,13 +24,13 @@ const actions: ActionTree<BlockState, RootState> = {
       const cacheKey = cmsBlockStorageKey + '/' + value
       if (await cache.getItem(cacheKey).then(item => item !== null)) {
         return cache.getItem(cacheKey).then(result => {
-          context.commit(types.ICMAA_CMS_BLOCK_UPD_CMS_BLOCK, result)
+          context.commit(types.ICMAA_CMS_BLOCK_UPD, result)
           return result
         })
       }
 
       if (!isServer) {
-        context.commit(types.ICMAA_CMS_BLOCK_ADD_CMS_BLOCK, { identifier: value })
+        context.commit(types.ICMAA_CMS_BLOCK_ADD, { identifier: value })
       }
 
       let params = {
@@ -54,14 +54,14 @@ const actions: ActionTree<BlockState, RootState> = {
         }
 
         result[key] = value;
-        context.commit(types.ICMAA_CMS_BLOCK_UPD_CMS_BLOCK, result)
+        context.commit(types.ICMAA_CMS_BLOCK_UPD, result)
 
         cache.setItem(cacheKey, result)
           .catch(error => Logger.error(error, 'icmaa-cms'))
 
         return result
       }).catch(err => {
-        context.commit(types.ICMAA_CMS_BLOCK_RMV_CMS_BLOCK, { identifier: value })
+        context.commit(types.ICMAA_CMS_BLOCK_RMV, { identifier: value })
         Logger.error(`Error while fetching block "${value}"`, 'icmaa-cms', err)()
       })
     } else {
