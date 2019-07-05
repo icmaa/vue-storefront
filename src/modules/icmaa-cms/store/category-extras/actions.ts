@@ -3,7 +3,7 @@ import { ActionTree } from 'vuex'
 import { KEY } from '../../'
 import * as types from './mutation-types'
 import RootState from '@vue-storefront/core/types/RootState';
-import BlockState from '../../types/BlockState'
+import CategoryExtrasState from '../../types/CategoryExtrasState'
 import { cmsCategoryExtrasStorageKey } from './'
 
 import Axios from 'axios'
@@ -14,8 +14,8 @@ import { processURLAddress } from '@vue-storefront/core/helpers'
 import { isServer } from '@vue-storefront/core/helpers'
 import { Logger } from '@vue-storefront/core/lib/logger'
 
-const actions: ActionTree<BlockState, RootState> = {
-  async single (context, { value, key = 'identifier' }): Promise<any> {
+const actions: ActionTree<CategoryExtrasState, RootState> = {
+  async single (context, { value, key = 'identifier' }): Promise<CategoryExtrasState> {
     const state = context.state
     const cache = Vue.prototype.$db[KEY]
     const storeView = currentStoreView()
@@ -48,9 +48,8 @@ const actions: ActionTree<BlockState, RootState> = {
         { responseType: 'json', params }
       ).then(resp => {
         let result = resp.data.result;
-        if (result.length === 0 || resp.status !== 200) {
-          Logger.error('Empty cms response:', 'icmaa-cms', value)()
-          return {}
+        if (Object.keys(result).length === 0 || resp.status !== 200) {
+          throw new Error(resp.statusText)
         }
 
         result[key] = value;
@@ -62,7 +61,7 @@ const actions: ActionTree<BlockState, RootState> = {
         return result
       }).catch(err => {
         context.commit(types.ICMAA_CMS_CATEGORY_EXRTAS_RMV, { identifier: value })
-        Logger.error(`Error while fetching block "${value}"`, 'icmaa-cms', err)()
+        Logger.error(`Error while fetching identifier "${value}"`, 'icmaa-cms', err)()
       })
     } else {
       return new Promise((resolve, reject) => {
@@ -71,7 +70,7 @@ const actions: ActionTree<BlockState, RootState> = {
           if (block) {
             resolve(block)
           } else {
-            reject(new Error('CMS block query returned empty result ' + key + ' = ' + value))
+            reject(new Error('Error while fetching state for ' + key + ' = ' + value))
           }
         } else {
           resolve()
