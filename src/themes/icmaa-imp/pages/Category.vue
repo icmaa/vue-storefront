@@ -91,8 +91,6 @@ export default {
     await store.dispatch('category/mergeSearchOptions', {
       sort: store.state.config.products.defaultSortBy.attribute + (store.state.config.products.defaultSortBy.order ? ':' + store.state.config.products.defaultSortBy.order : '')
     })
-
-    return store.dispatch('icmaaCmsCategoryExtras/single', { value: 'girls' })
   },
   methods: {
     openFilters () {
