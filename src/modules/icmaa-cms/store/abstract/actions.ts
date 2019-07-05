@@ -1,6 +1,7 @@
 import Vue from 'vue'
 
 import { KEY } from '../../'
+import { MutationTypesInterface } from '../abstract/mutation-types'
 
 import Axios from 'axios'
 import config from 'config'
@@ -9,6 +10,8 @@ import { currentStoreView } from '@vue-storefront/core/lib/multistore'
 import { processURLAddress } from '@vue-storefront/core/helpers'
 import { isServer } from '@vue-storefront/core/helpers'
 import { Logger } from '@vue-storefront/core/lib/logger'
+
+export { MutationTypesInterface }
 
 export interface OptionsInterface {
   context: any,
@@ -21,12 +24,6 @@ export interface OptionsInterface {
 export interface SingleOptionsInterface {
   key?: string|null,
   value: string
-}
-
-export interface MutationTypesInterface {
-  add: string,
-  upd: string,
-  rmv: string
 }
 
 export const single = async <T>(options: OptionsInterface): Promise<T> => {
@@ -68,8 +65,8 @@ export const single = async <T>(options: OptionsInterface): Promise<T> => {
       { responseType: 'json', params }
     ).then(resp => {
       let result = resp.data.result;
-      if (Object.keys(result).length === 0 || resp.status !== 200) {
-        throw new Error(resp.statusText)
+      if (Object.keys(result).length === 0) {
+        throw new Error('No results found')
       }
 
       result[key] = value;
@@ -79,9 +76,9 @@ export const single = async <T>(options: OptionsInterface): Promise<T> => {
         .catch(error => Logger.error(error, 'icmaa-cms'))
 
       return result
-    }).catch(err => {
+    }).catch(error => {
       context.commit(mutationTypes.rmv, { identifier: value })
-      Logger.error(`Error while fetching identifier "${value}"`, 'icmaa-cms', err)()
+      Logger.error(`Error while fetching ${key} "${value}"`, `icmaa-cms/${documentType}`, error)()
     })
   } else {
     return new Promise((resolve, reject) => {
