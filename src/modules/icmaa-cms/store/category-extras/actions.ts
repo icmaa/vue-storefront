@@ -14,8 +14,8 @@ const mutationTypes: MutationTypesInterface = {
 }
 
 const actions: ActionTree<CategoryExtrasState, RootState> = {
-  single: async (context, options: SingleOptionsInterface): Promise<CategoryExtrasStateItem|any> =>
-    singleAbstract({ documentType, mutationTypes, storageKey, context, options })
+  single: async (context, options: SingleOptionsInterface): Promise<CategoryExtrasStateItem> =>
+    singleAbstract<CategoryExtrasStateItem>({ documentType, mutationTypes, storageKey, context, options })
 }
 
 export default actions

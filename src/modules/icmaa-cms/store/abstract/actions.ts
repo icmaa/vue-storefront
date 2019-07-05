@@ -29,7 +29,7 @@ export interface MutationTypesInterface {
   rmv: string
 }
 
-export const single = async (options: OptionsInterface) => {
+export const single = async <T>(options: OptionsInterface): Promise<T> => {
   let { key, value } = options.options
   let { context, documentType, mutationTypes, storageKey } = options
   if (!key || key === null) {
