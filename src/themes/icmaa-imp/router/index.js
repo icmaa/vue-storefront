@@ -15,8 +15,8 @@ const CustomCmsPage = () => import(/* webpackChunkName: "vsf-custom-cms" */ 'the
 const CmsData = () => import(/* webpackChunkName: "vsf-data" */ 'src/modules/magento-2-cms/components/CmsData')
 
 /** ICMAA / Custom pages */
-const IcmaaCategoryList = () => import(/* webpackChunkName: "vsf-category-list" */ 'src/modules/icmaa-category/pages/List.vue')
-const IcmaaCmsPage = () => import(/* webpackChunkName: "vsf-cms-page" */ 'src/modules/icmaa-cms/pages/Page.vue')
+const IcmaaCategoryList = () => import(/* webpackChunkName: "vsf-icmaa-category-list" */ 'src/modules/icmaa-category/pages/List.vue')
+const IcmaaCmsPage = () => import(/* webpackChunkName: "vsf-icmaa-cms-page" */ 'src/modules/icmaa-cms/pages/Page.vue')
 
 let routes = [
   { name: 'home', path: '/', component: Home, alias: '/pwa.html' },

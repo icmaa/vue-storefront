@@ -12,6 +12,10 @@ export default {
       return this.pageByIdentifier(this.identifier)
     }
   },
-  async asyncData ({ store, route, context }) {},
-  metaInfo () {}
+  async asyncData ({ store, route, context }) {
+    await store.dispatch(
+      'icmaaCmsPage/single', { value: route.params.identifier }
+    )
+  }
+  // metaInfo () {}
 }
