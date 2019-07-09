@@ -22,6 +22,9 @@ export default {
     },
     block (): BlockStateItem {
       return this.blockByIdentifier(this.identifier)
+    },
+    content (): string {
+      return `<div>${this.page.content}</div>`
     }
   }
 }
