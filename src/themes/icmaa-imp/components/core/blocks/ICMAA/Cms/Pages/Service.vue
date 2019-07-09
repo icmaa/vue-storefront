@@ -2,7 +2,7 @@
   <div id="cms-page" v-if="page">
     <ul>
       <li v-for="item in test" :key="item">
-        {{ item }}
+        <component :is="stringToComponent(item)" />
       </li>
     </ul>
   </div>

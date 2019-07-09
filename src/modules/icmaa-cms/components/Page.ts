@@ -1,5 +1,6 @@
 import { mapGetters } from 'vuex'
 import { PageStateItem } from '../types/PageState'
+import { stringToComponent } from '../helpers'
 
 import YAML from 'yaml'
 import camelCase from 'lodash-es/camelCase'
@@ -29,11 +30,7 @@ export default {
     }
   },
   methods: {
-    componentByText: (text: string): object => {
-      return {
-        template: `<span>${text}</span>`
-      }
-    }
+    stringToComponent: (text: string): object => stringToComponent(text)
   },
   async asyncData ({ store, route, context }) {
     await store.dispatch(
