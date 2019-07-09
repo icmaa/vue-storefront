@@ -28,6 +28,13 @@ export default {
       }
     }
   },
+  methods: {
+    componentByText: (text: string): object => {
+      return {
+        template: `<span>${text}</span>`
+      }
+    }
+  },
   async asyncData ({ store, route, context }) {
     await store.dispatch(
       'icmaaCmsPage/single', { value: route.params.identifier }
