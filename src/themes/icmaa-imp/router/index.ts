@@ -1,5 +1,5 @@
 import config from 'config'
-import { default as icmaaCmsRouter } from './icmaa-cms'
+import { icmaaCmsRoutes } from './icmaa-cms'
 
 const Home = () => import(/* webpackChunkName: "vsf-home" */ 'theme/pages/Home.vue')
 const PageNotFound = () => import(/* webpackChunkName: "vsf-not-found" */ 'theme/pages/PageNotFound.vue')
@@ -11,7 +11,7 @@ const Compare = () => import(/* webpackChunkName: "vsf-compare" */ 'theme/pages/
 const MyAccount = () => import(/* webpackChunkName: "vsf-my-account" */ 'theme/pages/MyAccount.vue')
 const Static = () => import(/* webpackChunkName: "vsf-static" */ 'theme/pages/Static.vue')
 
-/** ICMAA / Custom pages */
+/** ICMAA / Custom module pages */
 const IcmaaCategoryList = () => import(/* webpackChunkName: "vsf-icmaa-category-list" */ 'src/modules/icmaa-category/pages/List.vue')
 
 let routes = [
@@ -59,6 +59,6 @@ routes = routes.concat([
 ])
 
 /** ICMAA / Custom cms routes */
-routes = routes.concat(icmaaCmsRouter)
+routes = routes.concat(icmaaCmsRoutes)
 
 export default routes
