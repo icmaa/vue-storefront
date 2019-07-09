@@ -78,7 +78,7 @@ const forCmsPageUrls = async ({ dispatch }, { url, params }) => {
     .then((page: PageStateItem) => {
       if (page !== null) {
         return {
-          name: page.routerName || 'icmaa-cms-page',
+          name: page.routeName || 'icmaa-cms-page',
           params: {
             identifier: page.identifier
           }

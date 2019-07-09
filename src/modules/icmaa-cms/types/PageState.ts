@@ -1,6 +1,6 @@
 export interface PageStateItem {
   identifier: string,
-  routerName: string,
+  routeName: string,
   content: string,
   language: string,
   metaTitle: string,

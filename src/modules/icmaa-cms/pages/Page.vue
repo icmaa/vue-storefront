@@ -9,9 +9,9 @@ import Page from 'src/modules/icmaa-cms/components/Page'
 
 export default {
   mixins: [ Page ],
-  computed: {
-    content () {
-      return `<div>${this.page.content}</div>`
+  data () {
+    return {
+      dataType: 'html'
     }
   }
 }

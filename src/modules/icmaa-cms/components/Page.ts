@@ -1,6 +1,9 @@
 import { mapGetters } from 'vuex'
 import { PageStateItem } from '../types/PageState'
+
+import YAML from 'yaml'
 import camelCase from 'lodash-es/camelCase'
+import { Logger } from '@vue-storefront/core/lib/logger'
 
 export default {
   name: 'IcmaaCmsPage',
@@ -11,6 +14,20 @@ export default {
     },
     page (): PageStateItem {
       return this.pageByIdentifier(this.identifier)
+    },
+    pageData (): string {
+      return this.page.content
+    },
+    content (): any|string {
+      Logger.error('Lorem ipsum', 'DEBUG', this.dataType)()
+      switch (this.dataType) {
+        case 'yaml':
+          return YAML.parse(this.pageData)
+        case 'json':
+          return JSON.parse(this.pageData)
+        default:
+          return `<div>${this.pageData}</div>`
+      }
     }
   },
   async asyncData ({ store, route, context }) {

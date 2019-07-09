@@ -1,12 +1,12 @@
 # Custom CMS routes
 
-In fact we wan't to make use of the benefits of [single-file-components](https://vuejs.org/v2/guide/single-file-components.html) in our CMS.
+In fact we wan't to make use of the benefits of [single-file-components](https://vuejs.org/v2/guide/single-file-components.html) and [async-sfc's](https://vuejs.org/v2/guide/components-dynamic-async.html) in our CMS.
 
 This means that there must be a rendered component registered to specific route and it's not possible to create them completely in a connected CMS on runtime. It's mainly because of the needed build of each component to make all functionallity like scoped css, code-splitteng and custom imports work.
 
-## How we add custom cms pages
+## Add a custom cms page
 
-### Add a new single-file-component
+### 01. Add a new single-file-component
 
 At first we need to add our new single-file-component on top of the file like:
 
@@ -16,7 +16,7 @@ const ServiceComponent = () => import(/* webpackChunkName: "vsf-icmaa-cms-page-c
 
 It's important to have a custom `webpackChunkName`, thats why we use a prefix like `vsf-icmaa-cms-page-custom-` for each new component.
 
-It's recommended to implement the default `page` mixins to your new component. A sample components could look like:
+It's recommended to implement the default `page` mixins to your new component to have default methods and meta-data already applied. A sample components could look like:
 ```html
 <template>
   <div id="cms-page" v-if="page">
@@ -29,16 +29,22 @@ import Page from 'src/modules/icmaa-cms/components/Page'
 
 export default {
   mixins: [ Page ],
-  computed: {
-    content () {
-      return `<div>${this.page.content}</div>`
+  data () {
+    return {
+      dataType: 'yaml'
     }
   }
 }
 </script>
+
+<style lang="sass">
+body {
+  background: #f00
+}
+</style>
 ```
 
-### Add a new route
+### 02. Add a new route
 
 To add a new route which is using our custom single-file-component, we need to specify all neccessary data to the `routes` array in `theme/router/icmaa-cms/index.ts` like:
 
@@ -52,13 +58,24 @@ A script on the bottom of this class will transform this route a bit to give it 
 { name: 'icmaa-cms-custom-service', path: '/icmaa-cms-custom/service/:identifier', component: ServiceComponent }
 ```
 
-## How to add/use cms data
+## 03. Populate and use cms data
 
-### Html
-…
+There are three options in format to add content data to your CMS page: `html`, `yaml` and `json`.
+Dependent on what format your cms page content contains, you can populate your data in your component using the parent computed property `content` of the `Page` mixin. If you wan't to use a specific data type you must define the variable `dataType` like:
 
-### JSON
-…
+```javascript
+export default {
+  mixins: [ Page ],
+  data () {
+    return {
+      dataType: 'yaml' // 'yaml' | 'json' | 'html' - default: 'html'
+    }
+  }
+}
+```
 
-### YAML
-…
+If you use `dataType`  with `json` or `yaml` a object or an array is returned, for `html` it's a compiled string.
+
+## 04. URL
+
+The defined `identifier` in the CMS page stands for the URL path. So if you add `service` your custom cms page will be available at `/service` or `/de/service` etc.. With giving the CMS entry an `identifier` and `routeName` it can automatically connect this url to the specific router and single-page-component using our `icmaa-url` module.
