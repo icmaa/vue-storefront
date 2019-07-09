@@ -20,7 +20,11 @@ It's recommended to implement the default `page` mixins to your new component to
 ```html
 <template>
   <div id="cms-page" v-if="page">
-    <component :is="{template: content}" />
+    <ul>
+      <li v-for="item in test" :key="item">
+        {{ item }}
+      </li>
+    </ul>
   </div>
 </template>
 
@@ -32,6 +36,11 @@ export default {
   data () {
     return {
       dataType: 'yaml'
+    }
+  },
+  computed: {
+    test () {
+      return this.content.test
     }
   }
 }

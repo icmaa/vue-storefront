@@ -1,6 +1,10 @@
 <template>
   <div id="cms-page" v-if="page">
-    {{ content }}
+    <ul>
+      <li v-for="item in test" :key="item">
+        {{ item }}
+      </li>
+    </ul>
   </div>
 </template>
 
@@ -11,7 +15,12 @@ export default {
   mixins: [ Page ],
   data () {
     return {
-      dataType: 'html'
+      dataType: 'yaml'
+    }
+  },
+  computed: {
+    test () {
+      return this.content.test
     }
   }
 }

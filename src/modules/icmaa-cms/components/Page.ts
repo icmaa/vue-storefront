@@ -3,7 +3,6 @@ import { PageStateItem } from '../types/PageState'
 
 import YAML from 'yaml'
 import camelCase from 'lodash-es/camelCase'
-import { Logger } from '@vue-storefront/core/lib/logger'
 
 export default {
   name: 'IcmaaCmsPage',
@@ -19,7 +18,6 @@ export default {
       return this.page.content
     },
     content (): any|string {
-      Logger.error('Lorem ipsum', 'DEBUG', this.dataType)()
       switch (this.dataType) {
         case 'yaml':
           return YAML.parse(this.pageData)
