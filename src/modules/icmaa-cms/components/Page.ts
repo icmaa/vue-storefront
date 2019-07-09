@@ -1,5 +1,6 @@
 import { mapGetters } from 'vuex'
 import { PageStateItem } from '../types/PageState'
+import camelCase from 'lodash-es/camelCase'
 
 export default {
   name: 'IcmaaCmsPage',
@@ -22,9 +23,10 @@ export default {
     const metaKeys = ['title', 'tags', 'description']
 
     metaKeys.forEach((value) => {
-      if (this.page.hasOwnProperty('meta-' + value) && this.page['meta-' + value] !== null) {
+      const key = camelCase('meta-' + value)
+      if (this.page.hasOwnProperty(key) && this.page[key] !== null) {
         if (value === 'title') {
-          meta[value] = this.page['meta-' + value]
+          meta[value] = this.page[key]
         } else {
           if (!meta.hasOwnProperty('meta')) {
             meta['meta'] = []
@@ -32,7 +34,7 @@ export default {
 
           meta.meta.push({
             name: value,
-            content: this.page['meta-' + value]
+            content: this.page[key]
           })
         }
       }
