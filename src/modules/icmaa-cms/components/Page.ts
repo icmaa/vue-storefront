@@ -16,6 +16,28 @@ export default {
     await store.dispatch(
       'icmaaCmsPage/single', { value: route.params.identifier }
     )
+  },
+  metaInfo () {
+    let meta: any = {}
+    const metaKeys = ['title', 'tags', 'description']
+
+    metaKeys.forEach((value) => {
+      if (this.page.hasOwnProperty('meta-' + value) && this.page['meta-' + value] !== null) {
+        if (value === 'title') {
+          meta[value] = this.page['meta-' + value]
+        } else {
+          if (!meta.hasOwnProperty('meta')) {
+            meta['meta'] = []
+          }
+
+          meta.meta.push({
+            name: value,
+            content: this.page['meta-' + value]
+          })
+        }
+      }
+    })
+
+    return meta
   }
-  // metaInfo () {}
 }

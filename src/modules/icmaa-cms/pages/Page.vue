@@ -12,9 +12,6 @@ export default {
   computed: {
     content () {
       return `<div>${this.page.content}</div>`
-    },
-    css () {
-      return `${this.page.css}`
     }
   }
 }
