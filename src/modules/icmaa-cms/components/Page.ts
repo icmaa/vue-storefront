@@ -25,12 +25,12 @@ export default {
         case 'json':
           return JSON.parse(this.pageData)
         default:
-          return `<div>${this.pageData}</div>`
+          return this.stringToComponent(this.pageData)
       }
     }
   },
   methods: {
-    stringToComponent: (text: string): object => stringToComponent(text)
+    stringToComponent: (text: string): object => stringToComponent(text, 'span')
   },
   async asyncData ({ store, route, context }) {
     await store.dispatch(

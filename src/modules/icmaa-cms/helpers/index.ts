@@ -6,7 +6,7 @@ export const localizeRouterLink = (text: string): string => {
     [g1, localizedRoute(g2, currentStoreView().storeCode), g3].join(''))
 }
 
-export const stringToComponent = (text: string): object => {
+export const stringToComponent = (text: string, wrapper: string = 'div'): object => {
   text = localizeRouterLink(text)
-  return { template: `<span>${text}</span>` }
+  return { template: `<${wrapper}>${text}</${wrapper}>` }
 }
