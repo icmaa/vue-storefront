@@ -1,6 +1,4 @@
-import Vue from 'vue'
-
-import { KEY } from '../../'
+import { cacheStorage as cache } from '../../'
 import { MutationTypesInterface } from '../abstract/mutation-types'
 
 import Axios from 'axios'
@@ -34,7 +32,6 @@ export const single = async <T>(options: OptionsInterface): Promise<T> => {
   }
 
   const state = context.state
-  const cache = Vue.prototype.$db[KEY]
   const storeView = currentStoreView()
 
   if (!state.items || state.items.length === 0 || !state.items.find(itm => itm[key] === value)) {
