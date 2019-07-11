@@ -31,11 +31,12 @@ export const single = async <T>(options: OptionsInterface): Promise<T> => {
     key = 'identifier'
   }
 
+  const cacheKey = storageKey + '/' + value
+
   const state = context.state
   const storeView = currentStoreView()
 
   if (!state.items || state.items.length === 0 || !state.items.find(itm => itm[key] === value)) {
-    const cacheKey = storageKey + '/' + value
     if (await cache.getItem(cacheKey).then(item => item !== null)) {
       return cache.getItem(cacheKey).then(result => {
         context.commit(mutationTypes.add, result)
@@ -80,9 +81,12 @@ export const single = async <T>(options: OptionsInterface): Promise<T> => {
   } else {
     return new Promise((resolve, reject) => {
       if (state.items.length > 0) {
-        let block = state.items.find(itm => itm[key] === value)
-        if (block) {
-          resolve(block)
+        let result = state.items.find(itm => itm[key] === value)
+        if (result) {
+          cache.setItem(cacheKey, result)
+            .catch(error => Logger.error(error, 'icmaa-cms'))
+
+          resolve(result)
         } else {
           reject(new Error('Error while fetching state for ' + key + ' = ' + value))
         }
