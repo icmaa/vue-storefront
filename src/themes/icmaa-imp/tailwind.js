@@ -1,5 +1,5 @@
 module.exports = {
-  // prefix: 'tw-',
+  prefix: 't-',
   theme: {
     container: {
       center: true
