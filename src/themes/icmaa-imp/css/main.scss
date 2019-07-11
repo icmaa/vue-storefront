@@ -1,5 +1,6 @@
-@import 'base/fonts';
-@import 'vendor/flexboxgrid2';
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 @import 'variables/variables';
 @import 'helpers/mixins';
@@ -9,6 +10,8 @@
 @import 'base/text';
 @import 'base/color';
 @import 'base/icons';
+
+@import 'vendor/flexboxgrid2';
 
 @import 'layout/layout';
 @import 'layout/border';
