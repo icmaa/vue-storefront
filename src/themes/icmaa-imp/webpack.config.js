@@ -1,5 +1,4 @@
 const path = require('path')
-const themeRoot = require('../../../core/build/theme-path')
 
 /**
  * You can extend default webpack build here.
@@ -28,7 +27,7 @@ module.exports = function (config, { isClient, isDev }) {
     options: {
       ident: 'postcss',
       plugins: (loader) => [
-        require('tailwindcss')(path.join(themeRoot, 'tailwind.js')),
+        require('tailwindcss')(path.join(__dirname, 'tailwind.js')),
         require('postcss-flexbugs-fixes'),
         require('autoprefixer')({
           flexbox: 'no-2009'
