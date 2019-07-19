@@ -12,7 +12,7 @@ export default {
   },
   meta: [
     { charset: 'utf-8' },
-    { vmid: 'description', name: 'description', content: 'Vue Dein offizieller Merchandise, Streetwear und Fanartikel Shop  - Impericon.com DE - Offizielles Merchandise, Streetwear, Fanartikel, Tickets und Schuhe im Impericon Shop - Innerhalb von 24 Stunden versandfertig - 30 Tage Rückgaberecht' },
+    { vmid: 'description', name: 'description', content: 'Dein offizieller Merchandise, Streetwear und Fanartikel Shop  - Impericon.com DE - Offizielles Merchandise, Streetwear, Fanartikel, Tickets und Schuhe im Impericon Shop - Innerhalb von 24 Stunden versandfertig - 30 Tage Rückgaberecht' },
     { name: 'viewport', content: 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' },
     { name: 'robots', content: 'index, follow' },
     { name: 'mobile-web-app-capable', content: 'yes' },
