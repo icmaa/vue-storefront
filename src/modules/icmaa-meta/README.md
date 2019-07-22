@@ -25,5 +25,4 @@ In `theme/resource/meta/` you need to add files like `head-uk.ts` to add a store
 
 ## Todo
 
-[ ] Handle deep copy of Object[] to extend existing meta values etc. in `./helper/index.ts`
 [ ] Make config via `icmaa-cms` available
