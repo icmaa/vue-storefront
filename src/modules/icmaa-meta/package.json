@@ -1,0 +1,15 @@
+{
+  "name": "icmaa-meta",
+  "version": "1.0.0",
+  "author": "cewald <c.ewald@impericon.com> and contributors",
+  "license": "MIT",
+  "private": true,
+  "devDependencies": {
+    "@vue-storefront/module": "^0.0.9",
+    "@vue-storefront/core": "^1.11.0-rc.1"
+  },
+  "peerDependencies": {
+    "@vue-storefront/core": "^1.11.0-rc.1",
+    "@vue-storefront/module": "^0.0.9"
+  }
+}

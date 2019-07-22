@@ -1,12 +1,8 @@
-import config from 'config'
-import { currentStoreView } from '@vue-storefront/core/lib/multistore'
+import { storeCode, storeLang } from 'src/modules/icmaa-meta/helper'
 
-const storeCode: string = currentStoreView().storeCode || config.i18n.defaultLanguage.toLowerCase()
-const storeLang: string = currentStoreView().i18n.defaultLocale || config.i18n.defaultLocale
-
-export default {
+const defaults: any = {
   title: 'Dein offizieller Merchandise, Streetwear und Fanartikel Shop',
-  titleTemplate: `%s - Impericon.com ${storeCode.toUpperCase()}`,
+  titleTemplate: `%s - Impericon.com ${storeCode().toUpperCase()}`,
   htmlAttrs: {
     lang: storeLang
   },
@@ -41,3 +37,5 @@ export default {
     }
   ]
 }
+
+export default defaults
