@@ -5,7 +5,7 @@
         <breadcrumbs :routes="getBreadcrumbs" :active-route="getCurrentCategory.name" />
         <div class="row middle-sm">
           <h1 class="col-sm-8 category-title mb10" v-html="title" />
-          <div class="sorting col-sm-2 align-right mt50">
+           <div class="sorting col-sm-2 align-right mt50">
             <label class="mr10">{{ $t('Columns') }}:</label>
             <columns @change-column="columnChange" />
           </div>
@@ -141,7 +141,7 @@ export default {
     }
   },
   async asyncData ({ store, route }) { // this is for SSR purposes to prefetch data - and it's always executed before parent component methods
-    await composeInitialPageState(store, route),
+    await composeInitialPageState(store, route)
     await store.dispatch('category/mergeSearchOptions', {
       sort: store.state.config.products.defaultSortBy.attribute + (store.state.config.products.defaultSortBy.order ? ':' + store.state.config.products.defaultSortBy.order : '')
     })
