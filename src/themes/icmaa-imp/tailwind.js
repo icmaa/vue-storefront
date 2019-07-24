@@ -13,6 +13,9 @@ module.exports = {
       colors: {
         'primary': '#611122',
         'sale': '#006ea1'
+      },
+      flex: {
+        'fix': '0 0 auto'
       }
     }
   },

@@ -1,9 +1,26 @@
 <template>
   <div class="header">
     <header
-      class="fixed w-100 brdr-bottom-1 bg-cl-primary brdr-cl-secondary"
+      class="t-fixed t-w-full t-bg-white"
       :class="{ 'is-visible': navVisible }"
     >
+      <div class="row-01 t-flex t-bg-black">
+        <div class="t-container t-px-2 t-flex-initial t-flex t-justify-between">
+          <button-icon icon="dehaze" title="Menu" />
+          <div class="t-flex-auto" />
+          <button-icon icon="person" title="My Account" />
+          <button-icon icon="favorite_border" title="Wishlist" />
+          <button-icon icon="shopping_cart" title="Shopping cart" />
+        </div>
+      </div>
+
+      <div class="row-02 t-flex">
+        <div class="t-container t-px-2 t-flex t-items-center">
+          <div class="t-flex-auto" />
+          <logo width="174" height="43" class="logo t-flex-fix t--mr-2 lg:t-mr-0" />
+        </div>
+      </div>
+
       <div class="container px15">
         <div class="row between-xs middle-xs" v-if="!isCheckoutPage || isThankYouPage">
           <div class="col-md-4 col-xs-2 middle-xs">
@@ -70,18 +87,20 @@ import CurrentPage from 'theme/mixins/currentPage'
 import AccountIcon from 'theme/components/core/blocks/Header/AccountIcon'
 import CompareIcon from 'theme/components/core/blocks/Header/CompareIcon'
 import HamburgerIcon from 'theme/components/core/blocks/Header/HamburgerIcon'
-import Logo from 'theme/components/core/Logo'
+import Logo from 'theme/components/core/blocks/Header/Logo'
 import MicrocartIcon from 'theme/components/core/blocks/Header/MicrocartIcon'
 import SearchIcon from 'theme/components/core/blocks/Header/SearchIcon'
 import WishlistIcon from 'theme/components/core/blocks/Header/WishlistIcon'
+import ButtonIcon from 'theme/components/core/blocks/Header/ButtonIcon'
 
 export default {
   name: 'Header',
   components: {
+    Logo,
+    ButtonIcon,
     AccountIcon,
     CompareIcon,
     HamburgerIcon,
-    Logo,
     MicrocartIcon,
     SearchIcon,
     WishlistIcon
@@ -93,7 +112,7 @@ export default {
       isScrolling: false,
       scrollTop: 0,
       lastScrollTop: 0,
-      navbarHeight: 54
+      navbarHeight: 110
     }
   },
   computed: {
@@ -148,15 +167,27 @@ export default {
 @import '~theme/css/helpers/functions/color';
 $color-icon-hover: color(secondary, $colors-background);
 
+header, .header-placeholder {
+  height: 110px;
+}
+
 header {
-  height: 54px;
-  top: -55px;
+  top: -110px;
   z-index: 3;
   transition: top 0.2s ease-in-out;
   &.is-visible {
     top: 0;
   }
+
+  .row-01 {
+    height: 50px;
+  }
+
+  .row-02 {
+    height: 60px;
+  }
 }
+
 .icon {
   opacity: 0.6;
   &:hover,
@@ -168,9 +199,6 @@ header {
 .right-icons {
   //for edge
   float: right;
-}
-.header-placeholder {
-  height: 54px;
 }
 .links {
   text-decoration: underline;
