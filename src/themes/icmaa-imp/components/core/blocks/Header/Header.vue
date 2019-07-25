@@ -85,15 +85,16 @@
 <script>
 import { mapState } from 'vuex'
 import CurrentPage from 'theme/mixins/currentPage'
+import Logo from 'theme/components/core/blocks/Header/Logo'
+import ButtonIcon from 'theme/components/core/blocks/Header/ButtonIcon'
+import SearchInput from 'theme/components/core/blocks/Header/SearchInput'
+
 import AccountIcon from 'theme/components/core/blocks/Header/AccountIcon'
 import CompareIcon from 'theme/components/core/blocks/Header/CompareIcon'
 import HamburgerIcon from 'theme/components/core/blocks/Header/HamburgerIcon'
-import Logo from 'theme/components/core/blocks/Header/Logo'
 import MicrocartIcon from 'theme/components/core/blocks/Header/MicrocartIcon'
 import SearchIcon from 'theme/components/core/blocks/Header/SearchIcon'
 import WishlistIcon from 'theme/components/core/blocks/Header/WishlistIcon'
-import ButtonIcon from 'theme/components/core/blocks/Header/ButtonIcon'
-import SearchInput from 'theme/components/core/blocks/Header/SearchInput'
 
 export default {
   name: 'Header',
@@ -190,6 +191,8 @@ header {
     height: 60px;
   }
 }
+
+// Old header css below …
 
 .icon {
   opacity: 0.6;
