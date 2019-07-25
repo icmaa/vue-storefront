@@ -6,10 +6,10 @@
     >
       <div class="row-01 t-flex t-bg-black">
         <div class="t-container t-px-4 t-flex-initial t-flex t-justify-between">
-          <button-icon icon="dehaze" title="Menu" />
+          <button-ui-sidebar icon="dehaze" title="Menu" ui-state-name="sidebar" ui-mutation-name="setSidebar" />
           <div class="t-flex-auto" />
           <button-icon icon="person" title="My Account" />
-          <button-icon icon="favorite_border" title="Wishlist" />
+          <button-ui-sidebar icon="favorite_border" title="Wishlist" ui-state-name="wishlist" ui-mutation-name="setWishlist" />
           <button-icon icon="shopping_cart" title="Shopping cart" />
         </div>
       </div>
@@ -86,6 +86,7 @@
 import { mapState } from 'vuex'
 import CurrentPage from 'theme/mixins/currentPage'
 import Logo from 'theme/components/core/blocks/Header/Logo'
+import ButtonUiSidebar from 'theme/components/core/blocks/Header/ButtonUiSidebar'
 import ButtonIcon from 'theme/components/core/blocks/Header/ButtonIcon'
 import SearchInput from 'theme/components/core/blocks/Header/SearchInput'
 
@@ -101,6 +102,7 @@ export default {
   components: {
     Logo,
     ButtonIcon,
+    ButtonUiSidebar,
     SearchInput,
     AccountIcon,
     CompareIcon,

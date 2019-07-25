@@ -1,5 +1,5 @@
 <template>
-  <button class="t-flex t-items-center t-cursor-pointer t-text-white" :aria-label="$t(title)">
+  <button class="t-flex t-items-center t-cursor-pointer t-text-white" :aria-label="$t(title)" @click="$emit('click')">
     <material-icon :icon="icon" class="t-flex t-flex-fix" />
     <span v-html="$t(title)" class="t-hidden lg:t-flex-auto lg:t-flex t--ml-1 t-text-white t-text-sm" :class="{ 't-mr-2': !last }" />
   </button>
