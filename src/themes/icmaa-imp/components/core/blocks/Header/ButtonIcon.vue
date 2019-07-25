@@ -1,11 +1,13 @@
 <template>
-  <button class="t-flex t-items-center t-cursor-pointer t-text-white" :aria-label="$t(title)" @click="$emit('click')">
+  <button class="t-flex t-items-center t-cursor-pointer t-text-white t-relative" :aria-label="$t(title)" @click="$emit('click')">
     <material-icon :icon="icon" class="t-flex t-flex-fix" />
+    <span class="qty t-flex t-justify-center t-items-center t-absolute t-bg-alt-1 t-border-2 t-border-base-darkest t-h-4 t-w-4 t-rounded-full t-text-xs" v-if="quantity > 0" v-text="qtyAsString" />
     <span v-html="$t(title)" class="t-hidden lg:t-flex-auto lg:t-flex t--ml-1 t-text-white t-text-sm" :class="{ 't-mr-2': !last }" />
   </button>
 </template>
 
 <script>
+import inRange from 'lodash-es/inRange'
 import MaterialIcon from 'theme/components/core/blocks/MaterialIcon'
 
 export default {
@@ -21,7 +23,16 @@ export default {
       type: String,
       required: true
     },
+    quantity: {
+      type: Number,
+      default: 0
+    },
     last: Boolean
+  },
+  computed: {
+    qtyAsString () {
+      return inRange(this.quantity, 1, 9) ? this.quantity.toString() : ''
+    }
   }
 }
 </script>
@@ -33,6 +44,12 @@ button {
   i {
     width: 50px;
     flex-basis: 50px;
+  }
+
+  .qty {
+    font-size: 0.563rem;
+    top: 8px;
+    left: 26px;
   }
 }
 

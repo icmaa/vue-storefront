@@ -5,12 +5,12 @@
       :class="{ 'is-visible': navVisible }"
     >
       <div class="row-01 t-flex t-bg-black">
-        <div class="t-container t-px-4 t-flex-initial t-flex t-justify-between">
-          <button-ui-sidebar icon="dehaze" title="Menu" ui-state-name="sidebar" ui-mutation-name="setSidebar" />
+        <div class="t-container t-px-2 t-flex-initial t-flex t-justify-between">
+          <button-ui-sidebar icon="dehaze" title="Menu" ui-state="sidebar" ui-mutation="setSidebar" />
           <div class="t-flex-auto" />
-          <button-icon icon="person" title="My Account" />
-          <button-ui-sidebar icon="favorite_border" title="Wishlist" ui-state-name="wishlist" ui-mutation-name="setWishlist" />
-          <button-icon icon="shopping_cart" title="Shopping cart" />
+          <button-account />
+          <button-ui-sidebar icon="favorite_border" title="Wishlist" ui-state="wishlist" ui-mutation="setWishlist" qty-getter="wishlist/getWishlistItemsCount" />
+          <button-cart />
         </div>
       </div>
 
@@ -87,7 +87,8 @@ import { mapState } from 'vuex'
 import CurrentPage from 'theme/mixins/currentPage'
 import Logo from 'theme/components/core/blocks/Header/Logo'
 import ButtonUiSidebar from 'theme/components/core/blocks/Header/ButtonUiSidebar'
-import ButtonIcon from 'theme/components/core/blocks/Header/ButtonIcon'
+import ButtonCart from 'theme/components/core/blocks/Header/ButtonCart'
+import ButtonAccount from 'theme/components/core/blocks/Header/ButtonAccount'
 import SearchInput from 'theme/components/core/blocks/Header/SearchInput'
 
 import AccountIcon from 'theme/components/core/blocks/Header/AccountIcon'
@@ -101,8 +102,10 @@ export default {
   name: 'Header',
   components: {
     Logo,
-    ButtonIcon,
     ButtonUiSidebar,
+    ButtonCart,
+    ButtonAccount,
+
     SearchInput,
     AccountIcon,
     CompareIcon,

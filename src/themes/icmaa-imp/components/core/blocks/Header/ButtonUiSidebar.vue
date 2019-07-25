@@ -1,10 +1,9 @@
 <template>
-  <button-icon :icon="icon" :title="title" @click="openSidebarMenu" />
+  <button-icon :icon="icon" :title="title" :quantity="quantity" @click="openSidebarMenu" />
 </template>
 
 <script>
 import { mapState } from 'vuex'
-import { Logger } from '@vue-storefront/core/lib/logger';
 import ButtonIcon from 'theme/components/core/blocks/Header/ButtonIcon'
 
 export default {
@@ -20,24 +19,35 @@ export default {
       type: String,
       required: true
     },
-    uiStateName: {
+    uiState: {
       type: String,
       required: true
     },
-    uiMutationName: {
+    uiMutation: {
       type: String,
       required: true
+    },
+    qtyGetter: {
+      type: [String, Boolean],
+      default: false
     },
     last: Boolean
   },
-  computed: mapState({
-    isOpen: function (state) {
-      return state.ui[this.uiStateName]
+  computed: {
+    ...mapState({
+      isOpen: function (state) {
+        return state.ui[this.uiState]
+      }
+    }),
+    quantity () {
+      return this.qtyGetter
+        ? Number(this.$store.getters[this.qtyGetter])
+        : 0
     }
-  }),
+  },
   methods: {
     openSidebarMenu () {
-      this.$store.commit('ui/' + this.uiMutationName, !this.isOpen)
+      this.$store.commit('ui/' + this.uiMutation, !this.isOpen)
     }
   }
 }
