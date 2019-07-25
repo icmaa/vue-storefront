@@ -5,7 +5,7 @@
       :class="{ 'is-visible': navVisible }"
     >
       <div class="row-01 t-flex t-bg-black">
-        <div class="t-container t-px-2 t-flex-initial t-flex t-justify-between">
+        <div class="t-container t-px-4 t-flex-initial t-flex t-justify-between">
           <button-icon icon="dehaze" title="Menu" />
           <div class="t-flex-auto" />
           <button-icon icon="person" title="My Account" />
@@ -15,9 +15,10 @@
       </div>
 
       <div class="row-02 t-flex">
-        <div class="t-container t-px-2 t-flex t-items-center">
-          <div class="t-flex-auto" />
-          <logo width="174" height="43" class="logo t-flex-fix t--mr-2 lg:t-mr-0" />
+        <div class="t-container t-px-4 t-flex t-items-center">
+          <search-input />
+          <div class="t-flex-expand t-w-4" />
+          <logo width="174" height="43" class="logo t-flex-fix t--mr-4 xl:t-mr-0" />
         </div>
       </div>
 
@@ -92,12 +93,14 @@ import MicrocartIcon from 'theme/components/core/blocks/Header/MicrocartIcon'
 import SearchIcon from 'theme/components/core/blocks/Header/SearchIcon'
 import WishlistIcon from 'theme/components/core/blocks/Header/WishlistIcon'
 import ButtonIcon from 'theme/components/core/blocks/Header/ButtonIcon'
+import SearchInput from 'theme/components/core/blocks/Header/SearchInput'
 
 export default {
   name: 'Header',
   components: {
     Logo,
     ButtonIcon,
+    SearchInput,
     AccountIcon,
     CompareIcon,
     HamburgerIcon,
