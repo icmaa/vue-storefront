@@ -7,7 +7,7 @@
       <div class="row-01 t-flex t-bg-black">
         <div class="t-container t-px-2 t-flex-initial t-flex t-justify-between">
           <button-ui-sidebar icon="dehaze" title="Menu" ui-state="sidebar" ui-mutation="setSidebar" />
-          <div class="t-flex-auto" />
+          <div class="t-flex-auto t-border-r t-border-base" />
           <button-account />
           <button-ui-sidebar icon="favorite_border" title="Wishlist" ui-state="wishlist" ui-mutation="setWishlist" qty-getter="wishlist/getWishlistItemsCount" />
           <button-cart />
@@ -18,6 +18,7 @@
         <div class="t-container t-px-4 t-flex t-items-center">
           <search-input />
           <div class="t-flex-expand t-w-4" />
+          <meta-navigation />
           <logo width="174" height="43" class="logo t-flex-fix t--mr-4 xl:t-mr-0" />
         </div>
       </div>
@@ -34,6 +35,7 @@ import ButtonUiSidebar from 'theme/components/core/blocks/Header/ButtonUiSidebar
 import ButtonCart from 'theme/components/core/blocks/Header/ButtonCart'
 import ButtonAccount from 'theme/components/core/blocks/Header/ButtonAccount'
 import SearchInput from 'theme/components/core/blocks/Header/SearchInput'
+import MetaNavigation from 'theme/components/core/blocks/Header/MetaNavigation'
 
 export default {
   name: 'Header',
@@ -42,7 +44,8 @@ export default {
     ButtonUiSidebar,
     ButtonCart,
     ButtonAccount,
-    SearchInput
+    SearchInput,
+    MetaNavigation
   },
   mixins: [CurrentPage],
   data () {
