@@ -28,6 +28,11 @@ export const Search = {
   beforeDestroy () {
     localStorage.setItem(`shop/user/searchQuery`, this.search);
   },
+  watch: {
+    search (val, org) {
+      this.$bus.$emit('search-input-change', { search: val })
+    }
+  },
   methods: {
     onEscapePress () {
       this.closeSearchpanel()
@@ -43,8 +48,6 @@ export const Search = {
     },
     makeSearch () {
       if (this.search !== '' && this.search !== undefined) {
-        this.$bus.$emit('search-input-change', { search: this.search })
-
         let query = this.buildSearchQuery(this.search)
         let startValue = 0;
         this.start = startValue
@@ -59,11 +62,6 @@ export const Search = {
       } else {
         this.products = []
         this.emptyResults = 0
-      }
-    },
-    change () {
-      if (this.search === '') {
-        this.$bus.$emit('search-input-change', { search: this.search })
       }
     },
     seeMore () {

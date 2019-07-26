@@ -25,7 +25,6 @@
               id="search"
               v-model="search"
               @input="makeSearch"
-              @change="change"
               @blur="$v.search.$touch()"
               class="search-panel-input"
               :placeholder="$t('Type what you are looking for...')"
