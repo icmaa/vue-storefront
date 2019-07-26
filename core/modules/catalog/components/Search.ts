@@ -61,6 +61,11 @@ export const Search = {
         this.emptyResults = 0
       }
     },
+    change () {
+      if (this.search === '') {
+        this.$bus.$emit('search-input-change', { search: this.search })
+      }
+    },
     seeMore () {
       if (this.search !== '' && this.search !== undefined) {
         let query = this.buildSearchQuery(this.search)
