@@ -43,6 +43,8 @@ export const Search = {
     },
     makeSearch () {
       if (this.search !== '' && this.search !== undefined) {
+        this.$bus.$emit('search-input-change', { search: this.search })
+
         let query = this.buildSearchQuery(this.search)
         let startValue = 0;
         this.start = startValue
