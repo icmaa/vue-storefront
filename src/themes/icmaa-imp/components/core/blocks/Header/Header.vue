@@ -7,10 +7,11 @@
       <div class="row-01 t-flex t-bg-black">
         <div class="t-container t-px-2 t-flex-initial t-flex t-justify-between">
           <button-ui-sidebar icon="dehaze" title="Menu" ui-state="sidebar" ui-mutation="setSidebar" />
-          <div class="t-flex-auto t-border-r t-border-base" />
+          <div class="t-flex-auto sm:t-border-r t-border-base" />
           <button-account />
           <button-ui-sidebar icon="favorite_border" title="Wishlist" ui-state="wishlist" ui-mutation="setWishlist" qty-getter="wishlist/getWishlistItemsCount" />
           <button-cart />
+          <language-switcher />
         </div>
       </div>
 
@@ -36,6 +37,7 @@ import ButtonCart from 'theme/components/core/blocks/Header/ButtonCart'
 import ButtonAccount from 'theme/components/core/blocks/Header/ButtonAccount'
 import SearchInput from 'theme/components/core/blocks/Header/SearchInput'
 import MetaNavigation from 'theme/components/core/blocks/Header/MetaNavigation'
+import LanguageSwitcher from 'theme/components/core/blocks/Header/LanguageSwitcher'
 
 export default {
   name: 'Header',
@@ -45,7 +47,8 @@ export default {
     ButtonCart,
     ButtonAccount,
     SearchInput,
-    MetaNavigation
+    MetaNavigation,
+    LanguageSwitcher
   },
   mixins: [CurrentPage],
   data () {
