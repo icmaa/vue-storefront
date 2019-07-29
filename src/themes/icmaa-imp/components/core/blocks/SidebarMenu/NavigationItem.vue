@@ -1,6 +1,6 @@
 <template>
   <div class="t-flex t-flex-wrap t-flex-fix t-content-center t-justify-center" :class="[ widthClass, { 't-mb-2': marginBottom } ]">
-    <router-link v-if="!hasChildren" :to="localizedRoute(route)" class="t-cursor-pointer t-rounded-sm t-py-4 t-flex t-mx-1 t-w-full t-h-full t-text-center t-justify-center t-items-center t-text-sm" :class="[ backgroundColorClass, textColorClass ]">
+    <router-link v-if="!hasChildren" :to="localizedRoute(route)" class="t-cursor-pointer t-rounded-sm t-py-4 t-flex t-mx-1 t-w-full t-h-full t-text-center t-justify-center t-items-center t-text-sm" :class="[ backgroundColorClass, textColorClass, backgroundImageClass ]" :style="[ backgroundImageStyle ]">
       <template v-if="icon">
         <material-icon :icon="icon" />
         <span class="t-sr-only t-sr-only-focusable">{{ name }}</span>
@@ -44,6 +44,10 @@ export default {
       type: String,
       default: 'base-lightest'
     },
+    backgroundImage: {
+      type: [String, Boolean],
+      default: false
+    },
     icon: {
       type: [String, Boolean],
       default: false
@@ -63,11 +67,27 @@ export default {
     backgroundColorClass () {
       return 't-bg-' + this.backgroundColor
     },
+    hasBackgroundImage () {
+      return (this.backgroundImage)
+    },
+    backgroundImageStyle () {
+      if (!this.hasBackgroundImage) {
+        return {}
+      }
+
+      return {
+        backgroundImage: 'url(' + this.backgroundImage + ')',
+        backgroundBlendMode: 'multiply'
+      }
+    },
+    backgroundImageClass () {
+      return this.hasBackgroundImage ? 't-bg-center t-bg-cover' : ''
+    },
     marginBottom () {
       return !this.hasChildren
     },
     textColorClass () {
-      return this.backgroundColor !== 'base-lightest' ? 't-text-white' : ''
+      return this.backgroundColor !== 'base-lightest' || this.hasBackgroundImage ? 't-text-white' : ''
     }
   }
 }
