@@ -18,13 +18,16 @@ module.exports = {
         'alt-3': '#65BD82',
         'base-darkest': '#000000',
         'base-dark': '#1E1E1E',
-        'base': '#3E3E3E',
+        'base-tone': '#3E3E3E',
         'base-light': '#999999',
         'base-lighter': '#C7C7C7',
         'base-lightest': '#EDEDED'
       },
       spacing: {
         '3-1/2': '0.85rem'
+      },
+      fontSize: {
+        'xxs': '0.625rem'
       },
       flex: {
         'fix': '0 0 auto',
