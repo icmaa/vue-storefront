@@ -88,7 +88,7 @@ export default {
     },
     fetchMenuData () {
       return Promise.all([
-        this.$store.dispatch('icmaaCmsBlock/single', { value: 'navigation-main' }),
+        this.$store.dispatch('icmaaCmsBlock/single', { value: 'navigation-main-test' }),
         this.$store.dispatch('icmaaCmsBlock/single', { value: 'navigation-meta' })
       ])
     }
