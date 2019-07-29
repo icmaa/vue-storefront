@@ -4,7 +4,7 @@
       <top-button icon="person" text="Account" tabindex="2" class="t-text-base-light" @click.native="login" />
     </top>
     <div @click="closeMenu" class="t-p-3 t-pt-4 t-flex t-flex-wrap">
-      <navigation-item :link="link" :key="link.id" v-for="link in getMainNavigation" />
+      <navigation-item v-for="link in getMainNavigation" :link="link" :width="link.width" :background-color="link.backgroundColor" :key="link.id" />
     </div>
   </div>
 </template>
