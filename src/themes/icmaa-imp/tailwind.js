@@ -38,6 +38,7 @@ module.exports = {
     opacity: ['placeholder']
   },
   plugins: [
+    require('tailwindcss-accessibility'),
     /**
      * Add placeholder variant
      * @see https://tailwindcss.com/docs/pseudo-class-variants/#creating-custom-variants
