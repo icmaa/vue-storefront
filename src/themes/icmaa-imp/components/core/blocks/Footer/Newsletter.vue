@@ -1,5 +1,5 @@
 <template>
-  <div class="newsletter t-mt-8" v-if="!isSubscribed">
+  <div class="newsletter t-mt-8 md:t-mt-0" v-if="!isSubscribed">
     <h3 class="t-text-primary t-text-lg t-font-bold t-mb-2">
       {{ $t("Get your 5€ Voucher") }}
     </h3>
@@ -7,8 +7,8 @@
       {{ $t("Sign up for our newsletter and get exclusive offers and activities.") }}
     </p>
     <div class="t-flex t-mb-2 ">
-      <input type="text" value="" :placeholder="$t('Your email address')" class="t-flex t-flex-expand t-border t-border-r-0 t-border-base-light t-rounded-tl-sm t-rounded-bl-sm t-text-sm t-h-10 t-px-2">
-      <button type="submit" class="t-flex t-border t-border-l-0 t-border-base-light t-rounded-tr-sm t-rounded-br-sm t-text-base-tone t-pr-2">
+      <input type="text" value="" :placeholder="$t('Your email address')" @focus="showNewsletterPopup" class="t-flex t-flex-expand t-border t-border-r-0 t-border-base-light t-rounded-tl-sm t-rounded-bl-sm t-text-sm t-h-10 t-px-2">
+      <button type="submit" @click="showNewsletterPopup" class="t-flex t-border t-border-l-0 t-border-base-light t-rounded-tr-sm t-rounded-br-sm t-text-base-tone t-pr-2">
         <material-icon icon="send" />
         <span class="t-sr-only">{{ $t('Submit') }}</span>
       </button>
@@ -45,21 +45,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-  @media (min-width: 767px) and (max-width: 1200px){
-    .button-outline{
-      min-width: 100%;
-    }
-  }
-  @media (max-width: 767px) {
-    .h3 {
-      font-size: 18px;
-      text-align: center;
-    }
-    .newsletter-button {
-      padding-top: 25px;
-      text-align: center;
-    }
-  }
-</style>
