@@ -52,7 +52,7 @@ export default {
       { jsonBlockByIdentifier: 'icmaaCmsBlock/jsonBlockByIdentifier' }
     ),
     getMainNavigation () {
-      return this.jsonBlockByIdentifier('navigation-main-test')
+      return this.jsonBlockByIdentifier('navigation-main')
     },
     metaNavigation () {
       return this.jsonBlockByIdentifier('navigation-meta')
