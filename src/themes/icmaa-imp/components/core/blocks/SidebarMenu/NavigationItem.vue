@@ -2,7 +2,7 @@
   <div class="t-flex t-flex-wrap t-flex-fix t-content-center t-justify-center" :class="[ widthClass, { 't-mb-2': marginBottom } ]">
     <router-link v-if="!hasChildren" :to="localizedRoute(route)" class="t-cursor-pointer t-rounded-sm t-py-4 t-flex t-mx-1 t-w-full t-h-full t-text-center t-justify-center t-items-center t-text-sm" :class="[ backgroundColorClass, textColorClass, backgroundImageClass ]" :style="[ backgroundImageStyle ]">
       <template v-if="icon">
-        <material-icon :icon="icon" />
+        <material-icon v-bind="{ icon, iconSet }" />
         <span class="t-sr-only t-sr-only-focusable">{{ name }}</span>
       </template>
       <template v-else>
@@ -52,6 +52,10 @@ export default {
       type: [String, Boolean],
       default: false
     },
+    iconSet: {
+      type: [String],
+      default: undefined
+    },
     children: {
       type: Array,
       default: () => []
@@ -76,7 +80,7 @@ export default {
       }
 
       return {
-        backgroundImage: 'url(' + this.backgroundImage + ')',
+        backgroundImage: 'url(' + this.getMediaThumbnail(this.backgroundImage, 0, 0) + ')',
         backgroundBlendMode: 'multiply'
       }
     },

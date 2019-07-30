@@ -1,5 +1,5 @@
 <template>
-  <div class="top t-px-2 t-border-b t-border-base-lighter t-flex">
+  <div class="top t-px-2 t-bg-white t-border-b t-border-base-lighter t-flex">
     <slot />
     <div class="t-flex-expand" />
     <top-button icon="close" text="Close" tabindex="1" @click.native="closeMenu" class="t-text-base" />

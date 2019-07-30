@@ -135,7 +135,7 @@ export default {
       this.selectedCategoryIds = []
     },
     search (val, org) {
-      if (val === null) {
+      if (val === null && val === 'null') {
         return
       }
       this.$bus.$emit('search-input-change', { search: val })
