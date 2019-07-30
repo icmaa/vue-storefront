@@ -1,8 +1,8 @@
 <template>
-  <div class="newsletter t-mt-8 md:t-mt-0" v-if="!isSubscribed">
-    <h3 class="t-text-primary t-text-lg t-font-bold t-mb-2">
+  <div class="newsletter" v-if="!isSubscribed">
+    <h4 class="t-text-primary t-text-lg t-font-bold t-mb-2">
       {{ $t("Get your 5€ Voucher") }}
-    </h3>
+    </h4>
     <p class="t-text-sm t-mb-3 t-leading-tight">
       {{ $t("Sign up for our newsletter and get exclusive offers and activities.") }}
     </p>

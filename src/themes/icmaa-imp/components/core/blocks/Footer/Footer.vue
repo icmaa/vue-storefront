@@ -2,34 +2,46 @@
   <footer>
     <div class="t-bg-white t-py-6 t-px-4">
       <div class="t-container md:t-flex">
-        <div class="social-media t-flex t-justify-between t-mb-6 md:t-w-1/3 md:t-mr-8 md:t-justify-start">
-          <template v-for="(path, icon) in socialMediaIcons">
-            <router-link :key="icon" :to="path" class="t-flex t-flex-fix t-items-center t-justify-center t-w-10 t-h-10 t-rounded-full t-bg-base-light t-text-2xl t-text-white md:t-mr-4">
-              <material-icon :icon="icon" icon-set="icmaa" class="t-flex" />
-            </router-link>
-          </template>
+        <div class="social-media t-mb-6 md:t-w-1/3 md:t-mr-8">
+          <h4 class="t-hidden md:t-block t-text-sm t-text-base-tone t-mb-6">
+            {{ $t('You can find us on') }}
+          </h4>
+          <div class="t-flex t-justify-between md:t-justify-start">
+            <template v-for="(path, icon) in socialMediaIcons">
+              <router-link :key="icon" :to="path" class="t-flex t-flex-fix t-items-center t-justify-center t-w-10 t-h-10 t-rounded-full t-bg-base-light t-text-2xl t-text-white md:t-mr-4">
+                <material-icon :icon="icon" icon-set="icmaa" class="t-flex" />
+              </router-link>
+            </template>
+          </div>
         </div>
-        <div class="service-carrier t-flex t-justify-between t-flex-wrap t-mb-6 t--mx-2 t--mb-4 md:t-w-1/3 md:t-justify-start md:t-content-start">
-          <template v-for="(name, path) in carrierLogos">
-            <div :key="path" class="t-flex t-w-auto t-flex-initial t-justify-center t-px-2 t-pb-4 md:t-justify-start md:t-w-1/3">
-              <div class="t-flex t-flex-initial t-w-24 t-h-12 t-items-center t-justify-center t-border t-border-base-lighter t-rounded-sm t-p-2 sm:t-p-4 md:t-w-full">
-                <retina-image :image="`/assets/logos/${path}.png`" :alt="name" class="t-flex t-max-w-full" />
+        <div class="service-carrier t-mb-4 md:t-w-1/3 md:t-justify-start md:t-content-start">
+          <h4 class="t-hidden md:t-block t-text-sm t-text-base-tone t-mb-6">
+            {{ $t('Payments & Shipping') }}
+          </h4>
+          <div class="logos t-flex t-justify-between t-flex-wrap t--mx-2">
+            <template v-for="(name, path) in carrierLogos">
+              <div :key="path" class="t-flex t-w-auto t-flex-initial t-justify-center t-px-2 t-pb-4 md:t-justify-start md:t-w-1/3">
+                <div class="t-flex t-flex-initial t-w-24 t-h-12 t-items-center t-justify-center t-border t-border-base-lighter t-rounded-sm t-p-2 sm:t-p-4 md:t-w-full">
+                  <retina-image :image="`/assets/logos/${path}.png`" :alt="name" class="t-flex t-max-w-full" />
+                </div>
               </div>
-            </div>
-          </template>
+            </template>
+          </div>
         </div>
         <newsletter class="md:t-w-1/3 md:t-ml-8" />
       </div>
     </div>
     <div class="footer-navigation t-bg-black t-p-4">
-      <div class="t-flex t-flex-wrap t-items-center t-justify-center t-leading-looser">
-        <template v-for="(link, index) in navigation">
-          <router-link :to="link.route" class="t-flex-initial t-px-4 t-text-white t-text-xs t-uppercase md:t-px-0 md:t-pr-4" :key="index">
-            {{ link.name }}
-          </router-link>
-        </template>
-        <div class="t-flex-expand t-hidden md:t-flex" />
-        <div class="copyright t-hidden md:t-flex t-text-white t-text-xs t-uppercase" v-html="copyright" />
+      <div class="t-container">
+        <div class="t-flex t-flex-wrap t-items-center t-justify-center t-leading-looser">
+          <template v-for="(link, index) in navigation">
+            <router-link :to="link.route" class="t-flex-initial t-px-4 t-text-white t-text-xs t-uppercase md:t-px-0 md:t-pr-4" :key="index">
+              {{ link.name }}
+            </router-link>
+          </template>
+          <div class="t-flex-expand t-hidden md:t-flex" />
+          <div class="copyright t-hidden md:t-flex t-text-white t-text-xs t-uppercase" v-html="copyright" />
+        </div>
       </div>
     </div>
     <back-to-top bottom="20px" right="20px" visibleoffset="200">
@@ -128,7 +140,7 @@ export default {
 <style lang="scss" scoped>
 
 @media (max-width: 360px) {
-  .service-carrier > div {
+  .service-carrier .logos > div {
     width: 33.333333%;
   }
 }
