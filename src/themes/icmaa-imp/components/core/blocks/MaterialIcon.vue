@@ -1,5 +1,5 @@
 <template>
-  <i class="material-icons" :class="[ sizeClass ]">{{ icon }}</i>
+  <i :class="[ iconClass, sizeClass ]">{{ icon }}</i>
 </template>
 
 <script>
@@ -10,6 +10,13 @@ export default {
       type: String,
       default: 'favorite_border'
     },
+    iconSet: {
+      type: String,
+      default: 'material',
+      validation: (value) => {
+        return ['material', 'icmaa'].indexOf(value) !== -1
+      }
+    },
     size: {
       type: String,
       default: 'md',
@@ -19,6 +26,14 @@ export default {
     }
   },
   computed: {
+    iconClass () {
+      const map = {
+        'material': 'material-icons',
+        'icmaa': 'icmaa-icons'
+      }
+
+      return map[this.iconSet]
+    },
     sizeClass () {
       const map = {
         'xs': 't-text-lg',
