@@ -1,7 +1,5 @@
 const defaultTheme = require('tailwindcss/defaultTheme')
 
-defaultTheme.minWidth
-
 module.exports = {
   prefix: 't-',
   theme: {
@@ -38,9 +36,6 @@ module.exports = {
       flex: {
         'fix': '0 0 auto',
         'expand': '1 0 auto'
-      },
-      minWidth: {
-        ...() => defaultTheme.maxWidth
       }
     }
   },
