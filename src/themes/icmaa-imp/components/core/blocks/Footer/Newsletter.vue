@@ -4,7 +4,7 @@
       {{ $t("Get your 5€ Voucher") }}
     </h4>
     <p class="t-text-sm t-mb-3 t-leading-tight">
-      {{ $t("Sign up for our newsletter and get exclusive offers and activities.") }}
+      {{ $t("Get the Impericon Newsletter & and get yourself a 5€ gift.") }}
     </p>
     <div class="t-flex t-mb-2 ">
       <input type="text" value="" :placeholder="$t('Your email address')" @focus="showNewsletterPopup" class="t-flex t-flex-expand t-border t-border-r-0 t-border-base-light t-rounded-tl-sm t-rounded-bl-sm t-text-sm t-h-10 t-px-2">
@@ -13,7 +13,7 @@
         <span class="t-sr-only">{{ $t('Submit') }}</span>
       </button>
     </div>
-    <i18n path="Data is not given to third parties and unsubscription is possible at any time. { policy }" tag="p" class="t-text-xs t-text-base-light t-leading-none t-mb-4">
+    <i18n path="Data is not given to third parties and unsubscription is possible at any time. {policy}" tag="p" class="t-text-xs t-text-base-light t-leading-none t-mb-4">
       <a place="policy" href="/policy">{{ $t('Privacy Policy') }}</a>
     </i18n>
     <newsletter-popup v-if="loadNewsletterPopup" />
