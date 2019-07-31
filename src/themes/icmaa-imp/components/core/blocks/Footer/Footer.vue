@@ -3,19 +3,33 @@
     <div class="t-bg-white t-py-6">
       <div class="t-container t-px-4">
         <div class="t--mx-4 md:t-flex">
-          <div class="social-media t-mb-6 md:t-w-1/3 t-px-4">
-            <h4 class="t-hidden md:t-block t-text-sm t-text-base-tone t-mb-4">
-              {{ $t("You can find us on") }}
-            </h4>
-            <div class="t-flex t-flex-wrap t-justify-between lg:t-justify-start">
-              <template v-for="(icon, index) in socialMediaIcons">
-                <a :key="index" :href="icon.href" :title="icon.name" target="_blank" class="t-flex t-flex-fix t-items-center t-justify-center t-w-10 t-h-10 t-rounded-full t-bg-base-light t-text-2xl t-text-white sm:t-mb-2 md:sm:t-mb-0 lg:t-mr-4">
-                  <material-icon :icon="icon.icon" icon-set="icmaa" class="t-flex" />
-                </a>
-              </template>
+          <div class="t-mb-6 t-px-4 md:t-w-1/3 md:t-mb-0">
+            <div class="social-media">
+              <h4 class="t-hidden md:t-block t-text-sm t-text-base-tone t-mb-4">
+                {{ $t("You can find us on") }}
+              </h4>
+              <div class="t-flex t-flex-wrap t-justify-between xl:t-justify-start">
+                <template v-for="(icon, index) in socialMediaIcons">
+                  <a :key="index" :href="icon.href" :title="icon.name" target="_blank" class="t-flex t-flex-fix t-items-center t-justify-center t-w-10 t-h-10 t-rounded-full t-bg-base-light t-text-white md:t-w-8 md:t-h-8 lg:t-w-10 lg:t-h-10 xl:t-mr-4">
+                    <material-icon :icon="icon.icon" icon-set="icmaa" class="t-flex md:t-text-lg lg:t-text-2xl" />
+                  </a>
+                </template>
+              </div>
+            </div>
+            <div class="country t-hidden md:t-block t-mt-4" v-if="multistoreEnabled">
+              <h4 class="t-text-sm t-text-base-tone t-mb-4">
+                {{ $t('Choose your country') }}
+              </h4>
+              <div class="t-flex t-flex-wrap t--mx-2">
+                <template v-for="(store, index) in languages">
+                  <a :href="store.href" :title="store.label" :key="index" class="t-mx-2 t-mb-2">
+                    <flag-icon :iso="store['iso-code']" width="20" height="20" />
+                  </a>
+                </template>
+              </div>
             </div>
           </div>
-          <div class="service-carrier t-px-4 t-mb-4 md:t-w-1/3 md:t-justify-start md:t-content-start">
+          <div class="service-carrier t-px-4 t-mb-4 md:t-w-1/3 md:t-mb-0 md:t-justify-start md:t-content-start">
             <h4 class="t-hidden md:t-block t-text-sm t-text-base-tone t-mb-4">
               {{ $t("Payments & Shipping") }}
             </h4>
@@ -29,7 +43,7 @@
               </template>
             </div>
           </div>
-          <newsletter class="t-px-4 md:t-w-1/3" />
+          <newsletter class="t-px-4 md:t-w-1/3 md:t-mb-0" />
         </div>
       </div>
     </div>
@@ -67,12 +81,14 @@ import LanguageSwitcher from '../../LanguageSwitcher.vue'
 import Newsletter from 'theme/components/core/blocks/Footer/Newsletter'
 import BackToTop from 'theme/components/core/BackToTop'
 import MaterialIcon from 'theme/components/core/blocks/MaterialIcon'
+import FlagIcon from 'theme/components/core/blocks/FlagIcon'
 import RetinaImage from 'theme/components/core/blocks/RetinaImage'
 
 export default {
   name: 'MainFooter',
   components: {
     MaterialIcon,
+    FlagIcon,
     RetinaImage,
     Newsletter,
     LanguageSwitcher,
@@ -85,6 +101,9 @@ export default {
     ),
     footer () {
       return this.jsonBlockByIdentifier('footer')
+    },
+    languages () {
+      return this.footer.languages
     },
     multistoreEnabled () {
       return config.storeViews.multistore
