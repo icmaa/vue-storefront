@@ -8,10 +8,10 @@
               {{ $t("You can find us on") }}
             </h4>
             <div class="t-flex t-flex-wrap t-justify-between lg:t-justify-start">
-              <template v-for="(path, icon) in socialMediaIcons">
-                <router-link :key="icon" :to="path" class="t-flex t-flex-fix t-items-center t-justify-center t-w-10 t-h-10 t-rounded-full t-bg-base-light t-text-2xl t-text-white sm:t-mb-2 md:sm:t-mb-0 lg:t-mr-4">
-                  <material-icon :icon="icon" icon-set="icmaa" class="t-flex" />
-                </router-link>
+              <template v-for="(icon, index) in socialMediaIcons">
+                <a :key="index" :href="icon.href" :title="icon.name" target="_blank" class="t-flex t-flex-fix t-items-center t-justify-center t-w-10 t-h-10 t-rounded-full t-bg-base-light t-text-2xl t-text-white sm:t-mb-2 md:sm:t-mb-0 lg:t-mr-4">
+                  <material-icon :icon="icon.icon" icon-set="icmaa" class="t-flex" />
+                </a>
               </template>
             </div>
           </div>
