@@ -1,46 +1,50 @@
 <template>
   <footer>
-    <div class="t-bg-white t-py-6 t-px-4">
-      <div class="t-container md:t-flex">
-        <div class="social-media t-mb-6 md:t-w-1/3 md:t-mr-8">
-          <h4 class="t-hidden md:t-block t-text-sm t-text-base-tone t-mb-6">
-            {{ $t('You can find us on') }}
-          </h4>
-          <div class="t-flex t-justify-between md:t-justify-start">
-            <template v-for="(path, icon) in socialMediaIcons">
-              <router-link :key="icon" :to="path" class="t-flex t-flex-fix t-items-center t-justify-center t-w-10 t-h-10 t-rounded-full t-bg-base-light t-text-2xl t-text-white md:t-mr-4">
-                <material-icon :icon="icon" icon-set="icmaa" class="t-flex" />
-              </router-link>
-            </template>
+    <div class="t-bg-white t-py-6">
+      <div class="t-container t-px-4">
+        <div class="t--mx-4 md:t-flex">
+          <div class="social-media t-mb-6 md:t-w-1/3 t-px-4">
+            <h4 class="t-hidden md:t-block t-text-sm t-text-base-tone t-mb-4">
+              {{ $t("You can find us on") }}
+            </h4>
+            <div class="t-flex t-flex-wrap t-justify-between lg:t-justify-start">
+              <template v-for="(path, icon) in socialMediaIcons">
+                <router-link :key="icon" :to="path" class="t-flex t-flex-fix t-items-center t-justify-center t-w-10 t-h-10 t-rounded-full t-bg-base-light t-text-2xl t-text-white sm:t-mb-2 md:sm:t-mb-0 lg:t-mr-4">
+                  <material-icon :icon="icon" icon-set="icmaa" class="t-flex" />
+                </router-link>
+              </template>
+            </div>
           </div>
-        </div>
-        <div class="service-carrier t-mb-4 md:t-w-1/3 md:t-justify-start md:t-content-start">
-          <h4 class="t-hidden md:t-block t-text-sm t-text-base-tone t-mb-6">
-            {{ $t('Payments & Shipping') }}
-          </h4>
-          <div class="logos t-flex t-justify-between t-flex-wrap t--mx-2">
-            <template v-for="(name, path) in carrierLogos">
-              <div :key="path" class="t-flex t-w-auto t-flex-initial t-justify-center t-px-2 t-pb-4 md:t-justify-start md:t-w-1/3">
-                <div class="t-flex t-flex-initial t-w-24 t-h-12 t-items-center t-justify-center t-border t-border-base-lighter t-rounded-sm t-p-2 sm:t-p-4 md:t-w-full">
-                  <retina-image :image="`/assets/logos/${path}.png`" :alt="name" class="t-flex t-max-w-full" />
+          <div class="service-carrier t-px-4 t-mb-4 md:t-w-1/3 md:t-justify-start md:t-content-start">
+            <h4 class="t-hidden md:t-block t-text-sm t-text-base-tone t-mb-4">
+              {{ $t("Payments & Shipping") }}
+            </h4>
+            <div class="logos t-flex t-justify-between t-flex-wrap t--mx-2">
+              <template v-for="(name, path) in carrierLogos">
+                <div :key="path" class="t-flex t-flex-initial t-w-1/3 t-justify-center t-px-2 t-pb-4">
+                  <div class="t-flex t-flex-initial t-h-12 t-mw-24 t-w-full t-py-2 t-px-1 t-items-center t-justify-center t-border t-border-base-lighter t-rounded-sm">
+                    <retina-image :image="`/assets/logos/${path}.png`" :alt="name" class="t-flex t-max-w-full" />
+                  </div>
                 </div>
-              </div>
-            </template>
+              </template>
+            </div>
           </div>
+          <newsletter class="t-px-4 md:t-w-1/3" />
         </div>
-        <newsletter class="md:t-w-1/3 md:t-ml-8" />
       </div>
     </div>
-    <div class="footer-navigation t-bg-black t-p-4">
-      <div class="t-container">
-        <div class="t-flex t-flex-wrap t-items-center t-justify-center t-leading-looser">
-          <template v-for="(link, index) in navigation">
-            <router-link :to="link.route" class="t-flex-initial t-px-4 t-text-white t-text-xs t-uppercase md:t-px-0 md:t-pr-4" :key="index">
-              {{ link.name }}
-            </router-link>
-          </template>
-          <div class="t-flex-expand t-hidden md:t-flex" />
-          <div class="copyright t-hidden md:t-flex t-text-white t-text-xs t-uppercase" v-html="copyright" />
+    <div class="footer-navigation t-bg-black t-py-4">
+      <div class="t-container t-px-4">
+        <div class="t--mx-4 lg:t-flex">
+          <div class="t-flex t-w-full t-flex-wrap t-items-center t-justify-center t-leading-looser">
+            <template v-for="(link, index) in navigation">
+              <router-link :to="link.route" class="t-flex-initial t-px-4 t-text-white t-text-xs t-uppercase" :key="index">
+                {{ link.name }}
+              </router-link>
+            </template>
+            <div class="t-hidden t-flex-expand lg:t-flex" />
+            <div class="copyright t-px-4 t-hidden lg:t-flex t-text-white t-text-xs t-uppercase" v-html="copyright" />
+          </div>
         </div>
       </div>
     </div>
