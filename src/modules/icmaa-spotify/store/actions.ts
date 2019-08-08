@@ -11,14 +11,20 @@ import { processURLAddress } from '@vue-storefront/core/helpers'
 import { Logger } from '@vue-storefront/core/lib/logger'
 
 const actions: ActionTree<SpotifyState, RootState> = {
-  async fetchRelatedArtist (context, category: Category): Promise<any> {
+  async fetchRelatedArtists (context, name: string) {
+    const { endpoint } = config.icmaa_spotify
+    const apiUrl = endpoint + '/related-artists/' + encodeURIComponent(name)
+    return Axios.get(processURLAddress(apiUrl))
+      .then(resp => resp.data.result)
+      .catch(() => [])
+  },
+  async fetchRelatedArtistsByCategory (context, category: Category): Promise<any> {
     if (!isCategoryInWhitelist(category)) {
       Logger.log('Not a child of parent category whitelist', 'icmaaSpotify')()
       return
     }
 
     const { id, name } = category
-    const { endpoint } = config.icmaa_spotify
     const state = context.state
 
     const cacheKey = storageKey + '/' + id
@@ -31,10 +37,7 @@ const actions: ActionTree<SpotifyState, RootState> = {
         })
       }
 
-      const apiUrl = endpoint + '/related-artists/' + encodeURIComponent(name)
-      const relatedArtists = await Axios.get(processURLAddress(apiUrl))
-        .then(resp => resp.data.result)
-        .catch(() => [])
+      const relatedArtists = await context.dispatch('fetchRelatedArtists', name)
 
       if (relatedArtists.length > 0) {
         const result = { categoryId: id, relatedArtists }
