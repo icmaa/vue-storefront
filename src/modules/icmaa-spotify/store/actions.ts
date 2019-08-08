@@ -65,9 +65,12 @@ const actions: ActionTree<SpotifyState, RootState> = {
     await dispatch('fetchRelatedArtistsByCategory', category)
     const relatedArtists = getters.relatedArtistByCategoryId(category.id)
 
-    const categorySearchOptions: DataResolver.CategorySearchOptions = {
-      filters: { 'name': relatedArtists }
-    }
+    /**
+     * To make full-text search possible in elasticsearch we must search the "name.keyword" field of our field.
+     * Otherwise it wont find any content because the originial "name" field is type "text"
+     * and can't be searched on using "terms".
+     */
+    const categorySearchOptions: DataResolver.CategorySearchOptions = { filters: { 'name.keyword': relatedArtists } }
     const categories = await dispatch('category-next/loadCategories', categorySearchOptions, { root: true })
 
     Logger.error('CATEGORIES', 'fetchRelatedArtistsCategories', categories)()
