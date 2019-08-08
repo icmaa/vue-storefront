@@ -31,12 +31,44 @@ export interface ListOptionsInterface {
 export const list = async <T>(options: OptionsInterface): Promise<T> => {
   let values = options.options as ListOptionsInterface | string
   let { context, documentType, mutationTypes, storageKey } = options
+  const { state } = context
 
   const storeView = currentStoreView()
   let params = {
     'type': documentType,
     'q': values,
     'lang': storeView ? storeView.i18n.defaultLocale.toLowerCase() : null
+  }
+
+  if (typeof values === 'string') {
+    let identifiers = values.split(',')
+    const extistingIdentifiersInState = identifiers.filter(i => (state.items.find(s => s.identifier === i)))
+
+    if (state.items.length !== 0) {
+      const stateItems = state.items.filter(i => extistingIdentifiersInState.includes(i.identifier))
+      stateItems.forEach(i => {
+        cache.setItem(storageKey + '/' + i.identifier, i)
+          .catch(error => Logger.error(error, 'icmaa-cms'))
+      })
+
+      if (identifiers.length === extistingIdentifiersInState.length) {
+        return stateItems
+      }
+    }
+
+    const searchForIdentifiersInCache = identifiers.filter(i => !extistingIdentifiersInState.includes(i))
+    values = searchForIdentifiersInCache.filter(async i => {
+      await cache.getItem(storageKey + '/' + i)
+        .then(result => {
+          if (!result) {
+            return false
+          }
+
+          context.commit(mutationTypes.add, result)
+          return true
+        })
+        .catch(() => false)
+    }).join(',')
   }
 
   return Axios.get(
