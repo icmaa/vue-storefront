@@ -8,7 +8,7 @@ import SpotifyState from '../types/SpotifyState'
 export const SpotifyStore: Module<SpotifyState, RootState> = {
   namespaced: true,
   state: {
-    relatedArtists: []
+    relatedArtists: {}
   },
   getters,
   actions,

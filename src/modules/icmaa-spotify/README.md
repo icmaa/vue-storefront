@@ -10,7 +10,8 @@ Get Spotify data via API for recommecndations
 * Add the following API endpoint to `config/local.json`:
   ```
   "icmaa_spotify": {
-    "endpoint": "/api/ext/icmaa-spotify"
+    "endpoint": "/api/ext/icmaa-spotify",
+    "parentCategoryWhitelist": [ 16 ]
   }
   ```
 

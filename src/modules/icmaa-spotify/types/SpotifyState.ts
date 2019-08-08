@@ -1,8 +1,7 @@
 export default interface SpotifyState {
-  relatedArtists: RelatedArtistsStateListItem[]
+  relatedArtists: RelatedArtistsStateList
 }
 
-export interface RelatedArtistsStateListItem {
-  categoryId: number,
-  relatedArtists: string[]
+export interface RelatedArtistsStateList {
+  [categoryId: number]: string[]
 }
