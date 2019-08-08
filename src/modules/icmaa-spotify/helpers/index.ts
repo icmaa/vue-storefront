@@ -1,6 +1,5 @@
 import config from 'config'
 import { Category } from '@vue-storefront/core/modules/catalog-next/types/Category'
-import { Logger } from '@vue-storefront/core/lib/logger'
 
 export const isCategoryInWhitelist = (category: Category) => {
   const { parentCategoryWhitelist } = config.icmaa_spotify

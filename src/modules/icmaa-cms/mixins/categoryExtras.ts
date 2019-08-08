@@ -37,7 +37,7 @@ export default {
       const category = this.$store.getters['category-next/getCurrentCategory']
       if (category && !this.categoryExtrasByIdentifier(category.url_key)) {
         await this.$store.dispatch('icmaaCmsCategoryExtras/single', { value: category.url_key })
-        await this.$store.dispatch('icmaaSpotify/fetchRelatedArtistsByCategory', category)
+        await this.$store.dispatch('icmaaSpotify/fetchRelatedArtists', category)
       }
     },
     getCategoryExtrasValueOrCategoryValue (key: string, catKey: string = 'name'): any {

@@ -1,17 +1,20 @@
 import { ActionTree } from 'vuex'
 import RootState from '@vue-storefront/core/types/RootState';
 import { Category } from '@vue-storefront/core/modules/catalog-next/types/Category'
+import { DataResolver } from '@vue-storefront/core/data-resolver/types/DataResolver';
 import SpotifyState from '../types/SpotifyState'
 import * as mutationTypes from './mutation-types'
 import { cacheStorage as cache, storageKey } from '../'
 import { isCategoryInWhitelist } from '../helpers'
+
 import Axios from 'axios'
 import config from 'config'
 import { processURLAddress } from '@vue-storefront/core/helpers'
+
 import { Logger } from '@vue-storefront/core/lib/logger'
 
 const actions: ActionTree<SpotifyState, RootState> = {
-  async fetchRelatedArtists (context, name: string) {
+  async fetchRelatedArtistsByName (context, name: string) {
     const { endpoint } = config.icmaa_spotify
     const apiUrl = endpoint + '/related-artists/' + encodeURIComponent(name)
     return Axios.get(processURLAddress(apiUrl))
@@ -37,7 +40,7 @@ const actions: ActionTree<SpotifyState, RootState> = {
         })
       }
 
-      const relatedArtists = await context.dispatch('fetchRelatedArtists', name)
+      const relatedArtists = await context.dispatch('fetchRelatedArtistsByName', name)
 
       if (relatedArtists.length > 0) {
         const result = { categoryId: id, relatedArtists }
@@ -57,6 +60,19 @@ const actions: ActionTree<SpotifyState, RootState> = {
         }
       })
     }
+  },
+  async fetchRelatedArtists ({ commit, getters, dispatch, rootState }, category: Category) {
+    await dispatch('fetchRelatedArtistsByCategory', category)
+    const relatedArtists = getters.relatedArtistByCategoryId(category.id)
+
+    const categorySearchOptions: DataResolver.CategorySearchOptions = {
+      filters: { 'name': relatedArtists }
+    }
+    const categories = await dispatch('category-next/loadCategories', categorySearchOptions, { root: true })
+
+    Logger.error('CATEGORIES', 'fetchRelatedArtistsCategories', categories)()
+
+    return categories
   }
 }
 
