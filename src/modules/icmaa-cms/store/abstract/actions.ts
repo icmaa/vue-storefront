@@ -13,7 +13,7 @@ export { MutationTypesInterface }
 
 export interface OptionsInterface {
   context: any,
-  options: SingleOptionsInterface,
+  options: string | ListOptionsInterface | SingleOptionsInterface,
   documentType: string,
   mutationTypes: MutationTypesInterface,
   storageKey: string
@@ -24,8 +24,44 @@ export interface SingleOptionsInterface {
   value: string
 }
 
+export interface ListOptionsInterface {
+  [key: string]: string
+}
+
+export const list = async <T>(options: OptionsInterface): Promise<T> => {
+  let values = options.options as ListOptionsInterface | string
+  let { context, documentType, mutationTypes, storageKey } = options
+
+  const storeView = currentStoreView()
+  let params = {
+    'type': documentType,
+    'q': values,
+    'lang': storeView ? storeView.i18n.defaultLocale.toLowerCase() : null
+  }
+
+  return Axios.get(
+    processURLAddress(config.icmaa_cms.endpoint) + '/search',
+    { responseType: 'json', params }
+  ).then(resp => {
+    let results = resp.data.result
+    if (results.length === 0) {
+      Logger.log(`No results found for :`, `icmaa-cms/${documentType}`, values)()
+      return
+    }
+
+    results.forEach(result => {
+      const cacheKey = storageKey + '/' + result.identifier
+      context.commit(mutationTypes.add, result)
+      cache.setItem(cacheKey, result)
+        .catch(error => Logger.error(error, 'icmaa-cms'))
+    });
+
+    return results
+  })
+}
+
 export const single = async <T>(options: OptionsInterface): Promise<T> => {
-  let { key, value } = options.options
+  let { key, value } = options.options as SingleOptionsInterface
   let { context, documentType, mutationTypes, storageKey } = options
   if (!key || key === null) {
     key = 'identifier'
@@ -50,24 +86,20 @@ export const single = async <T>(options: OptionsInterface): Promise<T> => {
 
     let params = {
       'type': documentType,
-      'uid': encodeURIComponent(value),
-      'lang': null
-    }
-
-    if (storeView) {
-      params.lang = storeView.i18n.defaultLocale.toLowerCase()
+      'uid': value,
+      'lang': storeView ? storeView.i18n.defaultLocale.toLowerCase() : null
     }
 
     return Axios.get(
-      processURLAddress(config.icmaa_cms.endpoint),
+      processURLAddress(config.icmaa_cms.endpoint) + '/by-uid',
       { responseType: 'json', params }
     ).then(resp => {
       let result = resp.data.result;
-      if (Object.keys(result).length === 0 || result.status === 400) {
-        throw new Error('No results found')
+      if (Object.keys(result).length === 0 || resp.data.code === 400) {
+        Logger.log(`No results found for ${key} "${value}"`, `icmaa-cms/${documentType}`)()
+        return
       }
 
-      result[key] = value;
       context.commit(mutationTypes.upd, result)
 
       cache.setItem(cacheKey, result)
@@ -76,7 +108,7 @@ export const single = async <T>(options: OptionsInterface): Promise<T> => {
       return result
     }).catch(error => {
       context.commit(mutationTypes.rmv, { identifier: value })
-      Logger.error(`Error while fetching ${key} "${value}"`, `icmaa-cms/${documentType}`, error)()
+      Logger.error(`Error while fetching ${key} "${value}"`, `icmaa-cms/${documentType}`, error.message)()
     })
   } else {
     return new Promise((resolve, reject) => {
