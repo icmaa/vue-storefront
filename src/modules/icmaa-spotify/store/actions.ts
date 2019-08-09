@@ -63,7 +63,7 @@ const actions: ActionTree<SpotifyState, RootState> = {
   },
   async fetchRelatedArtists ({ commit, getters, dispatch, rootState }, category: Category) {
     await dispatch('fetchRelatedArtistsByCategory', category)
-    const relatedArtists = getters.relatedArtistByCategoryId(category.id)
+    const relatedArtists = getters.relatedArtistsByCategoryId(category.id)
 
     /**
      * To make full-text search possible in elasticsearch we must search the "name.keyword" field of our field.
@@ -74,10 +74,7 @@ const actions: ActionTree<SpotifyState, RootState> = {
     const categories = await dispatch('category-next/loadCategories', categorySearchOptions, { root: true })
     const categoryExtras = await dispatch('icmaaCmsCategoryExtras/list', categories.map(c => c.url_key).join(','), { root: true })
 
-    Logger.error('CATEGORIES', 'fetchRelatedArtistsCategories', categories)()
-    Logger.error('CATEGORYEXTRAS', 'fetchRelatedArtistsCategories', categoryExtras)()
-
-    return categories
+    return categoryExtras
   }
 }
 

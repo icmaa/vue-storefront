@@ -35,8 +35,11 @@ export default {
   methods: {
     async fetchAsyncData () {
       const category = this.$store.getters['category-next/getCurrentCategory']
-      if (category && !this.categoryExtrasByIdentifier(category.url_key)) {
-        await this.$store.dispatch('icmaaCmsCategoryExtras/single', { value: category.url_key })
+      if (category) {
+        if (!this.categoryExtrasByUrlKey(category.url_key)) {
+          await this.$store.dispatch('icmaaCmsCategoryExtras/single', { value: category.url_key })
+        }
+
         await this.$store.dispatch('icmaaSpotify/fetchRelatedArtists', category)
       }
     },
@@ -47,8 +50,7 @@ export default {
   },
   computed: {
     ...mapGetters('category-next', ['getCurrentCategory']),
-    ...mapGetters('icmaaCmsCategoryExtras', ['categoryExtrasByCurrentCategory']),
-    ...mapGetters('icmaaCmsCategoryExtras', ['categoryExtrasByIdentifier']),
+    ...mapGetters('icmaaCmsCategoryExtras', ['categoryExtrasByCurrentCategory', 'categoryExtrasByUrlKey', 'spotifyLogolineItemsByCurrentCategory']),
     categoryExtras (): CategoryExtrasStateItem|boolean {
       return this.categoryExtrasByCurrentCategory
     },

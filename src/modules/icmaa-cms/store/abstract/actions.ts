@@ -71,6 +71,10 @@ export const list = async <T>(options: OptionsInterface): Promise<T> => {
     }).join(',')
   }
 
+  if (values.length === 0) {
+    return
+  }
+
   return Axios.get(
     processURLAddress(config.icmaa_cms.endpoint) + '/search',
     { responseType: 'json', params }
