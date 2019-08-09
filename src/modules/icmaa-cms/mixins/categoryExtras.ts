@@ -50,7 +50,7 @@ export default {
   },
   computed: {
     ...mapGetters('category-next', ['getCurrentCategory']),
-    ...mapGetters('icmaaCmsCategoryExtras', ['categoryExtrasByCurrentCategory', 'categoryExtrasByUrlKey', 'spotifyLogolineItemsByCurrentCategory']),
+    ...mapGetters('icmaaCmsCategoryExtras', ['categoryExtrasByCurrentCategory', 'categoryExtrasByUrlKey']),
     categoryExtras (): CategoryExtrasStateItem|boolean {
       return this.categoryExtrasByCurrentCategory
     },

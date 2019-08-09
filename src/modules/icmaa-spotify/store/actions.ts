@@ -72,9 +72,7 @@ const actions: ActionTree<SpotifyState, RootState> = {
      */
     const categorySearchOptions: DataResolver.CategorySearchOptions = { filters: { 'name.keyword': relatedArtists } }
     const categories = await dispatch('category-next/loadCategories', categorySearchOptions, { root: true })
-    const categoryExtras = await dispatch('icmaaCmsCategoryExtras/list', categories.map(c => c.url_key).join(','), { root: true })
-
-    return categoryExtras
+    return dispatch('icmaaCmsCategoryExtras/list', categories.map(c => c.url_key).join(','), { root: true })
   }
 }
 

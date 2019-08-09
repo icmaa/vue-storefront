@@ -4,8 +4,8 @@ import { Category } from '@vue-storefront/core/modules/catalog-next/types/Catego
 import RootState from '@vue-storefront/core/types/RootState'
 
 const getters: GetterTree<SpotifyState, RootState> = {
-  relatedArtist: (state) => state.relatedArtists,
-  relatedArtistsByCategoryId: (state) => (id: number): string[] => state.relatedArtists[id],
+  relatedArtists: (state) => state.relatedArtists,
+  relatedArtistsByCategoryId: (state) => (id: number): string[] => state.relatedArtists[id] || [],
   relatedArtistsCategoriesByCategoryId: (state, getters, rootState, rootGetters) => (id: number): Category[] => {
     return getters.relatedArtistsByCategoryId(id)
       .map(name => rootGetters['icmaaCmsCategoryExtras/categoryBy']('name', name))

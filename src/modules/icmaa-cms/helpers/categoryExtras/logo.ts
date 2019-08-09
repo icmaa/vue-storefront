@@ -1,23 +1,75 @@
+import * as config from 'config'
 import { Category } from '@vue-storefront/core/modules/catalog-next/types/Category'
-import { Logger } from '@vue-storefront/core/lib/logger'
+import { getThumbnailPath } from '@vue-storefront/core/helpers'
+import { localizedRoute, currentStoreView } from '@vue-storefront/core/lib/multistore'
 
 export class Logo {
-  protected name: string
-  protected category: Category
-  protected logoFileName: string
+  protected _name: string
+  protected _category: Category | boolean = false
+  protected _logoFileName: string
+  protected _height: undefined | number
+  protected _width: undefined | number
 
   public constructor (category: Category | string) {
     if (typeof category === 'string') {
-      this.name = category
+      this._name = category
     } else {
-      this.category = category
-      this.name = category.name
+      this._category = category
+      this._name = category.name
     }
   }
 
-  public getLogoFileName (): string {
-    if (!this.logoFileName) {
-      let name = this.name.toLowerCase()
+  public data () {
+    return {
+      url: this.url,
+      retinaUrl: this.retinaUrl,
+      alt: this.name,
+      link: this.link
+    }
+  }
+
+  public get category (): Category | boolean {
+    return this._category || false
+  }
+
+  public get name (): string {
+    return this._name
+  }
+
+  public get path (): string {
+    return this.getPath()
+  }
+
+  public get retinaPath (): string {
+    return this.getPath(true)
+  }
+
+  public get url (): string {
+    return getThumbnailPath(this.path, this.width, this.height, 'media')
+  }
+
+  public get retinaUrl (): string {
+    return getThumbnailPath(this.retinaPath, this.width * 2 || undefined, this.height * 2 || undefined, 'media')
+  }
+
+  public get link (): string | boolean {
+    if (!this.category) {
+      return false
+    }
+
+    return localizedRoute(
+      { name: 'category', fullPath: (this.category as Category).url_path },
+      currentStoreView().storeCode
+    )
+  }
+
+  protected getPath (isRetina: boolean = false): string {
+    return `/${this.getFolderPath()}/${this.getFileName()}${isRetina ? '@2x' : ''}.png`
+  }
+
+  protected getFileName (): string {
+    if (!this._logoFileName) {
+      let name = this._name.toLowerCase()
 
       const allowedCharacterRegExp = /[^a-zA-Z0-9äüöÄÜÖ]/gm
       name = name.replace(allowedCharacterRegExp, '')
@@ -28,9 +80,27 @@ export class Logo {
         name = name.replace(c, specialCharsRep[i])
       })
 
-      this.logoFileName = name
+      this._logoFileName = name
     }
 
-    return this.logoFileName
+    return this._logoFileName
+  }
+
+  protected getFolderPath = (): string => config.icmaa_cms.categoryExtras.logoFilePath
+
+  public get width () {
+    return this._width
+  }
+
+  public set width (v) {
+    this._width = v
+  }
+
+  public get height () {
+    return this._height
+  }
+
+  public set height (v) {
+    this._width = v
   }
 }
