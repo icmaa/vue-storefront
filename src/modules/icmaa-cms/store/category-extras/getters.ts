@@ -14,7 +14,7 @@ const getters: GetterTree<CategoryExtrasState, RootState> = {
     return category ? getters.categoryExtrasByUrlKey(category.url_key) : false
   },
   categoryBy: (state, getters, rootState, rootGetters) => (key: string, value: any): Category|boolean => {
-    return rootGetters['category-next/getCategories']().find(c => c[key] === value)
+    return rootGetters['category-next/getCategories'].find(c => c[key] === value)
   },
   logolineItems: (state, getters, rootState, rootGetters) => (categories: Category[], type: string = 'crossreferenceInLogoline'): Logo[] => {
     let logos = []
