@@ -52,7 +52,7 @@ const actions: ActionTree<SpotifyState, RootState> = {
       return new Promise((resolve, reject) => {
         let result = state.relatedArtists[id]
         if (result) {
-          cache.setItem(cacheKey, result)
+          cache.setItem(cacheKey, { categoryId: id, relatedArtists: result })
             .catch(error => Logger.error(error, 'icmaa-spotify'))
           resolve(result)
         } else {
