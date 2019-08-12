@@ -5,21 +5,21 @@ import RootState from '@vue-storefront/core/types/RootState'
 import { Logo } from '../../helpers/categoryExtras/logo'
 
 const getters: GetterTree<CategoryExtrasState, RootState> = {
-  categoryExtras: (state) => state.items,
-  categoryExtrasByUrlKey: (state) => (identifier): CategoryExtrasStateItem => {
+  getCategoryExtras: (state) => state.items,
+  getCategoryExtrasByUrlKey: (state) => (identifier): CategoryExtrasStateItem => {
     return state.items.find(item => item.identifier === identifier)
   },
-  categoryExtrasByCurrentCategory: (state, getters, rootState, rootGetters): CategoryExtrasStateItem|boolean => {
+  getCategoryExtrasByCurrentCategory: (state, getters, rootState, rootGetters): CategoryExtrasStateItem|boolean => {
     const category = rootGetters['category-next/getCurrentCategory']
-    return category ? getters.categoryExtrasByUrlKey(category.url_key) : false
+    return category ? getters.getCategoryExtrasByUrlKey(category.url_key) : false
   },
-  categoryBy: (state, getters, rootState, rootGetters) => (key: string, value: any): Category|boolean => {
+  getCategoryBy: (state, getters, rootState, rootGetters) => (key: string, value: any): Category|boolean => {
     return rootGetters['category-next/getCategories'].find(c => c[key] === value)
   },
-  logolineItems: (state, getters, rootState, rootGetters) => (categories: Category[], type: string = 'crossreferenceInLogoline'): Logo[] => {
+  getLogolineItems: (state, getters, rootState, rootGetters) => (categories: Category[], type: string = 'crossreferenceInLogoline'): Logo[] => {
     let logos = []
     categories.forEach(c => {
-      const extras = getters.categoryExtrasByUrlKey(c.url_key)
+      const extras = getters.getCategoryExtrasByUrlKey(c.url_key)
       if (extras && extras.hasLogo && extras[type]) {
         logos.push(new Logo(c))
       }
@@ -27,10 +27,10 @@ const getters: GetterTree<CategoryExtrasState, RootState> = {
 
     return logos
   },
-  spotifyLogolineItemsByCurrentCategory: (state, getters, rootState, rootGetters): Logo[]|boolean => {
-    const relatedArtistsCategories = rootGetters['icmaaSpotify/relatedArtistsCategoriesByCurrentCategory']
+  getSpotifyLogolineItemsByCurrentCategory: (state, getters, rootState, rootGetters): Logo[]|boolean => {
+    const relatedArtistsCategories = rootGetters['icmaaSpotify/getRelatedArtistsCategoriesByCurrentCategory']
     if (relatedArtistsCategories.length > 0) {
-      return getters.logolineItems(relatedArtistsCategories)
+      return getters.getLogolineItems(relatedArtistsCategories)
     }
 
     return false

@@ -50,7 +50,8 @@ export default {
   },
   computed: {
     ...mapGetters('category-next', ['getCurrentCategory']),
-    ...mapGetters('icmaaCmsCategoryExtras', ['categoryExtrasByCurrentCategory', 'categoryExtrasByUrlKey']),
+    ...mapGetters({ categoryExtrasByUrlKey: 'icmaaCmsCategoryExtras/getCategoryExtrasByUrlKey' }),
+    ...mapGetters({ categoryExtrasByCurrentCategory: 'icmaaCmsCategoryExtras/getCategoryExtrasByCurrentCategory' }),
     categoryExtras (): CategoryExtrasStateItem|boolean {
       return this.categoryExtrasByCurrentCategory
     },

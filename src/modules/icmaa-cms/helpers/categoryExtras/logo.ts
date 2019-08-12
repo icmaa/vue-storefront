@@ -1,4 +1,4 @@
-import * as config from 'config'
+import { icmaa_cms as config } from 'config'
 import { Category } from '@vue-storefront/core/modules/catalog-next/types/Category'
 import { getThumbnailPath } from '@vue-storefront/core/helpers'
 import { localizedRoute, currentStoreView } from '@vue-storefront/core/lib/multistore'
@@ -86,7 +86,7 @@ export class Logo {
     return this._logoFileName
   }
 
-  protected getFolderPath = (): string => config.icmaa_cms.categoryExtras.logoFilePath
+  protected getFolderPath = (): string => config.categoryExtras.logoFilePath
 
   public get width () {
     return this._width

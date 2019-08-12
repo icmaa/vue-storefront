@@ -63,7 +63,7 @@ const actions: ActionTree<SpotifyState, RootState> = {
   },
   async fetchRelatedArtists ({ commit, getters, dispatch, rootState }, category: Category) {
     await dispatch('fetchRelatedArtistsByCategory', category)
-    const relatedArtists = getters.relatedArtistsByCategoryId(category.id)
+    const relatedArtists = getters.getRelatedArtistsByCategoryId(category.id)
 
     /**
      * To make full-text search possible in elasticsearch we must search the "name.keyword" field of our field.
