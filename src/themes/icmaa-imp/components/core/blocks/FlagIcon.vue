@@ -30,13 +30,13 @@ export default {
       return this.$attrs
     },
     sprite () {
-      return `/assets/flags/${this.format}.svg`
+      return require(`@icmaa/vsf-theme-imp/assets/flags/${this.format}.svg`)
     },
     isoFileCode () {
       return this.iso.toLowerCase()
     },
     image () {
-      return `/assets/flags/${this.format}/${this.isoFileCode}.svg`
+      return require(`@icmaa/vsf-theme-imp/assets/flags/${this.format}/${this.isoFileCode}.svg`)
     }
   }
 }
