@@ -1,4 +1,4 @@
-import { store } from '../'
+import { store, storeLang } from '../'
 import { storeViews, icmaa_meta } from 'config'
 
 import { StoreView } from '@vue-storefront/core/lib/multistore'
@@ -16,7 +16,7 @@ class Hreflang {
 
   public getCurrentStoreViewUrlPath (store: StoreView) {
     let path = ''
-    if (icmaa_meta && icmaa_meta.base_url) {
+    if (this.hasConfigs()) {
       path = router.currentRoute.path
       path = (!store.url.startsWith('/'))
         ? store.url.replace(/\/$/, '') + router.currentRoute.path
@@ -27,11 +27,11 @@ class Hreflang {
   }
 
   public getHreflanFromConfigs: Function = (store: StoreView): HreflangInterface | boolean => {
-    const hreflang = icmaa_meta && icmaa_meta.hreflang && icmaa_meta.hreflang.find(m => m.storeCode === store.storeCode)
-    if (hreflang) {
+    const hreflangConfig = icmaa_meta && icmaa_meta.hreflang && icmaa_meta.hreflang.find(m => m.storeCode === store.storeCode)
+    if (this.hasConfigs()) {
       return {
         rel: 'alternate',
-        hreflang: hreflang['lang'],
+        hreflang: hreflangConfig ? hreflangConfig['lang'] : store.i18n.defaultLocale,
         href: this.getCurrentStoreViewUrlPath(store)
       }
     }
@@ -62,6 +62,10 @@ class Hreflang {
     }
 
     return this._hreflang
+  }
+
+  protected hasConfigs (): boolean {
+    return (icmaa_meta && icmaa_meta.base_url && icmaa_meta.hreflang)
   }
 
   public getItems (): HreflangInterface[] {
