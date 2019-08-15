@@ -23,6 +23,7 @@
     "vuex": "^3.0.1"
   },
   "devDependencies": {
+    "webpack-spritesmith": "^1.0.1",
     "svg-sprite": "^1.5.0"
   }
 }
