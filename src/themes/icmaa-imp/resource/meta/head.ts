@@ -1,4 +1,5 @@
-import { storeCode, storeLang } from 'icmaa-meta/helper'
+import { storeCode, storeLang, store } from 'icmaa-meta/helper'
+import hreflang from 'icmaa-meta/helper/head/hreflang'
 
 const defaults: any = {
   title: 'Dein offizieller Merchandise, Streetwear und Fanartikel Shop',
@@ -16,6 +17,7 @@ const defaults: any = {
     { name: 'apple-mobile-web-app-status-bar-style', content: '#ffffff' }
   ],
   link: [
+    ...hreflang.getItems(),
     { rel: 'icon', type: 'image/png', href: '/assets/favicon-32x32.png', sizes: '32x32' },
     { rel: 'icon', type: 'image/png', href: '/assets/favicon-16x16.png', sizes: '16x16' },
     { rel: 'apple-touch-icon', href: '/assets/apple-touch-icon.png' },

@@ -20,7 +20,7 @@ export const IcmaaMetaStore: Module<IcmaaMetaStoreState, any> = {
     }
   },
   actions: {
-    async load ({commit, rootState}, data) {
+    async load ({ commit }) {
       let metaData: any
       try {
         metaData = await import(/* webpackChunkName: "vsf-meta-[request]" */ `theme/resource/meta/head-${storeCode()}`)
