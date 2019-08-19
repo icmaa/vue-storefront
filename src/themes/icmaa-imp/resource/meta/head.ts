@@ -17,8 +17,8 @@ const defaults: any = {
     { name: 'mobile-web-app-capable', content: 'yes' },
     { name: 'theme-color', content: '#ffffff' },
     { name: 'apple-mobile-web-app-status-bar-style', content: '#ffffff' },
-    { property: 'fb:page_id', content: facebook.appId },
-    { property: 'fb:app_id', content: facebook.pageId }
+    { property: 'fb:page_id', content: facebook.pageId },
+    { property: 'fb:app_id', content: facebook.appId }
   ],
   link: [
     ...hreflang.getItems(),
