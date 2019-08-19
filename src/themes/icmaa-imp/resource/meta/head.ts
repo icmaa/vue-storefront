@@ -7,7 +7,7 @@ const defaults: any = {
   title: meta.title,
   titleTemplate: meta.titleTemplate.replace('{storeCode}', storeCode() !== 'default' ? storeCode().toUpperCase() : ''),
   htmlAttrs: {
-    lang: storeLang
+    lang: storeLang()
   },
   meta: [
     { charset: 'utf-8' },

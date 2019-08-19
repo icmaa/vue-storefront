@@ -1,7 +1,7 @@
-import { store, storeLang } from '../'
+import { store } from '../'
 import { storeViews, icmaa_meta } from 'config'
 
-import { StoreView } from '@vue-storefront/core/lib/multistore'
+import { StoreView, removeStoreCodeFromRoute } from '@vue-storefront/core/lib/multistore'
 import { router } from '@vue-storefront/core/app'
 
 export interface HreflangInterface {
@@ -12,12 +12,22 @@ export interface HreflangInterface {
 }
 
 class Hreflang {
+  protected _currentStore: StoreView
   protected _hreflang: HreflangInterface[]
+
+  public constructor () {
+    this._currentStore = store()
+  }
 
   public getCurrentStoreViewUrlPath (store: StoreView) {
     let path = ''
     if (this.hasConfigs()) {
-      path = router.currentRoute.path
+      path = removeStoreCodeFromRoute(router.currentRoute.path) as string
+
+      if (path === '/' + this._currentStore.storeCode) {
+        path = '/'
+      }
+
       path = (!store.url.startsWith('/'))
         ? store.url.replace(/\/$/, '') + router.currentRoute.path
         : icmaa_meta.base_url + store.url + path
@@ -51,7 +61,7 @@ class Hreflang {
 
         storeViews.mapStoreUrlsFor.forEach(c => {
           let storeview = storeViews[c]
-          if (storeview && !storeview.disabled) {
+          if (storeview && (!storeview.disabled || storeview.disabled === false)) {
             const hreflang = this.getHreflanFromConfigs(storeview)
             if (hreflang) {
               this._hreflang.push(hreflang)
