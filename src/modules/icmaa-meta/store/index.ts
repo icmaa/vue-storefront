@@ -1,9 +1,6 @@
 import { Module } from 'vuex'
 import { Logger } from '@vue-storefront/core/lib/logger'
 
-import { storeCode } from '../helper'
-import { mergeDeep } from 'apollo-utilities';
-
 export default interface IcmaaMetaStoreState {
   data?: {
     title?: string,
