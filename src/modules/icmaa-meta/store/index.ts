@@ -1,7 +1,8 @@
 import { Module } from 'vuex'
-import { Logger } from '@vue-storefront/core/lib/logger';
+import { Logger } from '@vue-storefront/core/lib/logger'
 
 import { storeCode } from '../helper'
+import { mergeDeep } from 'apollo-utilities';
 
 export default interface IcmaaMetaStoreState {
   data?: {
@@ -21,20 +22,16 @@ export const IcmaaMetaStore: Module<IcmaaMetaStoreState, any> = {
   },
   actions: {
     async load ({ commit }) {
-      let metaData: any
-      try {
-        metaData = await import(/* webpackChunkName: "vsf-meta-[request]" */ `theme/resource/meta/head-${storeCode()}`)
-      } catch (err) {
-        try {
-          Logger.debug(`Unable to load meta infos for "${storeCode()}" so the default will be loaded.`, `icmaa-meta`, err)()
-          metaData = await import(/* webpackChunkName: "vsf-meta-default" */ `theme/resource/meta/head`)
-        } catch (err) {
+      const metaDefault = await import(/* webpackChunkName: "vsf-meta-default" */ `theme/resource/meta/head`)
+        .catch(err => {
           Logger.error(`Unable to load meta infos:`, `icmaa-meta`, err)()
           throw new Error('Unable to load meta infos')
-        }
-      }
+        })
 
-      commit('ICMAA_META_SET_DATA', metaData.default)
+      await import(/* webpackChunkName: "vsf-meta-[request]" */ `theme/resource/meta/head-${storeCode()}`)
+        .then(meta => {
+          commit('ICMAA_META_SET_DATA', mergeDeep(metaDefault.default, meta.default))
+        })
     }
   },
   mutations: {
