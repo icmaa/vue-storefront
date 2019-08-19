@@ -23,7 +23,8 @@
     "vuex": "^3.0.1"
   },
   "devDependencies": {
-    "webpack-spritesmith": "^1.0.1",
-    "svg-sprite": "^1.5.0"
+    "@fullhuman/postcss-purgecss": "^1.2.0",
+    "svg-sprite": "^1.5.0",
+    "webpack-spritesmith": "^1.0.1"
   }
 }

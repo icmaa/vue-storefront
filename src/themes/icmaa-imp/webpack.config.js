@@ -36,6 +36,19 @@ module.exports = function (config, { isClient, isDev }) {
       plugins: (loader) => [
         require('tailwindcss')(path.join(__dirname, 'tailwind.js')),
         require('postcss-flexbugs-fixes'),
+        /**
+         * Remove unused CSS classes using PurgeCSS
+         * @see https://tailwindcss.com/docs/controlling-file-size/#app
+         * */
+        require('@fullhuman/postcss-purgecss')({
+          content: [
+            '!**/node_modules',
+            './{src,core}/**/*.html',
+            './{src,core}/**/*.vue'
+          ],
+          whitelistPatterns: [ /^t-bg-*/, /^t-text-*/ ],
+          defaultExtractor: content => content.match(/[\w-/:]+(?<!:)/g) || []
+        }),
         require('autoprefixer')({
           flexbox: 'no-2009'
         })
