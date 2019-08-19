@@ -1,7 +1,7 @@
 import { storeCode, storeLang, store } from 'icmaa-meta/helper'
 import hreflang from 'icmaa-meta/helper/head/hreflang'
 
-const { meta, facebook } = store()
+const { meta, facebook, geo, opengraph, apple } = store()
 
 const defaults: any = {
   title: meta.title,
@@ -16,9 +16,21 @@ const defaults: any = {
     { name: 'robots', content: 'index, follow' },
     { name: 'mobile-web-app-capable', content: 'yes' },
     { name: 'theme-color', content: '#ffffff' },
-    { name: 'apple-mobile-web-app-status-bar-style', content: '#ffffff' },
     { property: 'fb:page_id', content: facebook.pageId },
-    { property: 'fb:app_id', content: facebook.appId }
+    { property: 'fb:app_id', content: facebook.appId },
+    { property: 'og:image', content: opengraph.image },
+    { property: 'og:locale', content: opengraph.locale },
+    { property: 'og:site_name', content: opengraph.siteName },
+    { property: 'og:title', content: meta.title },
+    { property: 'og:url', content: '' },
+    { property: 'og:type', content: opengraph.type },
+    { name: 'apple-mobile-web-app-title', content: apple.mobileWebAppTitle },
+    { name: 'apple-mobile-web-app-status-bar-style', content: '#ffffff' },
+    { name: 'apple-itunes-app', content: apple.itunesApp},
+    { name: 'ICBM', content: geo.position },
+    { name: 'geo.placename', content: geo.placename },
+    { name: 'geo.position', content: geo.position },
+    { name: 'geo.region', content: geo.region }
   ],
   link: [
     ...hreflang.getItems(),
