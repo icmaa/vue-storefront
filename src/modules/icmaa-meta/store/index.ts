@@ -32,6 +32,9 @@ export const IcmaaMetaStore: Module<IcmaaMetaStoreState, any> = {
         .then(meta => {
           commit('ICMAA_META_SET_DATA', mergeDeep(metaDefault.default, meta.default))
         })
+        .catch(e => {
+          commit('ICMAA_META_SET_DATA', metaDefault.default)
+        })
     }
   },
   mutations: {
