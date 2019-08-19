@@ -22,18 +22,13 @@ export const IcmaaMetaStore: Module<IcmaaMetaStoreState, any> = {
   },
   actions: {
     async load ({ commit }) {
-      const metaDefault = await import(/* webpackChunkName: "vsf-meta-default" */ `theme/resource/meta/head`)
+      await import(/* webpackChunkName: "vsf-meta-default" */ `theme/resource/meta/head`)
+        .then(metaDefault => {
+          commit('ICMAA_META_SET_DATA', metaDefault.default)
+        })
         .catch(err => {
           Logger.error(`Unable to load meta infos:`, `icmaa-meta`, err)()
           throw new Error('Unable to load meta infos')
-        })
-
-      await import(/* webpackChunkName: "vsf-meta-[request]" */ `theme/resource/meta/head-${storeCode()}`)
-        .then(meta => {
-          commit('ICMAA_META_SET_DATA', mergeDeep(metaDefault.default, meta.default))
-        })
-        .catch(e => {
-          commit('ICMAA_META_SET_DATA', metaDefault.default)
         })
     }
   },
