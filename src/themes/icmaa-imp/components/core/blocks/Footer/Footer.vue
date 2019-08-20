@@ -125,10 +125,8 @@ export default {
 
 @import "theme/css/base/_sprite-footer-logos.scss";
 
-/* purgecss start ignore */
 .service-carrier .logos {
   @include retina-sprites($retina-groups)
 }
-/* purgecss end ignore */
 
 </style>
