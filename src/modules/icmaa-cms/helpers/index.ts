@@ -1,8 +1,8 @@
-import { icmaa, defaultStoreCode } from 'config'
+import { defaultStoreCode } from 'config'
 import { localizedRoute, currentStoreView } from '@vue-storefront/core/lib/multistore';
 
 export const getCurrentStoreCode = (): string => {
-  return !currentStoreView() ? null : currentStoreView().storeCode
+  return !currentStoreView() && currentStoreView().storeCode !== defaultStoreCode ? null : currentStoreView().storeCode
 }
 
 export const localizeRouterLink = (text: string): string => {
