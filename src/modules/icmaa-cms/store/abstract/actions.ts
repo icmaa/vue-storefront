@@ -3,7 +3,7 @@ import { MutationTypesInterface } from '../abstract/mutation-types'
 
 import Axios from 'axios'
 import config from 'config'
-import { getLocalizedStoreCode } from '../../helpers'
+import { getCurrentStoreCode } from '../../helpers'
 
 import { processURLAddress } from '@vue-storefront/core/helpers'
 import { isServer } from '@vue-storefront/core/helpers'
@@ -36,7 +36,7 @@ export const list = async <T>(options: OptionsInterface): Promise<T> => {
   let params = {
     'type': documentType,
     'q': values,
-    'lang': getLocalizedStoreCode()
+    'lang': getCurrentStoreCode()
   }
 
   if (typeof values === 'string') {
@@ -121,7 +121,7 @@ export const single = async <T>(options: OptionsInterface): Promise<T> => {
     let params = {
       'type': documentType,
       'uid': value,
-      'lang': getLocalizedStoreCode()
+      'lang': getCurrentStoreCode()
     }
 
     return Axios.get(
