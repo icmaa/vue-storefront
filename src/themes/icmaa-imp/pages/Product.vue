@@ -232,14 +232,10 @@ import SizeGuide from 'theme/components/core/blocks/Product/SizeGuide'
 import AddToWishlist from 'theme/components/core/blocks/Wishlist/AddToWishlist'
 import AddToCompare from 'theme/components/core/blocks/Compare/AddToCompare'
 import LazyHydrate from 'vue-lazy-hydration'
-<<<<<<< HEAD
 import { ReviewModule } from '@vue-storefront/core/modules/review'
 import { RecentlyViewedModule } from '@vue-storefront/core/modules/recently-viewed'
 import { registerModule, isModuleRegistered } from '@vue-storefront/core/lib/modules'
-=======
-import CategoryExtrasMixin from 'icmaa-cms/mixins/categoryExtras'
 import ProductMetaMixin from 'icmaa-meta/mixins/productMeta'
->>>>>>> 68924dbd7615bc4116d14a985177f10cde513c40
 
 export default {
   components: {
