@@ -233,7 +233,7 @@ import AddToWishlist from 'theme/components/core/blocks/Wishlist/AddToWishlist'
 import AddToCompare from 'theme/components/core/blocks/Compare/AddToCompare'
 import LazyHydrate from 'vue-lazy-hydration'
 import CategoryExtrasMixin from 'icmaa-cms/mixins/categoryExtras'
-import ProductMetaMixins from 'icmaa-meta/mixins/productMeta'
+import ProductMetaMixin from 'icmaa-meta/mixins/productMeta'
 
 export default {
   components: {
@@ -257,7 +257,7 @@ export default {
     Spinner,
     LazyHydrate
   },
-  mixins: [Product, VueOfflineMixin],
+  mixins: [Product, VueOfflineMixin, ProductMetaMixin],
   directives: { focusClean },
   data () {
     return {
