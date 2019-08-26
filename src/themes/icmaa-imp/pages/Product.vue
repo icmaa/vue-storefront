@@ -235,6 +235,8 @@ import LazyHydrate from 'vue-lazy-hydration'
 import { ReviewModule } from '@vue-storefront/core/modules/review'
 import { RecentlyViewedModule } from '@vue-storefront/core/modules/recently-viewed'
 import { registerModule, isModuleRegistered } from '@vue-storefront/core/lib/modules'
+import CategoryExtrasMixin from 'icmaa-cms/mixins/categoryExtras'
+import ProductMetaMixins from 'icmaa-meta/mixins/productMeta'
 
 export default {
   components: {
