@@ -12,13 +12,27 @@ const defaults: any = {
   meta: [
     { charset: 'utf-8' },
     { vmid: 'description', name: 'description', content: meta.description.default },
+    { vmid: 'keywords', name: 'keywords', content: meta.keywords.default },
     { name: 'viewport', content: 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' },
+    { generator: 'generator', content: 'Vue Storefront'},
     { name: 'robots', content: 'index, follow' },
     { name: 'mobile-web-app-capable', content: 'yes' },
     { name: 'theme-color', content: '#ffffff' },
+    { property: 'fb:page_id', content: facebook.pageId },
+    { property: 'fb:app_id', content: facebook.appId },
+    { vmid: 'og:image', property: 'og:image', content: facebook.opengraph.image },
+    { property: 'og:locale', content: facebook.opengraph.locale },
+    { property: 'og:site_name', content: facebook.opengraph.siteName },
+    { vmid: 'og:title', property: 'og:title', content: meta.title },
+    { vmid: 'og:url', property: 'og:url', content: '' },
+    { vmid: 'og:type', property: 'og:type', content: facebook.opengraph.type }, // website, product, article, book, music, video, place ...
+    { name: 'apple-mobile-web-app-title', content: meta.apple.mobileWebAppTitle },
     { name: 'apple-mobile-web-app-status-bar-style', content: '#ffffff' },
-    { property: 'fb:page_id', content: facebook.appId },
-    { property: 'fb:app_id', content: facebook.pageId }
+    { name: 'apple-itunes-app', content: meta.apple.itunesApp},
+    { name: 'ICBM', content: meta.geo.position },
+    { name: 'geo.placename', content: meta.geo.placename },
+    { name: 'geo.position', content: meta.geo.position },
+    { name: 'geo.region', content: meta.geo.region }
   ],
   link: [
     ...hreflang.getItems(),
