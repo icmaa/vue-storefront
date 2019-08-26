@@ -236,7 +236,7 @@ import { ReviewModule } from '@vue-storefront/core/modules/review'
 import { RecentlyViewedModule } from '@vue-storefront/core/modules/recently-viewed'
 import { registerModule, isModuleRegistered } from '@vue-storefront/core/lib/modules'
 import CategoryExtrasMixin from 'icmaa-cms/mixins/categoryExtras'
-import ProductMetaMixins from 'icmaa-meta/mixins/productMeta'
+import ProductMetaMixin from 'icmaa-meta/mixins/productMeta'
 
 export default {
   components: {
@@ -260,7 +260,7 @@ export default {
     Spinner,
     LazyHydrate
   },
-  mixins: [Product, VueOfflineMixin],
+  mixins: [Product, VueOfflineMixin, ProductMetaMixin],
   directives: { focusClean },
   beforeCreate () {
     registerModule(ReviewModule)
