@@ -232,6 +232,8 @@ import SizeGuide from 'theme/components/core/blocks/Product/SizeGuide'
 import AddToWishlist from 'theme/components/core/blocks/Wishlist/AddToWishlist'
 import AddToCompare from 'theme/components/core/blocks/Compare/AddToCompare'
 import LazyHydrate from 'vue-lazy-hydration'
+import CategoryExtrasMixin from 'icmaa-cms/mixins/categoryExtras'
+import ProductMetaMixins from 'icmaa-meta/mixins/productMeta'
 
 export default {
   components: {
