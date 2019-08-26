@@ -260,7 +260,7 @@ export default {
     Spinner,
     LazyHydrate
   },
-  mixins: [Product, VueOfflineMixin, ProductMetaMixin],
+  mixins: [Product, VueOfflineMixin, CategoryExtrasMixin, ProductMetaMixin],
   directives: { focusClean },
   beforeCreate () {
     registerModule(ReviewModule)
