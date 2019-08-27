@@ -3,9 +3,10 @@ const defaults: any = {
   metaInfo: {
     meta: [
       { vmid: 'keywords', name: 'keywords', content: 'Placeholder - categorypageKeywords' },
-      { vmid: 'og:image', property: 'og:image', content: 'Placeholder - categorypageImage(s)' },
+      { vmid: 'og:image', property: 'og:image', content: 'Placeholder - categorypageImage(s)' }, // multiple ..
       { vmid: 'og:title', property: 'og:title', content: 'Placeholder - categorypageTitle' },
-      { vmid: 'og:url', property: 'og:url', content: 'Placeholder - categorypageUrl' }
+      { vmid: 'og:url', property: 'og:url', content: 'Placeholder - categorypageUrl' },
+      { vmid: 'og:type', property: 'og:type', content: 'product.group' }
     ]
   }
 }
