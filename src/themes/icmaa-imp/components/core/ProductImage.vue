@@ -16,24 +16,25 @@
       v-show="showLowerQuality"
       :src="image.loading"
       :alt="alt"
+      class="t-w-full t-w-auto"
       @load="imageLoaded('lower', true)"
       @error="imageLoaded('lower', false)"
       ref="lQ"
-      class="product-image__thumb"
     >
     <img
       v-if="!highQualityImageError || isOnline"
       v-show="showHighQuality"
       :src="image.src"
       :alt="alt"
+      class="t-w-full t-w-auto"
       @load="imageLoaded('high', true)"
       @error="imageLoaded('high', false)"
-      class="product-image__thumb"
     >
   </div>
 </template>
 
 <script>
+import config from 'config'
 import { onlineHelper } from '@vue-storefront/core/helpers'
 
 export default {
@@ -89,12 +90,29 @@ export default {
     },
     isOnline (value) {
       return onlineHelper.isOnline
+    },
+    customImages () {
+      return this.getImageSizes()
     }
   },
   methods: {
     imageLoaded (type, success = true) {
       this[`${type}QualityImage`] = success
       this[`${type}QualityImageError`] = !success
+    },
+    getImageSizes () {
+      const { width, height } = config.products.gallery
+      return {
+        loading: this.getImageWithSize(width / 2, height / 2),
+        src: this.getImageWithSize(width, height),
+        srcAt2x: this.getImageWithSize(width * 2, height * 2),
+        original: this.getImageWithSize()
+      }
+    },
+    getImageWithSize (height = 0, width = 0) {
+      const regex = /(\/img\/)(\d+\/\d+)(\/resize\/)/gm
+      const src = this.image.src
+      return src.replace(regex, `$1${width}/${height}$3`)
     }
   }
 }
