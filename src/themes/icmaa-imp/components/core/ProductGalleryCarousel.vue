@@ -6,13 +6,13 @@
     :mouse-drag="false"
     :navigation-enabled="true"
     :pagination-enabled="false"
-    navigation-click-target-size="0"
+    :navigation-click-target-size="0"
     navigation-next-label="<div class='t-flex t-w-12 t-h-12 t-bg-black t-text-white t-rounded-full t-border t-border-white t-cursor-pointer t-mr-4'><i class='material-icons t-flex-1 t-self-center t-text-2xl'>keyboard_arrow_right</i></div>"
     navigation-prev-label="<div class='t-flex t-w-12 t-h-12 t-bg-black t-text-white t-rounded-full t-border t-border-white t-cursor-pointer t-ml-4'><i class='material-icons t-flex-1 t-self-center t-text-2xl'>keyboard_arrow_left</i></div>"
     ref="carousel"
     @pageChange="pageChange"
   >
-    <slide v-for="(images, index) in gallery" :key="index">
+    <slide v-for="(images, index) in galleryFiltered" :key="index">
       <product-image class="t-cursor-pointer" :image="images" :alt="productName | htmlDecode" />
     </slide>
   </carousel>
@@ -24,6 +24,7 @@ import { Carousel, Slide } from 'vue-carousel'
 import ProductImage from './ProductImage'
 import reduce from 'lodash-es/reduce'
 import map from 'lodash-es/map'
+import { Logger } from '@vue-storefront/core/lib/logger';
 
 export default {
   name: 'ProductGalleryCarousel',
@@ -54,7 +55,15 @@ export default {
       currentPage: 0
     }
   },
-  computed: {},
+  computed: {
+    galleryFiltered () {
+      return this.gallery.filter(image => {
+        /** Filter out old _sm files, they are duplicates of large ones */
+        const regex = /(_sm)(_\w*)*(\.[a-zA-Z]{3,4})$/gm
+        return regex.exec(image.src) === null
+      })
+    }
+  },
   beforeMount () {
     this.$bus.$on('filter-changed-product', this.selectVariant)
     this.$bus.$on('product-after-load', this.selectVariant)
