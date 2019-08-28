@@ -1,15 +1,15 @@
 <template>
   <div
     class="product-image"
-    :class="{'product-image--height': basic, 'product-image--width': !basic}"
-    :style="style"
+    :class="{ 't-h-0': showPlaceholder }"
+    :style="placeholderStyle"
     v-on="$listeners"
   >
     <img
-      v-show="showPlaceholder"
       src="/assets/placeholder.svg"
       :alt="alt"
-      class="product-image__placeholder"
+      :class="{ 'placeholder': true, 't-h-full': basic, 't-w-full': !basic }"
+      v-show="showPlaceholder"
     >
     <img
       v-if="!lowerQualityImageError || isOnline"
@@ -84,8 +84,8 @@ export default {
       const {width, height} = this.$store.state.config.products.gallery
       return `${height / (width / 100)}%`
     },
-    style () {
-      return this.calcRatio ? {paddingBottom: this.imageRatio} : {}
+    placeholderStyle () {
+      return this.calcRatio && this.showPlaceholder ? { paddingBottom: this.imageRatio } : {}
     },
     isOnline (value) {
       return onlineHelper.isOnline
@@ -105,26 +105,14 @@ export default {
     position: relative;
     width: 100%;
     max-width: 100%;
-    height: 0;
-    &__placeholder,
-    &__thumb {
+
+    .placeholder {
       position: absolute;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-    }
-    &__placeholder {
-      max-width: 50%;
-    }
-    &--height {
-      .product-image__thumb {
-        height: 100%;
-      }
-    }
-    &--width {
-      .product-image__thumb {
-        width: 100%;
-      }
+      width: 50%;
+      height: auto;
     }
   }
 </style>
