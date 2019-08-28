@@ -17,7 +17,7 @@ export default {
   props: {
     spacerCharacter: {
       type: String,
-      required: true,
+      required: false,
       default: '/'
     }
   }
