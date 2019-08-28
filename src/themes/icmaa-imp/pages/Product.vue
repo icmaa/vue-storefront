@@ -1,22 +1,23 @@
 <template>
   <div id="product" itemscope itemtype="http://schema.org/Product">
+    <div class="t-container t-px-4">
+      <div class="t--mx-4 t-flex t-flex-wrap">
+        <breadcrumbs class="breadcrumbs t-w-full t-mx-4 t-my-8 t-hidden lg:t-block" :routes="breadcrumbs.routes" :active-route="breadcrumbs.name" />
+        <product-gallery
+          class="product-gallery t-w-full"
+          :offline="image"
+          :gallery="gallery"
+          :configuration="configuration"
+          :product="product"
+        />
+      </div>
+    </div>
+
     <section class="bg-cl-secondary px20 product-top-section">
       <div class="container">
         <section class="row m0 between-xs">
-          <div class="col-xs-12 col-md-6 center-xs middle-xs image">
-            <product-gallery
-              :offline="image"
-              :gallery="gallery"
-              :configuration="configuration"
-              :product="product"
-            />
-          </div>
+          <div class="col-xs-12 col-md-6 center-xs middle-xs image" />
           <div class="col-xs-12 col-md-5 data">
-            <breadcrumbs
-              class="pt40 pb20 hidden-xs"
-              :routes="breadcrumbs.routes"
-              :active-route="breadcrumbs.name"
-            />
             <h1
               class="mb20 mt0 cl-mine-shaft product-name"
               data-testid="productName"
@@ -415,27 +416,15 @@ $bg-secondary: color(secondary, $colors-background);
   }
 }
 
-.breadcrumbs {
-  @media (max-width: 767px) {
-    margin: 15px 0;
-    padding: 15px 0 0 15px;
-  }
-}
-
 .error {
   color: red;
   font-weight: bold;
   padding-bottom: 15px;
 }
+
 .data {
   @media (max-width: 767px) {
     border-bottom: 1px solid $bg-secondary;
-  }
-}
-
-.image {
-  @media (max-width: 1023px) {
-    margin-bottom: 20px;
   }
 }
 
@@ -560,12 +549,8 @@ $bg-secondary: color(secondary, $colors-background);
   opacity: 0;
 }
 
-.product-image {
-  mix-blend-mode: multiply;
-  width: 460px;
-}
-
 .web-share {
   float: right;
 }
+
 </style>
