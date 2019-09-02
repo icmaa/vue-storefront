@@ -91,7 +91,10 @@ export default {
     isOnline (value) {
       return onlineHelper.isOnline
     },
-    customImages () {
+    themeImageSizes () {
+      /**
+       * @todo: Preload product images instead of loading all on page load
+       */
       return this.getImageSizes()
     }
   },

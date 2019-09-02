@@ -12,7 +12,7 @@
     ref="carousel"
     @pageChange="pageChange"
   >
-    <slide v-for="(images, index) in galleryFiltered" :key="index">
+    <slide v-for="(images, index) in galleryFiltered" :key="index" ref="thumbs">
       <product-image class="t-cursor-pointer" :image="images" :alt="productName | htmlDecode" />
     </slide>
   </carousel>
@@ -69,6 +69,10 @@ export default {
     this.$bus.$on('product-after-load', this.selectVariant)
   },
   mounted () {
+    this.$nextTick(() => {
+      disableBodyScroll(this.$refs.thumbs)
+    })
+
     this.selectVariant()
 
     if (this.configuration.color) {
