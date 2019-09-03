@@ -8,7 +8,6 @@ import { MetaInfo } from 'vue-meta'
 export const store: Function = (): StoreView => currentStoreView()
 export const storeCode: Function = (): string => store().storeCode || config.i18n.defaultLanguage.toLowerCase()
 export const storeLang: Function = (): string => store().i18n.defaultLocale || config.i18n.defaultLocale
-export const storeCurrency: Function = (): string => store().i18n.currencyCode || config.i18n.currencyCode
 
 export let mergeWithDefaults: any = (defaults: MetaInfo, config: ExtendedMetaInfo) => {
   const { add, update, remove } = config
