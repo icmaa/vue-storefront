@@ -1,5 +1,6 @@
 import { storeCode, storeLang, store } from 'icmaa-meta/helper'
 import hreflang from 'icmaa-meta/helper/head/hreflang'
+import config from 'config'
 
 const { meta, facebook } = store()
 
@@ -36,17 +37,20 @@ const defaults: any = {
   ],
   link: [
     ...hreflang.getItems(),
-    { rel: 'icon', type: 'image/png', href: '/assets/favicon-32x32.png', sizes: '32x32' },
-    { rel: 'icon', type: 'image/png', href: '/assets/favicon-16x16.png', sizes: '16x16' },
-    { rel: 'apple-touch-icon', href: '/assets/apple-touch-icon.png' },
-    { rel: 'apple-touch-startup-image', href: '/assets/apple_splash_2048.png', sizes: '2048x2732' },
-    { rel: 'apple-touch-startup-image', href: '/assets/apple_splash_1668.png', sizes: '1668x2224' },
-    { rel: 'apple-touch-startup-image', href: '/assets/apple_splash_1536.png', sizes: '1536x2048' },
-    { rel: 'apple-touch-startup-image', href: '/assets/apple_splash_1125.png', sizes: '1125x2436' },
-    { rel: 'apple-touch-startup-image', href: '/assets/apple_splash_1242.png', sizes: '1242x2208' },
-    { rel: 'apple-touch-startup-image', href: '/assets/apple_splash_750.png', sizes: '750x1334' },
-    { rel: 'apple-touch-startup-image', href: '/assets/apple_splash_640.png', sizes: '640x1136' },
-    { rel: 'manifest', href: '/assets/manifest.json' }
+    { rel: 'icon', type: 'image/png', href: '/assets/' + config.icmaa.mandant + '/meta/favicon-96x96.png', sizes: '96x96' },
+    { rel: 'icon', type: 'image/png', href: '/assets/' + config.icmaa.mandant + '/meta/favicon-32x32.png', sizes: '32x32' },
+    { rel: 'icon', type: 'image/png', href: '/assets/' + config.icmaa.mandant + '/meta/favicon-16x16.png', sizes: '16x16' },
+    { rel: 'apple-touch-icon', href: '/assets/' + config.icmaa.mandant + '/meta/apple/apple-touch-icon.png' },
+    { rel: 'apple-touch-startup-image', href: '/assets/' + config.icmaa.mandant + '/meta/apple/apple_splash_2048.png', sizes: '2048x2732' }, // iPad Pro 12.9
+    { rel: 'apple-touch-startup-image', href: '/assets/' + config.icmaa.mandant + '/meta/apple/apple_splash_1668.png', sizes: '1668x2224' }, // iPad Pro 10.5
+    { rel: 'apple-touch-startup-image', href: '/assets/' + config.icmaa.mandant + '/meta/apple/apple_splash_1536.png', sizes: '1536x2048' }, // iPad Air, Mini
+    { rel: 'apple-touch-startup-image', href: '/assets/' + config.icmaa.mandant + '/meta/apple/apple_splash_1242_2688.png', sizes: '1242x2688' }, // iPhone Xs Max
+    { rel: 'apple-touch-startup-image', href: '/assets/' + config.icmaa.mandant + '/meta/apple/apple_splash_828.png', sizes: '828x1792' }, // iPhone Xr
+    { rel: 'apple-touch-startup-image', href: '/assets/' + config.icmaa.mandant + '/meta/apple/apple_splash_1125.png', sizes: '1125x2436' }, // iPhone X, Xs
+    { rel: 'apple-touch-startup-image', href: '/assets/' + config.icmaa.mandant + '/meta/apple/apple_splash_1242.png', sizes: '1242x2208' }, // iPhone 8 Plus, 7 Plus, 6s Plus, 6 Plus
+    { rel: 'apple-touch-startup-image', href: '/assets/' + config.icmaa.mandant + '/meta/apple/apple_splash_750.png', sizes: '750x1334' }, // iPhone 8, 7, 6s, 6
+    { rel: 'apple-touch-startup-image', href: '/assets/' + config.icmaa.mandant + '/meta/apple/apple_splash_640.png', sizes: '640x1136' }, // iPhone 5, SE
+    { rel: 'manifest', href: '/assets/' + config.icmaa.mandant + '/meta/android/manifest.json' }
   ],
   script: [
     {
