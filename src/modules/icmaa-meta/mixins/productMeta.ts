@@ -24,7 +24,7 @@ export default {
       let facebookImageTags = []
       this.product.media_gallery.forEach(image => {
         facebookImageTags.push(
-          { vmid: 'og:image', property: 'og:image', content: (config.icmaa_meta.base_url + '/media/catalog/product/') + image.image }
+          { property: 'og:image', content: (config.icmaa_meta.base_url + '/media/catalog/product/') + image.image }
         )
       })
       // console.log(facebookImageTags);
