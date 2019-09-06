@@ -235,7 +235,6 @@ import LazyHydrate from 'vue-lazy-hydration'
 import { ReviewModule } from '@vue-storefront/core/modules/review'
 import { RecentlyViewedModule } from '@vue-storefront/core/modules/recently-viewed'
 import { registerModule, isModuleRegistered } from '@vue-storefront/core/lib/modules'
-import CategoryExtrasMixin from 'icmaa-cms/mixins/categoryExtras'
 import ProductMetaMixin from 'icmaa-meta/mixins/productMeta'
 
 export default {
@@ -260,7 +259,7 @@ export default {
     Spinner,
     LazyHydrate
   },
-  mixins: [Product, VueOfflineMixin, CategoryExtrasMixin, ProductMetaMixin],
+  mixins: [Product, VueOfflineMixin, ProductMetaMixin],
   directives: { focusClean },
   beforeCreate () {
     registerModule(ReviewModule)
