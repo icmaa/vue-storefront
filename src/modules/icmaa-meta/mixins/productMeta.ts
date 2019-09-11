@@ -8,8 +8,15 @@ const storeView = currentStoreView()
 const currencyCode = storeView.i18n.currencyCode
 
 export default {
-  // Load our attributes to the state
-  async asyncData ({ store, route, context }) {
+  async asyncData ({ store }) {
+    /**
+     * Load the attribute options and labels we need for metaInfo()
+     * !!! It's important to know that attributes are removed from initial ssr state by default and put into
+     * localstorage on client-side using the "useInitialStateFilter" config to save some DOM output size (up to 50%).
+     * But this way we can't load the attribute values because they are already empty in state management when we try
+     * to load them in metaInfo(). So we removed "attributes" from "initialStateFilter" config value.
+     * @see https://github.com/DivanteLtd/vue-storefront/issues/3520#issuecomment-530336629
+     */
     return store.dispatch('attribute/list', { filterValues: [ 'band', 'brand' ] })
   },
   computed: {
