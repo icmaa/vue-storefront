@@ -4,16 +4,27 @@
       <div class="t--mx-4 t-flex t-flex-wrap">
         <breadcrumbs class="breadcrumbs t-w-full t-mx-4 t-my-8 t-hidden lg:t-block" :routes="breadcrumbs.routes" :active-route="breadcrumbs.name" />
         <product-gallery
-          class="product-gallery t-w-full"
+          class="product-gallery t-w-full t-py-px"
           :offline="image"
           :gallery="gallery"
           :configuration="configuration"
           :product="product"
         />
+        <div class="t-w-full">
+          <h1 data-testid="productName" itemprop="name" class="t-p-8 t-bg-white t-leading-snug">
+            <template v-if="typeof productName === 'object'">
+              <span class="t-block t-text-2xl t-font-thin t-mb-2">{{ productName.mandant | htmlDecode }}</span>
+              <span class="t-block t-text-lg t-font-bold">{{ productName.product | htmlDecode }}</span>
+            </template>
+            <template v-else>
+              <span class="t-block t-text-2xl t-font-thin t-mb-2">{{ productName.mandant | htmlDecode }}</span>
+            </template>
+          </h1>
+        </div>
       </div>
     </div>
 
-    <section class="bg-cl-secondary px20 product-top-section">
+    <section class="t-mt-20 bg-cl-secondary px20 product-top-section">
       <div class="container">
         <section class="row m0 between-xs">
           <div class="col-xs-12 col-md-6 center-xs middle-xs image" />
@@ -278,6 +289,14 @@ export default {
         availability: this.product.stock.is_in_stock ? 'InStock' : 'OutOfStock'
       }
     },
+    productName () {
+      let name = this.product.name
+      const regex = /^(.*?)(\s-\s)/
+      return !regex.test(name) ? name : {
+        mandant: name.match(regex)[1],
+        product: name.replace(regex, '')
+      }
+    },
     getProductOptions () {
       if (
         this.product.errors &&
@@ -425,12 +444,6 @@ $bg-secondary: color(secondary, $colors-background);
 .data {
   @media (max-width: 767px) {
     border-bottom: 1px solid $bg-secondary;
-  }
-}
-
-.product-name {
-  @media (max-width: 767px) {
-    font-size: 36px;
   }
 }
 

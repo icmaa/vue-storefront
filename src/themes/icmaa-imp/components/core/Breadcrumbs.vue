@@ -1,7 +1,7 @@
 <template>
   <div class="t-text-sm t-text-base-tone">
     <template v-for="(link, index) in routes">
-      <router-link :to="localizedRoute(link.route_link)" :key="index">
+      <router-link :to="link.route_link" :key="index">
         {{ link.name | htmlDecode }}
       </router-link>
       <span class="t-mx-2" :key="'bullet-' + index" v-text="spacerCharacter" />
