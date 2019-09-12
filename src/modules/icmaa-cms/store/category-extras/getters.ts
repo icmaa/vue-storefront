@@ -34,6 +34,11 @@ const getters: GetterTree<CategoryExtrasState, RootState> = {
     }
 
     return false
+  },
+  isDepartmentChildCategory: (state) => (categoryId: number): boolean => {
+    return Object.values(state.departmentChildCategoryIdMap)
+      .filter(categoryIds => categoryIds.filter(c => c === categoryId).length > 0)
+      .length > 0
   }
 }
 

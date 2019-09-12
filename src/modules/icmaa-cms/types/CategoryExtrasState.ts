@@ -8,5 +8,6 @@ export interface CategoryExtrasStateItem {
 }
 
 export default interface CategoryExtrasState {
-  items: CategoryExtrasStateItem[]
+  items: CategoryExtrasStateItem[],
+  departmentChildCategoryIdMap: { [parentId: string]: number[] }
 }

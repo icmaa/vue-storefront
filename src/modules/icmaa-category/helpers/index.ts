@@ -11,7 +11,7 @@ export const fetchCategoryById = ({ parentId }): Promise<SearchResponse> => {
   return quickSearchByQuery({ entityType: 'category', query: searchQuery, size: 1, includeFields: entities.category.includeFields })
 }
 
-export const fetchChildCategories = async ({ parentId, sort = 'position:asc', level = 1, onlyShowTargetLevelItems = true, onlyActive = false, collectedCategories = [] }): Promise<CategoryStateCategory[]> => {
+export const fetchChildCategories = async ({ parentId, sort = 'position:asc', level = 1, onlyShowTargetLevelItems = true, onlyActive = false, includeFields = entities.category.includeFields, collectedCategories = [] }): Promise<CategoryStateCategory[]> => {
   let searchQuery = new SearchQuery()
   searchQuery.applyFilter({ key: 'parent_id', value: { 'eq': parentId } })
 
@@ -20,8 +20,12 @@ export const fetchChildCategories = async ({ parentId, sort = 'position:asc', le
     searchQuery.applyFilter({ key: 'product_count', value: {'gt': 0} })
   }
 
-  return quickSearchByQuery({ entityType: 'category', query: searchQuery, sort: sort, includeFields: entities.category.includeFields, size: 2500 })
+  return quickSearchByQuery({ entityType: 'category', query: searchQuery, sort, includeFields, size: 2500 })
     .then(resp => {
+      if (level === 0 && resp.items.length > 0) {
+        level = resp.items[0].level
+      }
+
       if (resp.items.length > 0 && resp.items[0].level <= level) {
         let childIds = []
         resp.items.forEach(item => {

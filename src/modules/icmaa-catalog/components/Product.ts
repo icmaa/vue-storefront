@@ -3,10 +3,12 @@ import ProductNameHelper from '../helpers/productName'
 
 export default {
   async asyncData ({ store }) {
-    return store.dispatch('attribute/list', { filterValues: [ 'band', 'brand' ] })
+    await store.dispatch('attribute/list', { filterValues: [ 'band', 'brand' ] })
+    await store.dispatch('icmaaCmsCategoryExtras/loadDepartmentChildCategoryIdMap')
   },
   computed: {
     ...mapGetters('attribute', { getOptionLabel: 'getOptionLabel' }),
+    ...mapGetters('icmaaCmsCategoryExtras', ['isDepartmentChildCategory']),
     departmentBrandType () {
       return this.product.brand ? 'brand' : 'band'
     },
