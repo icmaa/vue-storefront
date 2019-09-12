@@ -1,14 +1,25 @@
 import { mapGetters } from 'vuex'
 import ProductNameHelper from '../helpers/productName'
+import { Logger } from '@vue-storefront/core/lib/logger'
 
 export default {
   async asyncData ({ store }) {
     await store.dispatch('attribute/list', { filterValues: [ 'band', 'brand' ] })
     await store.dispatch('icmaaCmsCategoryExtras/loadDepartmentChildCategoryIdMap')
   },
+  // async mounted () {
+  //   await this.$store.dispatch('category-next/loadCategory', { filters: { 'id': this.departmentCategoryId } })
+  // },
   computed: {
     ...mapGetters('attribute', { getOptionLabel: 'getOptionLabel' }),
+    ...mapGetters('category-next', ['getCategories']),
     ...mapGetters('icmaaCmsCategoryExtras', ['isDepartmentChildCategory']),
+    departmentCategory () {
+      return this.getCategories.find(c => c.id === this.departmentCategoryId)
+    },
+    departmentCategoryId () {
+      return this.product.category.map(c => c.category_id).find(id => this.isDepartmentChildCategory(id))
+    },
     departmentBrandType () {
       return this.product.brand ? 'brand' : 'band'
     },
