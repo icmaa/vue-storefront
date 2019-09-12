@@ -223,6 +223,7 @@
 import { minValue } from 'vuelidate/lib/validators'
 import i18n from '@vue-storefront/i18n'
 import Product from '@vue-storefront/core/pages/Product'
+import IcmaaProduct from 'icmaa-catalog/components/Product'
 import VueOfflineMixin from 'vue-offline/mixin'
 import RelatedProducts from 'theme/components/core/blocks/Product/Related.vue'
 import Reviews from 'theme/components/core/blocks/Reviews/Reviews.vue'
@@ -270,7 +271,7 @@ export default {
     Spinner,
     LazyHydrate
   },
-  mixins: [Product, VueOfflineMixin],
+  mixins: [Product, IcmaaProduct, VueOfflineMixin],
   directives: { focusClean },
   beforeCreate () {
     registerModule(ReviewModule)
@@ -287,14 +288,6 @@ export default {
     structuredData () {
       return {
         availability: this.product.stock.is_in_stock ? 'InStock' : 'OutOfStock'
-      }
-    },
-    productName () {
-      let name = this.product.name
-      const regex = /^(.*?)(\s-\s)/
-      return !regex.test(name) ? name : {
-        mandant: name.match(regex)[1],
-        product: name.replace(regex, '')
       }
     },
     getProductOptions () {
