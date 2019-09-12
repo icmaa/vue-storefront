@@ -69,10 +69,6 @@ export default {
     this.$bus.$on('product-after-load', this.selectVariant)
   },
   mounted () {
-    this.$nextTick(() => {
-      disableBodyScroll(this.$refs.thumbs)
-    })
-
     this.selectVariant()
 
     if (this.configuration.color) {
