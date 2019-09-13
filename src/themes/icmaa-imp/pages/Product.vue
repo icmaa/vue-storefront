@@ -17,10 +17,10 @@
               <span class="t-block t-text-lg t-font-bold">{{ productName.product | htmlDecode }}</span>
             </template>
             <template v-else>
-              <span class="t-block t-text-2xl t-font-thin t-mb-2">{{ productName.mandant | htmlDecode }}</span>
+              <span class="t-block t-text-2xl t-font-thin t-mb-2">{{ productName | htmlDecode }}</span>
             </template>
           </h1>
-          <department-logo v-bind="departmentLogo.data()" class="t-flex-fix t-self-start" />
+          <department-logo v-bind="departmentLogo.data()" v-if="departmentLogo" class="t-flex-fix t-self-start" />
         </div>
       </div>
     </div>

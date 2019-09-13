@@ -1,6 +1,6 @@
 import { mapGetters } from 'vuex'
-import { Logo } from 'icmaa-cms/helpers/categoryExtras/logo'
 import ProductNameHelper from '../helpers/productName'
+import { Logo } from 'icmaa-cms/helpers/categoryExtras/logo'
 
 export default {
   async asyncData ({ store }) {
@@ -12,7 +12,9 @@ export default {
       await store.dispatch('category-next/loadCategory', { filters: { 'id': departmentCategoryId } })
 
       const category = store.getters['icmaaCmsCategoryExtras/getCurrentProductDepartmentCategory']
-      await store.dispatch('icmaaCmsCategoryExtras/single', { value: category.url_key })
+      if (category) {
+        await store.dispatch('icmaaCmsCategoryExtras/single', { value: category.url_key })
+      }
     }
   },
   computed: {
@@ -40,7 +42,9 @@ export default {
       return this.departmentBrandOptionLabel !== this.departmentBrandValue
     },
     categoryExtras () {
-      return this.getCategoryExtrasByUrlKey(this.departmentCategory.url_key)
+      if (this.departmentCategory) {
+        return this.getCategoryExtrasByUrlKey(this.departmentCategory.url_key)
+      }
     },
     productName () {
       let name = this.product.name
