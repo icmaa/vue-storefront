@@ -17,7 +17,7 @@ export default {
   },
   computed: {
     ...mapGetters('attribute', { getOptionLabel: 'getOptionLabel' }),
-    ...mapGetters('icmaaCmsCategoryExtras', ['getCurrentProductDepartmentCategory']),
+    ...mapGetters('icmaaCmsCategoryExtras', ['getCurrentProductDepartmentCategory', 'getCategoryExtrasByUrlKey']),
     departmentCategory () {
       return this.getCurrentProductDepartmentCategory
     },
@@ -35,6 +35,9 @@ export default {
     },
     hasDepartmentBrandOptionLabel () {
       return this.departmentBrandOptionLabel !== this.departmentBrandValue
+    },
+    categoryExtras () {
+      return this.getCategoryExtrasByUrlKey(this.departmentCategory.url_key)
     },
     productName () {
       let name = this.product.name

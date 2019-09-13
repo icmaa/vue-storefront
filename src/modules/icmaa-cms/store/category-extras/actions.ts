@@ -45,8 +45,6 @@ const actions: ActionTree<CategoryExtrasState, RootState> = {
       }
     })
 
-    Logger.error('Lorem ipsum', 'DEBUG', children['16'])()
-
     context.commit(types.ICMAA_CMS_CATEGORY_EXRTAS_DEPARTMENT_CHILDCATEGORIES_ADD, children)
   }
 }

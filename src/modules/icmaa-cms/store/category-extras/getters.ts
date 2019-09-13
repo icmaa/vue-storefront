@@ -52,8 +52,7 @@ const getters: GetterTree<CategoryExtrasState, RootState> = {
     return false
   },
   getCurrentProductDepartmentCategory: (state, getters, rootState, rootGetters): Category => {
-    const categories = rootGetters['category-next/getCategories']
-    return categories.find(c => c.id === getters.getCurrentProductDepartmentCategoryId)
+    return getters.getCategoryBy('id', getters.getCurrentProductDepartmentCategoryId)
   }
 }
 
