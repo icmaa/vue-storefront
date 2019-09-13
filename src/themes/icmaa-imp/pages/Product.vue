@@ -10,16 +10,17 @@
           :configuration="configuration"
           :product="product"
         />
-        <div class="t-w-full">
-          <h1 data-testid="productName" itemprop="name" class="t-p-8 t-bg-white t-leading-snug">
+        <div class="t-w-full t-p-8 t-bg-white t-flex">
+          <h1 data-testid="productName" itemprop="name" class="t-flex-grow t-mb-0 t-leading-snug">
             <template v-if="typeof productName === 'object'">
-              <span class="t-block t-text-2xl t-font-thin t-mb-2">{{ productName.mandant | htmlDecode }}</span>
+              <span class="t-block t-text-2xl t-font-thin t-leading-relaxed t-mb-2">{{ productName.mandant | htmlDecode }}</span>
               <span class="t-block t-text-lg t-font-bold">{{ productName.product | htmlDecode }}</span>
             </template>
             <template v-else>
               <span class="t-block t-text-2xl t-font-thin t-mb-2">{{ productName.mandant | htmlDecode }}</span>
             </template>
           </h1>
+          <department-logo v-bind="departmentLogo.data()" class="t-flex-fix t-self-start" />
         </div>
       </div>
     </div>
@@ -249,12 +250,15 @@ import { ReviewModule } from '@vue-storefront/core/modules/review'
 import { RecentlyViewedModule } from '@vue-storefront/core/modules/recently-viewed'
 import { registerModule, isModuleRegistered } from '@vue-storefront/core/lib/modules'
 
+import DepartmentLogo from 'theme/components/core/blocks/ICMAA/CategoryExtras/DepartmentLogo.vue'
+
 export default {
   components: {
     AddToCart,
     AddToCompare,
     AddToWishlist,
     Breadcrumbs,
+    DepartmentLogo,
     ColorSelector,
     GenericSelector,
     ProductAttribute,

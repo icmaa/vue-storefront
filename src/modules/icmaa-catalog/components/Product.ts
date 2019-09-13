@@ -1,6 +1,6 @@
 import { mapGetters } from 'vuex'
+import { Logo } from 'icmaa-cms/helpers/categoryExtras/logo'
 import ProductNameHelper from '../helpers/productName'
-import { Logger } from '@vue-storefront/core/lib/logger'
 
 export default {
   async asyncData ({ store }) {
@@ -32,6 +32,9 @@ export default {
         attributeKey: this.departmentBrandValue,
         optionId: this.product[this.departmentBrandType]
       })
+    },
+    departmentLogo () {
+      return (this.categoryExtras && this.categoryExtras.hasLogo) ? new Logo(this.departmentCategory) : false
     },
     hasDepartmentBrandOptionLabel () {
       return this.departmentBrandOptionLabel !== this.departmentBrandValue
