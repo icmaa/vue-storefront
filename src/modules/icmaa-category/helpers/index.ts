@@ -20,7 +20,7 @@ export const fetchChildCategories = async ({ parentId, sort = 'position:asc', le
     searchQuery.applyFilter({ key: 'product_count', value: {'gt': 0} })
   }
 
-  return quickSearchByQuery({ entityType: 'category', query: searchQuery, sort, includeFields, size: 2500 })
+  return quickSearchByQuery({ entityType: 'category', query: searchQuery, sort, includeFields, size: 5000 })
     .then(resp => {
       if (level === 0 && resp.items.length > 0) {
         level = resp.items[0].level
@@ -35,12 +35,11 @@ export const fetchChildCategories = async ({ parentId, sort = 'position:asc', le
 
           if (!onlyShowTargetLevelItems || (onlyShowTargetLevelItems && resp.items[0].level === level)) {
             collectedCategories.push(item)
-            onlyActive = true
           }
         })
 
         if (childIds.length > 0) {
-          return fetchChildCategories({ parentId: childIds, level, onlyActive, collectedCategories })
+          return fetchChildCategories({ parentId: childIds, level, onlyActive, onlyShowTargetLevelItems, collectedCategories })
         }
       }
 

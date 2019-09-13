@@ -26,7 +26,7 @@ const actions: ActionTree<CategoryExtrasState, RootState> = {
     listAbstract<CategoryExtrasStateItem>({ documentType, mutationTypes, storageKey, context, options }),
   loadDepartmentChildCategoryIdMap: async (context): Promise<void> => {
     const parentId: number[] = icmaa_cms.categoryExtras.parentDepartmentCategoryIds || []
-    const childCategories: CategoryStateCategory[]|void = await fetchChildCategories({ parentId, level: 0 })
+    const childCategories: CategoryStateCategory[]|void = await fetchChildCategories({ parentId, level: 10, onlyShowTargetLevelItems: false })
       .then(resp => resp)
       .catch(error => {
         Logger.error('Error while fetching children of category: ' + parentId, 'icmaaCmsCategoryExtras', error)()
@@ -44,6 +44,8 @@ const actions: ActionTree<CategoryExtrasState, RootState> = {
         children[categoryParentId].push(category.id)
       }
     })
+
+    Logger.error('Lorem ipsum', 'DEBUG', children['16'])()
 
     context.commit(types.ICMAA_CMS_CATEGORY_EXRTAS_DEPARTMENT_CHILDCATEGORIES_ADD, children)
   }
