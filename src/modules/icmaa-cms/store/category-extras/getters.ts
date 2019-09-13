@@ -42,6 +42,18 @@ const getters: GetterTree<CategoryExtrasState, RootState> = {
     return Object.values(state.departmentChildCategoryIdMap)
       .filter(categoryIds => categoryIds.filter(c => c === categoryId).length > 0)
       .length > 0
+  },
+  getCurrentProductDepartmentCategoryId: (state, getters, rootState, rootGetters): number|false => {
+    const product = rootGetters['product/productCurrent']
+    if (product) {
+      return product.category.map(c => c.category_id).find(id => getters.isDepartmentChildCategory(id))
+    }
+
+    return false
+  },
+  getCurrentProductDepartmentCategory: (state, getters, rootState, rootGetters): Category => {
+    const categories = rootGetters['category-next/getCategories']
+    return categories.find(c => c.id === getters.getCurrentProductDepartmentCategoryId)
   }
 }
 

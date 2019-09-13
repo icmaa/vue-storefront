@@ -6,19 +6,20 @@ export default {
   async asyncData ({ store }) {
     await store.dispatch('attribute/list', { filterValues: [ 'band', 'brand' ] })
     await store.dispatch('icmaaCmsCategoryExtras/loadDepartmentChildCategoryIdMap')
+
+    const departmentCategoryId = store.getters['icmaaCmsCategoryExtras/getCurrentProductDepartmentCategoryId']
+    if (departmentCategoryId) {
+      await store.dispatch('category-next/loadCategory', { filters: { 'id': departmentCategoryId } })
+
+      const category = store.getters['icmaaCmsCategoryExtras/getCurrentProductDepartmentCategory']
+      await store.dispatch('icmaaCmsCategoryExtras/single', { value: category.url_key })
+    }
   },
-  // async mounted () {
-  //   await this.$store.dispatch('category-next/loadCategory', { filters: { 'id': this.departmentCategoryId } })
-  // },
   computed: {
     ...mapGetters('attribute', { getOptionLabel: 'getOptionLabel' }),
-    ...mapGetters('category-next', ['getCategories']),
-    ...mapGetters('icmaaCmsCategoryExtras', ['isDepartmentChildCategory']),
+    ...mapGetters('icmaaCmsCategoryExtras', ['getCurrentProductDepartmentCategory']),
     departmentCategory () {
-      return this.getCategories.find(c => c.id === this.departmentCategoryId)
-    },
-    departmentCategoryId () {
-      return this.product.category.map(c => c.category_id).find(id => this.isDepartmentChildCategory(id))
+      return this.getCurrentProductDepartmentCategory
     },
     departmentBrandType () {
       return this.product.brand ? 'brand' : 'band'
