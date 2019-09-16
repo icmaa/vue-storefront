@@ -1,5 +1,6 @@
 import { mapGetters } from 'vuex'
 import i18n from '@vue-storefront/i18n'
+import { price } from '@vue-storefront/core/filters/price'
 import ProductNameHelper from '../helpers/productName'
 import { Logo } from 'icmaa-cms/helpers/categoryExtras/logo'
 
@@ -61,10 +62,13 @@ export default {
         product: name.replace(regex, '')
       }
     },
+    formattedProductPrice () {
+      return price(this.product.price_incl_tax)
+    },
     webshareText () {
       return i18n.t(
         'Checkout this out: {name} for {price}',
-        { name: this.translatedProductName, price: this.product.price_incl_tax }
+        { name: this.translatedProductName, price: this.formattedProductPrice }
       )
     }
   }
