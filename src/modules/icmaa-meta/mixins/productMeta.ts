@@ -55,7 +55,6 @@ export default {
       title: 'Placeholder - productpage',
       meta: [
         { vmid: 'description', name: 'description', content: 'Placeholder - productpageDescrition' },
-        { vmid: 'keywords', name: 'keywords', content: 'Placeholder - productpageKeywords' },
         { vmid: 'og:title', property: 'og:title', content: htmlDecode(this.productName) },
         { vmid: 'og:url', property: 'og:url', content: htmlDecode(this.productUrl) },
         { vmid: 'og:type', property: 'og:type', content: 'product' },

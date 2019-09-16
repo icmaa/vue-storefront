@@ -5,8 +5,11 @@ import { stringToComponent } from '../helpers'
 import YAML from 'yaml'
 import camelCase from 'lodash-es/camelCase'
 
+import CmsMetaMixin from 'icmaa-meta/mixins/cmsMeta';
+
 export default {
   name: 'IcmaaCmsPage',
+  mixins: [CmsMetaMixin],
   computed: {
     ...mapGetters('icmaaCmsPage', ['getPageByIdentifier']),
     identifier (): string {
@@ -52,6 +55,7 @@ export default {
           }
 
           meta.meta.push({
+            vmid: value,
             name: value,
             content: this.page[key]
           })
