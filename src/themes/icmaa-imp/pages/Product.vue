@@ -10,17 +10,22 @@
           :configuration="configuration"
           :product="product"
         />
-        <div class="t-w-full t-p-8 t-bg-white t-flex">
-          <h1 data-testid="productName" itemprop="name" class="t-flex-grow t-mb-0 t-leading-snug">
-            <template v-if="typeof productName === 'object'">
-              <span class="t-block t-text-2xl t-font-thin t-leading-relaxed t-mb-2">{{ productName.mandant | htmlDecode }}</span>
-              <span class="t-block t-text-lg t-font-bold">{{ productName.product | htmlDecode }}</span>
-            </template>
-            <template v-else>
-              <span class="t-block t-text-2xl t-font-thin t-mb-2">{{ productName | htmlDecode }}</span>
-            </template>
-          </h1>
-          <department-logo v-bind="departmentLogo.data()" v-if="departmentLogo" class="t-flex-fix t-self-start" />
+        <div class="t-w-full t-p-8 t-bg-white">
+          <div class="t-flex t-flex-wrap">
+            <h1 data-testid="productName" itemprop="name" class="t-flex-grow t-mb-0 t-leading-snug">
+              <template v-if="typeof productName === 'object'">
+                <span class="t-block t-text-2xl t-font-thin t-leading-relaxed t-mb-2">{{ productName.mandant | htmlDecode }}</span>
+                <span class="t-block t-text-lg t-font-bold">{{ productName.product | htmlDecode }}</span>
+              </template>
+              <template v-else>
+                <span class="t-block t-text-2xl t-font-thin t-mb-2">{{ productName | htmlDecode }}</span>
+              </template>
+            </h1>
+            <department-logo v-bind="departmentLogo.data()" v-if="departmentLogo" class="t-flex-fix t-self-start" />
+            <div class="t-flex-fix t-w-full">
+              <reviews-short :rating="0" :count="0" class="t-mt-4" />
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -251,6 +256,8 @@ import { RecentlyViewedModule } from '@vue-storefront/core/modules/recently-view
 import { registerModule, isModuleRegistered } from '@vue-storefront/core/lib/modules'
 
 import DepartmentLogo from 'theme/components/core/blocks/ICMAA/CategoryExtras/DepartmentLogo.vue'
+import MaterialIcon from 'theme/components/core/blocks/MaterialIcon'
+import ReviewsShort from 'theme/components/core/blocks/Reviews/ReviewsShort'
 
 export default {
   components: {
@@ -259,6 +266,7 @@ export default {
     AddToWishlist,
     Breadcrumbs,
     DepartmentLogo,
+    MaterialIcon,
     ColorSelector,
     GenericSelector,
     ProductAttribute,
@@ -268,6 +276,7 @@ export default {
     ProductLinks,
     RelatedProducts,
     Reviews,
+    ReviewsShort,
     SizeSelector,
     WebShare,
     BaseInputNumber,
