@@ -24,6 +24,7 @@
             <department-logo v-bind="departmentLogo.data()" v-if="departmentLogo" class="t-flex-fix t-self-start" />
             <div class="t-flex-fix t-w-full">
               <reviews-short :rating="0" :count="0" class="t-mt-4" />
+              <web-share :webshare-text="webshareText" :webshare-image="image.src" class="t-mt-4 t-text-base-light" />
             </div>
           </div>
         </div>
@@ -41,11 +42,6 @@
               itemprop="name"
             >
               {{ product.name | htmlDecode }}
-              <web-share
-                :title="product.name | htmlDecode"
-                text="Check this product!"
-                class="web-share"
-              />
             </h1>
             <div
               class="mb20 uppercase cl-secondary"
@@ -256,7 +252,6 @@ import { RecentlyViewedModule } from '@vue-storefront/core/modules/recently-view
 import { registerModule, isModuleRegistered } from '@vue-storefront/core/lib/modules'
 
 import DepartmentLogo from 'theme/components/core/blocks/ICMAA/CategoryExtras/DepartmentLogo.vue'
-import MaterialIcon from 'theme/components/core/blocks/MaterialIcon'
 import ReviewsShort from 'theme/components/core/blocks/Reviews/ReviewsShort'
 
 export default {
@@ -266,7 +261,6 @@ export default {
     AddToWishlist,
     Breadcrumbs,
     DepartmentLogo,
-    MaterialIcon,
     ColorSelector,
     GenericSelector,
     ProductAttribute,

@@ -1,4 +1,5 @@
 import { mapGetters } from 'vuex'
+import i18n from '@vue-storefront/i18n'
 import ProductNameHelper from '../helpers/productName'
 import { Logo } from 'icmaa-cms/helpers/categoryExtras/logo'
 
@@ -46,16 +47,25 @@ export default {
         return this.getCategoryExtrasByUrlKey(this.departmentCategory.url_key)
       }
     },
+    translatedProductName () {
+      return new ProductNameHelper(this.product.name).translatedName
+    },
     productName () {
-      let name = this.product.name
+      let name = this.translatedProductName
       const regex = this.hasDepartmentBrandOptionLabel
         ? new RegExp('/^(' + this.departmentBrandOptionLabel + '*?)(\\s-\\s)/')
         : /^(.*?)(\s-\s)/
 
       return !regex.test(name) ? name : {
         mandant: name.match(regex)[1],
-        product: new ProductNameHelper(name).translatedName.replace(regex, '')
+        product: name.replace(regex, '')
       }
+    },
+    webshareText () {
+      return i18n.t(
+        'Checkout this out: {name} for {price}',
+        { name: this.translatedProductName, price: this.product.price_incl_tax }
+      )
     }
   }
 }
