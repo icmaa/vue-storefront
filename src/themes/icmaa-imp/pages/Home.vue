@@ -3,10 +3,13 @@
     <div
       class="t-min-h-screen t-content-center t-flex-no-wrap t-justify-center"
     >
-      <!-- TEASER LARGE -->
-      <Banner />
+      <template v-if="teaser.length > 0">
+        <Banner :banner="teaser[0]" />
+      </template>
       <!-- TEASER SMALL -->
-      <Teaser />
+      <template v-if="teaser.length > 0">
+        <Teaser :teaser="teaser[1]" />
+      </template>
     </div>
   </div>
 </template>
