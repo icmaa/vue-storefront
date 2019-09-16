@@ -1,6 +1,6 @@
 <template>
   <div id="teaser-large" class="t-w-full t-mb-4">
-    <a :href="teaser[0].href" class="">
+    <a :href="banner.href" class="">
       <div class="t-relative">
         <img
           class="t-w-full"
@@ -8,9 +8,9 @@
         >
         <div
           class="t-flex t-justify-center t-absolute t-bottom-0 t-inset-x-0 t-mb-6 t-text-sm"
-          :style="{ color: teaser[0].title_color }"
+          :style="{ color: banner.title_color }"
         >
-          {{ teaser[0].title }}
+          {{ banner.title }}
           <material-icon icon="arrow_forward" class="t-ml-3" />
         </div>
       </div>
@@ -25,29 +25,8 @@ export default {
   components: {
     MaterialIcon
   },
-  data () {
-    return {
-      teaser: [
-        {
-          title: 'Alle Produkte anzeigen',
-          title_color: '#ffffff',
-          subtitle: 'Ein tollter Subtitle',
-          subtitle_color: '#ffffff',
-          href: '/sales.html',
-          banner: true
-        },
-        {
-          title: 'Neues Merchandise',
-          title_color: 'black',
-          subtitle: 'T-Shirts, Hoodies, Shorts uvm. noch viel mehr Sachen ',
-          subtitle_color: 'black',
-          button_text: 'JETZT SHOPPEN',
-          button_text_color: 'black',
-          href: '/merchandise.html',
-          banner: false
-        }
-      ]
-    };
+  props: {
+      banner: Object
   }
 };
 </script>
