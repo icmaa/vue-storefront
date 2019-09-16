@@ -2,7 +2,7 @@
   <component
     :is="link ? 'router-link' : 'button'"
     :to="localizedRoute(link)"
-    class="button-outline no-outline py15 bg-cl-transparent h4 no-underline sans-serif fs-medium"
+    class="no-outline bg-cl-transparent no-underline t-text-xs t-px-5 t-p-3 t-rounded-sm t-border t-border-black"
     :class="{
       light : color === 'light', 'brdr-white' : color === 'light', 'cl-white' : color === 'light',
       dark : color === 'dark', 'brdr-darkgray' : color === 'dark', 'cl-secondary' : color === 'dark',
