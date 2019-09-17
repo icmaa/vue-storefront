@@ -33,10 +33,13 @@ export default {
     total () {
       return this.count + ' ' + (this.count > 1 ? i18n.t('Reviews') : i18n.t('Review'))
     },
+    ratingCalculated () {
+      return this.rating / 100 * this.maxRating
+    },
     stars () {
       let stars = []
-      const fullStars = parseInt(this.rating)
-      const partialStar = Math.round(this.rating - fullStars)
+      const fullStars = parseInt(this.ratingCalculated)
+      const partialStar = Math.round(this.ratingCalculated - fullStars)
       const emptyStars = this.maxRating - fullStars - partialStar
 
       for (let i = 1; i <= this.maxRating; i++) {
@@ -44,7 +47,7 @@ export default {
           stars.push('star')
         } else if (i > fullStars && i <= this.maxRating - emptyStars && partialStar > 0) {
           stars.push('star_half')
-        } else if (i > this.rating) {
+        } else if (i > this.ratingCalculated) {
           stars.push('star_border')
         }
       }

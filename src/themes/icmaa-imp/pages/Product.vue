@@ -23,7 +23,7 @@
             </h1>
             <department-logo v-bind="departmentLogo.data()" v-if="departmentLogo" class="t-flex-fix t-self-start" />
             <div class="t-flex-fix t-w-full">
-              <reviews-short :rating="0" :count="0" class="t-mt-4" />
+              <reviews-short :rating="reviewsTotalRating" :count="reviewsCount" class="t-mt-4" />
               <web-share :webshare-text="webshareText" :webshare-image="image.src" class="t-mt-4 t-text-base-light" />
             </div>
           </div>
@@ -248,6 +248,7 @@ import AddToWishlist from 'theme/components/core/blocks/Wishlist/AddToWishlist'
 import AddToCompare from 'theme/components/core/blocks/Compare/AddToCompare'
 import LazyHydrate from 'vue-lazy-hydration'
 import { ReviewModule } from '@vue-storefront/core/modules/review'
+import { IcmaaExtendedReviewModule } from 'icmaa-review'
 import { RecentlyViewedModule } from '@vue-storefront/core/modules/recently-viewed'
 import { registerModule, isModuleRegistered } from '@vue-storefront/core/lib/modules'
 
@@ -282,6 +283,7 @@ export default {
   directives: { focusClean },
   beforeCreate () {
     registerModule(ReviewModule)
+    registerModule(IcmaaExtendedReviewModule)
     registerModule(RecentlyViewedModule)
   },
   data () {
