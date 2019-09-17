@@ -24,6 +24,27 @@
             <department-logo v-bind="departmentLogo.data()" v-if="departmentLogo" class="t-flex-fix t-self-start" />
             <reviews-short :rating="reviewsTotalRating" :count="reviewsCount" class="t-flex-fix t-w-full t-mt-4 lg:t-flex-expand lg:t-w-2/3" />
             <web-share :webshare-text="webshareText" :webshare-image="image.src" class="t-flex-fix t-w-full t-mt-4 t-text-base-light lg:t-w-auto" />
+
+            <div itemprop="offers" itemscope itemtype="http://schema.org/Offer">
+              <meta itemprop="priceCurrency" :content="currentStore.i18n.currencyCode">
+              <meta itemprop="price" :content="parseFloat(product.price_incl_tax).toFixed(2)">
+              <meta itemprop="availability" :content="structuredData.availability">
+              <meta itemprop="url" :content="product.url_path">
+
+              <div v-if="product.type_id !== 'grouped'" class="t-mt-5 t-mb-4 t-text-xl">
+                <template v-if="product.special_price && product.price_incl_tax && product.original_price_incl_tax">
+                  <span class="t-text-base-tone t-line-through">{{ product.original_price_incl_tax * product.qty | price }}</span>
+                  &nbsp;
+                  <span class="t-text-sale t-font-bold">{{ product.price_incl_tax * product.qty | price }}</span>
+                </template>
+                <span class="t-font-bold" v-if="!product.special_price && product.price_incl_tax">
+                  {{ product.qty > 0 ? product.price_incl_tax * product.qty : product.price_incl_tax | price }}
+                </span>
+                <div class="t-mt-1 t-text-xs t-text-base-light">
+                  inkl. 19% MwSt., zzgl. Versandkosten
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
