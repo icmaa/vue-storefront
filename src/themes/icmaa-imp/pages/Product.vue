@@ -12,7 +12,7 @@
         />
         <div class="t-w-full t-p-8 t-bg-white lg:t-w-1/2">
           <div class="t-flex t-flex-wrap">
-            <h1 data-testid="productName" itemprop="name" class="t-flex-grow t-mb-0 t-leading-snug">
+            <h1 data-testid="productName" itemprop="name" class="t-flex-grow t-w-1/2 t-mb-0 t-leading-snug">
               <template v-if="typeof productName === 'object'">
                 <span class="t-block t-text-2xl t-font-thin t-leading-relaxed t-mb-2">{{ productName.mandant | htmlDecode }}</span>
                 <span class="t-block t-text-lg t-font-bold">{{ productName.product | htmlDecode }}</span>
@@ -25,7 +25,7 @@
             <reviews-short :rating="reviewsTotalRating" :count="reviewsCount" class="t-flex-fix t-w-full t-mt-4 lg:t-flex-expand lg:t-w-2/3" />
             <web-share :webshare-text="webshareText" :webshare-image="image.src" class="t-flex-fix t-w-full t-mt-4 t-text-base-light lg:t-w-auto" />
 
-            <div itemprop="offers" itemscope itemtype="http://schema.org/Offer">
+            <div class="t-w-full" itemprop="offers" itemscope itemtype="http://schema.org/Offer">
               <meta itemprop="priceCurrency" :content="currentStore.i18n.currencyCode">
               <meta itemprop="price" :content="parseFloat(product.price_incl_tax).toFixed(2)">
               <meta itemprop="availability" :content="structuredData.availability">
