@@ -1,16 +1,16 @@
 <template>
   <div id="product" itemscope itemtype="http://schema.org/Product">
     <div class="t-container t-px-4">
-      <div class="t--mx-4 t-flex t-flex-wrap">
-        <breadcrumbs class="breadcrumbs t-w-full t-mx-4 t-my-8 t-hidden lg:t-block" :routes="breadcrumbs.routes" :active-route="breadcrumbs.name" />
+      <div class="t--mx-4 lg:t-px-4 t-flex t-flex-wrap">
+        <breadcrumbs class="breadcrumbs t-w-full t-my-8 t-hidden lg:t-block" :routes="breadcrumbs.routes" :active-route="breadcrumbs.name" />
         <product-gallery
-          class="product-gallery t-w-full t-py-px"
+          class="product-gallery t-w-full t-py-px lg:t-w-1/2 lg:t-py-0"
           :offline="image"
           :gallery="gallery"
           :configuration="configuration"
           :product="product"
         />
-        <div class="t-w-full t-p-8 t-bg-white">
+        <div class="t-w-full t-p-8 t-bg-white lg:t-w-1/2">
           <div class="t-flex t-flex-wrap">
             <h1 data-testid="productName" itemprop="name" class="t-flex-grow t-mb-0 t-leading-snug">
               <template v-if="typeof productName === 'object'">
@@ -22,10 +22,8 @@
               </template>
             </h1>
             <department-logo v-bind="departmentLogo.data()" v-if="departmentLogo" class="t-flex-fix t-self-start" />
-            <div class="t-flex-fix t-w-full">
-              <reviews-short :rating="reviewsTotalRating" :count="reviewsCount" class="t-mt-4" />
-              <web-share :webshare-text="webshareText" :webshare-image="image.src" class="t-mt-4 t-text-base-light" />
-            </div>
+            <reviews-short :rating="reviewsTotalRating" :count="reviewsCount" class="t-flex-fix t-w-full t-mt-4 lg:t-flex-expand lg:t-w-2/3" />
+            <web-share :webshare-text="webshareText" :webshare-image="image.src" class="t-flex-fix t-w-full t-mt-4 t-text-base-light lg:t-w-auto" />
           </div>
         </div>
       </div>

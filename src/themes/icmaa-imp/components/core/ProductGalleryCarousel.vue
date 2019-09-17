@@ -120,7 +120,27 @@ export default {
 </script>
 
 <style lang="scss">
-.VueCarousel-navigation-button:not(.VueCarousel-navigation--disabled) {
-  transform: translateX(0)
+
+.VueCarousel {
+  @media (min-width: 1024px) {
+    isolation: isolate;
+    background: -moz-linear-gradient(left,  rgba(0,0,0,0) 1%, rgba(0,0,0,0) 75%, rgba(0,0,0,0.05) 90%, rgba(0,0,0,0.1) 98%, rgba(0,0,0,0.1) 99%, rgba(0,0,0,0.15) 100%);
+    background: -webkit-linear-gradient(left,  rgba(0,0,0,0) 1%,rgba(0,0,0,0) 75%,rgba(0,0,0,0.05) 90%,rgba(0,0,0,0.1) 98%,rgba(0,0,0,0.1) 99%,rgba(0,0,0,0.15) 100%);
+    background: linear-gradient(to right,  rgba(0,0,0,0) 1%,rgba(0,0,0,0) 75%,rgba(0,0,0,0.05) 90%,rgba(0,0,0,0.1) 98%,rgba(0,0,0,0.1) 99%,rgba(0,0,0,0.15) 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00000000', endColorstr='#26000000',GradientType=1 );
+
+    .VueCarousel-inner {
+      mix-blend-mode: multiply;
+    }
+  }
+
+  .VueCarousel-navigation-button.VueCarousel-navigation--disabled {
+    display: none;
+  }
+
+  .VueCarousel-navigation-button:not(.VueCarousel-navigation--disabled) {
+    transform: translateX(0)
+  }
 }
+
 </style>

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <a v-for="(shareUrl, key) in shareUrls" :key="key" :href="shareUrl" target="_blank" class="t-text-base-light t-mr-4">
+    <a v-for="(shareUrl, key) in shareUrls" :key="key" :href="shareUrl" target="_blank" class="t-text-base-light" :class="{ 't-mr-4': key !== lastKey }">
       <material-icon icon-set="icmaa" :icon="key" size="xs" />
     </a>
   </div>
@@ -43,6 +43,9 @@ export default {
         'pinterest': `https://pinterest.com/pin/create/button/?url=${this.url}&amp;media=${this.image}&amp;description=${this.text}`,
         'whatsapp': `whatsapp://send?text=${this.url}%20${this.text}`
       }
+    },
+    lastKey () {
+      return Object.keys(this.shareUrls)[Object.keys(this.shareUrls).length - 1]
     }
   }
 }
