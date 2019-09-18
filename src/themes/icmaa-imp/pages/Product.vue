@@ -31,7 +31,7 @@
               <meta itemprop="availability" :content="structuredData.availability">
               <meta itemprop="url" :content="product.url_path">
 
-              <div v-if="product.type_id !== 'grouped'" class="t-mt-5 t-mb-4 t-text-1xl">
+              <div v-if="product.type_id !== 'grouped'" class="price t-mt-5 t-mb-8 t-text-1xl">
                 <template v-if="product.special_price && product.price_incl_tax && product.original_price_incl_tax">
                   <span class="t-text-base-tone t-line-through">{{ product.original_price_incl_tax * product.qty | price }}</span>
                   &nbsp;
@@ -41,6 +41,24 @@
                   {{ product.qty > 0 ? product.price_incl_tax * product.qty : product.price_incl_tax | price }}
                 </span>
                 <div class="t-mt-1 t-text-xs t-text-base-light" v-html="taxDisclaimer" />
+              </div>
+
+              <div class="t-flex t-flex-wrap">
+                <div v-if="product.type_id === 'configurable' && !loading" class="t-flex t-flex-grow t-w-full t-mb-4 lg:t-w-3/6 lg:t-mb-0 lg:t-mr-4">
+                  <div class="error" v-if="product.errors && Object.keys(product.errors).length > 0">
+                    {{ product.errors | formatProductMessages }}
+                  </div>
+                  <button-component type="select" icon="arrow_forward" class="t-w-full">
+                    <template v-if="getProductOptions.length > 1">
+                      {{ $t('Choose options') }}
+                    </template>
+                    <template v-else>
+                      {{ $t('Choose {attribute}', { attribute: getProductOptions[0].label }) }}
+                    </template>
+                  </button-component>
+                </div>
+                <button-component type="primary" v-text="$t('Add to cart')" class="t-flex-grow lg:t-w-2/6" />
+                <add-to-wishlist :product="product" class="t-flex-fix t-ml-4" />
               </div>
             </div>
           </div>
@@ -269,6 +287,7 @@ import { IcmaaExtendedReviewModule } from 'icmaa-review'
 import { RecentlyViewedModule } from '@vue-storefront/core/modules/recently-viewed'
 import { registerModule, isModuleRegistered } from '@vue-storefront/core/lib/modules'
 
+import ButtonComponent from 'theme/components/core/blocks/Button.vue'
 import DepartmentLogo from 'theme/components/core/blocks/ICMAA/CategoryExtras/DepartmentLogo.vue'
 import ReviewsShort from 'theme/components/core/blocks/Reviews/ReviewsShort'
 
@@ -278,6 +297,7 @@ export default {
     AddToCompare,
     AddToWishlist,
     Breadcrumbs,
+    ButtonComponent,
     DepartmentLogo,
     ColorSelector,
     GenericSelector,
