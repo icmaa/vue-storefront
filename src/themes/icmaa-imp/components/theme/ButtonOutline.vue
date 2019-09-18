@@ -2,13 +2,14 @@
   <component
     :is="link ? 'router-link' : 'button'"
     :to="localizedRoute(link)"
-    class="no-outline bg-cl-transparent no-underline t-text-xs t-px-5 t-p-3 t-rounded-sm t-border t-border-black"
+    class="button-outline no-outline bg-cl-transparent no-underline t-text-xs t-px-5 t-p-3 t-rounded-sm t-border"
     :class="{
       light : color === 'light', 'brdr-white' : color === 'light', 'cl-white' : color === 'light',
       dark : color === 'dark', 'brdr-darkgray' : color === 'dark', 'cl-secondary' : color === 'dark',
       px0 : link ? true : false,
-      px40 : link ? false : true
+      px40 : link ? false : true,
     }"
+    :style="{ '--color': color, color: color}"
   >
     <slot>Button</slot>
   </component>
@@ -42,8 +43,7 @@ $white: color(white);
 $black: color(black);
 
 .button-outline {
-  border: 2px solid;
-  height: 62px;
+  border: 1px solid var(--color);
 }
 
 @media screen and (min-width: 900px) {
