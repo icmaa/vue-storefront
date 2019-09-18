@@ -8,16 +8,20 @@
 
 <script>
 import TopButton from 'theme/components/theme/blocks/AsyncSidebar/TopButton'
+import onEscapePress from '@vue-storefront/core/mixins/onEscapePress'
 
 export default {
   name: 'AsyncMenuTop',
   components: {
     TopButton
   },
+  mixins: [onEscapePress],
   methods: {
     closeMenu () {
-      this.$store.commit('ui/setSidebar', false)
-      this.$store.commit('ui/setMicrocart', false)
+      this.$store.dispatch('ui/closeAll')
+    },
+    onEscapePress () {
+      this.$store.dispatch('ui/closeAll')
     }
   }
 }

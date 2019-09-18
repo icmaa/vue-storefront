@@ -48,7 +48,7 @@
                   <div class="error" v-if="product.errors && Object.keys(product.errors).length > 0">
                     {{ product.errors | formatProductMessages }}
                   </div>
-                  <button-component type="select" icon="arrow_forward" class="t-w-full">
+                  <button-component type="select" icon="arrow_forward" class="t-w-full" @click.native="openAddtocart">
                     <template v-if="getProductOptions.length > 1">
                       {{ $t('Choose options') }}
                     </template>
@@ -57,7 +57,7 @@
                     </template>
                   </button-component>
                 </div>
-                <button-component type="primary" v-text="$t('Add to cart')" class="t-flex-grow lg:t-w-2/6" />
+                <button-component type="primary" v-text="$t('Add to cart')" class="t-flex-grow lg:t-w-2/6" @click.native="openAddtocart" />
                 <add-to-wishlist :product="product" class="t-flex-fix t-ml-4" />
               </div>
             </div>
@@ -252,11 +252,17 @@
     <lazy-hydrate when-idle>
       <related-products type="related" />
     </lazy-hydrate>
+    <async-sidebar
+      :async-component="AddToCartDialog"
+      :is-open="isAddToCartDialogOpen"
+      @close="$store.commit('ui/setAddtocart')"
+    />
     <SizeGuide />
   </div>
 </template>
 
 <script>
+import { mapState, mapActions } from 'vuex'
 import { minValue } from 'vuelidate/lib/validators'
 import i18n from '@vue-storefront/i18n'
 import Product from '@vue-storefront/core/pages/Product'
@@ -282,6 +288,7 @@ import SizeGuide from 'theme/components/core/blocks/Product/SizeGuide'
 import AddToWishlist from 'theme/components/core/blocks/Wishlist/AddToWishlist'
 import AddToCompare from 'theme/components/core/blocks/Compare/AddToCompare'
 import LazyHydrate from 'vue-lazy-hydration'
+import AsyncSidebar from 'theme/components/theme/blocks/AsyncSidebar/AsyncSidebar.vue'
 import { ReviewModule } from '@vue-storefront/core/modules/review'
 import { IcmaaExtendedReviewModule } from 'icmaa-review'
 import { RecentlyViewedModule } from '@vue-storefront/core/modules/recently-viewed'
@@ -291,8 +298,11 @@ import ButtonComponent from 'theme/components/core/blocks/Button.vue'
 import DepartmentLogo from 'theme/components/core/blocks/ICMAA/CategoryExtras/DepartmentLogo.vue'
 import ReviewsShort from 'theme/components/core/blocks/Reviews/ReviewsShort'
 
+const AddToCartDialog = () => import(/* webpackPreload: true */ /* webpackChunkName: "vsf-addtocart-dialog" */ 'theme/components/core/AddToCartDialog.vue')
+
 export default {
   components: {
+    AsyncSidebar,
     AddToCart,
     AddToCompare,
     AddToWishlist,
@@ -325,12 +335,14 @@ export default {
   },
   data () {
     return {
+      AddToCartDialog,
       detailsOpen: false,
       quantity: 0,
       isProductLoading: true
     }
   },
   computed: {
+    ...mapState({ isAddToCartDialogOpen: state => state.ui.addtocart }),
     structuredData () {
       return {
         availability: this.product.stock.is_in_stock ? 'InStock' : 'OutOfStock'
@@ -407,6 +419,9 @@ export default {
     this.getQuantity()
   },
   methods: {
+    ...mapActions({
+      openAddtocart: 'ui/toggleAddtocart'
+    }),
     showDetails (event) {
       this.detailsOpen = true
       event.target.classList.add('hidden')
