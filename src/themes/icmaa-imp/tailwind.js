@@ -27,7 +27,8 @@ module.exports = {
         '3-1/2': '0.85rem'
       },
       fontSize: {
-        'xxs': '0.625rem'
+        'xxs': '0.625rem',
+        '1xl': '1.375rem'
       },
       lineHeight: {
         'looser': '3',

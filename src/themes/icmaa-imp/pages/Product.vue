@@ -31,7 +31,7 @@
               <meta itemprop="availability" :content="structuredData.availability">
               <meta itemprop="url" :content="product.url_path">
 
-              <div v-if="product.type_id !== 'grouped'" class="t-mt-5 t-mb-4 t-text-xl">
+              <div v-if="product.type_id !== 'grouped'" class="t-mt-5 t-mb-4 t-text-1xl">
                 <template v-if="product.special_price && product.price_incl_tax && product.original_price_incl_tax">
                   <span class="t-text-base-tone t-line-through">{{ product.original_price_incl_tax * product.qty | price }}</span>
                   &nbsp;
@@ -40,9 +40,7 @@
                 <span class="t-font-bold" v-if="!product.special_price && product.price_incl_tax">
                   {{ product.qty > 0 ? product.price_incl_tax * product.qty : product.price_incl_tax | price }}
                 </span>
-                <div class="t-mt-1 t-text-xs t-text-base-light">
-                  inkl. 19% MwSt., zzgl. Versandkosten
-                </div>
+                <div class="t-mt-1 t-text-xs t-text-base-light" v-html="taxDisclaimer" />
               </div>
             </div>
           </div>
@@ -377,6 +375,12 @@ export default {
     getInputName () {
       if (this.isSimpleOrConfigurable) { return i18n.t('Quantity available', { qty: this.quantity }) }
       return i18n.t('Quantity')
+    },
+    taxDisclaimer () {
+      return i18n.t(
+        '{incl} {rate}% VAT, Excl. shipping',
+        { rate: 19, incl: i18n.t('incl.') }
+      )
     }
   },
   created () {

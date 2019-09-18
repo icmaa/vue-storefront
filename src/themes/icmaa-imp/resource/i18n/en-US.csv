@@ -272,6 +272,8 @@
 "color","color"
 "color_filter","Color"
 "erin_recommends_filter","Erin Recommends"
+"excl.","excl."
+"incl.","incl."
 "items","items"
 "login to your account","login to your account"
 "login","login"
@@ -285,3 +287,4 @@
 "size_filter","Size"
 "to find product you were looking for.","to find product you were looking for."
 "to find something beautiful for You!","to find something beautiful for You!"
+"{incl} {rate}% VAT, Excl. shipping","{incl} {rate}% VAT, Excl. shipping"

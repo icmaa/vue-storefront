@@ -268,6 +268,8 @@
 "color","Farbe"
 "color_filter","Farbe"
 "erin_recommends_filter","Erin empfiehlt"
+"excl.","exkl."
+"incl.","inkl."
 "login to your account","mit Ihrem Konto anmelden"
 "login","Login"
 "or write to us through","oder schreiben Sie uns über"
@@ -280,3 +282,4 @@
 "size_filter","Größe"
 "to find product you were looking for.","benutzen, um das gesuchte Produkt zu finden."
 "to find something beautiful for You!","um etwas Schönes für Sie zu finden!"
+"{incl} {rate}% VAT, Excl. shipping","{incl} {rate}% MwSt., zzgl. Versandkosten"
