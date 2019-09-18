@@ -1,6 +1,6 @@
 <template>
   <div id="teaser-large" class="t-w-full t-mb-4">
-    <a :href="banner.href" class="">
+    <a :href="teaser.href" class="">
       <div class="t-relative">
         <img
           class="t-w-full"
@@ -8,9 +8,9 @@
         >
         <div
           class="t-flex t-justify-center t-absolute t-bottom-0 t-inset-x-0 t-mb-6 t-text-sm"
-          :style="{ color: banner.title_color }"
+          :style="{ color: teaser.text_color }"
         >
-          {{ banner.title }}
+          {{ teaser.text_1 }}
           <material-icon icon="arrow_forward" class="t-ml-3" />
         </div>
       </div>
@@ -26,7 +26,7 @@ export default {
     MaterialIcon
   },
   props: {
-      banner: Object
+      teaser: Object
   }
 };
 </script>

@@ -4,11 +4,11 @@
       class="t-min-h-screen t-content-center t-flex-no-wrap t-justify-center"
     >
       <template v-if="teaser.length > 0">
-        <Banner :banner="teaser[0]" />
+        <Teaser2x1 :teaser="teaser[0]" />
       </template>
       <!-- TEASER SMALL -->
       <template v-if="teaser.length > 0">
-        <Teaser :teaser="teaser[1]" />
+        <Teaser1x1 :teaser="teaser[1]" />
       </template>
     </div>
   </div>
@@ -19,34 +19,39 @@ import config from 'config';
 import { mapGetters } from 'vuex';
 import { onlineHelper } from '@vue-storefront/core/helpers';
 import { Logger } from '@vue-storefront/core/lib/logger';
-import Banner from 'theme/components/core/blocks/Teaser/Banner';
-import Teaser from 'theme/components/core/blocks/Teaser/Teaser';
+import Teaser2x1 from 'theme/components/core/blocks/Teaser/Teaser2x1';
+import Teaser1x1 from 'theme/components/core/blocks/Teaser/Teaser1x1';
 
 export default {
   components: {
-    Banner,
-    Teaser
+    Teaser2x1,
+    Teaser1x1
   },
   data () {
     return {
       teaser: [
         {
-          title: 'Alle Produkte anzeigen',
-          title_color: '#ffffff',
-          subtitle: 'Ein tollter Subtitle',
-          subtitle_color: '#ffffff',
-          href: '/sales.html',
-          banner: true
+          text_1: 'Alle Produkte anzeigen',
+          text_2: 'Ein tollter Subtitle',
+          text_3: 'disclaimer',
+          button_text: 'JETZT SHOPPEN',
+          text_color: '#ffffff',
+          background_color: '#000000',
+          image_2x1: '',
+          image_1x1: '',
+          image_link: '/sales.html'
+
         },
         {
-          title: 'Neues Merchandise',
-          title_color: 'black',
-          subtitle: 'T-Shirts, Hoodies, Shorts uvm. noch viel mehr Sachen ',
-          subtitle_color: 'black',
+          text_1: 'Neues Merchandise',
+          text_2: 'T-Shirts, Hoodies, Shorts uvm. noch viel mehr Sachen ',
+          text_3: 'disclaimer',
           button_text: 'JETZT SHOPPEN',
-          button_text_color: 'black',
-          href: '/merchandise.html',
-          banner: false
+          text_color: '#ffffff',
+          background_color: '#611122',
+          image_2x1: '',
+          image_1x1: '',
+          image_link: '/merchandise.html'
         }
       ]
     };
