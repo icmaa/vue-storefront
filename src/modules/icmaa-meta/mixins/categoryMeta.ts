@@ -26,9 +26,9 @@ export default {
     },
     categoryFBImages () {
       let categoryImagesTags = [];
-      // let limit = config.facebook.opengraph.imagesListInCategoryView
+      let limit = Math.min(this.getCategoryProducts.length, config.icmaa_meta.facebook.imagesListInCategoryView);
 
-      this.getCategoryProducts.slice(0, 4).forEach(image => {
+      this.getCategoryProducts.slice(0, limit).forEach(image => {
         categoryImagesTags.push({
           property: 'og:image',
           content: getThumbnailPath(
