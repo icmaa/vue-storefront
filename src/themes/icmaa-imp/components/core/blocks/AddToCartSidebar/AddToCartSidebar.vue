@@ -10,18 +10,23 @@
         </template>
       </h2>
     </template>
-    <div class="t-p-1 t-flex t-flex-wrap">
+    <div class="t-p-1 t-w-full t-flex t-flex-wrap">
+      <div v-if="isLoading">
+        LOADING - THIS IS NOT WORKING – PARALLEL ASYNC REQUESTS
+      </div>
       <template v-if="product.type_id =='configurable'">
         <div class="error t-w-full " v-if="product.errors && Object.keys(product.errors).length > 0">
           {{ product.errors | formatProductMessages }}
         </div>
         <div v-for="option in getProductOptions" :key="option.id" class="t-w-full t-flex t-flex-col">
           <default-selector
-            v-for="filter in getAvailableFilters[option.attribute_code]"
-            :key="filter.id"
+            v-for="(filter, key) in getAvailableFilters[option.attribute_code]"
+            :key="key"
             :variant="filter"
             :selected-filters="getSelectedFilters"
             @change="changeFilter"
+            :is-last="key === Object.keys(getAvailableFilters[option.attribute_code]).length - 1"
+            :is-loading="isLoading"
           />
         </div>
       </template>
@@ -37,28 +42,11 @@
         v-else-if="product.custom_options && product.custom_options.length > 0"
         :product="product"
       />
-      <div v-if="product.type_id !== 'grouped' && product.type_id !== 'bundle'">
-        <base-input-number
-          :name="getInputName"
-          v-model="product.qty"
-          :min="quantity ? 1 : 0"
-          :max="quantity"
-          :disabled="quantity ? false : true"
-          :value="quantity ? 1 : 0"
-          @blur="$v.$touch()"
-          :validations="[
-            {
-              condition: $v.product.qty.$error && !$v.product.qty.minValue,
-              text: $t('Quantity must be above 0')
-            }
-          ]"
-        />
-        <Spinner v-if="isQtyLoading" />
-      </div>
-      <add-to-cart
-        :product="product"
-        :disabled="($v.product.qty.$error && !$v.product.qty.minValue) || !quantity && isSimpleOrConfigurable && !isQtyLoading"
-      />
+      <model :product="product" class="t-w-full t-p-4 t-mt-6 t-mb-px t-bg-base-lightest t-text-sm t-text-base-tone" />
+      <router-link to="size-chart" class="t-w-full t-p-4 t-bg-base-lightest t-text-sm t-text-primary">
+        {{ $t('Which size fits me?') }}
+        <material-icon icon="call_made" size="md" class="t-float-right t-align-middle" />
+      </router-link>
     </div>
   </sidebar>
 </template>
@@ -68,16 +56,16 @@ import i18n from '@vue-storefront/i18n'
 import { mapGetters } from 'vuex'
 import { minValue } from 'vuelidate/lib/validators'
 import { ProductOption } from '@vue-storefront/core/modules/catalog/components/ProductOption.ts'
+import { notifications } from '@vue-storefront/core/modules/cart/helpers'
 import Composite from '@vue-storefront/core/mixins/composite'
 
 import Sidebar from 'theme/components/theme/blocks/AsyncSidebar/Sidebar'
-import AddToCart from 'theme/components/core/AddToCart.vue'
 import DefaultSelector from 'theme/components/core/blocks/AddToCartSidebar/DefaultSelector'
 import ProductLinks from 'theme/components/core/ProductLinks.vue'
 import ProductCustomOptions from 'theme/components/core/ProductCustomOptions.vue'
 import ProductBundleOptions from 'theme/components/core/ProductBundleOptions.vue'
-import Spinner from 'theme/components/core/Spinner'
-import BaseInputNumber from 'theme/components/core/blocks/Form/BaseInputNumber'
+import Model from 'theme/components/core/blocks/AddToCartSidebar/Model'
+import MaterialIcon from 'theme/components/core/blocks/MaterialIcon'
 
 export default {
   name: 'AddToCartSidebar',
@@ -88,9 +76,8 @@ export default {
     ProductBundleOptions,
     ProductCustomOptions,
     ProductLinks,
-    BaseInputNumber,
-    AddToCart,
-    Spinner
+    Model,
+    MaterialIcon
   },
   data () {
     return {
@@ -105,7 +92,8 @@ export default {
     ...mapGetters({
       product: 'product/productCurrent',
       configuration: 'product/currentConfiguration',
-      options: 'product/currentOptions'
+      options: 'product/currentOptions',
+      isAddingToCart: 'cart/getIsAdding'
     }),
     getProductOptions () {
       if (
@@ -163,9 +151,8 @@ export default {
       ) { return true }
       return false
     },
-    getInputName () {
-      if (this.isSimpleOrConfigurable) { return i18n.t('Quantity available', { qty: this.quantity }) }
-      return i18n.t('Quantity')
+    isLoading () {
+      return this.isQtyLoading || this.isAddingToCart
     }
   },
   methods: {
@@ -187,6 +174,20 @@ export default {
         Object.assign({ attribute_code: variant.type }, variant)
       )
       this.getQuantity()
+      this.addToCart(this.product)
+    },
+    async addToCart (product) {
+      try {
+        const diffLog = await this.$store.dispatch('cart/addItem', { productToAdd: product })
+        diffLog.clientNotifications.forEach(notificationData => {
+          this.notifyUser(notificationData)
+        })
+      } catch (message) {
+        this.notifyUser(notifications.createNotification({ type: 'error', message }))
+      }
+    },
+    notifyUser (notificationData) {
+      this.$store.dispatch('notification/spawnNotification', notificationData, { root: true })
     }
   },
   validations: {
