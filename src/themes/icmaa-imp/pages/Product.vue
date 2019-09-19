@@ -65,7 +65,7 @@
       <h2 class="h3 m0 mb10 serif lh20 details-title">
         {{ $t('Product details') }}
       </h2>
-      <div class="h4 details-wrapper" :class="{'details-wrapper--open': detailsOpen}">
+      <div class="h4 details-wrapper">
         <div class="row between-md m0">
           <div class="col-xs-12 col-sm-6">
             <div class="lh30 h5" itemprop="description" v-html="product.description" />
@@ -83,7 +83,6 @@
               </ul>
             </lazy-hydrate>
           </div>
-          <div class="details-overlay" @click="showDetails" />
         </div>
       </div>
     </section>
@@ -158,7 +157,6 @@ export default {
   data () {
     return {
       AddToCartSidebar,
-      detailsOpen: false,
       quantity: 0,
       isProductLoading: true
     }
@@ -181,10 +179,6 @@ export default {
     ...mapActions({
       openAddtocart: 'ui/toggleAddtocart'
     }),
-    showDetails (event) {
-      this.detailsOpen = true
-      event.target.classList.add('hidden')
-    },
     notifyOutStock () {
       this.$store.dispatch('notification/spawnNotification', {
         type: 'error',

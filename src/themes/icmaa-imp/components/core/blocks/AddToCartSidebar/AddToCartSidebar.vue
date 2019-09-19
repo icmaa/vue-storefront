@@ -6,21 +6,18 @@
       </h2>
     </template>
     <div class="t-p-1 t-w-full t-flex t-flex-wrap">
-      <div v-if="isLoading">
-        LOADING - THIS IS NOT WORKING – PARALLEL ASYNC REQUESTS
-      </div>
       <template v-if="product.type_id =='configurable'">
         <div class="error t-w-full " v-if="product.errors && Object.keys(product.errors).length > 0">
           {{ product.errors | formatProductMessages }}
         </div>
         <div v-for="option in productOptions" :key="option.id" class="t-w-full t-flex t-flex-col">
           <default-selector
-            v-for="(filter, key) in getAvailableFilters[option.attribute_code]"
+            v-for="(filter, key) in availableFilters[option.attribute_code]"
             :key="key"
             :variant="filter"
-            :selected-filters="getSelectedFilters"
+            :selected-filters="selectedFilters"
             @change="changeFilter"
-            :is-last="key === Object.keys(getAvailableFilters[option.attribute_code]).length - 1"
+            :is-last="key === Object.keys(availableFilters[option.attribute_code]).length - 1"
             :is-loading="isLoading"
           />
         </div>
@@ -91,52 +88,6 @@ export default {
       options: 'product/currentOptions',
       isAddingToCart: 'cart/getIsAdding'
     }),
-    getAvailableFilters () {
-      let filtersMap = {}
-      // TODO move to helper
-      if (this.product && this.product.configurable_options) {
-        this.product.configurable_options.forEach(configurableOption => {
-          const type = configurableOption.attribute_code
-          const filterVariants = configurableOption.values.map(
-            ({ value_index, label }) => {
-              let currentVariant = this.options[type].find(
-                config => config.id === value_index
-              )
-              label =
-                label || (currentVariant ? currentVariant.label : value_index)
-              return { id: value_index, label, type }
-            }
-          )
-          const availableOptions = filterVariants.filter(option =>
-            this.isOptionAvailable(option)
-          )
-          filtersMap[type] = availableOptions
-        })
-      }
-      return filtersMap
-    },
-    getSelectedFilters () {
-      // TODO move to helper when refactoring product page
-      let selectedFilters = {}
-      if (this.configuration && this.product) {
-        Object.keys(this.configuration).map(filterType => {
-          const filter = this.configuration[filterType]
-          selectedFilters[filterType] = {
-            id: filter.id,
-            label: filter.label,
-            type: filterType
-          }
-        })
-      }
-      return selectedFilters
-    },
-    isSimpleOrConfigurable () {
-      if (
-        this.product.type_id === 'simple' ||
-        this.product.type_id === 'configurable'
-      ) { return true }
-      return false
-    },
     isLoading () {
       return this.isQtyLoading || this.isAddingToCart
     }
@@ -144,7 +95,7 @@ export default {
   methods: {
     getQuantity () {
       this.isQtyLoading = true
-      this.$store
+      return this.$store
         .dispatch('stock/check', {
           product: this.product,
           qty: this.product.qte
@@ -155,12 +106,15 @@ export default {
         })
     },
     changeFilter (variant) {
-      this.$bus.$emit(
-        'filter-changed-product',
-        Object.assign({ attribute_code: variant.type }, variant)
-      )
-      this.getQuantity()
-      this.addToCart(this.product)
+      if (variant.available) {
+        this.$bus.$emit(
+          'filter-changed-product',
+          Object.assign({ attribute_code: variant.type }, variant)
+        )
+        this.getQuantity().then(() => {
+          this.addToCart(this.product)
+        })
+      }
     },
     async addToCart (product) {
       try {

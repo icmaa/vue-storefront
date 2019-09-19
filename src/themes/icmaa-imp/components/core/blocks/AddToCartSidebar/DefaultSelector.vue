@@ -1,11 +1,23 @@
 <template>
   <div
-    class="t-flex t-items-center t-h-12 t-px-4 t-text-base-tone t-text-sm t-uppercase t-border-base-lightest t-cursor-pointer"
-    :class="[ {'t-bg-base-lightest t-text-black': isActive && isLoading}, isLast ? 't-border-b-0' : ' t-border-b']"
+    class="t-flex t-items-center t-h-12 t-px-4 t-text-base-tone t-text-sm t-border-base-lightest t-cursor-pointer"
+    :class="[ {'t-flex t-text-base-light': !variant.available}, {'t-bg-base-lightest t-text-black': isActive && isLoading}, {'t-text-base-light': !isActive && isLoading}, isLast ? 't-border-b-0' : ' t-border-b']"
     @click="selectVariant"
     :aria-label="$t('Select ' + variant.label)"
   >
-    {{ getOptionLabel({ attributeKey: variant.type, optionId: variant.id }) }}
+    <template v-if="variant.available">
+      {{ getOptionLabel({ attributeKey: variant.type, optionId: variant.id }) }}
+      <spinner v-if="isLoading && isActive" />
+    </template>
+    <template v-else>
+      <span class="t-flex-auto">
+        {{ getOptionLabel({ attributeKey: variant.type, optionId: variant.id }) }}
+      </span>
+      <span class="t-flex-fix t-text-xs">
+        {{ $t('Request size') }}
+      </span>
+      <material-icon icon="mail_outline" class="t-flex-fix t-ml-4" />
+    </template>
   </div>
 </template>
 
@@ -13,10 +25,16 @@
 import { mapGetters } from 'vuex'
 import filterMixin from 'theme/mixins/filterMixin.ts'
 import focusClean from 'theme/components/theme/directives/focusClean'
+import MaterialIcon from 'theme/components/core/blocks/MaterialIcon'
+import Spinner from 'theme/components/core/Spinner'
 
 export default {
   mixins: [ filterMixin ],
   directives: { focusClean },
+  components: {
+    MaterialIcon,
+    Spinner
+  },
   props: {
     isLoading: {
       type: Boolean,
@@ -32,7 +50,9 @@ export default {
   },
   methods: {
     selectVariant () {
-      this.$emit('change', this.variant)
+      if (!this.isLoading) {
+        this.$emit('change', this.variant)
+      }
     }
   }
 }

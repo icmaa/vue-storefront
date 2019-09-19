@@ -24,6 +24,46 @@ export default {
       }
 
       return i18n.t('Choose {attribute}', { attribute: this.productOptionsLabels[0] })
+    },
+    availableFilters () {
+      let filtersMap = {}
+      // TODO move to helper
+      if (this.product && this.product.configurable_options) {
+        this.product.configurable_options.forEach(configurableOption => {
+          const type = configurableOption.attribute_code
+          const filterVariants = configurableOption.values.map(
+            ({ value_index, label }) => {
+              let currentVariant = this.options[type].find(
+                config => config.id === value_index
+              )
+              label = label || (currentVariant ? currentVariant.label : value_index)
+              return { id: value_index, label, type }
+            }
+          )
+          filterVariants.map(option => {
+            option['available'] = this.isOptionAvailable(option)
+            return option
+          }
+          )
+          filtersMap[type] = filterVariants
+        })
+      }
+      return filtersMap
+    },
+    selectedFilters () {
+      // TODO move to helper when refactoring product page
+      let selectedFilters = {}
+      if (this.configuration && this.product) {
+        Object.keys(this.configuration).map(filterType => {
+          const filter = this.configuration[filterType]
+          selectedFilters[filterType] = {
+            id: filter.id,
+            label: filter.label,
+            type: filterType
+          }
+        })
+      }
+      return selectedFilters
     }
   }
 }
