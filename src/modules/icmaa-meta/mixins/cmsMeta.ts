@@ -8,14 +8,17 @@ export default {
     ...mapGetters('icmaaCmsPage', ['getPages']),
 
     cmsTitle () {
-      return this.getPages.seo.title ? this.getPages.seo.title : '';
+      return this.getPages.metaTitle ? this.getPages.metaTitle : '';
     },
 
     cmsUrl () {
       return config.icmaa_meta.base_url + '/' + storeCode() + '/' + this.getPages.identifier; // TODO storecode "default"
     },
     cmsDescription () {
-      return this.getPages.seo.description ? this.getPages.seo.description : '';
+      return this.getPages.metaDescription ? this.getPages.metaDescription : '';
+    },
+    cmsOgImage () {
+      return this.getPages.metaOgImage ? this.getPages.metaOgImage : '';
     }
   },
   metaInfo () {
@@ -24,7 +27,8 @@ export default {
       meta: [
         { vmid: 'description', name: 'description', content: htmlDecode(this.cmsDescription) },
         { vmid: 'og:url', property: 'og:url', content: 'url' },
-        { vmid: 'og:title', property: 'og:title', content: htmlDecode(this.cmsTitle) }
+        { vmid: 'og:title', property: 'og:title', content: htmlDecode(this.cmsTitle) },
+        { vmid: 'og:image', property: 'og:image', content: htmlDecode(this.cmsOgImage) }
       ]
     }
   }
