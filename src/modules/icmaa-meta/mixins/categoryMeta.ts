@@ -7,13 +7,8 @@ import { getThumbnailPath } from '@vue-storefront/core/helpers';
 
 export default {
   computed: {
-    // ...mapGetters('catalog-next', ['getCategoryProducts']),
     ...mapGetters({
-      getCurrentSearchQuery: 'category-next/getCurrentSearchQuery',
-      getCategoryProducts: 'category-next/getCategoryProducts',
-      getCurrentCategory: 'category-next/getCurrentCategory',
-      getCategoryProductsTotal: 'category-next/getCategoryProductsTotal',
-      getAvailableFilters: 'category-next/getAvailableFilters'
+      getCategoryProducts: 'category-next/getCategoryProducts'
     }),
     categoryUrl () {
       return (
