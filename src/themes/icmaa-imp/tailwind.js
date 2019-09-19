@@ -31,6 +31,7 @@ module.exports = {
         '1xl': '1.375rem'
       },
       lineHeight: {
+        '1-rem': '1rem',
         'looser': '3',
         'super-loose': '4'
       },

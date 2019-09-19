@@ -1,5 +1,5 @@
 <template>
-  <button type="button" class="t-px-4 t-text-xs t-rounded-sm t-cursor-pointer" :class="[ { 't-uppercase': type !== 'select' }, sizeClass, colorClass ]">
+  <button type="button" class="t-px-4 t-text-xs t-rounded-sm t-cursor-pointer t-leading-1-rem" :class="[ { 't-uppercase': type !== 'select' }, sizeClass, colorClass ]">
     <template v-if="onlyIcon">
       <span class="t-sr-only">
         <slot />
@@ -62,7 +62,7 @@ export default {
         'second': 't-bg-base-darkest t-text-white',
         'ghost': 't-border t-border-base-darkest t-bg-transparent t-text-base-darkest',
         'transparent': 't-bg-transparent t-text-primary',
-        'select': 't-border t-border-base-light t-bg-transparent t-text-base-tone t-text-left'
+        'select': 't-border t-border-base-light t-bg-transparent t-text-base-tone t-text-left t-text-sm'
       }
 
       return map[this.type]
