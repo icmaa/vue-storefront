@@ -5,7 +5,7 @@
       <div class="t-flex-expand" />
       <top-button icon="close" text="Close" tabindex="1" @click.native="closeMenu" class="t-text-base" />
     </div>
-    <div @click="closeMenu" class="t-p-3 t-pt-4 t-flex t-flex-wrap">
+    <div @click="closeAfterClick" class="t-p-3 t-pt-4 t-flex t-flex-wrap">
       <slot />
     </div>
     <slot name="footer" />
@@ -21,12 +21,23 @@ import onEscapePress from '@vue-storefront/core/mixins/onEscapePress'
 import TopButton from 'theme/components/theme/blocks/AsyncSidebar/TopButton'
 
 export default {
-  name: 'AddToCartDialog',
+  name: 'Sidebar',
+  props: {
+    closeOnClick: {
+      type: Boolean,
+      default: true
+    }
+  },
   components: {
     TopButton
   },
   mixins: [ onEscapePress ],
   methods: {
+    closeAfterClick () {
+      if (this.closeOnClick) {
+        this.closeMenu()
+      }
+    },
     closeMenu () {
       this.$store.dispatch('ui/closeAll')
     },

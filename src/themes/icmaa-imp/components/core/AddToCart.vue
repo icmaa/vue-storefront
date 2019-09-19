@@ -51,10 +51,10 @@ export default {
     }
   },
   beforeMount () {
-    this.$bus.$on('product-after-removevariant', this.onAfterRemovedVariant)
+    // this.$bus.$on('product-after-removevariant', this.onAfterRemovedVariant)
   },
   beforeDestroy () {
-    this.$bus.$off('product-after-removevariant')
+    // // this.$bus.$off('product-after-removevariant')
   }
 }
 </script>

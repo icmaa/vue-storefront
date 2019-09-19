@@ -1,7 +1,7 @@
 <template>
   <transition :name="direction === 'right' ? 'slide-left' : direction === 'left' ? 'slide-right' : null ">
     <div
-      class="mw-100 fixed cl-accent bg-cl-primary"
+      class="t-max-w-full t-fixed t-bg-white"
       :class="direction === 'left' ? 'left-sidebar' : direction === 'right' ? 'right-sidebar' : null "
       data-testid="sidebar"
       ref="sidebar"
@@ -107,18 +107,6 @@ export default {
 
     @media (max-width: 767px) {
       width: 100vh;
-    }
-  }
-
-  .close {
-    i {
-      opacity: 0.6;
-    }
-    &:hover,
-    &:focus {
-      i {
-        opacity: 1;
-      }
     }
   }
 </style>
