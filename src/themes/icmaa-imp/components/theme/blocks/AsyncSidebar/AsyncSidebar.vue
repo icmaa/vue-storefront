@@ -67,6 +67,8 @@ export default {
 
 <style lang="scss" scoped>
   @import "~theme/css/animations/transitions";
+  @import '~theme/css/base/global_vars';
+  $z-index-modal: map-get($z-index, modal);
 
   .slide-left-enter-active,
   .slide-left-leave-active,
@@ -88,7 +90,7 @@ export default {
   .right-sidebar {
     top: 0;
     right: 0;
-    z-index: 3;
+    z-index: $z-index-modal;
     height: 100%;
     width: 800px;
     min-width: 320px;
@@ -103,7 +105,7 @@ export default {
     left: 0;
     overflow: hidden;
     overflow-y: auto;
-    z-index: 3;
+    z-index: $z-index-modal;
 
     @media (max-width: 767px) {
       width: 100vh;
