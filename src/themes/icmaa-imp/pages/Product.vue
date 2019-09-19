@@ -44,17 +44,12 @@
               </div>
 
               <div class="t-flex t-flex-wrap">
-                <div v-if="product.type_id === 'configurable' && !loading" class="t-flex t-flex-grow t-w-full t-mb-4 lg:t-w-3/6 lg:t-mb-0 lg:t-mr-4">
+                <div v-if="product.type_id === 'configurable' && !loading && productOptions.length > 0" class="t-flex t-flex-grow t-w-full t-mb-4 lg:t-w-3/6 lg:t-mb-0 lg:t-mr-4">
                   <div class="error" v-if="product.errors && Object.keys(product.errors).length > 0">
                     {{ product.errors | formatProductMessages }}
                   </div>
                   <button-component type="select" icon="arrow_forward" class="t-w-full" :disabled="loading" @click.native="openAddtocart">
-                    <template v-if="getProductOptions.length > 1">
-                      {{ $t('Choose options') }}
-                    </template>
-                    <template v-else>
-                      {{ $t('Choose {attribute}', { attribute: getProductOptions[0].label }) }}
-                    </template>
+                    {{ productOptionsLabel }}
                   </button-component>
                 </div>
                 <button-component type="primary" v-text="$t('Add to cart')" class="t-flex-grow lg:t-w-2/6" :disabled="loading" @click.native="openAddtocart" />
@@ -130,6 +125,7 @@ import { ReviewModule } from '@vue-storefront/core/modules/review'
 import { IcmaaExtendedReviewModule } from 'icmaa-review'
 import { RecentlyViewedModule } from '@vue-storefront/core/modules/recently-viewed'
 import { registerModule, isModuleRegistered } from '@vue-storefront/core/lib/modules'
+import ProductOptionsMixin from 'theme/mixins/product/optionsMixin'
 
 import ButtonComponent from 'theme/components/core/blocks/Button.vue'
 import DepartmentLogo from 'theme/components/core/blocks/ICMAA/CategoryExtras/DepartmentLogo.vue'
@@ -152,7 +148,7 @@ export default {
     WebShare,
     LazyHydrate
   },
-  mixins: [Product, IcmaaProduct, VueOfflineMixin],
+  mixins: [Product, IcmaaProduct, ProductOptionsMixin, VueOfflineMixin],
   directives: { focusClean },
   beforeCreate () {
     registerModule(ReviewModule)
@@ -173,16 +169,6 @@ export default {
       return {
         availability: this.product.stock.is_in_stock ? 'InStock' : 'OutOfStock'
       }
-    },
-    getProductOptions () {
-      if (
-        this.product.errors &&
-        Object.keys(this.product.errors).length &&
-        Object.keys(this.configuration).length
-      ) {
-        return []
-      }
-      return this.product.configurable_options
     },
     taxDisclaimer () {
       return i18n.t(

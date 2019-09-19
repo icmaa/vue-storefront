@@ -2,12 +2,7 @@
   <sidebar :close-on-click="false">
     <template v-slot:top>
       <h2 class="t-self-center t-pl-2 t-text-lg t-text-base-dark">
-        <template v-if="getProductOptions.length > 1">
-          {{ $t('Choose options') }}
-        </template>
-        <template v-else>
-          {{ $t('Choose {attribute}', { attribute: getProductOptions[0].label }) }}
-        </template>
+        {{ productOptionsLabel }}
       </h2>
     </template>
     <div class="t-p-1 t-w-full t-flex t-flex-wrap">
@@ -18,7 +13,7 @@
         <div class="error t-w-full " v-if="product.errors && Object.keys(product.errors).length > 0">
           {{ product.errors | formatProductMessages }}
         </div>
-        <div v-for="option in getProductOptions" :key="option.id" class="t-w-full t-flex t-flex-col">
+        <div v-for="option in productOptions" :key="option.id" class="t-w-full t-flex t-flex-col">
           <default-selector
             v-for="(filter, key) in getAvailableFilters[option.attribute_code]"
             :key="key"
@@ -55,9 +50,10 @@
 import i18n from '@vue-storefront/i18n'
 import { mapGetters } from 'vuex'
 import { minValue } from 'vuelidate/lib/validators'
-import { ProductOption } from '@vue-storefront/core/modules/catalog/components/ProductOption.ts'
+import { ProductOption } from '@vue-storefront/core/modules/catalog/components/ProductOption'
 import { notifications } from '@vue-storefront/core/modules/cart/helpers'
 import Composite from '@vue-storefront/core/mixins/composite'
+import ProductOptionsMixin from 'theme/mixins/product/optionsMixin'
 
 import Sidebar from 'theme/components/theme/blocks/AsyncSidebar/Sidebar'
 import DefaultSelector from 'theme/components/core/blocks/AddToCartSidebar/DefaultSelector'
@@ -69,7 +65,7 @@ import MaterialIcon from 'theme/components/core/blocks/MaterialIcon'
 
 export default {
   name: 'AddToCartSidebar',
-  mixins: [ Composite, ProductOption ],
+  mixins: [ Composite, ProductOption, ProductOptionsMixin ],
   components: {
     Sidebar,
     DefaultSelector,
@@ -95,16 +91,6 @@ export default {
       options: 'product/currentOptions',
       isAddingToCart: 'cart/getIsAdding'
     }),
-    getProductOptions () {
-      if (
-        this.product.errors &&
-        Object.keys(this.product.errors).length &&
-        Object.keys(this.configuration).length
-      ) {
-        return []
-      }
-      return this.product.configurable_options
-    },
     getAvailableFilters () {
       let filtersMap = {}
       // TODO move to helper

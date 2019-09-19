@@ -5,11 +5,12 @@
     @click="selectVariant"
     :aria-label="$t('Select ' + variant.label)"
   >
-    {{ variant.label }}
+    {{ getOptionLabel({ attributeKey: variant.type, optionId: variant.id }) }}
   </div>
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import filterMixin from 'theme/mixins/filterMixin.ts'
 import focusClean from 'theme/components/theme/directives/focusClean'
 
@@ -25,6 +26,9 @@ export default {
       type: Boolean,
       default: false
     }
+  },
+  computed: {
+    ...mapGetters('attribute', { getOptionLabel: 'getOptionLabel' })
   },
   methods: {
     selectVariant () {
