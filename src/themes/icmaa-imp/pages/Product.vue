@@ -44,7 +44,7 @@
               </div>
 
               <div class="t-flex t-flex-wrap">
-                <div v-if="product.type_id === 'configurable' && !loading && productOptions.length > 0" class="t-flex t-flex-grow t-w-full t-mb-4 lg:t-w-3/6 lg:t-mb-0 lg:t-mr-4">
+                <div v-if="product.type_id === 'configurable' && !isOnesizeProduct && !loading" class="t-flex t-flex-grow t-w-full t-mb-4 lg:t-w-3/6 lg:t-mb-0 lg:t-mr-4">
                   <div class="error" v-if="product.errors && Object.keys(product.errors).length > 0">
                     {{ product.errors | formatProductMessages }}
                   </div>
@@ -52,7 +52,10 @@
                     {{ productOptionsLabel }}
                   </button-component>
                 </div>
-                <button-component type="primary" v-text="$t('Add to cart')" class="t-flex-grow lg:t-w-2/6" :disabled="loading" @click.native="addToCart" />
+                <button-component type="primary" class="t-flex-grow lg:t-w-2/6 disabled:t-opacity-75 t-relative" :disabled="loading" @click.native="addToCartButtonClick">
+                  {{ $t('Add to cart') }}
+                  <loader-background v-if="loading && isSingleOptionProduct" class="t-bottom-0" height="t-h-1" bar="t-bg-base-lightest t-opacity-25" />
+                </button-component>
                 <add-to-wishlist :product="product" class="t-flex-fix t-ml-4" />
               </div>
             </div>
@@ -130,6 +133,7 @@ import ProductAddToCartMixin from 'theme/mixins/product/addtocartMixin'
 import ButtonComponent from 'theme/components/core/blocks/Button.vue'
 import DepartmentLogo from 'theme/components/core/blocks/ICMAA/CategoryExtras/DepartmentLogo.vue'
 import ReviewsShort from 'theme/components/core/blocks/Reviews/ReviewsShort'
+import LoaderBackground from 'theme/components/core/LoaderBackground'
 
 const AddToCartSidebar = () => import(/* webpackPreload: true */ /* webpackChunkName: "vsf-addtocart-sidebar" */ 'theme/components/core/blocks/AddToCartSidebar/AddToCartSidebar.vue')
 
@@ -139,6 +143,7 @@ export default {
     AddToWishlist,
     Breadcrumbs,
     ButtonComponent,
+    LoaderBackground,
     DepartmentLogo,
     ProductAttribute,
     ProductGallery,
@@ -171,6 +176,17 @@ export default {
         availability: this.product.stock.is_in_stock ? 'InStock' : 'OutOfStock'
       }
     },
+    isSingleOptionProduct () {
+      return this.product.type_id === 'simple' || this.isOnesizeProduct
+    },
+    isOnesizeProduct () {
+      if (this.productOptions.length === 1 && this.productOptions[0].attribute_code === 'size') {
+        return Object.values(this.productOptions[0].values)
+          .find(o => this.getOptionLabel({ attributeKey: 'size', optionId: o.value_index }) === 'Onesize') !== undefined
+      }
+
+      return false
+    },
     taxDisclaimer () {
       return i18n.t(
         '{incl} {rate}% VAT, Excl. shipping',
@@ -182,15 +198,14 @@ export default {
     ...mapActions({
       openAddtocart: 'ui/toggleAddtocart'
     }),
-    addToCartClick () {
+    addToCartButtonClick () {
       if (!this.loading) {
-        if (this.product.type_id === 'simple') {
+        if (this.isSingleOptionProduct) {
           this.loading = true
           this.getQuantity()
             .then(() => this.addToCart(this.product))
-            .then(() => {
-              this.loading = false
-            })
+            .then(() => { this.loading = false })
+            .catch(() => { this.loading = false })
 
           return
         }

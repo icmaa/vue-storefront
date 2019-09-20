@@ -1,5 +1,6 @@
 import { minValue } from 'vuelidate/lib/validators'
 import { notifications } from '@vue-storefront/core/modules/cart/helpers'
+import * as cartMutationTypes from '@vue-storefront/core/modules/cart/store/mutation-types'
 
 export default {
   methods: {
@@ -20,6 +21,10 @@ export default {
           this.notifyUser(notificationData)
         })
       } catch (message) {
+        this.$store.commit(
+          cartMutationTypes.SN_CART + '/' + cartMutationTypes.CART_ADDING_ITEM,
+          { isAdding: false }
+        )
         this.notifyUser(notifications.createNotification({ type: 'error', message }))
       }
     },

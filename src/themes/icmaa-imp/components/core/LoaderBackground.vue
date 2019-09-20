@@ -1,6 +1,6 @@
 <template>
-  <div class="loader t-absolute t-left-0 t-w-full" :class="[ background, height] ">
-    <div class="bar t-w-full t-h-full" />
+  <div class="loader t-absolute t-left-0 t-w-full t-overflow-hidden" :class="[ background, height] ">
+    <div class="bar t-w-1/2 t-h-full" :class="[ bar ]" />
   </div>
 </template>
 
@@ -12,6 +12,10 @@ export default {
       type: String,
       default: 't-bg-transparent'
     },
+    bar: {
+      type: String,
+      default: 't-bg-base-light'
+    },
     height: {
       type: String,
       default: 't-h-1/8'
@@ -20,18 +24,15 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 
-.loader {
-  .bar {
-    background: linear-gradient(90deg, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.2) 50%, rgba(255,255,255,0) 50%, rgba(255,255,255,0) 100%);
-    animation: roller 25s linear infinite;
-  }
+.loader .bar {
+  animation: loaderbackground 2s linear infinite;
 }
 
-@keyframes roller {
-  from {  background-position: 0 0    }
-  to   {  background-position: 10000px 0 }
+@keyframes loaderbackground {
+  from { transform: translate(-100%, 0) }
+  to   { transform: translate(200%, 0) }
 }
 
 </style>

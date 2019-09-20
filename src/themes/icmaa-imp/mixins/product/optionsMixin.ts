@@ -1,12 +1,13 @@
 import { mapGetters } from 'vuex'
 import i18n from '@vue-storefront/i18n'
+import { LocaleMessages } from 'vue-i18n'
 
 export default {
   computed: {
     ...mapGetters({
       getAttributeLabel: 'attribute/getAttributeLabel'
     }),
-    productOptions () {
+    productOptions (): any[] {
       if (this.product.errors &&
           Object.keys(this.product.errors).length &&
           Object.keys(this.configuration).length
@@ -15,17 +16,17 @@ export default {
       }
       return this.product.configurable_options || []
     },
-    productOptionsLabels () {
+    productOptionsLabels (): string[] {
       return this.productOptions.map(o => this.getAttributeLabel({ attributeKey: o.attribute_code }))
     },
-    productOptionsLabel () {
+    productOptionsLabel (): string|LocaleMessages {
       if (this.productOptions.length === 0 || this.productOptions.length > 1) {
         return i18n.t('Choose options')
       }
 
       return i18n.t('Choose {attribute}', { attribute: this.productOptionsLabels[0] })
     },
-    availableFilters () {
+    availableFilters (): Record<string, any> {
       let filtersMap = {}
       // TODO move to helper
       if (this.product && this.product.configurable_options) {
@@ -50,7 +51,7 @@ export default {
       }
       return filtersMap
     },
-    selectedFilters () {
+    selectedFilters (): Record<string, any> {
       // TODO move to helper when refactoring product page
       let selectedFilters = {}
       if (this.configuration && this.product) {

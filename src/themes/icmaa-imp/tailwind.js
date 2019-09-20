@@ -45,7 +45,7 @@ module.exports = {
   variants: {
     backgroundColor: ['group-hover', 'responsive', 'hover', 'focus'],
     textColor: ['group-hover', 'responsive', 'hover', 'focus', 'placeholder'],
-    opacity: ['placeholder']
+    opacity: ['placeholder', 'disabled']
   },
   plugins: [
     require('tailwindcss-accessibility'),
