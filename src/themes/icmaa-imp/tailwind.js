@@ -24,6 +24,7 @@ module.exports = {
         'base-lightest': '#EDEDED'
       },
       spacing: {
+        '1/8': '0.125rem',
         '3-1/2': '0.85rem'
       },
       fontSize: {

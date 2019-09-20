@@ -74,7 +74,7 @@ export default {
   },
   data () {
     return {
-      isQtyLoading: true,
+      loading: false,
       quantity: 0
     }
   },
@@ -89,19 +89,17 @@ export default {
       isAddingToCart: 'cart/getIsAdding'
     }),
     isLoading () {
-      return this.isQtyLoading || this.isAddingToCart
+      return this.loading || this.isAddingToCart
     }
   },
   methods: {
     getQuantity () {
-      this.isQtyLoading = true
       return this.$store
         .dispatch('stock/check', {
           product: this.product,
           qty: this.product.qte
         })
         .then(res => {
-          this.isQtyLoading = false
           this.quantity = res.qty
         })
     },
@@ -111,9 +109,12 @@ export default {
           'filter-changed-product',
           Object.assign({ attribute_code: variant.type }, variant)
         )
-        this.getQuantity().then(() => {
-          this.addToCart(this.product)
-        })
+        this.loading = true
+        this.getQuantity()
+          .then(() => this.addToCart(this.product))
+          .then(() => {
+            this.loading = false
+          })
       }
     },
     async addToCart (product) {
