@@ -52,7 +52,7 @@
                     {{ productOptionsLabel }}
                   </button-component>
                 </div>
-                <button-component type="primary" v-text="$t('Add to cart')" class="t-flex-grow lg:t-w-2/6" :disabled="loading" @click.native="openAddtocart" />
+                <button-component type="primary" v-text="$t('Add to cart')" class="t-flex-grow lg:t-w-2/6" :disabled="loading" @click.native="addToCart" />
                 <add-to-wishlist :product="product" class="t-flex-fix t-ml-4" />
               </div>
             </div>
@@ -125,6 +125,7 @@ import { IcmaaExtendedReviewModule } from 'icmaa-review'
 import { RecentlyViewedModule } from '@vue-storefront/core/modules/recently-viewed'
 import { registerModule, isModuleRegistered } from '@vue-storefront/core/lib/modules'
 import ProductOptionsMixin from 'theme/mixins/product/optionsMixin'
+import ProductAddToCartMixin from 'theme/mixins/product/addtocartMixin'
 
 import ButtonComponent from 'theme/components/core/blocks/Button.vue'
 import DepartmentLogo from 'theme/components/core/blocks/ICMAA/CategoryExtras/DepartmentLogo.vue'
@@ -147,7 +148,7 @@ export default {
     WebShare,
     LazyHydrate
   },
-  mixins: [Product, IcmaaProduct, ProductOptionsMixin, VueOfflineMixin],
+  mixins: [Product, IcmaaProduct, ProductOptionsMixin, ProductAddToCartMixin, VueOfflineMixin],
   directives: { focusClean },
   beforeCreate () {
     registerModule(ReviewModule)
@@ -157,9 +158,11 @@ export default {
   data () {
     return {
       AddToCartSidebar,
-      quantity: 0,
-      isProductLoading: true
+      quantity: 0
     }
+  },
+  created () {
+    this.getQuantity()
   },
   computed: {
     ...mapState({ isAddToCartSidebarOpen: state => state.ui.addtocart }),
@@ -179,6 +182,22 @@ export default {
     ...mapActions({
       openAddtocart: 'ui/toggleAddtocart'
     }),
+    addToCartClick () {
+      if (!this.loading) {
+        if (this.product.type_id === 'simple') {
+          this.loading = true
+          this.getQuantity()
+            .then(() => this.addToCart(this.product))
+            .then(() => {
+              this.loading = false
+            })
+
+          return
+        }
+
+        this.openAddtocart()
+      }
+    },
     notifyOutStock () {
       this.$store.dispatch('notification/spawnNotification', {
         type: 'error',

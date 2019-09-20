@@ -21,7 +21,7 @@ export default {
         return i18n.t('The Model')
       }
 
-      return this.product.name
+      return this.product.model_name
     },
     height () {
       return this.product.model_height

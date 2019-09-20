@@ -46,11 +46,11 @@
 <script>
 import i18n from '@vue-storefront/i18n'
 import { mapGetters } from 'vuex'
-import { minValue } from 'vuelidate/lib/validators'
 import { ProductOption } from '@vue-storefront/core/modules/catalog/components/ProductOption'
 import { notifications } from '@vue-storefront/core/modules/cart/helpers'
 import Composite from '@vue-storefront/core/mixins/composite'
 import ProductOptionsMixin from 'theme/mixins/product/optionsMixin'
+import ProductAddToCartMixin from 'theme/mixins/product/addtocartMixin'
 
 import Sidebar from 'theme/components/theme/blocks/AsyncSidebar/Sidebar'
 import DefaultSelector from 'theme/components/core/blocks/AddToCartSidebar/DefaultSelector'
@@ -62,7 +62,7 @@ import MaterialIcon from 'theme/components/core/blocks/MaterialIcon'
 
 export default {
   name: 'AddToCartSidebar',
-  mixins: [ Composite, ProductOption, ProductOptionsMixin ],
+  mixins: [ Composite, ProductOption, ProductOptionsMixin, ProductAddToCartMixin ],
   components: {
     Sidebar,
     DefaultSelector,
@@ -78,9 +78,6 @@ export default {
       quantity: 0
     }
   },
-  created () {
-    this.getQuantity()
-  },
   computed: {
     ...mapGetters({
       product: 'product/productCurrent',
@@ -93,16 +90,6 @@ export default {
     }
   },
   methods: {
-    getQuantity () {
-      return this.$store
-        .dispatch('stock/check', {
-          product: this.product,
-          qty: this.product.qte
-        })
-        .then(res => {
-          this.quantity = res.qty
-        })
-    },
     changeFilter (variant) {
       if (variant.available) {
         this.$bus.$emit(
@@ -115,26 +102,6 @@ export default {
           .then(() => {
             this.loading = false
           })
-      }
-    },
-    async addToCart (product) {
-      try {
-        const diffLog = await this.$store.dispatch('cart/addItem', { productToAdd: product })
-        diffLog.clientNotifications.forEach(notificationData => {
-          this.notifyUser(notificationData)
-        })
-      } catch (message) {
-        this.notifyUser(notifications.createNotification({ type: 'error', message }))
-      }
-    },
-    notifyUser (notificationData) {
-      this.$store.dispatch('notification/spawnNotification', notificationData, { root: true })
-    }
-  },
-  validations: {
-    product: {
-      qty: {
-        minValue: minValue(1)
       }
     }
   }
