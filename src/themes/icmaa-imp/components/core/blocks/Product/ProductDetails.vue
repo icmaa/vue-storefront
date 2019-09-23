@@ -3,7 +3,7 @@
     <div class="description">
       {{ product.description | htmlDecode }}
     </div>
-    <ul class="attributes  t-mt-6">
+    <ul class="attributes  t-mt-6" v-if="attributes.length > 0">
       <product-attributes
         :key="attr.attribute_code"
         v-for="attr in attributes"
@@ -36,7 +36,7 @@ export default {
     }),
     attributes () {
       return Object.values(this.attributesByCode).filter(a => {
-        return a.is_visible && a.is_user_defined && (parseInt(a.is_visible_on_front) || a.is_visible_on_front === true) && this.product[a.attribute_code]
+        return a.is_visible && a.is_visible_on_front === true && this.product[a.attribute_code]
       })
     }
   }

@@ -1,3 +1,5 @@
 <template>
-  <div>Care instructions</div>
+  <div class="t-text-sm">
+    Care instructions
+  </div>
 </template>

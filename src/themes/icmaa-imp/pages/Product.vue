@@ -84,15 +84,14 @@
             </details-tabs>
           </lazy-hydrate>
         </div>
-        <div class="reviews t-w-full lg:t-w-1/2">
-          Reviews
+        <div class="reviews t-w-full t-p-8 t-bg-base-lighter lg:t-w-1/2">
+          <lazy-hydrate when-idle>
+            <reviews :product-id="originalProduct.id" v-show="isOnline" />
+          </lazy-hydrate>
         </div>
       </div>
     </div>
 
-    <lazy-hydrate when-idle>
-      <reviews :product-id="originalProduct.id" v-show="isOnline" />
-    </lazy-hydrate>
     <lazy-hydrate when-idle>
       <related-products type="upsell" :heading="$t('We found other products you might like')" />
     </lazy-hydrate>
