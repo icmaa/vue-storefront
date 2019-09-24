@@ -3,7 +3,6 @@ import { PageStateItem } from '../types/PageState'
 import { stringToComponent } from '../helpers'
 
 import YAML from 'yaml'
-import camelCase from 'lodash-es/camelCase'
 
 import CmsMetaMixin from 'icmaa-meta/mixins/cmsMeta';
 
