@@ -79,7 +79,7 @@
                 {{ $t('Care instructions') }}
               </template>
               <template #tab-care-instructions>
-                <product-care-instructions />
+                <product-care-instructions :product="product" />
               </template>
             </details-tabs>
           </lazy-hydrate>
