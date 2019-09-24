@@ -10,9 +10,14 @@ export default {
         'features_tops',
         'features_watches',
         'features_label',
-        'features_specialpack',
+        'features_merchandise',
+        'commonphrases'
+      ]
+    },
+    contentAttributes () {
+      return [
         'features_media',
-        'features_merchandise'
+        'features_specialpack'
       ]
     },
     conversionAttributes () {
@@ -54,6 +59,7 @@ export default {
       let values = 0
       const features = [
         ...this.featureAttributes,
+        ...this.contentAttributes,
         ...this.conversionAttributes
       ]
 

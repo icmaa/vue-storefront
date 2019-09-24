@@ -1,8 +1,6 @@
 <template>
   <div class="t-text-sm">
-    <div class="description">
-      {{ product.description | htmlDecode }}
-    </div>
+    <div class="description t-whitespace-pre-line" v-text="product.description.trim()" />
     <ul class="attributes t-mt-6" v-if="attributes.length > 0">
       <product-attributes
         :key="attr.attribute_code"

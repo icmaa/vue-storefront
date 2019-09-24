@@ -16,6 +16,7 @@
 
 <script>
 import config from 'config'
+import { date } from '@vue-storefront/core/filters/date'
 
 import { mapGetters } from 'vuex'
 import { ProductAttribute } from '@vue-storefront/core/modules/catalog/components/ProductAttribute'
@@ -45,15 +46,20 @@ export default {
     label () {
       return (this.attribute && this.attribute.frontend_label) ? this.attribute.frontend_label : ((this.attribute && this.attribute.default_frontend_label) ? this.attribute.default_frontend_label : '')
     },
-    isMultiselect () {
-      return this.attribute.frontend_input === 'multiselect' || this.attribute.frontend_input === 'select'
+    isSelect () {
+      return ['multiselect', 'select'].includes(this.attribute.frontend_input)
+    },
+    isDate () {
+      return ['date', 'datetime'].includes(this.attribute.frontend_input)
     },
     valuesRaw () {
       let values = this.product[this.attributeCode]
 
       if (!values || values === '' || (values.length === 1 && values[0] === '')) {
         return []
-      } else if (!this.isMultiselect || typeof values !== 'object') {
+      } else if (this.isDate) {
+        return [date(values)]
+      } else if (!this.isSelect || typeof values !== 'object') {
         return [values.toString()]
       } else if (typeof values === 'string') {
         const split = values.split(',')
@@ -65,8 +71,8 @@ export default {
     values () {
       return this.valuesRaw.map(optionId => {
         return {
-          optionLabel: this.getOptionLabel({ attributeKey: this.attributeCode, optionId }),
-          optionLink: (this.attributeLinks && this.attributeLinks[optionId]) ? this.attributeLinks[optionId] : false
+          optionLabel: this.isSelect ? this.getOptionLabel({ attributeKey: this.attributeCode, optionId }) : optionId,
+          optionLink: (this.isSelect && this.attributeLinks && this.attributeLinks[optionId]) ? this.attributeLinks[optionId] : false
         }
       })
     },

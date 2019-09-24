@@ -1,5 +1,5 @@
 <template>
-  <ul class="t-text-sm t-list-disc t-list-inside t-pl-2">
+  <ul class="t-text-sm t-list-disc t-list-outside t-pl-6">
     <li v-for="(feature, index) in features" :key="index" :class="{ 't-mb-2': features.length -1 !== index }" v-html="feature" />
   </ul>
 </template>
@@ -23,22 +23,15 @@ export default {
       getAttributeLabel: 'attribute/getAttributeLabel',
       getOptionLabel: 'attribute/getOptionLabel'
     }),
-    featureValues () {
-      const featureValues = []
-      this.featureAttributes.forEach(attributeCode => {
-        let values = this.product[attributeCode]
-        if (!values || values === '' || (values.length === 1 && values[0] === '')) {
-          return
-        }
-
-        featureValues.push({ attributeCode, values })
-      })
-
-      return featureValues
-    },
     numerative () {
       return ['uk', 'en', 'us'].includes(currentStoreView().i18n.defaultLanguage.toLowerCase())
         ? 'imperial' : 'metric'
+    },
+    featureValues () {
+      return this.getValues(this.featureAttributes)
+    },
+    contentValues () {
+      return this.getValues(this.contentAttributes)
     },
     conversionValues () {
       return this.conversionAttributes.map(attributeCode => {
@@ -71,6 +64,13 @@ export default {
     features () {
       let features = []
 
+      // Content values
+      this.contentValues.forEach(option => {
+        const label = this.getAttributeLabel({ attributeKey: option.attributeCode })
+        const optionLabels = option.values.map(optionId => this.getOptionLabel({ attributeKey: option.attributeCode, optionId }))
+        features.push(`${label}: ${optionLabels.join(', ')}`)
+      })
+
       // Default features
       this.featureValues.forEach(option => {
         const attributeKey = option.attributeCode
@@ -87,6 +87,19 @@ export default {
     }
   },
   methods: {
+    getValues (attributes) {
+      const attributesValues = []
+      attributes.forEach(attributeCode => {
+        let values = this.product[attributeCode]
+        if (!values || values === '' || (values.length === 1 && values[0] === '')) {
+          return
+        }
+
+        attributesValues.push({ attributeCode, values })
+      })
+
+      return attributesValues
+    },
     round (v) {
       return Math.round(parseFloat(v) * 100) / 100
     }
