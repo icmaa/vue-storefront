@@ -136,6 +136,7 @@ import { RecentlyViewedModule } from '@vue-storefront/core/modules/recently-view
 import { registerModule, isModuleRegistered } from '@vue-storefront/core/lib/modules'
 import ProductOptionsMixin from 'theme/mixins/product/optionsMixin'
 import ProductAddToCartMixin from 'theme/mixins/product/addtocartMixin'
+import FeaturesMixin from 'theme/mixins/product/featuresMixin'
 
 import ButtonComponent from 'theme/components/core/blocks/Button'
 import DepartmentLogo from 'theme/components/core/blocks/ICMAA/CategoryExtras/DepartmentLogo'
@@ -167,7 +168,7 @@ export default {
     WebShare,
     LazyHydrate
   },
-  mixins: [ProductOption, IcmaaProduct, ProductOptionsMixin, ProductAddToCartMixin],
+  mixins: [ProductOption, IcmaaProduct, ProductOptionsMixin, ProductAddToCartMixin, FeaturesMixin],
   directives: { focusClean },
   beforeCreate () {
     registerModule(ReviewModule)
@@ -221,10 +222,16 @@ export default {
       return false
     },
     detailsTabs () {
-      let tabs = ['details', 'features']
-      if (this.product.feature_care) {
+      let tabs = ['details']
+
+      if (this.hasFeatures) {
+        tabs.push('features')
+      }
+
+      if (this.product.features_care && this.product.features_care.join('') !== '') {
         tabs.push('care-instructions')
       }
+
       return tabs
     },
     isOnline () {
