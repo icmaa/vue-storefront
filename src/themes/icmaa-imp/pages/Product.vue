@@ -92,7 +92,7 @@
         </div>
         <div class="reviews t-w-full t-p-8 t-bg-base-lighter lg:t-w-1/2">
           <lazy-hydrate when-idle>
-            <reviews :product-id="originalProduct.id" v-show="isOnline" />
+            <reviews :product="originalProduct" :product-name="translatedProductName" v-show="isOnline" />
           </lazy-hydrate>
         </div>
       </div>

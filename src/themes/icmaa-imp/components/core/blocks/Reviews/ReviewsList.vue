@@ -1,14 +1,12 @@
 <template>
   <div>
-    <div class="mt50 h5" v-if="!itemsPerPage || itemsPerPage.length === 0">
+    <div v-if="!itemsPerPage || itemsPerPage.length === 0" class="t-bg-white t-rounded-sm t-p-4">
       {{ $t('No reviews have been posted yet. Please don\'t hesitate to share Your opinion and write the first review!') }}
     </div>
-    <div class="mt50" v-for="(item, index) in itemsPerPage" :key="index" itemprop="review" itemscope itemtype="http://schema.org/Review">
+    <div v-for="(item, index) in itemsPerPage" :key="index" itemprop="review" itemscope itemtype="http://schema.org/Review" class="t-bg-white t-rounded-sm t-p-4 t-mb-4">
+      <h4 itemprop="reviewAspect" :content="item.title" v-html="item.title" />
       <meta itemprop="itemReviewed" :content="productName | htmlDecode">
-      <h4 class="weight-400 m0" itemprop="reviewAspect" :content="item.title">
-        {{ item.title }}
-      </h4>
-      <p class="cl-tertiary mt10 mb20 fs-medium-small">
+      <p>
         {{ item.nickname }}, {{ item.created_at | date }}
       </p>
       <p class="cl-gray lh25" itemprop="reviewBody" :content="item.detail">
@@ -35,17 +33,22 @@
 </template>
 
 <script>
-import Product from '@vue-storefront/core/pages/Product'
+import { mapGetters } from 'vuex'
+import ReviewsStars from 'theme/components/core/blocks/Reviews/ReviewsStars'
 
 export default {
+  name: 'ReviewsList',
+  components: {
+    ReviewsStars
+  },
   props: {
     perPage: {
       type: Number,
       required: false,
       default: 4
     },
-    items: {
-      type: Array,
+    productName: {
+      type: String,
       required: true
     }
   },
@@ -54,8 +57,12 @@ export default {
       currentPage: 1
     }
   },
-  mixins: [Product],
   computed: {
+    ...mapGetters({
+      items: 'review/getReviews',
+      reviewsCount: 'review/getReviewsCount',
+      reviewsTotalRating: 'review/getReviewsTotalRating'
+    }),
     itemsPerPage () {
       let start = ((this.currentPage - 1) * this.perPage)
       let end = start + this.perPage
@@ -95,36 +102,3 @@ export default {
   }
 }
 </script>
-
-<style lang="scss" scoped>
-@import '~theme/css/variables/colors';
-@import '~theme/css/helpers/functions/color';
-$mine-shaft: color(mine-shaft);
-$white: color(white);
-
-.inactive {
-  opacity: 0.5;
-  pointer-events: none;
-}
-.material-icons {
-  font-size: 30px;
-  line-height: 30px;
-}
-.pagination-page {
-  a {
-    &:hover {
-      background-color: $mine-shaft;
-      color: $white;
-    }
-  }
-  @media (max-width: 767px) {
-    margin: 0;
-  }
-  a, span {
-    @media (max-width: 767px) {
-      padding: 10px 12px;
-      font-size: 16px;
-    }
-  }
-}
-</style>
