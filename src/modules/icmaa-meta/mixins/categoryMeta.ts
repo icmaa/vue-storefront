@@ -2,14 +2,10 @@
 import { storeCode } from 'icmaa-meta/helper';
 import { htmlDecode } from '@vue-storefront/core/filters'
 import config from 'config'
-import { mapGetters } from 'vuex';
 import { getThumbnailPath } from '@vue-storefront/core/helpers';
 
 export default {
   computed: {
-    ...mapGetters({
-      getCategoryProducts: 'category-next/getCategoryProducts'
-    }),
     categoryUrl () {
       return (
         config.icmaa_meta.base_url +
