@@ -29,6 +29,7 @@ module.exports = {
         '2px': '2px'
       },
       fontSize: {
+        'reset': '0',
         'icon': '0.875em',
         'xxs': '0.625rem',
         '1xl': '1.375rem'

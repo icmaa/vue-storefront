@@ -1,6 +1,6 @@
 <template>
-  <span>
-    <material-icon v-for="(star,i) in stars" :key="i" :icon="star" size="xs" class="t-align-text-bottom" :class="{'t-text-alt-2': star !== 'star_border'}" />
+  <span class="t-text-reset">
+    <material-icon v-for="(star,i) in stars" :key="i" :icon="star" :size="starsSize" :class="{ 't-text-alt-2': !starsColor && star !== 'star_border', [starsColor]: starsColor }" />
   </span>
 </template>
 
@@ -20,6 +20,14 @@ export default {
     maxRating: {
       type: Number,
       default: 5
+    },
+    starsSize: {
+      type: String,
+      default: 'sm'
+    },
+    starsColor: {
+      type: [String, Boolean],
+      default: false
     }
   },
   computed: {

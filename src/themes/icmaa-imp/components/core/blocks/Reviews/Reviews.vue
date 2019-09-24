@@ -4,8 +4,14 @@
       <h2 class="t-text-lg t-text-base-dark t-font-bold t-mb-4">
         {{ $t('Reviews') }}
       </h2>
-      <div>
-        <reviews-short :rating="reviewsTotalRating" :count="reviewsCount" />
+      <div class="t-flex t-items-center t-justify-between t-mb-4">
+        <div class="t-flex t-items-center t-text-sm">
+          <reviews-stars :rating="reviewsTotalRating" stars-size="sm" stars-color="t-text-base-dark" class="t-text-base-dark" />
+          <span class="t-ml-2 t-hidden sm:t-block">({{ total }})</span>
+        </div>
+        <button-component size="sm" v-model="formVisible">
+          {{ $t('Add review') }}
+        </button-component>
       </div>
       <reviews-list :product-name="productName" :per-page="4" />
     </div>
@@ -77,12 +83,12 @@
           />
         </div>
         <div class="row m0 middle-xs center-xs start-sm buttons">
-          <button-full
+          <button-component
             @click.native="validate()"
             :class="{ 'w-auto': !currentUser }"
           >
             {{ $t('Add review') }}
-          </button-full>
+          </button-component>
           <no-ssr>
             <span
               class="fs-medium ml20 cl-gray lh30 py5 block"
@@ -102,11 +108,11 @@ import i18n from '@vue-storefront/i18n'
 import { mapGetters } from 'vuex'
 import { required, email, minLength } from 'vuelidate/lib/validators'
 
-import ReviewsShort from 'theme/components/core/blocks/Reviews/ReviewsShort'
+import ReviewsStars from 'theme/components/core/blocks/Reviews/ReviewsStars'
 import ReviewsList from 'theme/components/core/blocks/Reviews/ReviewsList'
+import ButtonComponent from 'theme/components/core/blocks/Button'
 import BaseInput from 'theme/components/core/blocks/Form/BaseInput'
 import BaseTextarea from 'theme/components/core/blocks/Form/BaseTextarea'
-import ButtonFull from 'theme/components/theme/ButtonFull'
 import { AddReview } from '@vue-storefront/core/modules/review/components/AddReview'
 import NoSSR from 'vue-no-ssr'
 
@@ -134,8 +140,8 @@ export default {
     }
   },
   components: {
-    ReviewsShort,
-    ButtonFull,
+    ReviewsStars,
+    ButtonComponent,
     BaseInput,
     BaseTextarea,
     ReviewsList,
@@ -149,6 +155,9 @@ export default {
     }),
     productId () {
       return this.product.id
+    },
+    total () {
+      return this.reviewsCount + ' ' + (this.reviewsCount > 1 ? i18n.t('Reviews') : i18n.t('Review'))
     },
     currentUser () {
       return this.$store.state.user.current

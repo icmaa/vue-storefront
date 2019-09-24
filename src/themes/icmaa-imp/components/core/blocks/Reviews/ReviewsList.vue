@@ -1,17 +1,15 @@
 <template>
   <div>
-    <div v-if="!itemsPerPage || itemsPerPage.length === 0" class="t-bg-white t-rounded-sm t-p-4">
+    <div v-if="!itemsPerPage || itemsPerPage.length === 0" class="t-bg-white t-rounded-sm t-p-4 t-text-sm t-text-base-light">
       {{ $t('No reviews have been posted yet. Please don\'t hesitate to share Your opinion and write the first review!') }}
     </div>
-    <div v-for="(item, index) in itemsPerPage" :key="index" itemprop="review" itemscope itemtype="http://schema.org/Review" class="t-bg-white t-rounded-sm t-p-4 t-mb-4">
-      <h4 itemprop="reviewAspect" :content="item.title" v-html="item.title" />
+    <div v-for="(item, index) in itemsPerPage" :key="index" itemprop="review" itemscope itemtype="http://schema.org/Review" class="t-bg-white t-rounded-sm t-p-4" :class="{ 't-mb-4': items.length !== (index - 1) }">
+      <meta itemprop="reviewAspect" :content="item.title" v-html="item.title">
       <meta itemprop="itemReviewed" :content="productName | htmlDecode">
-      <p>
-        {{ item.nickname }}, {{ item.created_at | date }}
-      </p>
-      <p class="cl-gray lh25" itemprop="reviewBody" :content="item.detail">
-        {{ item.detail }}
-      </p>
+      <meta itemprop="reviewBody" :content="item.detail | htmlDecode">
+      <reviews-stars :rating="item.ratings_total" stars-size="sm" class="t-flex t-items-center t-text-md t-text-base-light t-mt-2" />
+      <p class="t-text-sm t-my-4" v-html="item.detail" />
+      <p class="t-text-sm t-text-base-light" v-text="item.nickname" />
     </div>
     <div class="row middle-xs center-xs mt50" v-if="pageCount > 1">
       <a href="#" class="mr10 no-underline" :class="{ inactive: currentPage === 1 }" @click.prevent="prevPage">
@@ -34,6 +32,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import { arrayAvg } from 'icmaa-review/store/getters'
 import ReviewsStars from 'theme/components/core/blocks/Reviews/ReviewsStars'
 
 export default {
@@ -59,10 +58,16 @@ export default {
   },
   computed: {
     ...mapGetters({
-      items: 'review/getReviews',
+      reviews: 'review/getReviews',
       reviewsCount: 'review/getReviewsCount',
       reviewsTotalRating: 'review/getReviewsTotalRating'
     }),
+    items () {
+      return this.reviews.map(rvw => {
+        rvw['ratings_total'] = arrayAvg(rvw.ratings.map((r) => r.percent))
+        return rvw
+      })
+    },
     itemsPerPage () {
       let start = ((this.currentPage - 1) * this.perPage)
       let end = start + this.perPage

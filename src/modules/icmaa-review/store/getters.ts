@@ -4,8 +4,8 @@ import RootState from '@vue-storefront/core/types/RootState'
 import Review from '@vue-storefront/core/modules/review/types/Review'
 import ReviewState from '../type/ReviewState'
 
-const arraySum = (arr): number => arr.reduce((a, b) => a + b, 0)
-const arrayAvg = (arr): number => {
+export const arraySum = (arr): number => arr.reduce((a, b) => a + b, 0)
+export const arrayAvg = (arr): number => {
   const sum = arraySum(arr)
   return sum > 0 ? sum / arr.length : sum
 }

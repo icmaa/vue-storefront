@@ -1,7 +1,7 @@
 <template>
-  <div class="reviews t-text-base-light t-text-sm">
+  <div class="reviews t-flex t-items-center t-text-base-light t-text-sm">
     <reviews-stars :rating="rating" :max-rating="maxRating" />
-    <span>({{ total }})</span>
+    <span class="t-ml-2">({{ total }})</span>
   </div>
 </template>
 
