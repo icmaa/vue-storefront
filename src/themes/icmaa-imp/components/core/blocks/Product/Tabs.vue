@@ -16,8 +16,13 @@ import { Logger } from '@vue-storefront/core/lib/logger'
 export default {
   data () {
     return {
-      tabs: ['details', 'care-instructions'],
-      current: 'details'
+      current: this.tabs[0]
+    }
+  },
+  props: {
+    tabs: {
+      type: Array,
+      default: () => []
     }
   },
   computed: {

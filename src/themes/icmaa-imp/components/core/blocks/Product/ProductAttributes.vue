@@ -1,6 +1,6 @@
 <template>
-  <li class="t-flex">
-    <span class="t-w-2/6 t-font-bold">{{ label|htmlDecode }} </span>
+  <li class="t-flex" v-if="valuesRaw.length > 0">
+    <span class="t-w-2/6 t-font-bold">{{ label|htmlDecode }}</span>
     <span class="t-w-4/6">
       <template v-for="(value, index) in values">
         <template v-if="value.optionLink">
@@ -35,10 +35,6 @@ export default {
     attribute: {
       type: null,
       required: true
-    },
-    emptyPlaceholder: {
-      type: String,
-      default: ''
     }
   },
   computed: {
@@ -55,8 +51,8 @@ export default {
     valuesRaw () {
       let values = this.product[this.attributeCode]
 
-      if (!values) {
-        return [this.emptyPlaceholder]
+      if (!values || values === '' || (values.length === 1 && values[0] === '')) {
+        return []
       } else if (!this.isMultiselect || typeof values !== 'object') {
         return [values.toString()]
       } else if (typeof values === 'string') {

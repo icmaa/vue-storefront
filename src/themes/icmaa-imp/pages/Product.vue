@@ -68,12 +68,18 @@
       <div class="t--mx-4 lg:t-px-4 t-flex t-flex-wrap">
         <div class="product-details t-w-full t-p-8 t-bg-white lg:t-w-1/2">
           <lazy-hydrate on-interaction>
-            <details-tabs>
+            <details-tabs :tabs="detailsTabs">
               <template #pill-details>
                 {{ $t('Product details') }}
               </template>
               <template #tab-details>
                 <product-details :product="product" />
+              </template>
+              <template #pill-features>
+                {{ $t('Features') }}
+              </template>
+              <template #tab-features>
+                <product-features :product="product" />
               </template>
               <template #pill-care-instructions>
                 {{ $t('Care instructions') }}
@@ -135,6 +141,7 @@ import ButtonComponent from 'theme/components/core/blocks/Button'
 import DepartmentLogo from 'theme/components/core/blocks/ICMAA/CategoryExtras/DepartmentLogo'
 import DetailsTabs from 'theme/components/core/blocks/Product/Tabs'
 import ProductDetails from 'theme/components/core/blocks/Product/ProductDetails'
+import ProductFeatures from 'theme/components/core/blocks/Product/ProductFeatures'
 import ProductCareInstructions from 'theme/components/core/blocks/Product/ProductCareInstructions'
 import ReviewsShort from 'theme/components/core/blocks/Reviews/ReviewsShort'
 import LoaderBackground from 'theme/components/core/LoaderBackground'
@@ -153,6 +160,7 @@ export default {
     RelatedProducts,
     DetailsTabs,
     ProductDetails,
+    ProductFeatures,
     ProductCareInstructions,
     Reviews,
     ReviewsShort,
@@ -211,6 +219,13 @@ export default {
       }
 
       return false
+    },
+    detailsTabs () {
+      let tabs = ['details', 'features']
+      if (this.product.feature_care) {
+        tabs.push('care-instructions')
+      }
+      return tabs
     },
     isOnline () {
       return onlineHelper.isOnline

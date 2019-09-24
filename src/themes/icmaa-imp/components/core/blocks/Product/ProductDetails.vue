@@ -9,7 +9,6 @@
         v-for="attr in attributes"
         :product="product"
         :attribute="attr"
-        empty-placeholder="N/A"
         class="t-mb-3"
       />
     </ul>
