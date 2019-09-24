@@ -106,7 +106,7 @@ import { required, email, minLength } from 'vuelidate/lib/validators'
 import BaseInput from 'theme/components/core/blocks/Form/BaseInput'
 import BaseTextarea from 'theme/components/core/blocks/Form/BaseTextarea'
 import ButtonFull from 'theme/components/theme/ButtonFull'
-import ReviewsList from 'theme/components/theme/blocks/Reviews/ReviewsList'
+import ReviewsList from 'theme/components/core/blocks/Reviews/ReviewsList'
 import { Reviews } from '@vue-storefront/core/modules/review/components/Reviews'
 import { AddReview } from '@vue-storefront/core/modules/review/components/AddReview'
 import NoSSR from 'vue-no-ssr'
@@ -126,7 +126,7 @@ export default {
   },
   props: {
     productId: {
-      type: Number,
+      type: [String, Number],
       required: true
     }
   },
@@ -152,7 +152,6 @@ export default {
         'detail': this.formData.review,
         'nickname': this.formData.name,
         'review_entity': 'product',
-        'review_status': 2,
         'customer_id': this.currentUser ? this.currentUser.id : null
       })
 
