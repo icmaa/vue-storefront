@@ -20,6 +20,9 @@ export default {
       ); // TODO storecode "default"
     },
     categoryFBImages () {
+      if (!this.getCategoryProducts) {
+        return [];
+      }
       let categoryImagesTags = [];
       let limit = Math.min(this.getCategoryProducts.length, config.icmaa_meta.facebook.imagesListInCategoryView);
 
