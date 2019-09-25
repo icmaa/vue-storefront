@@ -20,8 +20,9 @@
 </template>
 
 <script>
-import i18n from '@vue-storefront/i18n'
 import { mapGetters } from 'vuex'
+import i18n from '@vue-storefront/i18n'
+import VueScrollTo from 'vue-scrollto'
 
 import ReviewsStars from 'theme/components/core/blocks/Reviews/ReviewsStars'
 import ReviewsList from 'theme/components/core/blocks/Reviews/ReviewsList'
@@ -68,6 +69,10 @@ export default {
     }
   },
   methods: {
+    goToForm () {
+      this.formVisible = 1
+      VueScrollTo.scrollTo('#reviews', { offset: -110 })
+    },
     toggleForm () {
       this.formVisible = !this.formVisible
     },
@@ -77,6 +82,7 @@ export default {
   },
   mounted () {
     this.$bus.$on('product-after-load', this.refreshList)
+    this.$bus.$on('reviews-open-form', this.goToForm)
   },
   destroyed () {
     this.$bus.$off('product-after-load', this.refreshList)

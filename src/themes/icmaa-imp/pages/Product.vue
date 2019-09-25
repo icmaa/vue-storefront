@@ -90,9 +90,12 @@
             </details-tabs>
           </lazy-hydrate>
         </div>
-        <div class="reviews t-w-full t-p-8 t-bg-base-lighter lg:t-w-1/2">
+        <div class="reviews t-relative t-w-full t-p-8 t-bg-base-lighter lg:t-w-1/2" id="reviews">
           <lazy-hydrate when-idle>
             <reviews :product="originalProduct" :product-name="translatedProductName" v-show="isOnline" />
+          </lazy-hydrate>
+          <lazy-hydrate when-idle>
+            <reviews-claim />
           </lazy-hydrate>
         </div>
       </div>
@@ -141,6 +144,7 @@ import ProductDetails from 'theme/components/core/blocks/Product/ProductDetails'
 import ProductFeatures from 'theme/components/core/blocks/Product/ProductFeatures'
 import ProductCareInstructions from 'theme/components/core/blocks/Product/ProductCareInstructions'
 import ReviewsShort from 'theme/components/core/blocks/Reviews/ReviewsShort'
+import ReviewsClaim from 'theme/components/core/blocks/Reviews/ReviewsClaim'
 import LoaderBackground from 'theme/components/core/LoaderBackground'
 import LazyHydrate from 'vue-lazy-hydration'
 
@@ -168,6 +172,7 @@ export default {
     ProductCareInstructions,
     Reviews,
     ReviewsShort,
+    ReviewsClaim,
     WebShare,
     LazyHydrate
   },

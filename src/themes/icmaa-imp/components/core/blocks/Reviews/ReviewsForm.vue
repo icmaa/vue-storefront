@@ -1,5 +1,5 @@
 <template>
-  <div class="reviews-form t-bg-white t-p-4 t-mb-8">
+  <div class="reviews-form t-bg-white t-p-4 t-mb-8" id="reviews-form">
     <form action="#" @submit.prevent="outOfScope()">
       <div class="">
         <base-input
@@ -70,9 +70,9 @@
           {{ $t('Add review') }}
         </button-component>
         <no-ssr>
-          <span v-if="!currentUser">
+          <div v-if="!currentUser">
             {{ $t('or') }} <a href="#" class="cl-primary" @click.prevent="login()">{{ $t('login') }}</a> {{ $t('to account') }}
-          </span>
+          </div>
         </no-ssr>
       </div>
     </form>
