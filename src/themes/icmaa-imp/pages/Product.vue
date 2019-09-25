@@ -64,7 +64,7 @@
       </div>
     </div>
 
-    <div class="t-container t-px-4 t-mt-8">
+    <div class="t-container t-px-4 t-my-8">
       <div class="t--mx-4 lg:t-px-4 t-flex t-flex-wrap">
         <div class="product-details t-w-full t-p-8 t-bg-white lg:t-w-1/2">
           <lazy-hydrate on-interaction>

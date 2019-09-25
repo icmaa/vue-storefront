@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="reviews-list">
     <div v-if="!itemsPerPage || itemsPerPage.length === 0" class="t-bg-white t-rounded-sm t-p-4 t-text-sm t-text-base-light">
       {{ $t('No reviews have been posted yet. Please don\'t hesitate to share Your opinion and write the first review!') }}
     </div>
@@ -32,7 +32,6 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { arrayAvg } from 'icmaa-review/store/getters'
 import ReviewsStars from 'theme/components/core/blocks/Reviews/ReviewsStars'
 
 export default {
@@ -60,11 +59,12 @@ export default {
     ...mapGetters({
       reviews: 'review/getReviews',
       reviewsCount: 'review/getReviewsCount',
-      reviewsTotalRating: 'review/getReviewsTotalRating'
+      reviewsTotalRating: 'review/getReviewsTotalRating',
+      reviewAvgRating: 'review/getReviewAvgRating'
     }),
     items () {
       return this.reviews.map(rvw => {
-        rvw['ratings_total'] = arrayAvg(rvw.ratings.map((r) => r.percent))
+        rvw['ratings_total'] = this.reviewAvgRating(rvw)
         return rvw
       })
     },
