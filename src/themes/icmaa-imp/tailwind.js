@@ -28,6 +28,11 @@ module.exports = {
         '3-1/2': '0.85rem',
         '2px': '2px'
       },
+      minHeight: {
+        'min-h-screen-25': '25vh',
+        'min-h-screen-50': '50vh',
+        'min-h-screen-75': '75vh'
+      },
       fontSize: {
         'reset': '0',
         'icon': '0.875em',
@@ -62,6 +67,13 @@ module.exports = {
           return `.${e(`placeholder${separator}${className}`)}::placeholder`
         })
       })
+    },
+    // Add custom utilities (custom-classes)
+    function ({ addUtilities }) {
+      addUtilities(
+        { '.webkit-touch': { '-webkit-overflow-scrolling': 'touch' } },
+        ['responsive']
+      )
     }
   ]
 }
