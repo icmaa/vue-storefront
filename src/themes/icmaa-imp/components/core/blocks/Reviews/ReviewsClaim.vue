@@ -1,6 +1,6 @@
 <template>
   <transition name="fade">
-    <div class="reviews-claim t-absolute t-left-0 t-bottom-0 t-w-full t-p-8 t-bg-alt-1 t-text-white t-text-xs" v-if="isOpen">
+    <div class="reviews-claim t-p-8 t-bg-alt-1 t-text-white t-text-xs" :class="[ reviewsCount > 0 ? 't-w-full t-absolute t-left-0 t-bottom-0' : 't-w-screen t--mx-8 t--mb-8 t-mt-8' ]" v-if="isOpen">
       <h4 class="t-text-lg t-mb-2">
         {{ $t('Write a review and get a {voucher} voucher!', { voucher }) }}
       </h4>
@@ -20,6 +20,8 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+
 import i18n from '@vue-storefront/i18n'
 import { price } from '@vue-storefront/core/filters/price'
 import { currentStoreView } from '@vue-storefront/core/lib/multistore'
@@ -35,6 +37,7 @@ export default {
     }
   },
   computed: {
+    ...mapGetters({ reviewsCount: 'review/getReviewsCount' }),
     voucher () {
       const store = currentStoreView()
       if (store.reviews && store.reviews.voucher_value) {

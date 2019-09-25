@@ -29,9 +29,9 @@ module.exports = {
         '2px': '2px'
       },
       minHeight: {
-        'min-h-screen-25': '25vh',
-        'min-h-screen-50': '50vh',
-        'min-h-screen-75': '75vh'
+        'screen-25': '25vh',
+        'screen-50': '50vh',
+        'screen-75': '75vh'
       },
       fontSize: {
         'reset': '0',
