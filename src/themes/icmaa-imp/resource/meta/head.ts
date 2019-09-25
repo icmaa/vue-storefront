@@ -1,6 +1,7 @@
 import { storeCode, storeLang, store } from 'icmaa-meta/helper';
 import hreflang from 'icmaa-meta/helper/head/hreflang';
 import config from 'config';
+import { router } from '@vue-storefront/core/app';
 
 const { meta, facebook } = store();
 
@@ -15,37 +16,22 @@ const defaults: any = {
   },
   meta: [
     { charset: 'utf-8' },
-    {
-      vmid: 'description',
-      name: 'description',
-      content: meta.description.default
-    },
+    { vmid: 'description', name: 'description', content: meta.description.default },
     { vmid: 'keywords', name: 'keywords', content: meta.keywords.default },
-    {
-      name: 'viewport',
-      content:
-        'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no'
-    },
+    { name: 'viewport', content: 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' },
     { generator: 'generator', content: 'Vue Storefront' },
     { name: 'robots', content: 'index, follow' },
     { name: 'mobile-web-app-capable', content: 'yes' },
     { name: 'theme-color', content: '#ffffff' },
     { property: 'fb:page_id', content: facebook.pageId },
     { property: 'fb:app_id', content: facebook.appId },
-    {
-      vmid: 'og:image',
-      property: 'og:image',
-      content: facebook.opengraph.image
-    },
+    { vmid: 'og:image', property: 'og:image', content: facebook.opengraph.image },
     { property: 'og:locale', content: facebook.opengraph.locale },
     { property: 'og:site_name', content: facebook.opengraph.siteName },
+    { property: 'og:url', content: config.icmaa_meta.base_url + router.currentRoute.path }, // TODO Storecode 'default'
     { vmid: 'og:title', property: 'og:title', content: meta.title },
-    { vmid: 'og:url', property: 'og:url', content: '' },
     { vmid: 'og:type', property: 'og:type', content: facebook.opengraph.type }, // website, product, article, book, music, video, place ...
-    {
-      name: 'apple-mobile-web-app-title',
-      content: meta.apple.mobileWebAppTitle
-    },
+    { name: 'apple-mobile-web-app-title', content: meta.apple.mobileWebAppTitle },
     { name: 'apple-mobile-web-app-status-bar-style', content: '#ffffff' },
     { name: 'apple-itunes-app', content: meta.apple.itunesApp },
     { name: 'ICBM', content: meta.geo.position },

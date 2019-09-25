@@ -1,20 +1,10 @@
 // title and description --> icmaa-cms/mixins/categoryExtras.ts
-import { storeCode } from 'icmaa-meta/helper';
 import { htmlDecode } from '@vue-storefront/core/filters'
 import config from 'config'
-import { getThumbnailPath } from '@vue-storefront/core/helpers';
+import { getThumbnailPath } from '@vue-storefront/core/helpers'
 
 export default {
   computed: {
-    categoryUrl () {
-      return (
-        config.icmaa_meta.base_url +
-        '/' +
-        storeCode() +
-        '/' +
-        this.getCurrentCategory.url_path
-      ); // TODO storecode "default"
-    },
     categoryFBImages () {
       if (!this.getCategoryProducts) {
         return [];
@@ -25,12 +15,7 @@ export default {
       this.getCategoryProducts.slice(0, limit).forEach(image => {
         categoryImagesTags.push({
           property: 'og:image',
-          content: getThumbnailPath(
-            '/catalog/product' + image.image,
-            this.width,
-            this.height,
-            'media'
-          )
+          content: getThumbnailPath('/catalog/product' + image.image, this.width, this.height, 'media')
         });
       });
 
@@ -44,11 +29,6 @@ export default {
           vmid: 'og:title',
           property: 'og:title',
           content: htmlDecode(this.getCurrentCategory.name)
-        },
-        {
-          vmid: 'og:url',
-          property: 'og:url',
-          content: htmlDecode(this.categoryUrl)
         },
         { vmid: 'og:type', property: 'og:type', content: 'product.group' },
         ...this.categoryFBImages

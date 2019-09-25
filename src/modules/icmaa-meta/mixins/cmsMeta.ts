@@ -3,7 +3,7 @@ import camelCase from 'lodash-es/camelCase';
 export default {
   metaInfo () {
     let meta: any = {}
-    const metaKeys = ['title', 'tags', 'description', 'og:image', 'og:title', 'og:url']
+    const metaKeys = ['title', 'tags', 'description', 'og:image', 'og:title']
 
     metaKeys.forEach((value) => {
       const key = camelCase('meta-' + value)
@@ -23,8 +23,6 @@ export default {
         }
       }
     })
-    console.log(meta);
-
     return meta
   }
 }

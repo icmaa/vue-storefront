@@ -1,8 +1,7 @@
-import { storeCode } from 'icmaa-meta/helper'
 import { htmlDecode } from '@vue-storefront/core/filters'
 import { currentStoreView } from '@vue-storefront/core/lib/multistore'
 import { optionLabel } from '@vue-storefront/core/modules/catalog/helpers/optionLabel'
-import config from 'config'
+import { getThumbnailPath } from '@vue-storefront/core/helpers'
 
 const storeView = currentStoreView()
 const currencyCode = storeView.i18n.currencyCode
@@ -32,14 +31,14 @@ export default {
     productBandOrBrandCode () {
       return this.product.brand ? 'brand' : 'band'
     },
-    productUrl () {
-      return config.icmaa_meta.base_url + '/' + storeCode() + '/' + this.product.url_path; // TODO storecode "default"
-    },
     productFbImages () {
+      if (!this.product.media_gallery) {
+        return [];
+      }
       let facebookImageTags = []
       this.product.media_gallery.forEach(image => {
         facebookImageTags.push(
-          { property: 'og:image', content: (config.icmaa_meta.base_url + '/media/catalog/product/') + image.image }
+          { property: 'og:image', content: getThumbnailPath('/catalog/product' + image.image, this.width, this.height, 'media') }
         )
       })
       return facebookImageTags
@@ -52,11 +51,10 @@ export default {
   },
   metaInfo () {
     return {
-      title: 'Placeholder - productpage',
+      title: 'Placeholder - productpage', // TODO
       meta: [
-        { vmid: 'description', name: 'description', content: 'Placeholder - productpageDescrition' },
+        { vmid: 'description', name: 'description', content: 'Placeholder - productpageDescrition' }, // TODO
         { vmid: 'og:title', property: 'og:title', content: htmlDecode(this.productName) },
-        { vmid: 'og:url', property: 'og:url', content: htmlDecode(this.productUrl) },
         { vmid: 'og:type', property: 'og:type', content: 'product' },
         { name: 'product.final_price', content: this.productPrice }, // ??
         { name: 'product.price', content: this.productPrice }, // ??
