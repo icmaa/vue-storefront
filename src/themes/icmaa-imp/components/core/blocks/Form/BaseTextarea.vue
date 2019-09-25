@@ -1,10 +1,9 @@
 <template>
   <div class="base-textarea relative">
     <textarea
-      class="t-w-full t-h-40 t-px-3 t-py-2 t-border t-rounded-sm placeholder:t-text-base-light"
-      :class="[ invalid ? 't-border-alert' : 't-border-base-light', { 't-pr-8': type === 'password' } ]"
+      class="t-w-full t-h-40 t-px-3 t-py-2 t-border t-rounded-sm t-appearance-none placeholder:t-text-base-light"
+      :class="[ invalid ? 't-border-alert' : 't-border-base-light' ]"
       :placeholder="placeholder"
-      :type="type"
       :name="name"
       :autocomplete="autocomplete"
       :value="value"
@@ -34,10 +33,6 @@ export default {
     }
   },
   props: {
-    type: {
-      type: String,
-      required: true
-    },
     value: {
       type: [String, Number],
       required: true

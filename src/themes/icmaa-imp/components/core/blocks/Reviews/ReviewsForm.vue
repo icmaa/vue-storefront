@@ -2,9 +2,10 @@
   <div class="reviews-form t-bg-white t-p-4 t-mb-8" id="reviews-form">
     <form action="#" @submit.prevent="outOfScope()">
       <div class="t-mb-4">
+        <base-label form-id="name" :label-text="$t('First name')" />
         <base-input
-          type="text"
-          :placeholder="$t('First name')"
+          id="name"
+          :placeholder="sampleName"
           v-model="formData.name"
           @blur="$v.formData.name.$touch()"
           :validations="[
@@ -20,9 +21,11 @@
         />
       </div>
       <div class="t-mb-4">
+        <base-label form-id="email" :label-text="$t('Email address')" />
         <base-input
+          id="email"
           type="email"
-          :placeholder="$t('Email address')"
+          :placeholder="sampleEmail"
           v-model="formData.email"
           @blur="$v.formData.email.$touch()"
           :validations="[
@@ -38,9 +41,10 @@
         />
       </div>
       <div class="t-mb-4">
+        <base-label form-id="summary" :label-text="$t('Summary')" />
         <base-input
-          type="text"
-          :placeholder="$t('Summary')"
+          id="summary"
+          :placeholder="$t('...')"
           v-model="formData.summary"
           @blur="$v.formData.summary.$touch()"
           :validations="[
@@ -52,9 +56,10 @@
         />
       </div>
       <div class="t-mb-4">
+        <base-label form-id="review" :label-text="$t('Review')" />
         <base-textarea
-          type="text"
-          :placeholder="$t('Review')"
+          id="review"
+          placeholder="..."
           v-model="formData.review"
           @blur="$v.formData.review.$touch()"
           :validations="[
@@ -69,11 +74,6 @@
         <button-component @click.native="validate()" :class="{ 'w-auto': !currentUser }">
           {{ $t('Add review') }}
         </button-component>
-        <no-ssr>
-          <div v-if="!currentUser">
-            {{ $t('or') }} <a href="#" class="cl-primary" @click.prevent="login()">{{ $t('login') }}</a> {{ $t('to account') }}
-          </div>
-        </no-ssr>
       </div>
     </form>
   </div>
@@ -85,10 +85,10 @@ import { mapGetters } from 'vuex'
 import { required, email, minLength } from 'vuelidate/lib/validators'
 
 import ButtonComponent from 'theme/components/core/blocks/Button'
+import BaseLabel from 'theme/components/core/blocks/Form/BaseLabel'
 import BaseInput from 'theme/components/core/blocks/Form/BaseInput'
 import BaseTextarea from 'theme/components/core/blocks/Form/BaseTextarea'
 import { AddReview } from '@vue-storefront/core/modules/review/components/AddReview'
-import NoSSR from 'vue-no-ssr'
 
 export default {
   name: 'ReviewsForm',
@@ -110,9 +110,9 @@ export default {
   },
   components: {
     ButtonComponent,
+    BaseLabel,
     BaseInput,
-    BaseTextarea,
-    'no-ssr': NoSSR
+    BaseTextarea
   },
   computed: {
     ...mapGetters({
@@ -125,6 +125,13 @@ export default {
     },
     currentUser () {
       return this.$store.state.user.current
+    },
+    sampleName () {
+      const names = ['Jose', 'Ulli', 'Manu', 'Maria', 'Micha', 'Sigi', 'Sascha']
+      return names[Math.floor(Math.random() * names.length)]
+    },
+    sampleEmail () {
+      return this.sampleName.toLowerCase() + '@muster.de'
     }
   },
   methods: {
@@ -164,9 +171,6 @@ export default {
       this.formData.summary = ''
       this.formData.review = ''
       this.$v.$reset()
-    },
-    login () {
-      this.$bus.$emit('modal-show', 'modal-signup')
     },
     fillInUserData () {
       if (this.currentUser) {

@@ -11,7 +11,7 @@
       {{ icon }}
     </button>
     <input
-      class="t-w-full t-h-10 t-px-3 t-border t-rounded-sm placeholder:t-text-base-light"
+      class="t-w-full t-h-10 t-px-3 t-border t-rounded-sm t-appearance-none t-leading-tight placeholder:t-text-base-light"
       :class="[ invalid ? 't-border-alert' : 't-border-base-light', { 't-pr-8': type === 'password' } ]"
       :placeholder="placeholder"
       :type="type === 'password' ? passType : type"
@@ -47,7 +47,7 @@ export default {
   props: {
     type: {
       type: String,
-      required: true
+      default: 'text'
     },
     value: {
       type: [String, Number],
