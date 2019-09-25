@@ -21,7 +21,8 @@ module.exports = {
         'base-tone': '#3E3E3E',
         'base-light': '#999999',
         'base-lighter': '#C7C7C7',
-        'base-lightest': '#EDEDED'
+        'base-lightest': '#EDEDED',
+        'alert': '#CC2823'
       },
       spacing: {
         '1/8': '0.125rem',

@@ -1,10 +1,10 @@
 <template>
   <div class="reviews-form t-bg-white t-p-4 t-mb-8" id="reviews-form">
     <form action="#" @submit.prevent="outOfScope()">
-      <div class="">
+      <div class="t-mb-4">
         <base-input
           type="text"
-          :placeholder="$t('First name') + ' *'"
+          :placeholder="$t('First name')"
           v-model="formData.name"
           @blur="$v.formData.name.$touch()"
           :validations="[
@@ -19,10 +19,10 @@
           ]"
         />
       </div>
-      <div class="">
+      <div class="t-mb-4">
         <base-input
           type="email"
-          :placeholder="$t('Email address') + ' *'"
+          :placeholder="$t('Email address')"
           v-model="formData.email"
           @blur="$v.formData.email.$touch()"
           :validations="[
@@ -37,10 +37,10 @@
           ]"
         />
       </div>
-      <div class="">
+      <div class="t-mb-4">
         <base-input
           type="text"
-          :placeholder="$t('Summary') + ' *'"
+          :placeholder="$t('Summary')"
           v-model="formData.summary"
           @blur="$v.formData.summary.$touch()"
           :validations="[
@@ -51,10 +51,10 @@
           ]"
         />
       </div>
-      <div class="">
+      <div class="t-mb-4">
         <base-textarea
           type="text"
-          :placeholder="$t('Review') + ' *'"
+          :placeholder="$t('Review')"
           v-model="formData.review"
           @blur="$v.formData.review.$touch()"
           :validations="[
