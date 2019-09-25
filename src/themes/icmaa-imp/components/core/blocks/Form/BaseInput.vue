@@ -30,7 +30,7 @@
 </template>
 
 <script>
-import ValidationMessages from './ValidationMessages.vue'
+import ValidationMessages from './ValidationMessages'
 
 export default {
   name: 'BaseInput',
@@ -122,7 +122,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .base-input input:focus + .validation-message {
   display: block;
 }

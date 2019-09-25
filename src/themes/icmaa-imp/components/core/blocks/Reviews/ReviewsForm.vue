@@ -41,6 +41,22 @@
         />
       </div>
       <div class="t-mb-4">
+        <base-label form-id="rating" :label-text="$t('Rating')" />
+        <base-select
+          id="rating"
+          name="rating"
+          :options="ratingOptions"
+          :selected="5"
+          :validations="[
+            {
+              condition: !$v.formData.rating.required,
+              text: $t('Field is required')
+            }
+          ]"
+          v-model="formData.rating"
+        />
+      </div>
+      <div class="t-mb-4">
         <base-label form-id="summary" :label-text="$t('Summary')" />
         <base-input
           id="summary"
@@ -88,6 +104,7 @@ import ButtonComponent from 'theme/components/core/blocks/Button'
 import BaseLabel from 'theme/components/core/blocks/Form/BaseLabel'
 import BaseInput from 'theme/components/core/blocks/Form/BaseInput'
 import BaseTextarea from 'theme/components/core/blocks/Form/BaseTextarea'
+import BaseSelect from 'theme/components/core/blocks/Form/BaseSelect'
 import { AddReview } from '@vue-storefront/core/modules/review/components/AddReview'
 
 export default {
@@ -112,7 +129,8 @@ export default {
     ButtonComponent,
     BaseLabel,
     BaseInput,
-    BaseTextarea
+    BaseTextarea,
+    BaseSelect
   },
   computed: {
     ...mapGetters({
@@ -125,6 +143,15 @@ export default {
     },
     currentUser () {
       return this.$store.state.user.current
+    },
+    ratingOptions () {
+      const total = 5
+      let values = []
+      for (let value = 1; value <= total; value++) {
+        values.push({ value, label: i18n.t(`Reviewrating: ${value}`) })
+      }
+
+      return values
     },
     sampleName () {
       const names = ['Jose', 'Ulli', 'Manu', 'Maria', 'Micha', 'Sigi', 'Sascha']
@@ -199,6 +226,9 @@ export default {
       email: {
         required,
         email
+      },
+      rating: {
+        required
       },
       summary: {
         required
