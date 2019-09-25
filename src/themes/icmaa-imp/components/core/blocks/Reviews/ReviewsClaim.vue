@@ -21,6 +21,7 @@
 
 <script>
 import i18n from '@vue-storefront/i18n'
+import { price } from '@vue-storefront/core/filters/price'
 import { currentStoreView } from '@vue-storefront/core/lib/multistore'
 import ButtonComponent from 'theme/components/core/blocks/Button'
 
@@ -35,9 +36,12 @@ export default {
   },
   computed: {
     voucher () {
-      return '50 €'
-      // NOT WORKING YET – DEBUG WHY store.reviews.voucher_value is empty
-      // return currentStoreView().reviews.voucher_value
+      const store = currentStoreView()
+      if (store.reviews && store.reviews.voucher_value) {
+        return store.reviews.voucher_value
+      }
+
+      return price(50)
     }
   },
   methods: {
