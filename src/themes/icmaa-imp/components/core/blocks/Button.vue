@@ -32,7 +32,7 @@ export default {
       type: String,
       default: 'second',
       validation: (value) => {
-        return ['primary', 'second', 'ghost', 'transparent'].indexOf(value) !== -1
+        return ['primary', 'second', 'ghost', 'transparent'].includes(value)
       }
     },
     icon: {
