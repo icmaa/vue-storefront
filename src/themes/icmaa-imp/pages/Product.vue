@@ -101,12 +101,6 @@
       </div>
     </div>
 
-    <lazy-hydrate when-idle>
-      <related-products type="upsell" :heading="$t('We found other products you might like')" />
-    </lazy-hydrate>
-    <lazy-hydrate when-idle>
-      <related-products type="related" />
-    </lazy-hydrate>
     <async-sidebar
       :async-component="AddToCartSidebar"
       :is-open="isAddToCartSidebarOpen"
@@ -130,7 +124,6 @@ import { ReviewModule } from '@vue-storefront/core/modules/review'
 import { IcmaaExtendedReviewModule } from 'icmaa-review'
 import { RecentlyViewedModule } from '@vue-storefront/core/modules/recently-viewed'
 import Reviews from 'theme/components/core/blocks/Reviews/Reviews'
-import RelatedProducts from 'theme/components/core/blocks/Product/Related'
 
 import AsyncSidebar from 'theme/components/theme/blocks/AsyncSidebar/AsyncSidebar'
 import IcmaaProduct from 'icmaa-catalog/components/Product'
@@ -166,7 +159,6 @@ export default {
     LoaderBackground,
     DepartmentLogo,
     ProductGallery,
-    RelatedProducts,
     DetailsTabs,
     ProductDetails,
     ProductFeatures,
