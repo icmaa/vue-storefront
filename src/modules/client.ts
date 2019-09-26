@@ -15,7 +15,7 @@ import { AmpRendererModule } from './amp-renderer';
 import { PaymentBackendMethodsModule } from './payment-backend-methods'
 import { PaymentCashOnDeliveryModule } from './payment-cash-on-delivery'
 import { NewsletterModule } from '@vue-storefront/core/modules/newsletter'
-// import { ExternalCheckout } from './external-checkout'
+import { ExternalCheckout } from 'external-checkout';
 // ICMAA Modules
 import { IcmaaExtendedUrlModule } from 'icmaa-url'
 import { IcmaaExtendedCatalogModule } from 'icmaa-catalog'
@@ -44,7 +44,7 @@ export function registerClientModules () {
   registerModule(AmpRendererModule)
   registerModule(CmsModule)
   registerModule(NewsletterModule)
-  // registerModule(ExternalCheckout)
+  registerModule(ExternalCheckout)
   // ICMAA Modules
   registerModule(IcmaaExtendedUrlModule)
   registerModule(IcmaaExtendedCatalogModule)

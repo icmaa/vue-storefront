@@ -1,20 +1,6 @@
-import {StorefrontModule, StorefrontModuleConfig} from '@vue-storefront/core/lib/module'
-import {beforeEach} from './router/beforeEach'
-import {routes} from './router/routes';
-
-const store = {
-  namespaced: true,
-  state: {
-    key: null
-  }
-}
+import { StorefrontModule } from '@vue-storefront/core/lib/modules'
 
 export const KEY = 'external-checkout'
 
-const moduleConfig: StorefrontModuleConfig = {
-  key: KEY,
-  store: {modules: [{key: KEY, module: store}]},
-  router: {beforeEach, routes}
+export const ExternalCheckout: StorefrontModule = function (app, store, router, moduleConfig, appConfig) {
 }
-
-export const ExternalCheckout = new StorefrontModule(moduleConfig)
