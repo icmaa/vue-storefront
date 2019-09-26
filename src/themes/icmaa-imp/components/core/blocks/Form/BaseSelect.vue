@@ -3,7 +3,7 @@
     <div class="t-relative">
       <select
         class="t-w-full t-h-10 t-pl-3 t-pr-12 t-border t-rounded-sm t-leading-tight t-bg-white t-appearance-none focus:outline-none focus:shadow-outline"
-        :class="[ invalid ? 't-border-alert' : 't-border-base-light' ]"
+        :class="[ invalid ? 't-border-alert' : 't-border-base-light', { 't-text-base-light': !value || value === selected } ]"
         :name="name"
         :id="id"
         @focus="$emit('focus')"
@@ -11,12 +11,12 @@
         @change="$emit('change', $event.target.value)"
         @input="$emit('input', $event.target.value)"
       >
-        <option disabled selected v-if="selected === ''" value="" v-html="initialOption" />
+        <option disabled :selected="!value" v-if="selected === ''" value="" v-html="initialOptionText" />
         <option
           v-for="(option, key) in options"
           :key="key"
           :value="option.value"
-          v-bind="{ selected: option.value === selected }"
+          v-bind="{ selected: option.value === selected || option.value === value }"
         >
           {{ option.label }}
         </option>
@@ -60,7 +60,7 @@ export default {
       required: true,
       default: () => []
     },
-    initialOption: {
+    initialOptionText: {
       type: String,
       required: false,
       default: i18n.t('Choose an option')

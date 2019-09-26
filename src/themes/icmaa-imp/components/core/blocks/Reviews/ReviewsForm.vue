@@ -46,9 +46,10 @@
           id="rating"
           name="rating"
           :options="ratingOptions"
+          :initial-option-text="$t('How did you like it?')"
           :validations="[
             {
-              condition: !$v.reviewForm.rating.required,
+              condition: $v.reviewForm.rating.$error && !$v.reviewForm.rating.required,
               text: $t('Field is required')
             }
           ]"
