@@ -5,6 +5,7 @@
       :class="[ invalid ? 't-border-alert' : 't-border-base-light' ]"
       :placeholder="placeholder"
       :name="name"
+      :id="id"
       :autocomplete="autocomplete"
       :value="value"
       :autofocus="autofocus"
@@ -35,7 +36,12 @@ export default {
   props: {
     value: {
       type: [String, Number],
-      required: true
+      default: ''
+    },
+    id: {
+      type: String,
+      required: false,
+      default: ''
     },
     name: {
       type: String,

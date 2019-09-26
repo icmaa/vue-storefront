@@ -1,20 +1,20 @@
 <template>
   <div class="reviews-form t-bg-white t-p-4 t-mb-8" id="reviews-form">
-    <form action="#" @submit.prevent="outOfScope()">
+    <form name="review" action="#" @submit.prevent="outOfScope()">
       <div class="t-mb-4">
         <base-label form-id="name" :label-text="$t('First name')" />
         <base-input
           id="name"
+          name="name"
           :placeholder="sampleName"
-          v-model="formData.name"
-          @blur="$v.formData.name.$touch()"
+          v-model="reviewForm.name"
           :validations="[
             {
-              condition: $v.formData.name.$error && !$v.formData.name.required,
+              condition: $v.reviewForm.name.$error && !$v.reviewForm.name.required,
               text: $t('Field is required')
             },
             {
-              condition: !$v.formData.name.minLength,
+              condition: !$v.reviewForm.name.minLength,
               text: $t('Name must have at least 2 letters.')
             }
           ]"
@@ -24,17 +24,17 @@
         <base-label form-id="email" :label-text="$t('Email address')" />
         <base-input
           id="email"
+          name="email"
           type="email"
           :placeholder="sampleEmail"
-          v-model="formData.email"
-          @blur="$v.formData.email.$touch()"
+          v-model="reviewForm.email"
           :validations="[
             {
-              condition: $v.formData.email.$error && !$v.formData.email.required,
+              condition: $v.reviewForm.email.$error && !$v.reviewForm.email.required,
               text: $t('Field is required')
             },
             {
-              condition: !$v.formData.email.email && $v.formData.email.$error,
+              condition: !$v.reviewForm.email.email && $v.reviewForm.email.$error,
               text: $t('Please provide valid e-mail address.')
             }
           ]"
@@ -46,26 +46,25 @@
           id="rating"
           name="rating"
           :options="ratingOptions"
-          :selected="5"
           :validations="[
             {
-              condition: !$v.formData.rating.required,
+              condition: !$v.reviewForm.rating.required,
               text: $t('Field is required')
             }
           ]"
-          v-model="formData.rating"
+          v-model="reviewForm.rating"
         />
       </div>
       <div class="t-mb-4">
         <base-label form-id="summary" :label-text="$t('Summary')" />
         <base-input
           id="summary"
+          name="summary"
           :placeholder="$t('...')"
-          v-model="formData.summary"
-          @blur="$v.formData.summary.$touch()"
+          v-model="reviewForm.summary"
           :validations="[
             {
-              condition: $v.formData.summary.$error && !$v.formData.summary.required,
+              condition: $v.reviewForm.summary.$error && !$v.reviewForm.summary.required,
               text: $t('Field is required')
             }
           ]"
@@ -75,12 +74,12 @@
         <base-label form-id="review" :label-text="$t('Review')" />
         <base-textarea
           id="review"
+          name="review"
           placeholder="..."
-          v-model="formData.review"
-          @blur="$v.formData.review.$touch()"
+          v-model="reviewForm.review"
           :validations="[
             {
-              condition: $v.formData.review.$error && !$v.formData.review.required,
+              condition: $v.reviewForm.review.$error && !$v.reviewForm.review.required,
               text: $t('Field is required')
             }
           ]"
@@ -111,9 +110,10 @@ export default {
   name: 'ReviewsForm',
   data () {
     return {
-      formData: {
+      reviewForm: {
         name: '',
         email: '',
+        rating: '',
         summary: '',
         review: ''
       }
@@ -163,19 +163,21 @@ export default {
   },
   methods: {
     validate () {
-      this.$v.$touch()
-      if (!this.$v.$invalid) {
+      this.$v.reviewForm.$touch()
+      if (!this.$v.reviewForm.$invalid) {
         this.submit()
       }
     },
     async submit () {
       const isReviewCreated = await this.$store.dispatch('review/add', {
-        'product_id': this.productId,
-        'title': this.formData.summary,
-        'detail': this.formData.review,
-        'nickname': this.formData.name,
         'review_entity': 'product',
-        'customer_id': this.currentUser ? this.currentUser.id : null
+        'product_id': this.productId,
+        'customer_id': this.currentUser ? this.currentUser.id : null,
+        'name': this.reviewForm.name,
+        'email': this.reviewForm.summary,
+        'rating': this.reviewForm.rating,
+        'title': this.reviewForm.summary,
+        'detail': this.reviewForm.review
       })
 
       if (isReviewCreated) {
@@ -193,16 +195,16 @@ export default {
       })
     },
     clearReviewForm () {
-      this.formData.name = ''
-      this.formData.email = ''
-      this.formData.summary = ''
-      this.formData.review = ''
+      this.reviewForm.name = ''
+      this.reviewForm.email = ''
+      this.reviewForm.summary = ''
+      this.reviewForm.review = ''
       this.$v.$reset()
     },
     fillInUserData () {
       if (this.currentUser) {
-        this.formData.name = this.currentUser.firstname
-        this.formData.email = this.currentUser.email
+        this.reviewForm.name = this.currentUser.firstname
+        this.reviewForm.email = this.currentUser.email
       }
     }
   },
@@ -218,7 +220,7 @@ export default {
     this.fillInUserData()
   },
   validations: {
-    formData: {
+    reviewForm: {
       name: {
         minLength: minLength(2),
         required

@@ -16,6 +16,7 @@
       :placeholder="placeholder"
       :type="type === 'password' ? passType : type"
       :name="name"
+      :id="id"
       :autocomplete="autocomplete"
       :value="value"
       :autofocus="autofocus"
@@ -51,6 +52,11 @@ export default {
     },
     value: {
       type: [String, Number],
+      default: ''
+    },
+    id: {
+      type: String,
+      required: false,
       default: ''
     },
     name: {

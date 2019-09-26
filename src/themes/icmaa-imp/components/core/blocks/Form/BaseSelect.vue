@@ -5,12 +5,13 @@
         class="t-w-full t-h-10 t-pl-3 t-pr-12 t-border t-rounded-sm t-leading-tight t-bg-white t-appearance-none focus:outline-none focus:shadow-outline"
         :class="[ invalid ? 't-border-alert' : 't-border-base-light' ]"
         :name="name"
+        :id="id"
         @focus="$emit('focus')"
         @blur="$emit('blur')"
         @change="$emit('change', $event.target.value)"
         @input="$emit('input', $event.target.value)"
       >
-        <option disabled selected value v-if="!selected" />
+        <option disabled selected v-if="selected === ''" value="" v-html="initialOption" />
         <option
           v-for="(option, key) in options"
           :key="key"
@@ -29,6 +30,7 @@
 </template>
 
 <script>
+import i18n from '@vue-storefront/i18n'
 import ValidationMessages from './ValidationMessages'
 import MaterialIcon from 'theme/components/core/blocks/MaterialIcon'
 
@@ -39,6 +41,10 @@ export default {
     ValidationMessages
   },
   props: {
+    value: {
+      type: [String, Number],
+      default: ''
+    },
     id: {
       type: String,
       required: false,
@@ -54,8 +60,13 @@ export default {
       required: true,
       default: () => []
     },
-    selected: {
+    initialOption: {
       type: String,
+      required: false,
+      default: i18n.t('Choose an option')
+    },
+    selected: {
+      type: [String, Number],
       required: false,
       default: ''
     },
