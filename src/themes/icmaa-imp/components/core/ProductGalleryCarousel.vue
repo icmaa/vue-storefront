@@ -14,7 +14,7 @@
     @pageChange="pageChange"
   >
     <slide v-for="(images, index) in galleryFiltered" :key="index" ref="thumbs">
-      <product-image class="t-cursor-pointer" :image="images" :alt="productName | htmlDecode" />
+      <product-image class="t-cursor-pointer" :image="images" :alt="productName | htmlDecode" @load="imageLoaded" />
     </slide>
   </carousel>
 </template>
@@ -25,7 +25,6 @@ import { Carousel, Slide } from 'vue-carousel'
 import ProductImage from './ProductImage'
 import reduce from 'lodash-es/reduce'
 import map from 'lodash-es/map'
-import { Logger } from '@vue-storefront/core/lib/logger';
 
 export default {
   name: 'ProductGalleryCarousel',
@@ -53,7 +52,8 @@ export default {
       carouselTransition: true,
       carouselTransitionSpeed: 0,
       currentColor: 0,
-      currentPage: 0
+      currentPage: 0,
+      loadedImages: []
     }
   },
   computed: {
@@ -63,6 +63,15 @@ export default {
         const regex = /(_sm)(_\w*)*(\.[a-zA-Z]{3,4})$/gm
         return regex.exec(image.src) === null
       })
+    },
+    areAllImagesLoaded () {
+      const gallery = this.galleryFiltered.map(g => g.src)
+      if (this.loadedImages.filter(i => gallery.includes(i)).length === gallery.length) {
+        this.$emit('loaded')
+        return true
+      }
+
+      return false
     }
   },
   beforeMount () {
@@ -76,14 +85,19 @@ export default {
       const {color} = this.configuration
       this.currentColor = color.id
     }
-
-    this.$emit('loaded')
   },
   beforeDestroy () {
     this.$bus.$off('filter-changed-product', this.selectVariant)
     this.$bus.$off('product-after-load', this.selectVariant)
   },
   methods: {
+    imageLoaded (image, loaded) {
+      if (loaded && !this.loadedImages.includes(image.src)) {
+        this.loadedImages.push(image.src)
+      }
+
+      return this.areAllImagesLoaded
+    },
     navigate (index) {
       if (this.$refs.carousel) {
         this.$refs.carousel.goToPage(index)
