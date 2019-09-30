@@ -3,6 +3,7 @@
     <div
       class="t-min-h-screen t-content-center t-flex-no-wrap t-justify-center"
     >
+      <!-- TEASER LARGE -->
       <template v-if="teaser.length > 0">
         <Teaser2x1 :teaser="teaser[0]" />
       </template>
@@ -31,7 +32,7 @@ export default {
     return {
       teaser: [
         {
-          text_1: 'Alle Produkte anzeigen',
+          text_1: 'ALLE PRODUKTE ANZEIGEN',
           text_2: 'Ein tollter Subtitle',
           text_3: 'disclaimer',
           button_text: 'JETZT SHOPPEN',
@@ -40,15 +41,14 @@ export default {
           image_2x1: '',
           image_1x1: '',
           image_link: '/sales.html'
-
         },
         {
           text_1: 'Neues Merchandise',
-          text_2: 'T-Shirts, Hoodies, Shorts uvm. noch viel mehr Sachen ',
-          text_3: 'disclaimer',
+          text_2: 'T-Shirts, Hoodies, Shorts uvm. noch viel mehr Sachen*',
+          text_3: '*Test Disclaimer mit längerem Text.',
           button_text: 'JETZT SHOPPEN',
-          text_color: '#ffffff',
-          background_color: '#611122',
+          text_color: '#000',
+          background_color: '#fff',
           image_2x1: '',
           image_1x1: '',
           image_link: '/merchandise.html'
