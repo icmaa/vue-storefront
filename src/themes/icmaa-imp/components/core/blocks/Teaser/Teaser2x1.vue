@@ -1,11 +1,23 @@
 <template>
-  <div id="teaser-large" class="t-w-full t-mb-4">
-    <a :href="teaser.href" class="">
+  <div id="teaser-large" class="t-w-full t-mb-5">
+    <a :href="teaser.image_link" class="">
       <div class="t-relative">
-        <img
-          class="t-w-full"
-          src="assets/teaser/20190603_1x1_teaser_boy_hell_04.webp"
-        >
+        <picture>
+          <source
+            media="(max-width: 767px)"
+            srcset="assets/teaser/20190603_1x1_teaser_boy_hell_04.webp"
+          >
+          <source
+            media="(min-width: 768px)"
+            srcset="assets/teaser/20190910_15_uebergangsjacken_desktop_de.webp"
+          >
+          <img
+            class="t-w-full"
+            src="assets/teaser/20190910_15_uebergangsjacken_desktop_de.webp"
+            alt=""
+          >
+        </picture>
+
         <div
           class="t-flex t-justify-center t-absolute t-bottom-0 t-inset-x-0 t-mb-6 t-text-sm"
           :style="{ color: teaser.text_color }"
@@ -26,7 +38,7 @@ export default {
     MaterialIcon
   },
   props: {
-      teaser: Object
+    teaser: Object
   }
 };
 </script>
