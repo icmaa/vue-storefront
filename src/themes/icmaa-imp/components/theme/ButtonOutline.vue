@@ -4,19 +4,23 @@
     :to="localizedRoute(link)"
     class="button-outline no-outline bg-cl-transparent no-underline t-text-xs t-px-5 t-p-3 t-rounded-sm t-border"
     :class="{
-      light : color === 'light', 'brdr-white' : color === 'light', 'cl-white' : color === 'light',
-      dark : color === 'dark', 'brdr-darkgray' : color === 'dark', 'cl-secondary' : color === 'dark',
-      px0 : link ? true : false,
-      px40 : link ? false : true,
+      light: color === 'light',
+      'brdr-white': color === 'light',
+      'cl-white': color === 'light',
+      dark: color === 'dark',
+      'brdr-darkgray': color === 'dark',
+      'cl-secondary': color === 'dark',
+      px0: link ? true : false,
+      px40: link ? false : true
     }"
-    :style="{ '--color': color, color: color}"
+    :style="{ '--color': color, color: color }"
   >
     <slot>Button</slot>
   </component>
 </template>
 
 <script>
-import focusClean from 'theme/components/theme/directives/focusClean'
+import focusClean from 'theme/components/theme/directives/focusClean';
 
 export default {
   name: 'ButtonOutline',
@@ -32,7 +36,7 @@ export default {
       required: false
     }
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>
@@ -46,12 +50,6 @@ $black: color(black);
   border: 1px solid var(--color);
 }
 
-@media screen and (min-width: 900px) {
-  .button-outline {
-    border: 2px solid;
-    min-width: 220px;
-  }
-}
 .dark {
   border: 1px solid $dark-border;
   &:hover,
