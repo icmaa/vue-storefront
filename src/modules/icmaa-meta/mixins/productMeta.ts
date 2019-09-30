@@ -33,12 +33,16 @@ export default {
     },
     productFbImages () {
       if (!this.product.media_gallery) {
-        return [];
+        return []
       }
+
       let facebookImageTags = []
       this.product.media_gallery.forEach(image => {
         facebookImageTags.push(
-          { property: 'og:image', content: getThumbnailPath('/catalog/product' + image.image, this.width, this.height, 'media') }
+          {
+            property: 'og:image',
+            content: getThumbnailPath('/catalog/product' + image.image, this.width, this.height, 'media')
+          }
         )
       })
       return facebookImageTags
@@ -56,9 +60,9 @@ export default {
         { vmid: 'description', name: 'description', content: 'Placeholder - productpageDescrition' }, // TODO
         { vmid: 'og:title', property: 'og:title', content: htmlDecode(this.productName) },
         { vmid: 'og:type', property: 'og:type', content: 'product' },
-        { name: 'product.final_price', content: this.productPrice }, // ??
-        { name: 'product.price', content: this.productPrice }, // ??
-        { name: 'product.name', content: htmlDecode(this.productName) }, // ??
+        { name: 'product.final_price', content: this.productPrice },
+        { name: 'product.price', content: this.productPrice },
+        { name: 'product.name', content: htmlDecode(this.productName) },
         { name: 'product:condition', content: 'new' },
         { name: 'product:availability', content: this.product.stock.is_in_stock }, // TODO mapping values - available for order, in stock, out fo stock, preorder
         { name: 'product:price:currency', content: currencyCode },

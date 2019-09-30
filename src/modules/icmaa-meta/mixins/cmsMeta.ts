@@ -1,4 +1,4 @@
-import camelCase from 'lodash-es/camelCase';
+import camelCase from 'lodash-es/camelCase'
 
 export default {
   metaInfo () {
