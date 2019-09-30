@@ -8,7 +8,7 @@ import { Logger } from '@vue-storefront/core/lib/logger'
 
 const actions: ActionTree<ConfigState, RootState> = {
   setMap (context): StoreView[] {
-    Logger.error('Hydrate store-view config values', 'icmaa-config')()
+    Logger.debug('Hydrate store-view config values', 'icmaa-config')()
 
     const { icmaa_config, storeViews } = config
     let storeConfigs = storeViews.mapStoreUrlsFor.map(storeCode => {
