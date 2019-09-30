@@ -4,9 +4,12 @@ import RootState from '@vue-storefront/core/types/RootState';
 import ConfigState, { ConfigStateStore } from '../types/ConfigState'
 import * as types from './mutation-types'
 import { getExtendedStoreviewConfig } from '../helpers'
+import { Logger } from '@vue-storefront/core/lib/logger'
 
 const actions: ActionTree<ConfigState, RootState> = {
   setMap (context): ConfigStateStore[] {
+    Logger.error('Hydrate store-view config values', 'icmaa-config')()
+
     const { icmaa_config, storeViews } = config
     let storeConfigs = storeViews.mapStoreUrlsFor.map(storeCode => {
       let store = icmaa_config.map.find(s => s.storeCode === storeCode) || { storeCode }
