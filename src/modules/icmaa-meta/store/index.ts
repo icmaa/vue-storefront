@@ -1,7 +1,5 @@
 import { Module } from 'vuex'
-import { StoreView } from '@vue-storefront/core/lib/types'
-import { ConfigStateStore } from 'icmaa-config/types/ConfigState'
-import { currentStoreView } from '@vue-storefront/core/lib/multistore'
+import { StoreView } from 'icmaa-config/types/ConfigState'
 import { Logger } from '@vue-storefront/core/lib/logger'
 
 export default interface IcmaaMetaStoreState {
@@ -24,9 +22,8 @@ export const IcmaaMetaStore: Module<IcmaaMetaStoreState, any> = {
     async load ({ commit, rootGetters }) {
       await import(/* webpackChunkName: "vsf-meta-default" */ `theme/resource/meta/head`)
         .then(metaDefault => {
-          const store: StoreView = currentStoreView()
-          const storeConfig: ConfigStateStore = rootGetters['icmaaConfig/getCurrentStoreConfig']
-          const meta = metaDefault.default(store, storeConfig)
+          const storeConfig: StoreView = rootGetters['icmaaConfig/getCurrentStoreConfig']
+          const meta = metaDefault.default(storeConfig)
           commit('ICMAA_META_SET_DATA', meta)
         })
         .catch(err => {

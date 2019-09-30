@@ -1,7 +1,7 @@
 import { storeViews, icmaa_meta } from 'config'
 
 import { removeStoreCodeFromRoute } from '@vue-storefront/core/lib/multistore'
-import { StoreView } from '@vue-storefront/core/lib/types'
+import { StoreView } from 'icmaa-config/types/ConfigState'
 import { router } from '@vue-storefront/core/app'
 
 export interface HreflangInterface {

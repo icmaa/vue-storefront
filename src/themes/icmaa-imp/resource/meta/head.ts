@@ -1,12 +1,9 @@
 import Hreflang from 'icmaa-meta/helper/head/hreflang'
-import { StoreView } from '@vue-storefront/core/lib/types'
-import { ConfigStateStore } from 'icmaa-config/types/ConfigState'
+import { StoreView } from 'icmaa-config/types/ConfigState'
 
-const defaults: any = (store: StoreView, storeConfig: ConfigStateStore) => {
-  const storeCode = store.storeCode
+const defaults: any = (store: StoreView) => {
+  const { storeCode, meta, facebook } = store
   const storeLang = store.i18n.defaultLanguage.toLowerCase()
-
-  const { meta, facebook } = storeConfig
 
   const hreflang = new Hreflang(store)
 

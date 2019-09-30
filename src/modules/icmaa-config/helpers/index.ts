@@ -1,9 +1,9 @@
-import { ConfigStateStore } from '../types/ConfigState'
+import { StoreView } from '../types/ConfigState'
 import merge from 'lodash-es/merge'
 
-export function getExtendedStoreviewConfig (storeView: ConfigStateStore, configStateMap: ConfigStateStore[]): ConfigStateStore {
+export function getExtendedStoreviewConfig (storeView: StoreView, configStateMap: StoreView[]): StoreView {
   if (storeView.extend) {
-    const parent: ConfigStateStore = configStateMap.find(s => s.storeCode === storeView.extend)
+    const parent: StoreView = configStateMap.find(s => s.storeCode === storeView.extend)
     if (parent) {
       storeView = merge(
         {},

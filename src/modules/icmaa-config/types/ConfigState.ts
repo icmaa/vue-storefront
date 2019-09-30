@@ -1,9 +1,9 @@
-export interface ConfigStateStore {
-  storeCode: string,
-  extend?: string,
+import { StoreView } from '@vue-storefront/core/lib/types'
+
+export interface StoreView {
   [key: string]: any
 }
 
 export default interface ConfigState {
-  map: ConfigStateStore[]
+  map: StoreView[]
 }
