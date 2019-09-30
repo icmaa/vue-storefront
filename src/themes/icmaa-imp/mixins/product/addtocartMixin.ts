@@ -8,15 +8,18 @@ export default {
       return this.$store
         .dispatch('stock/check', {
           product: this.product,
-          qty: this.product.qte
+          qty: this.product.qty
         })
         .then(res => {
-          this.quantity = res.qty
+          this.quantity = res.qty || 0
         })
     },
     async addToCart (product) {
       try {
         const diffLog = await this.$store.dispatch('cart/addItem', { productToAdd: product })
+
+        this.$store.dispatch('ui/closeAll')
+
         diffLog.clientNotifications.forEach(notificationData => {
           this.notifyUser(notificationData)
         })

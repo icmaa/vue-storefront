@@ -4,7 +4,7 @@
       <div class="t--mx-4 lg:t-px-4 t-flex t-flex-wrap">
         <breadcrumbs class="breadcrumbs t-w-full t-my-8 t-hidden lg:t-block" :routes="breadcrumbs" :active-route="product.name" />
         <product-gallery
-          class="product-gallery t-w-full t-py-px lg:t-w-1/2 lg:t-py-0"
+          class="product-gallery t-w-full t-border-base-lightest t-border-b t-bg-white lg:t-w-1/2 lg:t-border-b-0"
           :offline="offlineImage"
           :gallery="gallery"
           :configuration="configuration"
@@ -48,11 +48,11 @@
                   <div class="error" v-if="product.errors && Object.keys(product.errors).length > 0">
                     {{ product.errors | formatProductMessages }}
                   </div>
-                  <button-component type="select" icon="arrow_forward" class="t-w-full" :disabled="loading" @click.native="openAddtocart">
+                  <button-component type="select" icon="arrow_forward" class="t-w-full" :disabled="isAddToCartDisabled" @click.native="openAddtocart">
                     {{ productOptionsLabel }}
                   </button-component>
                 </div>
-                <button-component type="primary" class="t-flex-grow lg:t-w-2/6 disabled:t-opacity-75 t-relative" :disabled="loading" @click.native="addToCartButtonClick">
+                <button-component type="primary" class="t-flex-grow lg:t-w-2/6 disabled:t-opacity-75 t-relative" :disabled="isAddToCartDisabled" @click.native="addToCartButtonClick">
                   {{ $t('Add to cart') }}
                   <loader-background v-if="loading && isSingleOptionProduct" class="t-bottom-0" height="t-h-1" bar="t-bg-base-lightest t-opacity-25" />
                 </button-component>
@@ -90,20 +90,19 @@
             </details-tabs>
           </lazy-hydrate>
         </div>
-        <div class="reviews t-w-full t-p-8 t-bg-base-lighter lg:t-w-1/2">
+        <div class="reviews t-relative t-w-full t-p-8 t-bg-base-lighter lg:t-w-1/2" id="reviews">
           <lazy-hydrate when-idle>
-            <reviews :product-id="originalProduct.id" v-show="isOnline" />
+            <reviews :product="originalProduct" :product-name="translatedProductName" v-show="isOnline" />
+          </lazy-hydrate>
+          <lazy-hydrate when-idle>
+            <reviews-claim />
           </lazy-hydrate>
         </div>
       </div>
     </div>
 
-    <lazy-hydrate when-idle>
-      <related-products type="upsell" :heading="$t('We found other products you might like')" />
-    </lazy-hydrate>
-    <lazy-hydrate when-idle>
-      <related-products type="related" />
-    </lazy-hydrate>
+    <div class="spacer t-h-8" />
+
     <async-sidebar
       :async-component="AddToCartSidebar"
       :is-open="isAddToCartSidebarOpen"
@@ -114,39 +113,44 @@
 
 <script>
 import { mapGetters, mapState, mapActions } from 'vuex'
-import { minValue } from 'vuelidate/lib/validators'
 import i18n from '@vue-storefront/i18n'
 import config from 'config'
-import { ProductOption } from '@vue-storefront/core/modules/catalog/components/ProductOption'
+
+import { minValue } from 'vuelidate/lib/validators'
+import { registerModule, isModuleRegistered } from '@vue-storefront/core/lib/modules'
 import { onlineHelper } from '@vue-storefront/core/helpers'
-import IcmaaProduct from 'icmaa-catalog/components/Product'
-import VueOfflineMixin from 'vue-offline/mixin'
-import RelatedProducts from 'theme/components/core/blocks/Product/Related'
-import Reviews from 'theme/components/core/blocks/Reviews/Reviews'
-import Breadcrumbs from 'theme/components/core/Breadcrumbs'
-import ProductGallery from 'theme/components/core/ProductGallery'
+import { catalogHooksExecutors } from '@vue-storefront/core/modules/catalog-next/hooks'
+import { currentStoreView } from '@vue-storefront/core/lib/multistore'
 import focusClean from 'theme/components/theme/directives/focusClean'
-import WebShare from 'theme/components/theme/WebShare'
-import AddToWishlist from 'theme/components/core/blocks/Wishlist/AddToWishlist'
-import LazyHydrate from 'vue-lazy-hydration'
-import AsyncSidebar from 'theme/components/theme/blocks/AsyncSidebar/AsyncSidebar'
+
 import { ReviewModule } from '@vue-storefront/core/modules/review'
 import { IcmaaExtendedReviewModule } from 'icmaa-review'
 import { RecentlyViewedModule } from '@vue-storefront/core/modules/recently-viewed'
-import { registerModule, isModuleRegistered } from '@vue-storefront/core/lib/modules'
-import ProductMetaMixin from 'icmaa-meta/mixins/productMeta'
-import ProductOptionsMixin from 'theme/mixins/product/optionsMixin'
-import ProductAddToCartMixin from 'theme/mixins/product/addtocartMixin'
-import FeaturesMixin from 'theme/mixins/product/featuresMixin'
+import Reviews from 'theme/components/core/blocks/Reviews/Reviews'
 
+import AsyncSidebar from 'theme/components/theme/blocks/AsyncSidebar/AsyncSidebar'
+import IcmaaProduct from 'icmaa-catalog/components/Product'
+import Breadcrumbs from 'theme/components/core/Breadcrumbs'
+import ProductGallery from 'theme/components/core/ProductGallery'
+import WebShare from 'theme/components/theme/WebShare'
 import ButtonComponent from 'theme/components/core/blocks/Button'
+import AddToWishlist from 'theme/components/core/blocks/Wishlist/AddToWishlist'
 import DepartmentLogo from 'theme/components/core/blocks/ICMAA/CategoryExtras/DepartmentLogo'
 import DetailsTabs from 'theme/components/core/blocks/Product/Tabs'
 import ProductDetails from 'theme/components/core/blocks/Product/ProductDetails'
 import ProductFeatures from 'theme/components/core/blocks/Product/ProductFeatures'
 import ProductCareInstructions from 'theme/components/core/blocks/Product/ProductCareInstructions'
 import ReviewsShort from 'theme/components/core/blocks/Reviews/ReviewsShort'
+import ReviewsClaim from 'theme/components/core/blocks/Reviews/ReviewsClaim'
 import LoaderBackground from 'theme/components/core/LoaderBackground'
+import LazyHydrate from 'vue-lazy-hydration'
+
+import { ProductOption } from '@vue-storefront/core/modules/catalog/components/ProductOption'
+import VueOfflineMixin from 'vue-offline/mixin'
+import ProductMetaMixin from 'icmaa-meta/mixins/productMeta'
+import ProductOptionsMixin from 'theme/mixins/product/optionsMixin'
+import ProductAddToCartMixin from 'theme/mixins/product/addtocartMixin'
+import FeaturesMixin from 'theme/mixins/product/featuresMixin'
 
 const AddToCartSidebar = () => import(/* webpackPreload: true */ /* webpackChunkName: "vsf-addtocart-sidebar" */ 'theme/components/core/blocks/AddToCartSidebar/AddToCartSidebar')
 
@@ -159,13 +163,13 @@ export default {
     LoaderBackground,
     DepartmentLogo,
     ProductGallery,
-    RelatedProducts,
     DetailsTabs,
     ProductDetails,
     ProductFeatures,
     ProductCareInstructions,
     Reviews,
     ReviewsShort,
+    ReviewsClaim,
     WebShare,
     LazyHydrate
   },
@@ -210,6 +214,9 @@ export default {
       return {
         availability: this.product.stock.is_in_stock ? 'InStock' : 'OutOfStock'
       }
+    },
+    isAddToCartDisabled () {
+      return this.$v.$invalid || this.loading || !this.quantity
     },
     isSingleOptionProduct () {
       return this.product.type_id === 'simple' || this.isOnesizeProduct
@@ -286,6 +293,7 @@ export default {
   async asyncData ({ store, route }) {
     const product = await store.dispatch('product/loadProduct', { parentSku: route.params.parentSku, childSku: route && route.params && route.params.childSku ? route.params.childSku : null })
     await store.dispatch('product/loadProductBreadcrumbs', { product })
+    catalogHooksExecutors.productPageVisited(product)
   }
 }
 </script>

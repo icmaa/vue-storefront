@@ -10,9 +10,7 @@
         </h2>
       </header>
     </div>
-    <div class="row center-xs">
-      <product-listing columns="4" :products="getCurrentRelatedProducts" />
-    </div>
+    <product-listing columns="4" :products="getCurrentRelatedProducts" />
   </section>
 </template>
 
@@ -73,7 +71,7 @@ export default {
 
       const response = await this.$store.dispatch('product/list', {
         query: relatedProductsQuery,
-        size: 8,
+        size: 3,
         prefetchGroupProducts: false,
         updateState: false
       })

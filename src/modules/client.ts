@@ -16,12 +16,14 @@ import { PaymentBackendMethodsModule } from './payment-backend-methods'
 import { PaymentCashOnDeliveryModule } from './payment-cash-on-delivery'
 import { NewsletterModule } from '@vue-storefront/core/modules/newsletter'
 // ICMAA Modules
+import { IcmaaExtendedConfigModule } from 'icmaa-config'
 import { IcmaaExtendedUrlModule } from 'icmaa-url'
 import { IcmaaExtendedCatalogModule } from 'icmaa-catalog'
 import { IcmaaCategoryModule } from 'icmaa-category'
 import { IcmaaCmsModule } from 'icmaa-cms'
 import { IcmaaMetaModule } from 'icmaa-meta'
-import { IcmaSpotifyModule } from 'icmaa-spotify'
+import { IcmaaSpotifyModule } from 'icmaa-spotify'
+import { IcmaaExternalCheckout } from 'icmaa-external-checkout'
 
 import { registerModule } from '@vue-storefront/core/lib/modules'
 
@@ -44,12 +46,14 @@ export function registerClientModules () {
   registerModule(CmsModule)
   registerModule(NewsletterModule)
   // ICMAA Modules
+  registerModule(IcmaaExtendedConfigModule)
   registerModule(IcmaaExtendedUrlModule)
   registerModule(IcmaaExtendedCatalogModule)
   registerModule(IcmaaCmsModule)
   registerModule(IcmaaCategoryModule)
   registerModule(IcmaaMetaModule)
-  registerModule(IcmaSpotifyModule)
+  registerModule(IcmaaSpotifyModule)
+  registerModule(IcmaaExternalCheckout)
 }
 
 // Deprecated API, will be removed in 2.0
