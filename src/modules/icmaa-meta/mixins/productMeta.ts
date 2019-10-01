@@ -1,7 +1,9 @@
 import { mapGetters } from 'vuex'
 import { htmlDecode } from '@vue-storefront/core/filters'
-import { price } from '@vue-storefront/core/filters/price'
 import { getThumbnailPath } from '@vue-storefront/core/helpers'
+import { currentStoreView } from '@vue-storefront/core/lib/multistore'
+
+const store = currentStoreView()
 
 export default {
   computed: {
@@ -14,7 +16,10 @@ export default {
       return this.storeConfig ? this.storeConfig.i18n.currencyCode : ''
     },
     productPrice () {
-      return this.storeConfig ? price(this.product.price) : this.product.price
+      return this.product.original_price_incl_tax || this.productFinalPrice
+    },
+    productFinalPrice () {
+      return this.product.price_incl_tax
     },
     productBandOrBrand () {
       return this.product.brand ? this.product.brand : this.product.band
@@ -41,12 +46,9 @@ export default {
   },
   metaInfo () {
     /**
-     * @todo Those two aren't working because the storeView state isn't available ?!?
-     * @see https://vue-meta.nuxtjs.org/guide/caveats.html#reactive-variables-in-template-functions
-     * @see https://github.com/nuxt/vue-meta/issues/322
+     * @todo We can't load the current store-view from state management yet, the value is always empty in metaInfo().
+     * I opened an issue here: @see https://github.com/DivanteLtd/vue-storefront/issues/3674
      */
-    const currencyCode = this.currencyCode
-    const productPrice = this.productPrice
 
     return {
       title: this.translatedProductName,
@@ -55,12 +57,12 @@ export default {
         { vmid: 'og:title', property: 'og:title', content: htmlDecode(this.translatedProductName) },
         { vmid: 'og:type', property: 'og:type', content: 'product' },
         { name: 'product.name', content: htmlDecode(this.translatedProductName) },
-        { name: 'product.final_price', content: this.productPrice },
+        { name: 'product.final_price', content: this.productFinalPrice },
         { name: 'product.price', content: this.productPrice },
         { name: 'product:condition', content: 'new' },
         { name: 'product:availability', content: this.product.stock.is_in_stock }, // TODO mapping values - available for order, in stock, out fo stock, preorder
-        { name: 'product:price:currency', content: currencyCode },
-        { name: 'product:price:amount', content: productPrice },
+        { name: 'product:price:currency', content: store.i18n.currencyCode },
+        { name: 'product:price:amount', content: this.productFinalPrice },
         { name: 'product:brand', content: this.getOptionLabel({ attributeKey: this.productBandOrBrandCode, optionId: this.productBandOrBrand }) },
         ...this.productFbImages
       ]
