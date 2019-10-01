@@ -4,10 +4,12 @@ import { price } from '@vue-storefront/core/filters/price'
 import { getThumbnailPath } from '@vue-storefront/core/helpers'
 
 export default {
-  ...mapGetters({
-    getOptionLabel: 'attribute/getOptionLabel'
-  }),
   computed: {
+    ...mapGetters({
+      getOptionLabel: 'attribute/getOptionLabel',
+      storeConfig: 'icmaaConfig/getCurrentStoreConfig',
+      store: 'icmaaConfig/getCurrentStore'
+    }),
     currencyCode () {
       return this.storeConfig ? this.storeConfig.i18n.currencyCode : ''
     },
@@ -38,6 +40,14 @@ export default {
     }
   },
   metaInfo () {
+    /**
+     * @todo Those two aren't working because the storeView state isn't available ?!?
+     * @see https://vue-meta.nuxtjs.org/guide/caveats.html#reactive-variables-in-template-functions
+     * @see https://github.com/nuxt/vue-meta/issues/322
+     */
+    const currencyCode = this.currencyCode
+    const productPrice = this.productPrice
+
     return {
       title: this.translatedProductName,
       meta: [
@@ -49,8 +59,8 @@ export default {
         { name: 'product.price', content: this.productPrice },
         { name: 'product:condition', content: 'new' },
         { name: 'product:availability', content: this.product.stock.is_in_stock }, // TODO mapping values - available for order, in stock, out fo stock, preorder
-        { name: 'product:price:currency', content: this.currencyCode },
-        { name: 'product:price:amount', content: this.productPrice },
+        { name: 'product:price:currency', content: currencyCode },
+        { name: 'product:price:amount', content: productPrice },
         { name: 'product:brand', content: this.getOptionLabel({ attributeKey: this.productBandOrBrandCode, optionId: this.productBandOrBrand }) },
         ...this.productFbImages
       ]
