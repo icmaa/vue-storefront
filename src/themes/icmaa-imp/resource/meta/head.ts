@@ -22,7 +22,6 @@ const defaults: any = (store: StoreView) => {
       { vmid: 'description', name: 'description', content: meta.description.default },
       { vmid: 'keywords', name: 'keywords', content: meta.keywords.default },
       { name: 'viewport', content: 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' },
-      { generator: 'generator', content: 'Vue Storefront' },
       { name: 'robots', content: 'index, follow' },
       { name: 'mobile-web-app-capable', content: 'yes' },
       { name: 'theme-color', content: '#ffffff' },

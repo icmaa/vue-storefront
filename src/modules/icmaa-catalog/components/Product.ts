@@ -25,6 +25,7 @@ export default {
   },
   computed: {
     ...mapGetters('attribute', { getOptionLabel: 'getOptionLabel' }),
+    ...mapGetters('icmaaConfig', { storeConfig: 'getCurrentStoreConfig' }),
     ...mapGetters('icmaaCmsCategoryExtras', ['getCurrentProductDepartmentCategory', 'getCategoryExtrasByUrlKey']),
     ...mapGetters({ reviews: 'review/getReviews', reviewsCount: 'review/getReviewsCount', reviewsTotalRating: 'review/getReviewsTotalRating' }),
     departmentCategory () {

@@ -1,21 +1,18 @@
 import { mapGetters } from 'vuex'
 import { htmlDecode } from '@vue-storefront/core/filters'
-import { currentStoreView } from '@vue-storefront/core/lib/multistore'
+import { price } from '@vue-storefront/core/filters/price'
 import { getThumbnailPath } from '@vue-storefront/core/helpers'
-
-const storeView = currentStoreView()
-const currencyCode = storeView.i18n.currencyCode
 
 export default {
   ...mapGetters({
     getOptionLabel: 'attribute/getOptionLabel'
   }),
   computed: {
-    productName () {
-      return this.product ? this.product.name : ''
+    currencyCode () {
+      return this.storeConfig ? this.storeConfig.i18n.currencyCode : ''
     },
     productPrice () {
-      return this.product ? this.product.price : ''
+      return this.storeConfig ? price(this.product.price) : this.product.price
     },
     productBandOrBrand () {
       return this.product.brand ? this.product.brand : this.product.band
@@ -42,19 +39,19 @@ export default {
   },
   metaInfo () {
     return {
-      title: 'Placeholder - productpage', // TODO
+      title: this.translatedProductName,
       meta: [
-        { vmid: 'description', name: 'description', content: 'Placeholder - productpageDescrition' }, // TODO
-        { vmid: 'og:title', property: 'og:title', content: htmlDecode(this.productName) },
+        { vmid: 'description', name: 'description', content: htmlDecode(this.product.description) },
+        { vmid: 'og:title', property: 'og:title', content: htmlDecode(this.translatedProductName) },
         { vmid: 'og:type', property: 'og:type', content: 'product' },
+        { name: 'product.name', content: htmlDecode(this.translatedProductName) },
         { name: 'product.final_price', content: this.productPrice },
         { name: 'product.price', content: this.productPrice },
-        { name: 'product.name', content: htmlDecode(this.productName) },
         { name: 'product:condition', content: 'new' },
         { name: 'product:availability', content: this.product.stock.is_in_stock }, // TODO mapping values - available for order, in stock, out fo stock, preorder
-        { name: 'product:price:currency', content: currencyCode },
+        { name: 'product:price:currency', content: this.currencyCode },
         { name: 'product:price:amount', content: this.productPrice },
-        { name: 'product:brand', content: this.getOptionLabel(this.productBandOrBrandCode, this.productBandOrBrand) },
+        { name: 'product:brand', content: this.getOptionLabel({ attributeKey: this.productBandOrBrandCode, optionId: this.productBandOrBrand }) },
         ...this.productFbImages
       ]
     }
