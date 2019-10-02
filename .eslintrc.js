@@ -20,7 +20,7 @@ module.exports = {
     '@typescript-eslint/indent': ['error', 2],
     '@typescript-eslint/camelcase': 0,
     'semi': 'off',
-    '@typescript-eslint/semi': ['error', 'never'],
+    '@typescript-eslint/semi': 0,
     '@typescript-eslint/member-delimiter-style': ['error', { 'multiline': { 'delimiter': 'comma', 'requireLast': false }, 'singleline': { 'delimiter': 'comma' } }],
     '@typescript-eslint/no-empty-interface': 1,
     '@typescript-eslint/no-use-before-define': 1,
