@@ -95,7 +95,7 @@ import rootStore from '@vue-storefront/core/store'
 import { catalogHooksExecutors } from '@vue-storefront/core/modules/catalog-next/hooks'
 
 import CategoryExtrasHeader from 'theme/components/core/blocks/ICMAA/CategoryExtras/Header.vue'
-import CategoryExtrasMixin from 'icmaa-cms/mixins/categoryExtras'
+import CategoryExtrasMixin from 'icmaa-category-extras/mixins/categoryExtras'
 import CategoryMetaMixin from 'icmaa-meta/mixins/categoryMeta'
 
 const composeInitialPageState = async (store, route, forceLoad = false) => {
@@ -308,9 +308,4 @@ export default {
   .close {
     margin-left: auto;
   }
-</style>
-<style lang="scss">
-.product-image {
-  max-height: unset !important;
-}
 </style>
