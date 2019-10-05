@@ -6,9 +6,11 @@ Load and show category-extras from cms
 
 * Add options to `config/local.json`:
   ```
-  "icmaa_categoryextras": {
-    "logoFilePath": "impericon/department-logos"
-    "parentDepartmentCategoryIds": [ 14, 16 ]
+  "icmaa_cms": {
+    "categoryExtras": {
+      "logoFilePath": "impericon/department-logos"
+      "parentDepartmentCategoryIds": [ 14, 16 ]
+    }
   }
   ```
   
