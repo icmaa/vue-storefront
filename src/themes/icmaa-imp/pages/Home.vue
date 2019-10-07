@@ -22,6 +22,9 @@ export default {
   mounted () {
     if (!this.isLoggedIn && localStorage.getItem('redirect')) this.$bus.$emit('modal-show', 'modal-signup')
   },
+  asyncData ({ store, route }) {
+    return store.dispatch('icmaaTeaser/list', { tag: ['140'], cluster: ['4350'] })
+  },
   watch: {
     isLoggedIn () {
       const redirectObj = localStorage.getItem('redirect')
