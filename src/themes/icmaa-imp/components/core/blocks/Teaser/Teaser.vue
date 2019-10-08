@@ -44,7 +44,7 @@ export default {
       teaserSmall: [
         {
           text_1: 'Neues Merchandise',
-          text_2: 'T-Shirts, Hoodies, Shorts uvm. noch viel mehr Sachen*',
+          text_2: 'T-Shirts, Hoodies, Shorts uvm.',
           text_3: '*Test Disclaimer mit längerem Text.',
           button_text: 'JETZT SHOPPEN',
           text_color: '#000',
@@ -74,14 +74,4 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.text-26 {
-  font-size: 26px;
-}
-.text-14 {
-  font-size: 14px;
-}
-
-.text-12 {
-  font-size: 12px;
-}
 </style>

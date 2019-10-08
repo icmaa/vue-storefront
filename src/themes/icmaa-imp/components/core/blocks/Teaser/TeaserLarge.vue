@@ -1,5 +1,5 @@
 <template>
-  <div id="teaser-large" class="t-w-full t-mb-5">
+  <div id="teaser-large" class="md:t-mx-4 t-mb-5">
     <a :href="teaser.image_link" class="">
       <div class="t-relative">
         <picture>
@@ -19,7 +19,7 @@
         </picture>
 
         <div
-          class="t-flex t-justify-center t-absolute t-bottom-0 t-inset-x-0 t-mb-6 t-text-sm text-12"
+          class="t-flex t-justify-center t-absolute t-bottom-0 t-inset-x-0 t-mb-6 t-text-sm t-text-small"
           :style="{ color: teaser.text_color }"
         >
           {{ teaser.text_1 }}
@@ -47,7 +47,4 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.text-12 {
-  font-size: 12px;
-}
 </style>
