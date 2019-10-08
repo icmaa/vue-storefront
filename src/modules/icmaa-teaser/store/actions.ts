@@ -6,8 +6,7 @@ import * as types from './mutation-types'
 import TeaserState, { TeaserStateItem } from '../types/TeaserState'
 import RootState from '@vue-storefront/core/types/RootState'
 
-import { currentStoreView } from '@vue-storefront/core/lib/multistore'
-import dayjs from 'dayjs'
+import { getCurrentStoreviewDatetime } from '../helper/date'
 
 const documentType = 'teaser'
 const mutationTypes: MutationTypesInterface = {
@@ -16,22 +15,13 @@ const mutationTypes: MutationTypesInterface = {
   rmv: types.ICMAA_TEASER_RMV
 }
 
-interface TeaserListOptionsInterface extends ListOptionsInterface {
-  tag: string[],
-  cluster: string[]
-}
-
 const actions: ActionTree<TeaserState, RootState> = {
-  list: async (context, filter: TeaserListOptionsInterface): Promise<TeaserStateItem[]> => {
-    // const storeLocale = currentStoreView().i18n.defaultLocale.toLocaleLowerCase()
-    const currentDateTime = dayjs().format('YYYY-MM-DD HH:mm')
-
+  list: async (context, tags: string): Promise<TeaserStateItem[]> => {
     const options = {
       active: { 'in': true },
-      tag: { 'in_array': filter.tag.join(',') },
-      cluster: { 'in_array': filter.cluster.join(',') },
-      show_from: { 'lt-date': currentDateTime },
-      show_to: { 'gt-date': currentDateTime }
+      tag: { 'in_array': tags },
+      show_from: { 'lt-date': getCurrentStoreviewDatetime() },
+      show_to: { 'gt-date': getCurrentStoreviewDatetime() }
     }
 
     return listAbstract<TeaserStateItem>({ documentType, mutationTypes, storageKey, context, options })

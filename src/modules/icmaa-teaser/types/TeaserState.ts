@@ -1,6 +1,8 @@
 export interface TeaserStateItem {
-  identifier: string,
-  content: string
+  showFrom: string,
+  showTo: string,
+  active: boolean,
+  [key: string]: any
 }
 
 export default interface TeaserState {
