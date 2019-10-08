@@ -5,7 +5,7 @@
     :style="{ 'background-color': teaser.background_color }"
   >
     <a :href="teaser.image_link" class="t-w-full md:t-w-1/2 t-mb-8 md:t-mb-0">
-      <img class="t-w-full" :src="teaser.image_1x1" >
+      <img class="t-w-full" :src="teaser.image_1x1">
     </a>
     <div class="t-w-2/3 md:t-w-1/2">
       <div class="t-h-full t-pl-8 t-pb-10 md:t-ml-0 md:t-pt-24 lg:t-px-8 lg:t-pt-40">
@@ -58,6 +58,3 @@ export default {
   }
 };
 </script>
-
-<style lang="scss" scoped>
-</style>
