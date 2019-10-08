@@ -5,21 +5,21 @@
         <picture>
           <source
             media="(max-width: 767px)"
-            srcset="assets/teaser/20190603_1x1_teaser_boy_hell_04.webp"
+            :srcset="teaser.image_1x1"
           >
           <source
             media="(min-width: 768px)"
-            srcset="assets/teaser/20190910_15_uebergangsjacken_desktop_de.webp"
+            :srcset="teaser.image_2x1"
           >
           <img
             class="t-w-full"
-            src="assets/teaser/20190910_15_uebergangsjacken_desktop_de.webp"
+            :src="teaser.image_1x1"
             alt=""
           >
         </picture>
 
         <div
-          class="t-flex t-justify-center t-absolute t-bottom-0 t-inset-x-0 t-mb-6 t-text-sm"
+          class="t-flex t-justify-center t-absolute t-bottom-0 t-inset-x-0 t-mb-6 t-text-sm text-12"
           :style="{ color: teaser.text_color }"
         >
           {{ teaser.text_1 }}
@@ -38,10 +38,16 @@ export default {
     MaterialIcon
   },
   props: {
-    teaser: Object
+    teaser: {
+      type: Object,
+      required: true
+    }
   }
 };
 </script>
 
 <style lang="scss" scoped>
+.text-12 {
+  font-size: 12px;
+}
 </style>
