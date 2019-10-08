@@ -1,7 +1,5 @@
-import { UserProfile as OrgUserProfile } from '@vue-storefront/core/modules/user/types/UserProfile'
+import OrgUserState from '@vue-storefront/core/modules/user/types/UserState'
 
-export default interface UserProfile extends OrgUserProfile {
-  customer: OrgUserProfile['customer'] & {
-    cluster: false
-  }
+export default interface UserState extends OrgUserState {
+  sessionData: Record<string, any>
 }
