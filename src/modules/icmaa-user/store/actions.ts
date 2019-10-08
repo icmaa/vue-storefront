@@ -1,11 +1,19 @@
 import { ActionTree } from 'vuex'
-import * as types from './mutation-types'
+import { StorageManager } from '@vue-storefront/core/lib/storage-manager'
 import RootState from '@vue-storefront/core/types/RootState'
 import UserState from '../types/UserState'
+import * as types from './mutation-types'
 
 const actions: ActionTree<UserState, RootState> = {
-  async setCluster ({ commit }, cluster) {
+  setCluster ({ commit }, cluster) {
     commit(types.USER_ADD_SESSION_DATA, { key: 'cluster', value: cluster })
+  },
+  async loadSessionData ({ commit }) {
+    const usersCollection = StorageManager.get('user')
+    const userData = await usersCollection.getItem('session-data')
+    if (userData) {
+      commit(types.USER_SET_SESSION_DATA, userData)
+    }
   }
 }
 
