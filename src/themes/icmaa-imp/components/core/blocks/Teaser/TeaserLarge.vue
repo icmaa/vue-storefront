@@ -1,11 +1,12 @@
 <template>
   <div id="teaser-large" class="md:t-mx-4 t-mb-5">
+    {{ teaser }}
     <a :href="teaser.imageLink" class="">
       <div class="t-relative">
         <picture>
           <source
             media="(max-width: 767px)"
-            :srcset="imageUrl1X1"
+            :srcset="imageUrl1x1"
           >
           <source
             media="(min-width: 768px)"
@@ -46,10 +47,10 @@ export default {
   },
   computed: {
     imageUrl1x1 () {
-      return getThumbnailPath('/' + this.teaser.imageUrl1x1, 0, 0, 'media')
+      return getThumbnailPath('/' + this.teaser['imageUrl1X1'], 0, 0, 'media')
     },
     imageUrl2x1 () {
-      return getThumbnailPath('/' + this.teaser.imageUrl2x1, 0, 0, 'media')
+      return getThumbnailPath('/' + this.teaser['imageUrl2X1'], 0, 0, 'media')
     }
   }
 };

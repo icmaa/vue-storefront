@@ -59,7 +59,7 @@ export default {
   },
   computed: {
     imageUrl1x1 () {
-      return getThumbnailPath('/' + this.teaser.imageUrl1x1, 0, 0, 'media')
+      return getThumbnailPath('/' + this.teaser['imageUrl1X1'], 0, 0, 'media')
     }
   }
 };
