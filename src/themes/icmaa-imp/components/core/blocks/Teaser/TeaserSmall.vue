@@ -1,40 +1,21 @@
 <template>
-  <div
-    id="teaser-small"
-    class="t-flex t-flex-col md:t-flex-row t-mb-5 t-mx-4"
-    :style="{ 'background-color': teaser.backgroundColor }"
-  >
-    <retina-image :image="imageUrl" class="t-w-full md:t-w-1/2 t-mb-8 md:t-mb-0" />
-    <div class="t-w-full md:t-w-1/2">
-      <div class="t-h-full t-pl-8 t-pb-10 md:t-ml-0 md:t-pt-24 lg:t-px-8 lg:t-pt-40">
-        <h1
-          class="t-w-full t-leading-tight t-font-bold t-text-2.5xl t-mb-5"
-          :style="{ color: teaser.textColor }"
-        >
+  <div id="teaser-small" class="t-flex t-flex-col md:t-flex-row t-mb-5 t-mx-4" :style="{ 'background-color': teaser.backgroundColor }">
+    <retina-image :image="imageUrl" class="t-w-full md:t-w-1/2" />
+    <div class="t-w-full md:t-w-1/2 t-flex t-items-center">
+      <div class="t-p-8">
+        <h1 class="t-w-full t-leading-tight t-font-bold t-text-2.5xl t-mb-5" :style="{ color: teaser.textColor }">
           {{ teaser.text1 }}
         </h1>
-        <div
-          class="t-w-full t-text-sm t-mb-10"
-          :style="{ color: teaser.textColor }"
-        >
+        <div class="t-w-full t-text-sm t-mb-10" :style="{ color: teaser.textColor }">
           {{ teaser.text2 }}
         </div>
-        <div class="lg:t-mb-24">
-          <button-component
-            class="t-text-xs t-uppercase t-truncate"
-            :type="'ghost-custom'"
-            :custom-color="teaser.textColor"
-          >
+        <div class="t-w-full">
+          <button-component class="t-text-xs t-uppercase t-truncate" :type="'ghost-custom'" :custom-color="teaser.textColor">
             {{ teaser.buttonText }}
           </button-component>
         </div>
-
-        <div
-          v-if="teaser.text3"
-          class="t-hidden lg:t-block t-text-sm t-w-full"
-          :style="{ color: teaser.textColor }"
-        >
-          {{ teaser.text3 }}
+        <div v-if="teaser.text3" class="t-w-full t-hidden lg:t-block t-text-sm t-mt-24" :style="{ color: teaser.textColor }">
+          * {{ teaser.text3 }}
         </div>
       </div>
     </div>
