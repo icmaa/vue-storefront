@@ -1,28 +1,28 @@
 <template>
   <div id="teaser-large" class="md:t-mx-4 t-mb-5">
-    <a :href="teaser.image_link" class="">
+    <a :href="teaser.imageLink" class="">
       <div class="t-relative">
         <picture>
           <source
             media="(max-width: 767px)"
-            :srcset="teaser.image_1x1"
+            :srcset="imageUrl1X1"
           >
           <source
             media="(min-width: 768px)"
-            :srcset="teaser.image_2x1"
+            :srcset="imageUrl2x1"
           >
           <img
             class="t-w-full"
-            :src="teaser.image_1x1"
+            :src="imageUrl1x1"
             alt=""
           >
         </picture>
 
         <div
           class="t-flex t-justify-center t-absolute t-bottom-0 t-inset-x-0 t-mb-6 t-text-sm t-text-small"
-          :style="{ color: teaser.text_color }"
+          :style="{ color: teaser.textColor }"
         >
-          {{ teaser.text_1 }}
+          {{ teaser.text1 }}
           <material-icon icon="arrow_forward" class="t-ml-3" />
         </div>
       </div>
@@ -31,7 +31,8 @@
 </template>
 
 <script>
-import MaterialIcon from 'theme/components/core/blocks/MaterialIcon';
+import { getThumbnailPath } from '@vue-storefront/core/helpers'
+import MaterialIcon from 'theme/components/core/blocks/MaterialIcon'
 
 export default {
   components: {
@@ -41,6 +42,14 @@ export default {
     teaser: {
       type: Object,
       required: true
+    }
+  },
+  computed: {
+    imageUrl1x1 () {
+      return getThumbnailPath('/' + this.teaser.imageUrl1x1, 0, 0, 'media')
+    },
+    imageUrl2x1 () {
+      return getThumbnailPath('/' + this.teaser.imageUrl2x1, 0, 0, 'media')
     }
   }
 };

@@ -4,22 +4,22 @@
       <TeaserLarge
         v-for="(teaser, index) in teaserLarge"
         :teaser="teaser"
-        :key="index"
+        :key="'large_' + index"
       />
     </template>
     <TeaserSmall
       v-for="(teaser, index) in teaserSmall"
       :teaser="teaser"
-      :key="index"
+      :key="'small_' + index"
     />
   </div>
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
+
 import TeaserLarge from 'theme/components/core/blocks/Teaser/TeaserLarge';
 import TeaserSmall from 'theme/components/core/blocks/Teaser/TeaserSmall';
-
-import { mapGetters } from 'vuex';
 
 export default {
   props: {
@@ -41,15 +41,7 @@ export default {
     TeaserSmall
   },
   computed: {
-    ...mapGetters('icmaaTeaser', ['getFilteredTeaser']),
-    teaserLarge () {
-      console.log(this.getFilteredTeaser({ size: 'large' }))
-      return []
-    },
-    teaserSmall () {
-      console.log(this.getFilteredTeaser({ size: 'small' }))
-      return []
-    }
+    ...mapGetters('icmaaTeaser', { teaserSmall: 'getSmallTeaser', teaserLarge: 'getLargeTeaser' })
   },
   mounted () {
     this.$store.dispatch('icmaaTeaser/list', this.tags)
