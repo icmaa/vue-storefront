@@ -1,10 +1,13 @@
 import { GetterTree } from 'vuex'
 import TeaserState, { TeaserStateItem } from '../types/TeaserState'
 import RootState from '@vue-storefront/core/types/RootState'
+
 import { isDatetimeInBetween } from '../helper/date'
+
 import forEach from 'lodash-es/forEach'
 import isArray from 'lodash-es/isArray'
 import intersection from 'lodash-es/intersection'
+import orderBy from 'lodash-es/orderBy'
 
 const getters: GetterTree<TeaserState, RootState> = {
   getTeaser: (state): TeaserStateItem[] => state.items,
@@ -36,11 +39,15 @@ const getters: GetterTree<TeaserState, RootState> = {
     //   items = items.filter(i => i.cluster.includes(cluster))
     // }
 
-    /** @todo Add sort */
-
     items = items
       .filter(i => isDatetimeInBetween(i.showFrom, i.showTo))
       .filter(i => i.active)
+
+    /**
+     * Order result array
+     * @see https://vuejs.org/v2/guide/migration.html#Replacing-the-orderBy-Filter
+     * */
+    items = orderBy(items, ['order'], ['desc'])
 
     return items
   }
