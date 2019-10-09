@@ -50,6 +50,7 @@ import ButtonOutline from 'theme/components/theme/ButtonOutline'
 
 export default {
   components: {
+    RetinaImage,
     ButtonOutline
   },
   props: {
