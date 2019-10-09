@@ -5,7 +5,7 @@
     :style="{ 'background-color': teaser.backgroundColor }"
   >
     <a :href="teaser.imageLink" class="t-w-full md:t-w-1/2 t-mb-8 md:t-mb-0">
-      <img class="t-w-full" :src="imageUrl1x1">
+      <retina-image :image="imageUrl" class="t-w-full" />
     </a>
     <div class="t-w-2/3 md:t-w-1/2">
       <div class="t-h-full t-pl-8 t-pb-10 md:t-ml-0 md:t-pt-24 lg:t-px-8 lg:t-pt-40">
@@ -45,6 +45,7 @@
 
 <script>
 import { getThumbnailPath } from '@vue-storefront/core/helpers'
+import RetinaImage from 'theme/components/core/blocks/RetinaImage'
 import ButtonOutline from 'theme/components/theme/ButtonOutline'
 
 export default {
@@ -58,8 +59,8 @@ export default {
     }
   },
   computed: {
-    imageUrl1x1 () {
-      return getThumbnailPath('/' + this.teaser['imageUrl1X1'], 0, 0, 'media')
+    imageUrl () {
+      return getThumbnailPath('/' + this.teaser['imageUrl'], 0, 0, 'media')
     }
   }
 };
