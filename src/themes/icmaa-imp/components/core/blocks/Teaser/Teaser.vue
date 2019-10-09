@@ -1,17 +1,15 @@
 <template>
   <div id="teaser">
-    <template v-if="showLarge">
-      <TeaserLarge
-        v-for="(teaser, index) in teaserLarge"
+    <template v-if="showLarge && teaserLarge">
+      <teaser-large :teaser="teaserLarge" />
+    </template>
+    <template v-if="teaserSmall && teaserSmall.length > 0">
+      <teaser-small
+        v-for="(teaser, index) in teaserSmall"
         :teaser="teaser"
-        :key="'large_' + index"
+        :key="'small_' + index"
       />
     </template>
-    <TeaserSmall
-      v-for="(teaser, index) in teaserSmall"
-      :teaser="teaser"
-      :key="'small_' + index"
-    />
   </div>
 </template>
 
@@ -41,10 +39,17 @@ export default {
     TeaserSmall
   },
   computed: {
-    ...mapGetters('icmaaTeaser', { teaserSmall: 'getSmallTeaser', teaserLarge: 'getLargeTeaser' })
+    ...mapGetters('icmaaTeaser', ['getSmallTeaser', 'getLargeTeaser']),
+    teaserLarge () {
+      return this.getLargeTeaser[0]
+    },
+    teaserSmall () {
+      const teaser = this.getSmallTeaser
+      return teaser.slice(0, this.limit - 1)
+    }
   },
   mounted () {
     this.$store.dispatch('icmaaTeaser/list', this.tags)
   }
-};
+}
 </script>
