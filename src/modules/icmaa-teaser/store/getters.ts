@@ -6,7 +6,9 @@ import forEach from 'lodash-es/forEach'
 import isArray from 'lodash-es/isArray'
 
 const getters: GetterTree<TeaserState, RootState> = {
-  getTeasers: (state): TeaserStateItem[] => state.items,
+  getTeaser: (state): TeaserStateItem[] => state.items,
+  getSmallTeaser: (state, getters) => getters.getFilteredTeaser({ size: 'small' }),
+  getLargeTeaser: (state, getters) => getters.getFilteredTeaser({ size: 'large' }),
   getFilteredTeaser: (state) => (filters): TeaserStateItem[] => {
     let items = state.items
     forEach(filters, (value, key) => {

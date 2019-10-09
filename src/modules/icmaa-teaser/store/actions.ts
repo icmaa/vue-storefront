@@ -24,7 +24,7 @@ const actions: ActionTree<TeaserState, RootState> = {
       show_to: { 'gt-date': getCurrentStoreviewDatetime() }
     }
 
-    return listAbstract<TeaserStateItem>({ documentType, mutationTypes, storageKey, context, options })
+    return listAbstract<TeaserStateItem>({ documentType, mutationTypes, storageKey, context, options, identifier: 'uuid' })
   }
 }
 
