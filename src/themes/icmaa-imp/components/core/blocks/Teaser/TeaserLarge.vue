@@ -16,6 +16,7 @@ import MaterialIcon from 'theme/components/core/blocks/MaterialIcon'
 import RetinaImage from 'theme/components/core/blocks/RetinaImage'
 
 export default {
+  name: 'TeaserLarge',
   components: {
     MaterialIcon,
     RetinaImage

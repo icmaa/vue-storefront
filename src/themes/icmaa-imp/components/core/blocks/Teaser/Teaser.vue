@@ -16,6 +16,7 @@ import TeaserLarge from 'theme/components/core/blocks/Teaser/TeaserLarge';
 import TeaserSmall from 'theme/components/core/blocks/Teaser/TeaserSmall';
 
 export default {
+  name: 'Teaser',
   props: {
     tags: {
       type: String,

@@ -30,6 +30,7 @@ import RetinaImage from 'theme/components/core/blocks/RetinaImage'
 import ButtonComponent from 'theme/components/core/blocks/Button'
 
 export default {
+  name: 'TeaserSmall',
   components: {
     RetinaImage,
     ButtonComponent
