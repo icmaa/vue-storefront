@@ -1,6 +1,5 @@
 <template>
   <div id="teaser-large" class="md:t-mx-4 t-mb-5">
-    {{ teaser }}
     <a :href="teaser.imageLink" class="">
       <div class="t-relative">
         <picture>
