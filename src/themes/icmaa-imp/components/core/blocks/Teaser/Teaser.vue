@@ -41,10 +41,10 @@ export default {
   computed: {
     ...mapGetters('icmaaTeaser', ['getSmallTeaser', 'getLargeTeaser']),
     teaserLarge () {
-      return this.getLargeTeaser[0]
+      return this.getLargeTeaser(this.tags)[0]
     },
     teaserSmall () {
-      const teaser = this.getSmallTeaser
+      const teaser = this.getSmallTeaser(this.tags)
       return teaser.slice(0, this.limit - 1)
     }
   },
