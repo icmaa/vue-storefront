@@ -1,10 +1,10 @@
 <template>
-  <div id="teaser">
+  <div id="teaser" class="lg:t-pt-4 t-pb-4">
     <template v-if="showLarge && teaserLarge">
-      <teaser-large :teaser="teaserLarge" class="t-mb-5 lg:t-my-5" />
+      <teaser-large :teaser="teaserLarge" class="t-mb-4" />
     </template>
     <template v-if="teaserSmall && teaserSmall.length > 0">
-      <teaser-small v-for="(teaser, index) in teaserSmall" :teaser="teaser" :index="index" :key="'small_' + index" class="t-mb-5" />
+      <teaser-small v-for="(teaser, index) in teaserSmall" :teaser="teaser" :index="index" :key="'small_' + index" :class="{ 't-mb-4': index !== (teaserSmall.length - 1) }" />
     </template>
   </div>
 </template>
