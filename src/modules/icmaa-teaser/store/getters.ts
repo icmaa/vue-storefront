@@ -2,6 +2,7 @@ import { GetterTree } from 'vuex'
 import TeaserState, { TeaserStateItem } from '../types/TeaserState'
 import RootState from '@vue-storefront/core/types/RootState'
 
+import config from 'config'
 import { isDatetimeInBetween } from '../helper/date'
 
 import forEach from 'lodash-es/forEach'
@@ -33,11 +34,18 @@ const getters: GetterTree<TeaserState, RootState> = {
       }
     })
 
-    /** @todo Add cluster filter */
-    // const cluster = rootGetters['user/getCluster']
-    // if (rootGetters['user/getCluster']) {
-    //   items = items.filter(i => i.cluster.includes(cluster))
-    // }
+    const cluster = rootGetters['user/getCluster']
+    items = items.filter(i => {
+      if (i.cluster.length === 0) {
+        return true
+      }
+
+      if (!cluster && i.cluster.includes(config.icmaa_cluster.noClusterValue)) {
+        return true
+      }
+
+      return i.cluster.includes(cluster)
+    })
 
     items = items
       .filter(i => isDatetimeInBetween(i.showFrom, i.showTo))
