@@ -1,5 +1,5 @@
 <template>
-  <div id="teaser" class="lg:t-pt-4 t-pb-4">
+  <div id="teaser" class="sm:t-pt-4 t-pb-4">
     <template v-if="showLarge && teaserLarge">
       <teaser-large :teaser="teaserLarge" class="t-mb-4" />
     </template>

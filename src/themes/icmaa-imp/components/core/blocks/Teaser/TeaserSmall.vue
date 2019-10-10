@@ -1,5 +1,5 @@
 <template>
-  <div id="teaser-small" class="t-flex t-flex-col md:t-flex-row t-mx-4" :style="{ 'background-color': teaser.backgroundColor }">
+  <div id="teaser-small" class="t-flex t-flex-col md:t-flex-row t-mx-4 t-cursor-pointer t-webkit-tap-transparent" :style="{ 'background-color': teaser.backgroundColor }" @click="redirect">
     <retina-image :image="imageUrl" class="t-w-full md:t-w-1/2" v-if="showLeft" />
     <div class="t-w-full md:t-w-1/2 t-flex t-items-center">
       <div class="t-p-8">
@@ -55,6 +55,11 @@ export default {
     },
     showLeft () {
       return this.isUneven || this.viewport === 'sm' || !this.viewport
+    }
+  },
+  methods: {
+    redirect () {
+      this.$router.push(this.localizedRoute(this.teaser.link))
     }
   }
 }
