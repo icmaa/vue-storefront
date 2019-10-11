@@ -5,7 +5,7 @@
     </div>
     <retina-image :image="imageUrl" :alt="teaser.text1 | htmlDecode" class="t-flex-fix t-max-w-full" />
     <div class="t-flex-grow t-text-sm t-text-primary t-text-primary t-leading-tight t-pt-4" :class="{ 't-pb-8': !lastRow }">
-      {{ teaser.text1 }} {{ index }}
+      {{ teaser.text1 }}
     </div>
   </div>
 </template>
