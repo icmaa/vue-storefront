@@ -29,9 +29,9 @@ const getters: GetterTree<CategoryExtrasState, RootState> = {
   getLogolineItems: (state, getters, rootState, rootGetters) => (categories: Category[], type: string = 'crossreferenceInLogoline'): Logo[] => {
     let logos = []
     categories.forEach(c => {
-      const extras = getters.getCategoryExtrasByUrlKey(c.url_key)
-      if (extras && extras.hasLogo && extras[type]) {
-        logos.push(new Logo(c, extras.customerCluster))
+      const logo = getters.getDepartmentLogosByUrlKey(c.url_key)
+      if (logo && logo[type]) {
+        logos.push(new Logo(c, logo.customerCluster))
       }
     })
 
@@ -73,6 +73,9 @@ const getters: GetterTree<CategoryExtrasState, RootState> = {
   },
   getDepartmentLogos: (state): CategoryExtrasDepartmentLogoStateItem[] => {
     return state.departmentLogos
+  },
+  getDepartmentLogosByUrlKey: (state) => (identifier): CategoryExtrasDepartmentLogoStateItem => {
+    return state.departmentLogos.find(item => item.identifier === identifier)
   }
 }
 

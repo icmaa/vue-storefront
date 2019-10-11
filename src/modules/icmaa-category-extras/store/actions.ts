@@ -92,7 +92,7 @@ const actions: ActionTree<CategoryExtrasState, RootState> = {
         return
       }
 
-      results = results.map(r => pick(r, ['identifier', 'crossreferenceInLogoline', 'crossreferenceInProduct']))
+      results = results.map(r => pick(r, ['identifier', 'crossreferenceInLogoline', 'crossreferenceInProduct', 'customerCluster', 'genre']))
 
       context.commit(types.ICMAA_CATEGORY_EXTRAS_DEPARTMENTLOGOS_ADD, results)
       cache.setItem(cacheKey, results)

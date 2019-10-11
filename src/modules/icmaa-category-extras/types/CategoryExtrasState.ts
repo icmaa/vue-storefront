@@ -19,7 +19,9 @@ export interface CategoryExtrasCategoryIdMapStateItem {
 export interface CategoryExtrasDepartmentLogoStateItem {
   identifier: string,
   crossreferenceInLogoline: boolean,
-  crossreferenceInProduct: boolean
+  crossreferenceInProduct: boolean,
+  customerCluster: string,
+  genre: any[]
 }
 
 export default interface CategoryExtrasState {
