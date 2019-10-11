@@ -1,6 +1,6 @@
 import config from 'config'
 import { GetterTree } from 'vuex'
-import CategoryExtrasState, { CategoryExtrasStateItem, CategoryExtrasCategoryIdMapStateItem } from '../types/CategoryExtrasState'
+import CategoryExtrasState, { CategoryExtrasStateItem, CategoryExtrasCategoryIdMapStateItem, CategoryExtrasDepartmentLogoStateItem } from '../types/CategoryExtrasState'
 import { Category } from '@vue-storefront/core/modules/catalog-next/types/Category';
 import RootState from '@vue-storefront/core/types/RootState'
 import { Logo } from '../helpers/categoryExtras/logo'
@@ -70,6 +70,9 @@ const getters: GetterTree<CategoryExtrasState, RootState> = {
   },
   getCurrentProductDepartmentCategory: (state, getters, rootState, rootGetters): Category => {
     return getters.getCategoryBy('id', getters.getCurrentProductDepartmentCategoryId)
+  },
+  getDepartmentLogos: (state): CategoryExtrasDepartmentLogoStateItem[] => {
+    return state.departmentLogos
   }
 }
 

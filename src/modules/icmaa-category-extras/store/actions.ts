@@ -5,11 +5,17 @@ import { categoryExtrasStorageKey as storageKey } from './'
 import * as types from './mutation-types'
 import CategoryExtrasState, { CategoryExtrasStateItem } from '../types/CategoryExtrasState'
 import RootState from '@vue-storefront/core/types/RootState'
+import { cacheStorage as cache } from 'icmaa-cms'
 
 import { CategoryStateCategory } from 'icmaa-category/types/CategoryState'
 import { fetchChildCategories } from 'icmaa-category/helpers'
 import { icmaa_categoryextras } from 'config'
 
+import config from 'config'
+import Axios from 'axios'
+import pick from 'lodash-es/pick'
+import { processURLAddress } from '@vue-storefront/core/helpers'
+import { getCurrentStoreCode } from 'icmaa-cms/helpers'
 import { Logger } from '@vue-storefront/core/lib/logger'
 
 const documentType = 'category-extras'
@@ -59,6 +65,41 @@ const actions: ActionTree<CategoryExtrasState, RootState> = {
     }
 
     context.commit(types.ICMAA_CATEGORY_EXTRAS_CHILDCATEGORIES_ADD, childrenArray)
+  },
+  loadDepartmentLogos: async (context, parentId: number[]): Promise<void> => {
+    const cacheKey = storageKey + '/department-logos'
+
+    const cacheItem = await cache.getItem(cacheKey)
+    if (cacheItem) {
+      context.commit(types.ICMAA_CATEGORY_EXTRAS_DEPARTMENTLOGOS_ADD, cacheItem)
+      return
+    }
+
+    const options = { has_logo: { 'in': true } }
+    let params = {
+      'type': documentType,
+      'q': options,
+      'lang': getCurrentStoreCode()
+    }
+
+    return Axios.get(
+      processURLAddress(config.icmaa_cms.endpoint) + '/search',
+      { responseType: 'json', params }
+    ).then(resp => {
+      let results = resp.data.result
+      if (results.length === 0) {
+        Logger.log(`No results found for :`, `icmaa-cms/${documentType}`, options)()
+        return
+      }
+
+      results = results.map(r => pick(r, ['identifier', 'crossreferenceInLogoline', 'crossreferenceInProduct']))
+
+      context.commit(types.ICMAA_CATEGORY_EXTRAS_DEPARTMENTLOGOS_ADD, results)
+      cache.setItem(cacheKey, results)
+        .catch(error => Logger.error(error, 'icmaa-cms'))
+
+      return results
+    })
   }
 }
 
