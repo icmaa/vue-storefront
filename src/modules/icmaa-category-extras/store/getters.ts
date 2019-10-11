@@ -48,7 +48,7 @@ const getters: GetterTree<CategoryExtrasState, RootState> = {
   getChildCategoryIdMap: (state): CategoryExtrasCategoryIdMapStateItem[] => {
     return state.childCategoryIdMap
   },
-  getCategoryChildrenIds: (state, getters) => (parentId: number): CategoryExtrasCategoryIdMapStateItem => {
+  getCategoryChildrenMap: (state, getters) => (parentId: number): CategoryExtrasCategoryIdMapStateItem => {
     return getters.getChildCategoryIdMap.find(c => c.parentId === parentId)
   },
   getDepartmentChildCategoryIdMap: (state): CategoryExtrasCategoryIdMapStateItem[] => {
