@@ -44,7 +44,10 @@ const actions: ActionTree<CategoryExtrasState, RootState> = {
         if (!children[categoryParentId]) {
           children[categoryParentId] = []
         }
-        children[categoryParentId].push(category.id)
+        children[categoryParentId].push({
+          id: category.id,
+          url_key: category.url_key
+        })
       }
     })
 

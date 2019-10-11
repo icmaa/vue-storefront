@@ -6,9 +6,14 @@ export interface CategoryExtrasStateItem extends AbstractStateItem {
   crossreference_in_product: boolean
 }
 
+export interface CategoryExtrasCategoryIdMapChildStateItem {
+  id: number,
+  url_key: string
+}
+
 export interface CategoryExtrasCategoryIdMapStateItem {
   parentId: number,
-  children: number[]
+  children: CategoryExtrasCategoryIdMapChildStateItem[]
 }
 
 export default interface CategoryExtrasState {
