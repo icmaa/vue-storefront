@@ -1,3 +1,4 @@
+import config from 'config'
 import { GetterTree } from 'vuex'
 import CategoryExtrasState, { CategoryExtrasStateItem, CategoryExtrasCategoryIdMapStateItem } from '../types/CategoryExtrasState'
 import { Category } from '@vue-storefront/core/modules/catalog-next/types/Category';
@@ -44,12 +45,13 @@ const getters: GetterTree<CategoryExtrasState, RootState> = {
 
     return false
   },
-  getDepartmentChildCategoryIdMap: (state): CategoryExtrasCategoryIdMapStateItem => {
-    return state.departmentChildCategoryIdMap
+  getDepartmentChildCategoryIdMap: (state): CategoryExtrasCategoryIdMapStateItem[] => {
+    const { parentDepartmentCategoryIds } = config.icmaa_categoryextras
+    return state.childCategoryIdMap.filter(c => parentDepartmentCategoryIds.includes(c.parentId))
   },
-  isDepartmentChildCategory: (state) => (categoryId: number): boolean => {
-    return Object.values(state.departmentChildCategoryIdMap)
-      .filter(categoryIds => categoryIds.filter(c => c === categoryId).length > 0)
+  isDepartmentChildCategory: (state, getters) => (categoryId: number): boolean => {
+    return getters.getDepartmentChildCategoryIdMap
+      .filter(c => c.children.filter(c => c === categoryId).length > 0)
       .length > 0
   },
   getCurrentProductDepartmentCategoryId: (state, getters, rootState, rootGetters): number|false => {

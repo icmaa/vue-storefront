@@ -7,10 +7,11 @@ export interface CategoryExtrasStateItem extends AbstractStateItem {
 }
 
 export interface CategoryExtrasCategoryIdMapStateItem {
-  [parentId: string]: number[]
+  parentId: number,
+  children: number[]
 }
 
 export default interface CategoryExtrasState {
   items: CategoryExtrasStateItem[],
-  departmentChildCategoryIdMap: CategoryExtrasCategoryIdMapStateItem
+  childCategoryIdMap: CategoryExtrasCategoryIdMapStateItem[]
 }

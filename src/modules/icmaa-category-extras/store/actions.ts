@@ -14,9 +14,9 @@ import { Logger } from '@vue-storefront/core/lib/logger'
 
 const documentType = 'category-extras'
 const mutationTypes: MutationTypesInterface = {
-  add: types.ICMAA_CATEGORY_EXRTAS_ADD,
-  upd: types.ICMAA_CATEGORY_EXRTAS_UPD,
-  rmv: types.ICMAA_CATEGORY_EXRTAS_RMV
+  add: types.ICMAA_CATEGORY_EXTRAS_ADD,
+  upd: types.ICMAA_CATEGORY_EXTRAS_UPD,
+  rmv: types.ICMAA_CATEGORY_EXTRAS_RMV
 }
 
 const actions: ActionTree<CategoryExtrasState, RootState> = {
@@ -26,6 +26,9 @@ const actions: ActionTree<CategoryExtrasState, RootState> = {
     listAbstract<CategoryExtrasStateItem>({ documentType, mutationTypes, storageKey, context, options }),
   loadDepartmentChildCategoryIdMap: async (context): Promise<void> => {
     const parentId: number[] = icmaa_categoryextras.parentDepartmentCategoryIds || []
+    return context.dispatch('loadChildCategoryIdMap', parentId)
+  },
+  loadChildCategoryIdMap: async (context, parentId: number[]): Promise<void> => {
     const childCategories: CategoryStateCategory[]|void = await fetchChildCategories({ parentId, level: 10, onlyShowTargetLevelItems: false })
       .then(resp => resp)
       .catch(error => {
@@ -45,7 +48,14 @@ const actions: ActionTree<CategoryExtrasState, RootState> = {
       }
     })
 
-    context.commit(types.ICMAA_CATEGORY_EXRTAS_DEPARTMENT_CHILDCATEGORIES_ADD, children)
+    let childrenArray = []
+    for (const parentId in children) {
+      childrenArray.push({
+        parentId: parseInt(parentId), children: children[parentId]
+      })
+    }
+
+    context.commit(types.ICMAA_CATEGORY_EXTRAS_CHILDCATEGORIES_ADD, childrenArray)
   }
 }
 
