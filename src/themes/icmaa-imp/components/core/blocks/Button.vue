@@ -1,5 +1,5 @@
 <template>
-  <button type="button" class="t-px-4 t-text-xs t-rounded-sm t-cursor-pointer t-leading-1-rem" :class="[ { 't-uppercase': type !== 'select' }, sizeClass, colorClass ]" :style="customColorStyle">
+  <button type="button" class="t-px-4 t-text-xs t-rounded-sm t-cursor-pointer t-leading-1-rem" :class="[ { 't-uppercase': type !== 'select' }, sizeClass, colorClass, alignClass ]" :style="customColorStyle">
     <template v-if="iconOnly">
       <span class="t-sr-only">
         <slot />
@@ -45,6 +45,11 @@ export default {
         ].includes(value)
       }
     },
+    align: {
+      type: [String],
+      default: 'center',
+      validation: (v) => ['center', 'justify'].includes(v)
+    },
     customColor: {
       type: [String, Boolean],
       default: false
@@ -84,6 +89,9 @@ export default {
       }
 
       return map[this.type]
+    },
+    alignClass () {
+      return this.align === 'justify' ? 't-flex t-justify-between t-items-center' : ''
     },
     customColorStyle () {
       if (this.customColor && this.type === 'ghost-custom') {

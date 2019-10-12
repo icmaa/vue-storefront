@@ -39,7 +39,7 @@ module.exports = {
         'icon': '0.875em',
         'xxs': '0.625rem',
         '1xl': '1.375rem',
-        '2.5xl': '1.625rem'
+        '2-1/2xl': '1.625rem'
       },
       lineHeight: {
         '1-rem': '1rem',

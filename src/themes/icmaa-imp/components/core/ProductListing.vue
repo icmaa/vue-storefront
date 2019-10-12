@@ -1,6 +1,6 @@
 <template>
-  <div class="product-listing t-flex t-flex-wrap t-justify-start t-px-3 lg:t-px-4 lg:t--mx-4">
-    <product-tile v-for="(product, key) in products" :key="`${key}-${product.id}`" :product="product" class="t-px-1 lg:t-px-4 t-mb-8" :class="[ viewport === 'sm' ? 't-w-1/2' : 't-w-1/' + columns ]" />
+  <div class="product-listing t-flex t-flex-wrap t-justify-start t-px-3 lg:t-px-4 lg:t--mx-2">
+    <product-tile v-for="(product, key) in products" :key="`${key}-${product.id}`" :product="product" class="t-px-1 lg:t-px-2 t-mb-8" :class="[ viewport === 'sm' ? 't-w-1/2' : 't-w-1/' + columns ]" />
   </div>
 </template>
 

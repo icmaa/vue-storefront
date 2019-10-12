@@ -1,20 +1,28 @@
 <template>
   <div id="category">
     <header class="t-container">
-      <div class="t-px-4 t-mt-4 t-mb-8">
-        <breadcrumbs :routes="getBreadcrumbs" :active-route="getCurrentCategory.name" />
-        <h1 class="category-title">
-          {{ title }}
-        </h1>
-        <button class="" @click="openFilters">
-          {{ $t('Filters') }}
-        </button>
-        <div class="">
-          <label class="">{{ $t('Columns') }}:</label>
-          <column-selector :default-column="defaultColumn" @change-column="columnChange" />
-        </div>
-        <div class="">
-          <sort-by :has-label="true" @change="changeFilter" :value="getCurrentSearchQuery.sort" />
+      <div class="t-flex t-flex-wrap t-px-4 t-mb-8">
+        <breadcrumbs :routes="getBreadcrumbs" :active-route="getCurrentCategory.name" class="t-w-full t-my-8" />
+        <div class="t-w-full">
+          <div class="t-flex t-flex-wrap t-items-center t--mx-1 lg:t--mx-2">
+            <h1 class="category-title t-hidden lg:t-block t-w-3/4 t-px-1 lg:t-px-2 t-mb-4 t-font-light t-text-2xl t-text-base-dark" v-text="title" />
+            <div class="t-hidden lg:t-block t-w-1/4 t-px-1 lg:t-px-2 t-text-sm t-text-base-dark t-text-right">
+              <span class="t-font-bold">{{ getCategoryProductsTotal }}</span> {{ $t('items') }}
+              <span class="t-mx-2 t-text-base-lighter">|</span>
+              <span class="t-cursor-pointer">
+                42 {{ $t('items per page') }}
+                <material-icon icon="keyboard_arrow_down" size="xs" class="t-align-middle t-text-primary" />
+              </span>
+            </div>
+            <div class="t-w-1/2 lg:t-w-3/4 t-px-1 lg:t-px-2">
+              <button-component style="second" align="justify" icon="filter_list" @click.native="openFilters" class="t-w-full lg:t-w-auto">
+                {{ $t('Filters') }}
+              </button-component>
+            </div>
+            <div class="t-w-1/2 lg:t-w-1/4 t-px-1 lg:t-px-2">
+              <sort-by :has-label="true" @change="changeFilter" :value="getCurrentSearchQuery.sort" />
+            </div>
+          </div>
         </div>
         <category-extras-header />
       </div>
@@ -62,20 +70,23 @@
 
 <script>
 import LazyHydrate from 'vue-lazy-hydration'
+
+import config from 'config'
+import rootStore from '@vue-storefront/core/store'
+import { mapGetters } from 'vuex'
+import { isServer } from '@vue-storefront/core/helpers'
+import { catalogHooksExecutors } from '@vue-storefront/core/modules/catalog-next/hooks'
+import { getSearchOptionsFromRouteParams } from '@vue-storefront/core/modules/catalog-next/helpers/categoryHelpers'
+
 import Sidebar from '../components/core/blocks/Category/Sidebar'
 import ProductListing from '../components/core/ProductListing'
 import Breadcrumbs from '../components/core/Breadcrumbs'
 import SortBy from '../components/core/SortBy'
-import { isServer } from '@vue-storefront/core/helpers'
-import { getSearchOptionsFromRouteParams } from '@vue-storefront/core/modules/catalog-next/helpers/categoryHelpers'
-import config from 'config'
-import ColumnSelector from '../components/core/blocks/Category/ColumnSelector'
 import ButtonFull from 'theme/components/theme/ButtonFull'
-import { mapGetters } from 'vuex'
-import onBottomScroll from '@vue-storefront/core/mixins/onBottomScroll'
-import rootStore from '@vue-storefront/core/store'
-import { catalogHooksExecutors } from '@vue-storefront/core/modules/catalog-next/hooks'
+import ButtonComponent from 'theme/components/core/blocks/Button'
+import MaterialIcon from 'theme/components/core/blocks/MaterialIcon'
 
+import onBottomScroll from '@vue-storefront/core/mixins/onBottomScroll'
 import CategoryMixin from 'icmaa-catalog/components/Category'
 import CategoryExtrasHeader from 'theme/components/core/blocks/CategoryExtras/Header'
 import CategoryExtrasMixin from 'icmaa-category-extras/mixins/categoryExtras'
@@ -104,11 +115,12 @@ export default {
   components: {
     LazyHydrate,
     ButtonFull,
+    ButtonComponent,
+    MaterialIcon,
     ProductListing,
     Breadcrumbs,
     Sidebar,
     SortBy,
-    ColumnSelector,
     CategoryExtrasHeader
   },
   mixins: [ onBottomScroll, CategoryMixin, CategoryExtrasMixin, CategoryMetaMixin ],
@@ -213,20 +225,10 @@ export default {
   display: none;
 }
 
-.category-title {
-  line-height: 65px;
-}
-
 .sorting {
   label {
     margin-right: 10px;
   }
-}
-
-.category-title {
-  margin: 0;
-  font-size: 36px;
-  line-height: 40px;
 }
 
 .products-list {
