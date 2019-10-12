@@ -48,7 +48,7 @@ export default {
     align: {
       type: [String],
       default: 'center',
-      validation: (v) => ['center', 'justify'].includes(v)
+      validation: (v) => ['center', 'stretch'].includes(v)
     },
     customColor: {
       type: [String, Boolean],
@@ -91,7 +91,7 @@ export default {
       return map[this.type]
     },
     alignClass () {
-      return this.align === 'justify' ? 't-flex t-justify-between t-items-center' : ''
+      return this.align === 'stretch' ? 't-flex t-justify-between t-items-center' : ''
     },
     customColorStyle () {
       if (this.customColor && this.type === 'ghost-custom') {

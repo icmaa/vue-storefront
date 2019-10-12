@@ -15,7 +15,7 @@
               </span>
             </div>
             <div class="t-w-1/2 lg:t-w-3/4 t-px-1 lg:t-px-2">
-              <button-component style="second" align="justify" icon="filter_list" @click.native="openFilters" class="t-w-full lg:t-w-auto">
+              <button-component style="second" align="stretch" icon="filter_list" @click.native="openFilters" class="t-w-full lg:t-w-auto">
                 {{ $t('Filters') }}
               </button-component>
             </div>
@@ -33,6 +33,17 @@
         <product-listing :columns="defaultColumn" :products="getCategoryProducts" />
       </lazy-hydrate>
       <product-listing v-else :columns="defaultColumn" :products="getCategoryProducts" />
+      <div class="t-flex t-items-center t-justify-center">
+        <button-component type="ghost" @click.native="loadMoreProducts" :disabled="loadingProducts">
+          {{ loadingProducts ? $t('Patience please ...') : $t('More products') }}
+        </button-component>
+      </div>
+      <div v-if="isCategoryEmpty">
+        <h4 data-testid="noProductsInfo">
+          {{ $t('No products found!') }}
+        </h4>
+        <p>{{ $t('Please change Your search criteria and try again. If still not finding anything relevant, please visit the Home page and try out some of our bestsellers!') }}</p>
+      </div>
     </div>
 
     <div class="container pb60">
@@ -52,17 +63,6 @@
             {{ $t('Filter') }}
           </button-full>
         </div>
-        <div class="col-md-9 px10 border-box products-list">
-          <p class="col-xs-12 end-md m0 pb20 cl-secondary">
-            {{ $t('{count} items', { count: getCategoryProductsTotal }) }}
-          </p>
-          <div v-if="isCategoryEmpty" class="hidden-xs">
-            <h4 data-testid="noProductsInfo">
-              {{ $t('No products found!') }}
-            </h4>
-            <p>{{ $t('Please change Your search criteria and try again. If still not finding anything relevant, please visit the Home page and try out some of our bestsellers!') }}</p>
-          </div>
-        </div>
       </div>
     </div>
   </div>
@@ -78,15 +78,14 @@ import { isServer } from '@vue-storefront/core/helpers'
 import { catalogHooksExecutors } from '@vue-storefront/core/modules/catalog-next/hooks'
 import { getSearchOptionsFromRouteParams } from '@vue-storefront/core/modules/catalog-next/helpers/categoryHelpers'
 
-import Sidebar from '../components/core/blocks/Category/Sidebar'
-import ProductListing from '../components/core/ProductListing'
-import Breadcrumbs from '../components/core/Breadcrumbs'
-import SortBy from '../components/core/SortBy'
+import Sidebar from 'theme/components/core/blocks/Category/Sidebar'
+import ProductListing from 'theme/components/core/ProductListing'
+import Breadcrumbs from 'theme/components/core/Breadcrumbs'
+import SortBy from 'theme/components/core/SortBy'
 import ButtonFull from 'theme/components/theme/ButtonFull'
 import ButtonComponent from 'theme/components/core/blocks/Button'
 import MaterialIcon from 'theme/components/core/blocks/MaterialIcon'
 
-import onBottomScroll from '@vue-storefront/core/mixins/onBottomScroll'
 import CategoryMixin from 'icmaa-catalog/components/Category'
 import CategoryExtrasHeader from 'theme/components/core/blocks/CategoryExtras/Header'
 import CategoryExtrasMixin from 'icmaa-category-extras/mixins/categoryExtras'
@@ -123,7 +122,7 @@ export default {
     SortBy,
     CategoryExtrasHeader
   },
-  mixins: [ onBottomScroll, CategoryMixin, CategoryExtrasMixin, CategoryMetaMixin ],
+  mixins: [ CategoryMixin, CategoryExtrasMixin, CategoryMetaMixin ],
   data () {
     return {
       mobileFilters: false,
@@ -183,7 +182,7 @@ export default {
     columnChange (column) {
       this.defaultColumn = column
     },
-    async onBottomScroll () {
+    async loadMoreProducts () {
       if (this.loadingProducts) return
       this.loadingProducts = true
       try {
@@ -251,10 +250,6 @@ export default {
 
 .category-filters {
   display: none;
-}
-
-.product-listing {
-  justify-content: center;;
 }
 
 .mobile-filters {
