@@ -8,7 +8,7 @@
     </div>
     <router-link :to="productLink" tag="div" class="t-text-sm" v-if="!onlyImage">
       <p class="t-mb-1 t-text-primary t-leading-tight">
-        {{ product.name | htmlDecode }}
+        {{ translatedProductName | htmlDecode }}
       </p>
       <p>
         <span class="price-original t-text-base-light t-line-through t-mr-2" v-if="product.special_price && parseFloat(product.original_price_incl_tax) > 0">
@@ -26,21 +26,19 @@
 </template>
 
 <script>
-import rootStore from '@vue-storefront/core/store'
-import { ProductTile } from '@vue-storefront/core/modules/catalog/components/ProductTile.ts'
 import config from 'config'
-import ProductImage from './ProductImage'
+import rootStore from '@vue-storefront/core/store'
+import ProductImage from 'theme/components/core/ProductImage'
 import AddToWishlist from 'theme/components/core/blocks/Wishlist/AddToWishlist'
-import AddToCompare from 'theme/components/core/blocks/Compare/AddToCompare'
+import ProductNameMixin from 'icmaa-catalog/mixins/ProductNameMixin'
+import { ProductTile } from '@vue-storefront/core/modules/catalog/components/ProductTile'
 import { IsOnWishlist } from '@vue-storefront/core/modules/wishlist/components/IsOnWishlist'
-import { IsOnCompare } from '@vue-storefront/core/modules/compare/components/IsOnCompare'
 
 export default {
-  mixins: [ProductTile, IsOnWishlist, IsOnCompare],
+  mixins: [ProductTile, IsOnWishlist, ProductNameMixin],
   components: {
     ProductImage,
-    AddToWishlist,
-    AddToCompare
+    AddToWishlist
   },
   props: {
     labelsActive: {
