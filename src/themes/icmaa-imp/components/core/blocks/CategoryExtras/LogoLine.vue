@@ -54,7 +54,7 @@ export default {
     randomDepartmentLogoIdentifier () {
       const logos = this.getDepartmentLogos
         .filter(logo => {
-          return this.cluster ? logo.customerCluster.includes(this.cluster) : true &&
+          return (this.cluster ? (logo.customerCluster.includes(this.cluster) || logo.customerCluster.length === 0) : true) &&
             this.childrenIdentifier.includes(logo.identifier)
         })
         .map(l => l.identifier)
