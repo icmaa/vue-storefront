@@ -1,48 +1,34 @@
 <template>
   <div id="category">
-    <header class="bg-cl-secondary py35 pl20">
-      <div class="container">
+    <header class="t-container">
+      <div class="t-px-4 t-mt-4 t-mb-8">
         <breadcrumbs :routes="getBreadcrumbs" :active-route="getCurrentCategory.name" />
-        <div class="row middle-sm">
-          <h1 class="col-sm-8 category-title mb10">
-            {{ title }}
-          </h1>
-          <div class="sorting col-sm-2 align-right mt50">
-            <label class="mr10">{{ $t('Columns') }}:</label>
-            <columns @change-column="columnChange" />
-          </div>
-          <div class="sorting col-sm-2 align-right mt50">
-            <sort-by
-              :has-label="true"
-              @change="changeFilter"
-              :value="getCurrentSearchQuery.sort"
-            />
-          </div>
-          <category-extras-header />
+        <h1 class="category-title">
+          {{ title }}
+        </h1>
+        <button class="" @click="openFilters">
+          {{ $t('Filters') }}
+        </button>
+        <div class="">
+          <label class="">{{ $t('Columns') }}:</label>
+          <column-selector :default-column="defaultColumn" @change-column="columnChange" />
         </div>
-      </div>
-      <div class="container">
-        <div class="row m0">
-          <button
-            class="col-xs-5 mt25 mr15 p15 mobile-filters-button bg-cl-th-accent brdr-none cl-white h5 sans-serif fs-medium-small"
-            @click="openFilters"
-          >
-            {{ $t('Filters') }}
-          </button>
-          <div class="mobile-sorting col-xs-6 mt25">
-            <sort-by
-              @change="changeFilter"
-              :value="getCurrentSearchQuery.sort"
-            />
-          </div>
+        <div class="">
+          <sort-by :has-label="true" @change="changeFilter" :value="getCurrentSearchQuery.sort" />
         </div>
+        <category-extras-header />
       </div>
     </header>
+
+    <div class="t-container">
+      <lazy-hydrate :trigger-hydration="!loading" v-if="isLazyHydrateEnabled">
+        <product-listing :columns="defaultColumn" :products="getCategoryProducts" />
+      </lazy-hydrate>
+      <product-listing v-else :columns="defaultColumn" :products="getCategoryProducts" />
+    </div>
+
     <div class="container pb60">
       <div class="row m0 pt15">
-        <div class="col-md-3 start-xs category-filters">
-          <sidebar :filters="getAvailableFilters" @changeFilter="changeFilter" />
-        </div>
         <div class="col-md-3 start-xs mobile-filters" v-show="mobileFilters">
           <div class="close-container absolute w-100">
             <i class="material-icons p15 close cl-accent" @click="closeFilters">close</i>
@@ -68,10 +54,6 @@
             </h4>
             <p>{{ $t('Please change Your search criteria and try again. If still not finding anything relevant, please visit the Home page and try out some of our bestsellers!') }}</p>
           </div>
-          <lazy-hydrate :trigger-hydration="!loading" v-if="isLazyHydrateEnabled">
-            <product-listing :columns="defaultColumn" :products="getCategoryProducts" />
-          </lazy-hydrate>
-          <product-listing v-else :columns="defaultColumn" :products="getCategoryProducts" />
         </div>
       </div>
     </div>
@@ -80,21 +62,22 @@
 
 <script>
 import LazyHydrate from 'vue-lazy-hydration'
-import Sidebar from '../components/core/blocks/Category/Sidebar.vue'
-import ProductListing from '../components/core/ProductListing.vue'
-import Breadcrumbs from '../components/core/Breadcrumbs.vue'
-import SortBy from '../components/core/SortBy.vue'
+import Sidebar from '../components/core/blocks/Category/Sidebar'
+import ProductListing from '../components/core/ProductListing'
+import Breadcrumbs from '../components/core/Breadcrumbs'
+import SortBy from '../components/core/SortBy'
 import { isServer } from '@vue-storefront/core/helpers'
 import { getSearchOptionsFromRouteParams } from '@vue-storefront/core/modules/catalog-next/helpers/categoryHelpers'
 import config from 'config'
-import Columns from '../components/core/Columns.vue'
-import ButtonFull from 'theme/components/theme/ButtonFull.vue'
+import ColumnSelector from '../components/core/blocks/Category/ColumnSelector'
+import ButtonFull from 'theme/components/theme/ButtonFull'
 import { mapGetters } from 'vuex'
 import onBottomScroll from '@vue-storefront/core/mixins/onBottomScroll'
 import rootStore from '@vue-storefront/core/store'
 import { catalogHooksExecutors } from '@vue-storefront/core/modules/catalog-next/hooks'
 
-import CategoryExtrasHeader from 'theme/components/core/blocks/CategoryExtras/Header.vue'
+import CategoryMixin from 'icmaa-catalog/components/Category'
+import CategoryExtrasHeader from 'theme/components/core/blocks/CategoryExtras/Header'
 import CategoryExtrasMixin from 'icmaa-category-extras/mixins/categoryExtras'
 import CategoryMetaMixin from 'icmaa-meta/mixins/categoryMeta'
 
@@ -125,14 +108,14 @@ export default {
     Breadcrumbs,
     Sidebar,
     SortBy,
-    Columns,
+    ColumnSelector,
     CategoryExtrasHeader
   },
-  mixins: [ onBottomScroll, CategoryExtrasMixin, CategoryMetaMixin ],
+  mixins: [ onBottomScroll, CategoryMixin, CategoryExtrasMixin, CategoryMetaMixin ],
   data () {
     return {
       mobileFilters: false,
-      defaultColumn: 3,
+      defaultColumn: 4,
       loadingProducts: false,
       loading: true
     }
@@ -204,108 +187,95 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .btn {
-    &__filter {
-      min-width: 100px;
-    }
+.btn {
+  &__filter {
+    min-width: 100px;
   }
-  .divider {
-    width: calc(100vw - 8px);
-    bottom: 20px;
-    left: -36px;
+}
+.divider {
+  width: calc(100vw - 8px);
+  bottom: 20px;
+  left: -36px;
+}
+.category-filters {
+  width: 242px;
+}
+
+.mobile-filters {
+  overflow: auto;
+}
+
+.mobile-filters-button {
+  display: none;
+}
+
+.mobile-sorting {
+  display: none;
+}
+
+.category-title {
+  line-height: 65px;
+}
+
+.sorting {
+  label {
+    margin-right: 10px;
   }
-  .category-filters {
-    width: 242px;
-  }
+}
 
-  .mobile-filters {
-    display: none;
-    overflow: auto;
-  }
+.category-title {
+  margin: 0;
+  font-size: 36px;
+  line-height: 40px;
+}
 
-  .mobile-filters-button {
-    display: none;
-  }
+.products-list {
+  width: 100%;
+  max-width: none;
+}
 
-  .mobile-sorting {
-    display: none;
-  }
+.mobile-filters-button {
+  display: block;
+  height: 45px;
+}
 
-  .category-title {
-    line-height: 65px;
-  }
+.sorting {
+  display: none;
+}
 
-  .sorting {
-    label {
-      margin-right: 10px;
-    }
-  }
+.mobile-sorting {
+  display: block;
+}
 
-  @media (max-width: 64em) {
-    .products-list {
-      max-width: 530px;
-    }
-  }
+.category-filters {
+  display: none;
+}
 
-  @media (max-width: 770px) {
-    .category-title {
-      margin: 0;
-      font-size: 36px;
-      line-height: 40px;
-    }
+.product-listing {
+  justify-content: center;;
+}
 
-    .products-list {
-      width: 100%;
-      max-width: none;
-    }
+.mobile-filters {
+  position: fixed;
+  background-color: #F2F2F2;
+  z-index: 5;
+  padding: 0 40px;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  box-sizing: border-box;
+}
 
-    .mobile-filters {
-      display: block;
-    }
+.mobile-filters-body {
+  padding-top: 50px;
+}
 
-    .mobile-filters-button {
-      display: block;
-      height: 45px;
-    }
+.close-container {
+  left: 0;
+}
 
-    .sorting {
-      display: none;
-    }
-
-    .mobile-sorting {
-      display: block;
-    }
-
-    .category-filters {
-      display: none;
-    }
-
-    .product-listing {
-      justify-content: center;;
-    }
-
-    .mobile-filters {
-      position: fixed;
-      background-color: #F2F2F2;
-      z-index: 5;
-      padding: 0 40px;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      top: 0;
-      box-sizing: border-box;
-    }
-
-    .mobile-filters-body {
-      padding-top: 50px;
-    }
-  }
-
-  .close-container {
-    left: 0;
-  }
-
-  .close {
-    margin-left: auto;
-  }
+.close {
+  margin-left: auto;
+}
 </style>
