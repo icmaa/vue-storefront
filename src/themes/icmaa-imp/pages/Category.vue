@@ -79,9 +79,9 @@ import { catalogHooksExecutors } from '@vue-storefront/core/modules/catalog-next
 import { getSearchOptionsFromRouteParams } from '@vue-storefront/core/modules/catalog-next/helpers/categoryHelpers'
 
 import Sidebar from 'theme/components/core/blocks/Category/Sidebar'
+import SortBy from 'theme/components/core/blocks/Category/SortBy'
 import ProductListing from 'theme/components/core/ProductListing'
 import Breadcrumbs from 'theme/components/core/Breadcrumbs'
-import SortBy from 'theme/components/core/SortBy'
 import ButtonFull from 'theme/components/theme/ButtonFull'
 import ButtonComponent from 'theme/components/core/blocks/Button'
 import MaterialIcon from 'theme/components/core/blocks/MaterialIcon'
