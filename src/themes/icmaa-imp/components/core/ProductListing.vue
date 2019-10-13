@@ -20,7 +20,7 @@ export default {
     },
     columns: {
       type: [Number, String],
-      required: true
+      default: 4
     }
   },
   computed: {

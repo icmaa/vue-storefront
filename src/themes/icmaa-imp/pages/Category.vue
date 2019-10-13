@@ -9,10 +9,10 @@
             <div class="t-hidden lg:t-block t-w-1/4 t-px-1 lg:t-px-2 t-text-sm t-text-base-dark t-text-right">
               <span class="t-font-bold">{{ getCategoryProductsTotal }}</span> {{ $t('items') }}
               <span class="t-mx-2 t-text-base-lighter">|</span>
-              <span class="t-cursor-pointer">
-                42 {{ $t('items per page') }}
+              <dropdown @change="changePageSize" :options="pageSizeOptions" :current="pageSize" name="pagesize" class="t-inline-block">
+                {{ pageSize }} {{ $t('items per page') }}
                 <material-icon icon="keyboard_arrow_down" size="xs" class="t-align-middle t-text-primary" />
-              </span>
+              </dropdown>
             </div>
             <div class="t-w-1/2 lg:t-w-3/4 t-px-1 lg:t-px-2">
               <button-component style="second" align="stretch" icon="filter_list" @click.native="openFilters" class="t-w-full lg:t-w-auto">
@@ -30,9 +30,9 @@
 
     <div class="t-container">
       <lazy-hydrate :trigger-hydration="!loading" v-if="isLazyHydrateEnabled">
-        <product-listing :columns="defaultColumn" :products="getCategoryProducts" />
+        <product-listing :products="getCategoryProducts" />
       </lazy-hydrate>
-      <product-listing v-else :columns="defaultColumn" :products="getCategoryProducts" />
+      <product-listing v-else :products="getCategoryProducts" />
       <div class="t-flex t-items-center t-justify-center">
         <button-component type="ghost" @click.native="loadMoreProducts" :disabled="loadingProducts">
           {{ loadingProducts ? $t('Patience please ...') : $t('More products') }}
@@ -56,12 +56,9 @@
           <div class="relative pb20 pt15">
             <div class="brdr-top-1 brdr-cl-primary absolute divider w-100" />
           </div>
-          <button-full
-            class="mb20 btn__filter"
-            @click.native="closeFilters"
-          >
+          <button-component @click.native="closeFilters">
             {{ $t('Filter') }}
-          </button-full>
+          </button-component>
         </div>
       </div>
     </div>
@@ -80,9 +77,9 @@ import { getSearchOptionsFromRouteParams } from '@vue-storefront/core/modules/ca
 
 import Sidebar from 'theme/components/core/blocks/Category/Sidebar'
 import SortBy from 'theme/components/core/blocks/Category/SortBy'
+import Dropdown from 'theme/components/core/blocks/Dropdown'
 import ProductListing from 'theme/components/core/ProductListing'
 import Breadcrumbs from 'theme/components/core/Breadcrumbs'
-import ButtonFull from 'theme/components/theme/ButtonFull'
 import ButtonComponent from 'theme/components/core/blocks/Button'
 import MaterialIcon from 'theme/components/core/blocks/MaterialIcon'
 
@@ -91,13 +88,13 @@ import CategoryExtrasHeader from 'theme/components/core/blocks/CategoryExtras/He
 import CategoryExtrasMixin from 'icmaa-category-extras/mixins/categoryExtras'
 import CategoryMetaMixin from 'icmaa-meta/mixins/categoryMeta'
 
-const composeInitialPageState = async (store, route, forceLoad = false) => {
+const composeInitialPageState = async (store, route, forceLoad = false, pageSize) => {
   try {
     const filters = getSearchOptionsFromRouteParams(route.params)
     const cachedCategory = store.getters['category-next/getCategoryFrom'](route.path)
     const currentCategory = cachedCategory && !forceLoad ? cachedCategory : await store.dispatch('category-next/loadCategory', { filters })
 
-    await store.dispatch('category-next/loadCategoryProducts', { route, category: currentCategory })
+    await store.dispatch('category-next/loadCategoryProducts', { route, category: currentCategory, pageSize })
 
     const breadCrumbsLoader = store.dispatch('category-next/loadCategoryBreadcrumbs', currentCategory)
     if (isServer) {
@@ -113,7 +110,7 @@ const composeInitialPageState = async (store, route, forceLoad = false) => {
 export default {
   components: {
     LazyHydrate,
-    ButtonFull,
+    Dropdown,
     ButtonComponent,
     MaterialIcon,
     ProductListing,
@@ -125,8 +122,8 @@ export default {
   mixins: [ CategoryMixin, CategoryExtrasMixin, CategoryMetaMixin ],
   data () {
     return {
+      pageSize: this.$route && this.$route.query.pagesize ? this.$route.query.pagesize : 24,
       mobileFilters: false,
-      defaultColumn: 4,
       loadingProducts: false,
       loading: true
     }
@@ -147,17 +144,26 @@ export default {
     },
     getBreadcrumbs () {
       return this.$store.getters['category-next/getBreadcrumbs'].filter(breadcrumb => breadcrumb.name !== this.getCurrentCategory.name)
+    },
+    pageSizeOptions () {
+      return [
+        { value: 24, label: 24 },
+        { value: 48, label: 48 },
+        { value: 60, label: 60 },
+        { value: 100, label: 100 }
+      ]
     }
   },
-  async asyncData ({ store, route }) { // this is for SSR purposes to prefetch data - and it's always executed before parent component methods
-    await composeInitialPageState(store, route)
+  async asyncData ({ store, route, context }) { // this is for SSR purposes to prefetch data - and it's always executed before parent component methods
+    const { pageSize } = this.data()
+    await composeInitialPageState(store, route, false, route.params.pagesize || pageSize)
   },
   async beforeRouteEnter (to, from, next) {
     if (isServer) next() // SSR no need to invoke SW caching here
     else if (!from.name) { // SSR but client side invocation, we need to cache products and invoke requests from asyncData for offline support
       next(async vm => {
         vm.loading = true
-        await composeInitialPageState(vm.$store, to, true)
+        await composeInitialPageState(vm.$store, to, true, vm.pageSize)
         await vm.$store.dispatch('category-next/cacheProducts', { route: to }) // await here is because we must wait for the hydration
         vm.loading = false
       })
@@ -176,11 +182,12 @@ export default {
     closeFilters () {
       this.mobileFilters = false
     },
+    changePageSize (size) {
+      this.pageSize = size
+      this.$store.dispatch('category-next/switchSearchFilters', [ { type: 'pagesize', id: size } ])
+    },
     async changeFilter (filterVariant) {
       this.$store.dispatch('category-next/switchSearchFilters', [filterVariant])
-    },
-    columnChange (column) {
-      this.defaultColumn = column
     },
     async loadMoreProducts () {
       if (this.loadingProducts) return

@@ -1,6 +1,6 @@
 import FilterVariant from 'core/modules/catalog-next/types/FilterVariant';
 
-export const getSystemFilterNames: string[] = ['sort']
+export const getSystemFilterNames: string[] = ['sort', 'pagesize']
 
 /**
  * Creates new filtersQuery (based on currentQuery) by modifying specific filter variant.
