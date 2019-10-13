@@ -29,9 +29,10 @@ export default {
   watch: {
     value: {
       handler () {
-        const defaultVariant = this.value && this.value.length ? this.value : products.defaultSortBy.attribute
+        const { attribute, order } = products.defaultSortBy
+        const defaultVariant = this.value && this.value.length ? this.value : `${attribute}:${order}`
         this.sortby = this.sortingVariants.find(variant => variant.id === defaultVariant)
-        this.sortBySelect = this.sortby.id
+        this.sortBySelect = this.sortby.id || this.sortby
       },
       immediate: true
     },
