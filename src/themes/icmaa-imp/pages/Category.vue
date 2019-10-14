@@ -38,11 +38,13 @@
           {{ loadingProducts ? $t('Patience please ...') : $t('More products') }}
         </button-component>
       </div>
-      <div v-if="isCategoryEmpty">
-        <h4 data-testid="noProductsInfo">
+      <div class="t-bg-white t-mx-4 t-p-4 t-py-10 t-text-center" v-if="isCategoryEmpty">
+        <h4 class="t-text-base t-bold" data-testid="noProductsInfo">
           {{ $t('No products found!') }}
         </h4>
-        <p>{{ $t('Please change Your search criteria and try again. If still not finding anything relevant, please visit the Home page and try out some of our bestsellers!') }}</p>
+        <p class="t-text-sm t-text-base-light">
+          {{ $t('Please change Your search criteria and try again.') }}
+        </p>
       </div>
     </div>
 
