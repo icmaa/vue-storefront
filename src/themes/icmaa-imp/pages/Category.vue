@@ -28,7 +28,7 @@
       </div>
     </header>
 
-    <div class="t-container">
+    <div class="t-container t-pb-8">
       <lazy-hydrate :trigger-hydration="!loading" v-if="isLazyHydrateEnabled">
         <product-listing :products="getCategoryProducts" />
       </lazy-hydrate>
@@ -48,22 +48,12 @@
       </div>
     </div>
 
-    <div class="container pb60">
-      <div class="row m0 pt15">
-        <div class="col-md-3 start-xs mobile-filters" v-show="mobileFilters">
-          <div class="close-container absolute w-100">
-            <i class="material-icons p15 close cl-accent" @click="closeFilters">close</i>
-          </div>
-          <sidebar class="mobile-filters-body" :filters="getAvailableFilters" @changeFilter="changeFilter" />
-          <div class="relative pb20 pt15">
-            <div class="brdr-top-1 brdr-cl-primary absolute divider w-100" />
-          </div>
-          <button-component @click.native="closeFilters">
-            {{ $t('Filter') }}
-          </button-component>
-        </div>
-      </div>
-    </div>
+    <async-sidebar
+      :async-component="FilterSidebar"
+      :is-open="isSidebarOpen"
+      @close="$store.commit('ui/setCategoryfilter')"
+      direction="left"
+    />
   </div>
 </template>
 
@@ -72,11 +62,12 @@ import LazyHydrate from 'vue-lazy-hydration'
 
 import config from 'config'
 import rootStore from '@vue-storefront/core/store'
-import { mapGetters } from 'vuex'
+import { mapGetters, mapState } from 'vuex'
 import { isServer } from '@vue-storefront/core/helpers'
 import { catalogHooksExecutors } from '@vue-storefront/core/modules/catalog-next/hooks'
 import { getSearchOptionsFromRouteParams } from '@vue-storefront/core/modules/catalog-next/helpers/categoryHelpers'
 
+import AsyncSidebar from 'theme/components/theme/blocks/AsyncSidebar/AsyncSidebar.vue'
 import Sidebar from 'theme/components/core/blocks/Category/Sidebar'
 import SortBy from 'theme/components/core/blocks/Category/SortBy'
 import Dropdown from 'theme/components/core/blocks/Dropdown'
@@ -89,6 +80,8 @@ import CategoryMixin from 'icmaa-catalog/components/Category'
 import CategoryExtrasHeader from 'theme/components/core/blocks/CategoryExtras/Header'
 import CategoryExtrasMixin from 'icmaa-category-extras/mixins/categoryExtras'
 import CategoryMetaMixin from 'icmaa-meta/mixins/categoryMeta'
+
+const FilterSidebar = () => import(/* webpackPreload: true */ /* webpackChunkName: "vsf-sidebar-filter" */ 'theme/components/core/blocks/Category/Sidebar')
 
 const composeInitialPageState = async (store, route, forceLoad = false, pageSize) => {
   try {
@@ -111,31 +104,35 @@ const composeInitialPageState = async (store, route, forceLoad = false, pageSize
 
 export default {
   components: {
+    AsyncSidebar,
     LazyHydrate,
     Dropdown,
     ButtonComponent,
     MaterialIcon,
     ProductListing,
     Breadcrumbs,
-    Sidebar,
     SortBy,
     CategoryExtrasHeader
   },
   mixins: [ CategoryMixin, CategoryExtrasMixin, CategoryMetaMixin ],
   data () {
     return {
+      pageSizes: [24, 48, 60, 100],
       pageSize: this.$route && this.$route.query.pagesize ? this.$route.query.pagesize : 24,
       mobileFilters: false,
       loadingProducts: false,
-      loading: true
+      loading: true,
+      FilterSidebar
     }
   },
   computed: {
+    ...mapState({
+      isSidebarOpen: state => state.ui.categoryfilter
+    }),
     ...mapGetters({
       getCurrentSearchQuery: 'category-next/getCurrentSearchQuery',
       getCategoryProducts: 'category-next/getCategoryProducts',
       getCurrentCategory: 'category-next/getCurrentCategory',
-      getAvailableFilters: 'category-next/getAvailableFilters',
       getCategoryProductsTotal: 'category-next/getCategoryProductsTotal',
       getProductsStats: 'category-next/getCategorySearchProductsStats'
     }),
@@ -149,12 +146,7 @@ export default {
       return this.$store.getters['category-next/getBreadcrumbs'].filter(breadcrumb => breadcrumb.name !== this.getCurrentCategory.name)
     },
     pageSizeOptions () {
-      return [
-        { value: 24, label: 24 },
-        { value: 48, label: 48 },
-        { value: 60, label: 60 },
-        { value: 100, label: 100 }
-      ]
+      return this.pageSizes.map(s => { return { value: s, label: s } })
     },
     moreProductsInSearchResults () {
       const { perPage, start, total } = this.getProductsStats
@@ -184,17 +176,11 @@ export default {
   },
   methods: {
     openFilters () {
-      this.mobileFilters = true
-    },
-    closeFilters () {
-      this.mobileFilters = false
+      this.$store.dispatch('ui/toggleCategoryfilter')
     },
     changePageSize (size) {
       this.pageSize = size
       this.$store.dispatch('category-next/switchSearchFilters', [ { type: 'pagesize', id: size } ])
-    },
-    async changeFilter (filterVariant) {
-      this.$store.dispatch('category-next/switchSearchFilters', [filterVariant])
     },
     async loadMoreProducts () {
       if (this.loadingProducts) {
@@ -213,83 +199,3 @@ export default {
   }
 }
 </script>
-
-<style lang="scss" scoped>
-.btn {
-  &__filter {
-    min-width: 100px;
-  }
-}
-.divider {
-  width: calc(100vw - 8px);
-  bottom: 20px;
-  left: -36px;
-}
-.category-filters {
-  width: 242px;
-}
-
-.mobile-filters {
-  overflow: auto;
-}
-
-.mobile-filters-button {
-  display: none;
-}
-
-.mobile-sorting {
-  display: none;
-}
-
-.sorting {
-  label {
-    margin-right: 10px;
-  }
-}
-
-.products-list {
-  width: 100%;
-  max-width: none;
-}
-
-.mobile-filters-button {
-  display: block;
-  height: 45px;
-}
-
-.sorting {
-  display: none;
-}
-
-.mobile-sorting {
-  display: block;
-}
-
-.category-filters {
-  display: none;
-}
-
-.mobile-filters {
-  position: fixed;
-  background-color: #F2F2F2;
-  z-index: 5;
-  padding: 0 40px;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  top: 0;
-  box-sizing: border-box;
-}
-
-.mobile-filters-body {
-  padding-top: 50px;
-}
-
-.close-container {
-  left: 0;
-}
-
-.close {
-  margin-left: auto;
-}
-</style>

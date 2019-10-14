@@ -7,6 +7,7 @@ export const uiStore = {
     wishlist: false,
     searchpanel: false,
     addtocart: false,
+    categoryfilter: false,
     newsletterPopup: false,
     overlay: false,
     loader: false,
@@ -28,6 +29,7 @@ export const uiStore = {
       state.searchpanel = false
       state.wishlist = false
       state.addtocart = false
+      state.categoryfilter = false
       state.overlay = false
     },
     setCheckoutMode (state, action) {
@@ -51,6 +53,10 @@ export const uiStore = {
     },
     setAddtocart (state, action) {
       state.addtocart = action === true
+      state.overlay = action === true
+    },
+    setCategoryfilter (state, action) {
+      state.categoryfilter = action === true
       state.overlay = action === true
     },
     setOverlay (state, action) {
@@ -87,6 +93,9 @@ export const uiStore = {
     },
     toggleAddtocart ({ commit, state }) {
       commit('setAddtocart', !state.addtocart)
+    },
+    toggleCategoryfilter ({ commit, state }) {
+      commit('setCategoryfilter', !state.categoryfilter)
     }
   },
   getters: {
