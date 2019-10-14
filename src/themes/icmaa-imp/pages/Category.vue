@@ -15,10 +15,11 @@
                 <material-icon icon="keyboard_arrow_down" size="xs" class="t-align-middle t-text-primary" />
               </dropdown>
             </div>
-            <div class="t-w-1/2 lg:t-w-3/4 t-px-1 lg:t-px-2">
+            <div class="t-w-1/2 lg:t-w-3/4 t-px-1 lg:t-px-2 t-flex t-items-center">
               <button-component style="second" align="stretch" icon="filter_list" @click.native="openFilters" class="t-w-full lg:t-w-auto">
                 {{ $t('Filters') }}
               </button-component>
+              <presets @change="changeFilter" class="t-hidden lg:t-flex t-items-center t-ml-2" />
             </div>
             <div class="t-w-1/2 lg:t-w-1/4 t-px-1 lg:t-px-2">
               <sort-by :has-label="true" @change="changeFilter" :value="getCurrentSearchQuery.sort" />
@@ -70,9 +71,10 @@ import { getSearchOptionsFromRouteParams } from '@vue-storefront/core/modules/ca
 import AsyncSidebar from 'theme/components/theme/blocks/AsyncSidebar/AsyncSidebar.vue'
 import Sidebar from 'theme/components/core/blocks/Category/Sidebar'
 import SortBy from 'theme/components/core/blocks/Category/SortBy'
-import Dropdown from 'theme/components/core/blocks/Dropdown'
+import Presets from 'theme/components/core/blocks/Category/Presets'
 import ProductListing from 'theme/components/core/ProductListing'
 import Breadcrumbs from 'theme/components/core/Breadcrumbs'
+import Dropdown from 'theme/components/core/blocks/Dropdown'
 import ButtonComponent from 'theme/components/core/blocks/Button'
 import MaterialIcon from 'theme/components/core/blocks/MaterialIcon'
 
@@ -81,7 +83,7 @@ import CategoryExtrasHeader from 'theme/components/core/blocks/CategoryExtras/He
 import CategoryExtrasMixin from 'icmaa-category-extras/mixins/categoryExtras'
 import CategoryMetaMixin from 'icmaa-meta/mixins/categoryMeta'
 
-const FilterSidebar = () => import(/* webpackPreload: true */ /* webpackChunkName: "vsf-sidebar-filter" */ 'theme/components/core/blocks/Category/Sidebar')
+const FilterSidebar = () => import(/* webpackPreload: true */ /* webpackChunkName: "vsf-sidebar-categoryfilter" */ 'theme/components/core/blocks/Category/Sidebar')
 
 const composeInitialPageState = async (store, route, forceLoad = false, pageSize) => {
   try {
@@ -109,6 +111,7 @@ export default {
     Dropdown,
     ButtonComponent,
     MaterialIcon,
+    Presets,
     ProductListing,
     Breadcrumbs,
     SortBy,
@@ -175,6 +178,13 @@ export default {
     }
   },
   methods: {
+    async changeFilter (filterVariants) {
+      if (!Array.isArray(filterVariants)) {
+        filterVariants = [filterVariants]
+      }
+
+      this.$store.dispatch('category-next/switchSearchFilters', filterVariants)
+    },
     openFilters () {
       this.$store.dispatch('ui/toggleCategoryfilter')
     },
