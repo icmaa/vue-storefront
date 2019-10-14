@@ -22,8 +22,6 @@ export default {
           const exclude = v.exclude || []
           const handler = v.handler || v || 'outsideClick'
 
-          console.log(handler)
-
           // This variable indicates if the clicked element is excluded
           let clickedOnExcludedEl = false
           exclude.forEach(refName => {
