@@ -2,17 +2,19 @@
   <div id="home" class="t-container">
     <teaser tags="2" class="sm:t-pt-4 t-pb-8" />
     <teaser tags="2" :show-large="false" :show-small-in-row="true" class="t-pb-8" />
-    <logo-line :parent-id="16" :limit="12" class="t-px-4 t-pb-8" />
+    <div class="t-flex t-flex-wrap t-px-2 t-pb-4">
+      <logo-line :parent-id="16" path="/merchandise" :title="'Bands'" class="t-mb-4 lg:t-mb-0" />
+      <logo-line :parent-id="14" path="/streetwear" :title="'Brands'" />
+    </div>
   </div>
 </template>
 
 <script>
 import config from 'config'
-import { mapGetters } from 'vuex'
 import { onlineHelper } from '@vue-storefront/core/helpers'
 
 import Teaser from 'theme/components/core/blocks/Teaser/Teaser'
-import LogoLine from 'theme/components/core/blocks/CategoryExtras/LogoLine'
+import LogoLine from 'theme/components/core/blocks/CategoryExtras/LogoLineBlock'
 
 export default {
   components: {

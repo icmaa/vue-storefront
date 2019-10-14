@@ -1,12 +1,13 @@
 <template>
-  <div class="t-flex t-flex-wrap t-justify-between">
-    <department-logo v-for="(logo, index) in logoLineItems" :key="index" v-bind="logo.data()" class="t-flex-fix t-opacity-75 hover:t-opacity-100" :class="{ 't-mr-4': (index - 1 === logoLineItems.length)}" />
+  <div class="t-flex t-flex-wrap">
+    <div v-for="(logo, index) in logoLineItems" :key="'logo-' + index" class="t-flex-fix t-px-2">
+      <department-logo v-bind="logo.data()" class="t-flex t-px-4 t-py-2" :class="[ ...logoClassObj, white ? 't-bg-white' : 't-border-base-lightest t-border-b' ]" />
+    </div>
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
-import { getThumbnailPath } from '@vue-storefront/core/helpers'
 import sampleSize from 'lodash-es/sampleSize'
 
 import DepartmentLogo from 'theme/components/core/blocks/CategoryExtras/DepartmentLogo'
@@ -28,15 +29,22 @@ export default {
     limit: {
       type: Number,
       default: 5
+    },
+    white: {
+      type: Boolean,
+      default: true
+    },
+    logoClass: {
+      type: [String, Array, Object],
+      default: ''
     }
   },
   async mounted () {
     await this.$store.dispatch('icmaaCategoryExtras/loadDepartmentLogos')
     await this.$store.dispatch('icmaaCategoryExtras/loadChildCategoryIdMap', [ this.parentId ])
-    await this.$store.dispatch('icmaaCategoryExtras/list', this.randomDepartmentLogoIdentifier.join(','))
 
-    const categorySearchOptions = { filters: { 'url_key': this.randomDepartmentLogoIdentifier } }
-    this.categories = await this.$store.dispatch('category-next/loadCategories', categorySearchOptions)
+    const filters = { 'url_key': this.randomDepartmentLogoIdentifier }
+    this.categories = await this.$store.dispatch('category-next/loadCategories', { filters })
   },
   computed: {
     ...mapGetters('icmaaCategoryExtras', [ 'getCategoryChildrenMap', 'getDepartmentLogos', 'getLogolineItems' ]),
@@ -63,6 +71,9 @@ export default {
     },
     logoLineItems () {
       return this.getLogolineItems(this.categories)
+    },
+    logoClassObj () {
+      return typeof this.logoClass === 'string' ? [this.logoClass] : this.logoClass
     }
   }
 }
