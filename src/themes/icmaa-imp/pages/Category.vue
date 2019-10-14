@@ -9,7 +9,7 @@
             <div class="t-hidden lg:t-block t-w-1/4 t-px-1 lg:t-px-2 t-text-sm t-text-base-dark t-text-right">
               <span class="t-font-bold">{{ getCategoryProductsTotal }}</span> {{ $t('items') }}
               <span class="t-mx-2 t-text-base-lighter">|</span>
-              <dropdown @change="changePageSize" :options="pageSizeOptions" :current="pageSize" name="pagesize" class="t-inline-block">
+              <dropdown @change="changePageSize" :options="pageSizeOptions" :current="parseInt(pageSize)" position="right" name="pagesize" class="t-inline-block" :dropdown-class="{ 't-w-32 t-mt-2': true }">
                 {{ pageSize }} {{ $t('items per page') }}
                 <material-icon icon="keyboard_arrow_down" size="xs" class="t-align-middle t-text-primary" />
               </dropdown>
@@ -33,7 +33,7 @@
         <product-listing :products="getCategoryProducts" />
       </lazy-hydrate>
       <product-listing v-else :products="getCategoryProducts" />
-      <div class="t-flex t-items-center t-justify-center">
+      <div class="t-flex t-items-center t-justify-center" v-if="moreProductsInSearchResults">
         <button-component type="ghost" @click.native="loadMoreProducts" :disabled="loadingProducts">
           {{ loadingProducts ? $t('Patience please ...') : $t('More products') }}
         </button-component>
@@ -133,8 +133,9 @@ export default {
       getCurrentSearchQuery: 'category-next/getCurrentSearchQuery',
       getCategoryProducts: 'category-next/getCategoryProducts',
       getCurrentCategory: 'category-next/getCurrentCategory',
+      getAvailableFilters: 'category-next/getAvailableFilters',
       getCategoryProductsTotal: 'category-next/getCategoryProductsTotal',
-      getAvailableFilters: 'category-next/getAvailableFilters'
+      getProductsStats: 'category-next/getCategorySearchProductsStats'
     }),
     isLazyHydrateEnabled () {
       return config.ssr.lazyHydrateFor.includes('category-next.products')
@@ -152,6 +153,10 @@ export default {
         { value: 60, label: 60 },
         { value: 100, label: 100 }
       ]
+    },
+    moreProductsInSearchResults () {
+      const { perPage, start, total } = this.getProductsStats
+      return (start + perPage < total)
     }
   },
   async asyncData ({ store, route, context }) { // this is for SSR purposes to prefetch data - and it's always executed before parent component methods
@@ -190,9 +195,12 @@ export default {
       this.$store.dispatch('category-next/switchSearchFilters', [filterVariant])
     },
     async loadMoreProducts () {
-      if (this.loadingProducts) return
-      this.loadingProducts = true
+      if (this.loadingProducts) {
+        return
+      }
+
       try {
+        this.loadingProducts = true
         await this.$store.dispatch('category-next/loadMoreCategoryProducts')
       } catch (e) {
         console.error('Problem with fetching more products', e)

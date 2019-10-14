@@ -24,6 +24,10 @@ module.exports = {
         'base-lightest': '#EDEDED',
         'alert': '#CC2823'
       },
+      inset: {
+        '1/2': '50%',
+        'full': '100%'
+      },
       spacing: {
         '1/8': '0.125rem',
         '3-1/2': '0.85rem',
