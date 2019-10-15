@@ -10,7 +10,7 @@
         {{ $t('Clear filters') }}
       </h4>
       <div v-for="(filter, attributeKey) in availableFilters" :key="attributeKey">
-        <h5 @click="testSidebar">
+        <h5 @click="testSidebar(attributeKey)">
           {{ attributeLabel({ attributeKey }) }}
         </h5>
         <div class="t-flex t-flex-wrap" v-if="attributeKey==='color'">
@@ -34,7 +34,7 @@
           />
         </div>
       </div>
-      <submenu v-for="(sidebar, i) in sidebarPath" :key="i" :index="i" :sidebar="sidebar" />
+      <submenu v-for="(item, i) in sidebarPath" :key="i" :index="i" :async-component="getComponent(item.component)" />
     </div>
   </sidebar>
 </template>
@@ -47,7 +47,14 @@ import ColorSelector from 'theme/components/core/blocks/Category/Filter/ColorSel
 import GenericSelector from 'theme/components/core/blocks/Category/Filter/GenericSelector'
 import pickBy from 'lodash-es/pickBy'
 
+const Filter = () => import(/* webpackPreload: true */ /* webpackChunkName: "vsf-category-filter" */ 'theme/components/core/blocks/Category/Filter')
+
 export default {
+  data () {
+    return {
+      Filter
+    }
+  },
   components: {
     Sidebar,
     Submenu,
@@ -79,8 +86,11 @@ export default {
     sortById (filters) {
       return [...filters].sort((a, b) => { return a.id - b.id })
     },
-    testSidebar () {
-      this.$store.dispatch('ui/addSidebarPath', 'This is a test')
+    getComponent (key) {
+      return this[key]
+    },
+    testSidebar (filterName) {
+      this.$store.dispatch('ui/addSidebarPath', { component: 'Filter', test: filterName })
     }
   }
 }
