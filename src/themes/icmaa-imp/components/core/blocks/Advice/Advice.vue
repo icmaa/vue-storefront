@@ -4,9 +4,9 @@
       class="t-flex t-w-full row-01 t-items-center t-justify-center"
       style="background-color: #3D9FA5; color:white"
       id="advice"
-      v-if="isOpen"
+      v-if="advice && isOpen"
     >
-      <div>{{ text }}</div>
+      <div>{{ advice.text }}</div>
       <button-component
         class="t-justify-end"
         type="transparent-white"
@@ -44,9 +44,9 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('icmaaAdvice', ['getAdvice']),
+    ...mapGetters('icmaaAdvice', ['getSingleAdvice']),
     advice () {
-      return this.getAdvice();
+      return this.getSingleAdvice;
     }
   },
   mounted () {
