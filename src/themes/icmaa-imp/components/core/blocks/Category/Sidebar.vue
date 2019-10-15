@@ -37,18 +37,6 @@
             @change="changeFilter"
           />
         </div>
-        <div v-else-if="filterIndex==='size'">
-          <size-selector
-            context="category"
-            code="size"
-            class="size-select mr10 mb10"
-            v-for="(size, index) in sortById(filter)"
-            :key="index"
-            :variant="size"
-            :selected-filters="getCurrentFilters"
-            @change="changeFilter"
-          />
-        </div>
         <div v-else-if="filterIndex==='price'">
           <price-selector
             context="category"
@@ -85,17 +73,15 @@
 <script>
 import { mapGetters } from 'vuex'
 import Sidebar from 'theme/components/theme/blocks/AsyncSidebar/Sidebar'
-import ColorSelector from 'theme/components/core/ColorSelector'
-import SizeSelector from 'theme/components/core/SizeSelector'
-import PriceSelector from 'theme/components/core/PriceSelector'
-import GenericSelector from 'theme/components/core/GenericSelector'
+import ColorSelector from 'theme/components/core/blocks/Category/Filter/ColorSelector'
+import PriceSelector from 'theme/components/core/blocks/Category/Filter/PriceSelector'
+import GenericSelector from 'theme/components/core/blocks/Category/Filter/GenericSelector'
 import pickBy from 'lodash-es/pickBy'
 
 export default {
   components: {
     Sidebar,
     ColorSelector,
-    SizeSelector,
     PriceSelector,
     GenericSelector
   },
