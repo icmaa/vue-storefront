@@ -10,6 +10,8 @@ import * as types from './mutation-types';
 import AdviceState, { AdviceStateItem } from '../types/AdviceState';
 import RootState from '@vue-storefront/core/types/RootState';
 
+import { getCurrentStoreviewDatetime } from '../../icmaa-teaser/helper/date'
+
 const documentType = 'advice';
 const mutationTypes: MutationTypesInterface = {
   add: types.ICMAA_ADVICE_ADD,
@@ -20,7 +22,9 @@ const mutationTypes: MutationTypesInterface = {
 const actions: ActionTree<AdviceState, RootState> = {
   list: async (context): Promise<AdviceStateItem[]> => {
     const options = {
-      active: { in: true }
+      active: { in: true },
+      show_from: { 'lt-date': getCurrentStoreviewDatetime() },
+      show_to: { 'gt-date': getCurrentStoreviewDatetime() }
     };
 
     return listAbstract<AdviceStateItem>({
