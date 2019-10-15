@@ -1,8 +1,11 @@
+import Vue from 'vue'
+
 export const uiStore = {
   namespaced: true,
   state: {
     viewport: false,
     sidebar: false,
+    sidebarPath: [],
     microcart: false,
     wishlist: false,
     searchpanel: false,
@@ -35,29 +38,16 @@ export const uiStore = {
     setCheckoutMode (state, action) {
       state.checkoutMode = action === true
     },
-    setMicrocart (state, action) {
-      state.microcart = action === true
-      state.overlay = action === true
+    toggleSidebar (state, property, action) {
+      state.sidebarPath = []
+      state[property] = action || !state[property]
+      state.overlay = action || !state[property]
     },
-    setSidebar (state, action) {
-      state.sidebar = action === true
-      state.overlay = action === true
+    addSidebarPath (state, payload) {
+      state.sidebarPath.push(payload)
     },
-    setSearchpanel (state, action) {
-      state.searchpanel = action === true
-      state.overlay = action === true
-    },
-    setWishlist (state, action) {
-      state.wishlist = action === true
-      state.overlay = action === true
-    },
-    setAddtocart (state, action) {
-      state.addtocart = action === true
-      state.overlay = action === true
-    },
-    setCategoryfilter (state, action) {
-      state.categoryfilter = action === true
-      state.overlay = action === true
+    removeSidebarPath (state) {
+      Vue.delete(state.sidebarPath, state.sidebarPath.length - 1)
     },
     setOverlay (state, action) {
       state.overlay = action === true
@@ -85,20 +75,30 @@ export const uiStore = {
     closeAll ({ commit }) {
       commit('setCloseAll')
     },
-    toggleMicrocart ({ commit, state }) {
-      commit('setMicrocart', !state.microcart)
+    setSidebar ({ commit, state }, status) {
+      commit('toggleSidebar', 'sidebar', status)
     },
-    toggleWishlist ({ commit, state }) {
-      commit('setWishlist', !state.wishlist)
+    setMicrocart ({ commit, state }, status) {
+      commit('toggleSidebar', 'microcart', status)
     },
-    toggleAddtocart ({ commit, state }) {
-      commit('setAddtocart', !state.addtocart)
+    setWishlist ({ commit, state }, status) {
+      commit('toggleSidebar', 'wishlist', status)
     },
-    toggleCategoryfilter ({ commit, state }) {
-      commit('setCategoryfilter', !state.categoryfilter)
+    setAddtocart ({ commit, state }, status) {
+      commit('toggleSidebar', 'addtocart', status)
+    },
+    setCategoryfilter ({ commit, state }, status) {
+      commit('toggleSidebar', 'categoryfilter', status)
+    },
+    addSidebarPath ({ commit }, pathItem) {
+      commit('addSidebarPath', pathItem)
+    },
+    removeSidebarPath ({ commit }) {
+      commit('removeSidebarPath')
     }
   },
   getters: {
-    getViewport: state => state.viewport
+    getViewport: state => state.viewport,
+    getSidebarPath: state => state.sidebarPath
   }
 }

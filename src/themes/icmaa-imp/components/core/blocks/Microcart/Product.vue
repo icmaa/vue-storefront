@@ -23,7 +23,7 @@
               class="serif h4 name"
               :to="productLink"
               data-testid="productLink"
-              @click.native="$store.commit('ui/setMicrocart', false)"
+              @click.native="$store.dispatch('ui/setMicrocart', false)"
             >
               {{ product.name | htmlDecode }}
             </router-link>

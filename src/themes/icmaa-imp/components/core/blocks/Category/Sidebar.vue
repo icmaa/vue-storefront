@@ -5,30 +5,16 @@
         {{ $t('Filter') }}
       </h2>
     </template>
-    <div>
-      <h4 class="sidebar__header relative mt35 mb20 flex">
-        <span
-          class="weight-400 sidebar__header__clear pointer sans-serif flex lh25"
-          @click="resetAllFilters"
-          v-show="hasActiveFilters"
-        >
-          <i class="material-icons cl-accent mr5">
-            cancel
-          </i>
-          {{ $t('Clear filters') }}
-        </span>
+    <div class="submenu-wrapper" :style="{ transform: `translateX(${translateX}%)` }">
+      <h4 @click="resetAllFilters" v-show="hasActiveFilters">
+        {{ $t('Clear filters') }}
       </h4>
-      <div
-        v-for="(filter, filterIndex) in availableFilters"
-        :key="filterIndex"
-      >
-        <h5>
-          {{ $t(filterIndex + '_filter') }}
+      <div v-for="(filter, attributeKey) in availableFilters" :key="attributeKey">
+        <h5 @click="testSidebar">
+          {{ attributeLabel({ attributeKey }) }}
         </h5>
-
-        <div v-if="filterIndex==='color'" class="t-flex t-flex-wrap">
+        <div class="t-flex t-flex-wrap" v-if="attributeKey==='color'">
           <color-selector
-            context="category"
             code="color"
             v-for="(color, index) in filter"
             :key="index"
@@ -37,27 +23,9 @@
             @change="changeFilter"
           />
         </div>
-        <div v-else-if="filterIndex==='price'">
-          <price-selector
-            context="category"
-            class="price-select mb10 block"
-            code="price"
-            v-for="(price, index) in filter"
-            :key="index"
-            :id="price.id"
-            :from="price.from"
-            :to="price.to"
-            :content="price.label"
-            :variant="price"
-            :selected-filters="getCurrentFilters"
-            @change="changeFilter"
-          />
-        </div>
         <div v-else class="sidebar__inline-selecors">
           <generic-selector
-            context="category"
-            class="mr10 mb10 block"
-            :code="filterIndex"
+            :code="attributeKey"
             v-for="(option, index) in filter"
             :key="index"
             :variant="option"
@@ -66,6 +34,7 @@
           />
         </div>
       </div>
+      <submenu v-for="(sidebar, i) in sidebarPath" :key="i" :index="i" :sidebar="sidebar" />
     </div>
   </sidebar>
 </template>
@@ -73,27 +42,31 @@
 <script>
 import { mapGetters } from 'vuex'
 import Sidebar from 'theme/components/theme/blocks/AsyncSidebar/Sidebar'
+import Submenu from 'theme/components/theme/blocks/AsyncSidebar/Submenu'
 import ColorSelector from 'theme/components/core/blocks/Category/Filter/ColorSelector'
-import PriceSelector from 'theme/components/core/blocks/Category/Filter/PriceSelector'
 import GenericSelector from 'theme/components/core/blocks/Category/Filter/GenericSelector'
 import pickBy from 'lodash-es/pickBy'
 
 export default {
   components: {
     Sidebar,
+    Submenu,
     ColorSelector,
-    PriceSelector,
     GenericSelector
   },
   computed: {
     ...mapGetters({
       filters: 'category-next/getAvailableFilters',
       getCurrentFilters: 'category-next/getCurrentFilters',
-      hasActiveFilters: 'category-next/hasActiveFilters'
-
+      hasActiveFilters: 'category-next/hasActiveFilters',
+      attributeLabel: 'attribute/getAttributeLabel',
+      sidebarPath: 'ui/getSidebarPath'
     }),
     availableFilters () {
       return pickBy(this.filters, (filter, filterType) => { return (filter.length && !this.$store.getters['category-next/getSystemFilterNames'].includes(filterType)) })
+    },
+    translateX () {
+      return this.sidebarPath.length > 0 ? (this.sidebarPath.length) * -100 : 0
     }
   },
   methods: {
@@ -105,6 +78,9 @@ export default {
     },
     sortById (filters) {
       return [...filters].sort((a, b) => { return a.id - b.id })
+    },
+    testSidebar () {
+      this.$store.dispatch('ui/addSidebarPath', 'This is a test')
     }
   }
 }

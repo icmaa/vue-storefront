@@ -5,7 +5,7 @@
       <div class="t-flex-expand" />
       <top-button icon="close" text="Close" tabindex="1" @click.native="closeMenu" class="t-text-base" />
     </div>
-    <div @click="closeAfterClick" class="t-p-3 t-pt-4 t-flex t-flex-wrap">
+    <div @click="closeAfterClick" class="sidebar-content t-p-3 t-pt-4 t-flex t-flex-wrap">
       <slot />
     </div>
     <slot name="footer" />
@@ -58,6 +58,11 @@ export default {
 
 .top {
   height: 60px;
+}
+
+.sidebar-content .submenu-wrapper {
+  position: relative;
+  transition: transform .5s;
 }
 
 </style>

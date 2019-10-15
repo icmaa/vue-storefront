@@ -186,7 +186,7 @@ export default {
       this.$store.dispatch('category-next/switchSearchFilters', filterVariants)
     },
     openFilters () {
-      this.$store.dispatch('ui/toggleCategoryfilter')
+      this.$store.dispatch('ui/setCategoryfilter')
     },
     changePageSize (size) {
       this.pageSize = size
