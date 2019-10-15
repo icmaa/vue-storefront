@@ -26,7 +26,7 @@
           {{ $t(filterIndex + '_filter') }}
         </h5>
 
-        <div v-if="filterIndex==='color'">
+        <div v-if="filterIndex==='color'" class="t-flex t-flex-wrap">
           <color-selector
             context="category"
             code="color"
