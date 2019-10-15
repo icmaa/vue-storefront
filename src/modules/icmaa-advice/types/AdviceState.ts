@@ -1,7 +1,12 @@
 import { AbstractStateItem } from 'icmaa-cms/types/AbstractState'
 
 export interface AdviceStateItem extends AbstractStateItem {
-  textColor: string,
+  active: boolean,
+  showFrom: string,
+  showTo: string,
+  cluster: string[],
+  text: string,
+  link: string,
   [key: string]: any
 }
 
