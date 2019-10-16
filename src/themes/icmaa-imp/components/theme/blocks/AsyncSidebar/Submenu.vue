@@ -1,15 +1,28 @@
 <template>
-  <div class="t-absolute t-top-0 t-w-full" :style="{ left: `${(index + 1) * 100}%` }">
+  <sidebar class="t-absolute t-top-0 t-w-full" :style="{ left: `${(index + 1) * 100}%` }" :close-on-click="false">
+    <template v-slot:top>
+      <top-button icon="keyboard_arrow_left" text="Back" :tab-index="1" @click.native="close" class="t-text-base" />
+      <h2 class="t-self-center t-pl-2 t-text-lg t-text-base-dark" v-if="sidebar.title">
+        {{ sidebar.title }}
+      </h2>
+    </template>
     <component :is="component" @close="close" @reload="getComponent" v-bind="sidebar" />
-  </div>
+  </sidebar>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
+import Sidebar from 'theme/components/theme/blocks/AsyncSidebar/Sidebar'
+import TopButton from 'theme/components/theme/blocks/AsyncSidebar/TopButton'
 import LoadingSpinner from 'theme/components/theme/blocks/AsyncSidebar/LoadingSpinner.vue'
 import LoadingError from 'theme/components/theme/blocks/AsyncSidebar/LoadingError.vue'
 
 export default {
+  name: 'AsyncSidebarSubmenu',
+  components: {
+    Sidebar,
+    TopButton
+  },
   props: {
     index: {
       type: Number,

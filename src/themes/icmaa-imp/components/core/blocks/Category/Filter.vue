@@ -1,6 +1,5 @@
 <template>
   <div class="filter">
-    Filter: {{ attributeLabel({ attributeKey }) }}
     <generic-selector
       :code="attributeKey"
       v-for="(option, index) in options"
@@ -9,21 +8,17 @@
       :selected-filters="getCurrentFilters"
       @change="changeFilter"
     />
-    <button-component icon="keyboard_arrow_left" @click.native="$emit('close')">
-      {{ $t('Back') }}
-    </button-component>
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
 import GenericSelector from 'theme/components/core/blocks/Category/Filter/GenericSelector'
-import ButtonComponent from 'theme/components/core/blocks/Button'
 
 export default {
+  name: 'CategoryFilter',
   components: {
-    GenericSelector,
-    ButtonComponent
+    GenericSelector
   },
   props: {
     attributeKey: {
@@ -37,8 +32,7 @@ export default {
   },
   computed: {
     ...mapGetters({
-      getCurrentFilters: 'category-next/getCurrentFilters',
-      attributeLabel: 'attribute/getAttributeLabel'
+      getCurrentFilters: 'category-next/getCurrentFilters'
     })
   },
   methods: {

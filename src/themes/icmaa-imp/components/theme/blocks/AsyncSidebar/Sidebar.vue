@@ -60,9 +60,4 @@ export default {
   height: 60px;
 }
 
-.sidebar-content .submenu-wrapper {
-  position: relative;
-  transition: transform .5s;
-}
-
 </style>
