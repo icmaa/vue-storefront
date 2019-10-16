@@ -6,7 +6,7 @@
       <div class="t-flex-expand" />
       <top-button icon="close" text="Close" :tab-index="1" @click.native="closeMenu" class="t-text-base" />
     </div>
-    <div @click="closeAfterClick" class="sidebar-content t-p-3 t-pt-4 t-flex t-flex-wrap">
+    <div @click="closeAfterClick" class="sidebar-content t-p-4">
       <slot />
     </div>
     <slot name="footer" />

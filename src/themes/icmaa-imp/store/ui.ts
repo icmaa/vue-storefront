@@ -39,9 +39,10 @@ export const uiStore = {
       state.checkoutMode = action === true
     },
     toggleSidebar (state, property, action) {
+      const status = action || !state[property]
       state.sidebarPath = []
-      state[property] = action || !state[property]
-      state.overlay = action || !state[property]
+      state[property] = status
+      state.overlay = status
     },
     addSidebarPath (state, payload) {
       state.sidebarPath.push(payload)

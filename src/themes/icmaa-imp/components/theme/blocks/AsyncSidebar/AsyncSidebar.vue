@@ -7,7 +7,7 @@
       ref="sidebar"
       v-if="isOpen"
     >
-      <div class="submenu-wrapper" :style="{ transform: `translateX(${translateX}%)` }">
+      <div class="submenu-wrapper" :style="{ ...translateX }">
         <component :is="component" @close="$emit('close')" @reload="getComponent" />
         <submenu v-for="(item, i) in sidebarPath" :key="i" :index="i" :async-component="item.component" />
       </div>
@@ -73,8 +73,12 @@ export default {
   },
   computed: {
     ...mapGetters({ sidebarPath: 'ui/getSidebarPath' }),
+    hasSubmenu () {
+      return this.sidebarPath.length > 0
+    },
     translateX () {
-      return this.sidebarPath.length > 0 ? (this.sidebarPath.length) * -100 : 0
+      const translateX = this.sidebarPath.length > 0 ? (this.sidebarPath.length) * -100 : 0
+      return this.hasSubmenu ? { transform: `translateX(${translateX}%)` } : {}
     }
   }
 }

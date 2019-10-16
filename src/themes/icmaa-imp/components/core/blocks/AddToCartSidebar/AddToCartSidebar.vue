@@ -1,6 +1,6 @@
 <template>
   <sidebar :title="productOptionsLabel" :close-on-click="false">
-    <div class="t-p-1 t-w-full t-flex t-flex-wrap">
+    <div class="t-flex t-flex-wrap">
       <template v-if="product.type_id =='configurable'">
         <div class="error t-w-full " v-if="product.errors && Object.keys(product.errors).length > 0">
           {{ product.errors | formatProductMessages }}
