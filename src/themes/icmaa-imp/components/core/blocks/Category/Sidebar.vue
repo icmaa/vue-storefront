@@ -71,10 +71,7 @@ export default {
       let filters = Object.entries(this.filters).map(v => { return { attributeKey: v[0], options: v[1] } })
       return filters
         .filter(f => f.options.length && !this.$store.getters['category-next/getSystemFilterNames'].includes(f.attributeKey))
-        .map(f => {
-          f['submenu'] = submenuFilters.includes(f.attributeKey)
-          return f
-        })
+        .map(f => { return { ...f, submenu: submenuFilters.includes(f.attributeKey) } })
     },
     translateX () {
       return this.sidebarPath.length > 0 ? (this.sidebarPath.length) * -100 : 0
@@ -86,12 +83,6 @@ export default {
     },
     resetAllFilters () {
       this.$store.dispatch('category-next/resetSearchFilters')
-    },
-    sortById (filters) {
-      return [...filters].sort((a, b) => { return a.id - b.id })
-    },
-    getComponent (key) {
-      return this[key]
     },
     openSubmenuFilter (filter) {
       if (filter.submenu) {
