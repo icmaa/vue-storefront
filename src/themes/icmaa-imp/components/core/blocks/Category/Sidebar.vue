@@ -1,9 +1,16 @@
 <template>
   <sidebar :title="$t('Filter')" :close-on-click="false">
     <h4 @click="resetAllFilters" v-if="hasActiveFilters" v-text="$t('Clear filters')" />
-    <div v-for="(filter) in availableFilters" :key="filter.attributeKey" class="t-w-full t-mb-4">
-      <h5 @click="openSubmenuFilter(filter)" v-text="filter.label" />
-      <filter-wrapper :attribute-key="filter.attributeKey" :options="filter.options" v-if="!filter.submenu" />
+    <div v-for="filter in availableFilters" :key="filter.attributeKey" class="t-w-full">
+      <template v-if="filter.submenu">
+        <button-component icon="arrow_forward" type="select" class="t-w-full t-mb-6" @click="openSubmenuFilter(filter)">
+          {{ filter.label }}
+        </button-component>
+      </template>
+      <template v-else>
+        <h5 v-text="filter.label" class="t-text-xs t-text-base-tone t-mb-3" />
+        <filter-wrapper :attribute-key="filter.attributeKey" :options="filter.options" />
+      </template>
     </div>
   </sidebar>
 </template>
@@ -13,6 +20,7 @@ import { mapGetters } from 'vuex'
 import config from 'config'
 import Sidebar from 'theme/components/theme/blocks/AsyncSidebar/Sidebar'
 import FilterWrapper from 'theme/components/core/blocks/Category/Filter'
+import ButtonComponent from 'theme/components/core/blocks/Button'
 import pickBy from 'lodash-es/pickBy'
 
 const AsyncFilter = () => import(/* webpackPreload: true */ /* webpackChunkName: "vsf-category-filter" */ 'theme/components/core/blocks/Category/Filter')
@@ -20,7 +28,8 @@ const AsyncFilter = () => import(/* webpackPreload: true */ /* webpackChunkName:
 export default {
   components: {
     Sidebar,
-    FilterWrapper
+    FilterWrapper,
+    ButtonComponent
   },
   computed: {
     ...mapGetters({

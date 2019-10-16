@@ -1,6 +1,6 @@
 <template>
   <div class="filter">
-    <div class="t-flex t-flex-wrap" v-if="attributeKey === 'color'">
+    <div class="t-flex t-flex-wrap t-mb-4" v-if="attributeKey === 'color'">
       <color-selector
         v-for="(color, index) in options"
         :code="attributeKey"
@@ -10,7 +10,7 @@
         @change="changeFilter"
       />
     </div>
-    <div v-else>
+    <div class="t-flex t-flex-wrap t-mb-4" v-else>
       <generic-selector
         v-for="(option, index) in options"
         :code="attributeKey"
@@ -18,6 +18,8 @@
         :variant="option"
         :selected-filters="getCurrentFilters"
         @change="changeFilter"
+        class="t-mb-2"
+        :class="{ 't-mr-2': index !== option.length - 1 }"
       />
     </div>
   </div>

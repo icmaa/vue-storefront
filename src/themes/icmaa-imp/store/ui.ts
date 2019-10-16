@@ -79,6 +79,9 @@ export const uiStore = {
     setSidebar ({ commit, state }, status) {
       commit('toggleSidebar', 'sidebar', status)
     },
+    setSearchpanel ({ commit, state }, status) {
+      commit('toggleSidebar', 'searchpanel', status)
+    },
     setMicrocart ({ commit, state }, status) {
       commit('toggleSidebar', 'microcart', status)
     },
