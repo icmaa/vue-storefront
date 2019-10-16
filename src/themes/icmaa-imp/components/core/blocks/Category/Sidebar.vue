@@ -1,11 +1,5 @@
 <template>
-  <sidebar :close-on-click="false">
-    <template v-slot:top>
-      <h2 class="t-self-center t-pl-2 t-text-lg t-text-base-dark">
-        {{ $t('Filter') }}
-      </h2>
-    </template>
-
+  <sidebar :title="$t('Filter')" :close-on-click="false">
     <h4 @click="resetAllFilters" v-show="hasActiveFilters">
       {{ $t('Clear filters') }}
     </h4>
@@ -41,6 +35,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import config from 'config'
 import Sidebar from 'theme/components/theme/blocks/AsyncSidebar/Sidebar'
 import ColorSelector from 'theme/components/core/blocks/Category/Filter/ColorSelector'
 import GenericSelector from 'theme/components/core/blocks/Category/Filter/GenericSelector'
@@ -62,7 +57,7 @@ export default {
       attributeLabel: 'attribute/getAttributeLabel'
     }),
     availableFilters () {
-      const submenuFilters = ['size', 'price']
+      const submenuFilters = config.products.submenuFilters || []
       let filters = Object.entries(this.filters).map(v => { return { attributeKey: v[0], options: v[1] } })
       return filters
         .filter(f => f.options.length && !this.$store.getters['category-next/getSystemFilterNames'].includes(f.attributeKey))

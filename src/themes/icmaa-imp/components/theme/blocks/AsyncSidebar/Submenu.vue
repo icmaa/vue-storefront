@@ -1,10 +1,7 @@
 <template>
-  <sidebar class="t-absolute t-top-0 t-w-full" :style="{ left: `${(index + 1) * 100}%` }" :close-on-click="false">
+  <sidebar class="t-absolute t-top-0 t-w-full" :style="{ left: `${(index + 1) * 100}%` }" :title="sidebar.title" :close-on-click="false">
     <template v-slot:top>
       <top-button icon="keyboard_arrow_left" text="Back" :tab-index="1" @click.native="close" class="t-text-base" />
-      <h2 class="t-self-center t-pl-2 t-text-lg t-text-base-dark" v-if="sidebar.title">
-        {{ sidebar.title }}
-      </h2>
     </template>
     <component :is="component" @close="close" @reload="getComponent" v-bind="sidebar" />
   </sidebar>

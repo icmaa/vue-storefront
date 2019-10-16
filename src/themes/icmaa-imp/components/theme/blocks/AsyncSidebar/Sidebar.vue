@@ -2,6 +2,7 @@
   <div class="sidebar-menu t-scrolling-touch t-w-full t-min-h-screen t-flex t-flex-col" ref="container">
     <div class="top t-px-2 t-bg-white t-border-b t-border-base-lighter t-flex">
       <slot name="top" />
+      <h2 class="t-self-center t-pl-2 t-text-lg t-text-base-dark" v-if="title" v-text="title" />
       <div class="t-flex-expand" />
       <top-button icon="close" text="Close" :tab-index="1" @click.native="closeMenu" class="t-text-base" />
     </div>
@@ -23,6 +24,10 @@ import TopButton from 'theme/components/theme/blocks/AsyncSidebar/TopButton'
 export default {
   name: 'Sidebar',
   props: {
+    title: {
+      type: [Boolean, String],
+      default: false
+    },
     closeOnClick: {
       type: Boolean,
       default: true
