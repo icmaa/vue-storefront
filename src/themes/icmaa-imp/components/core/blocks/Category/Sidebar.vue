@@ -1,34 +1,9 @@
 <template>
   <sidebar :title="$t('Filter')" :close-on-click="false">
-    <h4 @click="resetAllFilters" v-show="hasActiveFilters">
-      {{ $t('Clear filters') }}
-    </h4>
-    <div v-for="(filter) in availableFilters" :key="filter.attributeKey">
-      <h5 @click="openSubmenuFilter(filter)">
-        {{ filter.label }}
-      </h5>
-      <template v-if="!filter.submenu">
-        <div class="t-flex t-flex-wrap" v-if="filter.attributeKey === 'color'">
-          <color-selector
-            v-for="(color, index) in filter.options"
-            :code="filter.attributeKey"
-            :key="index"
-            :variant="color"
-            :selected-filters="getCurrentFilters"
-            @change="changeFilter"
-          />
-        </div>
-        <div v-else class="sidebar__inline-selecors">
-          <generic-selector
-            v-for="(option, index) in filter.options"
-            :code="filter.attributeKey"
-            :key="index"
-            :variant="option"
-            :selected-filters="getCurrentFilters"
-            @change="changeFilter"
-          />
-        </div>
-      </template>
+    <h4 @click="resetAllFilters" v-if="hasActiveFilters" v-text="$t('Clear filters')" />
+    <div v-for="(filter) in availableFilters" :key="filter.attributeKey" class="t-w-full t-mb-4">
+      <h5 @click="openSubmenuFilter(filter)" v-text="filter.label" />
+      <filter-wrapper :attribute-key="filter.attributeKey" :options="filter.options" v-if="!filter.submenu" />
     </div>
   </sidebar>
 </template>
@@ -37,22 +12,19 @@
 import { mapGetters } from 'vuex'
 import config from 'config'
 import Sidebar from 'theme/components/theme/blocks/AsyncSidebar/Sidebar'
-import ColorSelector from 'theme/components/core/blocks/Category/Filter/ColorSelector'
-import GenericSelector from 'theme/components/core/blocks/Category/Filter/GenericSelector'
+import FilterWrapper from 'theme/components/core/blocks/Category/Filter'
 import pickBy from 'lodash-es/pickBy'
 
-const Filter = () => import(/* webpackPreload: true */ /* webpackChunkName: "vsf-category-filter" */ 'theme/components/core/blocks/Category/Filter')
+const AsyncFilter = () => import(/* webpackPreload: true */ /* webpackChunkName: "vsf-category-filter" */ 'theme/components/core/blocks/Category/Filter')
 
 export default {
   components: {
     Sidebar,
-    ColorSelector,
-    GenericSelector
+    FilterWrapper
   },
   computed: {
     ...mapGetters({
       filters: 'category-next/getAvailableFilters',
-      getCurrentFilters: 'category-next/getCurrentFilters',
       hasActiveFilters: 'category-next/hasActiveFilters',
       attributeLabel: 'attribute/getAttributeLabel'
     }),
@@ -65,15 +37,12 @@ export default {
     }
   },
   methods: {
-    async changeFilter (filterVariant) {
-      this.$store.dispatch('category-next/switchSearchFilters', [ filterVariant ])
-    },
     resetAllFilters () {
       this.$store.dispatch('category-next/resetSearchFilters')
     },
     openSubmenuFilter (filter) {
       if (filter.submenu) {
-        this.$store.dispatch('ui/addSidebarPath', { component: Filter, title: filter.label, ...filter })
+        this.$store.dispatch('ui/addSidebarPath', { component: AsyncFilter, title: filter.label, ...filter })
       }
     }
   }

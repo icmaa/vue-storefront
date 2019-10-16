@@ -1,23 +1,37 @@
 <template>
   <div class="filter">
-    <generic-selector
-      :code="attributeKey"
-      v-for="(option, index) in options"
-      :key="index"
-      :variant="option"
-      :selected-filters="getCurrentFilters"
-      @change="changeFilter"
-    />
+    <div class="t-flex t-flex-wrap" v-if="attributeKey === 'color'">
+      <color-selector
+        v-for="(color, index) in options"
+        :code="attributeKey"
+        :key="index"
+        :variant="color"
+        :selected-filters="getCurrentFilters"
+        @change="changeFilter"
+      />
+    </div>
+    <div v-else>
+      <generic-selector
+        v-for="(option, index) in options"
+        :code="attributeKey"
+        :key="index"
+        :variant="option"
+        :selected-filters="getCurrentFilters"
+        @change="changeFilter"
+      />
+    </div>
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
+import ColorSelector from 'theme/components/core/blocks/Category/Filter/ColorSelector'
 import GenericSelector from 'theme/components/core/blocks/Category/Filter/GenericSelector'
 
 export default {
   name: 'CategoryFilter',
   components: {
+    ColorSelector,
     GenericSelector
   },
   props: {
