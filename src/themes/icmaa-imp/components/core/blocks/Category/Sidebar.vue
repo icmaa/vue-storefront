@@ -9,32 +9,34 @@
       <h4 @click="resetAllFilters" v-show="hasActiveFilters">
         {{ $t('Clear filters') }}
       </h4>
-      <div v-for="(filter, attributeKey) in availableFilters" :key="attributeKey">
-        <h5 @click="testSidebar(attributeKey)">
-          {{ attributeLabel({ attributeKey }) }}
+      <div v-for="(filter) in availableFilters" :key="filter.attributeKey">
+        <h5 @click="openSubmenuFilter(filter)">
+          {{ attributeLabel({ attributeKey: filter.attributeKey }) }}
         </h5>
-        <div class="t-flex t-flex-wrap" v-if="attributeKey==='color'">
-          <color-selector
-            code="color"
-            v-for="(color, index) in filter"
-            :key="index"
-            :variant="color"
-            :selected-filters="getCurrentFilters"
-            @change="changeFilter"
-          />
-        </div>
-        <div v-else class="sidebar__inline-selecors">
-          <generic-selector
-            :code="attributeKey"
-            v-for="(option, index) in filter"
-            :key="index"
-            :variant="option"
-            :selected-filters="getCurrentFilters"
-            @change="changeFilter"
-          />
-        </div>
+        <template v-if="!filter.submenu">
+          <div class="t-flex t-flex-wrap" v-if="filter.attributeKey === 'color'">
+            <color-selector
+              v-for="(color, index) in filter.options"
+              :code="filter.attributeKey"
+              :key="index"
+              :variant="color"
+              :selected-filters="getCurrentFilters"
+              @change="changeFilter"
+            />
+          </div>
+          <div v-else class="sidebar__inline-selecors">
+            <generic-selector
+              v-for="(option, index) in filter.options"
+              :code="filter.attributeKey"
+              :key="index"
+              :variant="option"
+              :selected-filters="getCurrentFilters"
+              @change="changeFilter"
+            />
+          </div>
+        </template>
       </div>
-      <submenu v-for="(item, i) in sidebarPath" :key="i" :index="i" :async-component="getComponent(item.component)" />
+      <submenu v-for="(item, i) in sidebarPath" :key="i" :index="i" :async-component="item.component" />
     </div>
   </sidebar>
 </template>
@@ -50,11 +52,6 @@ import pickBy from 'lodash-es/pickBy'
 const Filter = () => import(/* webpackPreload: true */ /* webpackChunkName: "vsf-category-filter" */ 'theme/components/core/blocks/Category/Filter')
 
 export default {
-  data () {
-    return {
-      Filter
-    }
-  },
   components: {
     Sidebar,
     Submenu,
@@ -70,7 +67,14 @@ export default {
       sidebarPath: 'ui/getSidebarPath'
     }),
     availableFilters () {
-      return pickBy(this.filters, (filter, filterType) => { return (filter.length && !this.$store.getters['category-next/getSystemFilterNames'].includes(filterType)) })
+      const submenuFilters = ['size', 'price']
+      let filters = Object.entries(this.filters).map(v => { return { attributeKey: v[0], options: v[1] } })
+      return filters
+        .filter(f => f.options.length && !this.$store.getters['category-next/getSystemFilterNames'].includes(f.attributeKey))
+        .map(f => {
+          f['submenu'] = submenuFilters.includes(f.attributeKey)
+          return f
+        })
     },
     translateX () {
       return this.sidebarPath.length > 0 ? (this.sidebarPath.length) * -100 : 0
@@ -89,8 +93,10 @@ export default {
     getComponent (key) {
       return this[key]
     },
-    testSidebar (filterName) {
-      this.$store.dispatch('ui/addSidebarPath', { component: 'Filter', test: filterName })
+    openSubmenuFilter (filter) {
+      if (filter.submenu) {
+        this.$store.dispatch('ui/addSidebarPath', { component: Filter, ...filter })
+      }
     }
   }
 }

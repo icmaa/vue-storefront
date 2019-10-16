@@ -93,7 +93,7 @@ export const uiStore = {
     addSidebarPath ({ commit }, pathItem) {
       commit('addSidebarPath', pathItem)
     },
-    removeSidebarPath ({ commit }) {
+    removeLastSidebarPath ({ commit }) {
       commit('removeSidebarPath')
     }
   },

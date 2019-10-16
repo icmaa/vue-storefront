@@ -1,10 +1,6 @@
 <template>
   <div class="t-absolute t-top-0 t-w-full" :style="{ left: `${(index + 1) * 100}%` }">
-    {{ index }}
-    <div @click="back">
-      Go back
-    </div>
-    <component :is="component" @close="$emit('close')" @reload="getComponent" v-bind="sidebar" />
+    <component :is="component" @close="close" @reload="getComponent" v-bind="sidebar" />
   </div>
 </template>
 
@@ -51,8 +47,9 @@ export default {
         timeout: 3000
       })
     },
-    back () {
-      this.$store.dispatch('ui/removeSidebarPath')
+    close () {
+      this.$store.dispatch('ui/removeLastSidebarPath')
+      this.$emit('close')
     }
   }
 }

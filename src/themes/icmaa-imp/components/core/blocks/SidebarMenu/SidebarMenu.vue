@@ -1,7 +1,7 @@
 <template>
   <sidebar>
     <template v-slot:top>
-      <top-button icon="person" :text="loginButtonText" tabindex="2" class="t-text-base-light" @click.native="login" />
+      <top-button icon="person" :text="loginButtonText" :tab-index="2" class="t-text-base-light" @click.native="login" />
     </template>
     <template v-slot:default>
       <navigation-item v-for="link in getMainNavigation" v-bind="link" :key="link.id" />

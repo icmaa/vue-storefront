@@ -3,7 +3,7 @@
     <div class="top t-px-2 t-bg-white t-border-b t-border-base-lighter t-flex">
       <slot name="top" />
       <div class="t-flex-expand" />
-      <top-button icon="close" text="Close" tabindex="1" @click.native="closeMenu" class="t-text-base" />
+      <top-button icon="close" text="Close" :tab-index="1" @click.native="closeMenu" class="t-text-base" />
     </div>
     <div @click="closeAfterClick" class="sidebar-content t-p-3 t-pt-4 t-flex t-flex-wrap">
       <slot />
@@ -42,7 +42,7 @@ export default {
       this.$store.dispatch('ui/closeAll')
     },
     onEscapePress () {
-      this.$store.dispatch('ui/closeAll')
+      this.closeMenu()
     }
   },
   mounted () {
