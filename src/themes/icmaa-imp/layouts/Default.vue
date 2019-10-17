@@ -4,7 +4,7 @@
     <loader />
     <div id="viewport" class="w-100 relative">
       <main-header />
-      <advice />
+      <advice tags="2" />
       <async-sidebar
         :async-component="SearchPanel"
         :is-open="isSearchPanelOpen"
