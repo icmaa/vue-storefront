@@ -53,9 +53,10 @@ export default {
         return this.map.find(v => v.key === 'sale')
       }
 
-      let isNew = dayjs(this.product.online).isAfter(dayjs().subtract(14, 'days')) ? this.map.find(v => v.key === 'new') : undefined
+      const newRange = dayjs(this.product.online).isAfter(dayjs().subtract(14, 'days'))
+      const isNew = newRange ? this.map.find(v => v.key === 'new') : undefined
 
-      return this.map.find(v => v.id === this.id) || isNew || false
+      return this.map.find(v => v.id === this.promoId) || isNew || false
     },
     discount () {
       const original = this.product.original_price_incl_tax
@@ -68,7 +69,7 @@ export default {
     },
     background () {
       let { background } = this.promo
-      return background && background.startsWith('#') ? { background } : null
+      return background && background.startsWith('#') ? { background } : false
     }
   }
 }
