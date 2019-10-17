@@ -1,8 +1,7 @@
 import { ActionTree } from 'vuex';
 import {
   list as listAbstract,
-  MutationTypesInterface,
-  ListOptionsInterface
+  MutationTypesInterface
 } from 'icmaa-cms/store/abstract/actions';
 
 import { adviceStorageKey as storageKey } from './';
