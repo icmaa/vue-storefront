@@ -4,23 +4,21 @@ export const uiStore = {
   namespaced: true,
   state: {
     viewport: false,
-    sidebar: false,
     sidebarPath: [],
-    microcart: false,
-    wishlist: false,
-    searchpanel: false,
-    addtocart: false,
-    categoryfilter: false,
-    newsletterPopup: false,
+    sidebarAnimation: false,
     overlay: false,
     loader: false,
     authElem: 'login',
     checkoutMode: false,
     openMyAccount: false,
-    submenu: {
-      depth: false,
-      path: []
-    }
+    /** Sidebar and popup type states: */
+    sidebar: false,
+    microcart: false,
+    wishlist: false,
+    searchpanel: false,
+    addtocart: false,
+    categoryfilter: false,
+    newsletterPopup: false
   },
   mutations: {
     setViewport (state, viewport: string) {
@@ -48,7 +46,11 @@ export const uiStore = {
       state.sidebarPath.push(payload)
     },
     removeSidebarPath (state) {
-      Vue.delete(state.sidebarPath, state.sidebarPath.length - 1)
+      state.sidebarAnimation = true
+      setTimeout(() => {
+        state.sidebarAnimation = false
+        Vue.delete(state.sidebarPath, state.sidebarPath.length - 1)
+      }, 500)
     },
     setOverlay (state, action) {
       state.overlay = action === true
@@ -103,6 +105,7 @@ export const uiStore = {
   },
   getters: {
     getViewport: state => state.viewport,
-    getSidebarPath: state => state.sidebarPath
+    getSidebarPath: state => state.sidebarPath,
+    getSidebarAnimation: state => state.sidebarAnimation
   }
 }

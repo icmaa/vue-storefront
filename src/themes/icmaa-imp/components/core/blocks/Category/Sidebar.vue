@@ -9,7 +9,7 @@
       </template>
       <template v-else>
         <h5 v-text="filter.label" class="t-text-xs t-text-base-tone t-mb-3" />
-        <filter-wrapper :attribute-key="filter.attributeKey" :options="filter.options" />
+        <filter-wrapper :attribute-key="filter.attributeKey" :attribute-label="filter.label" :options="filter.options" />
       </template>
     </div>
   </sidebar>
@@ -51,7 +51,7 @@ export default {
     },
     openSubmenuFilter (filter) {
       if (filter.submenu) {
-        this.$store.dispatch('ui/addSidebarPath', { component: AsyncFilter, title: filter.label, ...filter })
+        this.$store.dispatch('ui/addSidebarPath', { component: AsyncFilter, title: filter.label, props: filter })
       }
     }
   }

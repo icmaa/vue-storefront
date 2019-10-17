@@ -72,12 +72,18 @@ export default {
     }
   },
   computed: {
-    ...mapGetters({ sidebarPath: 'ui/getSidebarPath' }),
+    ...mapGetters({
+      sidebarPath: 'ui/getSidebarPath',
+      sidebarAnimation: 'ui/getSidebarAnimation'
+    }),
     hasSubmenu () {
       return this.sidebarPath.length > 0
     },
+    sidebarLength () {
+      return this.sidebarAnimation ? this.sidebarPath.length - 1 : this.sidebarPath.length
+    },
     translateX () {
-      const translateX = this.sidebarPath.length > 0 ? (this.sidebarPath.length) * -100 : 0
+      const translateX = this.sidebarLength > 0 ? (this.sidebarLength) * -100 : 0
       return this.hasSubmenu ? { transform: `translateX(${translateX}%)` } : {}
     }
   }

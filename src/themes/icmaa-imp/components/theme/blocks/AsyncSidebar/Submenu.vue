@@ -3,7 +3,7 @@
     <template v-slot:top>
       <top-button icon="keyboard_arrow_left" text="Back" :tab-index="1" @click.native="close" class="t-text-base" />
     </template>
-    <component :is="component" @close="close" @reload="getComponent" v-bind="sidebar" />
+    <component :is="component" @close="close" @reload="getComponent" v-bind="sidebar.props" />
   </sidebar>
 </template>
 
