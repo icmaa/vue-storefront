@@ -36,7 +36,14 @@ module.exports = {
       minHeight: {
         'screen-25': '25vh',
         'screen-50': '50vh',
-        'screen-75': '75vh'
+        'screen-75': '75vh',
+        '1/2': '50%'
+      },
+      maxWidth: {
+        'screen-25': '25vh',
+        'screen-50': '50vh',
+        'screen-75': '75vh',
+        '1/2': '50%'
       },
       fontSize: {
         'reset': '0',
