@@ -1,9 +1,17 @@
 <template>
-  <div v-if="promo" class="t-flex t-items-center t-h-6 t-text-xxs t-uppercase t-text-white t-px-2 lg:t-h-8 lg:t-text-xs" :class="{ 't-font-bold t-bg-base-light': !background }" :style="background" v-text="discount || promo.label" />
+  <div v-if="promo" class="t-flex t-items-center t-h-6 t-text-xxs t-uppercase t-text-white lg:t-h-8 lg:t-text-xs" :class="[ background ? ' t-px-2' : 't-font-bold t-bg-base-light' ]" :style="background">
+    <template v-if="!background">
+      <retina-image :image="`/assets/catalog/promo-flags/${promo.key}.png`" :alt="promo.label" class="t-blend-hard-light" />
+    </template>
+    <template v-else>
+      {{ discount || promo.label }}
+    </template>
+  </div>
 </template>
 
 <script>
 import dayjs from 'dayjs'
+import RetinaImage from 'theme/components/core/blocks/RetinaImage'
 
 export default {
   name: 'PromoBanner',
@@ -13,23 +21,26 @@ export default {
       required: true
     }
   },
+  components: {
+    RetinaImage
+  },
   data () {
     return {
       map: [
-        { promoId: '1', key: 'exclusive', label: 'Exclusive', background: '#B18C3E' },
-        { promoId: '3', key: 'american_apparel', label: 'American Apparel', background: null },
-        { promoId: '5', key: 'preorder', label: 'Preorder', background: '#611222' },
-        { promoId: '6', key: 'special_offer', label: 'Special Offer', background: '#64BCAC' },
-        { promoId: '7', key: 'special_offer', label: 'Special Offer', background: '#64BCAC' },
-        { promoId: '8', key: 'artery', label: 'Artery', background: null },
-        { promoId: '9', key: 'sumerian', label: 'Sumerian Records', background: null },
-        { promoId: '10', key: 'deathwish', label: 'Deathwish', background: null },
-        { promoId: '11', key: 'continental', label: 'Continental', background: null },
-        { promoId: '12', key: 'purenoise', label: 'Pure Noise', background: null },
-        { promoId: '13', key: 'limited', label: 'Limited', background: '#023AE1' },
-        { promoId: '14', key: 'backprint', label: 'Backprint', background: '#551D99' },
-        { promoId: '', key: 'sale', label: 'Sale', background: '#006EA1' },
-        { promoId: '', key: 'new', label: 'New', background: '#1AC759' }
+        { id: '1', key: 'exclusive', label: 'Exclusive', background: '#B18C3E' },
+        { id: '3', key: 'american_apparel', label: 'American Apparel', background: null },
+        { id: '5', key: 'preorder', label: 'Preorder', background: '#611222' },
+        { id: '6', key: 'special_offer', label: 'Special Offer', background: '#64BCAC' },
+        { id: '7', key: 'special_offer', label: 'Special Offer', background: '#64BCAC' },
+        { id: '8', key: 'artery', label: 'Artery', background: null },
+        { id: '9', key: 'sumerian', label: 'Sumerian Records', background: null },
+        { id: '10', key: 'deathwish', label: 'Deathwish', background: null },
+        { id: '11', key: 'continental', label: 'Continental', background: null },
+        { id: '12', key: 'purenoise', label: 'Pure Noise', background: null },
+        { id: '13', key: 'limited', label: 'Limited', background: '#023AE1' },
+        { id: '14', key: 'backprint', label: 'Backprint', background: '#551D99' },
+        { id: '', key: 'sale', label: 'Sale', background: '#006EA1' },
+        { id: '', key: 'new', label: 'New', background: '#1AC759' }
       ]
     }
   },
@@ -44,7 +55,7 @@ export default {
 
       let isNew = dayjs(this.product.online).isAfter(dayjs().subtract(14, 'days')) ? this.map.find(v => v.key === 'new') : undefined
 
-      return this.map.find(v => v.promoId === this.promoId) || isNew || false
+      return this.map.find(v => v.id === this.id) || isNew || false
     },
     discount () {
       const original = this.product.original_price_incl_tax
@@ -57,7 +68,7 @@ export default {
     },
     background () {
       let { background } = this.promo
-      return background.startsWith('#') ? { background } : null
+      return background && background.startsWith('#') ? { background } : null
     }
   }
 }
