@@ -1,12 +1,15 @@
 <template>
   <transition name="fade">
-    <div class="t-w-full row-01 t-bg-alt-1 t-cursor-pointer" id="advice" v-if="advice && isOpen" @click="redirect">
-      <div class="t-container t-flex t-items-center t-justify-between t-h-full t-text-white">
-        <div class="" />
-        <div>{{ advice.text }}</div>
-        <button-component class="t-text-xs t-uppercase t-text-white" :type="'ghost-custom'" :custom-color="'white'">
-          {{ advice.buttonText }}
-        </button-component>
+    <div class="t-w-full row-01 t-bg-alt-1 t-cursor-pointer t-text-sm" id="advice" v-if="advice && isOpen" @click="redirect">
+      <div class="t-container t-flex t-items-center t-h-full t-justify-end t-text-white">
+        <div class="t-flex t-flex-1 t-items-center t-justify-center">
+          <div class="md:t-mr-10">
+            {{ advice.text }}
+          </div>
+          <button-component class="t-text-xs t-uppercase t-text-white" :type="'ghost-custom'" :custom-color="'white'">
+            {{ advice.buttonText }}
+          </button-component>
+        </div>
         <button-component class="t-justify-end" type="transparent-white" icon="close" :icon-only="true" @click.stop.native="close">
           {{ $t('Close') }}
         </button-component>
