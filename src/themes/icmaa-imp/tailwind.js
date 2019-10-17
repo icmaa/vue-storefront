@@ -96,7 +96,8 @@ module.exports = {
       addUtilities(
         {
           '.webkit-touch': { '-webkit-overflow-scrolling': 'touch' },
-          '.webkit-tap-transparent': { '-webkit-tap-highlight-color': 'transparent' }
+          '.webkit-tap-transparent': { '-webkit-tap-highlight-color': 'transparent' },
+          '.blend-hard-light': { 'mix-blend-mode': 'hard-light' }
         },
         ['responsive']
       )
