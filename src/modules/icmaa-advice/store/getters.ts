@@ -1,19 +1,21 @@
 import { GetterTree } from 'vuex';
 import AdviceState, { AdviceStateItem } from '../types/AdviceState';
 import RootState from '@vue-storefront/core/types/RootState';
-import itemActions from '@vue-storefront/core/modules/cart/store/actions/itemActions';
 
 import config from 'config';
 import head from 'lodash-es/head';
+import intersection from 'lodash-es/intersection';
 
 const getters: GetterTree<AdviceState, RootState> = {
   getAdvice: (state): AdviceStateItem[] => state.items,
-  getSingleAdvice: (state): AdviceStateItem => {
-    return state.items.length > 0 ? state.items.length[0] : [];
-  },
-  getClusterAdvice: (state, getters, RootState, rootGetters): AdviceStateItem => {
+  getSingleAdvice: (state, getters, RootState, rootGetters) => (tag: string): AdviceStateItem => {
     let items = state.items;
     const cluster = rootGetters['user/getCluster'];
+
+    const tags = tag.split(',');
+    items = items.filter(i => {
+      return intersection(i.tag, tags).length > 0;
+    });
 
     items = items.filter(i => {
       if (i.cluster.length === 0) {
@@ -26,9 +28,6 @@ const getters: GetterTree<AdviceState, RootState> = {
 
       return i.cluster.includes(cluster);
     });
-    if (items.length === 0) {
-      return getters.getSingleAdvice();
-    }
 
     return head(items);
   }
