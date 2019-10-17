@@ -1,5 +1,5 @@
 <template>
-  <button-component @click="$emit('change', variant)" :type="isActive ? 'second' : 'tag'" :aria-label="variant.label">
+  <button-component @click="$emit('change', variant)" :type="isActive ? 'tag-active' : 'tag'" :aria-label="variant.label">
     {{ variant.label }}
   </button-component>
 </template>

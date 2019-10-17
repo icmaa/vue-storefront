@@ -1,5 +1,5 @@
 <template>
-  <button type="button" class="t-flex t-items-center t-px-4 t-text-xs t-rounded-sm t-cursor-pointer" :class="[ { 't-uppercase': type !== 'select' }, sizeClass, colorClass, alignClass ]" :style="customColorStyle" @click="$emit('click')">
+  <button type="button" class="t-flex t-items-center t-px-4 t-text-xs t-rounded-sm t-cursor-pointer" :class="[ { 't-uppercase': !['select', 'tag', 'tag-active'].includes(type) }, sizeClass, colorClass, alignClass ]" :style="customColorStyle" @click="$emit('click')">
     <template v-if="iconOnly">
       <span class="t-sr-only">
         <slot />
@@ -80,7 +80,8 @@ export default {
       const map = {
         'primary': 't-bg-primary t-text-white',
         'second': 't-bg-base-darkest t-text-white',
-        'tag': 't-border t-border-base-light t-bg-white t-text-base-dark',
+        'tag': 't-border t-border-base-light t-bg-white t-text-base-dark hover:t-border-base-dark',
+        'tag-active': 't-border t-border-base-dark  t-bg-base-dark t-text-white',
         'ghost': 't-border t-border-base-darkest t-bg-transparent t-text-base-darkest',
         'ghost-white': 't-border t-border-white t-bg-transparent t-text-white',
         'ghost-custom': 't-border t-bg-transparent',
