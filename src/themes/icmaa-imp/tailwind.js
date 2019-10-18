@@ -47,7 +47,8 @@ module.exports = {
         'super-loose': '4'
       },
       height: {
-        'row-50': '50px'
+        '50px': '50px',
+        '60px': '60px'
       },
       flex: {
         'fix': '0 0 auto',

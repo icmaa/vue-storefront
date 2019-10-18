@@ -1,6 +1,6 @@
 <template>
   <div class="sidebar-menu t-scrolling-touch t-w-full t-min-h-screen t-flex t-flex-col" ref="container">
-    <div class="top t-px-2 t-bg-white t-border-b t-border-base-lighter t-flex">
+    <div class="t-h-60px t-px-2 t-bg-white t-border-b t-border-base-lighter t-flex">
       <slot name="top" />
       <div class="t-flex-expand" />
       <top-button icon="close" text="Close" tabindex="1" @click.native="closeMenu" class="t-text-base" />
