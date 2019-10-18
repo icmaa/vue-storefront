@@ -1,5 +1,5 @@
 <template>
-  <vue-slider v-model="value" :data="values" :marks="true" :enable-cross="false" :fixed="true" :lazy="true" :adsorb="true" :drag-on-click="true" :contained="true" tooltip="none" dot-size="24" :dot-style="{ boxShadow: 'none', border: '1px solid #999' }" :process-style="{ background: '#999' }" :label-style="{ fontSize: '.75rem', color: '#999', marginTop: '1rem' }" :label-active-style="{ color: '#000' }" />
+  <vue-slider v-model="value" :data="values" :marks="true" :enable-cross="false" :fixed="true" :lazy="true" :adsorb="true" :drag-on-click="true" tooltip="none" dot-size="24" :dot-style="{ boxShadow: 'none', border: '1px solid #999' }" :process-style="{ background: '#999' }" :label-style="{ fontSize: '.75rem', color: '#999', marginTop: '1rem' }" :label-active-style="{ color: '#000' }" />
 </template>
 
 <script>
