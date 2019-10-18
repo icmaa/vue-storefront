@@ -1,5 +1,5 @@
 <template>
-  <vue-slider v-model="value" :data="values" :marks="true" :enable-cross="false" :fixed="true" :lazy="true" tooltip="none" dot-size="24" :dot-style="{ boxShadow: 'none', border: '1px solid #999' }" :process-style="{ background: '#999' }" :label-style="{ fontSize: '.75rem', color: '#999', marginTop: '1rem' }" :label-active-style="{ color: '#000' }" />
+  <vue-slider v-model="value" :data="values" :marks="true" :enable-cross="false" :fixed="true" :lazy="true" :adsorb="true" :drag-on-click="true" :contained="true" tooltip="none" dot-size="24" :dot-style="{ boxShadow: 'none', border: '1px solid #999' }" :process-style="{ background: '#999' }" :label-style="{ fontSize: '.75rem', color: '#999', marginTop: '1rem' }" :label-active-style="{ color: '#000' }" />
 </template>
 
 <script>
@@ -40,23 +40,23 @@ export default {
   computed: {
     curFilter () {
       const filter = this.selectedFilters[this.attributeKey] || false
-      return Array.isArray(filter) ? filter.pop() : filter
+      return Array.isArray(filter) ? filter.slice(0).pop() : filter
     },
     startFromValue () {
       if (this.curFilter) {
         return this.curFilter.from
       }
 
-      return this.firstValue.from
+      return this.firstOption.from
     },
     startToValue () {
       if (this.curFilter) {
-        return this.curFilter.to || this.maxValue
+        return this.curFilter.to || this.values.slice(0).pop()
       }
 
-      return this.firstValue.to
+      return this.firstOption.to
     },
-    firstValue () {
+    firstOption () {
       const options = this.options.slice(0, 1)
       return options.shift()
     },
@@ -67,7 +67,7 @@ export default {
       return Math.max(...this.options.map(o => parseInt(o.from)))
     },
     values () {
-      return this.options.map(o => parseInt(o.from))
+      return [...this.options.map(o => parseInt(o.from)), '∞']
     }
   },
   watch: {
@@ -76,22 +76,10 @@ export default {
         return
       }
 
-      const from = v[0]
-      const to = v[1]
-
-      let filter = {
-        id: `${from}.0-${to}.0`,
-        type: 'price',
-        from,
-        to,
-        single: true
+      const filter = this.options.find(f => f.from === v[0])
+      if (filter) {
+        this.$emit('change', filter)
       }
-
-      if (to === this.maxValue) {
-        filter = this.options.slice(0).pop()
-      }
-
-      this.$emit('change', filter)
     }
   }
 }
