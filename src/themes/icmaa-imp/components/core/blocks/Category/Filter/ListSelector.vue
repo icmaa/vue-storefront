@@ -33,6 +33,10 @@ export default {
       type: Array,
       required: true
     },
+    attributeKey: {
+      type: String,
+      default: ''
+    },
     attributeLabel: {
       type: String,
       default: ''

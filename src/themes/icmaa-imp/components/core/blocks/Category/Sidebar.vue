@@ -1,6 +1,6 @@
 <template>
-  <sidebar :title="$t('Filter')" :close-on-click="false">
-    <h4 @click="resetAllFilters" v-if="hasActiveFilters" v-text="$t('Clear filters')" />
+  <sidebar :title="$t('Filter')" :close-on-click="false" class="t-pb-16">
+    <button-component @click="resetAllFilters" v-if="hasActiveFilters" v-text="$t('Clear filters')" class="t-w-full t-mb-6" />
     <div v-for="filter in availableFilters" :key="filter.attributeKey" class="t-w-full">
       <template v-if="filter.submenu">
         <button-component icon="arrow_forward" type="select" class="t-w-full t-mb-6" @click="openSubmenuFilter(filter)">
