@@ -7,7 +7,7 @@
       <gender-selector v-for="(option, index) in options" :key="index" :option="option" @change="changeFilter" />
     </div>
     <div class="t-mb-12 t-px-2" v-else-if="getType(attributeKey) === 'price'">
-      <price-selector v-bind="$props" @change="changeFilter" />
+      <price-selector v-bind="$props" @change="changeFilter" class="t-cursor-pointer" />
     </div>
     <div class="t-mb-4" v-else-if="getType(attributeKey) === 'list'">
       <list-selector v-bind="$props" @change="changeFilter" />
