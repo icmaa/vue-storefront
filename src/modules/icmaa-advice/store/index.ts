@@ -6,7 +6,7 @@ import RootState from '@vue-storefront/core/types/RootState'
 import AdviceState from '../types/AdviceState'
 
 export const adviceStateKey = 'icmaaAdvice'
-export const adviceStorageKey = 'teaser'
+export const adviceStorageKey = 'advice'
 
 export const AdviceStore: Module<AdviceState, RootState> = {
   namespaced: true,
