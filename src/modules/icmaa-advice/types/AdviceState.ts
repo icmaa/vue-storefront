@@ -7,6 +7,7 @@ export interface AdviceStateItem extends AbstractStateItem {
   tag: string[],
   cluster: string[],
   text: string,
+  buttonText: string,
   link: string,
   [key: string]: any
 }
