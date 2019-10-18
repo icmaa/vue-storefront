@@ -1,6 +1,6 @@
 <template>
   <transition name="fade">
-    <div id="advice" v-if="advice && isOpen" class="t-w-full t-h-row t-bg-alt-1 t-cursor-pointer t-text-sm" @click="redirect">
+    <div id="advice" v-if="advice && isOpen" class="t-w-full t-h-row-50 t-bg-alt-1 t-cursor-pointer t-text-sm" @click="redirect">
       <div class="t-container t-flex t-items-center t-h-full t-justify-end t-text-white">
         <div class="t-flex t-flex-1 t-items-center t-justify-center">
           <div class="md:t-mr-10">

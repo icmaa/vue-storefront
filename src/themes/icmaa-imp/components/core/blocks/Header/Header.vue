@@ -1,7 +1,7 @@
 <template>
   <div class="header">
     <header class="t-fixed t-w-full t-bg-white" :class="{ 'is-visible': navVisible }">
-      <div class="row-01 t-flex t-bg-black">
+      <div class="t-h-row-50 t-flex t-bg-black">
         <div class="t-container t-px-2 t-flex-initial t-flex t-justify-between">
           <button-ui-sidebar icon="dehaze" title="Menu" ui-state="sidebar" ui-mutation="setSidebar" />
           <div class="t-flex-auto sm:t-border-r t-border-base-tone " />
@@ -12,7 +12,7 @@
         </div>
       </div>
 
-      <div class="row-02 t-flex">
+      <div class="row-60 t-flex">
         <div class="t-container t-px-4 t-flex t-items-center">
           <search-input />
           <div class="t-flex-expand t-w-4" />
@@ -107,11 +107,7 @@ header {
     top: 0;
   }
 
-  .row-01 {
-    height: 50px;
-  }
-
-  .row-02 {
+  .row-60 {
     height: 60px;
   }
 }
