@@ -1,6 +1,6 @@
 <template>
   <ul class="">
-    <li>
+    <li v-if="searchable">
       <base-input v-model="filterString" :placeholder="$t('Filter {label}', { label: attributeLabel }) + ' ...'" icon="search" />
     </li>
     <li v-for="(option, index) in filteredOptions" :key="index" class="t-border-b t-border-base-lighter t-px-2 t-py-3">
@@ -40,6 +40,10 @@ export default {
     attributeLabel: {
       type: String,
       default: ''
+    },
+    searchable: {
+      type: Boolean,
+      default: false
     }
   },
   mixins: [ filterMixin ],
