@@ -1,6 +1,6 @@
 <template>
   <transition name="fade">
-    <div class="t-w-full row-01 t-bg-alt-1 t-cursor-pointer t-text-sm" id="advice" v-if="advice && isOpen" @click="redirect">
+    <div id="advice" v-if="advice && isOpen" class="t-w-full t-h-row t-bg-alt-1 t-cursor-pointer t-text-sm" @click="redirect">
       <div class="t-container t-flex t-items-center t-h-full t-justify-end t-text-white">
         <div class="t-flex t-flex-1 t-items-center t-justify-center">
           <div class="md:t-mr-10">
@@ -43,18 +43,28 @@ export default {
   },
   methods: {
     close () {
+      this.$store.dispatch('claims/set', { claimCode: 'adviceClaimAccepted', value: true })
       this.isOpen = false
     },
     redirect () {
+      this.$store.dispatch('claims/set', { claimCode: 'adviceClaimAccepted', value: true })
       this.$router.push(this.localizedRoute(this.advice.link))
       this.isOpen = false
     }
   },
+  created () {
+    this.$store.dispatch('claims/check', { claimCode: 'adviceClaimAccepted' })
+      .then(claim => {
+        if (!claim) {
+          this.isOpen = true
+          this.$store.dispatch('claims/set', { claimCode: 'adviceClaimAccepted', value: false })
+        } else {
+          this.isOpen = !claim.value
+        }
+      })
+  },
   computed: {
-    ...mapGetters('icmaaAdvice', ['getAdvice', 'getSingleAdvice']),
-    allAdvices () {
-      return this.getAdvice
-    },
+    ...mapGetters('icmaaAdvice', ['getSingleAdvice']),
     advice () {
       return this.getSingleAdvice(this.tags)
     }
@@ -64,9 +74,3 @@ export default {
   }
 }
 </script>
-
-<style lang="scss" scoped>
-.row-01 {
-  height: 50px;
-}
-</style>
