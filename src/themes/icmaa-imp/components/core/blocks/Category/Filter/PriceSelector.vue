@@ -1,5 +1,5 @@
 <template>
-  <vue-slider v-model="value" :data="values" :marks="true" :enable-cross="false" :lazy="true" />
+  <vue-slider v-model="value" :data="values" :marks="true" :enable-cross="false" :fixed="true" :lazy="true" tooltip="none" dot-size="24" :dot-style="{ boxShadow: 'none', border: '1px solid #999' }" :process-style="{ background: '#999' }" :label-style="{ fontSize: '.75rem', color: '#999', marginTop: '1rem' }" :label-active-style="{ color: '#000' }" />
 </template>
 
 <script>
@@ -21,7 +21,7 @@ export default {
     }
   },
   mounted () {
-    this.value = [this.curStartValue, this.curEndValue]
+    this.value = [this.startFromValue, this.startToValue]
   },
   props: {
     options: {
@@ -42,19 +42,23 @@ export default {
       const filter = this.selectedFilters[this.attributeKey] || false
       return Array.isArray(filter) ? filter.pop() : filter
     },
-    curStartValue () {
+    startFromValue () {
       if (this.curFilter) {
         return this.curFilter.from
       }
 
-      return this.minValue
+      return this.firstValue.from
     },
-    curEndValue () {
+    startToValue () {
       if (this.curFilter) {
         return this.curFilter.to || this.maxValue
       }
 
-      return this.maxValue
+      return this.firstValue.to
+    },
+    firstValue () {
+      const options = this.options.slice(0, 1)
+      return options.shift()
     },
     minValue () {
       return Math.min(...this.options.map(o => parseInt(o.from)))
@@ -73,20 +77,21 @@ export default {
       }
 
       const from = v[0]
-      const to = v[1] === this.maxValue ? '*' : v[1]
+      const to = v[1]
 
-      let id = `${from}.0-${to}`
-      if (v[1] !== this.maxValue) {
-        id = id + `.0`
+      let filter = {
+        id: `${from}.0-${to}.0`,
+        type: 'price',
+        from,
+        to,
+        single: true
       }
 
-      this.$emit('change', {
-        id,
-        type: 'price',
-        from: v[0],
-        to: v[1],
-        single: true
-      })
+      if (to === this.maxValue) {
+        filter = this.options.slice(0).pop()
+      }
+
+      this.$emit('change', filter)
     }
   }
 }
