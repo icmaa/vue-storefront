@@ -4,12 +4,12 @@
     <div v-for="filter in availableFilters" :key="filter.attributeKey" class="t-w-full">
       <template v-if="filter.submenu">
         <button-component icon="arrow_forward" type="select" class="t-w-full t-mb-6" @click="openSubmenuFilter(filter)">
-          {{ filter.label }}
+          {{ filter.attributeLabel }}
         </button-component>
       </template>
       <template v-else>
-        <h5 v-text="filter.label" class="t-text-xs t-text-base-tone t-mb-3" />
-        <filter-wrapper :attribute-key="filter.attributeKey" :attribute-label="filter.label" :options="filter.options" />
+        <h5 v-text="filter.attributeLabel" class="t-text-xs t-text-base-tone t-mb-3" />
+        <filter-wrapper :attribute-key="filter.attributeKey" :attribute-label="filter.attributeLabel" :options="filter.options" />
       </template>
     </div>
   </sidebar>
@@ -42,7 +42,7 @@ export default {
       let filters = Object.entries(this.filters).map(v => { return { attributeKey: v[0], options: v[1] } })
       return filters
         .filter(f => f.options.length && !this.$store.getters['category-next/getSystemFilterNames'].includes(f.attributeKey))
-        .map(f => { return { ...f, submenu: submenuFilters.includes(f.attributeKey), label: this.attributeLabel({ attributeKey: f.attributeKey }) } })
+        .map(f => { return { ...f, submenu: submenuFilters.includes(f.attributeKey), attributeLabel: this.attributeLabel({ attributeKey: f.attributeKey }) } })
     }
   },
   methods: {
@@ -51,7 +51,7 @@ export default {
     },
     openSubmenuFilter (filter) {
       if (filter.submenu) {
-        this.$store.dispatch('ui/addSidebarPath', { component: AsyncFilter, title: filter.label, props: filter })
+        this.$store.dispatch('ui/addSidebarPath', { component: AsyncFilter, title: filter.attributeLabel, props: filter })
       }
     }
   }
