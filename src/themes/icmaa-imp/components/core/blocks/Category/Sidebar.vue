@@ -4,7 +4,10 @@
     <div v-for="filter in availableFilters" :key="filter.attributeKey" class="t-w-full" :data-attribute-key="filter.attributeKey">
       <template v-if="filter.submenu">
         <button-component icon="arrow_forward" type="select" class="t-w-full t-mb-6" @click="openSubmenuFilter(filter)">
-          {{ $t('All {label}', { label: filter.attributeLabel }) }}
+          <span>
+            {{ $t('All {label}', { label: filter.attributeLabel }) }}
+            <span class="t-ml-2 t-text-xs t-text-base-light" v-if="isCurrentFilterAttribute(filter.attributeKey)" v-text="currentFilters(filter.attributeKey)" />
+          </span>
         </button-component>
       </template>
       <template v-else>
@@ -40,6 +43,7 @@ export default {
     ...mapGetters({
       filters: 'category-next/getAvailableFilters',
       hasActiveFilters: 'category-next/hasActiveFilters',
+      getCurrentFilters: 'category-next/getCurrentFilters',
       isCurrentFilterAttribute: 'category-next/isCurrentFilterAttribute',
       attributeLabel: 'attribute/getAttributeLabel'
     }),
@@ -57,6 +61,15 @@ export default {
     },
     unsetFilter (attributeKey) {
       this.$store.dispatch('category-next/unsetSearchFilterForAttribute', attributeKey)
+    },
+    currentFilters (attributeKey) {
+      let activeFilter = this.getCurrentFilters[attributeKey].map(f => f.label)
+      if (activeFilter.length > 3) {
+        activeFilter = activeFilter.slice(0, 3)
+        activeFilter.push('...')
+      }
+
+      return activeFilter.join(', ')
     },
     openSubmenuFilter (filter) {
       if (filter.submenu) {
