@@ -8,7 +8,12 @@
         </button-component>
       </template>
       <template v-else>
-        <h5 v-text="filter.attributeLabel" class="t-text-xs t-text-base-tone t-mb-3" />
+        <h5 class="t-flex t-items-center t-text-xs t-text-base-tone t-mb-3">
+          {{ filter.attributeLabel }}
+          <button-component v-if="isCurrentFilterAttribute(filter.attributeKey)" type="transparent" size="sm" icon="delete_sweep" :icon-only="true" @click="unsetFilter(filter.attributeKey)" class="t--my-4">
+            {{ $t('Unset {label} filter', { label: filter.attributeLabel }) }}
+          </button-component>
+        </h5>
         <filter-wrapper :attribute-key="filter.attributeKey" :attribute-label="filter.attributeLabel" :options="filter.options" />
       </template>
     </div>
@@ -35,6 +40,7 @@ export default {
     ...mapGetters({
       filters: 'category-next/getAvailableFilters',
       hasActiveFilters: 'category-next/hasActiveFilters',
+      isCurrentFilterAttribute: 'category-next/isCurrentFilterAttribute',
       attributeLabel: 'attribute/getAttributeLabel'
     }),
     availableFilters () {
@@ -48,6 +54,9 @@ export default {
   methods: {
     resetAllFilters () {
       this.$store.dispatch('category-next/resetSearchFilters')
+    },
+    unsetFilter (attributeKey) {
+      this.$store.dispatch('category-next/unsetSearchFilterForAttribute', attributeKey)
     },
     openSubmenuFilter (filter) {
       if (filter.submenu) {
