@@ -45,13 +45,15 @@ export default {
       hasActiveFilters: 'category-next/hasActiveFilters',
       getCurrentFilters: 'category-next/getCurrentFilters',
       isCurrentFilterAttribute: 'category-next/isCurrentFilterAttribute',
+      getSystemFilterNames: 'category-next/getSystemFilterNames',
+      getNestedSubmenuFilterKeys: 'category-next/getNestedSubmenuFilterKeys',
       attributeLabel: 'attribute/getAttributeLabel'
     }),
     availableFilters () {
       const submenuFilters = config.products.submenuFilters || []
       let filters = Object.entries(this.filters).map(v => { return { attributeKey: v[0], options: v[1] } })
       return filters
-        .filter(f => f.options.length && !this.$store.getters['category-next/getSystemFilterNames'].includes(f.attributeKey))
+        .filter(f => f.options.length && !this.getSystemFilterNames.includes(f.attributeKey) && !this.getNestedSubmenuFilterKeys.includes(f.attributeKey))
         .map(f => { return { ...f, submenu: submenuFilters.includes(f.attributeKey), attributeLabel: this.attributeLabel({ attributeKey: f.attributeKey }) } })
     }
   },
