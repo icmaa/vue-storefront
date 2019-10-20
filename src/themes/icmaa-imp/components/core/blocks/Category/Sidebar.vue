@@ -42,7 +42,7 @@ import Sidebar from 'theme/components/theme/blocks/AsyncSidebar/Sidebar'
 import FilterWrapper from 'theme/components/core/blocks/Category/Filter'
 import ButtonComponent from 'theme/components/core/blocks/Button'
 import MaterialIcon from 'theme/components/core/blocks/MaterialIcon'
-import pickBy from 'lodash-es/pickBy'
+import sortBy from 'lodash-es/sortBy'
 
 const AsyncFilter = () => import(/* webpackPreload: true */ /* webpackChunkName: "vsf-category-filter" */ 'theme/components/core/blocks/Category/Filter')
 
@@ -62,18 +62,21 @@ export default {
       isActiveFilterAttribute: 'category-next/isActiveFilterAttribute',
       getSystemFilterNames: 'category-next/getSystemFilterNames',
       isVisibleFilter: 'category-next/isVisibleFilter',
-      attributeLabel: 'attribute/getAttributeLabel'
+      attributeLabel: 'attribute/getAttributeLabel',
+      attributes: 'attribute/getAttributeListByCode'
     }),
     availableFilters () {
       const submenuFilters = config.products.submenuFilters || []
       const singleOptionFilters = config.products.singleOptionFilters || []
+      const attributes = this.attributes
+
       let filters = Object.entries(this.filters).map(v => { return { attributeKey: v[0], options: v[1] } })
       return filters
         .filter(f => (f.options.length > 1 || (f.options.length === 1 && singleOptionFilters.includes(f.attributeKey))) && !this.getSystemFilterNames.includes(f.attributeKey) && this.isVisibleFilter(f.attributeKey))
-        .map(f => { return { ...f, submenu: submenuFilters.includes(f.attributeKey), attributeLabel: this.attributeLabel({ attributeKey: f.attributeKey }) } })
+        .map(f => { return { ...f, submenu: submenuFilters.includes(f.attributeKey), attributeLabel: this.attributeLabel({ attributeKey: f.attributeKey }), position: attributes[f.attributeKey].position } })
     },
     groupedFilters () {
-      const allAvailableFilters = this.availableFilters
+      let allAvailableFilters = sortBy(this.availableFilters, 'position', 'attributeLabel')
       const parentsOfNestedFilters = Object.keys(config.products.filterTree) || []
 
       return [
