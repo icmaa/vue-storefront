@@ -6,7 +6,10 @@
         <button-component icon="arrow_forward" type="select" class="t-w-full t-mb-6" @click="openSubmenuFilter(filter)">
           <span>
             {{ $t('All {label}', { label: filter.attributeLabel }) }}
-            <span class="t-ml-2 t-text-xs t-text-base-light" v-if="isCurrentFilterAttribute(filter.attributeKey)" v-text="currentFilters(filter.attributeKey)" />
+            <span class="t-ml-2 t-text-xs t-text-base-light" v-if="isCurrentFilterAttribute(filter.attributeKey)">
+              <material-icon class="t-align-middle" icon="check" size="xs" />
+              {{ currentFilters(filter.attributeKey) }}
+            </span>
           </span>
         </button-component>
       </template>
@@ -29,6 +32,7 @@ import config from 'config'
 import Sidebar from 'theme/components/theme/blocks/AsyncSidebar/Sidebar'
 import FilterWrapper from 'theme/components/core/blocks/Category/Filter'
 import ButtonComponent from 'theme/components/core/blocks/Button'
+import MaterialIcon from 'theme/components/core/blocks/MaterialIcon'
 import pickBy from 'lodash-es/pickBy'
 
 const AsyncFilter = () => import(/* webpackPreload: true */ /* webpackChunkName: "vsf-category-filter" */ 'theme/components/core/blocks/Category/Filter')
@@ -37,7 +41,8 @@ export default {
   components: {
     Sidebar,
     FilterWrapper,
-    ButtonComponent
+    ButtonComponent,
+    MaterialIcon
   },
   computed: {
     ...mapGetters({
