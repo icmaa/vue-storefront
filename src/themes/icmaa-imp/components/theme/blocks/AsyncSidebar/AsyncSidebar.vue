@@ -112,29 +112,25 @@ $z-index-modal: map-get($z-index, modal);
   transform: translateX(-100%);
 }
 
+.left-sidebar,
 .right-sidebar {
   top: 0;
-  right: 0;
   z-index: $z-index-modal;
-  height: 100%;
-  width: 800px;
-  min-width: 320px;
-  overflow-y: auto;
-  overflow-x: hidden;
-}
-
-.left-sidebar{
   height: 100vh;
-  width: 350px;
-  top: 0;
-  left: 0;
+  width: 460px;
   overflow: hidden;
-  overflow-y: auto;
-  z-index: $z-index-modal;
 
   @media (max-width: 767px) {
     width: 100vh;
   }
+}
+
+.left-sidebar{
+  left: 0;
+}
+
+.right-sidebar{
+  right: 0;
 }
 
 .sidebar .submenu-wrapper {
