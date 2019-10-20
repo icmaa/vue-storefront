@@ -1,6 +1,8 @@
 <template>
   <sidebar :title="$t('Filter')" :close-on-click="false" class="t-pb-16">
-    <button-component @click="resetAllFilters" v-if="hasActiveFilters" v-text="$t('Clear filters')" class="t-w-full t-mb-6" />
+    <div v-if="hasActiveFilters" class="t-fixed t-bottom-0 t-left-0 t-p-4 t-bg-white t-shadow t-w-full">
+      <button-component @click="resetAllFilters" v-text="$t('Clear filters')" class="t-w-full" />
+    </div>
     <div v-for="(group, groupKey) in groupedFilters" :key="groupKey">
       <div v-if="groupKey === 1" :class="{ 't-border-t t-border-base-lighter t-mt-8 t-pt-6': groupedFilters[0].length > 0 }">
         <h4 class="t-text-sm t-mb-6">
