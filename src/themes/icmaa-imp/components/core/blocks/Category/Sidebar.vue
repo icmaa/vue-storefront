@@ -6,7 +6,7 @@
         <button-component icon="arrow_forward" type="select" class="t-w-full t-mb-6" @click="openSubmenuFilter(filter)">
           <span>
             {{ $t('All {label}', { label: filter.attributeLabel }) }}
-            <span class="t-ml-2 t-text-xs t-text-base-light" v-if="isCurrentFilterAttribute(filter.attributeKey)">
+            <span class="t-ml-2 t-text-xs t-text-base-light" v-if="isActiveFilterAttribute(filter.attributeKey)">
               <material-icon class="t-align-middle" icon="check" size="xs" />
               {{ currentFilters(filter.attributeKey) }}
             </span>
@@ -16,7 +16,7 @@
       <template v-else>
         <h5 class="t-flex t-items-center t-text-xs t-text-base-tone t-mb-3">
           {{ filter.attributeLabel }}
-          <button-component v-if="isCurrentFilterAttribute(filter.attributeKey)" type="transparent" size="sm" icon="delete_sweep" :icon-only="true" @click="unsetFilter(filter.attributeKey)" class="t--my-4">
+          <button-component v-if="isActiveFilterAttribute(filter.attributeKey)" type="transparent" size="sm" icon="delete_sweep" :icon-only="true" @click="unsetFilter(filter.attributeKey)" class="t--my-4">
             {{ $t('Unset {label} filter', { label: filter.attributeLabel }) }}
           </button-component>
         </h5>
@@ -49,16 +49,16 @@ export default {
       filters: 'category-next/getAvailableFilters',
       hasActiveFilters: 'category-next/hasActiveFilters',
       getCurrentFilters: 'category-next/getCurrentFilters',
-      isCurrentFilterAttribute: 'category-next/isCurrentFilterAttribute',
+      isActiveFilterAttribute: 'category-next/isActiveFilterAttribute',
       getSystemFilterNames: 'category-next/getSystemFilterNames',
-      getNestedSubmenuFilterKeys: 'category-next/getNestedSubmenuFilterKeys',
+      isVisibleFilter: 'category-next/isVisibleFilter',
       attributeLabel: 'attribute/getAttributeLabel'
     }),
     availableFilters () {
       const submenuFilters = config.products.submenuFilters || []
       let filters = Object.entries(this.filters).map(v => { return { attributeKey: v[0], options: v[1] } })
       return filters
-        .filter(f => f.options.length && !this.getSystemFilterNames.includes(f.attributeKey) && !this.getNestedSubmenuFilterKeys.includes(f.attributeKey))
+        .filter(f => f.options.length && !this.getSystemFilterNames.includes(f.attributeKey) && this.isVisibleFilter(f.attributeKey))
         .map(f => { return { ...f, submenu: submenuFilters.includes(f.attributeKey), attributeLabel: this.attributeLabel({ attributeKey: f.attributeKey }) } })
     }
   },
@@ -70,7 +70,12 @@ export default {
       this.$store.dispatch('category-next/unsetSearchFilterForAttribute', attributeKey)
     },
     currentFilters (attributeKey) {
-      let activeFilter = this.getCurrentFilters[attributeKey].map(f => f.label)
+      let activeFilter = this.getCurrentFilters[attributeKey]
+      if (!Array.isArray(activeFilter)) {
+        activeFilter = [activeFilter]
+      }
+
+      activeFilter = activeFilter.map(f => f.label)
       if (activeFilter.length > 3) {
         activeFilter = activeFilter.slice(0, 3)
         activeFilter.push('...')
