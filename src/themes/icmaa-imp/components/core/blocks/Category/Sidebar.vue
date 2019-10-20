@@ -1,27 +1,34 @@
 <template>
   <sidebar :title="$t('Filter')" :close-on-click="false" class="t-pb-16">
     <button-component @click="resetAllFilters" v-if="hasActiveFilters" v-text="$t('Clear filters')" class="t-w-full t-mb-6" />
-    <div v-for="filter in availableFilters" :key="filter.attributeKey" class="t-w-full" :data-attribute-key="filter.attributeKey">
-      <template v-if="filter.submenu">
-        <button-component icon="arrow_forward" type="select" class="t-w-full t-mb-6" @click="openSubmenuFilter(filter)">
-          <span>
-            {{ $t('All {label}', { label: filter.attributeLabel }) }}
-            <span class="t-ml-2 t-text-xs t-text-base-light" v-if="isActiveFilterAttribute(filter.attributeKey)">
-              <material-icon class="t-align-middle" icon="check" size="xs" />
-              {{ currentFilters(filter.attributeKey) }}
+    <div v-for="(group, groupKey) in groupedFilters" :key="groupKey">
+      <div v-if="groupKey === 1" :class="{ 't-border-t t-border-base-lighter t-mt-8 t-pt-6': groupedFilters[0].length > 0 }">
+        <h4 class="t-text-sm t-mb-6">
+          {{ $t('Productdetails') }}
+        </h4>
+      </div>
+      <div v-for="filter in group" :key="filter.attributeKey" class="t-w-full" :data-attribute-key="filter.attributeKey">
+        <template v-if="filter.submenu">
+          <button-component icon="arrow_forward" type="select" class="t-w-full" :class="[ groupKey === 0 ? 't-mb-4' : 't-mb-6']" @click="openSubmenuFilter(filter)">
+            <span>
+              {{ filter.attributeLabel }}
+              <span class="t-ml-2 t-text-xs t-text-base-light" v-if="isActiveFilterAttribute(filter.attributeKey)">
+                <material-icon class="t-align-middle" icon="check" size="xs" />
+                {{ currentFilters(filter.attributeKey) }}
+              </span>
             </span>
-          </span>
-        </button-component>
-      </template>
-      <template v-else>
-        <h5 class="t-flex t-items-center t-text-xs t-text-base-tone t-mb-3">
-          {{ filter.attributeLabel }}
-          <button-component v-if="isActiveFilterAttribute(filter.attributeKey)" type="transparent" size="sm" icon="delete_sweep" :icon-only="true" @click="unsetFilter(filter.attributeKey)" class="t--my-4">
-            {{ $t('Unset {label} filter', { label: filter.attributeLabel }) }}
           </button-component>
-        </h5>
-        <filter-wrapper :attribute-key="filter.attributeKey" :attribute-label="filter.attributeLabel" :options="filter.options" />
-      </template>
+        </template>
+        <template v-else>
+          <h5 class="t-flex t-items-center t-text-xs t-text-base-tone t-mb-3">
+            {{ filter.attributeLabel }}
+            <button-component v-if="isActiveFilterAttribute(filter.attributeKey)" type="transparent" size="sm" icon="delete_sweep" :icon-only="true" @click="unsetFilter(filter.attributeKey)" class="t--my-4">
+              {{ $t('Unset {label} filter', { label: filter.attributeLabel }) }}
+            </button-component>
+          </h5>
+          <filter-wrapper :attribute-key="filter.attributeKey" :attribute-label="filter.attributeLabel" :options="filter.options" />
+        </template>
+      </div>
     </div>
   </sidebar>
 </template>
@@ -38,6 +45,7 @@ import pickBy from 'lodash-es/pickBy'
 const AsyncFilter = () => import(/* webpackPreload: true */ /* webpackChunkName: "vsf-category-filter" */ 'theme/components/core/blocks/Category/Filter')
 
 export default {
+  name: 'CategorySidebar',
   components: {
     Sidebar,
     FilterWrapper,
@@ -60,6 +68,15 @@ export default {
       return filters
         .filter(f => f.options.length && !this.getSystemFilterNames.includes(f.attributeKey) && this.isVisibleFilter(f.attributeKey))
         .map(f => { return { ...f, submenu: submenuFilters.includes(f.attributeKey), attributeLabel: this.attributeLabel({ attributeKey: f.attributeKey }) } })
+    },
+    groupedFilters () {
+      const allAvailableFilters = this.availableFilters
+      const parentsOfNestedFilters = Object.keys(config.products.filterTree) || []
+
+      return [
+        allAvailableFilters.filter(f => parentsOfNestedFilters.includes(f.attributeKey)),
+        allAvailableFilters.filter(f => !parentsOfNestedFilters.includes(f.attributeKey))
+      ]
     }
   },
   methods: {
