@@ -6,7 +6,6 @@ import intersection from 'lodash-es/intersection'
 
 const getters: GetterTree<CategoryState, RootState> = {
   isActiveFilterAttribute: (state, getters) => (attributeKey: string) => {
-    console.log(getters.getCurrentFilters[attributeKey])
     return (getters.getCurrentFilters[attributeKey])
   },
   getNestedSubmenuFilterKeys: () => {
