@@ -64,9 +64,10 @@ export default {
     }),
     availableFilters () {
       const submenuFilters = config.products.submenuFilters || []
+      const singleOptionFilters = config.products.singleOptionFilters || []
       let filters = Object.entries(this.filters).map(v => { return { attributeKey: v[0], options: v[1] } })
       return filters
-        .filter(f => f.options.length && !this.getSystemFilterNames.includes(f.attributeKey) && this.isVisibleFilter(f.attributeKey))
+        .filter(f => (f.options.length > 1 || (f.options.length === 1 && singleOptionFilters.includes(f.attributeKey))) && !this.getSystemFilterNames.includes(f.attributeKey) && this.isVisibleFilter(f.attributeKey))
         .map(f => { return { ...f, submenu: submenuFilters.includes(f.attributeKey), attributeLabel: this.attributeLabel({ attributeKey: f.attributeKey }) } })
     },
     groupedFilters () {
