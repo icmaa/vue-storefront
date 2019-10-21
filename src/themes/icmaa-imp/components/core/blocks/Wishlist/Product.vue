@@ -1,22 +1,30 @@
 <template>
-  <li class="t-w-1/2 md:t-w-1/4 t-px-4 t-b-4">
-    <div class="t-mb-4" @click="closeWishlist">
+  <li class="t-w-full t-flex t-px-4 t-mb-4 t-bg-white t-py-1">
+    <div class="t-w-1/3">
       <router-link :to="productLink">
         <product-image :image="image" />
       </router-link>
     </div>
-    <h3 class="t-text-base t-text-sm t-leading-none" @click="closeWishlist">
-      <router-link :to="productLink">
-        {{ product.name | htmlDecode }}
-      </router-link>
-    </h3>
-    <div class="t-mt-2 t-mb-4 t-text-sm t-text-base-light">
-      <span class="price-original t-line-through t-mr-2" v-if="product.special_price">{{ product.original_price_incl_tax | price }}</span>
-      <span class="price-special" v-if="product.special_price">{{ product.price_incl_tax | price }}</span>
-      <span v-if="!product.special_price">{{ product.price_incl_tax | price }}</span>
-    </div>
-    <div>
-      <remove-button @click="removeProductFromWhishList(product)" />
+    <div class="t-w-2/3 t-flex t-flex-col t-px-2 t-py-4 t-justify-between">
+      <div class="t-text-primary t-text-sm t-mb-4 t-leading-tight">
+        <router-link :to="productLink" class="t-text-primary t-w-full t-text-sm t-leading-tight">
+          {{ product.name | htmlDecode }}
+        </router-link>
+      </div>
+
+      <div class="t-mb-4 t-text-sm t-text-base-light">
+        <span class="t-text-base-tone t-line-through" v-if="product.special_price">{{ product.original_price_incl_tax | price }}</span>
+        <span class="t-text-sale" v-if="product.special_price">{{ product.price_incl_tax | price }}</span>
+        <span class="price t-text-base-dark t-font-bold" v-if="!product.special_price">{{ product.price_incl_tax | price }}</span>
+      </div>
+
+      <div class="t-flex t-flex-grow t-items-end">
+        <button-component type="primary" class="t-flex-grow lg:t-w-2/6 disabled:t-opacity-75 t-relative" @click.native="redirect">
+          {{ $t('Add to cart') }}
+        </button-component>
+
+        <add-to-wishlist :product="product" class="t-flex-fix t-ml-4" />
+      </div>
     </div>
   </li>
 </template>
@@ -28,12 +36,14 @@ import { formatProductLink } from '@vue-storefront/core/modules/url/helpers'
 import { htmlDecode } from '@vue-storefront/core/lib/store/filters'
 import i18n from '@vue-storefront/i18n'
 import ProductImage from 'theme/components/core/ProductImage'
-import RemoveButton from 'theme/components/core/blocks/Wishlist/RemoveButton'
+import ButtonComponent from 'theme/components/core/blocks/Button'
+import AddToWishlist from 'theme/components/core/blocks/Wishlist/AddToWishlist'
 
 export default {
   components: {
-    RemoveButton,
-    ProductImage
+    AddToWishlist,
+    ProductImage,
+    ButtonComponent
   },
   mixins: [Product],
   computed: {
@@ -48,13 +58,8 @@ export default {
     }
   },
   methods: {
-    removeProductFromWhishList (product) {
-      this.$store.dispatch('notification/spawnNotification', {
-        type: 'success',
-        message: i18n.t('Product {productName} has been removed from wishlist!', { productName: htmlDecode(product.name) }),
-        action1: { label: i18n.t('OK') }
-      }, { root: true })
-      this.removeFromWishlist(product)
+    redirect () {
+      this.$router.push(this.localizedRoute(this.productLink))
     }
   }
 }
