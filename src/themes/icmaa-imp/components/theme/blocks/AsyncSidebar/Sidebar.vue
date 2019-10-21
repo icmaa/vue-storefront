@@ -17,7 +17,6 @@
 <script>
 import { mapState, mapGetters } from 'vuex'
 import { currentStoreView } from '@vue-storefront/core/lib/multistore'
-import { disableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock'
 import onEscapePress from '@vue-storefront/core/mixins/onEscapePress'
 
 import TopButton from 'theme/components/theme/blocks/AsyncSidebar/TopButton'
@@ -50,12 +49,6 @@ export default {
     onEscapePress () {
       this.closeMenu()
     }
-  },
-  mounted () {
-    disableBodyScroll(this.$refs.container)
-  },
-  destroyed () {
-    clearAllBodyScrollLocks()
   }
 }
 </script>
