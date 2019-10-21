@@ -1,7 +1,7 @@
 <template>
   <transition :name="direction === 'right' ? 'slide-left' : direction === 'left' ? 'slide-right' : null ">
     <div
-      class="sidebar t-max-w-full t-fixed t-bg-white"
+      class="sidebar t-max-w-full t-fixed t-scrolling-touch t-bg-white"
       :class="direction === 'left' ? 'left-sidebar' : direction === 'right' ? 'right-sidebar' : null "
       data-testid="sidebar"
       ref="sidebar"
@@ -19,8 +19,8 @@
 import { mapGetters } from 'vuex'
 
 import Submenu from 'theme/components/theme/blocks/AsyncSidebar/Submenu'
-import LoadingSpinner from 'theme/components/theme/blocks/AsyncSidebar/LoadingSpinner.vue'
-import LoadingError from 'theme/components/theme/blocks/AsyncSidebar/LoadingError.vue'
+import LoadingSpinner from 'theme/components/theme/blocks/AsyncSidebar/LoadingSpinner'
+import LoadingError from 'theme/components/theme/blocks/AsyncSidebar/LoadingError'
 import { disableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock'
 
 export default {
@@ -44,13 +44,13 @@ export default {
   },
   watch: {
     isOpen (state) {
-      if (state) {
-        this.$nextTick(() => {
+      this.$nextTick(() => {
+        if (state) {
           disableBodyScroll(this.$refs.sidebar)
-        })
-      } else {
-        clearAllBodyScrollLocks()
-      }
+        } else {
+          clearAllBodyScrollLocks()
+        }
+      })
     }
   },
   data () {
@@ -117,8 +117,9 @@ $z-index-modal: map-get($z-index, modal);
   top: 0;
   z-index: $z-index-modal;
   height: 100vh;
+  max-height: 100vh;
   width: 460px;
-  overflow: hidden;
+  overflow: auto;
 
   @media (max-width: 767px) {
     width: 100vh;
