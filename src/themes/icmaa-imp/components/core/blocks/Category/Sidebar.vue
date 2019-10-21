@@ -1,35 +1,39 @@
 <template>
-  <sidebar :title="$t('Filter')" :close-on-click="false" :class="[ hasActiveFilters ? 't-pb-40' : 't-pb-24' ]">
-    <div v-if="hasActiveFilters" class="t-absolute t-bottom-0 t-left-0 t-z-10 t-p-4 t-bg-white t-shadow t-w-full">
-      <button-component @click="resetAllFilters" v-text="$t('Clear filters')" class="t-w-full" />
-    </div>
-    <div v-for="(group, groupKey) in groupedFilters" :key="groupKey">
-      <div v-if="groupKey === 1" :class="{ 't-border-t t-border-base-lighter t-mt-8 t-pt-6': groupedFilters[0].length > 0 }">
-        <h4 class="t-text-sm t-mb-6">
-          {{ $t('Productdetails') }}
-        </h4>
-      </div>
-      <div v-for="filter in group" :key="filter.attributeKey" class="t-w-full" :data-attribute-key="filter.attributeKey">
-        <template v-if="filter.submenu">
-          <button-component icon="arrow_forward" type="select" class="t-w-full" :class="[ groupKey === 0 ? 't-mb-4' : 't-mb-6']" @click="openSubmenuFilter(filter)">
-            <span>
-              {{ filter.attributeLabel }}
-              <span class="t-ml-2 t-text-xs t-text-base-light" v-if="isActiveFilterAttribute(filter.attributeKey)">
-                <material-icon class="t-align-middle" icon="check" size="xs" />
-                {{ currentFilters(filter.attributeKey) }}
+  <sidebar :title="$t('Filter')" :close-on-click="false">
+    <template v-slot:top-after-title>
+      <button-component v-if="hasActiveFilters" type="transparent" size="sm" icon="delete_sweep" :icon-only="true" @click="resetAllFilters">
+        {{ $t('Clear filters') }}
+      </button-component>
+    </template>
+    <div class="t-pb-16">
+      <div v-for="(group, groupKey) in groupedFilters" :key="groupKey">
+        <div v-if="groupKey === 1" :class="{ 't-border-t t-border-base-lighter t-mt-8 t-pt-6': groupedFilters[0].length > 0 }">
+          <h4 class="t-text-sm t-mb-6">
+            {{ $t('Productdetails') }}
+          </h4>
+        </div>
+        <div v-for="filter in group" :key="filter.attributeKey" class="t-w-full" :data-attribute-key="filter.attributeKey">
+          <template v-if="filter.submenu">
+            <button-component icon="arrow_forward" type="select" class="t-w-full" :class="[ groupKey === 0 ? 't-mb-4' : 't-mb-6']" @click="openSubmenuFilter(filter)">
+              <span>
+                {{ filter.attributeLabel }}
+                <span class="t-ml-2 t-text-xs t-text-base-light" v-if="isActiveFilterAttribute(filter.attributeKey)">
+                  <material-icon class="t-align-middle" icon="check" size="xs" />
+                  {{ currentFilters(filter.attributeKey) }}
+                </span>
               </span>
-            </span>
-          </button-component>
-        </template>
-        <template v-else>
-          <h5 class="t-flex t-items-center t-text-xs t-text-base-tone t-mb-3">
-            {{ filter.attributeLabel }}
-            <button-component v-if="isActiveFilterAttribute(filter.attributeKey)" type="transparent" size="sm" icon="delete_sweep" :icon-only="true" @click="unsetFilter(filter.attributeKey)" class="t--my-4">
-              {{ $t('Unset {label} filter', { label: filter.attributeLabel }) }}
             </button-component>
-          </h5>
-          <filter-wrapper :attribute-key="filter.attributeKey" :attribute-label="filter.attributeLabel" :options="filter.options" />
-        </template>
+          </template>
+          <template v-else>
+            <h5 class="t-flex t-items-center t-text-xs t-text-base-tone t-mb-3">
+              {{ filter.attributeLabel }}
+              <button-component v-if="isActiveFilterAttribute(filter.attributeKey)" type="transparent" size="sm" icon="delete_sweep" :icon-only="true" @click="unsetFilter(filter.attributeKey)" class="t--my-4">
+                {{ $t('Unset {label} filter', { label: filter.attributeLabel }) }}
+              </button-component>
+            </h5>
+            <filter-wrapper :attribute-key="filter.attributeKey" :attribute-label="filter.attributeLabel" :options="filter.options" />
+          </template>
+        </div>
       </div>
     </div>
   </sidebar>
