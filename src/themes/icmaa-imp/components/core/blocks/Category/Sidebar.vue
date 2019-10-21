@@ -5,7 +5,7 @@
         {{ $t('Clear filters') }}
       </button-component>
     </template>
-    <div class="t-pb-16">
+    <div class="t-pb-20">
       <div v-for="(group, groupKey) in groupedFilters" :key="groupKey">
         <div v-if="groupKey === 1" :class="{ 't-border-t t-border-base-lighter t-mt-8 t-pt-6': groupedFilters[0].length > 0 }">
           <h4 class="t-text-sm t-mb-6">
