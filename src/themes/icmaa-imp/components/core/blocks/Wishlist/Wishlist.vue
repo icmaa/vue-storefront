@@ -1,7 +1,11 @@
 <template>
-  <sidebar :title="$t('Wishlist')" class="t-bg-base-lightest">
-    <div class="">
-      <!--<clear-wishlist-button v-if="productsInWishlist.length" @click="clearWishlist" class="col-xs-12 col-sm mb35 end-sm" />-->
+  <sidebar :title="$t('Wishlist')" :close-on-click="true">
+    <template v-slot:top-after-title>
+      <button-component v-if="productsInWishlist.length" type="transparent" size="sm" icon="delete_sweep" :icon-only="true" @click="clearWishlist">
+        {{ $t('Clear wishlist') }}
+      </button-component>
+    </template>
+    <div>
       <h4 v-if="!productsInWishlist.length" class="">
         {{ $t('Your wishlist is empty.') }}
       </h4>
@@ -25,9 +29,11 @@
 import Sidebar from 'theme/components/theme/blocks/AsyncSidebar/Sidebar'
 import Wishlist from '@vue-storefront/core/compatibility/components/blocks/Wishlist/Wishlist'
 import Product from 'theme/components/core/blocks/Wishlist/Product'
+import ButtonComponent from 'theme/components/core/blocks/Button'
 
 export default {
   components: {
+    ButtonComponent,
     Sidebar,
     Product
   },
