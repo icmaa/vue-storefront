@@ -12,18 +12,18 @@
         </router-link>
       </div>
 
-      <div class="t-text-sm t-text-base-light t-mb-1">
+      <div class="t-text-sm t-text-base-light t-pb-4 t-mb-1">
         <span class="price-original t-text-base-light t-line-through t-mr-2" v-if="product.special_price">{{ product.original_price_incl_tax | price }}</span>
         <span class="price-special t-text-sale t-font-bold" v-if="product.special_price">{{ product.price_incl_tax | price }}</span>
         <span class="price t-text-base-dark t-font-bold" v-if="!product.special_price">{{ product.price_incl_tax | price }}</span>
       </div>
 
-      <div class="t-flex t-flex-grow t-items-end">
-        <button-component type="primary" class="t-flex-grow lg:t-w-2/6 disabled:t-opacity-75 t-relative" @click.native="redirect">
+      <div class="t-flex t-flex-wrap t-flex-grow t-items-end">
+        <button-component type="primary" class="t-flex-grow" @click.native="redirect">
           {{ $t('Add to cart') }}
         </button-component>
 
-        <add-to-wishlist :product="product" :icon-remove="'delete'" class="t-flex-fix t-ml-4" @click.native.stop />
+        <add-to-wishlist :product="product" :icon-remove="'delete'" :button-type="'transparent'" class="t-flex-fix" @click.native.stop />
       </div>
     </div>
   </li>
