@@ -6,12 +6,12 @@
       </button-component>
     </template>
     <div>
-      <h4 v-if="!productsInWishlist.length">
+      <h4 v-if="!productsInWishlist.length" class="t-text-sm">
         {{ $t('Your wishlist is empty.') }}
       </h4>
       <div class="t-container">
         <ul>
-          <product v-for="wishlistProduct in productsInWishlist" :key="wishlistProduct.id" :product="wishlistProduct" />
+          <product v-for="(wishlistProduct, i) in productsInWishlist" :key="wishlistProduct.id" :product="wishlistProduct" :class="{ 't-border-b': productsInWishlist.length !== (i + 1) }" />
         </ul>
       </div>
     </div>
