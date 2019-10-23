@@ -6,16 +6,9 @@
       </button-component>
     </template>
     <div>
-      <h4 v-if="!productsInWishlist.length" class="">
+      <h4 v-if="!productsInWishlist.length">
         {{ $t('Your wishlist is empty.') }}
       </h4>
-      <div v-if="!productsInWishlist.length" class="">
-        {{ $t("Don't hesitate and") }}
-        <router-link :to="localizedRoute('/')">
-          {{ $t('browse our catalog') }}
-        </router-link>
-        {{ $t('to find something beautiful for You!') }}
-      </div>
       <div class="t-container">
         <ul>
           <product v-for="wishlistProduct in productsInWishlist" :key="wishlistProduct.id" :product="wishlistProduct" />
