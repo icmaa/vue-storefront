@@ -1,7 +1,7 @@
 <template>
   <sidebar :title="$t('Wishlist')" :close-on-click="true">
     <template v-slot:top-after-title>
-      <button-component v-if="productsInWishlist.length" type="transparent" size="sm" icon="delete_sweep" :icon-only="true" @click="clearWishlist">
+      <button-component v-if="productsInWishlist.length" type="transparent" size="sm" icon="delete" :icon-only="true" @click="clearWishlist">
         {{ $t('Clear wishlist') }}
       </button-component>
     </template>
