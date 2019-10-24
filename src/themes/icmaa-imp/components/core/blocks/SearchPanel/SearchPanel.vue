@@ -1,7 +1,11 @@
 <template>
   <sidebar :close-on-click="false" :use-expander-in-title="false" ref="searchSidebar" data-testid="searchSidebar">
     <template v-slot:top>
-      <input type="text" v-model="search" @input="makeSearch" @blur="$v.search.$touch()" :placeholder="$t('Type what you are looking for...')" autofocus="true" ref="searchInput" class="t-flex-expand t-mx-2 t-p-0 t-text-lg t-text-base-tone placeholder:t-text-base-lighter">
+      <label for="search" class="t-flex">
+        <span class="t-sr-only">{{ $t('Search') }}</span>
+        <material-icon icon="search" class="t-mx-2" />
+      </label>
+      <input type="text" v-model="searchString" @input="search" @blur="$v.searchString.$touch()" :placeholder="$t('Type what you are looking for...')" autofocus="true" id="search" ref="searchString" class="t-flex-expand t-p-0 t-text-lg t-text-base-tone placeholder:t-text-base-lighter">
     </template>
     <div class="t-pb-20">
       <transition name="fade">
@@ -9,12 +13,12 @@
           {{ $t(getNoResultsMessage) }}
         </div>
       </transition>
-      <category-panel :categories="categories" v-model="selectedCategoryIds" v-if="!emptyResults && visibleProducts.length && categories.length > 1" class="t-mb-4" />
-      <div class="product-listing t-flex t-flex-wrap t-bg-base-lightest t--mx-4 t-px-3 t-py-4" v-if="!emptyResults && visibleProducts.length > 0">
-        <product-tile v-for="product in visibleProducts" :key="product.id" :product="product" @click.native="closeSearchpanel" class="t-w-1/2 lg:t-w-1/3 t-px-1 t-mb-8" />
+      <category-panel :categories="categories" v-model="selectedCategoryIds" v-if="!emptyResults && filteredProducts.length && categories.length > 1" class="t-mb-4" />
+      <div class="product-listing t-flex t-flex-wrap t-bg-base-lightest t--mx-4 t-px-3 t-py-4" v-if="!emptyResults && filteredProducts.length > 0">
+        <product-tile v-for="product in filteredProducts" :key="product.id" :product="product" @click.native="closeSearchpanel" class="t-w-1/2 lg:t-w-1/3 t-px-1 t-mb-8" />
       </div>
-      <div v-if="visibleProducts.length >= 18 && OnlineOnly" class="t-flex t-items-center t-justify-center t-mt-8">
-        <button-component type="ghost" @click="seeMore" v-if="readMore" class="t-w-2/3 lg:t-w-1/3" :class="{ 't-relative t-opacity-60': loadingProducts }">
+      <div v-if="filteredProducts.length >= 18 && OnlineOnly" class="t-flex t-items-center t-justify-center t-mt-8">
+        <button-component type="ghost" @click="loadMoreProducts" v-if="readMore" class="t-w-2/3 lg:t-w-1/3" :class="{ 't-relative t-opacity-60': loadingProducts }">
           {{ $t('Load more') }}
           <loader-background v-if="loadingProducts" bar="t-bg-base-darkest" class="t-bottom-0" />
         </button-component>
@@ -25,36 +29,54 @@
 
 <script>
 import Sidebar from 'theme/components/theme/blocks/AsyncSidebar/Sidebar'
-import SearchPanel from '@vue-storefront/core/compatibility/components/blocks/SearchPanel/SearchPanel'
 import ProductTile from 'theme/components/core/ProductTile'
 import CategoryPanel from 'theme/components/core/blocks/SearchPanel/CategoryPanel'
+import MaterialIcon from 'theme/components/core/blocks/MaterialIcon'
 import ButtonComponent from 'theme/components/core/blocks/Button'
 import LoaderBackground from 'theme/components/core/LoaderBackground'
 import VueOfflineMixin from 'vue-offline/mixin'
+import onEscapePress from '@vue-storefront/core/mixins/onEscapePress'
+
+import i18n from '@vue-storefront/i18n'
 import { minLength } from 'vuelidate/lib/validators'
 import { disableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock'
+import { prepareQuickSearchQuery } from '@vue-storefront/core/modules/catalog/queries/searchPanel'
+import { Logger } from '@vue-storefront/core/lib/logger'
 
 export default {
+  name: 'SearchPanel',
   components: {
     Sidebar,
     ProductTile,
     CategoryPanel,
+    MaterialIcon,
     ButtonComponent,
     LoaderBackground
   },
-  mixins: [SearchPanel, VueOfflineMixin],
+  mixins: [VueOfflineMixin],
   validations: {
-    search: {
+    searchString: {
       minLength: minLength(3)
     }
   },
   data () {
     return {
+      products: [],
+      searchString: '',
+      size: 18,
+      start: 0,
+      placeholder: i18n.t('Type what you are looking for...'),
+      emptyResults: false,
+      readMore: true,
+      loadingProducts: false,
       selectedCategoryIds: []
     }
   },
   computed: {
-    visibleProducts () {
+    items () {
+      return this.$store.state.search
+    },
+    filteredProducts () {
       const productList = this.products || []
       if (this.selectedCategoryIds.length) {
         return productList.filter(product => product.category_ids.some(categoryId => {
@@ -75,7 +97,7 @@ export default {
     },
     getNoResultsMessage () {
       let msg = ''
-      if (!this.$v.search.minLength) {
+      if (!this.$v.searchString.minLength) {
         msg = 'Searched term should consist of at least 3 characters.'
       } else if (this.emptyResults) {
         msg = 'No results were found.'
@@ -87,22 +109,76 @@ export default {
     categories () {
       this.selectedCategoryIds = []
     },
-    search (val, org) {
-      // Prevent value from being string 'null'
+    searchString (val, org) {
       if (val === null || val === 'null' || val === undefined) {
-        this.search = ''
+        this.searchString = ''
         return
       }
 
       this.$bus.$emit('search-input-change', { search: val })
     }
   },
-  mounted () {
-    // add autofocus to search input field
-    this.$refs.searchInput.focus()
-    disableBodyScroll(this.$refs.searchSidebar)
+  methods: {
+    buildSearchQuery (queryText) {
+      let searchQuery = prepareQuickSearchQuery(queryText)
+      return searchQuery
+    },
+    search () {
+      if (this.searchString !== '' && this.searchString !== undefined) {
+        let query = this.buildSearchQuery(this.searchString)
+        let startValue = 0;
+        this.start = startValue
+        this.readMore = true
+        this.loadingProducts = true
+        this.$store.dispatch('product/list', { query, start: this.start, configuration: {}, size: this.size, updateState: false }).then(resp => {
+          this.products = resp.items
+          this.start = startValue + this.size
+          this.emptyResults = resp.items.length < 1
+          this.loadingProducts = false
+        }).catch((err) => {
+          Logger.error(err, 'components-search')()
+        })
+      } else {
+        this.products = []
+        this.emptyResults = 0
+      }
+    },
+    loadMoreProducts () {
+      if (this.searchString !== '' && this.searchString !== undefined) {
+        let query = this.buildSearchQuery(this.searchString)
+        let startValue = this.start;
+        this.loadingProducts = true
+        this.$store.dispatch('product/list', { query, start: startValue, size: this.size, updateState: false }).then((resp) => {
+          let page = Math.floor(resp.total / this.size)
+          let exceeed = resp.total - this.size * page
+          if (resp.start === resp.total - exceeed) {
+            this.readMore = false
+          }
+          this.products = this.products.concat(resp.items)
+          this.start = startValue + this.size
+          this.emptyResults = this.products.length < 1
+          this.loadingProducts = false
+        }).catch((err) => {
+          Logger.error(err, 'components-search')()
+        })
+      } else {
+        this.products = []
+        this.emptyResults = 0
+      }
+    }
   },
-  destroyed () {
+  mounted () {
+    this.$refs.searchString.focus()
+    disableBodyScroll(this.$refs.searchSidebar)
+
+    this.searchString = localStorage.getItem(`shop/user/searchQuery`) || ''
+
+    if (this.searchString) {
+      this.search();
+    }
+  },
+  beforeDestroy () {
+    localStorage.setItem(`shop/user/searchQuery`, this.searchString);
     clearAllBodyScrollLocks()
   }
 }
