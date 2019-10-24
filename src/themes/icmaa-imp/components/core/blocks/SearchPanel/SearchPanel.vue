@@ -1,7 +1,7 @@
 <template>
-  <sidebar :close-on-click="false" :use-expander-in-title="false" class="searchpanel" data-testid="searchPanel">
+  <sidebar :close-on-click="false" :use-expander-in-title="false" ref="searchSidebar" data-testid="searchSidebar">
     <template v-slot:top>
-      <input type="text" v-model="search" @input="makeSearch" @blur="$v.search.$touch()" :placeholder="$t('Type what you are looking for...')" autofocus="true" id="search" ref="search" class="t-flex-expand t-mx-2 t-p-0 t-text-lg t-text-base-tone placeholder:t-text-base-lighter">
+      <input type="text" v-model="search" @input="makeSearch" @blur="$v.search.$touch()" :placeholder="$t('Type what you are looking for...')" autofocus="true" ref="searchInput" class="t-flex-expand t-mx-2 t-p-0 t-text-lg t-text-base-tone placeholder:t-text-base-lighter">
     </template>
     <div class="t-pb-20">
       <transition name="fade">
@@ -10,7 +10,7 @@
         </div>
       </transition>
       <category-panel :categories="categories" v-model="selectedCategoryIds" v-if="!emptyResults && visibleProducts.length && categories.length > 1" class="t-mb-4" />
-      <div class="product-listing t-flex t-flex-wrap t-bg-base-lightest t--mx-4 t-px-3 t-py-4" v-if="!emptyResults">
+      <div class="product-listing t-flex t-flex-wrap t-bg-base-lightest t--mx-4 t-px-3 t-py-4" v-if="!emptyResults && visibleProducts.length > 0">
         <product-tile v-for="product in visibleProducts" :key="product.id" :product="product" @click.native="closeSearchpanel" class="t-w-1/2 lg:t-w-1/3 t-px-1 t-mb-8" />
       </div>
       <div
@@ -109,8 +109,8 @@ export default {
   },
   mounted () {
     // add autofocus to search input field
-    this.$refs.search.focus()
-    disableBodyScroll(this.$el)
+    this.$refs.searchInput.focus()
+    disableBodyScroll(this.$refs.searchSidebar)
   },
   destroyed () {
     clearAllBodyScrollLocks()
