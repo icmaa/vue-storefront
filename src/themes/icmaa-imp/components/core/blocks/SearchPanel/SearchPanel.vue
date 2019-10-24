@@ -13,25 +13,11 @@
       <div class="product-listing t-flex t-flex-wrap t-bg-base-lightest t--mx-4 t-px-3 t-py-4" v-if="!emptyResults && visibleProducts.length > 0">
         <product-tile v-for="product in visibleProducts" :key="product.id" :product="product" @click.native="closeSearchpanel" class="t-w-1/2 lg:t-w-1/3 t-px-1 t-mb-8" />
       </div>
-      <div
-        v-show="OnlineOnly"
-        v-if="visibleProducts.length >= 18"
-        class="buttons-set align-center py35 mt20 px40"
-      >
-        <button
-          @click="seeMore" v-if="readMore"
-          class="no-outline brdr-none py15 px20 bg-cl-mine-shaft :bg-cl-th-secondary cl-white fs-medium-small"
-          type="button"
-        >
+      <div v-if="visibleProducts.length >= 18 && OnlineOnly" class="t-flex t-items-center t-justify-center t-mt-8">
+        <button-component type="ghost" @click="seeMore" v-if="readMore" class="t-w-2/3 lg:t-w-1/3" :class="{ 't-relative t-opacity-60': loadingProducts }">
           {{ $t('Load more') }}
-        </button>
-        <button
-          @click="closeSearchpanel"
-          class="no-outline brdr-none p15 fs-medium-small close-button"
-          type="button"
-        >
-          {{ $t('Close') }}
-        </button>
+          <loader-background v-if="loadingProducts" bar="t-bg-base-darkest" class="t-bottom-0" />
+        </button-component>
       </div>
     </div>
   </sidebar>
@@ -42,6 +28,8 @@ import Sidebar from 'theme/components/theme/blocks/AsyncSidebar/Sidebar'
 import SearchPanel from '@vue-storefront/core/compatibility/components/blocks/SearchPanel/SearchPanel'
 import ProductTile from 'theme/components/core/ProductTile'
 import CategoryPanel from 'theme/components/core/blocks/SearchPanel/CategoryPanel'
+import ButtonComponent from 'theme/components/core/blocks/Button'
+import LoaderBackground from 'theme/components/core/LoaderBackground'
 import VueOfflineMixin from 'vue-offline/mixin'
 import { minLength } from 'vuelidate/lib/validators'
 import { disableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock'
@@ -50,7 +38,9 @@ export default {
   components: {
     Sidebar,
     ProductTile,
-    CategoryPanel
+    CategoryPanel,
+    ButtonComponent,
+    LoaderBackground
   },
   mixins: [SearchPanel, VueOfflineMixin],
   validations: {
