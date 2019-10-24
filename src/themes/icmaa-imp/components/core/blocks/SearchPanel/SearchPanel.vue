@@ -17,8 +17,8 @@
       <div class="product-listing t-flex t-flex-wrap t-bg-base-lightest t--mx-4 t-px-3 t-py-4" v-if="!emptyResults && filteredProducts.length > 0">
         <product-tile v-for="product in filteredProducts" :key="product.id" :product="product" @click.native="closeSidebar" class="t-w-1/2 lg:t-w-1/3 t-px-1 t-mb-8" />
       </div>
-      <div v-if="filteredProducts.length > size && OnlineOnly" class="t-flex t-items-center t-justify-center t-mt-8">
-        <button-component type="ghost" @click="loadMoreProducts" v-if="readMore" class="t-w-2/3 lg:t-w-1/3" :class="{ 't-relative t-opacity-60': loadingProducts }">
+      <div v-if="filteredProducts.length >= size && OnlineOnly" class="t-flex t-items-center t-justify-center t-mt-8">
+        <button-component type="ghost" @click="loadMoreProducts" v-if="moreProducts" class="t-w-2/3 lg:t-w-1/3" :class="{ 't-relative t-opacity-60': loadingProducts }">
           {{ $t('Load more') }}
           <loader-background v-if="loadingProducts" bar="t-bg-base-darkest" class="t-bottom-0" />
         </button-component>
@@ -37,7 +37,7 @@ import LoaderBackground from 'theme/components/core/LoaderBackground'
 import VueOfflineMixin from 'vue-offline/mixin'
 
 import i18n from '@vue-storefront/i18n'
-import { minLength } from 'vuelidate/lib/validators'
+import { required, minLength } from 'vuelidate/lib/validators'
 import { disableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock'
 import { prepareQuickSearchQuery } from '@vue-storefront/core/modules/catalog/queries/searchPanel'
 import { Logger } from '@vue-storefront/core/lib/logger'
@@ -55,6 +55,7 @@ export default {
   mixins: [VueOfflineMixin],
   validations: {
     searchString: {
+      required,
       minLength: minLength(3)
     }
   },
@@ -65,8 +66,8 @@ export default {
       size: 12,
       start: 0,
       placeholder: i18n.t('Type what you are looking for...'),
-      emptyResults: false,
-      readMore: true,
+      emptyResults: true,
+      moreProducts: true,
       loadingProducts: false,
       selectedCategoryIds: []
     }
@@ -101,6 +102,7 @@ export default {
       } else if (this.emptyResults) {
         msg = 'No results were found.'
       }
+
       return msg
     }
   },
@@ -109,29 +111,20 @@ export default {
       this.selectedCategoryIds = []
     },
     searchString (val, org) {
-      if (val === null || val === 'null' || val === undefined) {
-        this.searchString = ''
-        return
-      }
-
+      val = this.$v.searchString.$invalid ? '' : val
       this.$bus.$emit('search-input-change', { search: val })
     }
   },
   methods: {
-    buildSearchQuery (queryText) {
-      let searchQuery = prepareQuickSearchQuery(queryText)
-      return searchQuery
-    },
     search () {
-      if (this.searchString !== '' && this.searchString !== undefined) {
-        let query = this.buildSearchQuery(this.searchString)
-        let startValue = 0;
-        this.start = startValue
-        this.readMore = true
+      if (!this.$v.searchString.$invalid) {
+        let query = prepareQuickSearchQuery(this.searchString)
+        this.start = 0
+        this.moreProducts = true
         this.loadingProducts = true
         this.$store.dispatch('product/list', { query, start: this.start, configuration: {}, size: this.size, updateState: false }).then(resp => {
           this.products = resp.items
-          this.start = startValue + this.size
+          this.start += this.size
           this.emptyResults = resp.items.length < 1
           this.loadingProducts = false
         }).catch((err) => {
@@ -139,48 +132,47 @@ export default {
         })
       } else {
         this.products = []
-        this.emptyResults = 0
+        this.emptyResults = true
       }
     },
     loadMoreProducts () {
       if (this.searchString !== '' && this.searchString !== undefined) {
-        let query = this.buildSearchQuery(this.searchString)
-        let startValue = this.start;
+        let query = prepareQuickSearchQuery(this.searchString)
         this.loadingProducts = true
-        this.$store.dispatch('product/list', { query, start: startValue, size: this.size, updateState: false }).then((resp) => {
+        this.$store.dispatch('product/list', { query, start: this.start, size: this.size, updateState: false }).then((resp) => {
           let page = Math.floor(resp.total / this.size)
           let exceeed = resp.total - this.size * page
           if (resp.start === resp.total - exceeed) {
-            this.readMore = false
+            this.moreProducts = false
           }
           this.products = this.products.concat(resp.items)
-          this.start = startValue + this.size
+          this.start += this.size
           this.emptyResults = this.products.length < 1
           this.loadingProducts = false
         }).catch((err) => {
+          this.loadingProducts = false
           Logger.error(err, 'components-search')()
         })
       } else {
         this.products = []
-        this.emptyResults = 0
+        this.emptyResults = true
       }
     },
     closeSidebar () {
       this.$store.dispatch('ui/setSearchpanel', false)
     }
   },
-  mounted () {
+  async mounted () {
     this.$refs.searchString.focus()
     disableBodyScroll(this.$refs.searchSidebar)
 
-    this.searchString = localStorage.getItem(`shop/user/searchQuery`) || ''
-
+    this.searchString = await localStorage.getItem(`shop/user/searchQuery`) || ''
     if (this.searchString) {
-      this.search();
+      this.search()
     }
   },
   beforeDestroy () {
-    localStorage.setItem(`shop/user/searchQuery`, this.searchString);
+    localStorage.setItem(`shop/user/searchQuery`, this.searchString)
     clearAllBodyScrollLocks()
   }
 }
