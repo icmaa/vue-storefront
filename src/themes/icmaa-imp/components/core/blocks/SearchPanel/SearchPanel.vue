@@ -4,14 +4,14 @@
       <input type="text" v-model="search" @input="makeSearch" @blur="$v.search.$touch()" :placeholder="$t('Type what you are looking for...')" autofocus="true" id="search" ref="search" class="t-flex-expand t-mx-2 t-p-0 t-text-lg t-text-base-tone placeholder:t-text-base-lighter">
     </template>
     <div class="t-pb-20">
-      <category-panel :categories="categories" v-model="selectedCategoryIds" v-if="visibleProducts.length && categories.length > 1" class="t-mb-4" />
-      <div class="product-listing t-flex t-flex-wrap t-bg-base-lightest t--mx-4 t-px-3 t-py-4">
+      <transition name="fade">
+        <div v-if="getNoResultsMessage" class="t-px-2 t-mt-2 t-text-sm">
+          {{ $t(getNoResultsMessage) }}
+        </div>
+      </transition>
+      <category-panel :categories="categories" v-model="selectedCategoryIds" v-if="!emptyResults && visibleProducts.length && categories.length > 1" class="t-mb-4" />
+      <div class="product-listing t-flex t-flex-wrap t-bg-base-lightest t--mx-4 t-px-3 t-py-4" v-if="!emptyResults">
         <product-tile v-for="product in visibleProducts" :key="product.id" :product="product" @click.native="closeSearchpanel" class="t-w-1/2 lg:t-w-1/3 t-px-1 t-mb-8" />
-        <transition name="fade">
-          <div v-if="getNoResultsMessage" class="t-px-2 t-mt-2 t-text-sm">
-            {{ $t(getNoResultsMessage) }}
-          </div>
-        </transition>
       </div>
       <div
         v-show="OnlineOnly"
