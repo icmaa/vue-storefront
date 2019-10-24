@@ -1,56 +1,46 @@
 <template>
   <sidebar :close-on-click="false" :use-expander-in-title="false" class="searchpanel" data-testid="searchPanel">
     <template v-slot:top>
-      <input
-        id="search"
-        ref="search"
-        v-model="search"
-        @input="makeSearch"
-        @blur="$v.search.$touch()"
-        class="t-flex-expand t-mx-2 t-p-0 t-text-lg t-text-base-tone placeholder:t-text-base-lighter"
-        type="text"
-        autofocus="true"
-        :placeholder="$t('Type what you are looking for...')"
-      >
+      <input type="text" v-model="search" @input="makeSearch" @blur="$v.search.$touch()" :placeholder="$t('Type what you are looking for...')" autofocus="true" id="search" ref="search" class="t-flex-expand t-mx-2 t-p-0 t-text-lg t-text-base-tone placeholder:t-text-base-lighter">
     </template>
-    <div v-if="visibleProducts.length && categories.length > 1" class="categories">
-      <category-panel :categories="categories" v-model="selectedCategoryIds" />
-    </div>
-    <div class="product-listing row">
-      <product-tile
-        v-for="product in visibleProducts"
-        :key="product.id"
-        :product="product"
-        @click.native="closeSearchpanel"
-      />
-      <transition name="fade">
-        <div
-          v-if="getNoResultsMessage"
-          class="no-results relative center-xs h4 col-md-12"
+    <div class="t-pb-20">
+      <category-panel :categories="categories" v-model="selectedCategoryIds" v-if="visibleProducts.length && categories.length > 1" class="t-mb-4" />
+      <div class="product-listing row">
+        <product-tile
+          v-for="product in visibleProducts"
+          :key="product.id"
+          :product="product"
+          @click.native="closeSearchpanel"
+        />
+        <transition name="fade">
+          <div
+            v-if="getNoResultsMessage"
+            class="no-results relative center-xs h4 col-md-12"
+          >
+            {{ $t(getNoResultsMessage) }}
+          </div>
+        </transition>
+      </div>
+      <div
+        v-show="OnlineOnly"
+        v-if="visibleProducts.length >= 18"
+        class="buttons-set align-center py35 mt20 px40"
+      >
+        <button
+          @click="seeMore" v-if="readMore"
+          class="no-outline brdr-none py15 px20 bg-cl-mine-shaft :bg-cl-th-secondary cl-white fs-medium-small"
+          type="button"
         >
-          {{ $t(getNoResultsMessage) }}
-        </div>
-      </transition>
-    </div>
-    <div
-      v-show="OnlineOnly"
-      v-if="visibleProducts.length >= 18"
-      class="buttons-set align-center py35 mt20 px40"
-    >
-      <button
-        @click="seeMore" v-if="readMore"
-        class="no-outline brdr-none py15 px20 bg-cl-mine-shaft :bg-cl-th-secondary cl-white fs-medium-small"
-        type="button"
-      >
-        {{ $t('Load more') }}
-      </button>
-      <button
-        @click="closeSearchpanel"
-        class="no-outline brdr-none p15 fs-medium-small close-button"
-        type="button"
-      >
-        {{ $t('Close') }}
-      </button>
+          {{ $t('Load more') }}
+        </button>
+        <button
+          @click="closeSearchpanel"
+          class="no-outline brdr-none p15 fs-medium-small close-button"
+          type="button"
+        >
+          {{ $t('Close') }}
+        </button>
+      </div>
     </div>
   </sidebar>
 </template>
@@ -59,8 +49,8 @@
 import Sidebar from 'theme/components/theme/blocks/AsyncSidebar/Sidebar'
 import SearchPanel from '@vue-storefront/core/compatibility/components/blocks/SearchPanel/SearchPanel'
 import ProductTile from 'theme/components/core/ProductTile'
+import CategoryPanel from 'theme/components/core/blocks/SearchPanel/CategoryPanel'
 import VueOfflineMixin from 'vue-offline/mixin'
-import CategoryPanel from 'theme/components/core/blocks/Category/CategoryPanel'
 import { minLength } from 'vuelidate/lib/validators'
 import { disableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock'
 
