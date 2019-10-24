@@ -97,10 +97,12 @@ export default {
     },
     getNoResultsMessage () {
       let msg = ''
-      if (!this.$v.searchString.minLength) {
-        msg = 'Searched term should consist of at least 3 characters.'
-      } else if (this.emptyResults) {
-        msg = 'No results were found.'
+      if (this.searchString !== '') {
+        if (this.$v.searchString.$invalid) {
+          msg = 'Searched term should consist of at least 3 characters.'
+        } else if (this.emptyResults) {
+          msg = 'No results were found.'
+        }
       }
 
       return msg
