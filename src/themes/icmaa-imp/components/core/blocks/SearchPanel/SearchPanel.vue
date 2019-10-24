@@ -6,7 +6,7 @@
     <div class="t-pb-20">
       <category-panel :categories="categories" v-model="selectedCategoryIds" v-if="visibleProducts.length && categories.length > 1" class="t-mb-4" />
       <div class="product-listing t-flex t-flex-wrap t-bg-base-lightest t--mx-4 t-px-3 t-py-4">
-        <product-tile v-for="product in visibleProducts" :key="product.id" :product="product" @click.native="closeSearchpanel" class="t-w-1/2 t-px-1 t-mb-8" />
+        <product-tile v-for="product in visibleProducts" :key="product.id" :product="product" @click.native="closeSearchpanel" class="t-w-1/2 lg:t-w-1/3 t-px-1 t-mb-8" />
         <transition name="fade">
           <div v-if="getNoResultsMessage" class="t-px-2 t-mt-2 t-text-sm">
             {{ $t(getNoResultsMessage) }}
