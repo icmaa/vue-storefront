@@ -15,9 +15,9 @@
       </transition>
       <category-panel :categories="categories" v-model="selectedCategoryIds" v-if="!emptyResults && filteredProducts.length && categories.length > 1" class="t-mb-4" />
       <div class="product-listing t-flex t-flex-wrap t-bg-base-lightest t--mx-4 t-px-3 t-py-4" v-if="!emptyResults && filteredProducts.length > 0">
-        <product-tile v-for="product in filteredProducts" :key="product.id" :product="product" @click.native="closeSearchpanel" class="t-w-1/2 lg:t-w-1/3 t-px-1 t-mb-8" />
+        <product-tile v-for="product in filteredProducts" :key="product.id" :product="product" @click.native="closeSidebar" class="t-w-1/2 lg:t-w-1/3 t-px-1 t-mb-8" />
       </div>
-      <div v-if="filteredProducts.length >= 18 && OnlineOnly" class="t-flex t-items-center t-justify-center t-mt-8">
+      <div v-if="filteredProducts.length > size && OnlineOnly" class="t-flex t-items-center t-justify-center t-mt-8">
         <button-component type="ghost" @click="loadMoreProducts" v-if="readMore" class="t-w-2/3 lg:t-w-1/3" :class="{ 't-relative t-opacity-60': loadingProducts }">
           {{ $t('Load more') }}
           <loader-background v-if="loadingProducts" bar="t-bg-base-darkest" class="t-bottom-0" />
@@ -35,7 +35,6 @@ import MaterialIcon from 'theme/components/core/blocks/MaterialIcon'
 import ButtonComponent from 'theme/components/core/blocks/Button'
 import LoaderBackground from 'theme/components/core/LoaderBackground'
 import VueOfflineMixin from 'vue-offline/mixin'
-import onEscapePress from '@vue-storefront/core/mixins/onEscapePress'
 
 import i18n from '@vue-storefront/i18n'
 import { minLength } from 'vuelidate/lib/validators'
@@ -61,9 +60,9 @@ export default {
   },
   data () {
     return {
-      products: [],
       searchString: '',
-      size: 18,
+      products: [],
+      size: 12,
       start: 0,
       placeholder: i18n.t('Type what you are looking for...'),
       emptyResults: false,
@@ -165,6 +164,9 @@ export default {
         this.products = []
         this.emptyResults = 0
       }
+    },
+    closeSidebar () {
+      this.$store.dispatch('ui/setSearchpanel', false)
     }
   },
   mounted () {
