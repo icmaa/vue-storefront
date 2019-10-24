@@ -1,19 +1,18 @@
 <template>
-  <sidebar :title="$t('Search')" :close-on-click="false" class="searchpanel" data-testid="searchPanel">
-    <div class="search-input-group">
-      <i class="material-icons search-icon">search</i>
+  <sidebar :close-on-click="false" :use-expander-in-title="false" class="searchpanel" data-testid="searchPanel">
+    <template v-slot:top>
       <input
-        ref="search"
         id="search"
+        ref="search"
         v-model="search"
         @input="makeSearch"
         @blur="$v.search.$touch()"
-        class="search-panel-input"
-        :placeholder="$t('Type what you are looking for...')"
-        type="search"
+        class="t-flex-expand t-mx-2 t-p-0 t-text-lg t-text-base-tone placeholder:t-text-base-lighter"
+        type="text"
         autofocus="true"
+        :placeholder="$t('Type what you are looking for...')"
       >
-    </div>
+    </template>
     <div v-if="visibleProducts.length && categories.length > 1" class="categories">
       <category-panel :categories="categories" v-model="selectedCategoryIds" />
     </div>
