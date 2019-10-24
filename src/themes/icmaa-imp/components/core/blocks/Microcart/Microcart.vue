@@ -1,55 +1,46 @@
 <template>
-  <sidebar :title="$t('Shopping cart')" class="microcart t-relative" data-testid="microcart">
+  <sidebar :title="$t('Shopping cart')" class="microcart t-relative" data-testid="microcart" :close-on-click="false">
+    <template v-slot:top-after-title>
+      <button-component v-if="productsInCart.length" type="transparent" size="sm" icon="delete" :icon-only="true" @click="clearCart">
+        {{ $t('Clear cart') }}
+      </button-component>
+    </template>
+
     <transition name="fade">
       <div v-if="isEditMode" class="overlay" @click="closeEditMode" />
     </transition>
 
-    <div class="row middle-xs bg-cl-primary top-sm px40 actions">
-      <div class="col-xs-12 col-sm mt35 mb35 mt0 end-sm clearcart-col">
-        <clear-cart-button
-          v-if="productsInCart.length"
-          @click.native="clearCart"
-        />
-      </div>
-    </div>
-
     <h4 v-if="!productsInCart.length" class="cl-accent ml30">
       {{ $t('Your shopping cart is empty.') }}
     </h4>
-    <div v-if="!productsInCart.length" class="ml30" @click="closeMicrocartExtend">
-      {{ $t("Don't hesitate and") }}
-      <router-link :to="localizedRoute('/')">
-        {{ $t('browse our catalog') }}
-      </router-link>
-      {{ $t('to find something beautiful for You!') }}
-    </div>
-    <ul v-if="productsInCart.length" class="bg-cl-primary m0 px40 pb40 products">
+
+    <ul v-if="productsInCart.length" class="">
       <product v-for="product in productsInCart" :key="product.checksum || product.sku" :product="product" />
     </ul>
-    <div v-if="productsInCart.length" class="summary px40 cl-accent serif">
-      <h3 class="m0 pt40 mb30 weight-400 summary-heading">
+
+    <div v-if="productsInCart.length" class="">
+      <h3 class="t-text-lg t-py-4">
         {{ $t('Shopping summary') }}
       </h3>
-      <div v-for="(segment, index) in totals" :key="index" class="row py20" v-if="segment.code !== 'grand_total'">
-        <div class="col-xs">
-          {{ segment.title }}
-          <button v-if="appliedCoupon && segment.code === 'discount'" type="button" class="p0 brdr-none bg-cl-transparent close delete-button ml10" @click="clearCoupon">
-            <i class="material-icons cl-accent">
-              close
-            </i>
-          </button>
-        </div>
-        <div v-if="segment.value != null" class="col-xs align-right">
-          {{ segment.value | price }}
+      <div v-for="(segment, index) in totals" :key="index" class="" v-if="segment.code !== 'grand_total'">
+        <div class="t-flex t-items-center t-justify-between t-py-1">
+          <div class="">
+            {{ segment.title }}
+            <button v-if="appliedCoupon && segment.code === 'discount'" type="button" class="p0 brdr-none bg-cl-transparent close delete-button ml10" @click="clearCoupon">
+              <i class="material-icons cl-accent">
+                close
+              </i>
+            </button>
+          </div>
+          <div v-if="segment.value != null" class="">
+            {{ segment.value | price }}
+          </div>
         </div>
       </div>
-      <div class="row py20">
+
+      <div class="">
         <div v-if="OnlineOnly && !addCouponPressed" class="col-xs-12">
-          <button
-            class="p0 brdr-none serif fs-medium-small cl-accent bg-cl-transparent"
-            type="button"
-            @click="addDiscountCoupon"
-          >
+          <button class="p0 brdr-none serif fs-medium-small cl-accent bg-cl-transparent" type="button" @click="addDiscountCoupon">
             {{ $t('Add a discount code') }}
           </button>
         </div>
@@ -64,35 +55,32 @@
         </div>
       </div>
 
-      <div class="row pt30 pb20 weight-700 middle-xs" v-for="(segment, index) in totals" :key="index" v-if="segment.code === 'grand_total'">
-        <div class="col-xs h4 total-price-label">
+      <div class="t-flex t-items-center t-justify-between" v-for="(segment, index) in totals" :key="index" v-if="segment.code === 'grand_total'">
+        <div class="t-font-bold t-text-lg">
           {{ segment.title }}
         </div>
-        <div class="col-xs align-right h2 total-price-value">
+        <div class="t-font-bold t-text-lg">
           {{ segment.value | price }}
         </div>
       </div>
     </div>
 
-    <div
-      class="row py20 px40 middle-xs actions"
-      v-if="productsInCart.length && !isCheckoutMode"
-    >
-      <div class="col-xs-12 col-sm first-sm">
-        <router-link :to="localizedRoute('/')" class="no-underline cl-secondary link">
+    <div class="" v-if="productsInCart.length && !isCheckoutMode">
+      <div class="t-mb-4">
+        <!--<router-link :to="localizedRoute('/')" class="no-underline cl-secondary link">
           <span @click="closeMicrocartExtend">
             {{ $t('Return to shopping') }}
           </span>
-        </router-link>
+        </router-link>-->
       </div>
-      <div class="col-xs-12 first-xs col-sm-4 end-sm">
-        <button-full
-          :link="{ name: 'checkout' }"
-          @click.native="closeMicrocartExtend"
-        >
+      <div class="">
+        <!-- <button-full :link="{ name: 'checkout' }" @click.native="closeMicrocartExtend">
           {{ $t('Go to checkout') }}
-        </button-full>
-        <instant-checkout v-if="isInstantCheckoutRegistered" class="no-outline button-full block brdr-none w-100 px10 py20 bg-cl-mine-shaft :bg-cl-th-secondary ripple weight-400 h4 cl-white sans-serif fs-medium mt20" />
+        </button-full>-->
+        <button-component :type="'primary'" class="t-w-full t-h-16 t-text-md" :link="{ name: 'checkout' }" @click.native="closeMicrocartExtend">
+          {{ $t('Go to checkout') }}
+        </button-component>
+        <!--<instant-checkout v-if="isInstantCheckoutRegistered" class="no-outline button-full block brdr-none w-100 px10 py20 bg-cl-mine-shaft :bg-cl-th-secondary ripple weight-400 h4 cl-white sans-serif fs-medium mt20" />-->
       </div>
     </div>
   </sidebar>
@@ -108,6 +96,7 @@ import onEscapePress from '@vue-storefront/core/mixins/onEscapePress'
 import InstantCheckout from 'src/modules/instant-checkout/components/InstantCheckout.vue'
 import { registerModule } from '@vue-storefront/core/lib/modules'
 
+import ButtonComponent from 'theme/components/core/blocks/Button'
 import Sidebar from 'theme/components/theme/blocks/AsyncSidebar/Sidebar'
 import BaseInput from 'theme/components/core/blocks/Form/BaseInput'
 import ClearCartButton from 'theme/components/core/blocks/Microcart/ClearCartButton'
@@ -119,6 +108,7 @@ import { InstantCheckoutModule } from 'src/modules/instant-checkout'
 
 export default {
   components: {
+    ButtonComponent,
     Sidebar,
     Product,
     ClearCartButton,
@@ -127,11 +117,7 @@ export default {
     BaseInput,
     InstantCheckout
   },
-  mixins: [
-    VueOfflineMixin,
-    EditMode,
-    onEscapePress
-  ],
+  mixins: [VueOfflineMixin, EditMode, onEscapePress],
   data () {
     return {
       addCouponPressed: false,
@@ -198,7 +184,8 @@ export default {
         type: 'warning',
         message: i18n.t('Are you sure you would like to remove all the items from the shopping cart?'),
         action1: { label: i18n.t('Cancel'), action: 'close' },
-        action2: { label: i18n.t('OK'),
+        action2: {
+          label: i18n.t('OK'),
           action: async () => {
             await this.$store.dispatch('cart/clear', { recreateAndSyncCart: false }) // just clear the items without sync
             await this.$store.dispatch('cart/sync', { forceClientState: true })
@@ -212,102 +199,104 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  @import "~theme/css/animations/transitions";
+@import '~theme/css/animations/transitions';
 
-  .mt0 {
-    @media (max-width: 767px) {
-      margin-top: 0;
-    }
+.mt0 {
+  @media (max-width: 767px) {
+    margin-top: 0;
   }
+}
 
-  .clearcart {
-    &-col {
+.clearcart {
+  &-col {
+    display: flex;
+    align-self: center;
+  }
+}
+
+.products {
+  @media (max-width: 767px) {
+    padding: 30px 15px;
+  }
+}
+
+.actions {
+  @media (max-width: 767px) {
+    padding: 0 15px;
+  }
+  .link {
+    @media (max-width: 767px) {
       display: flex;
-      align-self: center;
-    }
-  }
-
-  .products {
-    @media (max-width: 767px) {
-      padding: 30px 15px;
-    }
-  }
-
-  .actions {
-    @media (max-width: 767px) {
-      padding: 0 15px;
-    }
-    .link {
-      @media (max-width: 767px) {
-        display: flex;
-        justify-content: center;
-        padding: 20px 70px;
-        &.checkout {
-          margin-top: 55px;
-          padding: 0;
-        }
+      justify-content: center;
+      padding: 20px 70px;
+      &.checkout {
+        margin-top: 55px;
+        padding: 0;
       }
     }
   }
+}
 
-  .summary {
-    @media (max-width: 767px) {
-      padding:  0 15px;
-      font-size: 12px;
-    }
+.summary {
+  @media (max-width: 767px) {
+    padding: 0 15px;
+    font-size: 12px;
+  }
+}
+
+.summary-heading {
+  @media (max-width: 767px) {
+    font-size: 18px;
+  }
+}
+
+.total-price-label {
+  @media (max-width: 767px) {
+    font-size: 18px;
+  }
+}
+
+.total-price-value {
+  @media (max-width: 767px) {
+    font-size: 24px;
+  }
+}
+
+.delete-button {
+  vertical-align: middle;
+}
+
+.coupon-wrapper {
+  display: flex;
+
+  .button-outline {
+    text-transform: inherit;
+    width: 50%;
   }
 
-  .summary-heading {
-    @media (max-width: 767px) {
-      font-size: 18px;
-    }
+  .coupon-input {
+    margin-right: 20px;
+    width: 100%;
   }
+}
 
-  .total-price-label {
-    @media (max-width: 767px) {
-      font-size: 18px;
-    }
-  }
+.overlay {
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  position: absolute;
+  z-index: 0;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+}
 
-  .total-price-value {
-    @media (max-width: 767px) {
-      font-size: 24px;
-    }
-  }
-
-  .delete-button {
-    vertical-align: middle;
-  }
-
-  .coupon-wrapper {
-    display: flex;
-
-    .button-outline {
-      text-transform: inherit;
-      width: 50%;
-    }
-
-    .coupon-input {
-      margin-right: 20px;
-      width: 100%;
-    }
-  }
-
-  .overlay {
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    position: absolute;
-    z-index: 0;
-    height: 100%;
-    background:rgba(0, 0, 0, 0.4);
-  }
-
-  .fade-enter-active, .fade-leave-active {
-    transition: opacity .4s;
-  }
-  .fade-enter, .fade-leave-to {
-    opacity: 0;
-  }
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.4s;
+}
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
+}
 </style>

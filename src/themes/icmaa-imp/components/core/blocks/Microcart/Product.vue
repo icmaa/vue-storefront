@@ -1,129 +1,59 @@
 <template>
-  <li class="row py10 bg-cl-white" :class="{ 'relative': editMode }">
-    <div class="mx10 w-100 py10 mb15 edit-mode flex between-xs middle-xs" v-if="editMode">
-      Edit mode
-      <button class="brdr-none bg-cl-transparent" @click="closeEditMode">
-        <span class="cl-accent">
-          <i class="material-icons cl-accent mr5">
-            close
-          </i>
-        </span>
-      </button>
+  <li class="t-flex t-py-2 t-border-b">
+    <div class="t-w-1/3 t-mr-4">
+      <product-image :image="image" />
     </div>
-    <div class="blend">
-      <div class="ml10 bg-cl-secondary">
-        <product-image :image="image" />
+
+    <div class="t-w-2/3 t-flex t-flex-col">
+      <div>
+        <router-link class="t-text-primary" :to="productLink" data-testid="productLink" @click.native="$store.dispatch('ui/setMicrocart', false)">
+          {{ product.name | htmlDecode }}
+        </router-link>
       </div>
-    </div>
-    <div class="col-xs pt15 flex pl35 flex-wrap">
-      <div class="flex flex-nowrap details">
-        <div class="flex w-100 flex-wrap between-xs">
-          <div>
-            <router-link
-              class="serif h4 name"
-              :to="productLink"
-              data-testid="productLink"
-              @click.native="$store.dispatch('ui/setMicrocart', false)"
-            >
-              {{ product.name | htmlDecode }}
-            </router-link>
-            <div class="h6 cl-bg-tertiary pt5 sku" data-testid="productSku">
-              {{ product.sku }}
-            </div>
-            <div class="h6 cl-bg-tertiary pt5 options" v-if="isTotalsActive">
-              <div v-for="opt in product.totals.options" :key="opt.label">
-                <span class="opn">{{ opt.label }}: </span>
-                <span class="opv" v-html="opt.value" />
-              </div>
-            </div>
-            <div class="h6 cl-bg-tertiary pt5 options" v-else-if="!editMode && product.options">
-              <div v-for="opt in product.options" :key="opt.label">
-                <span class="opn">{{ opt.label }}: </span>
-                <span class="opv" v-html="opt.value" />
-              </div>
-            </div>
-            <div class="h6 pt5 cl-error" v-if="hasProductErrors">
-              {{ product.errors | formatProductMessages }}
-            </div>
-            <div class="h6 pt5 cl-success" v-if="hasProductInfo && !hasProductErrors">
-              {{ product.info | formatProductMessages }}
+      <div class="t-flex t-flex-grow t-justify-between t-items-center t-mb-3">
+        <div class="t-w-1/2">
+          <div class="t-text-sm t-font-bold" v-if="isTotalsActive">
+            <div class="t-flex t-flex-wrap t-whitespace-pre" v-for="opt in product.totals.options" :key="opt.label">
+              <span class="">{{ opt.label }}: </span>
+              <span class="" v-html="opt.value" />
             </div>
           </div>
-          <div class="h5 cl-accent lh25 qty">
-            <base-input-number
-              :name="$t('Quantity')"
-              :value="productQty"
-              @input="updateProductQty"
-              :min="1"
-            />
+          <div class="t-text-sm t-font-bold " v-else-if="!editMode && product.options">
+            <div class="t-flex t-flex-wrap" v-for="opt in product.options" :key="opt.label">
+              <div class="">{{ opt.label }}: </div>
+              <div class="" v-html="opt.value" />
+            </div>
+          </div>
+          <div class="t-text-sm" v-if="hasProductErrors">
+            {{ product.errors | formatProductMessages }}
+          </div>
+
+          <div class="t-text-sm">
+            <span>{{ $t('Quantity') }}: </span>
+            <span>{{ productQty }}</span>
           </div>
         </div>
-        <div class="flex mr10 align-right start-xs between-sm prices">
-          <div class="prices" v-if="!displayItemDiscounts || !isOnline">
-            <span class="h4 serif cl-error price-special" v-if="product.special_price">
-              {{ product.price_incl_tax * product.qty | price }}
-            </span>
-            <span class="h6 serif price-original" v-if="product.special_price">
-              {{ product.original_price_incl_tax * product.qty | price }}
-            </span>
-            <span class="h4 serif price-regular" v-else data-testid="productPrice">
-              {{ (product.original_price_incl_tax ? product.original_price_incl_tax : product.price_incl_tax) * product.qty | price }}
-            </span>
-          </div>
-          <div class="prices" v-else-if="isOnline && product.totals">
-            <span class="h4 serif cl-error price-special" v-if="product.totals.discount_amount">
-              {{ product.totals.row_total - product.totals.discount_amount + product.totals.tax_amount | price }}
-            </span>
-            <span class="h6 serif price-original" v-if="product.totals.discount_amount">
+
+        <div class="t-w-1/2 t-flex t-flex-col t-items-center t-text-sm">
+          <div class="" v-if="isOnline && product.totals">
+            <div class="price-original t-text-base-light t-line-through" v-if="!product.totals.discount_amount">
+              {{ (product.totals.row_total - product.totals.discount_amount + product.totals.tax_amount) | price }}
+            </div>
+            <div class="price-special t-text-sale t-font-bold" v-if="!product.totals.discount_amount">
               {{ product.totals.row_total_incl_tax | price }}
-            </span>
-            <span class="h4 serif price-regular" v-if="!product.totals.discount_amount">
-              {{ product.totals.row_total_incl_tax | price }}
-            </span>
+            </div>
           </div>
-          <div class="prices" v-else>
-            <span class="h4 serif price-regular">
-              {{ (product.regular_price || product.price_incl_tax) * product.qty | price }}
+          <div class="" v-else>
+            <span class="">
+              {{ ((product.regular_price || product.price_incl_tax) * product.qty) | price }}
             </span>
           </div>
         </div>
       </div>
-      <div class="w-100 pb15 flex flex-wrap bottom-xs" v-if="editMode">
-        <div class="ml0 flex flex-wrap filters" v-if="productsAreReconfigurable">
-          <div class="h5 pt5 w-100" v-for="(option, index) in product.configurable_options" :key="index">
-            <div class="h6 cl-bg-tertiary mr10">
-              {{ option.label }}:
-            </div>
-            <div class="flex flex-wrap pt5" v-if="option.label == 'Color' && editMode">
-              <color-selector
-                v-for="filter in getAvailableFilters[option.attribute_code]"
-                v-if="isOptionAvailable(filter)"
-                :key="filter.id"
-                :variant="filter"
-                :selected-filters="getSelectedOptions"
-                @change="editModeSetFilters"
-              />
-            </div>
-            <div class="flex flex-wrap pt5" v-else-if="option.label == 'Size' && editMode">
-              <generic-selector
-                class="mr10 mb10"
-                v-for="filter in getAvailableFilters[option.attribute_code]"
-                v-if="isOptionAvailable(filter)"
-                :key="filter.id"
-                :variant="filter"
-                :selected-filters="getSelectedOptions"
-                @change="editModeSetFilters"
-              />
-            </div>
-          </div>
-        </div>
-        <button-full class="update-button mb10 mr10" @click.native="updateProductVariant">
-          {{ $t('Update item') }}
-        </button-full>
-      </div>
-      <div class="w-100 flex middle-xs actions" v-if="!editMode">
-        <edit-button class="mx5" @click="openEditMode" v-if="productsAreReconfigurable && !editMode" />
-        <remove-button class="mx5" @click="removeItem" />
+
+      <div class="t-flex t-items-center t-flex-wrap">
+        <button-component :type="'select'" class="t-mr-4" :size="'sm'" :icon="'remove_shopping_cart'" :icon-only="true" @click="removeItem" />
+        <add-to-wishlist :product="product" :button-type="'select'" :size="'sm'" class="t-flex-fix" />
       </div>
     </div>
   </li>
@@ -135,6 +65,9 @@ import config from 'config'
 import { currentStoreView } from '@vue-storefront/core/lib/multistore'
 import { formatProductLink } from '@vue-storefront/core/modules/url/helpers'
 import Product from '@vue-storefront/core/compatibility/components/blocks/Microcart/Product'
+
+import ButtonComponent from 'theme/components/core/blocks/Button'
+import AddToWishlist from 'theme/components/core/blocks/Wishlist/AddToWishlist'
 
 import ProductImage from 'theme/components/core/ProductImage'
 import ColorSelector from 'theme/components/core/blocks/Category/Filter/ColorSelector.vue'
@@ -156,13 +89,9 @@ export default {
     }
   },
   components: {
-    RemoveButton,
-    BaseInputNumber,
+    ButtonComponent,
     ProductImage,
-    ColorSelector,
-    GenericSelector,
-    EditButton,
-    ButtonFull
+    AddToWishlist
   },
   mixins: [Product, ProductOption, EditMode],
   computed: {
@@ -232,91 +161,92 @@ export default {
 <style lang="scss" scoped>
 @import '~theme/css/variables/colors';
 @import '~theme/css/helpers/functions/color';
-  .blend {
-    flex: 0 0 150px;
+.blend {
+  flex: 0 0 150px;
+}
+
+.image {
+  mix-blend-mode: multiply;
+  vertical-align: top;
+  width: 150px;
+  @media (max-width: 767px) {
+    width: 100px;
   }
+}
 
-  .image {
-    mix-blend-mode: multiply;
-    vertical-align: top;
-    width: 150px;
-    @media (max-width: 767px) {
-      width: 100px;
-    }
-  }
+.details {
+  flex: 1 1 auto;
+  display: flex;
+  flex-flow: row wrap;
+}
 
-  .details {
-    flex: 1 1 auto;
-    display: flex;
-    flex-flow: row wrap;
-  }
-
-  .name {
-    @media (max-width: 767px) {
-      font-size: 14px;
-    }
-  }
-
-  .options, .sku {
-    @media (max-width: 767px) {
-      font-size: 10px;
-    }
-  }
-
-  .qty {
-    padding-right: 30px;
-
-    @media (max-width: 767px) {
-      font-size: 12px;
-    }
-  }
-
-  .actions {
-    margin: 0 -5px;
-  }
-
-  .prices {
-    flex-direction: column;
-    @media (max-width: 767px) {
-      padding: 0;
-      font-size: 12px;
-    }
-  }
-
-  .price-special {
-    @media (max-width: 767px) {
-      font-size: 14px;
-    }
-  }
-
-  .price-original {
-    text-decoration: line-through;
-  }
-
-  input {
-    width: 30px;
-  }
-
-  .flex-nowrap {
-    flex-wrap: nowrap;
-  }
-
-  .flex-wrap {
-    flex-wrap: wrap;
-  }
-
-  .edit-mode {
-    border-bottom: 1px solid color(white-smoke);
-  }
-
-  .filters {
-    flex: 1 1 200px;
-  }
-
-  .update-button {
+.name {
+  @media (max-width: 767px) {
     font-size: 14px;
-    min-width: 150px;
-    width: 150px;
-    padding: 10px;
   }
+}
+
+.options,
+.sku {
+  @media (max-width: 767px) {
+    font-size: 10px;
+  }
+}
+
+.qty {
+  padding-right: 30px;
+
+  @media (max-width: 767px) {
+    font-size: 12px;
+  }
+}
+
+.actions {
+  margin: 0 -5px;
+}
+
+.prices {
+  flex-direction: column;
+  @media (max-width: 767px) {
+    padding: 0;
+    font-size: 12px;
+  }
+}
+
+.price-special {
+  @media (max-width: 767px) {
+    font-size: 14px;
+  }
+}
+
+.price-original {
+  text-decoration: line-through;
+}
+
+input {
+  width: 30px;
+}
+
+.flex-nowrap {
+  flex-wrap: nowrap;
+}
+
+.flex-wrap {
+  flex-wrap: wrap;
+}
+
+.edit-mode {
+  border-bottom: 1px solid color(white-smoke);
+}
+
+.filters {
+  flex: 1 1 200px;
+}
+
+.update-button {
+  font-size: 14px;
+  min-width: 150px;
+  width: 150px;
+  padding: 10px;
+}
 </style>
