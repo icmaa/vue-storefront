@@ -3,7 +3,7 @@
     <material-icon :icon="favoriteIcon" class="t-text-white" />
     <span class="t-sr-only">{{ !isOnWishlist ? $t('Add to favorite') : $t('Remove') }}</span>
   </div>
-  <button-component v-else :type="buttonType" :icon="favoriteIcon" :icon-only="true" @click.native="toggleWishlist" data-testid="addToWishlist">
+  <button-component v-else :type="buttonType" :icon="favoriteIcon" :size="size" :icon-only="true" @click.native="toggleWishlist" data-testid="addToWishlist">
     <slot>
       {{ !isOnWishlist ? $t('Add to favorite') : $t('Remove') }}
     </slot>
@@ -54,18 +54,18 @@ export default {
     },
     addProductToWhishlist (product) {
       this.$store.dispatch('notification/spawnNotification', {
-          type: 'success',
-          message: i18n.t('Product {productName} has been added to wishlist!', { productName: htmlDecode(product.name) }),
-          action1: { label: i18n.t('OK') }
-        }, { root: true })
+        type: 'success',
+        message: i18n.t('Product {productName} has been added to wishlist!', { productName: htmlDecode(product.name) }),
+        action1: { label: i18n.t('OK') }
+      }, { root: true })
       this.addToWishlist(product)
     },
     removeProductFromWhishList (product) {
       this.$store.dispatch('notification/spawnNotification', {
-          type: 'success',
-          message: i18n.t('Product {productName} has been removed from wishlist!', { productName: htmlDecode(product.name) }),
-          action1: { label: i18n.t('OK') }
-        }, { root: true })
+        type: 'success',
+        message: i18n.t('Product {productName} has been removed from wishlist!', { productName: htmlDecode(product.name) }),
+        action1: { label: i18n.t('OK') }
+      }, { root: true })
       this.removeFromWishlist(product)
     }
   }
