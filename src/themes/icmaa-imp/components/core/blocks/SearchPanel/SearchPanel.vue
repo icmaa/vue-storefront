@@ -117,11 +117,14 @@ export default {
     }
   },
   methods: {
-    getAlias (searchString) {
+    async getAlias (searchString) {
       const wordsRegexp = /(\w+)/giu
-
       let wordResult = ''
       let replaces = []
+
+      const allWords = searchString.match(wordsRegexp)
+      // Load alias from storyblok here …
+
       while ((wordResult = wordsRegexp.exec(searchString)) !== null) {
         const word = wordResult[0]
         const aliasKey = Object.keys(this.alias).find(k => RegExp(`^${word}$`, 'giu').test(k))
@@ -135,14 +138,12 @@ export default {
         searchString = searchString.replace(RegExp(r.word, 'i'), r.replace)
       })
 
-      console.log(searchString)
-
       return searchString
     },
     async search () {
       if (!this.$v.searchString.$invalid) {
         let query = prepareQuickSearchQuery(
-          this.getAlias(this.searchString)
+          await this.getAlias(this.searchString)
         )
 
         this.start = 0
