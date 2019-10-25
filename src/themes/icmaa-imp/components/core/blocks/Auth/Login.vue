@@ -1,24 +1,20 @@
 <template>
   <div>
-    <header class="modal-header py25 px65 h1 serif weight-700 bg-cl-secondary">
-      {{ $t('Log in') }}
-      <i
-        slot="close"
-        class="modal-close material-icons cl-bg-tertiary"
-        @click="close"
-      >
-        close
-      </i>
+    <header class="t-h-60px t-mb-8 t-flex-fix t-px-2 t-bg-white t-border-b t-border-base-lighter t-flex t-items-center t-justify-between">
+      <span class="t-pl-2 t-text-lg t-text-base-dark">{{ $t('Log in') }}</span>
+      <top-button icon="close" text="Close" :tab-index="1" @click.native="close" class="t-text-base" />
     </header>
+
     <div v-if="hasRedirect" class="pt10 pb10 px65 redirect-error">
       <p class="h5 mb0 mt0">
         {{ $t('You need to be logged in to see this page') }}
       </p>
     </div>
-    <div class="modal-content bg-cl-primary pt30 pb60 px65 cl-secondary">
-      <form @submit.prevent="login" novalidate>
+
+    <div class="t-flex t-items-center t-justify-center">
+      <form class="" @submit.prevent="login" novalidate>
         <base-input
-          class="mb10"
+          class="t-mb-4"
           type="email"
           name="email"
           focus
@@ -37,39 +33,39 @@
           ]"
         />
         <base-input
-          class="mb10"
+          class="t-mb-4"
           type="password"
           name="password"
           v-model="password"
           @blur="$v.password.$touch()"
           :placeholder="$t('Password *')"
-          :validations="[{
-            condition: !$v.password.required && $v.password.$error,
-            text: $t('Field is required.')
-          }]"
+          :validations="[
+            {
+              condition: !$v.password.required && $v.password.$error,
+              text: $t('Field is required.')
+            }
+          ]"
         />
-        <div class="row">
-          <base-checkbox
-            class="col-xs-7 col-sm-6 mb20"
-            id="remember"
-            v-model="remember"
-          >
-            {{ $t('Remember me') }}
+        <div class="t-flex t-items-start t-justify-between t-mb-4">
+          <base-checkbox class="t-mr-4" id="remember" v-model="remember">
+            <span class="t-text-base">{{ $t('Remember me') }}</span>
           </base-checkbox>
-          <div class="col-xs-5 col-sm-6 mb35 flex end-xs middle-xs">
+          <div class="">
             <a href="#" @click.prevent="remindPassword">
               {{ $t('Forgot the password?') }}
             </a>
           </div>
         </div>
-        <button-full class="mb20" type="submit" data-testid="loginSubmit">
+        <button-component type="primary" class="t-w-full t-mb-2" data-testid="loginSubmit">
           {{ $t('Log in to your account') }}
-        </button-full>
-        <div class="center-xs">
-          {{ $t('or') }}
-          <a href="#" @click.prevent="switchElem" data-testid="registerLink">
-            {{ $t('register an account') }}
-          </a>
+        </button-component>
+        <div class="t-mb-4 t-flex t-justify-center">
+          <div>
+            <span>{{ $t('or') }} </span>
+            <a href="#" @click.prevent="switchElem" data-testid="registerLink">
+              {{ $t('register an account') }}
+            </a>
+          </div>
         </div>
       </form>
     </div>
@@ -79,12 +75,19 @@
 <script>
 import Login from '@vue-storefront/core/compatibility/components/blocks/Auth/Login'
 
-import ButtonFull from 'theme/components/theme/ButtonFull.vue'
 import BaseCheckbox from '../Form/BaseCheckbox.vue'
 import BaseInput from '../Form/BaseInput.vue'
 import { required, email } from 'vuelidate/lib/validators'
+import ButtonComponent from 'theme/components/core/blocks/Button'
+import TopButton from 'theme/components/theme/blocks/AsyncSidebar/TopButton'
 
 export default {
+  components: {
+    BaseCheckbox,
+    BaseInput,
+    ButtonComponent,
+    TopButton
+  },
   mixins: [Login],
   validations: {
     email: {
@@ -142,11 +145,6 @@ export default {
         action1: { label: this.$t('OK') }
       })
     }
-  },
-  components: {
-    ButtonFull,
-    BaseCheckbox,
-    BaseInput
   }
 }
 </script>
@@ -156,22 +154,22 @@ export default {
 @import '~theme/css/helpers/functions/color';
 $color-error: color(error);
 $white: color(white);
-  .modal-header{
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.modal-close {
+  cursor: pointer;
+}
+.modal-content {
+  @media (max-width: 400px) {
+    padding-left: 20px;
+    padding-right: 20px;
   }
-  .modal-close{
-    cursor: pointer;
-  }
-  .modal-content {
-    @media (max-width: 400px) {
-      padding-left: 20px;
-      padding-right: 20px;
-    }
-  }
-  .redirect-error {
-    background-color: $color-error;
-    color: $white;
-  }
+}
+.redirect-error {
+  background-color: $color-error;
+  color: $white;
+}
 </style>
