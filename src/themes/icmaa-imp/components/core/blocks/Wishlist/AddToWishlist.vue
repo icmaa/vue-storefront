@@ -3,7 +3,7 @@
     <material-icon :icon="favoriteIcon" class="t-text-white" />
     <span class="t-sr-only">{{ !isOnWishlist ? $t('Add to favorite') : $t('Remove') }}</span>
   </div>
-  <button-component v-else :type="buttonType" :icon="favoriteIcon" :size="size" :icon-only="true" @click.native="toggleWishlist" data-testid="addToWishlist">
+  <button-component v-else :type="buttonType" :icon="favoriteIcon" :icon-only="true" @click.native="toggleWishlist" data-testid="addToWishlist">
     <slot>
       {{ !isOnWishlist ? $t('Add to favorite') : $t('Remove') }}
     </slot>
@@ -41,6 +41,10 @@ export default {
     iconRemove: {
       type: String,
       default: 'favorite'
+    },
+    size: {
+      type: String,
+      default: ''
     }
   },
   computed: {
