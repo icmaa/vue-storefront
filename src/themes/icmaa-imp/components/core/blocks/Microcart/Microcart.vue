@@ -5,43 +5,41 @@
         {{ $t('Clear cart') }}
       </button-component>
     </template>
+    <div class="t-pb-20">
+      <h4 v-if="!productsInCart.length" class="">
+        {{ $t('Your shopping cart is empty.') }}
+      </h4>
 
-    <h4 v-if="!productsInCart.length" class="">
-      {{ $t('Your shopping cart is empty.') }}
-    </h4>
+      <template v-if="productsInCart.length">
+        <ul class="t-mb-4">
+          <product v-for="product in productsInCart" :key="product.checksum || product.sku" :product="product" />
+        </ul>
+        <div class="t-mb-4">
+          <div v-for="(segment, index) in filteredTotals" :key="index" class="t-flex t-items-center t-justify-between t-mb-2 t-text-sm">
+            <span>
+              {{ segment.title }}
+            </span>
+            <span v-if="segment.value !== null">
+              {{ segment.value | price }}
+            </span>
+          </div>
+          <div class="t-flex t-items-center t-justify-between t-font-bold" v-for="(segment, index) in grandTotals" :key="index">
+            <span>
+              {{ segment.title }}
+            </span>
+            <span>
+              {{ segment.value | price }}
+            </span>
+          </div>
+        </div>
 
-    <ul v-if="productsInCart.length" class="t-mb-4">
-      <product v-for="product in productsInCart" :key="product.checksum || product.sku" :product="product" />
-    </ul>
-
-    <div v-if="productsInCart.length" class="t-mb-4">
-      <div v-for="(segment, index) in totals" :key="index" v-if="segment.code !== 'grand_total'" class="t-flex t-items-center t-justify-between t-text-sm">
-        <span>
-          {{ segment.title }}
-        </span>
-        <span v-if="segment.value != null">
-          {{ segment.value | price }}
-        </span>
-      </div>
-
-      <div class="t-flex t-items-center t-justify-between t-font-bold t-text-lg t-mt-1" v-for="(segment, index) in totals" :key="index" v-if="segment.code === 'grand_total'">
-        <span>
-          {{ segment.title }}
-        </span>
-        <span>
-          {{ segment.value | price }}
-        </span>
-      </div>
+        <template v-if="!isCheckoutMode">
+          <button-component type="primary" class="t-w-full" :link="{ name: 'checkout' }" @click.native="closeMicrocartExtend">
+            {{ $t('Go to checkout') }}
+          </button-component>
+        </template>
+      </template>
     </div>
-
-    <template v-if="productsInCart.length && !isCheckoutMode">
-      <button-component type="primary" class="t-w-full t-h-16 t-text-lg t-mb-2" :link="{ name: 'checkout' }" @click.native="closeMicrocartExtend">
-        {{ $t('Go to checkout') }}
-      </button-component>
-      <button-component type="transparent" class="t-w-full t-h-16 t-text-sm t-text-base-light" :link="localizedRoute('/')" @click.native="closeMicrocartExtend">
-        {{ $t('Return to shopping') }}
-      </button-component>
-    </template>
   </sidebar>
 </template>
 
@@ -82,7 +80,13 @@ export default {
     ...mapGetters({
       productsInCart: 'cart/getCartItems',
       totals: 'cart/getTotals'
-    })
+    }),
+    filteredTotals () {
+      return this.totals.filter(segment => segment.code !== 'grand_total')
+    },
+    grandTotals () {
+      return this.totals.filter(segment => segment.code === 'grand_total')
+    }
   },
   methods: {
     closeMicrocartExtend () {

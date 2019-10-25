@@ -5,13 +5,13 @@
     </div>
 
     <div class="t-w-2/3 t-flex t-flex-col t-py-2">
-      <div class="t-mb-2 t-leading-tight">
+      <div class="t-mb-4 t-leading-tight">
         <router-link class="t-text-primary t-text-sm" :to="productLink" data-testid="productLink" @click.native="$store.dispatch('ui/setMicrocart', false)">
           {{ productQty }} x {{ product.name | htmlDecode }}
         </router-link>
       </div>
 
-      <div class="t-w-full t-text-sm" v-if="product.totals">
+      <div class="t-w-full t-text-sm t-mb-4" v-if="product.totals">
         <span class="t-text-base-light t-line-through t-mr-2" v-if="product.totals.discount_amount">
           {{ (product.totals.row_total - product.totals.discount_amount + product.totals.tax_amount) | price }}
         </span>
@@ -24,16 +24,21 @@
       </div>
 
       <div class="t-flex-grow">
-        <div v-if="isTotalsActive" class="t-flex t-w-full t-flex-wrap" v-for="opt in product.totals.options" :key="opt.label">
-          <button-component class="t-mt-2 t-mr-2" type="tag" size="sm">
-            {{ opt.value }}
-          </button-component>
-        </div>
-        <div v-else-if="product.options" class="t-flex t-w-full t-flex-wrap" v-for="opt in product.options" :key="opt.label">
-          <button-component class="t-mt-2 t-mr-2" type="tag" size="sm">
-            {{ opt.value }}
-          </button-component>
-        </div>
+        <template v-if="isTotalsActive">
+          <div class="t-flex t-w-full t-flex-wrap" v-for="opt in product.totals.options" :key="opt.label">
+            <button-component class="t-mr-2" type="tag" size="xs">
+              {{ opt.value }}
+            </button-component>
+          </div>
+        </template>
+        <template v-else-if="product.options">
+          <div class="t-flex t-w-full t-flex-wrap" v-for="opt in product.options" :key="opt.label">
+            <button-component class="t-mr-2" type="tag" size="xs">
+              {{ opt.value }}
+            </button-component>
+          </div>
+        </template>
+
         <div class="t-text-sm" v-if="hasProductErrors">
           {{ product.errors | formatProductMessages }}
         </div>
