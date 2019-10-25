@@ -35,6 +35,7 @@ import LoaderBackground from 'theme/components/core/LoaderBackground'
 import VueOfflineMixin from 'vue-offline/mixin'
 
 import i18n from '@vue-storefront/i18n'
+import { mapGetters } from 'vuex'
 import { required, minLength } from 'vuelidate/lib/validators'
 import { disableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock'
 import { prepareQuickSearchQuery } from '@vue-storefront/core/modules/catalog/queries/searchPanel'
@@ -67,15 +68,11 @@ export default {
       emptyResults: true,
       moreProducts: true,
       loadingProducts: false,
-      selectedCategoryIds: [],
-      alias: {
-        'hsb': 'Heaven Shall Burn',
-        'styg': 'Stick To Your Guns',
-        'Beutel': 'Drawstring'
-      }
+      selectedCategoryIds: []
     }
   },
   computed: {
+    ...mapGetters({ alias: 'icmaaSearchAlias/getMap' }),
     items () {
       return this.$store.state.search
     },
@@ -123,7 +120,7 @@ export default {
       let replaces = []
 
       const allWords = searchString.match(wordsRegexp)
-      // Load alias from storyblok here …
+      await this.$store.dispatch('icmaaSearchAlias/list', allWords)
 
       while ((wordResult = wordsRegexp.exec(searchString)) !== null) {
         const word = wordResult[0]
@@ -137,6 +134,9 @@ export default {
       replaces.forEach(r => {
         searchString = searchString.replace(RegExp(r.word, 'i'), r.replace)
       })
+
+      Logger.error('Lorem ipsum', 'DEBUG', this.alias)()
+      Logger.error('Lorem ipsum', 'DEBUG', searchString)()
 
       return searchString
     },
