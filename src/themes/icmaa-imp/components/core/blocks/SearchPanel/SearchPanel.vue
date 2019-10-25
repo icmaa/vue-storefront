@@ -67,7 +67,12 @@ export default {
       emptyResults: true,
       moreProducts: true,
       loadingProducts: false,
-      selectedCategoryIds: []
+      selectedCategoryIds: [],
+      alias: {
+        'hsb': 'Heaven Shall Burn',
+        'styg': 'Stick To Your Guns',
+        'Beutel': 'Drawstring'
+      }
     }
   },
   computed: {
@@ -109,16 +114,37 @@ export default {
   watch: {
     categories () {
       this.selectedCategoryIds = []
-    },
-    searchString (val, org) {
-      val = this.$v.searchString.$invalid ? '' : val
-      this.$bus.$emit('search-input-change', { search: val })
     }
   },
   methods: {
-    search () {
+    getAlias (searchString) {
+      const wordsRegexp = /(\w+)/giu
+
+      let wordResult = ''
+      let replaces = []
+      while ((wordResult = wordsRegexp.exec(searchString)) !== null) {
+        const word = wordResult[0]
+        const aliasKey = Object.keys(this.alias).find(k => RegExp(`^${word}$`, 'giu').test(k))
+        if (aliasKey) {
+          const replace = this.alias[aliasKey]
+          replaces.push({ word, replace })
+        }
+      }
+
+      replaces.forEach(r => {
+        searchString = searchString.replace(RegExp(r.word, 'i'), r.replace)
+      })
+
+      console.log(searchString)
+
+      return searchString
+    },
+    async search () {
       if (!this.$v.searchString.$invalid) {
-        let query = prepareQuickSearchQuery(this.searchString)
+        let query = prepareQuickSearchQuery(
+          this.getAlias(this.searchString)
+        )
+
         this.start = 0
         this.moreProducts = true
         this.loadingProducts = true
@@ -172,7 +198,10 @@ export default {
     }
   },
   beforeDestroy () {
-    localStorage.setItem(`shop/user/searchQuery`, this.searchString)
+    const search = this.$v.searchString.$invalid ? '' : this.searchString
+    this.$bus.$emit('search-input-change', { search })
+    localStorage.setItem(`shop/user/searchQuery`, search)
+
     clearAllBodyScrollLocks()
   }
 }
