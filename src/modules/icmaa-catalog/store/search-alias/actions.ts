@@ -23,7 +23,7 @@ const actions: ActionTree<SearchAliasState, RootState> = {
       storageKey,
       context,
       options,
-      identifier: 'alias'
+      identifier: 'identifier'
     })
   }
 }

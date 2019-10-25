@@ -6,7 +6,7 @@ const getters: GetterTree<SearchAliasState, RootState> = {
   getAll: (state): Record<string, any> => state.items,
   getMap: (state): Record<string, any> => {
     let object = {}
-    state.items.forEach((v, k) => { object[k] = v })
+    state.items.forEach((v) => { object[v.identifier] = v.search })
     return object
   }
 }

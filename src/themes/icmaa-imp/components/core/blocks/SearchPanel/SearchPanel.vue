@@ -135,8 +135,7 @@ export default {
         searchString = searchString.replace(RegExp(r.word, 'i'), r.replace)
       })
 
-      Logger.error('Lorem ipsum', 'DEBUG', this.alias)()
-      Logger.error('Lorem ipsum', 'DEBUG', searchString)()
+      Logger.debug('Search for:', 'DEBUG', searchString)()
 
       return searchString
     },
