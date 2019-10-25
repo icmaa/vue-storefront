@@ -15,7 +15,7 @@
           <product v-for="product in productsInCart" :key="product.checksum || product.sku" :product="product" />
         </ul>
         <div class="t-mb-4">
-          <div v-for="(segment, index) in filteredTotals" :key="index" class="t-flex t-items-center t-justify-between t-mb-2 t-text-sm">
+          <div v-for="(segment, index) in filteredTotals" :key="`total-${index}`" class="t-flex t-items-center t-justify-between t-mb-2 t-text-sm">
             <span>
               {{ segment.title }}
             </span>
@@ -23,7 +23,7 @@
               {{ segment.value | price }}
             </span>
           </div>
-          <div class="t-flex t-items-center t-justify-between t-font-bold" v-for="(segment, index) in grandTotals" :key="index">
+          <div class="t-flex t-items-center t-justify-between t-font-bold" v-for="(segment, index) in grandTotals" :key="`grand-total-${index}`">
             <span>
               {{ segment.title }}
             </span>
@@ -34,7 +34,7 @@
         </div>
 
         <template v-if="!isCheckoutMode">
-          <button-component type="primary" class="t-w-full" :link="{ name: 'checkout' }" @click.native="closeMicrocartExtend">
+          <button-component type="primary" class="t-w-full" :link="{ name: 'checkout' }" @click.native="toCheckout">
             {{ $t('Go to checkout') }}
           </button-component>
         </template>
@@ -89,11 +89,9 @@ export default {
     }
   },
   methods: {
-    closeMicrocartExtend () {
+    toCheckout () {
       this.$store.dispatch('ui/closeAll')
-    },
-    onEscapePress () {
-      this.closeMicrocartExtend()
+      this.$router.push(this.localizedRoute('/checkout'))
     },
     clearCart () {
       this.$store.dispatch('notification/spawnNotification', {
