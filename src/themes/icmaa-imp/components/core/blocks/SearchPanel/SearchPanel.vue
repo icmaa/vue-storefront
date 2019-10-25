@@ -8,11 +8,9 @@
       <input type="text" v-model="searchString" @input="search" @blur="$v.searchString.$touch()" :placeholder="$t('Type what you are looking for...')" autofocus="true" id="search" ref="searchString" class="t-flex-expand t-p-0 t-text-lg t-text-base-tone placeholder:t-text-base-lighter">
     </template>
     <div class="t-pb-20">
-      <transition name="fade">
-        <div v-if="getNoResultsMessage" class="t-px-2 t-mt-2 t-text-sm">
-          {{ $t(getNoResultsMessage) }}
-        </div>
-      </transition>
+      <div v-if="getNoResultsMessage" class="t-px-2 t-mt-2 t-text-sm">
+        {{ $t(getNoResultsMessage) }}
+      </div>
       <category-panel :categories="categories" v-model="selectedCategoryIds" v-if="!emptyResults && filteredProducts.length && categories.length > 1" class="t-mb-4" />
       <div class="product-listing t-flex t-flex-wrap t-bg-base-lightest t--mx-4 t-px-3 t-py-4" v-if="!emptyResults && filteredProducts.length > 0">
         <product-tile v-for="product in filteredProducts" :key="product.id" :product="product" @click.native="closeSidebar" class="t-w-1/2 lg:t-w-1/3 t-px-1 t-mb-8" />
