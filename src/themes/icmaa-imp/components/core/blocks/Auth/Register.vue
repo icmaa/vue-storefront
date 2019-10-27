@@ -1,16 +1,5 @@
 <template>
   <div>
-    <header class="modal-header py25 px65 h1 serif weight-700 bg-cl-secondary">
-      {{ $t('Register') }}
-      <i
-        slot="close"
-        class="modal-close material-icons cl-bg-tertiary"
-        @click="close"
-      >
-        close
-      </i>
-    </header>
-
     <div class="modal-content bg-cl-primary pt30 pb60 px65 cl-secondary">
       <form @submit.prevent="register" novalidate>
         <base-input
