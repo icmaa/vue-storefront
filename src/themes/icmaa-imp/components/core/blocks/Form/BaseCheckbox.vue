@@ -18,11 +18,11 @@
       >
         <material-icon icon="check" size="sm" v-if="value" />
       </div>
-      <div class="t-text-sm t-leading-tight">
+      <div class="t-text-sm t-leading-tight" :class="{ 't-text-alert': invalid }">
         <slot />
       </div>
     </label>
-    <ValidationMessages :validations="validations" />
+    <ValidationMessages v-if="showValidationMessage" :validations="validations" />
   </div>
 </template>
 
@@ -52,6 +52,10 @@ export default {
     validations: {
       type: Array,
       default: () => []
+    },
+    showValidationMessage: {
+      type: Boolean,
+      default: false
     },
     disabled: {
       type: Boolean,
