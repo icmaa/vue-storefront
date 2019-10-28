@@ -54,7 +54,7 @@
             condition: !$v.gender.required && $v.gender.$error,
             text: $t('Field is required.')
           }]"
-          class="t-w-full lg:t-w-1/3 t-px-2 t-mb-4"
+          class="t-w-full lg:t-w-1/2 t-px-2 t-mb-4"
         />
         <base-input
           name="dob"
@@ -68,7 +68,7 @@
               text: $t('Field is required.')
             }
           ]"
-          class="t-w-full lg:t-w-2/3 t-px-2 t-mb-4"
+          class="t-w-full lg:t-w-1/2 t-px-2 t-mb-4"
         />
         <base-input
           type="password"
@@ -117,10 +117,10 @@
         </base-checkbox>
         <div class="t-w-full t-px-2">
           <button-component :submit="true" type="primary" class="t-w-full t-mb-2">
-            {{ $t('Register an account') }} *
+            {{ $t('Register') }} *
           </button-component>
           <button-component type="transparent" @click="switchElem" class="t-w-full t-mb-4">
-            {{ $t('Login to your account') }}
+            {{ $t('Already have an account?') }} <span class="t-ml-1">– {{ $t('Login to your account') }}</span>
           </button-component>
           <div class="t-w-full t-text-xs t-text-base-lighter t-leading-1-rem lg:t-text-center">
             <material-icon icon="asterisk" icon-set="icmaa" size="xxs" class="t-mr-1" />

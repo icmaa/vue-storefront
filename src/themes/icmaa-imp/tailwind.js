@@ -97,7 +97,7 @@ module.exports = {
     function ({ addUtilities }) {
       addUtilities(
         {
-          '.webkit-touch': { '-webkit-overflow-scrolling': 'touch' },
+          '.hide-scrollbar': { 'scrollbar-width': 'none', '-ms-overflow-style': 'none' },
           '.webkit-tap-transparent': { '-webkit-tap-highlight-color': 'transparent' },
           '.blend-hard-light': { 'mix-blend-mode': 'hard-light' }
         },
