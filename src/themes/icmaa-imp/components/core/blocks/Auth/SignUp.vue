@@ -1,5 +1,5 @@
 <template>
-  <modal name="modal-signup" :title="$t(title)" :width="width">
+  <modal name="modal-signup" :title="$t(title)" :width="width" @close="onClose">
     <login v-if="activeElem === 'login'" />
     <register v-if="activeElem === 'register'" />
     <forgot-pass v-if="activeElem === 'forgot-pass'" />
@@ -41,6 +41,11 @@ export default {
     Login,
     Register,
     ForgotPass
+  },
+  methods: {
+    onClose () {
+      this.$store.commit('ui/setAuthElem', 'login')
+    }
   }
 }
 </script>

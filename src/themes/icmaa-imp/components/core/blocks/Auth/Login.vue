@@ -1,12 +1,11 @@
 <template>
-  <div>
+  <div class="lg:t-p-4">
     <div v-if="hasRedirect">
       {{ $t('You need to be logged in to see this page') }}
     </div>
     <form class="" @submit.prevent="login" novalidate>
       <base-input
-        class="t-mb-4" type="email" name="email" v-model="email"
-        @blur="$v.email.$touch()"
+        class="t-mb-4" type="email" name="email" id="email" v-model="email"
         :placeholder="$t('E-mail address *')"
         :validations="[
           {
@@ -23,8 +22,8 @@
         class="t-mb-4"
         type="password"
         name="password"
+        id="password"
         v-model="password"
-        @blur="$v.password.$touch()"
         :placeholder="$t('Password *')"
         :validations="[
           {
@@ -33,21 +32,21 @@
           }
         ]"
       />
-      <div class="t-flex t-items-start t-justify-between t-mb-4">
+      <div class="t-flex t-items-center t-justify-between t-mb-4">
         <base-checkbox class="t-mr-4" id="remember" v-model="remember">
-          <span class="t-text-base">{{ $t('Remember me') }}</span>
+          {{ $t('Remember me') }}
         </base-checkbox>
-        <a href="#" @click.prevent="remindPassword">
+        <div href="#" @click.prevent="remindPassword" class="t-text-sm t-cursor-pointer">
           {{ $t('Forgot the password?') }}
-        </a>
+        </div>
       </div>
-      <button-component type="primary" class="t-w-full t-mb-2" data-testid="loginSubmit">
+      <button-component :submit="true" type="primary" class="t-w-full t-mb-2" data-testid="loginSubmit">
         {{ $t('Log in to your account') }}
       </button-component>
       <button-component type="facebook" icon="facebook" icon-set="icmaa" icon-position="left" class="t-w-full t-mb-2">
         {{ $t('Log in with facebook') }}
       </button-component>
-      <button-component type="transparent" class="t-w-full" @click="switchElem" data-testid="registerLink">
+      <button-component type="transparent" class="t-w-full t--mb-2" @click="switchElem" data-testid="registerLink">
         {{ $t('Register an account') }}
       </button-component>
     </form>
@@ -55,22 +54,21 @@
 </template>
 
 <script>
-import Login from '@vue-storefront/core/compatibility/components/blocks/Auth/Login'
 
-import BaseCheckbox from '../Form/BaseCheckbox.vue'
-import BaseInput from '../Form/BaseInput.vue'
 import { required, email } from 'vuelidate/lib/validators'
+import { Login } from '@vue-storefront/core/modules/user/components/Login'
+
+import BaseInput from 'theme/components/core/blocks/Form/BaseInput'
+import BaseCheckbox from 'theme/components/core/blocks/Form/BaseCheckbox'
 import ButtonComponent from 'theme/components/core/blocks/Button'
-import TopButton from 'theme/components/theme/blocks/AsyncSidebar/TopButton'
 
 export default {
   components: {
     BaseCheckbox,
     BaseInput,
-    ButtonComponent,
-    TopButton
+    ButtonComponent
   },
-  mixins: [Login],
+  mixins: [ Login ],
   validations: {
     email: {
       required,

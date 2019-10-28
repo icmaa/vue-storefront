@@ -48,10 +48,14 @@ export default {
   },
   methods: {
     onHide (name, state, params) {
-      return name === this.name ? this.toggle(false) : false
+      if (name === this.name) {
+        this.toggle(false)
+      }
     },
     onShow (name, state, params) {
-      return name === this.name ? this.toggle(true) : false
+      if (name === this.name) {
+        this.toggle(true)
+      }
     },
     onToggle (name, state, params) {
       if (name === this.name) {
@@ -68,6 +72,7 @@ export default {
     toggle (state) {
       this.isVisible = state
       state ? this.setOverlay(state) : setTimeout(() => this.setOverlay(state), this.delay)
+      this.$emit(state ? 'show' : 'close', this)
     },
     close () {
       this.toggle(false)
@@ -126,16 +131,16 @@ $z-index-modal: map-get($z-index, modal);
 
   .modal-container {
     position: absolute;
-    top: 10%;
+    top: 50%;
     left: 50%;
-    transform: translate(-50%, 0);
+    transform: translate(-50%, -50%);
     width: 945px;
     margin: 0 auto;
     max-width: 100%;
     z-index: $z-index-modal + 1;
+    overflow: auto;
 
     @media (max-width: 600px) {
-      top: 0;
       min-height: 100%;
       min-width: 100%;
       margin: 0;

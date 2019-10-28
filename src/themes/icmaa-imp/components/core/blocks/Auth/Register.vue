@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="modal-content bg-cl-primary pt30 pb60 px65 cl-secondary">
+    <div class="modal-content">
       <form @submit.prevent="register" novalidate>
         <base-input
           class="mb10"

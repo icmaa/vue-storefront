@@ -1,24 +1,26 @@
 <template>
-  <div class="base-input t-relative t-flex t-flex-wrap">
-    <material-icon icon="visibility_off" v-if="passIconActive" @click="togglePassType()" class="t-absolute t-flex t-self-center t-p-2 t-cursor-pointer" :class="[`t-${iconPosition}-0`]" :aria-label="$t('Toggle password visibility')" :title="$t('Toggle password visibility')" />
-    <input
-      class="t-w-full t-h-10 t-px-3 t-border t-rounded-sm t-appearance-none t-text-sm t-leading-tight placeholder:t-text-base-light"
-      :class="[ invalid ? 't-border-alert' : 't-border-base-light', { 't-pr-10': type === 'password' || (icon && iconPosition === 'right'), 't-pl-10': icon && iconPosition === 'left' } ]"
-      :placeholder="placeholder"
-      :type="type === 'password' ? passType : type"
-      :name="name"
-      :id="id"
-      :autocomplete="autocomplete"
-      :value="value"
-      :autofocus="autofocus"
-      :ref="name"
-      @input="$emit('input', $event.target.value)"
-      @blur="$emit('blur')"
-      @keyup.enter="$emit('keyup.enter', $event.target.value)"
-      @keyup="$emit('keyup', $event)"
-    >
-    <material-icon :icon="icon" v-if="icon" class="t-absolute t-flex t-self-center t-p-2" :class="[`t-${iconPosition}-0`]" />
-    <ValidationMessages v-if="invalid" :validations="validations" :validations-as-tooltip="validationsAsTooltip" />
+  <div :class="{ 't-relative': validationsAsTooltip }">
+    <div class="base-input t-relative t-flex t-flex-wrap">
+      <material-icon :icon="passTypeIcon" v-if="passIconActive" @click.native="togglePassType()" class="t-absolute t-flex t-self-center t-p-2 t-cursor-pointer t-text-base-lighter" :class="[`t-${iconPosition}-0`]" :aria-label="$t('Toggle password visibility')" :title="$t('Toggle password visibility')" />
+      <input
+        class="t-w-full t-h-10 t-px-3 t-border t-rounded-sm t-appearance-none t-text-sm t-leading-tight placeholder:t-text-base-light"
+        :class="[ invalid ? 't-border-alert' : 't-border-base-light', { 't-pr-10': type === 'password' || (icon && iconPosition === 'right'), 't-pl-10': icon && iconPosition === 'left' } ]"
+        :placeholder="placeholder"
+        :type="type === 'password' ? passType : type"
+        :name="name"
+        :id="id"
+        :autocomplete="autocomplete"
+        :value="value"
+        :autofocus="autofocus"
+        :ref="name"
+        @input="$emit('input', $event.target.value)"
+        @blur="$emit('blur')"
+        @keyup.enter="$emit('keyup.enter', $event.target.value)"
+        @keyup="$emit('keyup', $event)"
+      >
+      <material-icon :icon="icon" v-if="icon" class="t-absolute t-flex t-self-center t-p-2" :class="[`t-${iconPosition}-0`]" />
+    </div>
+    <ValidationMessages :validations="validations" :validations-as-tooltip="validationsAsTooltip" />
   </div>
 </template>
 
@@ -35,6 +37,7 @@ export default {
   data () {
     return {
       passType: 'password',
+      passTypeIcon: 'visibility_off',
       passIconActive: false
     }
   },
@@ -104,10 +107,10 @@ export default {
     togglePassType () {
       if (this.passType === 'password') {
         this.passType = 'text'
-        this.icon = 'visibility'
+        this.passTypeIcon = 'visibility'
       } else {
         this.passType = 'password'
-        this.icon = 'visibility_off'
+        this.passTypeIcon = 'visibility_off'
       }
     },
     // setFocus sets focus on a field which has a value of 'ref' tag equal to fieldName
