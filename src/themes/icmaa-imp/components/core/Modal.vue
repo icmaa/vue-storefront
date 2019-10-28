@@ -10,7 +10,7 @@
           <div class="t-flex-expand" />
           <top-button icon="close" text="Close" :tab-index="1" @click.native="close" class="t--mr-2 t-text-base" />
         </div>
-        <div class="modal-content t-p-4">
+        <div class="modal-content" :class="[ padding ]">
           <slot />
         </div>
       </div>
@@ -106,6 +106,10 @@ export default {
     width: {
       type: Number,
       default: 0
+    },
+    padding: {
+      type: String,
+      default: 't-p-4 lg:t-p-8'
     }
   },
   computed: {

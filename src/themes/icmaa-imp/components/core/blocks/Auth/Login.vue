@@ -1,56 +1,54 @@
 <template>
-  <div class="lg:t-p-4">
+  <form class="" @submit.prevent="login" novalidate>
     <div v-if="hasRedirect">
       {{ $t('You need to be logged in to see this page') }}
     </div>
-    <form class="" @submit.prevent="login" novalidate>
-      <base-input
-        class="t-mb-4" type="email" name="email" id="email" v-model="email"
-        :placeholder="$t('E-mail address *')"
-        :validations="[
-          {
-            condition: !$v.email.required && $v.email.$error,
-            text: $t('Field is required.')
-          },
-          {
-            condition: !$v.email.email && $v.email.$error,
-            text: $t('Please provide valid e-mail address.')
-          }
-        ]"
-      />
-      <base-input
-        class="t-mb-4"
-        type="password"
-        name="password"
-        id="password"
-        v-model="password"
-        :placeholder="$t('Password *')"
-        :validations="[
-          {
-            condition: !$v.password.required && $v.password.$error,
-            text: $t('Field is required.')
-          }
-        ]"
-      />
-      <div class="t-flex t-items-center t-justify-between t-mb-4">
-        <base-checkbox class="t-mr-4" id="remember" v-model="remember">
-          {{ $t('Remember me') }}
-        </base-checkbox>
-        <div href="#" @click.prevent="remindPassword" class="t-text-sm t-cursor-pointer">
-          {{ $t('Forgot the password?') }}
-        </div>
+    <base-input
+      class="t-mb-4" type="email" name="email" id="email" v-model="email"
+      :placeholder="$t('E-mail address *')"
+      :validations="[
+        {
+          condition: !$v.email.required && $v.email.$error,
+          text: $t('Field is required.')
+        },
+        {
+          condition: !$v.email.email && $v.email.$error,
+          text: $t('Please provide valid e-mail address.')
+        }
+      ]"
+    />
+    <base-input
+      class="t-mb-4"
+      type="password"
+      name="password"
+      id="password"
+      v-model="password"
+      :placeholder="$t('Password *')"
+      :validations="[
+        {
+          condition: !$v.password.required && $v.password.$error,
+          text: $t('Field is required.')
+        }
+      ]"
+    />
+    <div class="t-flex t-items-center t-justify-between t-mb-4">
+      <base-checkbox class="t-mr-4" id="remember" v-model="remember">
+        {{ $t('Remember me') }}
+      </base-checkbox>
+      <div href="#" @click.prevent="remindPassword" class="t-text-sm t-cursor-pointer">
+        {{ $t('Forgot the password?') }}
       </div>
-      <button-component :submit="true" type="primary" class="t-w-full t-mb-2" data-testid="loginSubmit">
-        {{ $t('Log in to your account') }}
-      </button-component>
-      <button-component type="facebook" icon="facebook" icon-set="icmaa" icon-position="left" class="t-w-full t-mb-2">
-        {{ $t('Log in with facebook') }}
-      </button-component>
-      <button-component type="transparent" class="t-w-full t--mb-2" @click="switchElem" data-testid="registerLink">
-        {{ $t('Register an account') }}
-      </button-component>
-    </form>
-  </div>
+    </div>
+    <button-component :submit="true" type="primary" class="t-w-full t-mb-2" data-testid="loginSubmit">
+      {{ $t('Log in to your account') }}
+    </button-component>
+    <button-component type="facebook" icon="facebook" icon-set="icmaa" icon-position="left" class="t-w-full t-mb-2">
+      {{ $t('Log in with facebook') }}
+    </button-component>
+    <button-component type="transparent" class="t-w-full t--mb-2" @click="switchElem" data-testid="registerLink">
+      {{ $t('Register an account') }}
+    </button-component>
+  </form>
 </template>
 
 <script>

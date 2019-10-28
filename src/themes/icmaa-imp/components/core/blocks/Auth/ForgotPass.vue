@@ -1,44 +1,40 @@
 <template>
-  <div class="lg:t-p-4">
-    <template v-if="!passwordSent">
-      <form @submit.prevent="sendEmail" novalidate>
-        <p class="t-mb-4">
-          {{ $t('Enter your email address. After submit you will receive an email with an reset-link.') }}
-        </p>
-        <base-input
-          type="email"
-          name="email"
-          v-model="email"
-          focus
-          :placeholder="$t('E-mail address *')"
-          :validations="[
-            {
-              condition: !$v.email.required && $v.email.$error,
-              text: $t('Field is required.')
-            },
-            {
-              condition: !$v.email.email && $v.email.$error,
-              text: $t('Please provide valid e-mail address.')
-            }
-          ]"
-          class="t-mb-4"
-        />
-        <button-component :submit="true" type="primary" class="t-w-full t-mb-2">
-          {{ $t('Reset password') }}
-        </button-component>
-        <button-component type="transparent" class="t-w-full t--mb-2" @click="switchElem">
-          {{ $t('Return to log in') }}
-        </button-component>
-      </form>
-    </template>
-    <template v-if="passwordSent">
-      <p class="t-mb-4">
-        {{ $t("We've sent password reset instructions to your email. Check your inbox and follow the link.") }}
-      </p>
-      <button-component class="t-w-full" @click="switchElem">
-        {{ $t('Back to login') }}
-      </button-component>
-    </template>
+  <form @submit.prevent="sendEmail" novalidate v-if="!passwordSent">
+    <p class="t-text-sm t-mb-4">
+      {{ $t('Enter your email address. After submit you will receive an email with an reset-link.') }}
+    </p>
+    <base-input
+      type="email"
+      name="email"
+      v-model="email"
+      focus
+      :placeholder="$t('E-mail address *')"
+      :validations="[
+        {
+          condition: !$v.email.required && $v.email.$error,
+          text: $t('Field is required.')
+        },
+        {
+          condition: !$v.email.email && $v.email.$error,
+          text: $t('Please provide valid e-mail address.')
+        }
+      ]"
+      class="t-mb-4"
+    />
+    <button-component :submit="true" type="primary" class="t-w-full t-mb-2">
+      {{ $t('Reset password') }}
+    </button-component>
+    <button-component type="transparent" class="t-w-full t--mb-2" @click="switchElem">
+      {{ $t('Return to log in') }}
+    </button-component>
+  </form>
+  <div v-else>
+    <p class="t-mb-4">
+      {{ $t("We've sent password reset instructions to your email. Check your inbox and follow the link.") }}
+    </p>
+    <button-component class="t-w-full" @click="switchElem">
+      {{ $t('Back to login') }}
+    </button-component>
   </div>
 </template>
 
