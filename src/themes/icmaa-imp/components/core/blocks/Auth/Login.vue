@@ -1,6 +1,6 @@
 <template>
   <form class="" @submit.prevent="login" novalidate>
-    <div v-if="hasRedirect">
+    <div v-if="hasRedirect" class="t-mb-4 t-text-sm">
       {{ $t('You need to be logged in to see this page') }}
     </div>
     <base-input
@@ -82,10 +82,6 @@ export default {
     }
   },
   methods: {
-    close (e) {
-      if (e) localStorage.removeItem('redirect')
-      this.$bus.$emit('modal-hide', 'modal-signup')
-    },
     login () {
       if (this.$v.$invalid) {
         this.$v.$touch()
@@ -126,28 +122,3 @@ export default {
   }
 }
 </script>
-
-<style lang="scss" scoped>
-@import '~theme/css/variables/colors';
-@import '~theme/css/helpers/functions/color';
-$color-error: color(error);
-$white: color(white);
-.modal-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-.modal-close {
-  cursor: pointer;
-}
-.modal-content {
-  @media (max-width: 400px) {
-    padding-left: 20px;
-    padding-right: 20px;
-  }
-}
-.redirect-error {
-  background-color: $color-error;
-  color: $white;
-}
-</style>

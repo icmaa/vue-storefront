@@ -45,6 +45,7 @@ export default {
   methods: {
     onClose () {
       this.$store.commit('ui/setAuthElem', 'login')
+      localStorage.removeItem('redirect')
     }
   }
 }
