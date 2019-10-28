@@ -13,6 +13,7 @@
         :value="value"
         :autofocus="autofocus"
         :ref="name"
+        v-mask="maskSettings"
         @input="$emit('input', $event.target.value)"
         @blur="$emit('blur')"
         @keyup.enter="$emit('keyup.enter', $event.target.value)"
@@ -27,12 +28,25 @@
 <script>
 import ValidationMessages from './ValidationMessages'
 import MaterialIcon from 'theme/components/core/blocks/MaterialIcon'
+import { mask as maskDirective } from 'vue-the-mask'
 
 export default {
   name: 'BaseInput',
   components: {
     MaterialIcon,
     ValidationMessages
+  },
+  directives: {
+    /**
+     * This our way to make this directive conditional
+     * https://github.com/vuejs-tips/vue-the-mask/issues/54
+     */
+    'mask': function (e, b) {
+      if (!b.value) {
+        return
+      }
+      maskDirective(e, b)
+    }
   },
   data () {
     return {
@@ -96,11 +110,18 @@ export default {
       type: String,
       default: 'right',
       validations: (v) => ['left', 'right'].includes(v)
+    },
+    mask: {
+      type: [String, Object, Boolean],
+      default: false
     }
   },
   computed: {
     invalid () {
       return this.validations.filter(v => v.condition).length > 0
+    },
+    maskSettings () {
+      return this.mask === 'date' ? '##.##.####' : this.mask
     }
   },
   methods: {
@@ -132,9 +153,3 @@ export default {
   }
 }
 </script>
-
-<style lang="scss">
-.base-input input:focus + .validation-message {
-  display: block;
-}
-</style>

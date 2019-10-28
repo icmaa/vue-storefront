@@ -46,7 +46,7 @@
       {{ $t('Log in with facebook') }}
     </button-component>
     <button-component type="transparent" class="t-w-full t--mb-2" @click="switchElem" data-testid="registerLink">
-      {{ $t('Register an account') }}
+      {{ $t('Not yet an account?') }} <span class="t-ml-1">{{ $t('Register now') }}</span>
     </button-component>
   </form>
 </template>

@@ -22,7 +22,6 @@
           class="t-w-full t-px-2 t-mb-4"
         />
         <base-input
-          type="text"
           name="first-name"
           autocomplete="given-name"
           v-model="firstName"
@@ -36,9 +35,8 @@
           class="t-w-full lg:t-w-1/2 t-px-2 t-mb-4"
         />
         <base-input
-          type="text"
           name="last-name"
-          autocomplete="last-name"
+          autocomplete="family-name"
           v-model="lastName"
           :placeholder="$t('Last name *')"
           :validations="[{
@@ -56,7 +54,21 @@
             condition: !$v.gender.required && $v.gender.$error,
             text: $t('Field is required.')
           }]"
-          class="t-w-full t-px-2 t-mb-4"
+          class="t-w-full lg:t-w-1/3 t-px-2 t-mb-4"
+        />
+        <base-input
+          name="dob"
+          autocomplete="bday"
+          mask="date"
+          v-model="dob"
+          :placeholder="$t('Date of birth') + ' (DD.MM.YYYY) *'"
+          :validations="[
+            {
+              condition: !$v.dob.required && $v.dob.$error,
+              text: $t('Field is required.')
+            }
+          ]"
+          class="t-w-full lg:t-w-2/3 t-px-2 t-mb-4"
         />
         <base-input
           type="password"
@@ -104,24 +116,18 @@
           {{ $t('I want to receive a newsletter') }}
         </base-checkbox>
         <div class="t-w-full t-px-2">
-          <button-component :submit="true" type="primary" class="t-w-full t-mb-4">
+          <button-component :submit="true" type="primary" class="t-w-full t-mb-2">
             {{ $t('Register an account') }} *
           </button-component>
           <button-component type="transparent" @click="switchElem" class="t-w-full t-mb-4">
-            {{ $t('login to your account') }}
+            {{ $t('Login to your account') }}
           </button-component>
-          <div class="t-w-full t-text-xs t-text-base-lighter t-leading-1-rem">
+          <div class="t-w-full t-text-xs t-text-base-lighter t-leading-1-rem lg:t-text-center">
             <material-icon icon="asterisk" icon-set="icmaa" size="xxs" class="t-mr-1" />
             <i18n path="I have read and agree with the {terms}, {policy} and {return}." tag="span">
-              <router-link place="terms" :to="localizedRoute('/terms')">
-                {{ $t('Terms and Conditions') }}
-              </router-link>
-              <router-link place="policy" :to="localizedRoute('/policy')">
-                {{ $t('Privacy Policy') }}
-              </router-link>
-              <router-link place="return" :to="localizedRoute('/return')">
-                {{ $t('Return instructions') }}
-              </router-link>
+              <router-link place="terms" :to="localizedRoute('/terms')" v-html="$t('Terms and Conditions')" class="t-text-base-lighter t-underline" />
+              <router-link place="policy" :to="localizedRoute('/policy')" v-html="$t('Privacy Policy')" class="t-text-base-lighter t-underline" />
+              <router-link place="return" :to="localizedRoute('/return')" v-html="$t('Return Instructions')" class="t-text-base-lighter t-underline" />
             </i18n>
           </div>
         </div>
@@ -132,7 +138,6 @@
 
 <script>
 import i18n from '@vue-storefront/i18n'
-import { mapGetters } from 'vuex'
 import ButtonComponent from 'theme/components/core/blocks/Button'
 import BaseInput from 'theme/components/core/blocks/Form/BaseInput'
 import BaseSelect from 'theme/components/core/blocks/Form/BaseSelect'
@@ -156,6 +161,7 @@ export default {
       firstName: '',
       lastName: '',
       gender: '',
+      dob: '',
       newsletter: false,
       password: '',
       rPassword: '',
@@ -176,6 +182,9 @@ export default {
     gender: {
       required
     },
+    dob: {
+      required
+    },
     password: {
       minLength: minLength(8),
       required
@@ -186,15 +195,11 @@ export default {
     }
   },
   computed: {
-    ...mapGetters({
-      'attributes': 'attribute/getAttributeListByCode'
-    }),
     genderOptions () {
-      if (this.attributes['gender']) {
-        return this.attributes['gender'].options
-      }
-
-      return []
+      return [
+        { label: i18n.t('Male'), value: 'male' },
+        { label: i18n.t('Female'), value: 'female' }
+      ]
     }
   },
   methods: {
@@ -253,9 +258,6 @@ export default {
         action1: { label: this.$t('OK') }
       })
     }
-  },
-  created () {
-    this.$store.dispatch('attribute/list', { filterValues: ['gender'] })
   }
 }
 </script>
