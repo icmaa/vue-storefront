@@ -147,18 +147,14 @@
 <script>
 import { mapGetters } from 'vuex'
 import i18n from '@vue-storefront/i18n'
-import dayjs from 'dayjs'
 import ButtonComponent from 'theme/components/core/blocks/Button'
 import BaseInput from 'theme/components/core/blocks/Form/BaseInput'
 import BaseSelect from 'theme/components/core/blocks/Form/BaseSelect'
 import BaseCheckbox from 'theme/components/core/blocks/Form/BaseCheckbox'
 import MaterialIcon from 'theme/components/core/blocks/MaterialIcon'
+import { date } from 'icmaa-config/helpers/validators'
 import { required, email, minLength, sameAs } from 'vuelidate/lib/validators'
 import { Logger } from '@vue-storefront/core/lib/logger'
-
-const date = (format = 'DD.MM.YYYY') => (value) => {
-  return dayjs(value, format).format(format) === value
-}
 
 export default {
   name: 'Register',
@@ -199,7 +195,7 @@ export default {
     },
     dob: {
       required,
-      date: date('DD.MM.YYYY')
+      date
     },
     password: {
       minLength: minLength(8),
@@ -236,7 +232,7 @@ export default {
         password: this.password,
         firstname: this.firstName,
         lastname: this.lastName,
-        dob: dayjs(this.dob).format('YYYY-MM-DD'),
+        dob: this.dob,
         gender: this.gender,
         cluster: this.cluster || '',
         newsletter: this.newsletter
