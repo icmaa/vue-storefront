@@ -48,6 +48,7 @@
           {{ $t('Please change Your search criteria and try again.') }}
         </p>
       </div>
+      <category-extras-footer />
     </div>
 
     <async-sidebar
@@ -82,6 +83,7 @@ import LoaderBackground from 'theme/components/core/LoaderBackground'
 
 import CategoryMixin from 'icmaa-catalog/components/Category'
 import CategoryExtrasHeader from 'theme/components/core/blocks/CategoryExtras/Header'
+import CategoryExtrasFooter from 'theme/components/core/blocks/CategoryExtras/Footer'
 import CategoryExtrasMixin from 'icmaa-category-extras/mixins/categoryExtras'
 import CategoryMetaMixin from 'icmaa-meta/mixins/categoryMeta'
 
@@ -118,7 +120,8 @@ export default {
     ProductListing,
     Breadcrumbs,
     SortBy,
-    CategoryExtrasHeader
+    CategoryExtrasHeader,
+    CategoryExtrasFooter
   },
   mixins: [ CategoryMixin, CategoryExtrasMixin, CategoryMetaMixin ],
   data () {

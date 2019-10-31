@@ -23,7 +23,9 @@ module.exports = {
         'base-lighter': '#C7C7C7',
         'base-lightest': '#EDEDED',
         'alert': '#CC2823',
-        'facebook': '#4267B2'
+        'facebook': '#4267B2',
+        'twitter': '#1DA1F2',
+        'youtube': '#ff0000'
       },
       inset: {
         '1/2': '50%',
