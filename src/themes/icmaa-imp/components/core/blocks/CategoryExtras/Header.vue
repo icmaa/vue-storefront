@@ -1,7 +1,7 @@
 <template>
   <div v-if="isVisible">
-    <retina-image :image="banner" :alt="category.name" v-if="banner" />
-    <div class="t-mx-4 t-my-2 t-flex t-justify-between" v-if="spotifyLogoItems">
+    <retina-image :image="banner" :alt="category.name" v-if="banner" class="t-w-screen" />
+    <div class="t-px-4 t-py-2 t-flex t-justify-between" v-if="spotifyLogoItems">
       <span class="t-flex-fix t-hidden lg:t-inline-block t-flex t-self-center t-text-base-light t-text-sm t-mr-8">{{ $t('Similar bands:') }}</span>
       <department-logo v-for="(logo, index) in spotifyLogoItems" :key="index" v-bind="logo.data()" class="t-flex-fix t-opacity-60 hover:t-opacity-100" :class="{ 't-mr-4': isLast(index, spotifyLogoItems)}" />
     </div>
@@ -21,6 +21,12 @@ export default {
   components: {
     DepartmentLogo,
     RetinaImage
+  },
+  props: {
+    spotifyLogoLimit: {
+      type: [Boolean, Number],
+      default: false
+    }
   },
   computed: {
     ...mapGetters({
@@ -42,7 +48,7 @@ export default {
     spotifyLogoItems () {
       return sampleSize(
         this.getSpotifyLogoItems,
-        this.viewport === 'sm' ? 4 : 5
+        this.spotifyLogoLimit || (this.viewport === 'sm' ? 4 : 10)
       )
     }
   },

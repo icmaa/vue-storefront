@@ -40,12 +40,14 @@ module.exports = {
         'screen-25': '25vh',
         'screen-50': '50vh',
         'screen-75': '75vh',
+        'screen-100': '100vh',
         '1/2': '50%'
       },
       maxWidth: {
-        'screen-25': '25vh',
-        'screen-50': '50vh',
-        'screen-75': '75vh',
+        'screen-25': '25vw',
+        'screen-50': '50vw',
+        'screen-75': '75vw',
+        'screen-100': '100vw',
         '1/2': '50%'
       },
       fontSize: {
