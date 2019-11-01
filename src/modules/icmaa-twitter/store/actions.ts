@@ -13,7 +13,7 @@ import { Logger } from '@vue-storefront/core/lib/logger'
 const actions: ActionTree<TwitterState, RootState> = {
   async fetchStatusFeed (context, screenName: string) {
     const { endpoint } = config.icmaa_twitter
-    const apiUrl = endpoint + '/feed/' + encodeURIComponent(screenName)
+    const apiUrl = endpoint + '/feed/' + encodeURIComponent(screenName) + '/3'
     return Axios.get(processURLAddress(apiUrl))
       .then(resp => resp.data.result && resp.data.result.items ? resp.data.result.items : [])
       .catch(() => [])

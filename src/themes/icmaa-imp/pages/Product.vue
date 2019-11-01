@@ -119,7 +119,7 @@ import i18n from '@vue-storefront/i18n'
 import config from 'config'
 
 import { minValue } from 'vuelidate/lib/validators'
-import { registerModule, isModuleRegistered } from '@vue-storefront/core/lib/modules'
+import { registerModule } from '@vue-storefront/core/lib/modules'
 import { onlineHelper, isServer } from '@vue-storefront/core/helpers'
 import { catalogHooksExecutors } from '@vue-storefront/core/modules/catalog-next/hooks'
 import { currentStoreView } from '@vue-storefront/core/lib/multistore'
