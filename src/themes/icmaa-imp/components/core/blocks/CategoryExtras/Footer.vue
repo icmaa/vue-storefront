@@ -24,13 +24,17 @@
         <iframe class="t-absolute t-top-0" width="100%" height="100%" :src="vimeoVideo" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen />
       </div>
     </div>
-    <div class="t-w-full md:t-w-1/3 t-mb-8 md:t-mb-0 t-px-4">
+    <div class="t-w-full md:t-w-1/3 t-mb-8 md:t-mb-0 t-px-4" v-if="twitterId">
       <h3 class="t-flex t-items-center t-text-xl t-text-twitter t-font-thin t-leading-1-em t-mb-4">
         <span class="t-flex t-flex-fix t-items-center t-justify-center t-w-10 t-h-10 t-rounded-full t-text-white t-bg-twitter t-mr-2">
           <material-icon icon="twitter" icon-set="icmaa" class="t-flex md:t-text-lg lg:t-text-2xl" />
         </span>
-        Twitter
+        <a :href="`https://twitter.com/${twitterId}`" target="_blank" class="t-text-twitter" v-if="twitterId">
+          {{ '@' + twitterId }}
+        </a>
+        <span v-else>Twitter</span>
       </h3>
+      <twitter-status-feed :screen-name="twitterId" />
     </div>
     <div class="t-w-full t-px-4 t-mt-8 t-text-xs t-text-base-lighter t-leading-snug" v-if="footerDescription">
       {{ footerDescription }}
@@ -42,11 +46,13 @@
 import { mapGetters } from 'vuex'
 import { stripHTML } from '@vue-storefront/core/filters'
 import MaterialIcon from 'theme/components/core/blocks/MaterialIcon'
+import TwitterStatusFeed from 'theme/components/core/blocks/CategoryExtras/TwitterStatusFeed'
 
 export default {
   name: 'CategoryExtrasFooter',
   components: {
-    MaterialIcon
+    MaterialIcon,
+    TwitterStatusFeed
   },
   data () {
     return {
@@ -90,6 +96,9 @@ export default {
       }
 
       return false
+    },
+    twitterId () {
+      return this.categoryExtras.twitterId || false
     }
   },
   methods: {
