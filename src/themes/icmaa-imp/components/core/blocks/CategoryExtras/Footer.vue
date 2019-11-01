@@ -1,15 +1,5 @@
 <template>
   <div class="t-flex t-flex-wrap t--mx-4 t-px-4" v-if="isVisible && description">
-    <div class="t-w-full md:t-w-1/3 t-mb-8 md:t-mb-0 t-px-4" :class="[ hasVideo ? 'md:t-w-1/3' : 'md:t-w-2/3' ]">
-      <h2 class="t-flex t-items-center t-h-10 t-text-1xl t-text-base-dark t-font-thin t-leading-1-em t-mb-4">
-        {{ categoryExtras.title }}
-      </h2>
-      <p class="t-text-base-dark t-text-sm" v-html="descriptionFolded ? descriptionShort : description" />
-      <div class="t-text-base-light t-text-sm t-leading-1em t-mt-4 t-cursor-pointer" v-if="isLongDescription" @click="descriptionFolded = !descriptionFolded">
-        <material-icon :icon="descriptionFolded ? 'keyboard_arrow_down' : 'keyboard_arrow_up'" size="xs" class="t-align-middle" />
-        {{ descriptionFolded ? $t('Read more') : $t('Read less') }}
-      </div>
-    </div>
     <div class="t-w-full md:t-w-1/3 t-mb-8 md:t-mb-0 t-px-4" v-if="hasVideo">
       <h3 class="t-flex t-items-center t-text-xl t-text-youtube t-font-thin t-leading-1-em t-mb-4">
         <span class="t-flex t-flex-fix t-items-center t-justify-center t-w-10 t-h-10 t-rounded-full t-text-white t-bg-youtube t-mr-2">
@@ -35,6 +25,16 @@
         <span v-else>Twitter</span>
       </h3>
       <twitter-status-feed :screen-name="twitterId" />
+    </div>
+    <div class="t-w-full md:t-w-1/3 t-mb-8 md:t-mb-0 t-px-4" :class="[ hasVideo ? 'md:t-w-1/3' : 'md:t-w-2/3' ]">
+      <h2 class="t-flex t-items-center t-h-10 t-text-1xl t-text-base-dark t-font-thin t-leading-1-em t-mb-4">
+        {{ categoryExtras.title }}
+      </h2>
+      <p class="t-text-base-tone t-text-sm t-leading-snug" v-html="descriptionFolded ? descriptionShort : description" />
+      <div class="t-text-base-light t-text-sm t-leading-1em t-mt-4 t-cursor-pointer" v-if="isLongDescription" @click="descriptionFolded = !descriptionFolded">
+        <material-icon :icon="descriptionFolded ? 'keyboard_arrow_down' : 'keyboard_arrow_up'" size="xs" class="t-align-middle" />
+        {{ descriptionFolded ? $t('Read more') : $t('Read less') }}
+      </div>
     </div>
     <div class="t-w-full t-px-4 t-mt-8 t-text-xs t-text-base-lighter t-leading-snug" v-if="footerDescription">
       {{ footerDescription }}

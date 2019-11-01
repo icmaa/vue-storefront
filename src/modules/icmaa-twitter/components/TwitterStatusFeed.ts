@@ -8,20 +8,31 @@ export default {
     screenName: {
       type: String,
       required: true
+    },
+    limit: {
+      type: Number,
+      default: 2
+    }
+  },
+  data () {
+    return {
+      loading: true
     }
   },
   beforeCreate () {
     registerModule(IcmaaTwitterModule)
   },
   async mounted () {
-    return this.$store.dispatch('icmaaTwitter/loadStatusFeed', this.screenName)
+    await this.$store.dispatch('icmaaTwitter/loadStatusFeed', this.screenName)
+    this.loading = false
   },
   computed: {
     ...mapGetters({
       getStatus: 'icmaaTwitter/getStatusByScreenName'
     }),
     status () {
-      return this.getStatus(this.screenName)
+      const status = this.getStatus(this.screenName)
+      return status ? status.slice(0, this.limit) : []
     }
   },
   methods: {

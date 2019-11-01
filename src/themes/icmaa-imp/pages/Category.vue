@@ -38,12 +38,12 @@
       </div>
     </header>
 
-    <div class="t-container t-pb-8">
+    <div class="t-container">
       <lazy-hydrate :trigger-hydration="!loading" v-if="isLazyHydrateEnabled">
         <product-listing :products="getCategoryProducts" />
       </lazy-hydrate>
       <product-listing v-else :products="getCategoryProducts" />
-      <div class="t-flex t-items-center t-justify-center" v-if="moreProductsInSearchResults">
+      <div class="t-flex t-items-center t-justify-center t-pb-8" v-if="moreProductsInSearchResults">
         <button-component type="ghost" @click.native="loadMoreProducts" :disabled="loadingProducts" class="t-w-2/3 lg:t-w-1/4" :class="{ 't-relative t-opacity-60': loadingProducts }">
           {{ $t('Load more') }}
           <loader-background v-if="loadingProducts" bar="t-bg-base-darkest" class="t-bottom-0" />
@@ -58,7 +58,7 @@
         </p>
       </div>
       <lazy-hydrate when-visible>
-        <category-extras-footer id="category-info-footer" />
+        <category-extras-footer id="category-info-footer" class="t-pb-8" />
       </lazy-hydrate>
     </div>
 
