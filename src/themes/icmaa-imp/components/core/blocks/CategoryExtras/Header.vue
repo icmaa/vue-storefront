@@ -19,6 +19,7 @@ import { getThumbnailPath } from '@vue-storefront/core/helpers'
 import DepartmentLogo from 'theme/components/core/blocks/CategoryExtras/DepartmentLogo'
 import RetinaImage from 'theme/components/core/blocks/RetinaImage'
 
+import { isDatetimeInBetween } from 'icmaa-config/helpers/datetime'
 import sampleSize from 'lodash-es/sampleSize'
 
 export default {
@@ -41,7 +42,11 @@ export default {
       viewport: 'ui/getViewport'
     }),
     isVisible () {
-      return this.categoryExtras && this.categoryExtras.active && (this.banner || this.spotifyLogoItems.length > 0)
+      const { bannerShowFrom, bannerShowTo } = this.categoryExtras
+      return this.categoryExtras &&
+        this.categoryExtras.active &&
+        (this.banner || this.spotifyLogoItems.length > 0) &&
+        isDatetimeInBetween(bannerShowFrom, bannerShowTo)
     },
     banner () {
       if (!this.categoryExtras.bannerImage) {
