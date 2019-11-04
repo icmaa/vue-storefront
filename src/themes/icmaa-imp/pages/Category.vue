@@ -49,13 +49,15 @@
           <loader-background v-if="loadingProducts" bar="t-bg-base-darkest" class="t-bottom-0" />
         </button-component>
       </div>
-      <div class="t-bg-white t-mx-4 t-p-4 t-py-10 t-text-center" v-if="isCategoryEmpty">
-        <h4 class="t-text-base t-bold" data-testid="noProductsInfo">
-          {{ $t('No products found!') }}
-        </h4>
-        <p class="t-text-sm t-text-base-light">
-          {{ $t('Please change Your search criteria and try again.') }}
-        </p>
+      <div class="t-pb-8">
+        <div class="t-bg-white t-mx-4 t-p-4 t-py-10 t-text-center" v-if="isCategoryEmpty">
+          <h4 class="t-text-base t-bold" data-testid="noProductsInfo">
+            {{ $t('No products found!') }}
+          </h4>
+          <p class="t-text-sm t-text-base-light">
+            {{ $t('Please change Your search criteria and try again.') }}
+          </p>
+        </div>
       </div>
       <lazy-hydrate when-visible>
         <category-extras-footer id="category-info-footer" class="t-pb-8" />
