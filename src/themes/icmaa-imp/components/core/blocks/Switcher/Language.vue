@@ -8,7 +8,7 @@
       <div class=" t-w-1/4 sm:t-w-1/6 t-p-1">
         <div class="t-border t-border-base-lighter t-rounded-sm t-pt-1" :class="{ 't-bg-base-lightest': config.i18n.defaultCountry === currentStoreView.i18n.defaultCountry }">
           <a href="/" class="t-flex t-flex-col t-items-center">
-            <flag-icon :iso="config.i18n.defaultCountry" format="4x3" width="60" height="40" />
+            <flag-icon :iso="config.i18n.defaultCountry" class="t-border" format="4x3" width="60" height="45" />
             <div class="t-text-sm">{{ config.i18n.defaultCountry }}</div>
           </a>
         </div>
@@ -17,7 +17,7 @@
       <div class="t-w-1/4 sm:t-w-1/6 t-p-1" v-for="(storeView, storeCode) in storeViews" :key="storeCode" v-if="!storeView.disabled && typeof storeView === 'object' && storeView.i18n">
         <div class="t-border t-border-base-lighter t-rounded-sm t-pt-1" :class="{ 't-bg-base-lightest': storeView.storeId === currentStoreView.storeId }">
           <a :href="storeView.url" class="t-flex t-flex-col t-items-center">
-            <flag-icon :iso="storeView.i18n.defaultCountry" format="4x3" width="60" height="40" />
+            <flag-icon :iso="storeView.i18n.defaultCountry" class="t-border t-border-base-lightest" format="4x3" width="60" height="45" />
             <div class="t-text-sm">{{ storeView.i18n.defaultCountry }}</div>
           </a>
         </div>
