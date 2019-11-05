@@ -8,6 +8,7 @@
         <logo-line :parent-id="14" path="/streetwear" :title="'Brands'" />
       </div>
     </lazy-hydrate>
+    <product-listing-widget />
   </div>
 </template>
 
@@ -18,12 +19,14 @@ import { onlineHelper } from '@vue-storefront/core/helpers'
 import LazyHydrate from 'vue-lazy-hydration'
 import Teaser from 'theme/components/core/blocks/Teaser/Teaser'
 import LogoLine from 'theme/components/core/blocks/CategoryExtras/LogoLineBlock'
+import ProductListingWidget from 'theme/components/core/ProductListingWidget'
 
 export default {
   components: {
     LazyHydrate,
     Teaser,
-    LogoLine
+    LogoLine,
+    ProductListingWidget
   },
   mounted () {
     if (!this.isLoggedIn && localStorage.getItem('redirect')) {

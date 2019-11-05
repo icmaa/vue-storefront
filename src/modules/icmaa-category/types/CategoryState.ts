@@ -1,5 +1,8 @@
+import Product from '@vue-storefront/core/modules/catalog/types/Product';
+
 export default interface CategoryState {
-  lists: CategoryStateListItem[]
+  lists: CategoryStateListItem[],
+  productListingWidget: ProductListingWidgetState[]
 }
 
 export interface CategoryStateListItem {
@@ -18,4 +21,9 @@ export interface CategoryStateCategory {
   slug: string,
   level: number,
   is_active: boolean
+}
+
+export interface ProductListingWidgetState {
+  parent: number,
+  list: Product[]
 }
