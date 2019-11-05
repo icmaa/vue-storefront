@@ -29,6 +29,14 @@ export default {
       default: 3278 // category new
     }
   },
+  computed: {
+    ...mapGetters({
+      getProductListingWidget: 'icmaaCategory/productListingWidget'
+    }),
+    products () {
+      return this.getProductListingWidget()
+    }
+  },
   async mounted () {
     const products = await this.$store.dispatch('icmaaCategory/loadProductListingWidgetProducts', {
       categoryId: this.categoryId,

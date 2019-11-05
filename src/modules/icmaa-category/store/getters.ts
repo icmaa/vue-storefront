@@ -16,7 +16,8 @@ const getters: GetterTree<CategoryState, RootState> = {
     }
 
     return false
-  }
+  },
+  productListingWidget: (state) => state.productListingWidget
 }
 
 export default getters
