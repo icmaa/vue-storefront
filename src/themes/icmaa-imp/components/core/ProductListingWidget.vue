@@ -30,7 +30,7 @@ export default {
     },
     sort: {
       type: String,
-      default: ''
+      default: 'created_at:asc'
     }
   },
   computed: {
