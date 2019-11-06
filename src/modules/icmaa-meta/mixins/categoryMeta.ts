@@ -5,6 +5,12 @@ import { getThumbnailPath } from '@vue-storefront/core/helpers'
 import { htmlDecode } from '@vue-storefront/core/filters'
 
 export default {
+  methods: {
+    getCategoryExtrasValueOrCategoryValue (key: string, catKey: string = 'name'): any {
+      return this.categoryExtras && this.categoryExtras[key]
+        ? this.categoryExtras[key] : this.getCurrentCategory[catKey]
+    }
+  },
   computed: {
     ...mapGetters('category-next', ['getCurrentCategory']),
     ...mapGetters({ categoryExtras: 'icmaaCategoryExtras/getCategoryExtrasByCurrentCategory' }),

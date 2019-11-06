@@ -32,10 +32,6 @@ export default {
       if (category) {
         await this.$store.dispatch('icmaaSpotify/fetchRelatedArtists', category)
       }
-    },
-    getCategoryExtrasValueOrCategoryValue (key: string, catKey: string = 'name'): any {
-      return this.categoryExtras && this.categoryExtras[key]
-        ? this.categoryExtras[key] : this.getCurrentCategory[catKey]
     }
   }
 }
