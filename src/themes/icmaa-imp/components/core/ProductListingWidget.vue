@@ -26,7 +26,7 @@ export default {
     },
     categoryId: {
       type: Number,
-      default: 3278 // category new
+      required: true
     },
     sort: {
       type: String,
@@ -34,13 +34,13 @@ export default {
     }
   },
   computed: {
-    ...mapGetters({
-      getProductListingWidget: 'icmaaCategory/productListingWidget'
-    }),
+    ...mapGetters('icmaaCategory', ['getProductListingWidgetByCategoryId']),
     products () {
-      const products = this.getProductListingWidget;
-      console.log(products)
-      return products
+      const products = this.getProductListingWidgetByCategoryId(this.categoryId)
+      if (!products) {
+        return []
+      }
+      return products.list
     }
   },
   async mounted () {
@@ -49,7 +49,6 @@ export default {
       size: this.limit,
       sort: this.sort
     })
-    console.log(products)
   }
 }
 </script>
