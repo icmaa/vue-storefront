@@ -19,7 +19,7 @@ const getters: GetterTree<CategoryState, RootState> = {
 
     return false;
   },
-  productListingWidget: state => state.productListingWidget
+  productListingWidget: (state): ProductListingWidgetState[] => state.productListingWidget
 };
 
 export default getters

@@ -27,6 +27,10 @@ export default {
     categoryId: {
       type: Number,
       default: 3278 // category new
+    },
+    sort: {
+      type: String,
+      default: ''
     }
   },
   computed: {
@@ -41,7 +45,7 @@ export default {
     const products = await this.$store.dispatch('icmaaCategory/loadProductListingWidgetProducts', {
       categoryId: this.categoryId,
       size: this.limit,
-      sort: ''
+      sort: this.sort
     })
     console.log(products)
   }

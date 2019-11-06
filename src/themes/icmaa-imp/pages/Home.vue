@@ -8,7 +8,7 @@
         <logo-line :parent-id="14" path="/streetwear" :title="'Brands'" />
       </div>
     </lazy-hydrate>
-    <product-listing-widget />
+    <product-listing-widget :category-id="79" :limit="3" :sort="id" />
   </div>
 </template>
 
