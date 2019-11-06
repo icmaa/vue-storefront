@@ -1,6 +1,4 @@
 import { mapGetters } from 'vuex'
-import { CategoryExtrasStateItem } from '../types/CategoryExtrasState'
-import { Category } from '@vue-storefront/core/modules/catalog-next/types/Category'
 
 import { htmlDecode } from '@vue-storefront/core/filters/html-decode'
 
@@ -28,7 +26,7 @@ export default {
     this.fetchAsyncData()
   },
   watch: {
-    getCurrentCategory: function (newCat: Category, oldCat: Category) {
+    getCurrentCategory: function () {
       this.fetchAsyncData()
     }
   },
@@ -36,11 +34,6 @@ export default {
     async fetchAsyncData () {
       const category = this.$store.getters['category-next/getCurrentCategory']
       if (category) {
-        await this.$store.dispatch('icmaaCategoryExtras/loadDepartmentLogos')
-        if (!this.categoryExtrasByUrlKey(category.url_key)) {
-          await this.$store.dispatch('icmaaCategoryExtras/single', { value: category.url_key })
-        }
-
         await this.$store.dispatch('icmaaSpotify/fetchRelatedArtists', category)
       }
     },
@@ -51,11 +44,7 @@ export default {
   },
   computed: {
     ...mapGetters('category-next', ['getCurrentCategory']),
-    ...mapGetters({ categoryExtrasByUrlKey: 'icmaaCategoryExtras/getCategoryExtrasByUrlKey' }),
-    ...mapGetters({ categoryExtrasByCurrentCategory: 'icmaaCategoryExtras/getCategoryExtrasByCurrentCategory' }),
-    categoryExtras (): CategoryExtrasStateItem|boolean {
-      return this.categoryExtrasByCurrentCategory
-    },
+    ...mapGetters({ categoryExtras: 'icmaaCategoryExtras/getCategoryExtrasByCurrentCategory' }),
     title (): string {
       return this.getCategoryExtrasValueOrCategoryValue('title')
     },

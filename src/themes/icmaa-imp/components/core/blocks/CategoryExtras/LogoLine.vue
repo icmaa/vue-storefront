@@ -59,34 +59,31 @@ export default {
     }
   },
   async mounted () {
-    await this.$store.dispatch('icmaaCategoryExtras/loadDepartmentLogos')
     await this.$store.dispatch('icmaaCategoryExtras/loadChildCategoryIdMap', [ this.parentId ])
 
-    const filters = { 'url_key': this.randomDepartmentLogoIdentifier }
-    this.categories = await this.$store.dispatch('category-next/loadCategories', { filters })
+    const filters = {
+      'url_key': this.randomChildCategories,
+      'ceHasLogo': true,
+      'ceLogoline': true
+    }
+
+    // if (this.cluster) {
+    //   filters['ceCluster'] = [this.cluster, null]
+    // }
+
+    this.categories = await this.$store.dispatch(
+      'category-next/loadCategories',
+      { filters, size: this.limit, onlyActive: true }
+    )
   },
   computed: {
-    ...mapGetters('icmaaCategoryExtras', [ 'getCategoryChildrenMap', 'getDepartmentLogos', 'getLogolineItems' ]),
+    ...mapGetters('icmaaCategoryExtras', [ 'getCategoryChildrenMap', 'getLogolineItems' ]),
     ...mapGetters({ cluster: 'user/getCluster' }),
     categoryChildrenMap () {
       return this.getCategoryChildrenMap(this.parentId)
     },
-    childrenIdentifier () {
-      if (this.categoryChildrenMap) {
-        return this.categoryChildrenMap.children.map(c => c.url_key)
-      }
-
-      return []
-    },
-    randomDepartmentLogoIdentifier () {
-      const logos = this.getDepartmentLogos
-        .filter(logo => {
-          return (this.cluster ? (logo.customerCluster.includes(this.cluster) || logo.customerCluster.length === 0) : true) &&
-            this.childrenIdentifier.includes(logo.identifier)
-        })
-        .map(l => l.identifier)
-
-      return sampleSize(logos, this.limit)
+    randomChildCategories () {
+      return sampleSize(this.categoryChildrenMap.children, this.limit * 10).map(c => c.url_key)
     },
     logoLineItems () {
       return this.getLogolineItems(this.categories)

@@ -42,9 +42,8 @@ export default {
       viewport: 'ui/getViewport'
     }),
     isVisible () {
-      const { bannerShowFrom, bannerShowTo } = this.categoryExtras
-      return this.categoryExtras &&
-        this.categoryExtras.active &&
+      const { bannerShowFrom, bannerShowTo, active } = this.categoryExtras
+      return this.categoryExtras && active &&
         (this.banner || this.spotifyLogoItems.length > 0) &&
         isDatetimeInBetween(bannerShowFrom, bannerShowTo)
     },
