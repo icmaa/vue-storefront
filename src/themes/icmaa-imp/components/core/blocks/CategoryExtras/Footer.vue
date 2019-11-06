@@ -85,9 +85,7 @@ export default {
     },
     youtubeVideo () {
       if (this.categoryExtras.videoYoutube.length > 0) {
-        const regExp = /[/=?](\w+)$/i
-        const url = this.categoryExtras.videoYoutube.match(regExp)
-        return url ? `https://www.youtube.com/embed/${url[1]}` : this.categoryExtras.videoYoutube
+        return `https://www.youtube.com/embed/${this.categoryExtras.videoYoutube}`
       }
 
       return false
