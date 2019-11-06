@@ -74,8 +74,7 @@ const actions: ActionTree<SpotifyState, RootState> = {
     const categorySearchOptions: DataResolver.CategorySearchOptions = {
       filters: {
         'name.keyword': categoriesNotInState,
-        'ceHasLogo': 'true',
-        'ceLogoline': 'true'
+        'ceHasLogo': 'true'
       }
     }
 
