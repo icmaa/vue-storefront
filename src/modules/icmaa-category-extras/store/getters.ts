@@ -42,10 +42,14 @@ const getters: GetterTree<CategoryExtrasState, RootState> = {
   getCategoryBy: (state, getters, rootState, rootGetters) => (key: string, value: any): Category|boolean => {
     return rootGetters['category-next/getCategories'].find(c => c[key] === value)
   },
-  getLogolineItems: () => (categories: Category[], type: string = 'ceLogoline'): Logo[] => {
+  getLogolineItems: () => (categories: Category[], type: string|boolean = false): Logo[] => {
     let logos = []
+    if (type) {
+      type = 'ce' + this.type.charAt(0).toUpperCase() + this.type.slice(1)
+    }
+
     categories.forEach(c => {
-      if (c['ceHasLogo'] === true && c[type] && c[type] === true) {
+      if (c['ceHasLogo'] === true && (!type || (c[type as string] && c[type as string] === true))) {
         logos.push(new Logo(c, c['ceCluster']))
       }
     })

@@ -41,6 +41,10 @@ export default {
       type: Number,
       default: 5
     },
+    type: {
+      type: String,
+      default: 'logoline'
+    },
     white: {
       type: Boolean,
       default: true
@@ -62,7 +66,7 @@ export default {
     await this.$store.dispatch('icmaaCategoryExtras/loadChildCategoryIdMap', [ this.parentId ])
 
     const filters = {
-      'url_key': this.randomChildCategories,
+      'id': this.childCategoryIds,
       'ceHasLogo': true,
       'ceLogoline': true
     }
@@ -82,11 +86,11 @@ export default {
     categoryChildrenMap () {
       return this.getCategoryChildrenMap(this.parentId)
     },
-    randomChildCategories () {
-      return sampleSize(this.categoryChildrenMap.children, this.limit * 10).map(c => c.url_key)
+    childCategoryIds () {
+      return this.categoryChildrenMap.children.map(c => c.id)
     },
     logoLineItems () {
-      return this.getLogolineItems(this.categories)
+      return this.getLogolineItems(this.categories, this.type)
     },
     placeholderCount () {
       return this.limit > this.logoLineItems.length && this.placeholder ? this.limit - this.logoLineItems.length : 0
