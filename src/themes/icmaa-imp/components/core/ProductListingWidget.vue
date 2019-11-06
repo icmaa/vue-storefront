@@ -38,7 +38,9 @@ export default {
       getProductListingWidget: 'icmaaCategory/productListingWidget'
     }),
     products () {
-      return this.getProductListingWidget
+      const products = this.getProductListingWidget;
+      console.log(products)
+      return products
     }
   },
   async mounted () {
