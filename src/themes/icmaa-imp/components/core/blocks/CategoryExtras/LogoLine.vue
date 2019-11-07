@@ -54,6 +54,11 @@ export default {
       default: false
     }
   },
+  data () {
+    return {
+      categories: []
+    }
+  },
   async mounted () {
     await this.fetchData()
   },
@@ -63,21 +68,14 @@ export default {
       allCategories: 'category-next/getCategories',
       cluster: 'user/getCluster'
     }),
-    categories () {
-      const cluster = this.cluster ? [this.cluster, ''] : false
-      const categories = this.allCategories.filter(c => {
-        return this.childCategoryIds.includes(c.id) &&
-          c.ceHasLogo === true &&
-          c.ceLogoline === true &&
-          (!cluster || cluster.includes(c.ceCluster))
-      })
-
-      return sampleSize(categories, this.limit)
-    },
     categoryChildrenMap () {
       return this.getCategoryChildrenMap(this.parentId)
     },
     childCategoryIds () {
+      if (!this.categoryChildrenMap) {
+        return []
+      }
+
       return this.categoryChildrenMap.children.map(c => c.id)
     },
     logoLineItems () {
@@ -121,6 +119,21 @@ export default {
         'category-next/loadCategories',
         { filters, size: this.limit, onlyActive: true }
       )
+
+      // Prevent flickering logoline when clicked
+      // because of changing `categories` state property
+      this.setCategories()
+    },
+    setCategories () {
+      const cluster = this.cluster ? [this.cluster, ''] : false
+      const categories = this.allCategories.filter(c => {
+        return this.childCategoryIds.includes(c.id) &&
+          c.ceHasLogo === true &&
+          c.ceLogoline === true &&
+          (!cluster || cluster.includes(c.ceCluster))
+      })
+
+      this.categories = sampleSize(categories, this.limit)
     }
   }
 }
