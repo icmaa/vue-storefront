@@ -23,14 +23,10 @@ import DepartmentLogo from 'theme/components/core/blocks/CategoryExtras/Departme
 import Placeholder from 'theme/components/core/blocks/Placeholder'
 
 export default {
+  name: 'LogoLine',
   components: {
     DepartmentLogo,
     Placeholder
-  },
-  data: function () {
-    return {
-      categories: []
-    }
   },
   props: {
     parentId: {
@@ -63,26 +59,25 @@ export default {
     }
   },
   async mounted () {
-    await this.$store.dispatch('icmaaCategoryExtras/loadChildCategoryIdMap', [ this.parentId ])
-
-    const filters = {
-      'id': this.childCategoryIds,
-      'ceHasLogo': true,
-      'ceLogoline': true
-    }
-
-    if (this.cluster) {
-      filters['ceCluster'] = [this.cluster, '']
-    }
-
-    this.categories = await this.$store.dispatch(
-      'category-next/loadCategories',
-      { filters, size: this.limit, onlyActive: true }
-    )
+    await this.fetchData()
   },
   computed: {
     ...mapGetters('icmaaCategoryExtras', [ 'getCategoryChildrenMap', 'getLogolineItems' ]),
-    ...mapGetters({ cluster: 'user/getCluster' }),
+    ...mapGetters({
+      allCategories: 'category-next/getCategories',
+      cluster: 'user/getCluster'
+    }),
+    categories () {
+      const cluster = this.cluster ? [this.cluster, ''] : false
+      const categories = this.allCategories.filter(c => {
+        return this.childCategoryIds.includes(c.id) &&
+          c.ceHasLogo === true &&
+          c.ceLogoline === true &&
+          (!cluster || cluster.includes(c.ceCluster))
+      })
+
+      return sampleSize(categories, this.limit)
+    },
     categoryChildrenMap () {
       return this.getCategoryChildrenMap(this.parentId)
     },
@@ -103,10 +98,33 @@ export default {
     }
   },
   watch: {
+    async parentId () {
+      await this.fetchData()
+    },
     logoLineItems (items) {
       if (items.length > 0) {
         this.$emit('loaded')
       }
+    }
+  },
+  methods: {
+    async fetchData () {
+      await this.$store.dispatch('icmaaCategoryExtras/loadChildCategoryIdMap', [ this.parentId ])
+
+      const filters = {
+        'id': this.childCategoryIds,
+        'ceHasLogo': true,
+        'ceLogoline': true
+      }
+
+      if (this.cluster) {
+        filters['ceCluster'] = [this.cluster, '']
+      }
+
+      await this.$store.dispatch(
+        'category-next/loadCategories',
+        { filters, size: this.limit, onlyActive: true }
+      )
     }
   }
 }
