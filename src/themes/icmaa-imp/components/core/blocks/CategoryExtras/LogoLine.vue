@@ -59,9 +59,6 @@ export default {
       categories: []
     }
   },
-  async mounted () {
-    await this.fetchData()
-  },
   computed: {
     ...mapGetters('icmaaCategoryExtras', [ 'getCategoryChildrenMap', 'getLogolineItems' ]),
     ...mapGetters({
@@ -89,16 +86,6 @@ export default {
     },
     columnClassObj () {
       return typeof this.columnClass === 'string' ? [this.columnClass] : this.columnClass
-    }
-  },
-  watch: {
-    async parentId () {
-      await this.fetchData()
-    },
-    logoLineItems (items) {
-      if (items.length > 0) {
-        this.$emit('loaded')
-      }
     }
   },
   methods: {
@@ -134,6 +121,19 @@ export default {
       })
 
       this.categories = sampleSize(categories, this.limit)
+    }
+  },
+  async mounted () {
+    await this.fetchData()
+  },
+  watch: {
+    async parentId () {
+      await this.fetchData()
+    },
+    logoLineItems (items) {
+      if (items.length > 0) {
+        this.$emit('loaded')
+      }
     }
   }
 }
