@@ -71,9 +71,9 @@ export default {
       'ceLogoline': true
     }
 
-    // if (this.cluster) {
-    //   filters['ceCluster'] = [this.cluster, null]
-    // }
+    if (this.cluster) {
+      filters['ceCluster'] = [this.cluster, '']
+    }
 
     this.categories = await this.$store.dispatch(
       'category-next/loadCategories',
