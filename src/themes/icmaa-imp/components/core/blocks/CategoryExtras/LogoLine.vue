@@ -37,10 +37,6 @@ export default {
       type: Number,
       default: 5
     },
-    type: {
-      type: String,
-      default: 'logoline'
-    },
     white: {
       type: Boolean,
       default: true
@@ -85,7 +81,7 @@ export default {
       return this.categoryChildrenMap.children.map(c => c.id)
     },
     logoLineItems () {
-      return this.getLogolineItems(this.categories, this.type)
+      return this.getLogolineItems(this.categories, 'logoline')
     },
     placeholderCount () {
       return this.limit > this.logoLineItems.length && this.placeholder ? this.limit - this.logoLineItems.length : 0
