@@ -41,17 +41,30 @@ export default {
       if (!products) {
         return []
       }
-      return products.list
+      return products.list.slice(0, this.limit)
     }
   },
   async mounted () {
-    await this.$store.dispatch('icmaaCategory/loadProductListingWidgetProducts', {
-      categoryId: this.categoryId,
-      cluster: this.cluster,
-      size: this.limit,
-      sort: this.sort
-    })
+    if (this.products.length < this.limit) {
+      // If products are not enough because of different limit than product count in state, load more.
+      await this.$store.dispatch('icmaaCategory/loadProductListingWidgetProducts', {
+        categoryId: this.categoryId,
+        cluster: this.cluster,
+        size: this.limit - this.products.length,
+        sort: this.sort
+      })
+    } else {
+      // If no products there yet
+      await this.$store.dispatch('icmaaCategory/loadProductListingWidgetProducts', {
+        categoryId: this.categoryId,
+        cluster: this.cluster,
+        size: this.limit,
+        sort: this.sort
+      })
+    }
 
+    // If not enough cluster items found, load regular ones
+    // ! This is a workaround for missing should/or filter of quickSearchByQuery
     if (this.cluster && this.products.length < this.limit) {
       await this.$store.dispatch('icmaaCategory/loadProductListingWidgetProducts', {
         categoryId: this.categoryId,
