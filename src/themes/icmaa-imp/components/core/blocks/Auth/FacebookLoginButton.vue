@@ -37,25 +37,12 @@ export default {
     return {
       appId: '103608836440301',
       version: 'v5.0',
+      options: {},
       loginOptions: { scope: 'email,user_birthday,user_gender', return_scopes: true },
       fields: 'first_name,last_name,email,birthday,gender',
-      options: {},
       working: false,
       connected: false
     }
-  },
-  created () {
-    const created = new Promise(async resolve => {
-      const { appId, version, options } = this
-      const sdk = await this.getFbSdk({ appId, version, options })
-      const fbLoginStatus = await this.getFbLoginStatus()
-      if (fbLoginStatus.status === 'connected') {
-        this.connected = true
-      }
-      this.$emit('sdk-init', { FB: sdk })
-      resolve()
-    })
-    this.doAsync(created)
   },
   computed: {
     visible () {
@@ -66,13 +53,13 @@ export default {
     }
   },
   methods: {
-    onLogin (response) {
+    async authorizeRequest (response) {
       if (this.connected) {
         const { fields } = this
         const { accessToken } = response.authResponse
-        window.FB.api('/me', { accessToken, fields }, (r) => {
-          console.log(r)
-        })
+
+        /** @todo Make request to API and VSF-Bridge to login the user */
+        // this.process(...)
       }
     },
     toggleLogin () {
@@ -85,24 +72,25 @@ export default {
     },
     async login () {
       const login = this.fbLogin(this.loginOptions)
-      const response = await this.doAsync(login)
+      const response = await this.process(login)
 
       this.connected = (response.status === 'connected')
+
+      await this.authorizeRequest(response)
       this.$emit('login', response)
-      this.onLogin(response)
 
       return login
     },
     async logout () {
       const logout = this.fbLogout()
-      const response = await this.doAsync(logout)
+      const response = await this.process(logout)
 
       this.connected = false
       this.$emit('logout', response)
 
       return logout
     },
-    async doAsync (promise) {
+    async process (promise) {
       this.working = true
       await promise
       this.working = false
@@ -151,6 +139,19 @@ export default {
         window.FB.logout(response => resolve(response))
       })
     }
+  },
+  created () {
+    const created = new Promise(async resolve => {
+      const { appId, version, options } = this
+      const sdk = await this.getFbSdk({ appId, version, options })
+      const fbLoginStatus = await this.getFbLoginStatus()
+      if (fbLoginStatus.status === 'connected') {
+        this.connected = true
+      }
+      this.$emit('sdk-init', { FB: sdk })
+      resolve()
+    })
+    this.process(created)
   }
 }
 </script>
