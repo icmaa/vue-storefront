@@ -52,7 +52,6 @@ export default {
      * @todo We can't load the current store-view from state management yet, the value is always empty in metaInfo().
      * I opened an issue here: @see https://github.com/DivanteLtd/vue-storefront/issues/3674
      */
-    const storeView = currentStoreView()
 
     return {
       title: this.translatedProductName,
@@ -66,7 +65,7 @@ export default {
               slug: this.getCurrentProduct.slug,
               childSku: this.getCurrentProduct.sku
             }
-          }, storeView.storeCode)).href
+          }, store.storeCode)).href
         }
       ],
       meta: [
