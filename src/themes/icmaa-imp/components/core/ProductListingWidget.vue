@@ -35,6 +35,7 @@ export default {
   },
   computed: {
     ...mapGetters('icmaaCategory', ['getProductListingWidgetByCategoryId']),
+    ...mapGetters({ cluster: 'user/getCluster' }),
     products () {
       const products = this.getProductListingWidgetByCategoryId(this.categoryId)
       if (!products) {
@@ -44,8 +45,9 @@ export default {
     }
   },
   async mounted () {
-    const products = await this.$store.dispatch('icmaaCategory/loadProductListingWidgetProducts', {
+    await this.$store.dispatch('icmaaCategory/loadProductListingWidgetProducts', {
       categoryId: this.categoryId,
+      cluster: this.cluster,
       size: this.limit,
       sort: this.sort
     })
