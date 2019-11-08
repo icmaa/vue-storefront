@@ -18,6 +18,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import sampleSize from 'lodash-es/sampleSize'
+import { getCategoryExtrasKeyByAttribute } from 'icmaa-category-extras/helpers'
 
 import DepartmentLogo from 'theme/components/core/blocks/CategoryExtras/DepartmentLogo'
 import Placeholder from 'theme/components/core/blocks/Placeholder'
@@ -36,6 +37,11 @@ export default {
     limit: {
       type: Number,
       default: 5
+    },
+    type: {
+      type: String,
+      default: 'logoline',
+      validation: (v) => ['logoline', 'productLogoline'].includes(v)
     },
     white: {
       type: Boolean,
@@ -76,7 +82,7 @@ export default {
       return this.categoryChildrenMap.children.map(c => c.id)
     },
     logoLineItems () {
-      return this.getLogolineItems(this.categories, 'logoline')
+      return this.getLogolineItems(this.categories, this.type)
     },
     placeholderCount () {
       return this.limit > this.logoLineItems.length && this.placeholder ? this.limit - this.logoLineItems.length : 0
@@ -86,6 +92,9 @@ export default {
     },
     columnClassObj () {
       return typeof this.columnClass === 'string' ? [this.columnClass] : this.columnClass
+    },
+    catTypeKey () {
+      return getCategoryExtrasKeyByAttribute(this.type)
     }
   },
   methods: {
@@ -95,7 +104,7 @@ export default {
       const filters = {
         'id': this.childCategoryIds,
         'ceHasLogo': true,
-        'ceLogoline': true
+        [this.catTypeKey]: true
       }
 
       if (this.cluster) {
@@ -116,7 +125,7 @@ export default {
       const categories = this.allCategories.filter(c => {
         return this.childCategoryIds.includes(c.id) &&
           c.ceHasLogo === true &&
-          c.ceLogoline === true &&
+          c[this.catTypeKey] === true &&
           (!cluster || cluster.includes(c.ceCluster))
       })
 

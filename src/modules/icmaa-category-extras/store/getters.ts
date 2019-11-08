@@ -4,6 +4,7 @@ import CategoryExtrasState, { CategoryExtras, CategoryExtrasCategoryIdMapStateIt
 import { Category } from '@vue-storefront/core/modules/catalog-next/types/Category';
 import RootState from '@vue-storefront/core/types/RootState'
 import { Logo } from '../helpers/categoryExtras/logo'
+import { getCategoryExtrasKeyByAttribute } from '../helpers/'
 import isEmpty from 'lodash-es/isEmpty'
 import mapKeys from 'lodash-es/mapKeys'
 import pick from 'lodash-es/pick'
@@ -44,7 +45,7 @@ const getters: GetterTree<CategoryExtrasState, RootState> = {
   },
   getLogolineItems: () => (categories: Category[], type: string|boolean = false): Logo[] => {
     let logos: Logo[] = []
-    const typeKey: string = type ? 'ce' + (type as string).charAt(0).toUpperCase() + (type as string).slice(1) : ''
+    const typeKey: string = type ? getCategoryExtrasKeyByAttribute(type as string) : ''
 
     categories.forEach(c => {
       if (c['ceHasLogo'] === true && (!type || (c[typeKey] && c[typeKey] === true))) {
