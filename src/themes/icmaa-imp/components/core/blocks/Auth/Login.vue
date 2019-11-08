@@ -1,8 +1,5 @@
 <template>
   <form class="" @submit.prevent="login" novalidate>
-    <no-ssr>
-      <v-facebook-login app-id="103608836440301" :login-options="{ scope: 'email', return_scopes: true }" @sdk-init="fbSdkInit" @login="fbLogin" @connect="fbConnect" />
-    </no-ssr>
     <div v-if="hasRedirect" class="t-mb-4 t-text-sm">
       {{ $t('You need to be logged in to see this page') }}
     </div>
@@ -45,9 +42,9 @@
     <button-component :submit="true" type="primary" class="t-w-full t-mb-2" data-testid="loginSubmit">
       {{ $t('Login to your account') }}
     </button-component>
-    <button-component type="facebook" icon="facebook" icon-set="icmaa" icon-position="left" class="t-w-full t-mb-2">
-      {{ $t('Login with Facebook') }}
-    </button-component>
+    <no-ssr>
+      <facebook-login-button class="t-w-full t-mb-2" />
+    </no-ssr>
     <button-component type="transparent" class="t-w-full t--mb-2" @click="switchElem" data-testid="registerLink">
       {{ $t('Not yet an account?') }} <span class="t-ml-1">{{ $t('Register now') }}</span>
     </button-component>
@@ -62,16 +59,15 @@ import { Login } from '@vue-storefront/core/modules/user/components/Login'
 import BaseInput from 'theme/components/core/blocks/Form/BaseInput'
 import BaseCheckbox from 'theme/components/core/blocks/Form/BaseCheckbox'
 import ButtonComponent from 'theme/components/core/blocks/Button'
-
+import FacebookLoginButton from 'theme/components/core/blocks/Auth/FacebookLoginButton'
 import NoSSR from 'vue-no-ssr'
-const VFacebookLogin = () => import(/* webpackChunkName: "vsf-layout-fblogin" */ 'vue-facebook-login-component')
 
 export default {
   components: {
     BaseCheckbox,
     BaseInput,
     ButtonComponent,
-    VFacebookLogin,
+    FacebookLoginButton,
     'no-ssr': NoSSR
   },
   mixins: [ Login ],
@@ -124,20 +120,6 @@ export default {
       this.$store.dispatch('notification/spawnNotification', {
         type: 'error',
         message: this.$t(result.result),
-        action1: { label: this.$t('OK') }
-      })
-    },
-    fbSdkInit (response) {
-      console.log(response)
-    },
-    fbLogin (response, test) {
-      console.log(response, test)
-    },
-    fbConnect (response) {
-      console.log(response)
-      this.$store.dispatch('notification/spawnNotification', {
-        type: 'success',
-        message: this.$t('You are logged in!'),
         action1: { label: this.$t('OK') }
       })
     }
