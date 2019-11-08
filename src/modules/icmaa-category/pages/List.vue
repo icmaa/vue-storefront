@@ -21,6 +21,7 @@
               data-testid="categoryLink"
               v-html="category.name"
               class="t-block"
+              :class="{ 't-text-primary t-font-bold': category.ceCluster === cluster }"
             />
           </li>
         </ul>
