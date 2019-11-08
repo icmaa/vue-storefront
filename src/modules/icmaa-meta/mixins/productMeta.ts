@@ -1,7 +1,7 @@
 import { mapGetters } from 'vuex'
 import { htmlDecode } from '@vue-storefront/core/filters'
 import { getThumbnailPath } from '@vue-storefront/core/helpers'
-import { currentStoreView } from '@vue-storefront/core/lib/multistore'
+import { localizedRoute, currentStoreView } from '@vue-storefront/core/lib/multistore'
 
 const store = currentStoreView()
 
@@ -10,7 +10,10 @@ export default {
     ...mapGetters({
       getOptionLabel: 'attribute/getOptionLabel',
       storeConfig: 'icmaaConfig/getCurrentStoreConfig',
-      store: 'icmaaConfig/getCurrentStore'
+      store: 'icmaaConfig/getCurrentStore',
+      getCurrentCategory: 'category-next/getCurrentCategory',
+      getCurrentProduct: 'product/getCurrentProduct',
+      getCurrentProductConfiguration: 'product/getCurrentProductConfiguration'
     }),
     currencyCode () {
       return this.storeConfig ? this.storeConfig.i18n.currencyCode : ''
@@ -49,9 +52,23 @@ export default {
      * @todo We can't load the current store-view from state management yet, the value is always empty in metaInfo().
      * I opened an issue here: @see https://github.com/DivanteLtd/vue-storefront/issues/3674
      */
+    const storeView = currentStoreView()
 
     return {
       title: this.translatedProductName,
+      link: [
+        {
+          rel: 'amphtml',
+          href: this.$router.resolve(localizedRoute({
+            name: this.getCurrentProduct.type_id + '-product-amp',
+            params: {
+              parentSku: this.getCurrentProduct.parentSku ? this.getCurrentProduct.parentSku : this.getCurrentProduct.sku,
+              slug: this.getCurrentProduct.slug,
+              childSku: this.getCurrentProduct.sku
+            }
+          }, storeView.storeCode)).href
+        }
+      ],
       meta: [
         { vmid: 'description', name: 'description', content: htmlDecode(this.product.description) },
         { vmid: 'og:title', property: 'og:title', content: htmlDecode(this.translatedProductName) },
@@ -66,6 +83,8 @@ export default {
         { name: 'product:brand', content: this.getOptionLabel({ attributeKey: this.productBandOrBrandCode, optionId: this.productBandOrBrand }) },
         ...this.productFbImages
       ]
+      // title: htmlDecode(this.getCurrentProduct.meta_title || this.getCurrentProduct.name),
+      // meta: this.getCurrentProduct.meta_description ? [{ vmid: 'description', name: 'description', content: htmlDecode(this.getCurrentProduct.meta_description) }] : []
     }
   }
 }
