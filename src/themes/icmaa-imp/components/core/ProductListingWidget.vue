@@ -51,6 +51,14 @@ export default {
       size: this.limit,
       sort: this.sort
     })
+
+    if (this.cluster && this.products.length < this.limit) {
+      await this.$store.dispatch('icmaaCategory/loadProductListingWidgetProducts', {
+        categoryId: this.categoryId,
+        size: this.limit - this.products.length,
+        sort: this.sort
+      })
+    }
   }
 }
 </script>

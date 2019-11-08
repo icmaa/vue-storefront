@@ -37,10 +37,10 @@ const actions: ActionTree<CategoryState, RootState> = {
       return { parent, list: list as Category[] }
     }
   },
-  async loadProductListingWidgetProducts ({ state, commit, dispatch, rootGetters }, params: { categoryId: number, cluster: string, size: number, sort: string }): Promise<ProductListingWidgetState> {
+  async loadProductListingWidgetProducts ({ state, commit, dispatch }, params: { categoryId: number, cluster: string, size: number, sort: string }): Promise<ProductListingWidgetState> {
     const { categoryId, cluster, size, sort } = params
 
-    if (state.productListingWidget.find(i => i.parent === categoryId)) {
+    if (state.productListingWidget.find(i => i.parent === categoryId && i.list.length >= size)) {
       return
     }
 

@@ -12,7 +12,10 @@ const mutations: MutationTree<CategoryListState> = {
     }
   },
   [types.ICMAA_CATEGORY_LIST_ADD_PRODUCT] (state, payload: ProductListingWidgetState) {
-    if (state.productListingWidget.find(i => i.parent === payload.parent)) {
+    let list = state.productListingWidget.find(i => i.parent === payload.parent)
+    if (list) {
+      const newProductids = payload.list.map(p => p.id).filter(id => !list.list.map(p => p.id).includes(id))
+      list.list.push(...payload.list.filter(p => newProductids.includes(p.id)))
       return
     }
     state.productListingWidget.push(payload)
