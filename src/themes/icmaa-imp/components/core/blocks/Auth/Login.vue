@@ -1,5 +1,8 @@
 <template>
   <form class="" @submit.prevent="login" novalidate>
+    <no-ssr>
+      <v-facebook-login app-id="103608836440301" :login-options="{ scope: 'email', return_scopes: true }" @sdk-init="fbSdkInit" @login="fbLogin" @connect="fbConnect" />
+    </no-ssr>
     <div v-if="hasRedirect" class="t-mb-4 t-text-sm">
       {{ $t('You need to be logged in to see this page') }}
     </div>
@@ -60,11 +63,16 @@ import BaseInput from 'theme/components/core/blocks/Form/BaseInput'
 import BaseCheckbox from 'theme/components/core/blocks/Form/BaseCheckbox'
 import ButtonComponent from 'theme/components/core/blocks/Button'
 
+import NoSSR from 'vue-no-ssr'
+const VFacebookLogin = () => import(/* webpackChunkName: "vsf-layout-fblogin" */ 'vue-facebook-login-component')
+
 export default {
   components: {
     BaseCheckbox,
     BaseInput,
-    ButtonComponent
+    ButtonComponent,
+    VFacebookLogin,
+    'no-ssr': NoSSR
   },
   mixins: [ Login ],
   validations: {
@@ -116,6 +124,20 @@ export default {
       this.$store.dispatch('notification/spawnNotification', {
         type: 'error',
         message: this.$t(result.result),
+        action1: { label: this.$t('OK') }
+      })
+    },
+    fbSdkInit (response) {
+      console.log(response)
+    },
+    fbLogin (response, test) {
+      console.log(response, test)
+    },
+    fbConnect (response) {
+      console.log(response)
+      this.$store.dispatch('notification/spawnNotification', {
+        type: 'success',
+        message: this.$t('You are logged in!'),
         action1: { label: this.$t('OK') }
       })
     }
