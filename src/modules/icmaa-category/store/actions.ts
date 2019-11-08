@@ -1,15 +1,17 @@
 import { ActionTree } from 'vuex'
 import RootState from '@vue-storefront/core/types/RootState'
-import CategoryState, { CategoryStateListItem, CategoryStateCategory, ProductListingWidgetState } from '../types/CategoryState'
+import { Category } from '@vue-storefront/core/modules/catalog-next/types/Category'
+import CategoryState, { CategoryStateListItemHydrated, ProductListingWidgetState } from '../types/CategoryState'
 import * as types from './mutation-types'
+import * as catTypes from '@vue-storefront/core/modules/catalog-next/store/category/mutation-types'
 import { fetchCategoryById, fetchChildCategories } from '../helpers'
 import SearchQuery from '@vue-storefront/core/lib/search/searchQuery'
 
 import { Logger } from '@vue-storefront/core/lib/logger'
 
 const actions: ActionTree<CategoryState, RootState> = {
-  async list (context, { parentId, crawlDepth = 1 }): Promise<CategoryStateListItem> {
-    if (!context.state.lists.find(item => item.parent.id === parentId)) {
+  async list ({ state, commit }, { parentId, crawlDepth = 1 }): Promise<CategoryStateListItemHydrated> {
+    if (!state.lists.find(item => item.parent === parentId)) {
       let parent = await fetchCategoryById({ parentId })
         .then(resp => {
           return resp.items[0]
@@ -23,15 +25,16 @@ const actions: ActionTree<CategoryState, RootState> = {
         return
       }
 
-      let list: CategoryStateCategory[] | void = await fetchChildCategories({ parentId, level: parent.level + crawlDepth })
+      let list: Category[] | void = await fetchChildCategories({ parentId, level: parent.level + crawlDepth })
         .then(resp => resp)
         .catch(error => {
           Logger.error('Error while fetching children of category: ' + parentId, 'icmaaCategoryList', error)()
         })
 
-      context.commit(types.ICMAA_CATEGORY_LIST_ADD_CATEGORY_LIST, { parent, list })
+      commit(`category-next/${catTypes.CATEGORY_ADD_CATEGORIES}`, [ parent, ...list ], { root: true })
+      commit(types.ICMAA_CATEGORY_LIST_ADD_CATEGORY_LIST, { parent, list })
 
-      return { parent, list: list as CategoryStateCategory[] }
+      return { parent, list: list as Category[] }
     }
   },
   async loadProductListingWidgetProducts ({ state, commit, dispatch }, params: { categoryId: number, size: number, sort: string }): Promise<ProductListingWidgetState> {

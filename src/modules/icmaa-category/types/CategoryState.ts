@@ -1,3 +1,4 @@
+import { Category } from '@vue-storefront/core/modules/catalog-next/types/Category'
 import Product from '@vue-storefront/core/modules/catalog/types/Product'
 
 export default interface CategoryState {
@@ -6,21 +7,13 @@ export default interface CategoryState {
 }
 
 export interface CategoryStateListItem {
-  parent: CategoryStateCategory,
-  list: CategoryStateCategory[]
+  parent: number,
+  list: number[]
 }
 
-export interface CategoryStateCategory {
-  id: number,
-  parent_id: number,
-  name: string,
-  path: string,
-  children_count: number,
-  url_path: string,
-  url_key: string,
-  slug: string,
-  level: number,
-  is_active: boolean
+export interface CategoryStateListItemHydrated {
+  parent: Category,
+  list: Category[]
 }
 
 export interface ProductListingWidgetState {
