@@ -17,6 +17,21 @@
 import ButtonComponent from 'theme/components/core/blocks/Button'
 import LoaderBackground from 'theme/components/core/LoaderBackground'
 
+/**
+ * We use the FB auth-token based login method usind their JS SDK.
+ * We can't use the more save `code-flow` authorization because it's not supported by the SDK.
+ *
+ * Workflow:
+ * - Request an oauth access token via SDK
+ * - Send a request with this access token to API
+ * - API sends it to VSF bridge
+ * - Bridge actions sends request to FB API using this access token to fetch user data
+ * - If found the user will be logged in
+ * - If not a new account will be created and the new user will be logged in
+ *
+ * @see https://developers.facebook.com/docs/facebook-login/security
+ */
+
 export default {
   name: 'FacebookLoginButton',
   props: {
