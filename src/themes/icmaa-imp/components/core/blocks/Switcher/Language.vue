@@ -6,19 +6,11 @@
 
     <div class="t-flex t-flex-wrap">
       <div class="t-w-1/2 t-p-1">
-        <a href="/" class="t-flex t-items-center t-border t-border-base-lighter t-rounded-sm t-p-1" :class="{ 't-bg-base-lightest': config.i18n.defaultCountry === currentStoreView.i18n.defaultCountry }">
-          <flag-icon :iso="config.i18n.defaultCountry" class="t-border t-border-base-lightest t-mx-1" format="4x3" width="40" height="30" />
-          <div class="t-text-sm t-leading-none">
-            {{ config.i18n.fullCountryName }}
-          </div>
-        </a>
+        <language-button :store-view="{ url: '/', i18n: { fullCountryName: config.i18n.fullCountryName, defaultCountry: config.i18n.defaultCountry } }" :is-current="config.i18n.defaultCountry === currentStoreView.i18n.defaultCountry" />
       </div>
 
       <div class="t-w-1/2 t-p-1" v-for="(storeView, storeCode) in config.storeViews" :key="storeCode" v-if="!storeView.disabled && typeof storeView === 'object' && storeView.i18n">
-        <a :href="storeView.url" class="t-flex t-items-center t-border t-border-base-lighter t-rounded-sm t-p-1" :class="{ 't-bg-base-lightest': storeView.storeId === currentStoreView.storeId }">
-          <flag-icon :iso="storeView.i18n.defaultCountry" class="t-border t-border-base-lightest t-mx-1" format="4x3" width="40" height="30" />
-          <div class="t-text-sm t-leading-none">{{ storeView.i18n.fullCountryName }}</div>
-        </a>
+        <language-button :store-view="storeView" :is-current="storeView.storeId === currentStoreView.storeId" />
       </div>
     </div>
   </modal>
@@ -27,13 +19,13 @@
 <script>
 import config from 'config'
 import Modal from 'theme/components/core/Modal.vue'
-import FlagIcon from 'theme/components/core/blocks/FlagIcon'
+import LanguageButton from 'theme/components/core/blocks/Switcher/LanguageButton'
 import { currentStoreView } from '@vue-storefront/core/lib/multistore'
 
 export default {
   components: {
     Modal,
-    FlagIcon
+    LanguageButton
   },
   data () {
     return {
