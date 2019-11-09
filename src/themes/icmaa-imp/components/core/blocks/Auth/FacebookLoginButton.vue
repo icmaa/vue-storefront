@@ -17,6 +17,10 @@
 import ButtonComponent from 'theme/components/core/blocks/Button'
 import LoaderBackground from 'theme/components/core/LoaderBackground'
 
+import Axios from 'axios'
+import config from 'config'
+import { processLocalizedURLAddress } from '@vue-storefront/core/helpers'
+
 /**
  * We use the FB auth-token based login method usind their JS SDK.
  * We can't use the more save `code-flow` authorization because it's not supported by the SDK.
@@ -70,11 +74,21 @@ export default {
   methods: {
     async authorizeRequest (response) {
       if (this.connected) {
-        const { fields } = this
+        const { fields, version } = this
         const { accessToken } = response.authResponse
 
         /** @todo Make request to API and VSF-Bridge to login the user */
-        // this.process(...)
+        // const { endpoint } = config.icmaa_facebook
+        // const apiUrl = endpoint + '/login'
+        // this.process(
+        //   Axios
+        //     .post(
+        //       processLocalizedURLAddress(apiUrl),
+        //       { accessToken, version }
+        //     )
+        //     .then(resp => resp.data.result)
+        //     .catch(() => [])
+        // )
       }
     },
     toggleLogin () {
