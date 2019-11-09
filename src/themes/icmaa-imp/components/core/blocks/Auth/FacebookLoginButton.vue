@@ -60,12 +60,12 @@ export default {
       loginOptions: { scope: 'email,user_birthday,user_gender', return_scopes: true },
       fields: 'first_name,last_name,email,birthday,gender',
       working: false,
-      connected: false
+      connected: undefined
     }
   },
   computed: {
     visible () {
-      return !(this.connected && this.hideConnected)
+      return !(this.connected === undefined || (this.connected && this.hideConnected))
     },
     disabled () {
       return this.working === true
@@ -78,17 +78,17 @@ export default {
         const { accessToken } = response.authResponse
 
         /** @todo Make request to API and VSF-Bridge to login the user */
-        // const { endpoint } = config.icmaa_facebook
-        // const apiUrl = endpoint + '/login'
-        // this.process(
-        //   Axios
-        //     .post(
-        //       processLocalizedURLAddress(apiUrl),
-        //       { accessToken, version }
-        //     )
-        //     .then(resp => resp.data.result)
-        //     .catch(() => [])
-        // )
+        const { endpoint } = config.icmaa_facebook
+        const apiUrl = endpoint + '/login'
+        this.process(
+          Axios
+            .post(
+              processLocalizedURLAddress(apiUrl),
+              { accessToken, version }
+            )
+            .then(resp => resp.data.result)
+            .catch(() => [])
+        )
       }
     },
     toggleLogin () {
