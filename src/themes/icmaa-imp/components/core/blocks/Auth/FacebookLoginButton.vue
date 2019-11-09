@@ -15,6 +15,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import config from 'config'
 import ButtonComponent from 'theme/components/core/blocks/Button'
 import LoaderBackground from 'theme/components/core/LoaderBackground'
 
@@ -50,11 +51,13 @@ export default {
     LoaderBackground
   },
   data () {
+    const { enabled, appId, version, scope } = config.icmaa_facebook.login
     return {
-      appId: '103608836440301',
-      version: 'v5.0',
+      enabled,
+      appId,
+      version,
       options: {},
-      loginOptions: { scope: 'email,user_birthday,user_gender', return_scopes: true },
+      loginOptions: { scope, return_scopes: true },
       working: false,
       connected: undefined
     }
@@ -62,7 +65,7 @@ export default {
   computed: {
     ...mapGetters({ isLoggedIn: 'user/isLoggedIn' }),
     visible () {
-      return !(this.isLoggedIn || this.connected === undefined || (this.connected && this.hideConnected))
+      return !(!this.enabled || this.isLoggedIn || this.connected === undefined || (this.connected && this.hideConnected))
     },
     disabled () {
       return this.working === true
@@ -178,6 +181,10 @@ export default {
     }
   },
   created () {
+    if (!this.enabled) {
+      return
+    }
+
     const created = new Promise(async resolve => {
       const { appId, version, options } = this
       const sdk = await this.getFbSdk({ appId, version, options })
