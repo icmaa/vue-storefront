@@ -30,7 +30,7 @@ const actions: ActionTree<UserState, RootState> = {
     const apiUrl = processLocalizedURLAddress(endpoint + '/login')
 
     const resp = await Axios
-      .post(apiUrl, { accessToken, version })
+      .post(apiUrl, { 'access_token': accessToken, version })
       .then(resp => resp)
       .catch(e => { throw new Error(e.response.data.result) })
 

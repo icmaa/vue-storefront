@@ -14,6 +14,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import ButtonComponent from 'theme/components/core/blocks/Button'
 import LoaderBackground from 'theme/components/core/LoaderBackground'
 
@@ -59,31 +60,41 @@ export default {
     }
   },
   computed: {
+    ...mapGetters({ isLoggedIn: 'user/isLoggedIn' }),
     visible () {
-      return !(this.connected === undefined || (this.connected && this.hideConnected))
+      return !(this.isLoggedIn || this.connected === undefined || (this.connected && this.hideConnected))
     },
     disabled () {
       return this.working === true
     }
   },
   methods: {
+    onSuccess () {
+      this.$store.dispatch('ui/closeAll')
+      this.$store.dispatch('notification/spawnNotification', {
+        type: 'success',
+        message: this.$t('You are logged in!'),
+        action1: { label: this.$t('OK') }
+      })
+    },
+    onFailure (error) {
+      this.logout()
+        .then(() => {
+          this.$store.dispatch('notification/spawnNotification', {
+            type: 'error',
+            message: error,
+            action1: { label: this.$t('OK') }
+          })
+        })
+    },
     async authorizeRequest (response) {
       if (this.connected) {
         const { version } = this
         const { accessToken } = response.authResponse
 
-        /** @todo Make request to API and VSF-Bridge to login the user */
-        await this.process(
-          this.$store.dispatch('user/facebookLogin', { accessToken, version })
-        ).catch(e => {
-          this.logout().then(() => {
-            this.$store.dispatch('notification/spawnNotification', {
-              type: 'error',
-              message: e,
-              action1: { label: this.$t('OK') }
-            })
-          })
-        })
+        await this.process(this.$store.dispatch('user/facebookLogin', { accessToken, version }))
+          .catch(e => this.onFailure)
+          .then(() => this.onSuccess)
       }
     },
     toggleLogin () {
@@ -173,7 +184,12 @@ export default {
       this.$emit('sdk-init', { FB: sdk })
       resolve()
     })
-    this.process(created)
+
+    this.process(created).then(() => {
+      if (this.connected && !this.isLoggedIn) {
+        this.logout()
+      }
+    })
   }
 }
 </script>

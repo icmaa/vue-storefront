@@ -5,7 +5,7 @@
     </div>
     <base-input
       class="t-mb-4" type="email" name="email" id="email" v-model="email"
-      :placeholder="$t('E-mail address *')"
+      :placeholder="$t('E-mail address') + ' *'"
       :validations="[
         {
           condition: !$v.email.required && $v.email.$error,
@@ -23,7 +23,7 @@
       name="password"
       id="password"
       v-model="password"
-      :placeholder="$t('Password *')"
+      :placeholder="$t('Password') + ' *'"
       :validations="[
         {
           condition: !$v.password.required && $v.password.$error,
