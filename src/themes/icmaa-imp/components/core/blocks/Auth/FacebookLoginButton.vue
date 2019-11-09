@@ -1,5 +1,5 @@
 <template>
-  <button-component v-if="visible" type="facebook" :icon="working ? '' : 'facebook'" icon-set="icmaa" icon-position="left" :disabled="disabled" :class="{ 't-relative': working }" @click="toggleLogin">
+  <button-component v-if="visible" type="facebook" :icon="working ? '' : 'facebook'" icon-set="icmaa" icon-position="left" :disabled="disabled" :class="{ 't-relative': working, 't-opacity-75': disabled }" @click="toggleLogin">
     <template v-if="!connected">
       {{ $t(initialText) }}
     </template>
