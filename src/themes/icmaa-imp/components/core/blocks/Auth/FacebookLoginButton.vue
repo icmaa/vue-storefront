@@ -71,6 +71,8 @@ export default {
   methods: {
     onSuccess () {
       this.$store.dispatch('ui/closeAll')
+      this.$bus.$emit('modal-hide', 'modal-signup')
+
       this.$store.dispatch('notification/spawnNotification', {
         type: 'success',
         message: this.$t('You are logged in!'),
@@ -93,8 +95,8 @@ export default {
         const { accessToken } = response.authResponse
 
         await this.process(this.$store.dispatch('user/facebookLogin', { accessToken, version }))
-          .catch(e => this.onFailure)
-          .then(() => this.onSuccess)
+          .catch(e => this.onFailure(e))
+          .then(() => this.onSuccess())
       }
     },
     toggleLogin () {
