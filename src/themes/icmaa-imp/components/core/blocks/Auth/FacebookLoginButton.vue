@@ -17,10 +17,6 @@
 import ButtonComponent from 'theme/components/core/blocks/Button'
 import LoaderBackground from 'theme/components/core/LoaderBackground'
 
-import Axios from 'axios'
-import config from 'config'
-import { processLocalizedURLAddress } from '@vue-storefront/core/helpers'
-
 /**
  * We use the FB auth-token based login method usind their JS SDK.
  * We can't use the more save `code-flow` authorization because it's not supported by the SDK.
@@ -45,7 +41,7 @@ export default {
     },
     hideConnected: {
       type: Boolean,
-      default: true
+      default: false
     }
   },
   components: {
@@ -58,7 +54,6 @@ export default {
       version: 'v5.0',
       options: {},
       loginOptions: { scope: 'email,user_birthday,user_gender', return_scopes: true },
-      fields: 'first_name,last_name,email,birthday,gender',
       working: false,
       connected: undefined
     }
@@ -74,21 +69,21 @@ export default {
   methods: {
     async authorizeRequest (response) {
       if (this.connected) {
-        const { fields, version } = this
+        const { version } = this
         const { accessToken } = response.authResponse
 
         /** @todo Make request to API and VSF-Bridge to login the user */
-        const { endpoint } = config.icmaa_facebook
-        const apiUrl = endpoint + '/login'
-        this.process(
-          Axios
-            .post(
-              processLocalizedURLAddress(apiUrl),
-              { accessToken, version }
-            )
-            .then(resp => resp.data.result)
-            .catch(() => [])
-        )
+        await this.process(
+          this.$store.dispatch('user/facebookLogin', { accessToken, version })
+        ).catch(e => {
+          this.logout().then(() => {
+            this.$store.dispatch('notification/spawnNotification', {
+              type: 'error',
+              message: e,
+              action1: { label: this.$t('OK') }
+            })
+          })
+        })
       }
     },
     toggleLogin () {
@@ -174,9 +169,7 @@ export default {
       const { appId, version, options } = this
       const sdk = await this.getFbSdk({ appId, version, options })
       const fbLoginStatus = await this.getFbLoginStatus()
-      if (fbLoginStatus.status === 'connected') {
-        this.connected = true
-      }
+      this.connected = (fbLoginStatus.status === 'connected')
       this.$emit('sdk-init', { FB: sdk })
       resolve()
     })
