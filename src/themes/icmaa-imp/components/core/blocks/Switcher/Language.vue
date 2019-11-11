@@ -1,15 +1,10 @@
 <template>
-  <modal name="modal-switcher" :width="650">
-    <p slot="header">
-      {{ $t('Choose your country') }}
-    </p>
-
-    <div class="t-flex t-flex-wrap">
-      <div class="t-w-1/2 t-p-1">
-        <language-button :store-view="{ url: '/', i18n: { fullCountryName: config.i18n.fullCountryName, defaultCountry: config.i18n.defaultCountry } }" :is-current="config.i18n.defaultCountry === currentStoreView.i18n.defaultCountry" />
-      </div>
-
-      <div class="t-w-1/2 t-p-1" v-for="(storeView, storeCode) in config.storeViews" :key="storeCode" v-if="!storeView.disabled && typeof storeView === 'object' && storeView.i18n">
+  <modal name="modal-switcher" :width="500">
+    <div slot="header">
+      {{ $t('Switch store') }}
+    </div>
+    <div class="t-flex t-flex-wrap t--mx-2 t--mb-4">
+      <div class="t-w-1/2 t-px-2 t-pb-4" v-for="(storeView) in storeViews" :key="storeView.storeCode">
         <language-button :store-view="storeView" :is-current="storeView.storeId === currentStoreView.storeId" />
       </div>
     </div>
@@ -18,33 +13,25 @@
 
 <script>
 import config from 'config'
+import { mapGetters } from 'vuex'
+import { currentStoreView } from '@vue-storefront/core/lib/multistore'
+
 import Modal from 'theme/components/core/Modal.vue'
 import LanguageButton from 'theme/components/core/blocks/Switcher/LanguageButton'
-import { currentStoreView } from '@vue-storefront/core/lib/multistore'
 
 export default {
   components: {
     Modal,
     LanguageButton
   },
-  data () {
-    return {
-      componentLoaded: false
-    }
-  },
   computed: {
+    ...mapGetters({ storeConfigs: 'icmaaConfig/getMap' }),
     currentStoreView () {
       return currentStoreView()
     },
-    config () {
-      return config
+    storeViews () {
+      return this.storeConfigs.map(s => config.storeViews[s.storeCode])
     }
-  },
-  mounted () {
-    this.$nextTick(() => {
-      this.componentLoaded = true
-      this.$bus.$emit('modal-show', 'modal-switcher')
-    })
   },
   methods: {
     close () {
