@@ -76,7 +76,7 @@
       >
         {{ $t('Change my password') }}
       </base-checkbox>
-      <div v-show="profile.changePassword">
+      <div v-if="profile.changePassword">
         <base-input
           type="password"
           name="oldPassword"
@@ -200,47 +200,38 @@ export default {
       this.validation.$touch()
       if (!this.validation.$invalid) {
         /** @todo Submit logic */
+        let customer = Object.assign({}, this.customer, this.profile)
+        // this.$bus.$emit('myAccount-before-updateUser', customer)
       }
 
       return false
+    },
+    initCustomer () {
+      if (this.customer) {
+        const keys = Object.keys(this.profile)
+        this.profile = Object.assign({}, this.profile, pick(this.customer, keys))
+
+        if (this.profile.dob) {
+          this.profile.dob = toDate(this.profile.dob, undefined, 'YYYY-MM-DD HH:mm:ss')
+        }
+
+        if (this.profile.gender) {
+          this.profile.gender = invert(config.icmaa.user.gender_map)[this.profile.gender.toString()]
+        }
+      }
     }
   },
   mounted () {
-    if (this.customer) {
-      const keys = Object.keys(this.profile)
-      this.profile = Object.assign({}, this.profile, pick(this.customer, keys))
-
-      if (this.profile.dob) {
-        this.profile.dob = toDate(this.profile.dob, undefined, 'YYYY-MM-DD HH:mm:ss')
-      }
-
-      if (this.profile.gender) {
-        this.profile.gender = invert(config.icmaa.user.gender_map)[this.profile.gender.toString()]
-      }
-    }
+    this.initCustomer()
   },
-  validations: {
-    profile: {
-      firstname: {
-        required,
-        minLength: minLength(2),
-        unicodeAlpha
-      },
-      lastname: {
-        required,
-        unicodeAlpha
-      },
-      email: {
-        required,
-        email
-      },
-      dob: {
-        required,
-        date
-      },
-      gender: {
-        required
-      },
+  beforeMount () {
+    this.$bus.$on('user-after-loggedin', this.initCustomer)
+  },
+  beforeDestroy () {
+    this.$bus.$off('user-after-loggedin', this.initCustomer)
+  },
+  validations () {
+    const password = this.profile.changePassword ? {
       oldPassword: {
         required
       },
@@ -250,6 +241,32 @@ export default {
       rPassword: {
         required,
         sameAsPassword: sameAs('password')
+      }
+    } : {}
+
+    return {
+      profile: {
+        firstname: {
+          required,
+          minLength: minLength(2),
+          unicodeAlpha
+        },
+        lastname: {
+          required,
+          unicodeAlpha
+        },
+        email: {
+          required,
+          email
+        },
+        dob: {
+          required,
+          date
+        },
+        gender: {
+          required
+        },
+        ...password
       }
     }
   }
