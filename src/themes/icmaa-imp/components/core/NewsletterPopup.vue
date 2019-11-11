@@ -1,5 +1,5 @@
 <template>
-  <modal name="modal-newsletter" :title="$t('Newsletter')" width="400">
+  <modal name="modal-newsletter" :title="$t('Newsletter')" :width="400">
     <form @submit.prevent="subscribe(onSuccesfulSubmission)" novalidate>
       <p class="t-text-sm t-mb-4">
         {{ $t('Sign up to our newsletter and receive a coupon for 10% off!') }}
