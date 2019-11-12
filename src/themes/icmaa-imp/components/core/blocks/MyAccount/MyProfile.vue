@@ -231,14 +231,16 @@ export default {
         }
 
         let customer = Object.assign({}, this.customer, profile)
-        this.$bus.$emit('myAccount-before-updateUser', customer)
 
+        let newPassword = false
         if (this.profile.changePassword) {
-          this.$bus.$emit('myAccount-before-changePassword', {
+          newPassword = {
             currentPassword: this.profile.oldPassword,
             newPassword: this.profile.password
-          })
+          }
         }
+
+        this.$bus.$emit('myAccount-before-updateUser', customer, newPassword)
       }
 
       return false

@@ -4,7 +4,7 @@
       {{ $t('My addresses') }}
     </headline>
 
-    <div class="list t-flex t-flex-wrap t-flex-grow t--m-2 t-mb-4">
+    <div class="list t-flex t-flex-wrap t-flex-grow t--mx-2" v-if="!edit">
       <div v-for="(a, i) in addresses" :key="i" class="t-flex t-w-1/2 t-px-2 t-cursor-pointer" @click="editAddress(a.entity_id)">
         <div class="t-w-full t-text-sm t-leading-snug">
           <p v-if="a.company" v-text="a.company" />
@@ -17,7 +17,7 @@
     </div>
 
     <div class="form" v-if="edit">
-      <form novalidate class="t-flex t-flex-wrap t--mx-2">
+      <form @submit.prevent="submit" novalidate class="t-flex t-flex-wrap t--mx-2">
         <base-input
           name="firstname"
           id="firstname"
@@ -109,9 +109,12 @@
           :label="$t('Telephone')"
           class="t-w-full lg:t-w-1/2 t-px-2 t-mb-4"
         />
-        <div class="t-px-2 t-w-full">
+        <div class="t-px-2 t-w-full t-flex t-flex-wrap">
           <button-component :submit="true" type="primary" class="t-w-full lg:t-w-auto">
             {{ $t('Save address') }}
+          </button-component>
+          <button-component type="ghost" class="t-w-full t-mt-2 lg:t-mt-0 lg:t-ml-4 lg:t-w-auto" @click="back">
+            {{ $t('Back') }}
           </button-component>
         </div>
       </form>
@@ -145,7 +148,7 @@ export default {
   name: 'MyAdresses',
   data () {
     return {
-      edit: undefined,
+      edit: false,
       address: {
         entity_id: '',
         company: '',
@@ -198,11 +201,40 @@ export default {
   },
   methods: {
     editAddress (entity_id) {
-      this.edit = entity_id
+      this.edit = true
       this.address = Object.assign({}, this.address, pick(
         this.customer.addresses.find(a => a.entity_id === entity_id),
         ...Object.keys(this.address)
       ))
+    },
+    submit () {
+      this.validation.$touch()
+      if (!this.validation.$invalid) {
+        let address = this.address
+        let customer = this.customer
+
+        customer.addresses = customer.addresses.map(a => a.entity_id === address.entity_id ? address : a)
+
+        this.$bus.$emit('myAccount-before-updateUser', customer)
+      }
+
+      return false
+    },
+    back () {
+      this.edit = false
+      this.address = {
+        entity_id: '',
+        company: '',
+        prefix: '',
+        firstname: '',
+        lastname: '',
+        suffix: '',
+        street: [''],
+        postcode: '',
+        city: '',
+        country_id: '',
+        telephone: ''
+      }
     }
   },
   validations: {

@@ -12,8 +12,12 @@
 </template>
 
 <script>
+import i18n from '@vue-storefront/i18n'
+import Composite from '@vue-storefront/core/mixins/composite'
+import { currentStoreView, localizedRoute } from '@vue-storefront/core/lib/multistore'
+import { Logger } from '@vue-storefront/core/lib/logger'
+
 import Navigation from 'theme/components/core/blocks/MyAccount/Navigation'
-import MyAccount from '@vue-storefront/core/pages/MyAccount'
 import MyProfile from '../components/core/blocks/MyAccount/MyProfile'
 import MyAddresses from '../components/core/blocks/MyAccount/MyAddresses'
 import MyNewsletter from '../components/core/blocks/MyAccount/MyNewsletter'
@@ -23,7 +27,19 @@ import MyRecentlyViewed from '../components/core/blocks/MyAccount/MyRecentlyView
 import NoSSR from 'vue-no-ssr'
 
 export default {
-  mixins: [ MyAccount ],
+  name: 'MyAccount',
+  mixins: [Composite],
+  props: {
+    activeBlock: {
+      type: String,
+      default: 'MyProfile'
+    }
+  },
+  data () {
+    return {
+      navigation: []
+    }
+  },
   components: {
     MyProfile,
     MyAddresses,
@@ -33,6 +49,74 @@ export default {
     MyRecentlyViewed,
     Navigation,
     'no-ssr': NoSSR
+  },
+  beforeMount () {
+    this.$bus.$on('myAccount-before-updateUser', this.onBeforeUpdateUser)
+  },
+  async mounted () {
+    await this.$store.dispatch('user/startSession')
+    if (!this.$store.getters['user/isLoggedIn']) {
+      localStorage.setItem('redirect', this.$route.path)
+      this.$router.push(localizedRoute('/', currentStoreView().storeCode))
+    }
+  },
+  destroyed () {
+    this.$bus.$off('myAccount-before-updateUser', this.onBeforeUpdateUser)
+  },
+  methods: {
+    async onBeforeUpdateUser (updatedData, passwordData = false) {
+      if (updatedData) {
+        this.$bus.$emit('notification-progress-start')
+
+        if (passwordData) {
+          passwordData = await this.$store.dispatch('user/changePassword', passwordData)
+            .catch(err => {
+              this.showNotification(i18n.t('An error occured:') + err.message, 'error')
+              Logger.error(err)()
+            })
+            .then(response => {
+              if (response.resultCode === 200) {
+                return true
+              }
+            })
+
+          if (!passwordData) {
+            this.$bus.$emit('notification-progress-stop', {})
+            return
+          }
+        }
+
+        await this.$store.dispatch('user/update', { customer: updatedData })
+          .catch(err => {
+            this.showNotification(i18n.t('An error occured:') + err.message, 'error')
+            Logger.error(err)()
+          })
+          .then(response => {
+            if (response.resultCode === 200) {
+              this.showNotification(i18n.t('Account data has successfully been updated'), 'success')
+            }
+          })
+
+        this.$bus.$emit('notification-progress-stop', {})
+      }
+    },
+    showNotification (message, type) {
+      this.$store.dispatch('notification/spawnNotification', {
+        type, message, action1: { label: i18n.t('OK') }
+      })
+    }
+  },
+  metaInfo () {
+    return {
+      title: this.$route.meta.title || i18n.t('My Account'),
+      meta: this.$route.meta.description ? [{ vmid: 'description', name: 'description', content: this.$route.meta.description }] : []
+    }
+  },
+  asyncData ({ store, route, context }) { // this is for SSR purposes to prefetch data
+    return new Promise((resolve, reject) => {
+      if (context) context.output.cacheTags.add(`my-account`)
+      resolve()
+    })
   }
 }
 </script>

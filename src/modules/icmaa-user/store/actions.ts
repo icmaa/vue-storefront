@@ -2,9 +2,12 @@ import { ActionTree } from 'vuex'
 import { StorageManager } from '@vue-storefront/core/lib/storage-manager'
 import RootState from '@vue-storefront/core/types/RootState'
 import UserState from '../types/UserState'
+import { UserProfile } from '@vue-storefront/core/modules/user/types/UserProfile'
+import { UserService } from '@vue-storefront/core/data-resolver'
 import * as types from './mutation-types'
 import * as userTypes from '@vue-storefront/core/modules/user/store/mutation-types'
 import { userHooksExecutors, userHooks } from '@vue-storefront/core/modules/user/hooks'
+import Task from '@vue-storefront/core/lib/sync/types/Task'
 
 import config from 'config'
 import Axios from 'axios'
@@ -12,6 +15,25 @@ import isEmpty from 'lodash-es/isEmpty'
 import { processLocalizedURLAddress } from '@vue-storefront/core/helpers'
 
 const actions: ActionTree<UserState, RootState> = {
+  async update ({ dispatch }, profile: UserProfile): Promise<Task> {
+    const resp = await UserService.updateProfile(profile)
+    if (resp.resultCode === 200) {
+      dispatch('user/setCurrentUser', resp.result, { root: true })
+    }
+
+    return resp
+  },
+  async changePassword ({ dispatch, getters }, passwordData): Promise<Task> {
+    const resp = await UserService.changePassword(passwordData)
+    if (resp.code === 200) {
+      await dispatch('login', {
+        username: getters.getUserEmail,
+        password: passwordData.newPassword
+      })
+    }
+
+    return resp
+  },
   setCluster ({ commit }, cluster) {
     if (!isEmpty(cluster) || cluster === false) {
       commit(types.USER_ADD_SESSION_DATA, { key: 'cluster', value: cluster })
