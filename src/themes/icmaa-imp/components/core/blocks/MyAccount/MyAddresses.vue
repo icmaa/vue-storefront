@@ -3,7 +3,8 @@
     <headline icon="home">
       {{ $t('My addresses') }}
     </headline>
-    <div class="list t-flex t-flex-wrap t-flex-grow t--m-2">
+
+    <div v-if="!edit" class="list t-flex t-flex-wrap t-flex-grow t--m-2">
       <div v-for="(a, i) in addresses" :key="i" class="t-flex t-w-1/2 t-px-2">
         <div class="t-w-full t-text-sm t-leading-snug">
           <p v-if="a.company" v-text="a.company" />
@@ -13,6 +14,102 @@
           {{ a.country.name }}
         </div>
       </div>
+    </div>
+
+    <div class="form" v-if="edit">
+      <form novalidate class="t-flex t-flex-wrap t--mx-2">
+        <base-input
+          name="firstname"
+          id="firstname"
+          autocomplete="given-name"
+          v-model="address.firstname"
+          :label="$t('First name') + ' *'"
+          :validations="[
+            {
+              condition: !validation.firstname.required && validation.firstname.$error,
+              text: $t('Field is required.')
+            }
+          ]"
+          class="t-w-1/2 lg:t-w-1/4 t-px-2 t-mb-4"
+        />
+        <base-input
+          name="lastname"
+          id="lastname"
+          autocomplete="family-name"
+          v-model="address.lastname"
+          :label="$t('Last name') + ' *'"
+          :validations="[{
+            condition: !validation.lastname.required && validation.lastname.$error,
+            text: $t('Field is required.')
+          }]"
+          class="t-w-1/2 lg:t-w-1/4 t-px-2 t-mb-4"
+        />
+        <base-input
+          name="company"
+          id="company"
+          autocomplete="company"
+          v-model="address.company"
+          :label="$t('Company name')"
+          class="t-w-full lg:t-w-1/2 t-px-2 t-mb-4"
+        />
+        <base-input
+          :name="`street`"
+          :id="`street`"
+          autocomplete="street"
+          v-model="address.street"
+          :label="$t('Street') + ' *'"
+          :validations="[{
+            condition: !validation.street.required && validation.street.$error,
+            text: $t('Field is required.')
+          }]"
+          class="t-w-full lg:t-w-1/2 t-px-2 t-mb-4"
+        />
+        <base-input
+          name="city"
+          id="city"
+          autocomplete="city"
+          v-model="address.city"
+          :label="$t('City') + ' *'"
+          :validations="[{
+            condition: !validation.city.required && validation.city.$error,
+            text: $t('Field is required.')
+          }]"
+          class="t-w-full lg:t-w-1/2 t-px-2 t-mb-4"
+        />
+        <base-input
+          name="postcode"
+          id="postcode"
+          autocomplete="postcode"
+          v-model="address.postcode"
+          :label="$t('Postcode') + ' *'"
+          :validations="[{
+            condition: !validation.postcode.required && validation.postcode.$error,
+            text: $t('Field is required.')
+          }]"
+          class="t-w-1/2 lg:t-w-1/4 t-px-2 t-mb-4"
+        />
+        <base-select
+          name="country_id"
+          id="country_id"
+          v-model="address.country_id"
+          :options="countryOptions"
+          :label="$t('Country') + ' *'"
+          :initial-option-text="$t('Country')"
+          :validations="[{
+            condition: !validation.country_id.required && validation.country_id.$error,
+            text: $t('Field is required.')
+          }]"
+          class="t-w-1/2 lg:t-w-1/4 t-px-2 t-mb-4"
+        />
+        <base-input
+          name="telephone"
+          id="telephone"
+          autocomplete="telephone"
+          v-model="address.telephone"
+          :label="$t('Telephone')"
+          class="t-w-full lg:t-w-1/2 t-px-2 t-mb-4"
+        />
+      </form>
     </div>
   </div>
 </template>
@@ -43,8 +140,18 @@ export default {
   name: 'MyAdresses',
   data () {
     return {
+      edit: 1,
       address: {
-
+        company: '',
+        prefix: '',
+        firstname: '',
+        lastname: '',
+        suffix: '',
+        street: '',
+        postcode: '',
+        city: '',
+        country_id: '',
+        telephone: ''
       },
       countries: Countries
     }
@@ -85,22 +192,18 @@ export default {
   },
   validations: {
     address: {
-      firstName: {
+      firstname: {
         required,
         minLength: minLength(2),
         unicodeAlpha
       },
-      lastName: {
+      lastname: {
         required
       },
-      country: {
+      country_id: {
         required
       },
       street: {
-        required,
-        unicodeAlphaNum
-      },
-      house: {
         required,
         unicodeAlphaNum
       },
@@ -111,6 +214,10 @@ export default {
       city: {
         required,
         unicodeAlpha
+      },
+      telephone: {
+        required,
+        unicodeAlphaNum
       }
     }
   }
