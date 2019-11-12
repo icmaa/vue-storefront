@@ -1,14 +1,18 @@
 <template>
-  <div class="">
-    <h1>{{ $t('My profile') }}</h1>
-    <form @submit.prevent="submit" novalidate>
+  <div class="t-p-4 t-bg-white">
+    <h1 class="t-flex t-items-center t-mt-2 t-mb-6 t-text-2xl">
+      <material-icon icon="account_circle" size="lg" class="t-mr-2" />
+      {{ $t('My profile') }}
+    </h1>
+    <form @submit.prevent="submit" novalidate class="t-flex t-flex-wrap t--mx-2">
       <base-input
         type="email"
         name="email"
+        id="email"
         autocomplete="email"
         v-model="profile.email"
         focus
-        :placeholder="$t('E-mail address') + ' *'"
+        :label="$t('E-mail address') + ' *'"
         :validations="[
           {
             condition: !validation.email.required && validation.email.$error,
@@ -19,45 +23,55 @@
             text: $t('Please provide valid e-mail address.')
           }
         ]"
+        class="t-w-full lg:t-w-1/2 t-px-2 t-mb-4"
       />
       <base-input
         name="first-name"
+        id="first-name"
         autocomplete="given-name"
         v-model="profile.firstname"
-        :placeholder="$t('First name') + ' *'"
+        :label="$t('First name') + ' *'"
         :validations="[
           {
             condition: !validation.firstname.required && validation.firstname.$error,
             text: $t('Field is required.')
           }
         ]"
+        class="t-w-full lg:t-w-1/2 t-px-2 t-mb-4"
       />
       <base-input
         name="last-name"
+        id="last-name"
         autocomplete="family-name"
         v-model="profile.lastname"
-        :placeholder="$t('Last name') + ' *'"
+        :label="$t('Last name') + ' *'"
         :validations="[{
           condition: !validation.lastname.required && validation.lastname.$error,
           text: $t('Field is required.')
         }]"
+        class="t-w-full lg:t-w-1/2 t-px-2 t-mb-4"
       />
       <base-select
         name="gender"
+        id="gender"
         v-model="profile.gender"
         :options="genderOptions"
-        :initial-option-text="$t('Gender') + ' *'"
+        :label="$t('Gender') + ' *'"
+        :initial-option-text="$t('Gender')"
         :validations="[{
           condition: !validation.gender.required && validation.gender.$error,
           text: $t('Field is required.')
         }]"
+        class="t-w-full lg:t-w-1/2 t-px-2 t-mb-4"
       />
       <base-input
         name="dob"
+        id="dob"
         autocomplete="bday"
         mask="date"
         v-model="profile.dob"
-        :placeholder="$t('Date of birth') + ' (DD.MM.YYYY) *'"
+        :label="$t('Date of birth') + ' *'"
+        :placeholder="'DD.MM.YYYY'"
         :validations="[
           {
             condition: !validation.dob.required && validation.dob.$error,
@@ -68,22 +82,25 @@
             text: $t('Use a valid date.')
           }
         ]"
+        class="t-w-full lg:t-w-1/2 t-px-2 t-mb-4"
       />
       <base-checkbox
         name="changePassword"
         id="changePassword"
         v-model="profile.changePassword"
+        class="t-w-full t-px-2 t-mb-4"
       >
         {{ $t('Change my password') }}
       </base-checkbox>
-      <div v-if="profile.changePassword">
+      <div v-if="profile.changePassword" class="t-flex t-flex-wrap t-flex-grow">
         <base-input
           type="password"
           name="oldPassword"
+          id="oldPassword"
           ref="oldPassword"
           autocomplete="old-password"
           v-model="profile.oldPassword"
-          :placeholder="$t('Current password') + ' *'"
+          :label="$t('Current password') + ' *'"
           :validations="[
             {
               condition: !validation.oldPassword.required && validation.oldPassword.$error,
@@ -94,14 +111,16 @@
               text: $t('Password must have at least 8 letters.')
             }
           ]"
+          class="t-w-full t-px-2 t-mb-4"
         />
         <base-input
           type="password"
           name="password"
+          id="password"
           ref="password"
           autocomplete="new-password"
           v-model="profile.password"
-          :placeholder="$t('Password') + ' *'"
+          :label="$t('Password') + ' *'"
           :validations="[
             {
               condition: !validation.password.required && validation.password.$error,
@@ -112,13 +131,15 @@
               text: $t('Password must have at least 8 letters.')
             }
           ]"
+          class="t-w-full lg:t-w-1/2 t-px-2 t-mb-4"
         />
         <base-input
           type="password"
           name="rPassword"
+          id="rPassword"
           autocomplete="new-password"
           v-model="profile.rPassword"
-          :placeholder="$t('Repeat password') + ' *'"
+          :label="$t('Repeat password') + ' *'"
           :validations="[
             {
               condition: !validation.rPassword.required && validation.rPassword.$error,
@@ -129,12 +150,14 @@
               text: $t('Passwords must be identical.')
             }
           ]"
+          class="t-w-full lg:t-w-1/2 t-px-2 t-mb-4"
         />
       </div>
-
-      <button-component :submit="true" type="primary">
-        {{ $t('Update my profile') }}
-      </button-component>
+      <div class="t-px-2 t-w-full">
+        <button-component :submit="true" type="primary" class="t-w-full lg:t-w-auto">
+          {{ $t('Update my profile') }}
+        </button-component>
+      </div>
     </form>
   </div>
 </template>
@@ -152,6 +175,7 @@ import { unicodeAlpha, unicodeAlphaNum } from '@vue-storefront/core/helpers/vali
 import { date } from 'icmaa-config/helpers/validators'
 import { toDate } from 'icmaa-config/helpers/datetime'
 
+import MaterialIcon from 'theme/components/core/blocks/MaterialIcon'
 import BaseCheckbox from 'theme/components/core/blocks/Form/BaseCheckbox'
 import BaseSelect from 'theme/components/core/blocks/Form/BaseSelect'
 import BaseInput from 'theme/components/core/blocks/Form/BaseInput'
@@ -160,6 +184,7 @@ import ButtonComponent from 'theme/components/core/blocks/Button'
 export default {
   name: 'MyProfile',
   components: {
+    MaterialIcon,
     BaseCheckbox,
     BaseSelect,
     BaseInput,
