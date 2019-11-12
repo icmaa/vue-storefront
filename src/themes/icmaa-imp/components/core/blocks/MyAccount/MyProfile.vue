@@ -199,9 +199,15 @@ export default {
     submit () {
       this.validation.$touch()
       if (!this.validation.$invalid) {
-        /** @todo Submit logic */
         let customer = Object.assign({}, this.customer, this.profile)
-        // this.$bus.$emit('myAccount-before-updateUser', customer)
+        this.$bus.$emit('myAccount-before-updateUser', customer)
+
+        if (this.profile.changePassword) {
+          this.$bus.$emit('myAccount-before-changePassword', {
+            currentPassword: this.profile.oldPassword,
+            newPassword: this.profile.password
+          })
+        }
       }
 
       return false
