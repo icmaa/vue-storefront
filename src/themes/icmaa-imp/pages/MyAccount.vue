@@ -15,7 +15,7 @@
 import Navigation from 'theme/components/core/blocks/MyAccount/Navigation'
 import MyAccount from '@vue-storefront/core/pages/MyAccount'
 import MyProfile from '../components/core/blocks/MyAccount/MyProfile'
-import MyShippingDetails from '../components/core/blocks/MyAccount/MyShippingDetails'
+import MyAddresses from '../components/core/blocks/MyAccount/MyAddresses'
 import MyNewsletter from '../components/core/blocks/MyAccount/MyNewsletter'
 import MyOrders from '../components/core/blocks/MyAccount/MyOrders'
 import MyOrder from '../components/core/blocks/MyAccount/MyOrder'
@@ -26,7 +26,7 @@ export default {
   mixins: [ MyAccount ],
   components: {
     MyProfile,
-    MyShippingDetails,
+    MyAddresses,
     MyNewsletter,
     MyOrders,
     MyOrder,

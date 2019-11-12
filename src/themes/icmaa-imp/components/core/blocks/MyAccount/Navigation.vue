@@ -46,7 +46,7 @@ export default {
       navigation: [
         { title: this.$t('My profile'), icon: 'account_circle', link: '/my-account' },
         { title: this.$t('My orders'), icon: 'local_mall', link: '/my-account/orders' },
-        { title: this.$t('My addresses'), icon: 'home', link: '/my-account/shipping-details' },
+        { title: this.$t('My addresses'), icon: 'home', link: '/my-account/addresses' },
         { title: this.$t('My newsletter'), icon: 'mail', link: '/my-account/newsletter' },
         { title: this.$t('My product reviews'), icon: 'subject', link: '/my-account/reviews' },
         { title: this.$t('My coupons'), icon: 'receipt', link: '/my-account/coupons' }
