@@ -199,7 +199,13 @@ export default {
     submit () {
       this.validation.$touch()
       if (!this.validation.$invalid) {
-        let customer = Object.assign({}, this.customer, this.profile)
+        let profile = this.profile
+        if (profile.gender) {
+          const gender = config.icmaa.user.gender_map[profile.gender]
+          profile = Object.assign({}, profile, { gender })
+        }
+
+        let customer = Object.assign({}, this.customer, profile)
         this.$bus.$emit('myAccount-before-updateUser', customer)
 
         if (this.profile.changePassword) {
