@@ -4,8 +4,8 @@
       {{ $t('My addresses') }}
     </headline>
 
-    <div v-if="!edit" class="list t-flex t-flex-wrap t-flex-grow t--m-2">
-      <div v-for="(a, i) in addresses" :key="i" class="t-flex t-w-1/2 t-px-2">
+    <div class="list t-flex t-flex-wrap t-flex-grow t--m-2 t-mb-4">
+      <div v-for="(a, i) in addresses" :key="i" class="t-flex t-w-1/2 t-px-2 t-cursor-pointer" @click="editAddress(a.entity_id)">
         <div class="t-w-full t-text-sm t-leading-snug">
           <p v-if="a.company" v-text="a.company" />
           <p>{{ a.prefix }} {{ a.firstname }} {{ a.lastname }} {{ a.suffix }}</p>
@@ -53,10 +53,10 @@
           class="t-w-full lg:t-w-1/2 t-px-2 t-mb-4"
         />
         <base-input
-          :name="`street`"
-          :id="`street`"
+          name="street[0]"
+          id="street"
           autocomplete="street"
-          v-model="address.street"
+          v-model="address.street[0]"
           :label="$t('Street') + ' *'"
           :validations="[{
             condition: !validation.street.required && validation.street.$error,
@@ -109,6 +109,11 @@
           :label="$t('Telephone')"
           class="t-w-full lg:t-w-1/2 t-px-2 t-mb-4"
         />
+        <div class="t-px-2 t-w-full">
+          <button-component :submit="true" type="primary" class="t-w-full lg:t-w-auto">
+            {{ $t('Save address') }}
+          </button-component>
+        </div>
       </form>
     </div>
   </div>
@@ -140,14 +145,15 @@ export default {
   name: 'MyAdresses',
   data () {
     return {
-      edit: 1,
+      edit: undefined,
       address: {
+        entity_id: '',
         company: '',
         prefix: '',
         firstname: '',
         lastname: '',
         suffix: '',
-        street: '',
+        street: [''],
         postcode: '',
         city: '',
         country_id: '',
@@ -171,11 +177,11 @@ export default {
     }),
     addresses () {
       return this.customer.addresses.map(address => {
-        let { company, prefix, firstname, lastname, suffix, postcode, city, country_id } = address
+        let { entity_id, company, prefix, firstname, lastname, suffix, postcode, city, country_id } = address
         let country = this.countries.find(c => c.code === country_id)
         let street = address.street.filter(s => s.length > 0).join('<br>')
 
-        return { company, prefix, firstname, lastname, suffix, street, postcode, city, country }
+        return { entity_id, company, prefix, firstname, lastname, suffix, street, postcode, city, country }
       })
     },
     validation () {
@@ -188,6 +194,15 @@ export default {
           label: item.name
         }
       })
+    }
+  },
+  methods: {
+    editAddress (entity_id) {
+      this.edit = entity_id
+      this.address = Object.assign({}, this.address, pick(
+        this.customer.addresses.find(a => a.entity_id === entity_id),
+        ...Object.keys(this.address)
+      ))
     }
   },
   validations: {
