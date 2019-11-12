@@ -70,14 +70,14 @@ export default {
 
         if (passwordData) {
           passwordData = await this.$store.dispatch('user/changePassword', passwordData)
-            .catch(err => {
-              this.showNotification(i18n.t('An error occured:') + err.message, 'error')
-              Logger.error(err)()
-            })
             .then(response => {
               if (response.resultCode === 200) {
                 return true
               }
+            })
+            .catch(err => {
+              this.showNotification(i18n.t('An error occured:') + err.message, 'error')
+              Logger.error('Error while saving password:', 'MyAccount', err)()
             })
 
           if (!passwordData) {
@@ -87,14 +87,14 @@ export default {
         }
 
         await this.$store.dispatch('user/update', { customer: updatedData })
-          .catch(err => {
-            this.showNotification(i18n.t('An error occured:') + err.message, 'error')
-            Logger.error(err)()
-          })
           .then(response => {
             if (response.resultCode === 200) {
               this.showNotification(i18n.t('Account data has successfully been updated'), 'success')
             }
+          })
+          .catch(err => {
+            Logger.error('Error while update user:', 'MyAccount', err)()
+            this.showNotification(i18n.t('An error occured:') + err.message, 'error')
           })
 
         this.$bus.$emit('notification-progress-stop', {})

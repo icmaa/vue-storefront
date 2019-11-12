@@ -16,23 +16,27 @@ import { processLocalizedURLAddress } from '@vue-storefront/core/helpers'
 
 const actions: ActionTree<UserState, RootState> = {
   async update ({ dispatch }, profile: UserProfile): Promise<Task> {
-    const resp = await UserService.updateProfile(profile)
-    if (resp.resultCode === 200) {
-      dispatch('user/setCurrentUser', resp.result, { root: true })
-    }
-
-    return resp
+    return UserService.updateProfile(profile)
+      .then(resp => {
+        if (resp.resultCode === 200) {
+          dispatch('user/setCurrentUser', resp.result, { root: true })
+        } else {
+          throw new Error('Error while saving customer data')
+        }
+        return resp
+      })
   },
   async changePassword ({ dispatch, getters }, passwordData): Promise<Task> {
-    const resp = await UserService.changePassword(passwordData)
-    if (resp.code === 200) {
-      await dispatch('login', {
-        username: getters.getUserEmail,
-        password: passwordData.newPassword
+    return UserService.changePassword(passwordData)
+      .then(async resp => {
+        if (resp.code === 200) {
+          await dispatch('login', {
+            username: getters.getUserEmail,
+            password: passwordData.newPassword
+          })
+        }
+        return resp
       })
-    }
-
-    return resp
   },
   setCluster ({ commit }, cluster) {
     if (!isEmpty(cluster) || cluster === false) {
