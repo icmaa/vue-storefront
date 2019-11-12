@@ -1,9 +1,8 @@
 <template>
   <div class="t-p-4 t-bg-white">
-    <h1 class="t-flex t-items-center t-mt-2 t-mb-6 t-text-2xl">
-      <material-icon icon="account_circle" size="lg" class="t-mr-2" />
+    <headline icon="account_circle">
       {{ $t('My profile') }}
-    </h1>
+    </headline>
     <form @submit.prevent="submit" novalidate class="t-flex t-flex-wrap t--mx-2">
       <base-input
         type="email"
@@ -111,8 +110,9 @@
               text: $t('Password must have at least 8 letters.')
             }
           ]"
-          class="t-w-full t-px-2 t-mb-4"
+          class="t-w-full lg:t-w-1/2 t-px-2 t-mb-4"
         />
+        <div class="t-w-full" />
         <base-input
           type="password"
           name="password"
@@ -175,7 +175,7 @@ import { unicodeAlpha, unicodeAlphaNum } from '@vue-storefront/core/helpers/vali
 import { date } from 'icmaa-config/helpers/validators'
 import { toDate } from 'icmaa-config/helpers/datetime'
 
-import MaterialIcon from 'theme/components/core/blocks/MaterialIcon'
+import Headline from 'theme/components/core/blocks/MyAccount/Headline'
 import BaseCheckbox from 'theme/components/core/blocks/Form/BaseCheckbox'
 import BaseSelect from 'theme/components/core/blocks/Form/BaseSelect'
 import BaseInput from 'theme/components/core/blocks/Form/BaseInput'
@@ -184,7 +184,7 @@ import ButtonComponent from 'theme/components/core/blocks/Button'
 export default {
   name: 'MyProfile',
   components: {
-    MaterialIcon,
+    Headline,
     BaseCheckbox,
     BaseSelect,
     BaseInput,

@@ -1,12 +1,10 @@
 <template>
-  <div class="mb35">
+  <div class="t-p-4 t-bg-white">
+    <headline icon="home">
+      {{ $t('My shipping details') }}
+    </headline>
     <!-- My shipping details header -->
     <div class="row mb15">
-      <div class="col-xs-12 col-sm-6" :class="{ 'cl-accent' : !isEdited }">
-        <h3 class="m0 mb5">
-          {{ $t('My shipping details') }}
-        </h3>
-      </div>
       <div class="col-xs-12 col-sm-6">
         <div class="lh30 flex end-md" v-if="!isEdited">
           <a href="#" class="cl-tertiary flex" @click.prevent="edit">
@@ -232,6 +230,7 @@ import { required, minLength } from 'vuelidate/lib/validators'
 import MyShippingDetails from '@vue-storefront/core/compatibility/components/blocks/MyAccount/MyShippingDetails'
 import { unicodeAlpha, unicodeAlphaNum } from '@vue-storefront/core/helpers/validators'
 
+import Headline from 'theme/components/core/blocks/MyAccount/Headline'
 import ButtonFull from 'theme/components/theme/ButtonFull'
 import Tooltip from 'theme/components/core/Tooltip'
 import BaseCheckbox from 'theme/components/core/blocks/Form/BaseCheckbox'
@@ -240,6 +239,7 @@ import BaseSelect from 'theme/components/core/blocks/Form/BaseSelect'
 
 export default {
   components: {
+    Headline,
     ButtonFull,
     Tooltip,
     BaseCheckbox,

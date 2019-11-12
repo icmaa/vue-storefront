@@ -2,7 +2,7 @@
   <div id="my_account" class="t-container">
     <div class="t-flex t-flex-wrap t-items-start t-px-4 t--mx-2 t-py-4">
       <navigation class="customer-account t-flex t-px-2 t-mb-4 lg:t-mb-0 lg:t-w-1/4" />
-      <div class="lg:t-w-3/4 t-px-2">
+      <div class="t-w-full lg:t-w-3/4 t-px-2">
         <no-ssr>
           <component :is="this.$props.activeBlock" />
         </no-ssr>
