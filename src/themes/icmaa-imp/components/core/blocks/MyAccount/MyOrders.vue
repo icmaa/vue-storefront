@@ -1,165 +1,95 @@
 <template>
-  <div class="mb35">
-    <!-- My orders header -->
-    <div class="row mb15">
-      <div class="col-xs-12 col-sm-6">
-        <h3 class="m0 mb5">
-          {{ $t('My orders') }}
-        </h3>
-      </div>
-    </div>
+  <div class="t-p-4 t-bg-white">
+    <headline icon="local_mall">
+      {{ $t('My orders') }}
+    </headline>
     <!-- My orders body -->
-    <div class="row">
-      <div class="col-xs-12" v-show="!isHistoryEmpty">
-        <table class="brdr-1 brdr-cl-bg-secondary">
+    <div class="t-text-sm">
+      <div class="" v-show="!isHistoryEmpty">
+        <table class="t-w-full t-table-auto t-text-left">
           <thead>
             <tr>
-              <th class="p20 serif lh20">
+              <th v-show="viewport !== 'xs'" class="">
                 {{ $t('Order ID') }}
               </th>
-              <th class="p20 serif lh20 hide-on-xs">
-                {{ $t('Date and time') }}
+              <th class="">
+                {{ $t('Date') }}
               </th>
-              <th class="p20 serif lh20 hide-on-xs">
-                {{ $t('Author') }}
-              </th>
-              <th class="p20 serif lh20 hide-on-xs">
+              <th class="">
                 {{ $t('Value') }}
               </th>
-              <th class="p20 serif lh20 hide-on-xs">
-                {{ $t('Type') }}
-              </th>
-              <th class="p20 serif lh20 hide-on-xs">
+              <th class="">
                 {{ $t('Status') }}
               </th>
-              <th class="p20 serif lh20">
-&nbsp;
+              <th class="">
+                &nbsp;
               </th>
             </tr>
-          </thead>
+          </thead class="">
           <tbody>
-            <tr class="brdr-top-1 brdr-cl-bg-secondary" v-for="order in ordersHistory" :key="order.entity_id">
-              <td class="fs-medium lh25">
-                #{{ order.increment_id }}
-              </td>
-              <td class="fs-medium lh25 hide-on-xs">
-                {{ order.created_at | date }}
-              </td>
-              <td class="fs-medium lh25 hide-on-xs">
-                {{ order.customer_firstname }} {{ order.customer_lastname }}
-              </td>
-              <td class="fs-medium lh25 hide-on-xs">
-                {{ order.grand_total | price }}
-              </td>
-              <td class="fs-medium lh25 hide-on-xs">
-                {{ $t('Purchase') }}
-              </td>
-              <td class="fs-medium lh25 hide-on-xs">
-                {{ order.status | capitalize }}
-              </td>
-              <td class="fs-medium lh25">
-                <span class="relative dropdown">
-                  <i class="material-icons cl-secondary pointer">more_horiz</i>
-                  <div class="dropdown-content bg-cl-primary align-left sans-serif lh20 weight-400 fs-medium-small py5">
-                    <router-link class="no-underline block py10 px15" :to="localizedRoute(`/my-account/orders/${order.entity_id}`)">
-                      {{ $t('View order') }}
-                    </router-link>
-                    <a href="#" class="no-underline block py10 px15" @click.prevent="remakeOrder(skipGrouped(order.items))">{{ $t('Remake order') }}</a>
-                  </div>
-                </span>
-              </td>
-            </tr>
+            <template v-for="order in ordersHistory">
+              <tr :order="order" :key="order.entity_id" class="t-cursor-pointer t-border-t t-border-base-lighter t-px-2 t-py-3" @click="redirect(order.entity_id)">
+                <td v-show="viewport !== 'xs'" class="t-py-2">
+                  #{{ order.increment_id }}
+                </td>
+                <td class="t-py-2">
+                  {{ order.created_at | date }}
+                </td>
+                <td class="t-py-2">
+                  {{ order.grand_total | price }}
+                </td>
+                <td class="t-py-2 t-flex t-items-center">
+                  <!-- {{ order.status | capitalize }}-->
+                  <span class="status" />
+                </td>
+                <td class="">
+                  <material-icon icon="chevron_right" size="md" class="t-align-middle" />
+                </td>
+              </tr>
+            </template>
           </tbody>
         </table>
       </div>
-      <div class="col-xs-12 h4" v-show="isHistoryEmpty">
+      <div class="" v-show="isHistoryEmpty">
         <p>{{ $t('No orders yet') }}</p>
       </div>
+      <!-- Custom design -->
+      <div />
+
+      <div />
     </div>
   </div>
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+import Headline from 'theme/components/core/blocks/MyAccount/Headline'
 import UserOrder from '@vue-storefront/core/modules/order/components/UserOrdersHistory'
+import MaterialIcon from 'theme/components/core/blocks/MaterialIcon'
 
 export default {
-  mixins: [UserOrder]
+  mixins: [UserOrder],
+  components: {
+    Headline,
+    MaterialIcon
+  },
+  computed: {
+    ...mapGetters({ viewport: 'ui/getViewport' })
+  },
+  methods: {
+    redirect (orderId) {
+      this.$router.push(this.localizedRoute(`/my-account/orders/${orderId}`))
+    }
+  }
 }
 </script>
 
 <style lang="scss" scoped>
-@import '~theme/css/base/global_vars';
-@import '~theme/css/variables/colors';
-@import '~theme/css/helpers/functions/color';
-$color-icon-hover: color(secondary, $colors-background);
-
-table {
-  border-collapse: collapse;
-  width: 100%;
-
-  th, td {
-    text-align: left;
-    padding: 20px;
-
-    @media (max-width: 1199px) {
-      padding: 10px;
-    }
-
-    @media (max-width: 767px) {
-      text-align: center;
-    }
-
-    &.hide-on-xs {
-
-      @media (max-width: 767px) {
-        display: none;
-      }
-
-    }
-
-  }
-
-  i {
-    vertical-align: middle;
-  }
-
+.status {
+  height: 20px;
+  width: 20px;
+  background-color: greenyellow;
+  border-radius: 50%;
+  display: inline-block;
 }
-
-.dropdown {
-  display: block;
-  margin: -20px;
-  padding: 20px;
-
-  @media (max-width: 1199px) {
-    margin: -10px;
-    padding: 10px;
-  }
-
-  .dropdown-content {
-    display: none;
-    position: absolute;
-    right: 0;
-    top: 100%;
-    width: 160px;
-    z-index: 1;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
-  }
-
-  a {
-    opacity: .6;
-
-    &:hover,
-    &:focus {
-      background-color: $color-icon-hover;
-      opacity: 1;
-    }
-
-  }
-
-  &:hover .dropdown-content {
-    display: block;
-  }
-
-}
-
 </style>
