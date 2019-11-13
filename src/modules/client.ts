@@ -28,6 +28,7 @@ import { IcmaaAdviceModule } from 'icmaa-advice'
 import { IcmaaMetaModule } from 'icmaa-meta'
 import { IcmaaSpotifyModule } from 'icmaa-spotify'
 import { IcmaaExternalCheckout } from 'icmaa-external-checkout'
+import { IcmaaAmpRendererModule } from 'icmaa-amp-renderer'
 
 import { registerModule } from '@vue-storefront/core/lib/modules'
 
@@ -62,6 +63,7 @@ export function registerClientModules () {
   registerModule(IcmaaMetaModule)
   registerModule(IcmaaSpotifyModule)
   registerModule(IcmaaExternalCheckout)
+  registerModule(IcmaaAmpRendererModule)
 }
 
 // Deprecated API, will be removed in 2.0
