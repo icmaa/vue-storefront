@@ -17,7 +17,6 @@ import { processLocalizedURLAddress } from '@vue-storefront/core/helpers'
 
 const actions: ActionTree<UserState, RootState> = {
   async update ({ dispatch }, profile: UserProfile): Promise<Task> {
-    console.log(profile)
     return UserService.updateProfile(profile)
       .then(resp => {
         if (resp.resultCode === 200) {

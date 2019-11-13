@@ -1,7 +1,6 @@
 <template>
   <div class="t-p-4 t-bg-white">
-    <!-- My newsletter header -->
-    <headline icon="account_circle">
+    <headline icon="mail">
       {{ $t('My newsletter') }}
     </headline>
 
