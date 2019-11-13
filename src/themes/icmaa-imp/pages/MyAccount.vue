@@ -66,7 +66,7 @@ export default {
   methods: {
     async onBeforeUpdateUser (updatedData, passwordData = false) {
       if (updatedData) {
-        this.$bus.$emit('notification-progress-start')
+        this.$bus.$emit('notification-progress-start', i18n.t('Please wait'))
 
         if (passwordData) {
           passwordData = await this.$store.dispatch('user/changePassword', passwordData)

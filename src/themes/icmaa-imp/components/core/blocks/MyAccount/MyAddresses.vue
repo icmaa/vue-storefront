@@ -156,7 +156,23 @@
             En cas de problème avec votre livraison, le coursier GLS peut vous contacter par téléphone pour décider d'une nouvelle date de livraison.
           </div>
         </div>
-        <div class="t-px-2 t-w-full t-flex t-flex-wrap">
+        <base-checkbox
+          name="default_billing"
+          id="default_billing"
+          v-model="address.default_billing"
+          class="t-w-full lg:t-w-1/2 t-px-2"
+        >
+          {{ $t('Use as my default billing address') }}
+        </base-checkbox>
+        <base-checkbox
+          name="default_shipping"
+          id="default_shipping"
+          v-model="address.default_shipping"
+          class="t-w-full lg:t-w-1/2 t-px-2 t-mb-4"
+        >
+          {{ $t('Use as my default shipping address') }}
+        </base-checkbox>
+        <div class="t-px-2 t-w-full t-flex t-flex-wrap t-justify-between">
           <button-component :submit="true" type="primary" class="t-w-full lg:t-w-auto">
             {{ $t('Save address') }}
           </button-component>
@@ -183,7 +199,6 @@ import { date } from 'icmaa-config/helpers/validators'
 import { toDate } from 'icmaa-config/helpers/datetime'
 
 import Headline from 'theme/components/core/blocks/MyAccount/Headline'
-import MaterialIcon from 'theme/components/core/blocks/MaterialIcon'
 import BaseCheckbox from 'theme/components/core/blocks/Form/BaseCheckbox'
 import BaseSelect from 'theme/components/core/blocks/Form/BaseSelect'
 import BaseInput from 'theme/components/core/blocks/Form/BaseInput'
@@ -207,15 +222,16 @@ export default {
         postcode: '',
         city: '',
         country_id: '',
-        telephone: ''
+        telephone: '',
+        default_billing: false,
+        default_shipping: false
       },
       countries: Countries
     }
   },
   components: {
     Headline,
-    // MaterialIcon,
-    // BaseCheckbox,
+    BaseCheckbox,
     BaseSelect,
     BaseInput,
     ButtonComponent
@@ -273,6 +289,10 @@ export default {
 
         customer.addresses = customer.addresses.map(a => {
           if (a.entity_id === address.entity_id) {
+            if (customer.addresses.length === 1) {
+              address.default_billing = true
+              address.default_shipping = true
+            }
             return Object.assign(a, address)
           }
 
