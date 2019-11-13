@@ -166,6 +166,7 @@
 import { mapGetters } from 'vuex'
 import config from 'config'
 import i18n from '@vue-storefront/i18n'
+import { currentStoreView } from '@vue-storefront/core/lib/multistore'
 
 import pick from 'lodash-es/pick'
 import invert from 'lodash-es/invert'
@@ -229,6 +230,9 @@ export default {
           const gender = config.icmaa.user.gender_map[profile.gender]
           profile = Object.assign({}, profile, { gender })
         }
+        if (profile.dob) {
+          profile.dob = toDate(profile.dob, 'YYYY-MM-DD HH:mm:ss', currentStoreView().i18n.dateFormat)
+        }
 
         let customer = Object.assign({}, this.customer, profile)
 
@@ -251,7 +255,7 @@ export default {
         this.profile = Object.assign({}, this.profile, pick(this.customer, keys))
 
         if (this.profile.dob) {
-          this.profile.dob = toDate(this.profile.dob, undefined, 'YYYY-MM-DD HH:mm:ss')
+          this.profile.dob = toDate(this.profile.dob, currentStoreView().i18n.dateFormat, 'YYYY-MM-DD HH:mm:ss')
         }
 
         if (this.profile.gender) {

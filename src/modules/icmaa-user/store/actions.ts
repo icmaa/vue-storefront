@@ -7,6 +7,7 @@ import { UserService } from '@vue-storefront/core/data-resolver'
 import * as types from './mutation-types'
 import * as userTypes from '@vue-storefront/core/modules/user/store/mutation-types'
 import { userHooksExecutors, userHooks } from '@vue-storefront/core/modules/user/hooks'
+import { Logger } from '@vue-storefront/core/lib/logger'
 import Task from '@vue-storefront/core/lib/sync/types/Task'
 
 import config from 'config'
@@ -16,11 +17,13 @@ import { processLocalizedURLAddress } from '@vue-storefront/core/helpers'
 
 const actions: ActionTree<UserState, RootState> = {
   async update ({ dispatch }, profile: UserProfile): Promise<Task> {
+    console.log(profile)
     return UserService.updateProfile(profile)
       .then(resp => {
         if (resp.resultCode === 200) {
           dispatch('user/setCurrentUser', resp.result, { root: true })
         } else {
+          Logger.error('Error while updating user:', 'user', resp)()
           throw new Error('Error while saving customer data')
         }
         return resp

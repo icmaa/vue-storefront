@@ -263,7 +263,6 @@ export default {
         unicodeAlpha
       },
       telephone: {
-        required,
         unicodeAlphaNum
       }
     }

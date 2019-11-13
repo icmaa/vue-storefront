@@ -77,7 +77,7 @@ export default {
             })
             .catch(err => {
               this.showNotification(i18n.t('An error occured:') + err.message, 'error')
-              Logger.error('Error while saving password:', 'MyAccount', err)()
+              Logger.error('Error while saving password: ', 'MyAccount', err)()
             })
 
           if (!passwordData) {
@@ -93,8 +93,7 @@ export default {
             }
           })
           .catch(err => {
-            Logger.error('Error while update user:', 'MyAccount', err)()
-            this.showNotification(i18n.t('An error occured:') + err.message, 'error')
+            this.showNotification(i18n.t('An error occured: ') + err.message, 'error')
           })
 
         this.$bus.$emit('notification-progress-stop', {})
