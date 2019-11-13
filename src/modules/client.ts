@@ -28,7 +28,7 @@ import { IcmaaAdviceModule } from 'icmaa-advice'
 import { IcmaaMetaModule } from 'icmaa-meta'
 import { IcmaaSpotifyModule } from 'icmaa-spotify'
 import { IcmaaExternalCheckout } from 'icmaa-external-checkout'
-import { IcmaaAmpRendererModule } from 'icmaa-amp-renderer'
+import { IcmaaAmpRendererModule } from './icmaa-amp-renderer'
 
 import { registerModule } from '@vue-storefront/core/lib/modules'
 
