@@ -3,7 +3,7 @@ import { mapGetters } from 'vuex'
 import config from 'config'
 import { getThumbnailPath } from '@vue-storefront/core/helpers'
 import { htmlDecode } from '@vue-storefront/core/filters'
-import { localizedRoute, currentStoreView } from '@vue-storefront/core/lib/multistore'
+import { currentStoreView, localizedRoute } from '@vue-storefront/core/lib/multistore'
 
 export default {
   methods: {
@@ -24,7 +24,7 @@ export default {
     metaTitle (): string {
       return this.getCategoryExtrasValueOrCategoryValue('metaTitle')
     },
-    metaDescription (): string|boolean {
+    metaDescription (): string | boolean {
       return this.categoryExtras && this.categoryExtras.metaDescription
         ? this.categoryExtras.metaDescription : false
     },
@@ -47,6 +47,8 @@ export default {
     }
   },
   metaInfo () {
+    const storeView = currentStoreView()
+
     let meta = [
       {
         vmid: 'og:title',
@@ -61,22 +63,19 @@ export default {
       meta.push({ vmid: 'description', name: 'description', content: htmlDecode(this.metaDescription) })
     }
 
-    const storeView = currentStoreView()
-
     return {
       title: htmlDecode(this.metaTitle),
       link: [
-        { rel: 'amphtml',
+        {
+          rel: 'amphtml',
           href: this.$router.resolve(localizedRoute({
             name: 'category-amp',
             params: {
-              slug: this.category.slug
+              slug: this.getCurrentCategory.slug
             }
           }, storeView.storeCode)).href
         }
       ],
-      // title: htmlDecode(this.category.meta_title || this.categoryName),
-      // meta: this.category.meta_description ? [{ vmid: 'description', name: 'description', content: htmlDecode(this.category.meta_description) }] : []
       meta
     }
   }
