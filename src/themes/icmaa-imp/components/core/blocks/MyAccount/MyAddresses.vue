@@ -28,6 +28,10 @@
             {
               condition: !validation.firstname.required && validation.firstname.$error,
               text: $t('Field is required.')
+            },
+            {
+              condition: !validation.firstname.latin && validation.firstname.$error,
+              text: $t('Invalid characters.')
             }
           ]"
           class="t-w-1/2 lg:t-w-1/4 t-px-2 t-mb-4"
@@ -38,10 +42,16 @@
           autocomplete="family-name"
           v-model="address.lastname"
           :label="$t('Last name') + ' *'"
-          :validations="[{
-            condition: !validation.lastname.required && validation.lastname.$error,
-            text: $t('Field is required.')
-          }]"
+          :validations="[
+            {
+              condition: !validation.lastname.required && validation.lastname.$error,
+              text: $t('Field is required.')
+            },
+            {
+              condition: !validation.lastname.latin && validation.lastname.$error,
+              text: $t('Invalid characters.')
+            }
+          ]"
           class="t-w-1/2 lg:t-w-1/4 t-px-2 t-mb-4"
         />
         <base-input
@@ -50,30 +60,54 @@
           autocomplete="company"
           v-model="address.company"
           :label="$t('Company name')"
-          class="t-w-full lg:t-w-1/2 t-px-2 t-mb-4"
-        />
-        <base-input
-          name="street[0]"
-          id="street"
-          autocomplete="street"
-          v-model="address.street[0]"
-          :label="$t('Street') + ' *'"
           :validations="[{
-            condition: !validation.street.required && validation.street.$error,
-            text: $t('Field is required.')
+            condition: !validation.company.latin && validation.company.$error,
+            text: $t('Invalid characters.')
           }]"
           class="t-w-full lg:t-w-1/2 t-px-2 t-mb-4"
         />
+        <div class="t-w-full lg:t-w-1/2 t-px-2">
+          <base-input
+            v-for="(street,i) in address.street" :key="i"
+            :name="`street[${i}]`"
+            :id="`street-${i}`"
+            autocomplete="street"
+            v-model="address.street[i]"
+            :label="i === 0 ? $t('Street') + ' *' : false"
+            :validations="[
+              {
+                condition: houseNumberAdvice,
+                text: $t('Forgot your house number?')
+              },
+              {
+                condition: !validation.street.$each[i].required && validation.street.$error,
+                text: $t('Field is required.')
+              },
+              {
+                condition: (!validation.street.$each[i].latin || !validation.street.$each[i].streetname) && validation.street.$error,
+                text: $t('Invalid characters.')
+              }
+            ]"
+            class="t-w-full"
+            :class="[ i === address.street.length - 1 ? 't-mb-4' : 't-mb-2' ]"
+          />
+        </div>
         <base-input
           name="city"
           id="city"
           autocomplete="city"
           v-model="address.city"
           :label="$t('City') + ' *'"
-          :validations="[{
-            condition: !validation.city.required && validation.city.$error,
-            text: $t('Field is required.')
-          }]"
+          :validations="[
+            {
+              condition: !validation.city.required && validation.city.$error,
+              text: $t('Field is required.')
+            },
+            {
+              condition: !validation.city.latin && validation.city.$error,
+              text: $t('Invalid characters.')
+            }
+          ]"
           class="t-w-full lg:t-w-1/2 t-px-2 t-mb-4"
         />
         <base-input
@@ -82,10 +116,15 @@
           autocomplete="postcode"
           v-model="address.postcode"
           :label="$t('Postcode') + ' *'"
-          :validations="[{
-            condition: !validation.postcode.required && validation.postcode.$error,
-            text: $t('Field is required.')
-          }]"
+          :validations="[
+            {
+              condition: !validation.postcode.required && validation.postcode.$error,
+              text: $t('Field is required.')
+            },{
+              condition: !validation.postcode.postcode && validation.postcode.$error,
+              text: $t('This is not a valid postcode.')
+            }
+          ]"
           class="t-w-1/2 lg:t-w-1/4 t-px-2 t-mb-4"
         />
         <base-select
@@ -101,14 +140,22 @@
           }]"
           class="t-w-1/2 lg:t-w-1/4 t-px-2 t-mb-4"
         />
-        <base-input
-          name="telephone"
-          id="telephone"
-          autocomplete="telephone"
-          v-model="address.telephone"
-          :label="$t('Telephone')"
-          class="t-w-full lg:t-w-1/2 t-px-2 t-mb-4"
-        />
+        <div class="t-w-full lg:t-w-1/2 t-px-2 t-mb-4">
+          <base-input
+            name="telephone"
+            id="telephone"
+            autocomplete="telephone"
+            v-model="address.telephone"
+            :label="$t('Telephone')"
+            :validations="[{
+              condition: !validation.telephone.unicodeAlphaNum && validation.telephone.$error,
+              text: $t('Only alphanumeric characters are allowed.')
+            }]"
+          />
+          <div class="t-mt-2 t-text-xs t-text-base-light t-leading-snug" v-if="['FR'].includes(countryId)">
+            En cas de problème avec votre livraison, le coursier GLS peut vous contacter par téléphone pour décider d'une nouvelle date de livraison.
+          </div>
+        </div>
         <div class="t-px-2 t-w-full t-flex t-flex-wrap">
           <button-component :submit="true" type="primary" class="t-w-full lg:t-w-auto">
             {{ $t('Save address') }}
@@ -131,7 +178,7 @@ import pick from 'lodash-es/pick'
 import invert from 'lodash-es/invert'
 
 import { required, minLength, email, sameAs } from 'vuelidate/lib/validators'
-import { unicodeAlpha, unicodeAlphaNum } from '@vue-storefront/core/helpers/validators'
+import { latin, unicodeAlphaNum, streetname, postcode } from 'icmaa-config/helpers/validators'
 import { date } from 'icmaa-config/helpers/validators'
 import { toDate } from 'icmaa-config/helpers/datetime'
 
@@ -167,8 +214,8 @@ export default {
   },
   components: {
     Headline,
-    MaterialIcon,
-    BaseCheckbox,
+    // MaterialIcon,
+    // BaseCheckbox,
     BaseSelect,
     BaseInput,
     ButtonComponent
@@ -197,6 +244,13 @@ export default {
           label: item.name
         }
       })
+    },
+    countryId () {
+      return this.address.country_id.length > 0 ? this.address.country_id : undefined
+    },
+    houseNumberAdvice () {
+      const street = this.address.street.join('')
+      return street.length > 8 && !/(\d)+/.test(street)
     }
   },
   methods: {
@@ -206,6 +260,10 @@ export default {
         this.customer.addresses.find(a => a.entity_id === entity_id),
         ...Object.keys(this.address)
       ))
+
+      if (this.address.street.length > 1) {
+        this.address.street = [this.address.street.join(' ')]
+      }
     },
     submit () {
       this.validation.$touch()
@@ -243,33 +301,41 @@ export default {
       }
     }
   },
-  validations: {
-    address: {
-      firstname: {
-        required,
-        minLength: minLength(2),
-        unicodeAlpha
-      },
-      lastname: {
-        required
-      },
-      country_id: {
-        required
-      },
-      street: {
-        required,
-        unicodeAlphaNum
-      },
-      postcode: {
-        required,
-        minLength: minLength(3)
-      },
-      city: {
-        required,
-        unicodeAlpha
-      },
-      telephone: {
-        unicodeAlphaNum
+  validations () {
+    return {
+      address: {
+        firstname: {
+          required,
+          latin
+        },
+        lastname: {
+          required,
+          latin
+        },
+        company: {
+          latin
+        },
+        country_id: {
+          required
+        },
+        street: {
+          $each: {
+            required,
+            streetname,
+            latin
+          }
+        },
+        postcode: {
+          required,
+          postcode: postcode(this.countryId)
+        },
+        city: {
+          required,
+          latin
+        },
+        telephone: {
+          unicodeAlphaNum
+        }
       }
     }
   }
