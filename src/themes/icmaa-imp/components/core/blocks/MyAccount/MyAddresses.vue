@@ -213,7 +213,13 @@ export default {
         let address = this.address
         let customer = this.customer
 
-        customer.addresses = customer.addresses.map(a => a.entity_id === address.entity_id ? address : a)
+        customer.addresses = customer.addresses.map(a => {
+          if (a.entity_id === address.entity_id) {
+            return Object.assign(a, address)
+          }
+
+          return a
+        })
 
         this.$bus.$emit('myAccount-before-updateUser', customer)
       }
