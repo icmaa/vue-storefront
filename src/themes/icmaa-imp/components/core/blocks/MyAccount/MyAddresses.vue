@@ -157,17 +157,17 @@
           </div>
         </div>
         <base-checkbox
-          name="default_billing"
-          id="default_billing"
-          v-model="address.default_billing"
+          name="is_default_billing"
+          id="is_default_billing"
+          v-model="address.is_default_billing"
           class="t-w-full lg:t-w-1/2 t-px-2"
         >
           {{ $t('Use as my default billing address') }}
         </base-checkbox>
         <base-checkbox
-          name="default_shipping"
-          id="default_shipping"
-          v-model="address.default_shipping"
+          name="is_default_shipping"
+          id="is_default_shipping"
+          v-model="address.is_default_shipping"
           class="t-w-full lg:t-w-1/2 t-px-2 t-mb-4"
         >
           {{ $t('Use as my default shipping address') }}
@@ -223,8 +223,8 @@ export default {
         city: '',
         country_id: '',
         telephone: '',
-        default_billing: false,
-        default_shipping: false
+        is_default_billing: false,
+        is_default_shipping: false
       },
       countries: Countries
     }
