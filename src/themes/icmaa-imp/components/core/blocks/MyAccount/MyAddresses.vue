@@ -180,6 +180,7 @@
           id="is_default_billing"
           v-model="address.is_default_billing"
           class="t-w-full lg:t-w-1/2 t-px-2"
+          :disabled="customerAddress && customerAddress.is_default_billing"
         >
           {{ $t('Use as my default billing address') }}
         </base-checkbox>
@@ -188,6 +189,7 @@
           id="is_default_shipping"
           v-model="address.is_default_shipping"
           class="t-w-full lg:t-w-1/2 t-px-2 t-mb-4"
+          :disabled="customerAddress && customerAddress.is_default_shipping"
         >
           {{ $t('Use as my default shipping address') }}
         </base-checkbox>
@@ -281,8 +283,11 @@ export default {
       const street = this.address.street.join('')
       return street.length > 8 && !/(\d)+/.test(street)
     },
+    customerAddress () {
+      return this.customer.addresses.find(a => a.entity_id === this.address.entity_id)
+    },
     isDefaultAddress () {
-      let address = this.customer.addresses.find(a => a.entity_id === this.address.entity_id)
+      let address = this.customerAddress
       return address && (address.is_default_billing === true || address.is_default_shipping === true)
     },
     hasVatId () {
@@ -316,7 +321,7 @@ export default {
         }
 
         ['is_default_billing', 'is_default_shipping'].forEach(key => {
-          if (address[key]) {
+          if (address[key] === true) {
             customer.addresses.map(a => {
               a[key] = false
               return a
