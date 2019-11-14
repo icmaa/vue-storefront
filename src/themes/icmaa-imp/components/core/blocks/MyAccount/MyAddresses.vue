@@ -179,7 +179,7 @@
           <button-component :submit="true" type="primary" class="t-w-full lg:t-w-auto">
             {{ $t('Save address') }}
           </button-component>
-          <button-component v-if="!isNewAddress && !isDefaultAddress && address.entity_id" type="ghost" class="t-w-full t-mt-2 lg:t-mt-0 lg:t-ml-4 lg:t-w-auto" @click="deleteAddress">
+          <button-component v-if="!isNewAddress && !isDefaultAddress && address.entity_id" type="ghost" class="t-w-full t-mt-2 lg:t-mt-0 lg:t-ml-4 lg:t-w-auto" @click="deleteAddress(address.entity_id)">
             {{ $t('Delete') }}
           </button-component>
           <button-component type="ghost" class="t-w-full t-mt-2 lg:t-mt-0 lg:t-ml-4 lg:t-w-auto" @click="back">
@@ -219,6 +219,7 @@ export default {
     return {
       edit: false,
       isNewAddress: false,
+      isDelete: false,
       address: {},
       countries: Countries
     }
@@ -264,7 +265,7 @@ export default {
     },
     isDefaultAddress () {
       let address = this.customer.addresses.find(a => a.entity_id === this.address.entity_id)
-      return address.is_default_billing === true || address.is_default_shipping === true
+      return address && (address.is_default_billing === true || address.is_default_shipping === true)
     }
   },
   methods: {
@@ -306,7 +307,7 @@ export default {
       return false
     },
     deleteAddress (entity_id) {
-      if (this.isDefaultAddress()) {
+      if (this.isDefaultAddress) {
         this.$store.dispatch('notification/spawnNotification', {
           type: 'error',
           message: i18n.t('Can\'t delete a default shipping nor billing address.'),
@@ -325,8 +326,9 @@ export default {
           return a
         })
 
+      this.isDelete = true
+
       this.$bus.$emit('myAccount-before-updateUser', customer)
-      this.back()
     },
     setAddressDefaults () {
       this.address = {
@@ -355,6 +357,12 @@ export default {
       if (this.isNewAddress) {
         const lastAddress = this.customer.addresses.slice(-1).pop()
         this.editAddress(lastAddress.entity_id)
+        return
+      }
+
+      if (this.isDelete) {
+        this.isDelete = false
+        this.back()
         return
       }
 
