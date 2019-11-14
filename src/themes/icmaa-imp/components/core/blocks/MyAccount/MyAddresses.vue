@@ -325,7 +325,10 @@ export default {
       if (this.isNewAddress) {
         const lastAddress = this.customer.addresses.slice(-1).pop()
         this.editAddress(lastAddress.entity_id)
+        return
       }
+
+      this.editAddress(this.address.entity_id)
     }
   },
   beforeMount () {
