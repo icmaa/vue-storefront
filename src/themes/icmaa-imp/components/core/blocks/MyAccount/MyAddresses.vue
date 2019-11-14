@@ -195,9 +195,11 @@
           <button-component :submit="true" type="primary" class="t-w-full lg:t-w-auto">
             {{ $t('Save address') }}
           </button-component>
-          <button-component v-if="!isNewAddress && !isDefaultAddress && address.entity_id" type="ghost" class="t-w-full t-mt-2 lg:t-mt-0 lg:t-ml-4 lg:t-w-auto" @click="deleteAddress(address.entity_id)">
-            {{ $t('Delete') }}
-          </button-component>
+          <div v-if="!isNewAddress && !isDefaultAddress && address.entity_id" class="t-flex-1">
+            <button-component type="ghost" class="t-w-full t-mt-2 lg:t-mt-0 lg:t-ml-4 lg:t-w-auto" :confirm="true" @click="deleteAddress(address.entity_id)">
+              {{ $t('Delete') }}
+            </button-component>
+          </div>
           <button-component type="ghost" class="t-w-full t-mt-2 lg:t-mt-0 lg:t-ml-4 lg:t-w-auto" @click="back">
             {{ $t('Back') }}
           </button-component>
@@ -336,7 +338,6 @@ export default {
           message: i18n.t('Can\'t delete a default shipping nor billing address.'),
           action1: { label: i18n.t('OK') }
         })
-
         return
       }
 
