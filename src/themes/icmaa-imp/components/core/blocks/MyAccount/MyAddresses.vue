@@ -159,6 +159,22 @@
             En cas de problème avec votre livraison, le coursier GLS peut vous contacter par téléphone pour décider d'une nouvelle date de livraison.
           </div>
         </div>
+        <div v-if="hasVatId" class="t-w-full t-mb-4">
+          <base-input
+            name="vat_id"
+            id="vat_id"
+            autocomplete="vat_id"
+            v-model="address.vat_id"
+            :label="$t('VAT number') + ' *'"
+            :validations="[
+              {
+                condition: !validation.vat_id.required && validation.vat_id.$error,
+                text: $t('Field is required.')
+              }
+            ]"
+            class="t-w-full lg:t-w-1/2 t-px-2"
+          />
+        </div>
         <base-checkbox
           name="is_default_billing"
           id="is_default_billing"
@@ -266,6 +282,9 @@ export default {
     isDefaultAddress () {
       let address = this.customer.addresses.find(a => a.entity_id === this.address.entity_id)
       return address && (address.is_default_billing === true || address.is_default_shipping === true)
+    },
+    hasVatId () {
+      return ['IT'].includes(this.countryId)
     }
   },
   methods: {
@@ -292,6 +311,10 @@ export default {
         if (customer.addresses.length < 1) {
           address.is_default_billing = true
           address.is_default_shipping = true
+        }
+
+        if (!this.hasVatId) {
+          address.vat_id = null
         }
 
         customer.addresses = customer.addresses
@@ -343,6 +366,7 @@ export default {
         city: '',
         country_id: currentStoreView().storeCode.toUpperCase(),
         telephone: '',
+        vat_id: null,
         is_default_billing: false,
         is_default_shipping: false
       }
@@ -379,6 +403,10 @@ export default {
     this.$bus.$off('myAccount-after-updateUser-success', this.onAfterUpdateUserSuccess)
   },
   validations () {
+    const vatId = this.hasVatId ? {
+      vat_id: { required }
+    } : {}
+
     return {
       address: {
         firstname: {
@@ -412,7 +440,8 @@ export default {
         },
         telephone: {
           unicodeAlphaNum
-        }
+        },
+        ...vatId
       }
     }
   }
