@@ -5,24 +5,30 @@
     </headline>
 
     <div class="list t-flex t-flex-wrap t-flex-grow t--mx-2" v-if="!edit">
-      <div v-for="(a, i) in addresses" :key="i" class="t-flex t-w-1/2 t-px-2 t-cursor-pointer" @click="editAddress(a.entity_id)">
+      <div v-for="(a, i) in addresses" :key="i" class="t-flex t-w-1/2 t-px-2 t-mb-4 t-cursor-pointer" @click="editAddress(a.entity_id)">
         <div class="t-w-full t-text-sm t-leading-snug">
           <p v-if="a.company" v-text="a.company" />
           <p>{{ a.prefix }} {{ a.firstname }} {{ a.lastname }} {{ a.suffix }}</p>
           <p>{{ a.street }}</p>
           <p>{{ a.postcode }} {{ a.city }}</p>
           {{ a.country.name }}
-          <div v-if="a.is_default_billing">
-            {{ $t('Default billing address') }}
-          </div>
-          <div v-if="a.is_default_shipping">
-            {{ $t('Default shipping address') }}
+          <div v-if="a.is_default_billing || a.is_default_shipping" class="t-mt-2">
+            <div v-if="a.is_default_billing" class="t-text-xs t-text-base-light">
+              <material-icon icon="check" size="xs" class="t-inline-flex t-align-bottom" />
+              {{ $t('Default billing address') }}
+            </div>
+            <div v-if="a.is_default_shipping" class="t-text-xs t-text-base-light">
+              <material-icon icon="check" size="xs" class="t-inline-flex t-align-bottom" />
+              {{ $t('Default shipping address') }}
+            </div>
           </div>
         </div>
       </div>
-      <button-component @click="editAddress(true)">
-        {{ $t('New address') }}
-      </button-component>
+      <div class="t-px-2">
+        <button-component @click="editAddress(true)">
+          {{ $t('New address') }}
+        </button-component>
+      </div>
     </div>
 
     <div class="form" v-if="edit">
@@ -203,7 +209,7 @@
           <button-component :submit="true" type="primary" size="lg" class="t-w-full lg:t-w-auto lg:t-order-3">
             {{ $t('Save address') }}
           </button-component>
-          <button-component type="ghost" icon="keyboard_arrow_left" icon-position="left" class="t-flex-1 t-w-1/2 t-mt-4 lg:t-mt-0 lg:t-w-auto lg:t-order-1" @click="back">
+          <button-component type="ghost" icon="keyboard_arrow_left" icon-position="left" class="t-flex-1 lg:t-flex-fix t-w-1/2 t-mt-4 lg:t-mt-0 lg:t-w-auto lg:t-order-1" @click="back">
             {{ $t('Back') }}
           </button-component>
           <div v-if="!isNewAddress && !isDefaultAddress && address.entity_id" class="t-flex-1 t-w-1/2 t-pl-4 lg:t-order-2">
@@ -236,6 +242,7 @@ import BaseCheckbox from 'theme/components/core/blocks/Form/BaseCheckbox'
 import BaseSelect from 'theme/components/core/blocks/Form/BaseSelect'
 import BaseInput from 'theme/components/core/blocks/Form/BaseInput'
 import ButtonComponent from 'theme/components/core/blocks/Button'
+import MaterialIcon from 'theme/components/core/blocks/MaterialIcon'
 
 const Countries = require('@vue-storefront/i18n/resource/countries.json')
 
@@ -255,7 +262,8 @@ export default {
     BaseCheckbox,
     BaseSelect,
     BaseInput,
-    ButtonComponent
+    ButtonComponent,
+    MaterialIcon
   },
   computed: {
     ...mapGetters({
