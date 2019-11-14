@@ -99,10 +99,12 @@ export default {
         this.$bus.$emit('notification-progress-stop', {})
       }
     },
-    showNotification (message, type) {
-      this.$store.dispatch('notification/spawnNotification', {
+    async showNotification (message, type) {
+      await this.$store.dispatch('notification/spawnNotification', {
         type, message, action1: { label: i18n.t('OK') }
       })
+
+      this.$bus.$emit('myAccount-after-updateUser-' + type)
     }
   },
   metaInfo () {

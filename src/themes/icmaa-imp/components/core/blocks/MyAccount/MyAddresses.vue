@@ -14,6 +14,9 @@
           {{ a.country.name }}
         </div>
       </div>
+      <button-component @click="editAddress(true)">
+        {{ $t('New address') }}
+      </button-component>
     </div>
 
     <div class="form" v-if="edit">
@@ -189,6 +192,7 @@
 import { mapGetters } from 'vuex'
 import config from 'config'
 import i18n from '@vue-storefront/i18n'
+import { currentStoreView } from '@vue-storefront/core/lib/multistore'
 
 import pick from 'lodash-es/pick'
 import invert from 'lodash-es/invert'
@@ -211,21 +215,8 @@ export default {
   data () {
     return {
       edit: false,
-      address: {
-        entity_id: '',
-        company: '',
-        prefix: '',
-        firstname: '',
-        lastname: '',
-        suffix: '',
-        street: [''],
-        postcode: '',
-        city: '',
-        country_id: '',
-        telephone: '',
-        is_default_billing: false,
-        is_default_shipping: false
-      },
+      isNewAddress: false,
+      address: {},
       countries: Countries
     }
   },
@@ -272,6 +263,9 @@ export default {
   methods: {
     editAddress (entity_id) {
       this.edit = true
+      this.isNewAddress = entity_id === true
+      this.validation.$reset()
+
       this.address = Object.assign({}, this.address, pick(
         this.customer.addresses.find(a => a.entity_id === entity_id),
         ...Object.keys(this.address)
@@ -287,39 +281,61 @@ export default {
         let address = this.address
         let customer = this.customer
 
-        customer.addresses = customer.addresses.map(a => {
-          if (a.entity_id === address.entity_id) {
-            if (customer.addresses.length === 1) {
-              address.default_billing = true
-              address.default_shipping = true
-            }
-            return Object.assign(a, address)
-          }
+        if (customer.addresses.length < 1) {
+          address.is_default_billing = true
+          address.is_default_shipping = true
+        }
 
-          return a
-        })
+        customer.addresses = customer.addresses
+          .map(a => a.entity_id === address.entity_id ? Object.assign(a, address) : a)
+
+        if (this.isNewAddress || !address.entity_id) {
+          customer.addresses.push(address)
+        }
 
         this.$bus.$emit('myAccount-before-updateUser', customer)
       }
 
       return false
     },
-    back () {
-      this.edit = false
+    setAddressDefaults () {
       this.address = {
         entity_id: '',
         company: '',
         prefix: '',
-        firstname: '',
-        lastname: '',
+        firstname: this.customer.firstname,
+        lastname: this.customer.lastname,
         suffix: '',
         street: [''],
         postcode: '',
         city: '',
-        country_id: '',
-        telephone: ''
+        country_id: currentStoreView().storeCode.toUpperCase(),
+        telephone: '',
+        is_default_billing: false,
+        is_default_shipping: false
+      }
+
+      return this.address
+    },
+    back () {
+      this.edit = false
+      this.setAddressDefaults()
+    },
+    onAfterUpdateUserSuccess () {
+      if (this.isNewAddress) {
+        const lastAddress = this.customer.addresses.slice(-1).pop()
+        this.editAddress(lastAddress.entity_id)
       }
     }
+  },
+  beforeMount () {
+    this.$bus.$on('myAccount-after-updateUser-success', this.onAfterUpdateUserSuccess)
+  },
+  mounted () {
+    this.setAddressDefaults()
+  },
+  destroyed () {
+    this.$bus.$off('myAccount-after-updateUser-success', this.onAfterUpdateUserSuccess)
   },
   validations () {
     return {
