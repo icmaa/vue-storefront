@@ -179,6 +179,9 @@
           <button-component :submit="true" type="primary" class="t-w-full lg:t-w-auto">
             {{ $t('Save address') }}
           </button-component>
+          <button-component v-if="!isNewAddress && !isDefaultAddress && address.entity_id" type="ghost" class="t-w-full t-mt-2 lg:t-mt-0 lg:t-ml-4 lg:t-w-auto" @click="deleteAddress">
+            {{ $t('Delete') }}
+          </button-component>
           <button-component type="ghost" class="t-w-full t-mt-2 lg:t-mt-0 lg:t-ml-4 lg:t-w-auto" @click="back">
             {{ $t('Back') }}
           </button-component>
@@ -258,6 +261,10 @@ export default {
     houseNumberAdvice () {
       const street = this.address.street.join('')
       return street.length > 8 && !/(\d)+/.test(street)
+    },
+    isDefaultAddress () {
+      let address = this.customer.addresses.find(a => a.entity_id === this.address.entity_id)
+      return address.is_default_billing === true || address.is_default_shipping === true
     }
   },
   methods: {
@@ -297,6 +304,29 @@ export default {
       }
 
       return false
+    },
+    deleteAddress (entity_id) {
+      if (this.isDefaultAddress()) {
+        this.$store.dispatch('notification/spawnNotification', {
+          type: 'error',
+          message: i18n.t('Can\'t delete a default shipping nor billing address.'),
+          action1: { label: i18n.t('OK') }
+        })
+
+        return
+      }
+
+      let customer = this.customer
+      customer.addresses = customer.addresses
+        .map(a => {
+          if (a.entity_id === entity_id) {
+            a.delete = true
+          }
+          return a
+        })
+
+      this.$bus.$emit('myAccount-before-updateUser', customer)
+      this.back()
     },
     setAddressDefaults () {
       this.address = {
