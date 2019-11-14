@@ -194,17 +194,17 @@
           {{ $t('Use as my default shipping address') }}
         </base-checkbox>
         <div class="t-px-2 t-w-full t-flex t-flex-wrap t-justify-between">
-          <button-component type="ghost" icon="keyboard_arrow_left" icon-position="left" class="t-w-full t-mt-2 lg:t-mt-0 lg:t-w-auto" @click="back">
+          <button-component :submit="true" type="primary" size="lg" class="t-w-full lg:t-w-auto lg:t-order-3">
+            {{ $t('Save address') }}
+          </button-component>
+          <button-component type="ghost" icon="keyboard_arrow_left" icon-position="left" class="t-w-1/2 t-mt-4 lg:t-mt-0 lg:t-w-auto lg:t-order-1" @click="back">
             {{ $t('Back') }}
           </button-component>
-          <div v-if="!isNewAddress && !isDefaultAddress && address.entity_id" class="t-flex-1">
-            <button-component type="ghost" icon="delete" icon-position="left" class="t-w-full t-mt-2 lg:t-mt-0 lg:t-ml-4 lg:t-w-auto" :confirm="true" @click="deleteAddress(address.entity_id)">
+          <div v-if="!isNewAddress && !isDefaultAddress && address.entity_id" class="t-flex-1 t-w-1/2 t-pl-4 lg:t-order-2">
+            <button-component type="ghost" icon="delete" icon-position="left" class="t-w-full t-mt-4 lg:t-mt-0 lg:t-w-auto " :confirm="true" @click="deleteAddress(address.entity_id)">
               {{ $t('Delete') }}
             </button-component>
           </div>
-          <button-component :submit="true" type="primary" class="t-w-full lg:t-w-auto">
-            {{ $t('Save address') }}
-          </button-component>
         </div>
       </form>
     </div>
