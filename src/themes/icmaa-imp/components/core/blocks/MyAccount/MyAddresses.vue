@@ -5,8 +5,8 @@
     </headline>
 
     <div class="list t-flex t-flex-wrap t-flex-grow t--mx-2" v-if="!edit">
-      <div v-for="(a, i) in addresses" :key="i" class="t-flex t-w-1/2 t-px-2 t-mb-4 t-cursor-pointer" @click="editAddress(a.entity_id)">
-        <div class="t-w-full t-text-sm t-leading-snug">
+      <div v-for="(a, i) in addresses" :key="i" class="t-flex t-w-1/2 lg:t-w-1/3 t-px-2 t-mb-4 t-cursor-pointer" @click="editAddress(a.entity_id)">
+        <div class="t-w-full t-text-sm t-leading-snug t-border t-border-base-lightest t-p-4">
           <p v-if="a.company" v-text="a.company" />
           <p>{{ a.prefix }} {{ a.firstname }} {{ a.lastname }} {{ a.suffix }}</p>
           <p>{{ a.street }}</p>
@@ -24,7 +24,7 @@
           </div>
         </div>
       </div>
-      <div class="t-px-2">
+      <div class="t-w-full t-px-2">
         <button-component @click="editAddress(true)">
           {{ $t('New address') }}
         </button-component>
