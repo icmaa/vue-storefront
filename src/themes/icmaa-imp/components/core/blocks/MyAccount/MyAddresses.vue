@@ -12,6 +12,12 @@
           <p>{{ a.street }}</p>
           <p>{{ a.postcode }} {{ a.city }}</p>
           {{ a.country.name }}
+          <div v-if="a.is_default_billing">
+            {{ $t('Default billing address') }}
+          </div>
+          <div v-if="a.is_default_shipping">
+            {{ $t('Default shipping address') }}
+          </div>
         </div>
       </div>
       <button-component @click="editAddress(true)">
@@ -258,11 +264,11 @@ export default {
     }),
     addresses () {
       return this.customer.addresses.map(address => {
-        let { entity_id, company, prefix, firstname, lastname, suffix, postcode, city, country_id } = address
+        let { entity_id, company, prefix, firstname, lastname, suffix, postcode, city, country_id, is_default_billing, is_default_shipping } = address
         let country = this.countries.find(c => c.code === country_id)
         let street = address.street.filter(s => s.length > 0).join('<br>')
 
-        return { entity_id, company, prefix, firstname, lastname, suffix, street, postcode, city, country }
+        return { entity_id, company, prefix, firstname, lastname, suffix, street, postcode, city, country, is_default_billing, is_default_shipping }
       })
     },
     validation () {
@@ -305,7 +311,7 @@ export default {
         ...Object.keys(this.address)
       ))
 
-      if (this.address.street.length > 1) {
+      if (this.address.street.length > 0) {
         this.address.street = [this.address.street.join(' ')]
       }
     },
