@@ -315,6 +315,15 @@ export default {
           address.is_default_shipping = true
         }
 
+        ['is_default_billing', 'is_default_shipping'].forEach(key => {
+          if (address[key]) {
+            customer.addresses.map(a => {
+              a[key] = false
+              return a
+            })
+          }
+        })
+
         if (!this.hasVatId) {
           address.vat_id = null
         }
