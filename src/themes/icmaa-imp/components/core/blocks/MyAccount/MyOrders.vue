@@ -28,7 +28,7 @@
           </thead class="">
           <tbody>
             <template v-for="order in ordersHistory">
-              <tr :order="order" :key="order.entity_id" class="t-cursor-pointer t-border-t t-border-base-lighter t-px-2 t-py-3" @click="redirect(order.entity_id)">
+              <tr :order="order" :key="order.entity_id" class="t-cursor-pointer t-border-t t-border-base-lightest t-px-2 t-py-3" @click="redirect(order.entity_id)">
                 <td v-show="viewport !== 'xs'" class="t-py-2">
                   #{{ order.increment_id }}
                 </td>
@@ -40,7 +40,7 @@
                 </td>
                 <td class="t-py-2 t-flex t-items-center">
                   <!-- {{ order.status | capitalize }}-->
-                  <span class="status" />
+                  <span class="status" />&nbsp;{{ order.status | capitalize }}
                 </td>
                 <td class="">
                   <material-icon icon="chevron_right" size="md" class="t-align-middle" />
