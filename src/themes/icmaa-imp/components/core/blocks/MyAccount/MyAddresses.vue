@@ -24,6 +24,16 @@
           </div>
         </div>
       </div>
+      <div v-if="addresses.length === 0" class="t-flex t-w-full sm:t-w-1/2 lg:t-w-1/3 t-px-2 t-mb-4 t-cursor-pointer" @click="editAddress(true)">
+        <div class="t-w-full t-text-sm t-leading-snug t-border t-border-base-lightest t-p-4 t-h-32 t-flex t-flex-wrap t-items-center">
+          <div class="t-w-full">
+            <div>{{ $t('There are no addresses yet.') }}</div>
+            <div class="t-text-base-light">
+              {{ $t('Click here to add a new one') }}
+            </div>
+          </div>
+        </div>
+      </div>
       <div class="t-w-full t-px-2">
         <button-component @click="editAddress(true)">
           {{ $t('New address') }}

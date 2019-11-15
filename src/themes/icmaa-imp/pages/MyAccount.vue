@@ -1,12 +1,9 @@
 <template>
   <div id="my_account" class="t-container">
-    <div class="t-flex t-flex-wrap t-items-start t-px-4 t--mx-2 t-py-4">
-      <navigation class="customer-account t-flex t-px-2 t-mb-4 lg:t-mb-0 lg:t-w-1/4" />
-      <div class="t-w-full lg:t-w-3/4 t-px-2">
-        <no-ssr>
-          <component :is="this.$props.activeBlock" />
-        </no-ssr>
-      </div>
+    <div class="t-px-4 t-py-4">
+      <no-ssr>
+        <component :is="this.$props.activeBlock" />
+      </no-ssr>
     </div>
   </div>
 </template>
@@ -17,7 +14,6 @@ import Composite from '@vue-storefront/core/mixins/composite'
 import { currentStoreView, localizedRoute } from '@vue-storefront/core/lib/multistore'
 import { Logger } from '@vue-storefront/core/lib/logger'
 
-import Navigation from 'theme/components/core/blocks/MyAccount/Navigation'
 import MyProfile from '../components/core/blocks/MyAccount/MyProfile'
 import MyAddresses from '../components/core/blocks/MyAccount/MyAddresses'
 import MyNewsletter from '../components/core/blocks/MyAccount/MyNewsletter'
@@ -47,7 +43,6 @@ export default {
     MyOrders,
     MyOrder,
     MyRecentlyViewed,
-    Navigation,
     'no-ssr': NoSSR
   },
   beforeMount () {
