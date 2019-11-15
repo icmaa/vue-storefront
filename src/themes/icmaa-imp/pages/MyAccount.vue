@@ -59,7 +59,7 @@ export default {
     this.$bus.$off('myAccount-before-updateUser', this.onBeforeUpdateUser)
   },
   methods: {
-    async onBeforeUpdateUser (updatedData, passwordData = false) {
+    async onBeforeUpdateUser (updatedData, passwordData = false, message = false) {
       if (updatedData) {
         this.$bus.$emit('notification-progress-start', i18n.t('Please wait'))
 
@@ -84,7 +84,10 @@ export default {
         await this.$store.dispatch('user/update', { customer: updatedData })
           .then(response => {
             if (response.resultCode === 200) {
-              this.showNotification(i18n.t('Account data has successfully been updated'), 'success')
+              if (!message) {
+                message = i18n.t('Account data has successfully been updated')
+              }
+              this.showNotification(i18n.t(message), 'success')
             }
           })
           .catch(err => {

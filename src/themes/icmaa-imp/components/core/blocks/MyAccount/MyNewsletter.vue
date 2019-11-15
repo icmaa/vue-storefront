@@ -3,11 +3,9 @@
     <headline icon="mail">
       {{ $t('My newsletter') }}
     </headline>
-
-    <base-checkbox class="t-w-full t-px-2 t-mb-4" id="generalAgreement" v-model="user.isSubscribed">
+    <base-checkbox class="t-w-full t-px-2 t-mb-4" id="generalAgreement" v-model="isSubscribed">
       {{ $t('I want to receive a newsletter, and agree to its terms') }}
     </base-checkbox>
-
     <div class="t-w-full t-px-2">
       <button-component type="primary" @click.native="updateNewsletter" class="t-w-full lg:t-w-auto">
         {{ $t('Update my preferences') }}
@@ -17,8 +15,8 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import Headline from 'theme/components/core/blocks/MyAccount/Headline'
-import { Newsletter } from '@vue-storefront/core/modules/newsletter/components/Newsletter'
 import BaseCheckbox from '../Form/BaseCheckbox.vue'
 import i18n from '@vue-storefront/i18n'
 import ButtonComponent from 'theme/components/core/blocks/Button'
@@ -30,31 +28,28 @@ export default {
     BaseCheckbox,
     Headline
   },
-  methods: {
-    async updateNewsletter () {
-      if (this.user.isSubscribed) {
-        const isSubscribed = await this.$store.dispatch('newsletter/subscribe', this.email)
-
-        if (isSubscribed) {
-          this.$store.dispatch('notification/spawnNotification', {
-            type: 'success',
-            message: i18n.t('You have been successfully subscribed to our newsletter!'),
-            action1: { label: i18n.t('OK') }
-          })
-        }
-        return
-      }
-
-      const isUnsubscribed = await this.$store.dispatch('newsletter/unsubscribe', this.email)
-      if (isUnsubscribed) {
-        this.$store.dispatch('notification/spawnNotification', {
-          type: 'success',
-          message: i18n.t('You have been successfully unsubscribed from our newsletter!'),
-          action1: { label: i18n.t('OK') }
-        })
-      }
+  data () {
+    return {
+      isSubscribed: false,
+      text_subscribe: 'You have been successfully unsubscribed from our newsletter!',
+      text_unsubscribe: 'You have been successfully subscribed to our newsletter!'
     }
   },
-  mixins: [Newsletter]
+  mounted () {
+    this.isSubscribed = this.customer ? this.getIsSubscribed : false
+  },
+  computed: {
+    ...mapGetters({
+      getIsSubscribed: 'newsletter/isSubscribed',
+      customer: 'user/getCustomer'
+    })
+  },
+  methods: {
+    updateNewsletter () {
+      const message = this.isSubscribed ? this.text_unsubscribe : this.text_subscribe
+      const customer = Object.assign({}, this.customer, { is_subscribed: this.isSubscribed })
+      this.$bus.$emit('myAccount-before-updateUser', customer, false, message)
+    }
+  }
 }
 </script>
