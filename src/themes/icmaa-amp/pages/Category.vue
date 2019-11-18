@@ -1,45 +1,43 @@
 <template>
-  <div id="category">
-    <header class="bg-cl-secondary py35 pl20">
-      <div class="container">
-        Bebug . icmaa-amp
-        <breadcrumbs :routes="breadcrumbs.routes" :active-route="category.name" />
-        <div class="row middle-sm">
-          <h1 class="col-sm-9 category-title mb10">
-            {{ category.name }}
-          </h1>
+  <main class="t-bg-base-lightest">
+    <div id="category">
+      <div class="t-container">
+        <div class="t-flex t-flex-wrap t-px-4 t-mb-8">
+          <div class="t-flex t-flex-wrap t-items-center t--mx-1 lg:t--mx-2">
+            <h1 class="category-title t-hidden lg:t-block t-w-3/4 t-px-1 lg:t-px-2 t-mb-4 t-font-light t-text-2xl t-text-base-dark">
+              {{ category.name }}
+            </h1>
+          </div>
         </div>
       </div>
-    </header>
-    <div class="container pb60">
-      <div class="row m0 pt15">
-        <p class="col-xs-12 hidden-md m0 px20 cl-secondary">
-          {{ productsCounter }} items
-        </p>
-        <div class="col-md-9 pt20 px10 border-box products-list block-center">
-          <div v-if="isCategoryEmpty" class="hidden-xs">
-            <h4 data-testid="noProductsInfo">
-              {{ $t('No products found!') }}
-            </h4>
-            <p>{{ $t('Please change Your search criteria and try again. If still not finding anything relevant, please visit the Home page and try out some of our bestsellers!') }}</p>
+      <div class="t-container">
+        <div class="product-listing t-flex t-flex-wrap t-justify-start t-px-3 lg:t-px-4 lg:t--mx-2">
+          <p class="col-xs-12 hidden-md m0 px20 cl-secondary">
+            {{ productsCounter }} items
+          </p>
+          <div class="product-listing t-flex t-flex-wrap t-justify-start t-px-3 lg:t-px-4 lg:t--mx-2">
+            <div v-if="isCategoryEmpty" class="hidden-xs">
+              <h4 data-testid="noProductsInfo">
+                {{ $t('No products found!') }}
+              </h4>
+              <p>{{ $t('Please change Your search criteria and try again. If still not finding anything relevant, please visit the Home page and try out some of our bestsellers!') }}</p>
+            </div>
+            <product-listing columns="4" :products="products" />
           </div>
-          <product-listing columns="4" :products="products" />
         </div>
       </div>
     </div>
-  </div>
+  </main>
 </template>
 
 <script>
 
 import Category from '@vue-storefront/core/pages/Category' // theme = default/base theme
-import Breadcrumbs from 'theme/components/core/Breadcrumbs.vue'
 import ProductListing from '../components/core/ProductListing.vue'
 
 export default {
   components: {
-    ProductListing,
-    Breadcrumbs
+    ProductListing
   },
   data () {
     return {

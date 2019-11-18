@@ -1,45 +1,48 @@
 <template>
   <div
-    class="product align-center w-100 pb20"
+    class="product t-cursor-pointer"
     v-observe-visibility="visibilityChanged"
   >
-    <router-link
-      class="block no-underline product-link"
-      :to="productLink"
-      data-testid="productLink"
-    >
-      <div
-        class="product-image relative bg-cl-secondary"
-        :class="[{ sale: labelsActive && isOnSale }, { new: labelsActive && isNew }]"
+    <div class="product-cover t-relative t-bg-white" :class="{ 't-mb-4': !onlyImage }">
+      <router-link
+        class="product-link t-block t-z-0"
+        :to="productLink"
+        data-testid="productLink"
       >
-        <amp-img
-          :alt="product.name"
-          :src="thumbnailObj.src"
-          height="300"
-          width="310"
-        />
-      </div>
-
-      <p class="mb0 cl-accent mt10" v-if="!onlyImage">
+        <div
+          class="product-image relative"
+          :class="[{ sale: labelsActive && isOnSale }, { new: labelsActive && isNew }]"
+        >
+          <amp-img
+            :alt="product.name"
+            :src="thumbnailObj.src"
+            width="300"
+            height="433"
+          />
+        </div>
+      </router-link>
+    </div>
+    <router-link :to="productLink" tag="div" class="t-text-sm" v-if="!onlyImage">
+      <p class="t-mb-1 t-text-primary t-leading-tight" v-if="!onlyImage">
         {{ product.name | htmlDecode }}
       </p>
 
       <span
-        class="price-original mr5 lh30 cl-secondary"
+        class="price-original t-text-base-light t-line-through t-mr-2"
         v-if="product.special_price && parseFloat(product.original_price_incl_tax) > 0 && !onlyImage"
       >
         {{ product.original_price_incl_tax | price }}
       </span>
 
       <span
-        class="price-special lh30 cl-accent weight-700"
+        class="price-special t-text-sale t-font-bold"
         v-if="product.special_price && parseFloat(product.special_price) > 0 && !onlyImage"
       >
         {{ product.price_incl_tax | price }}
       </span>
 
       <span
-        class="lh30 cl-secondary"
+        class="price t-text-base-dark t-font-bold"
         v-if="!product.special_price && parseFloat(product.price_incl_tax) > 0 && !onlyImage"
       >
         {{ product.price_incl_tax | price }}
@@ -136,19 +139,7 @@ $color-white: color(white);
 .product-image {
   width: 100%;
   overflow: hidden;
-  max-height: 300px;
-
-  &:hover {
-    amp-img {
-      opacity: 1;
-      transform: scale(1.1);
-    }
-
-    &.sale::after,
-    &.new::after {
-      opacity: 0.8;
-    }
-  }
+  max-height: 433px;
 
   amp-img {
     max-height: 100%;
@@ -156,10 +147,7 @@ $color-white: color(white);
     width: auto;
     height: auto;
     margin: auto;
-    mix-blend-mode: darken;
-    opacity: 0.8;
     transform: scale(1);
-    transition: 0.3s opacity $motion-main, 0.3s transform $motion-main;
     /deep/ img {
         height: initial;
         width: initial;
