@@ -1,12 +1,9 @@
 <template>
   <div class="header">
-    <header
-      class="fixed w-100 brdr-bottom-1 bg-cl-primary brdr-cl-secondary"
-      :class="{ 'is-visible': true }"
-    >
-      <div class="container px15">
-        <div class="row between-xs middle-xs">
-          <div class="col-sm-4 col-xs-2 middle-xs">
+    <header class="t-fixed t-w-full t-bg-white">
+      <div class="t-h-60px t-flex">
+        <div class="t-container t-px-4 t-flex t-items-center">
+          <div class="t-flex t-w-full t-flex-wrap t-items-stretch">
             <div>
               <template>
                 <a
@@ -19,20 +16,10 @@
               </template>
             </div>
           </div>
-          <div class="col-xs-2 visible-xs" />
-          <div class="col-sm-4 col-xs-4 center-xs">
-            <div>
-              <logo width="auto" height="41px" />
-            </div>
-          </div>
-          <div class="col-xs-2 visible-xs" />
-          <div class="col-sm-4 col-xs-2 end-xs">
-            <div class="inline-flex right-icons" />
-          </div>
         </div>
+        <logo width="174" height="43" class="logo t-flex-fix t--mr-4 xl:t-mr-0" />
       </div>
     </header>
-    <div class="header-placeholder" />
   </div>
 </template>
 
