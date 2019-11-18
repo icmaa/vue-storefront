@@ -7,7 +7,7 @@
 
     <!-- <a href="#" class="t-align-right t-text-base-light" @click.prevent="remakeOrder(singleOrderItems)">{{ $t('Remake order') }}</a>-->
     <div class="t-flex t-flex-wrap t-justify-between t-bg-base-lightest t-text-sm t-p-2">
-      <div>{{ $t('Status') }} {{ order.status | capitalize }}</div>
+      <div class="t-flex t-items-center">{{ $t('Status') }} <status-icon :status="order.status" /> {{ order.status | capitalize }}</div>
       <div>{{ $t('Order date') }} {{ order.created_at | date('LLL') }}</div>
     </div>
 
@@ -55,7 +55,7 @@
     </div>
 
     <!-- Ordered products -->
-    <div class="t-text-lg t-py-2">
+    <div class="t-text-lg t-py-2 t-mb-4">
       {{ $t('Items ordered') }}
     </div>
     <div class="t-w-full t-flex t-mb-2 t-pb-2 t-border-b t-border-base-lightest" v-for="item in singleOrderItems" :key="item.item_id">
@@ -107,12 +107,14 @@ import MyOrder from '@vue-storefront/core/compatibility/components/blocks/MyAcco
 import ProductImage from 'theme/components/core/ProductImage'
 import { getThumbnailPath, productThumbnailPath } from '@vue-storefront/core/helpers'
 import { mapActions } from 'vuex'
+import StatusIcon from 'theme/components/core/blocks/MyAccount/StatusIcon.vue'
 
 export default {
   mixins: [MyOrder],
   components: {
     ProductImage,
-    Headline
+    Headline,
+    StatusIcon
   },
   data () {
     return {
