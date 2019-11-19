@@ -4,22 +4,19 @@
       <div class="t-h-60px t-flex">
         <div class="t-container t-px-4 t-flex t-items-center">
           <div class="t-flex t-w-full t-flex-wrap t-items-stretch">
-            <div>
-              <template>
-                <a
-                  class="inline-flex brdr-none p15 icon bg-cl-secondary pointer"
-                  href="/"
-                  data-testid="returnButton"
-                >
-                  <i class="material-icons">keyboard_backspace</i>
-                </a>
-              </template>
-            </div>
+            <a
+              class="inline-flex brdr-none p15 icon bg-cl-secondary pointer"
+              href="/"
+              data-testid="returnButton"
+            >
+              <i class="material-icons">keyboard_backspace</i>
+            </a>
           </div>
+          <logo width="174" height="43" class="t-no-underline logo t-flex-fix t--mr-4 xl:t-mr-0 router-link-active" />
         </div>
-        <logo width="174" height="43" class="logo t-flex-fix t--mr-4 xl:t-mr-0" />
       </div>
     </header>
+    <div class="header-placeholder" />
   </div>
 </template>
 

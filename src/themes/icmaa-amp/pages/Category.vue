@@ -12,18 +12,13 @@
       </div>
       <div class="t-container">
         <div class="product-listing t-flex t-flex-wrap t-justify-start t-px-3 lg:t-px-4 lg:t--mx-2">
-          <p class="col-xs-12 hidden-md m0 px20 cl-secondary">
-            {{ productsCounter }} items
-          </p>
-          <div class="product-listing t-flex t-flex-wrap t-justify-start t-px-3 lg:t-px-4 lg:t--mx-2">
-            <div v-if="isCategoryEmpty" class="hidden-xs">
-              <h4 data-testid="noProductsInfo">
-                {{ $t('No products found!') }}
-              </h4>
-              <p>{{ $t('Please change Your search criteria and try again. If still not finding anything relevant, please visit the Home page and try out some of our bestsellers!') }}</p>
-            </div>
-            <product-listing columns="4" :products="products" />
+          <div v-if="isCategoryEmpty" class="hidden-xs">
+            <h4 data-testid="noProductsInfo">
+              {{ $t('No products found!') }}
+            </h4>
+            <p>{{ $t('Please change Your search criteria and try again. If still not finding anything relevant, please visit the Home page and try out some of our bestsellers!') }}</p>
           </div>
+          <product-listing columns="4" :products="products" />
         </div>
       </div>
     </div>

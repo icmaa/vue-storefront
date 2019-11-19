@@ -1,28 +1,27 @@
 <template>
   <div
-    class="product t-cursor-pointer"
+    class="product w-100 pb20 t-cursor-pointer"
     v-observe-visibility="visibilityChanged"
   >
-    <div class="product-cover t-relative t-bg-white" :class="{ 't-mb-4': !onlyImage }">
-      <router-link
-        class="product-link t-block t-z-0"
-        :to="productLink"
-        data-testid="productLink"
+    <router-link
+      class="product-cover t-relative t-bg-white t-mb-4"
+      :to="productLink"
+      data-testid="productLink"
+    >
+      <div
+        class="product-image relative t-bg-white t-pb-10"
+        :class="[{ sale: labelsActive && isOnSale }, { new: labelsActive && isNew }]"
       >
-        <div
-          class="product-image relative"
-          :class="[{ sale: labelsActive && isOnSale }, { new: labelsActive && isNew }]"
-        >
-          <amp-img
-            :alt="product.name"
-            :src="thumbnailObj.src"
-            width="300"
-            height="433"
-          />
-        </div>
-      </router-link>
-    </div>
-    <router-link :to="productLink" tag="div" class="t-text-sm" v-if="!onlyImage">
+        <amp-img
+          :alt="product.name"
+          :src="thumbnailObj.src"
+          height="433"
+          width="310"
+        />
+      </div>
+    </router-link>
+
+    <router-link :to="productLink" tag="div" class="t-text-sm t-pt-3" v-if="!onlyImage">
       <p class="t-mb-1 t-text-primary t-leading-tight" v-if="!onlyImage">
         {{ product.name | htmlDecode }}
       </p>
@@ -147,7 +146,6 @@ $color-white: color(white);
     width: auto;
     height: auto;
     margin: auto;
-    transform: scale(1);
     /deep/ img {
         height: initial;
         width: initial;
