@@ -6,9 +6,12 @@
 </headline>
 
     <!-- <a href="#" class="t-align-right t-text-base-light" @click.prevent="remakeOrder(singleOrderItems)">{{ $t('Remake order') }}</a>-->
-    <div class="t-flex t-flex-wrap t-justify-between t-bg-base-lightest t-text-sm t-p-2">
-      <div class="t-flex t-items-center">{{ $t('Status') }} <status-icon :status="order.status" /> {{ order.status | capitalize }}</div>
-      <div>{{ $t('Order date') }} {{ order.created_at | date('LLL') }}</div>
+    <div class="t-flex t-flex-wrap t-justify-between t-bg-base-lightest t-text-sm t-p-2 t-mb-4">
+      <div class="t-flex">
+        <div class="t-w-full t-flex t-items-center"><div><strong>{{ $t('Status') }}</strong></div><status-icon :status="order.status" /></div>
+        <div class="t-w-full">{{ order.status | capitalize }}</div>
+      </div>
+      <div><strong>{{ $t('Order date') }}</strong> {{ order.created_at | date('LLL') }}</div>
     </div>
 
     <!-- Order information -->
@@ -17,9 +20,9 @@
         {{ $t('Order informations') }}
       </div>
       <div class="t-flex t-flex-wrap">
-        <div class="t-w-full sm:t-w-1/2 t-mb-3 sm:t-pr-4">
+        <div class="t-w-full sm:t-w-1/2 t-mb-4 sm:t-pr-4">
           <div class="t-border-b">
-            {{ $t('Billing address') }}
+            <strong>{{ $t('Billing address') }}</strong>
           </div>
           <address>
             <p>{{ billingAddress.firstname }} {{ billingAddress.lastname }}</p>
@@ -28,9 +31,9 @@
             <p>{{ billingAddress.country }}</p>
           </address>
         </div>
-        <div class="t-w-full sm:t-w-1/2 t-mb-2 sm:t-pr-4">
+        <div class="t-w-full sm:t-w-1/2 t-mb-4 sm:t-pr-4">
           <div class="t-border-b">
-            {{ $t('Shipping address') }}
+            <strong>{{ $t('Shipping address') }}</strong>
           </div>
           <address>
             <p>{{ shippingAddress.firstname }} {{ shippingAddress.lastname }}</p>
@@ -39,15 +42,15 @@
             <p>{{ shippingAddress.country }}</p>
           </address>
         </div>
-        <div class="t-w-full sm:t-w-1/2 t-mb-2 sm:t-pr-4">
+        <div class="t-w-full sm:t-w-1/2 t-mb-4 sm:t-pr-4">
           <div class="t-border-b">
-            {{ $t('Shipping method') }}
+            <strong>{{ $t('Shipping method') }}</strong>
           </div>
           <p>{{ order.shipping_description }}</p>
         </div>
-        <div class="t-w-full sm:t-w-1/2 t-mb-2 sm:t-pr-4">
+        <div class="t-w-full sm:t-w-1/2 t-mb-4 sm:t-pr-4">
           <div class="t-border-b">
-            {{ $t('Payment method') }}
+            <strong>{{ $t('Payment method') }}</strong>
           </div>
           <p>{{ paymentMethod }}</p>
         </div>
@@ -63,9 +66,9 @@
         <product-image :image="{ src: getThumbnail(item.thumbnail, 20, 20), loading: getThumbnail(item.thumbnail, 20, 20) }" />
       </div>
       <div class="t-w-2/3 t-py-2">
-        <div class="t-block t-text-primary t-w-full t-text-sm t-leading-tight" :data-div="$t('Product Name')">
-{{ item.qty_ordered }} x {{ item.name }}
-</div>
+        <div class="t-block t-text-primary t-w-full t-text-sm t-leading-tight t-mb-2" :data-div="$t('Product Name')">
+          {{ item.qty_ordered }} x {{ item.name }}
+        </div>
         <div class="t-font-bold" :data-div="$t('Subtotal')">
           {{ item.row_total_incl_tax | price }}
         </div>
@@ -108,6 +111,8 @@ import ProductImage from 'theme/components/core/ProductImage'
 import { getThumbnailPath, productThumbnailPath } from '@vue-storefront/core/helpers'
 import { mapActions } from 'vuex'
 import StatusIcon from 'theme/components/core/blocks/MyAccount/StatusIcon.vue'
+import { currentStoreView } from '@vue-storefront/core/lib/multistore'
+import { formatProductLink } from '@vue-storefront/core/modules/url/helpers'
 
 export default {
   mixins: [MyOrder],
@@ -129,16 +134,17 @@ export default {
   computed: {
     thumbnail () {
       return this.getThumbnail(this.singleOrderItems[0].thumbnail, 150, 150)
+    },
+    productLink () {
+      const product = this.getProduct({ options: { sku: this.singleOrderItems[0].sku }, setCurrentProduct: false, setCurrentCategoryPath: false, selectDefaultVariant: false })
+      return product
+      // return formatProductLink(product, currentStoreView().storeCode)
     }
   },
   mounted () {
     this.singleOrderItems.forEach(async item => {
-      if (!this.itemThumbnail[item.sku]) {
-        const product = await this.getProduct({ options: { sku: item.sku }, setCurrentProduct: false, setCurrentCategoryPath: false, selectDefaultVariant: false })
-        console.log(product)
-        const thumbnail = this.getThumbnail(product.image, 150, 150)
-        Vue.set(this.itemThumbnail, item.sku, getThumbnailPath(thumbnail, 280, 280))
-      }
+      const product = await this.getProduct({ options: { sku: item.sku }, setCurrentProduct: false, setCurrentCategoryPath: false, selectDefaultVariant: false })
+      Vue.set(this.itemThumbnail, item.sku, product)
     })
   }
 }
