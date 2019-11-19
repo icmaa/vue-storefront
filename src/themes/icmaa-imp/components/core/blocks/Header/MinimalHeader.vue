@@ -1,6 +1,6 @@
 <template>
   <div class="header">
-    <header class="t-fixed t-w-full t-bg-white">
+    <header class="t-fixed t-w-full t-bg-white is-visible">
       <div class="t-h-60px t-flex">
         <div class="t-container t-px-4 t-flex t-items-center">
           <div class="t-flex t-w-full t-flex-wrap t-items-stretch">
