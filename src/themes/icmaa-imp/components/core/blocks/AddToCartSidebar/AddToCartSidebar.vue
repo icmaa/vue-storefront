@@ -43,6 +43,7 @@ import i18n from '@vue-storefront/i18n'
 import { mapGetters } from 'vuex'
 import { ProductOption } from '@vue-storefront/core/modules/catalog/components/ProductOption'
 import { notifications } from '@vue-storefront/core/modules/cart/helpers'
+import { Logger } from '@vue-storefront/core/lib/logger'
 import Composite from '@vue-storefront/core/mixins/composite'
 import ProductOptionsMixin from 'theme/mixins/product/optionsMixin'
 import ProductAddToCartMixin from 'theme/mixins/product/addtocartMixin'
@@ -97,6 +98,8 @@ export default {
           .then(() => {
             this.loading = false
           })
+      } else {
+        Logger.error('TODO: Add product-alert', 'DEBUG', Logger)()
       }
     }
   }

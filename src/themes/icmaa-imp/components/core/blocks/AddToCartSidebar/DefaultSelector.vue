@@ -13,7 +13,7 @@
       <span class="t-flex-auto">
         {{ getOptionLabel({ attributeKey: option.type, optionId: option.id }) }}
       </span>
-      <span class="t-flex-fix t-text-xs">
+      <span class="t-flex-fix t-text-xs t-cursor-pointer">
         {{ $t('Request size') }}
       </span>
       <material-icon icon="mail_outline" class="t-flex-fix t-ml-4" />
