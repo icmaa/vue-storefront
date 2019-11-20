@@ -98,7 +98,10 @@ export default {
             this.loading = false
           })
       } else {
-        this.$store.dispatch('icmaaProductAlert/addProductStockAlert', 123)
+        const confChild = this.product.configurable_children.find(c => c[option.type] === option.id)
+        if (confChild) {
+          this.$store.dispatch('icmaaProductAlert/addProductStockAlert', confChild.id)
+        }
       }
     }
   }
