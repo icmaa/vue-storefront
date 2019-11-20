@@ -46,6 +46,7 @@ import { notifications } from '@vue-storefront/core/modules/cart/helpers'
 import Composite from '@vue-storefront/core/mixins/composite'
 import ProductOptionsMixin from 'theme/mixins/product/optionsMixin'
 import ProductAddToCartMixin from 'theme/mixins/product/addtocartMixin'
+import ProductStockAlertMixin from 'icmaa-product-alert/mixins/productStockAlertMixin'
 
 import Sidebar from 'theme/components/theme/blocks/AsyncSidebar/Sidebar'
 import DefaultSelector from 'theme/components/core/blocks/AddToCartSidebar/DefaultSelector'
@@ -57,7 +58,7 @@ import MaterialIcon from 'theme/components/core/blocks/MaterialIcon'
 
 export default {
   name: 'AddToCartSidebar',
-  mixins: [ Composite, ProductOption, ProductOptionsMixin, ProductAddToCartMixin ],
+  mixins: [ Composite, ProductOption, ProductOptionsMixin, ProductAddToCartMixin, ProductStockAlertMixin ],
   components: {
     Sidebar,
     DefaultSelector,
@@ -98,10 +99,7 @@ export default {
             this.loading = false
           })
       } else {
-        const confChild = this.product.configurable_children.find(c => c[option.type] === option.id)
-        if (confChild) {
-          this.$store.dispatch('icmaaProductAlert/addProductStockAlert', confChild.id)
-        }
+        this.addProductStockAlert(this.product, option)
       }
     }
   }
