@@ -1,3 +1,3 @@
 export default interface ProductAlert {
-  [key: string]: any
+  stock: string[]
 }

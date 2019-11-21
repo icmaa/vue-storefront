@@ -7,6 +7,10 @@ import * as types from './mutation-types'
 const actions: ActionTree<ProductAlertState, RootState> = {
   async addProductStockAlert ({ commit, rootGetters }, productId): Promise<boolean> {
     const addProduct = await ProductAlertService.addProductStockAlert(productId)
+    if (addProduct) {
+      commit(types.ICMAA_PRODUCT_ALERT_ADD_PRODUCT, productId)
+    }
+
     return addProduct
   }
 }
