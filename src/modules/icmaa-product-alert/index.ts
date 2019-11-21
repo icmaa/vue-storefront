@@ -6,7 +6,7 @@ export const IcmaaProductAlertModule: StorefrontModule = async function ({ store
   store.registerModule('icmaaProductAlert', ProductAlertStore)
 
   EventBus.$on('user-after-loggedin', async result => {
-    const productStockAlerts = await store.dispatch('icmaaProductAlert/fetchProductStockAlerts')
+    await store.dispatch('icmaaProductAlert/fetchProductStockAlerts')
   })
 
   EventBus.$on('user-after-logout', result => {
