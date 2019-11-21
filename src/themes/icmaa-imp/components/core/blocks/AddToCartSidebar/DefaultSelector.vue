@@ -12,10 +12,15 @@
       <span class="t-flex-auto">
         {{ getOptionLabel({ attributeKey: option.type, optionId: option.id }) }}
       </span>
-      <span class="t-flex-fix t-text-xs t-cursor-pointer">
-        {{ $t('Request size') }}
+      <span class="t-flex-fix t-text-xs" :class="{ 't-text-alt-3': isStockAlertSubscrided }">
+        <template v-if="!isStockAlertSubscrided">
+          {{ $t('Request size') }}
+        </template>
+        <template v-else>
+          {{ $t('Subscribed for updates') }}
+        </template>
       </span>
-      <material-icon icon="mail_outline" class="t-flex-fix t-ml-4" />
+      <material-icon :icon="isStockAlertSubscrided ? 'check' : 'mail_outline'" class="t-flex-fix t-ml-2" :class="{ 't-text-alt-3': isStockAlertSubscrided }" />
     </template>
     <loader-background v-if="isActive && isLoading" class="t-bottom-0" />
   </div>
@@ -53,11 +58,15 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('attribute', { getOptionLabel: 'getOptionLabel' })
+    ...mapGetters('attribute', ['getOptionLabel']),
+    ...mapGetters('icmaaProductAlert', ['isOptionSubscribedToStock']),
+    isStockAlertSubscrided () {
+      return this.isOptionSubscribedToStock(this.option)
+    }
   },
   methods: {
     selectVariant () {
-      if (!this.isLoading) {
+      if (!this.isLoading && !this.isStockAlertSubscrided) {
         this.$emit('change', this.option)
       }
     }

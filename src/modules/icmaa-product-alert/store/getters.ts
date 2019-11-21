@@ -13,7 +13,15 @@ const getters: GetterTree<ProductAlertState, RootState> = {
         return childProduct.id
       }
       return false
+    },
+  isOptionSubscribedToStock: (state, getters) => (option): boolean => {
+    const product = getters.getChildProductIdByCurrentProductOption(option)
+    if (!product) {
+      return false
     }
+
+    return getters.hasSubscribedToStockItem(product)
+  }
 }
 
 export default getters
