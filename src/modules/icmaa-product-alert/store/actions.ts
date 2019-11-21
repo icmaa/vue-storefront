@@ -12,6 +12,17 @@ const actions: ActionTree<ProductAlertState, RootState> = {
     }
 
     return addProduct
+  },
+  async fetchProductStockAlerts ({ commit, rootGetters }): Promise<string[]> {
+    const productIds = await ProductAlertService.listProductStockAlerts()
+    if (productIds) {
+      commit(types.ICMAA_PRODUCT_ALERT_SET_PRODUCTS, productIds)
+    }
+
+    return productIds as string[] || []
+  },
+  clearProductStockAlerts ({ commit }): void {
+    commit(types.ICMAA_PRODUCT_ALERT_CLR_PRODUCT)
   }
 }
 

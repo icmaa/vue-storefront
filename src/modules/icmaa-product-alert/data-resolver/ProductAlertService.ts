@@ -24,17 +24,16 @@ const removeProductStockAlert = (product_id: string): Promise<boolean> =>
     }
   }).then(resp => resp.code === 200)
 
-const listProductStockAlerts = (product_id: string): Promise<boolean|any[]> =>
+const listProductStockAlerts = (): Promise<boolean|string[]> =>
   TaskQueue.execute({
     url: processURLAddress(config.icmaa_productalert.endpoint) + '/stocklist?token={{token}}',
     payload: {
-      method: 'DELETE',
+      method: 'GET',
       headers: { 'Content-Type': 'application/json' },
-      mode: 'cors',
-      body: JSON.stringify({ product_id })
+      mode: 'cors'
     },
     silent: true
-  }).then(resp => resp.code === 200 ? resp.result : false)
+  }).then(resp => resp.code === 200 ? resp.result.map(a => a.product_id) : false)
 
 export default {
   addProductStockAlert,

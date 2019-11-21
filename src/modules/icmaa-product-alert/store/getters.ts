@@ -4,6 +4,7 @@ import ProductAlertState from '../types/ProductAlertState'
 
 const getters: GetterTree<ProductAlertState, RootState> = {
   getStockItems: (state): string[] => state.stock,
+  hasSubscribedToStockItem: (state) => (productId): boolean => state.stock.includes(productId),
   getChildProductIdByCurrentProductOption: (state, getters, RootState, rootGetters) =>
     (option: { type: string, id: string }): string|boolean => {
       const confChildren = rootGetters['product/getCurrentProduct'].configurable_children
