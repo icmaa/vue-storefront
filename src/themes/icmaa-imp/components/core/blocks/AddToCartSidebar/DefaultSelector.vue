@@ -12,14 +12,11 @@
       <span class="t-flex-auto">
         {{ getOptionLabel({ attributeKey: option.type, optionId: option.id }) }}
       </span>
-      <span class="t-flex-fix t-text-xs" :class="{ 't-text-alt-3': isStockAlertSubscrided }">
-        <template v-if="!isStockAlertSubscrided">
-          {{ $t('Request size') }}
-        </template>
-        <template v-else>
-          {{ $t('Subscribed for updates') }}
-        </template>
-      </span>
+      <span
+        class="t-flex-fix t-text-xs t-leading-1-em t-text-right"
+        :class="{ 't-text-alt-3': isStockAlertSubscrided }"
+        v-html="$t(isStockAlertSubscrided ? 'Subscribed for<br> stock updates' : 'Request size')"
+      />
       <material-icon :icon="isStockAlertSubscrided ? 'check' : 'mail_outline'" class="t-flex-fix t-ml-2" :class="{ 't-text-alt-3': isStockAlertSubscrided }" />
     </template>
     <loader-background v-if="isActive && isLoading" class="t-bottom-0" />
