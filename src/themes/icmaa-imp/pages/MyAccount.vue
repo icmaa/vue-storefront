@@ -1,25 +1,31 @@
 <template>
-  <div id="my_account" class="t-container">
-    <div class="t-px-4 t-py-4">
+  <div id="my_account" class="t-container t-px-4">
+    <div class="t-flex t--mx-2 t-py-4">
+      <div class="t-hidden lg:t-flex t-w-1/4 t-px-2" v-if="viewport && !['xs','sm','md'].includes(viewport)">
+        <navigation />
+      </div>
       <no-ssr>
-        <component :is="this.$props.activeBlock" />
+        <div class="t-w-full lg:t-w-3/4 t-px-2">
+          <component :is="this.$props.activeBlock" />
+        </div>
       </no-ssr>
     </div>
   </div>
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import i18n from '@vue-storefront/i18n'
 import Composite from '@vue-storefront/core/mixins/composite'
 import { currentStoreView, localizedRoute } from '@vue-storefront/core/lib/multistore'
 import { Logger } from '@vue-storefront/core/lib/logger'
 
+import Navigation from '../components/core/blocks/MyAccount/Navigation'
 import MyProfile from '../components/core/blocks/MyAccount/MyProfile'
 import MyAddresses from '../components/core/blocks/MyAccount/MyAddresses'
 import MyNewsletter from '../components/core/blocks/MyAccount/MyNewsletter'
 import MyOrders from '../components/core/blocks/MyAccount/MyOrders'
 import MyOrder from '../components/core/blocks/MyAccount/MyOrder'
-import MyRecentlyViewed from '../components/core/blocks/MyAccount/MyRecentlyViewed'
 import NoSSR from 'vue-no-ssr'
 
 export default {
@@ -37,12 +43,12 @@ export default {
     }
   },
   components: {
+    Navigation,
     MyProfile,
     MyAddresses,
     MyNewsletter,
     MyOrders,
     MyOrder,
-    MyRecentlyViewed,
     'no-ssr': NoSSR
   },
   beforeMount () {
@@ -57,6 +63,11 @@ export default {
   },
   destroyed () {
     this.$bus.$off('myAccount-before-updateUser', this.onBeforeUpdateUser)
+  },
+  computed: {
+    ...mapGetters({
+      viewport: 'ui/getViewport'
+    })
   },
   methods: {
     async onBeforeUpdateUser (updatedData, passwordData = false, message = false) {
