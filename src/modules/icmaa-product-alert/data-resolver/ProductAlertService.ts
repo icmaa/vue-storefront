@@ -32,6 +32,7 @@ const listProductStockAlerts = (): Promise<boolean|string[]> =>
       headers: { 'Content-Type': 'application/json' },
       mode: 'cors'
     },
+    is_result_cacheable: true,
     silent: true
   }).then(resp => resp.code === 200 ? resp.result.map(a => a.product_id) : false)
 
