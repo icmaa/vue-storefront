@@ -1,10 +1,18 @@
-import getFunctionScores from './elasticsearch/score'
-import getMultiMatchConfig from './elasticsearch/multimatch'
-import getBoosts from './elasticsearch/boost'
-import getMapping from './elasticsearch/mapping'
+import getFunctionScores from '@vue-storefront/core/lib/search/adapter/api/elasticsearch/score'
+import getMultiMatchConfig from '@vue-storefront/core/lib/search/adapter/api/elasticsearch/multimatch'
+import getBoosts from '@vue-storefront/core/lib/search/adapter/api/elasticsearch/boost'
+import getMapping from '@vue-storefront/core/lib/search/adapter/api/elasticsearch/mapping'
 import cloneDeep from 'lodash-es/cloneDeep'
 import config from 'config'
 
+/**
+ * Copy of @vue-storefront/core/lib/search/adapter/api/elasticsearchQuery.js
+ * including our changes to:
+ * * Add or-null filters
+ * * Add or/should filters
+ *
+ * @param searchQuery
+ */
 export async function prepareElasticsearchQueryBody (searchQuery) {
   const bodybuilder = await import(/* webpackChunkName: "bodybuilder" */ 'bodybuilder')
   const optionsPrefix = '_options'
@@ -25,11 +33,26 @@ export async function prepareElasticsearchQueryBody (searchQuery) {
           query = query.filter('range', filter.attribute, filter.value)
         } else {
           // process terms filters
+          const operator = Object.keys(filter.value)[0]
           filter.value = filter.value[Object.keys(filter.value)[0]]
-          if (!Array.isArray(filter.value)) {
+          if (!Array.isArray(filter.value) && filter.value !== null) {
             filter.value = [filter.value]
           }
-          query = query.filter('terms', getMapping(filter.attribute), filter.value)
+          if (operator === 'or') {
+            if (filter.value === null) {
+              query = query.orFilter('bool', (b) => {
+                return b.notFilter('exists', getMapping(filter.attribute))
+              })
+            } else {
+              query = query.orFilter('terms', getMapping(filter.attribute), filter.value)
+            }
+          } else {
+            if (filter.value === null) {
+              query = query.notFilter('exists', getMapping(filter.attribute))
+            } else {
+              query = query.filter('terms', getMapping(filter.attribute), filter.value)
+            }
+          }
         }
       } else if (filter.scope === 'catalog') {
         hasCatalogFilters = true
@@ -114,7 +137,7 @@ export async function prepareElasticsearchQueryBody (searchQuery) {
   }
   const queryBody = query.build()
   if (searchQuery.suggest) {
-    queryBody.suggest = searchQuery.suggest
+    queryBody['suggest'] = searchQuery.suggest
   }
 
   return queryBody
