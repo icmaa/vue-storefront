@@ -1,5 +1,6 @@
 <template>
   <div class="mb35" v-if="order">
+    <tracking-link :order-id="order.id" :status="order.status" />
     <!-- My order header -->
     <div class="row mb15">
       <div class="col-xs-12 col-md-2 col-lg-1">
@@ -147,6 +148,7 @@ import Vue from 'vue'
 import MyOrder from '@vue-storefront/core/compatibility/components/blocks/MyAccount/MyOrder'
 import ReturnIcon from 'theme/components/core/blocks/Header/ReturnIcon'
 import ProductImage from 'theme/components/core/ProductImage'
+import TrackingLink from 'icmaa-tracking/components/TrackingLink'
 import { getThumbnailPath, productThumbnailPath } from '@vue-storefront/core/helpers'
 import { mapActions } from 'vuex'
 
@@ -154,7 +156,8 @@ export default {
   mixins: [MyOrder],
   components: {
     ReturnIcon,
-    ProductImage
+    ProductImage,
+    TrackingLink
   },
   data () {
     return {
