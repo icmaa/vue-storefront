@@ -1,6 +1,6 @@
 <template>
   <div id="product" itemscope itemtype="http://schema.org/Product">
-    <section class="bg-cl-secondary px20 product-top-section">
+    <section class="px20 product-top-section">
       <div class="container">
         <section class="row m0 between-xs">
           <div class="col-xs-12 col-md-6 center-xs middle-xs image">
@@ -28,17 +28,14 @@
               :routes="breadcrumbs"
               :active-route="product.name"
             />
-            <h1 class="mb20 mt0 cl-mine-shaft product-name" data-testid="productName" itemprop="name">
+            <h1 class="t-block t-text-2xl t-font-thin t-leading-relaxed t-mb-2" data-testid="productName" itemprop="name">
               {{ product.name | htmlDecode }}
             </h1>
-            <div class="mb20 uppercase cl-secondary">
-              sku: {{ product.sku }}
-            </div>
             <div itemprop="offers" itemscope itemtype="http://schema.org/Offer">
               <meta itemprop="priceCurrency" :content="priceCurrency">
               <meta itemprop="price" :content="parseFloat(product.price_incl_tax).toFixed(2)">
               <div
-                class="mb40 price serif"
+                class="mb40 price"
                 v-if="product.type_id !== 'grouped'"
               >
                 <div
@@ -81,7 +78,7 @@
               :product="product"
             />
             <div class="row m0">
-              <router-link class="button-full text-center block w-100 px10 py20 bg-cl-mine-shaft :bg-cl-th-secondary ripple weight-400 h4 cl-white sans-serif fs-medium col-xs-12 col-sm-4 col-md-6" :to="localizedRoute({
+              <router-link class="t-flex t-items-center t-rounded-sm t-cursor-pointer t-webkit-tap-transparent t-flex-grow lg:t-w-2/6 disabled:t-opacity-75 t-relative t-uppercase t-h-10 t-px-4 t-text-xs t-bg-primary t-text-white t-justify-center" :to="localizedRoute({
                 name: product.type_id + '-product',
                 params: {
                   parentSku: product.parentSku ? product.parentSku : product.sku,
@@ -97,33 +94,15 @@
         </section>
       </div>
     </section>
-    <section class="container px15 pt50 pb35 cl-accent details">
-      <h2 class="h3 m0 mb10 serif lh20 details-title">
+    <section class="container px15 pt50 pb35 cl-accent details sm:t-pl-8">
+      <h2 class="t-block t-text-2xl t-font-thin t-leading-relaxed t-mb-2">
         {{ $t('Product details') }}
       </h2>
       <div
-        class="h4 details-wrapper"
-        :class="{'details-wrapper--open': detailsOpen}"
+        class="h4"
       >
         <div class="row between-md m0">
-          <div class="col-xs-12 col-sm-6">
-            <div
-              class="lh30 h5"
-              itemprop="description"
-              v-html="product.description"
-            />
-          </div>
-          <div class="col-xs-12 col-sm-5">
-            <ul class="attributes p0 pt5 m0">
-              <product-attribute
-                :key="attr.attribute_code"
-                v-for="attr in customAttributes"
-                :product="product"
-                :attribute="attr"
-                empty-placeholder="N/A"
-              />
-            </ul>
-          </div>
+          <product-details :product="product" />
         </div>
       </div>
     </section>
@@ -140,6 +119,7 @@ import ProductBundleOptions from 'theme/components/core/ProductBundleOptions.vue
 import focusClean from 'theme/components/theme/directives/focusClean'
 import { isServer } from '@vue-storefront/core/helpers'
 import { currentStoreView } from '@vue-storefront/core/lib/multistore'
+import ProductDetails from 'theme/components/core/blocks/Product/ProductDetails'
 
 export default {
   components: {
@@ -147,7 +127,8 @@ export default {
     ProductAttribute,
     ProductBundleOptions,
     ProductCustomOptions,
-    ProductLinks
+    ProductLinks,
+    ProductDetails
   },
   data () {
     return {

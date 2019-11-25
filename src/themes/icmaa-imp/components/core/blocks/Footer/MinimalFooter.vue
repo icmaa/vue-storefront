@@ -4,7 +4,7 @@
       <div class="t-container t-px-4">
         <div class="t--mx-4 lg:t-flex">
           <div class="t-flex t-w-full t-flex-wrap t-items-center t-justify-center t-leading-looser" data-v-5687d0d6="">
-            <div class="t-hidden t-flex-expand lg:t-flex" data-v-5687d0d6="" /> <div class="copyright t-px-4 t-hidden lg:t-flex t-text-white t-text-xs t-uppercase" data-v-5687d0d6="">
+            <div class="t-hidden t-flex-expand lg:t-flex" data-v-5687d0d6="" /> <div class="copyright t-px-4 lg:t-flex t-text-white t-text-xs t-uppercase" data-v-5687d0d6="">
               © Impericon is a Division of IC Music and Apparel GmbH
             </div>
           </div>
