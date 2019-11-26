@@ -1,11 +1,11 @@
 <template>
   <div class="competition t-container" v-if="competition">
-    <div class="t-px-4 t-mb-8">
+    <div class="t-px-4 t-pt-4 t-mb-8">
       <h1>{{ competition.headline }}</h1>
       <div>{{ competition.description }}</div>
     </div>
-    <form v-if="isActive" @submit.prevent="submit" novalidate class="t-flex t-flex-wrap t-px-4 t--mx-2 t-pb-8">
-      <div v-for="(element, i) in formElements" :key="i" class="t-flex t-w-1/2 t-px-2 t-mb-4">
+    <form v-if="isActive" @submit.prevent="submit" novalidate class="t-flex t-flex-wrap t-px-4 t--mx-2 t-pb-4">
+      <div v-for="(element, i) in formElements" :key="i" class="t-flex t-w-full lg:t-w-1/2 t-px-2 t-mb-4">
         <template v-if="element.component === 'form_input'">
           <base-input
             :name="element.name"
@@ -31,7 +31,7 @@
             :name="element.name"
             :id="element.name"
             v-model="form[element.name]"
-            class="t-w-full"
+            class="t-w-full lg:t-mt-4"
           >
             {{ element.label }}
           </base-checkbox>
@@ -82,7 +82,11 @@ export default {
     }
   },
   computed: {
-    ...mapGetters({ getCompetition: 'icmaaCompetitions/getByIdentifier' }),
+    ...mapGetters({
+      getCompetition: 'icmaaCompetitions/getByIdentifier',
+      isLoggedIn: 'user/isLoggedIn',
+      customer: 'user/getCustomer'
+    }),
     competition () {
       return this.getCompetition(this.$route.params.identifier)
     },
@@ -125,6 +129,8 @@ export default {
           value = element.default || ''
         } else if (element.component === 'form_checkbox') {
           value = element.checked || false
+        } else if (element.component === 'form_input' && element.name === 'email') {
+          value = this.isLoggedIn ? this.customer.email : ''
         }
         defaults[element.name] = value
       })
@@ -146,7 +152,7 @@ export default {
       form: this.formValidation
     }
   },
-  mounted () {
+  created () {
     this.form = this.formDefaults
   },
   async asyncData ({ store, route, context }) {
