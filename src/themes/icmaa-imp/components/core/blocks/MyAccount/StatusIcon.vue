@@ -1,5 +1,5 @@
 <template>
-  <div class="status-icon t-mx-1" :class="status" />
+  <div class="status-icon t-mr-1 t-flex t-flex-fix" :class="status" />
 </template>
 
 <script>
@@ -22,8 +22,8 @@ export default {
 
 <style lang="scss" scoped>
 .status-icon {
-  height: 1rem;
-  width: 1rem;
+  height: 0.9rem;
+  width: 0.9rem;
   border-radius: 50%;
   display: inline-block;
 }

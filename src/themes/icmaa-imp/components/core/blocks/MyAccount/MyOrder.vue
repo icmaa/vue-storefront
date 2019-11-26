@@ -2,28 +2,43 @@
   <div class="t-p-4 t-bg-white" v-if="order">
     <!-- My order header -->
     <headline icon="local_mall">
-      {{ $t('Order #') }}{{ order.increment_id }}
-    </headline>
+{{ $t('Order #') }}{{ order.increment_id }}
+</headline>
 
-    <!-- <a href="#" class="t-align-right t-text-base-light" @click.prevent="remakeOrder(singleOrderItems)">{{ $t('Remake order') }}</a>-->
-    <div class="t-flex t-flex-wrap t-justify-between t-bg-base-lightest t-rounded-sm t-text-sm t-p-2 t-mb-4">
+    <div class="t-flex t-flex-wrap t-justify-between t-border-b t-text-sm t-p-2 t-mb-4">
       <div class="t-flex">
-        <div class="t-w-full t-flex t-items-center t-py-1">
-          <div>
-            <strong>{{ $t('Status') }}</strong>
+        <div class="t-w-full t-py-2 t-mr-2">
+          <div class="t-font-bold">
+            {{ $t('Status') }}
           </div>
-          <status-icon :status="order.status" />
-          <div>{{ order.status | capitalize }}</div>
+          <div class="t-flex t-items-center">
+            <status-icon :status="order.status" />
+            {{ order.status | capitalize }}
+          </div>
         </div>
       </div>
-      <div class="t-py-2">
-        <strong>{{ $t('Order date') }}</strong> {{ order.created_at | date('LLL') }}
+      <div class="t-py-2 t-mr-2">
+        <div class="t-font-bold">
+          {{ $t('Order date') }}
+        </div>
+        {{ order.created_at | date('LLL') }}
       </div>
+      <div class="t-w-full t-flex t-flex-wrap t-justify-between">
+        <tracking-link :order-id="order.id" :status="order.status" class="t-my-2 t-mr-2">
+          <button-component type="second" icon="local_shipping" :icon-only="false" class="t-flex-fix">
+            {{ $t('Shipment tracking') }}
+          </button-component>
+        </tracking-link>
+        <button-component type="primary" :icon="false" @click="remakeOrder(singleOrderItems)" class="t-flex-fix t-my-2 t-mr-2">
+          {{ $t('Remake order') }}
+        </button-component>
+      </div>
+      <a :href="service" class="t-pt-2 t-block t-w-full t-font-hairline">Fragen zur Bestellung?</a>
     </div>
 
     <!-- Order information -->
     <div class="t-text-sm">
-      <div class="t-text-lg t-py-2">
+      <div class="t-block t-text-2xl t-font-thin t-leading-relaxed t-mb-2">
         {{ $t('Order informations') }}
       </div>
       <div class="t-flex t-flex-wrap">
@@ -61,7 +76,7 @@
     </div>
 
     <!-- products -->
-    <div class="t-text-lg t-py-2 t-mb-4">
+    <div class="t-block t-text-2xl t-font-thin t-leading-relaxed t-mb-2">
       {{ $t('Items ordered') }}
     </div>
     <div class="t-w-full t-flex t-mb-2 t-pb-2 t-border-b t-rounded-sm t-border-base-lightest" v-for="item in singleOrderItems" :key="item.item_id">
@@ -70,8 +85,8 @@
       </div>
       <div class="t-w-2/3 t-py-2">
         <div class="t-block t-text-primary t-w-full t-text-sm t-leading-tight t-mb-2" :data-div="$t('Product Name')">
-          {{ item.qty_ordered }} x {{ item.name }}
-        </div>
+{{ item.qty_ordered }} x {{ item.name }}
+</div>
         <div class="t-font-bold" :data-div="$t('Subtotal')">
           {{ item.row_total_incl_tax | price }}
         </div>
@@ -110,19 +125,23 @@
 import Vue from 'vue'
 import Headline from 'theme/components/core/blocks/MyAccount/Headline'
 import MyOrder from '@vue-storefront/core/compatibility/components/blocks/MyAccount/MyOrder'
+import TrackingLink from 'icmaa-tracking/components/TrackingLink'
 import ProductImage from 'theme/components/core/ProductImage'
 import { getThumbnailPath, productThumbnailPath } from '@vue-storefront/core/helpers'
 import { mapActions } from 'vuex'
 import StatusIcon from 'theme/components/core/blocks/MyAccount/StatusIcon.vue'
 import { currentStoreView } from '@vue-storefront/core/lib/multistore'
 import { formatProductLink } from '@vue-storefront/core/modules/url/helpers'
+import ButtonComponent from 'theme/components/core/blocks/Button'
 
 export default {
   mixins: [MyOrder],
   components: {
     ProductImage,
     Headline,
-    StatusIcon
+    StatusIcon,
+    TrackingLink,
+    ButtonComponent
   },
   data () {
     return {
@@ -142,6 +161,9 @@ export default {
       const product = this.getProduct({ options: { sku: this.singleOrderItems[0].sku }, setCurrentProduct: false, setCurrentCategoryPath: false, selectDefaultVariant: false })
       return product
       // return formatProductLink(product, currentStoreView().storeCode)
+    },
+    service () {
+      return `/${currentStoreView().storeCode}/service`
     }
   },
   mounted () {
