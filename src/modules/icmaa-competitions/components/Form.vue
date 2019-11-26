@@ -1,7 +1,9 @@
 <template>
   <form @submit.prevent="submit" novalidate class="t-flex t-flex-wrap t-px-4 t--mx-2 t-pb-4">
-    <pre class="t-h-32 t-overflow-scroll t-w-full t-px-2">{{ $v.form }}</pre>
-    <div v-for="(element, i) in formElements" :key="i" class="t-flex t-w-full lg:t-w-1/2 t-px-2 t-mb-4">
+    <div v-for="(element, i) in formElements" :key="i"
+         class="t-flex t-w-full t-px-2 t-mb-4"
+         :class="{ 'lg:t-w-1/2': element.width === 'half' }"
+    >
       <template v-if="element.component === 'form_input'">
         <base-input
           :name="element.name"
@@ -29,8 +31,9 @@
           :name="element.name"
           :id="element.name"
           :validations="validation[element.name]"
+          :class="{ 'lg:t-mt-4': element.width === 'half' }"
+          class="t-w-full"
           v-model="form[element.name]"
-          class="t-w-full lg:t-mt-4"
         >
           {{ element.label }}
         </base-checkbox>
@@ -88,7 +91,7 @@ export default {
       messages: {
         default: 'This isn\'t a valid field value.',
         email: 'Please provide valid e-mail address.',
-        required: 'Please provide valid e-mail address.'
+        required: 'Field is required.'
       }
     }
   },
@@ -99,12 +102,17 @@ export default {
     }),
     fields () {
       return this.formElements.map(element => {
+        if (element.required && element.component !== 'form_checkbox' && !element.label.endsWith('*')) {
+          element.label = element.label + ' *'
+        }
+
         if (element.component === 'form_select') {
           element.options = element.options.map(o => {
             const { label, value } = o
             return { label, value }
           })
         }
+
         return element
       })
     },
@@ -166,7 +174,6 @@ export default {
   methods: {
     submit () {
       this.$v.form.$touch()
-      console.log(this.$v.form)
       if (!this.$v.form.$invalid) {
         this.$emit('submit')
       }
