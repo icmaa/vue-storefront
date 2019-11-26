@@ -10,6 +10,7 @@
           :id="element.name"
           :label="element.label"
           :placeholder="element.placeholder"
+          :mask="element.mask || undefined"
           :validations="validation[element.name]"
           v-model="form[element.name]"
           class="t-w-full"
@@ -62,6 +63,7 @@
 import { mapGetters } from 'vuex'
 import { isDatetimeInBetween } from 'icmaa-config/helpers/datetime'
 import { required, email } from 'vuelidate/lib/validators'
+import { date, isTrue, regex } from 'icmaa-config/helpers/validators'
 import i18n from '@vue-storefront/i18n'
 
 import BaseInput from 'theme/components/core/blocks/Form/BaseInput'
@@ -118,13 +120,25 @@ export default {
     },
     validator () {
       let validations = {}
+      const textFields = ['form_input', 'form_textarea']
       this.fields.forEach(element => {
         let validation = {}
         if (element.required === true) {
-          validation = Object.assign(validation, { required })
+          if (element.component === 'form_checkbox') {
+            validation = Object.assign(validation, { isTrue })
+          } else {
+            validation = Object.assign(validation, { required })
+          }
         }
-        if (element.name === 'email') {
-          validation = Object.assign(validation, { email })
+        if (textFields.includes(element.component)) {
+          if (element.name === 'email' || element.validation === 'email') {
+            validation = Object.assign(validation, { email })
+          } else if (element.validation === 'date') {
+            validation = Object.assign(validation, { date })
+          } else {
+            const regexRule = regex(element.validation)
+            validation = Object.assign(validation, { regexRule })
+          }
         }
 
         validations[element.name] = validation
@@ -161,7 +175,7 @@ export default {
         if (element.component === 'form_select') {
           value = element.default || ''
         } else if (element.component === 'form_checkbox') {
-          value = element.checked || false
+          value = element.checked || undefined
         } else if (element.component === 'form_input' && element.name === 'email') {
           value = this.isLoggedIn ? this.customer.email : ''
         }

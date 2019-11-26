@@ -5,12 +5,13 @@
         class="t-hidden"
         type="checkbox"
         :id="id"
-        :checked="value"
+        :checked="value === true"
         @keyup.enter="$emit('click')"
         @click="$emit('click')"
         @blur="$emit('blur')"
         @change="$emit('change', $event.target.checked)"
         :disabled="disabled"
+        :value="value"
       >
       <div
         class="t-flex t-flex-fix t-items-center t-justify-center t-h-6 t-w-6 t-my-2 t-mr-2 t-bg-white t-border t-rounded-sm t-appearance-none t-text-sm t-leading-tight"

@@ -10,5 +10,8 @@
   },
   "peerDependencies": {
     "@vue-storefront/core": "^1.11.0-rc.1"
+  },
+  "dependencies": {
+    "vuelidate": "^0.7.4"
   }
 }
