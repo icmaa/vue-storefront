@@ -36,7 +36,12 @@
           class="t-w-full"
           v-model="form[element.name]"
         >
-          {{ element.label }}
+          <template v-if="containsHtml(element.label)">
+            <component :is="stringToComponent(element.label)" />
+          </template>
+          <template v-else>
+            {{ element.label }}
+          </template>
         </base-checkbox>
       </template>
       <template v-else-if="element.component === 'form_select'">
@@ -53,7 +58,7 @@
     </div>
     <div class="t-flex t-w-full t-px-2">
       <button-component :submit="true" type="primary">
-        {{ $t('Submit') }}
+        {{ submitButtonText }}
       </button-component>
     </div>
   </form>
@@ -64,6 +69,7 @@ import { mapGetters } from 'vuex'
 import { isDatetimeInBetween } from 'icmaa-config/helpers/datetime'
 import { required, email } from 'vuelidate/lib/validators'
 import { date, isTrue, regex } from 'icmaa-config/helpers/validators'
+import { stringToComponent } from 'icmaa-cms/helpers'
 import i18n from '@vue-storefront/i18n'
 
 import BaseInput from 'theme/components/core/blocks/Form/BaseInput'
@@ -85,6 +91,10 @@ export default {
     formElements: {
       type: Array,
       required: true
+    },
+    submitButtonText: {
+      type: String,
+      default: i18n.t('Submit')
     }
   },
   data () {
@@ -186,6 +196,12 @@ export default {
     }
   },
   methods: {
+    containsHtml (string) {
+      return /<\/?[a-z][\s\S]*>/i.test(string)
+    },
+    stringToComponent (string) {
+      return stringToComponent(string)
+    },
     submit () {
       this.$v.form.$touch()
       if (!this.$v.form.$invalid) {
