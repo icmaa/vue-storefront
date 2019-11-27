@@ -1,30 +1,55 @@
 <template>
   <div class="competition t-container" v-if="competition">
     <div class="t-px-4 t-pt-4 t-mb-8">
-      <div class="t-bg-white t-p-4">
-        <h1 class="t-text-xl t-mb-1 t-font-bold" v-text="competition.headline" />
-        <component :is="description" class="t-text-sm t-leading-relaxed t-text-base-tone" />
+      <div class="t-flex t-flex-wrap t-mb-4">
+        <retina-image :image="image" :alt="competition.headline | stripHTML" class="t-w-1/2" />
+        <div class="t-w-1/2 t-bg-white t-p-8 t-flex t-flex-col t-justify-center">
+          <h1 class="t-font-light t-leading-tight t-mb-1 t-mb-8 t-text-3xl t-whitespace-pre-line" v-html="competition.headline" />
+          <component :is="description" class="t-text-sm t-leading-relaxed t-text-base-tone" />
+          <div class="t-mt-8">
+            <button-component type="ghost" v-scroll-to="'#competition-form'">
+              {{ $t('Participate now!') }}
+            </button-component>
+          </div>
+        </div>
       </div>
-    </div>
-    <form-component v-if="isActive" :form-elements="competition.form" :submit-button-text="$t('Submit') + (competition.disclaimer ? ' *' : '')" @submit="submit" />
-    <div v-if="isActive && competition.disclaimer" class="t-px-4 t-pt-4 t-pb-8 t-text-sm t-text-base-light">
-      <material-icon icon="asterisk" icon-set="icmaa" size="xxs" class="t-mr-1" /> {{ competition.disclaimer }}
+      <div class="t-flex t-flex-wrap t-mb-8">
+        <div class="t-w-1/2">
+          <div class="t-relative t-w-full t-bg-white" style="padding-top: 56.25%">
+            <iframe class="t-absolute t-top-0" width="100%" height="100%" :src="youtubeVideoUrl" frameborder="0" allowfullscreen />
+          </div>
+        </div>
+        <div class="t-w-1/2 t-pl-px">
+          <router-link :to="competition.bannerLink">
+            <retina-image :image="bannerImage" :alt="competition.bannerLinkText | stripHTML" />
+          </router-link>
+        </div>
+      </div>
+      <form-component v-if="isActive" :form-elements="competition.form" :submit-button-text="$t('Submit') + (competition.disclaimer ? ' *' : '')" @submit="submit" id="competition-form" />
+      <div v-if="isActive && competition.disclaimer" class="t-pt-4 t-pb-8 t-text-sm t-text-base-light">
+        <material-icon icon="asterisk" icon-set="icmaa" size="xxs" class="t-mr-1" /> {{ competition.disclaimer }}
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
+import { getThumbnailPath } from '@vue-storefront/core/helpers'
 import { isDatetimeInBetween } from 'icmaa-config/helpers/datetime'
 import { stringToComponent } from 'icmaa-cms/helpers'
 
 import FormComponent from 'icmaa-competitions/components/Form'
+import RetinaImage from 'theme/components/core/blocks/RetinaImage'
+import ButtonComponent from 'theme/components/core/blocks/Button'
 import MaterialIcon from 'theme/components/core/blocks/MaterialIcon'
 
 export default {
   name: 'Competition',
   components: {
     FormComponent,
+    ButtonComponent,
+    RetinaImage,
     MaterialIcon
   },
   data () {
@@ -45,6 +70,15 @@ export default {
     },
     description () {
       return stringToComponent(this.competition.description)
+    },
+    image () {
+      return getThumbnailPath('/' + this.competition.image, 0, 0, 'media')
+    },
+    bannerImage () {
+      return getThumbnailPath('/' + this.competition.bannerImage, 0, 0, 'media')
+    },
+    youtubeVideoUrl () {
+      return `https://www.youtube.com/embed/${this.competition.youtubeVideoId}`
     }
   },
   methods: {

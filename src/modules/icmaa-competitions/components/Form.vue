@@ -1,5 +1,5 @@
 <template>
-  <form @submit.prevent="submit" novalidate class="t-flex t-flex-wrap t-px-4 t--mx-2 t-pb-4">
+  <form @submit.prevent="submit" novalidate class="t-flex t-flex-wrap t--mx-2 t-pb-4">
     <div v-for="(element, i) in formElements" :key="i"
          class="t-flex t-w-full t-px-2 t-mb-4"
          :class="{ 'lg:t-w-1/2': element.width === 'half' }"
