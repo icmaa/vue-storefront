@@ -52,6 +52,7 @@
 "Date and time","Datum und Uhrzeit"
 "Date of birth","Geburtsdatum"
 "Date","Datum"
+"Deadline for entries is {showTo}. The decision is final.","Teilnahmeschluss ist der {showTo}. Der Rechtsweg ist ausgeschlossen."
 "Default billing address","Standard Rechnungsadresse"
 "Default shipping address","Standard Versandadresse"
 "Delete","Löschen"
