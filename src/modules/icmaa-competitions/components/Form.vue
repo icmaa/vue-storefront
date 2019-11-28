@@ -55,6 +55,16 @@
           class="t-w-full"
         />
       </template>
+      <template v-else-if="element.component === 'form_select_country'">
+        <country-select
+          :name="element.name"
+          :id="element.name"
+          :label="element.label"
+          :validations="validation[element.name]"
+          v-model="form[element.name]"
+          class="t-w-full"
+        />
+      </template>
     </div>
     <div class="t-flex t-w-full t-px-2">
       <button-component :submit="true" type="primary">
@@ -68,14 +78,16 @@
 import { mapGetters } from 'vuex'
 import { isDatetimeInBetween } from 'icmaa-config/helpers/datetime'
 import { required, email } from 'vuelidate/lib/validators'
-import { date, isTrue, regex } from 'icmaa-config/helpers/validators'
+import { date, postcode, isTrue, regex } from 'icmaa-config/helpers/validators'
 import { stringToComponent } from 'icmaa-cms/helpers'
+import { currentStoreView } from '@vue-storefront/core/lib/multistore'
 import i18n from '@vue-storefront/i18n'
 
 import BaseInput from 'theme/components/core/blocks/Form/BaseInput'
 import BaseSelect from 'theme/components/core/blocks/Form/BaseSelect'
 import BaseCheckbox from 'theme/components/core/blocks/Form/BaseCheckbox'
 import BaseTextarea from 'theme/components/core/blocks/Form/BaseTextarea'
+import CountrySelect from 'theme/components/core/blocks/Form/CountrySelect'
 import ButtonComponent from 'theme/components/core/blocks/Button'
 
 export default {
@@ -85,6 +97,7 @@ export default {
     BaseSelect,
     BaseCheckbox,
     BaseTextarea,
+    CountrySelect,
     ButtonComponent
   },
   props: {
@@ -145,6 +158,8 @@ export default {
             validation = Object.assign(validation, { email })
           } else if (element.validation === 'date') {
             validation = Object.assign(validation, { date })
+          } else if (element.validation === 'postcode') {
+            validation = Object.assign(validation, { postcode: postcode(this.countryId) })
           } else {
             const regexRule = regex(element.validation)
             validation = Object.assign(validation, { regexRule })
@@ -184,6 +199,8 @@ export default {
         let value = ''
         if (element.component === 'form_select') {
           value = element.default || ''
+        } else if (element.component === 'form_select_country') {
+          value = currentStoreView().i18n.defaultCountry
         } else if (element.component === 'form_checkbox') {
           value = element.checked || undefined
         } else if (element.component === 'form_input' && element.name === 'email') {
@@ -193,6 +210,9 @@ export default {
       })
 
       return defaults
+    },
+    countryId () {
+      return this.form.country || currentStoreView().i18n.defaultCountry
     }
   },
   methods: {
