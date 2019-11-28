@@ -92,6 +92,11 @@ export default {
   },
   methods: {
     submit () {
+      if (!this.isActive) {
+        window.location.reload()
+        return
+      }
+
       console.log('SUBMIT')
     }
   },
