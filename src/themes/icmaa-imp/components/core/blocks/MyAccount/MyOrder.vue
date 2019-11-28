@@ -2,19 +2,18 @@
   <div class="t-p-4 t-bg-white" v-if="order">
     <!-- My order header -->
     <headline icon="local_mall">
-{{ $t('Order #') }}{{ order.increment_id }}
-</headline>
+      {{ $t('Order #') }}{{ order.increment_id }}
+    </headline>
 
+    <!-- Order status -->
     <div class="t-flex t-flex-wrap t-justify-between t-border-b t-text-sm t-p-2 t-mb-4">
-      <div class="t-flex">
-        <div class="t-w-full t-py-2 t-mr-2">
-          <div class="t-font-bold">
-            {{ $t('Status') }}
-          </div>
-          <div class="t-flex t-items-center">
-            <status-icon :status="order.status" />
-            {{ order.status | capitalize }}
-          </div>
+      <div class="t-py-2 t-mr-2">
+        <div class="t-font-bold">
+          {{ $t('Status') }}
+        </div>
+        <div class="t-flex t-items-center">
+          <status-icon :status="order.status" />
+          {{ order.status | capitalize }}
         </div>
       </div>
       <div class="t-py-2 t-mr-2">
@@ -23,7 +22,7 @@
         </div>
         {{ order.created_at | date('LLL') }}
       </div>
-      <div class="t-w-full t-flex t-flex-wrap t-justify-between">
+      <div class="t-w-full t-flex t-flex-wrap t-justify-between t-mb-2">
         <tracking-link :order-id="order.id" :status="order.status" class="t-my-2 t-mr-2">
           <button-component type="second" icon="local_shipping" :icon-only="false" class="t-flex-fix">
             {{ $t('Shipment tracking') }}
@@ -33,18 +32,18 @@
           {{ $t('Remake order') }}
         </button-component>
       </div>
-      <a :href="service" class="t-pt-2 t-block t-w-full t-font-hairline">Fragen zur Bestellung?</a>
+      <a :href="service" class="t-block t-w-full t-font-hairline">{{ $t('Are there any questions left?') }}</a>
     </div>
 
     <!-- Order information -->
-    <div class="t-text-sm">
+    <div class="t-text-sm t-mb-2">
       <div class="t-block t-text-2xl t-font-thin t-leading-relaxed t-mb-2">
         {{ $t('Order informations') }}
       </div>
       <div class="t-flex t-flex-wrap">
         <div class="t-w-full sm:t-w-1/2 t-mb-4 sm:t-pr-4">
-          <div class="t-border-b">
-            <strong>{{ $t('Billing address') }}</strong>
+          <div class="t-border-b t-font-bold">
+            {{ $t('Billing address') }}
           </div>
           <p>{{ billingAddress.firstname }} {{ billingAddress.lastname }}</p>
           <p>{{ billingAddress.street[0] }} {{ billingAddress.street[1] }}</p>
@@ -52,8 +51,8 @@
           <p>{{ billingAddress.country }}</p>
         </div>
         <div class="t-w-full sm:t-w-1/2 t-mb-4 sm:t-pr-4">
-          <div class="t-border-b">
-            <strong>{{ $t('Shipping address') }}</strong>
+          <div class="t-border-b t-font-bold">
+            {{ $t('Shipping address') }}
           </div>
           <p>{{ shippingAddress.firstname }} {{ shippingAddress.lastname }}</p>
           <p>{{ shippingAddress.street[0] }} {{ shippingAddress.street[1] }}</p>
@@ -61,21 +60,21 @@
           <p>{{ shippingAddress.country }}</p>
         </div>
         <div class="t-w-full sm:t-w-1/2 t-mb-4 sm:t-pr-4">
-          <div class="t-border-b">
-            <strong>{{ $t('Shipping method') }}</strong>
+          <div class="t-border-b t-font-bold">
+            {{ $t('Shipping method') }}
           </div>
           <p>{{ order.shipping_description }}</p>
         </div>
         <div class="t-w-full sm:t-w-1/2 t-mb-4 sm:t-pr-4">
-          <div class="t-border-b">
-            <strong>{{ $t('Payment method') }}</strong>
+          <div class="t-border-b t-font-bold">
+            {{ $t('Payment method') }}
           </div>
           <p>{{ paymentMethod }}</p>
         </div>
       </div>
     </div>
 
-    <!-- products -->
+    <!-- product list -->
     <div class="t-block t-text-2xl t-font-thin t-leading-relaxed t-mb-2">
       {{ $t('Items ordered') }}
     </div>
@@ -85,8 +84,8 @@
       </div>
       <div class="t-w-2/3 t-py-2">
         <div class="t-block t-text-primary t-w-full t-text-sm t-leading-tight t-mb-2" :data-div="$t('Product Name')">
-{{ item.qty_ordered }} x {{ item.name }}
-</div>
+          {{ item.qty_ordered }} x {{ item.name }}
+        </div>
         <div class="t-font-bold" :data-div="$t('Subtotal')">
           {{ item.row_total_incl_tax | price }}
         </div>
@@ -133,6 +132,7 @@ import StatusIcon from 'theme/components/core/blocks/MyAccount/StatusIcon.vue'
 import { currentStoreView } from '@vue-storefront/core/lib/multistore'
 import { formatProductLink } from '@vue-storefront/core/modules/url/helpers'
 import ButtonComponent from 'theme/components/core/blocks/Button'
+import { mapGetters } from 'vuex'
 
 export default {
   mixins: [MyOrder],
@@ -154,22 +154,16 @@ export default {
     })
   },
   computed: {
-    thumbnail () {
-      return this.getThumbnail(this.singleOrderItems[0].thumbnail, 150, 150)
-    },
-    productLink () {
-      const product = this.getProduct({ options: { sku: this.singleOrderItems[0].sku }, setCurrentProduct: false, setCurrentCategoryPath: false, selectDefaultVariant: false })
-      return product
-      // return formatProductLink(product, currentStoreView().storeCode)
-    },
+    ...mapGetters('icmaaCmsBlock', ['getJsonBlockByIdentifier']),
     service () {
-      return `/${currentStoreView().storeCode}/service`
+      const metaNavigation = this.getJsonBlockByIdentifier('navigation-meta').find(el => el.name === 'Service') || { route: '/service' }
+      return `/${currentStoreView().storeCode}${metaNavigation.route}`
     }
   },
   mounted () {
     this.singleOrderItems.forEach(async item => {
-      const product = await this.getProduct({ options: { sku: item.sku }, setCurrentProduct: false, setCurrentCategoryPath: false, selectDefaultVariant: false })
-      Vue.set(this.itemThumbnail, item.sku, product)
+      const product = await this.getProduct({ options: { sku: item.sku }, setCurrentProduct: false, setCurrentCategoryPath: false, selectDefaultVariant: false }, {root: true})
+      this.itemThumbnail.push([item.sku, product])
     })
   }
 }
