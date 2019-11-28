@@ -17,10 +17,16 @@
             <iframe class="t-absolute t-top-0" width="100%" height="100%" :src="youtubeVideoUrl" frameborder="0" allowfullscreen />
           </div>
         </div>
-        <div class="t-w-full lg:t-w-1/2 t-pt-px lg:t-pl-px lg:t-pt-0">
-          <router-link :to="competition.bannerLink">
-            <retina-image :image="bannerImage" :alt="competition.bannerLinkText | stripHTML" />
-          </router-link>
+        <div class="t-w-full lg:t-w-1/2 t-pt-px lg:t-pl-px lg:t-pt-0 t-flex">
+          <div class="t-relative t-flex-1">
+            <router-link :to="competition.bannerLink" class="t-flex">
+              <retina-image :image="bannerImage" :alt="competition.bannerLinkText | stripHTML" class="t-flex-1" />
+            </router-link>
+            <router-link :to="competition.bannerLink" class="t-flex t-items-center t-w-full lg:t-absolute lg:t-bottom-0 t-bg-white t-p-4 lg:t-px-6 lg:t-py-8 t-text-primary t-text-xl">
+              <span v-text="competition.bannerLinkText" class="t-flex-1" />
+              <material-icon icon="keyboard_arrow_right" size="lg" class="t-text-base-lighter t-ml-2" />
+            </router-link>
+          </div>
         </div>
       </div>
       <form-component v-if="isActive" :form-elements="competition.form" :submit-button-text="$t('Submit') + (competition.disclaimer ? ' *' : '')" @submit="submit" id="competition-form" />
