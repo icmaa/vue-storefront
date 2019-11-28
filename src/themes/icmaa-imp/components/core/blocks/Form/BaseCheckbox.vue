@@ -19,7 +19,7 @@
       >
         <material-icon icon="check" size="sm" v-if="value" />
       </div>
-      <div class="t-text-sm t-leading-tight" :class="{ 't-text-alert': invalid }">
+      <div class="checkbox-label t-text-sm t-leading-tight" :class="{ 't-text-alert': invalid }">
         <slot />
       </div>
     </label>
@@ -73,4 +73,14 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import '~theme/css/variables/colors';
+@import '~theme/css/helpers/functions/color';
+$color-primary: color(base-dark);
+
+.checkbox-label {
+  >>> a {
+    color: $color-primary;
+    text-decoration: underline;
+  }
+}
 </style>
