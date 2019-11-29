@@ -1,5 +1,5 @@
 <template>
-  <amp-img v-lazy="lazyObj" layout="responsive" width="612" height="884" :src="`${sizes.src}`" :data-srcset="`${sizes.src} 1x, ${sizes.srcAt2x} 2x`" v-on="$listeners" class="product-image t-w-full t-w-auto" />
+  <amp-img v-lazy="lazyObj" layout="responsive" width="161" height="233" :src="`${sizes.src}`" :data-srcset="`${sizes.src} 1x, ${sizes.srcAt2x} 2x`" v-on="$listeners" class="product-image t-w-full t-w-auto" />
 </template>
 
 <script>

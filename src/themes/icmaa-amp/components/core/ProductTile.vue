@@ -1,15 +1,12 @@
 <template>
   <div>
-    <div
-      class="product-cover t-relative t-bg-white t-mb-4"
-      v-observe-visibility="visibilityChanged"
-    >
+    <div class="product-cover t-relative t-bg-white t-mb-4" v-observe-visibility="visibilityChanged">
       <router-link
         class="product-link t-block t-z-0"
         :to="productLink"
         data-testid="productLink"
       >
-        <placeholder ratio="161:233" v-if="imageLoading" />
+        <!--placeholder ratio="161:233" v-if="imageLoading" /-->
         <product-image-amp :image="thumbnailObj" :alt="product.name | htmlDecode" data-testid="productImageAmp" @load="imageLoading = false" />
       </router-link>
     </div>
@@ -46,8 +43,8 @@
 import rootStore from '@vue-storefront/core/store'
 import { ProductTile } from '@vue-storefront/core/modules/catalog/components/ProductTile.ts'
 import config from 'config'
-import Placeholder from '../../../icmaa-imp/components/core/blocks/Placeholder'
-import ProductImageAmp from '../../../icmaa-imp/components/core/ProductImageAmp'
+import Placeholder from '@icmaa/vsf-theme-imp/components/core/blocks/Placeholder'
+import ProductImageAmp from '@icmaa/vsf-theme-imp/components/core/ProductImageAmp'
 
 export default {
   mixins: [ProductTile],
