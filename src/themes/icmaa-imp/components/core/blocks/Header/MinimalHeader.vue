@@ -2,7 +2,7 @@
   <div class="header">
     <header class="t-fixed t-w-full t-bg-white is-visible">
       <div class="t-flex">
-        <div class="t-container t-px-4 t-flex t-items-center">
+        <div class="t-container t-pr-4 md:t-px-4 t-flex t-items-center">
           <div class="t-flex t-w-full t-flex-wrap t-items-stretch">
             <router-link :to="localizedRoute('/')" :title="$t('Home Page')" class="inline-flex brdr-none p15 icon bg-cl-secondary pointer t-no-underline">
               <i class="material-icons">keyboard_backspace</i>
