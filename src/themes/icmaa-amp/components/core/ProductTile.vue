@@ -9,16 +9,11 @@
         :to="productLink"
         data-testid="productLink"
       >
-        <amp-img
-          :alt="product.name"
-          :src="thumbnailObj.src"
-          height="433"
-          width="310"
-          class="product-image t-w-full t-w-auto"
-        />
+        <placeholder ratio="161:233" v-if="imageLoading" />
+        <product-image-amp :image="thumbnailObj" :alt="product.name | htmlDecode" data-testid="productImageAmp" @load="imageLoading = false" />
       </router-link>
     </div>
-    <router-link :to="productLink" tag="div" class="t-text-sm t-pt-3" v-if="!onlyImage">
+    <router-link :to="productLink" tag="div" class="t-text-sm" v-if="!onlyImage">
       <p class="t-mb-1 t-text-primary t-leading-tight" v-if="!onlyImage">
         {{ product.name | htmlDecode }}
       </p>
@@ -51,9 +46,20 @@
 import rootStore from '@vue-storefront/core/store'
 import { ProductTile } from '@vue-storefront/core/modules/catalog/components/ProductTile.ts'
 import config from 'config'
+import Placeholder from '../../../icmaa-imp/components/core/blocks/Placeholder'
+import ProductImageAmp from '../../../icmaa-imp/components/core/ProductImageAmp'
 
 export default {
   mixins: [ProductTile],
+  components: {
+    Placeholder,
+    ProductImageAmp
+  },
+  data () {
+    return {
+      imageLoading: true
+    }
+  },
   props: {
     labelsActive: {
       type: Boolean,
