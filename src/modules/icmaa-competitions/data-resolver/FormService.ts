@@ -9,6 +9,7 @@ const sendForm = (spreadsheetId: string, form: Record<string, any>): Promise<boo
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       mode: 'cors',
+      silent: true,
       body: JSON.stringify({
         spreadsheetId,
         form
