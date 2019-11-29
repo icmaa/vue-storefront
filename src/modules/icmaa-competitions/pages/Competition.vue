@@ -119,34 +119,32 @@ export default {
         return
       }
 
-      const sheetId = ''
-
       this.$bus.$emit('notification-progress-start', i18n.t('Please wait'))
       this.$store.dispatch('icmaaCompetitions/post', { sheetId: this.sheetId, data: this.form })
-        .then(success => this.afterSend)
-    }
-  },
-  afterSend (success) {
-    this.$bus.$emit('notification-progress-stop')
-
-    if (success) {
-      this.isSend = true
+        .then(this.afterSend)
+    },
+    afterSend (success) {
       this.$bus.$emit('notification-progress-stop')
+
+      if (success) {
+        this.isSend = true
+        this.$bus.$emit('notification-progress-stop')
+        this.$store.dispatch('notification/spawnNotification', {
+          type: 'success',
+          message: i18n.t('Thank you. We successfully received your data and will inform you about further steps.'),
+          action1: { label: i18n.t('OK') }
+        })
+      } else {
+        this.onError()
+      }
+    },
+    onError () {
       this.$store.dispatch('notification/spawnNotification', {
-        type: 'success',
-        message: i18n.t('Thank you. We successfully received your data and will inform you about further steps.'),
+        type: 'error',
+        message: i18n.t('There was an unexpected error. Please check your entered data and try again.'),
         action1: { label: i18n.t('OK') }
       })
-    } else {
-      this.onError()
     }
-  },
-  onError () {
-    this.$store.dispatch('notification/spawnNotification', {
-      type: 'error',
-      message: i18n.t('There was an unexpected error. Please check your entered data and try again.'),
-      action1: { label: i18n.t('OK') }
-    })
   },
   async asyncData ({ store, route, context }) {
     const value = route.params.identifier
