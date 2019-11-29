@@ -35,7 +35,7 @@
       </div>
       <div v-if="isSend" class="t-p-4 t-bg-white">
         <div class="t-flex t-items-center t-text-1xl t-font-bold t-text-alt-3 t-mb-2">
-          <material-icon icon="check_circle" size="lg" class="t-mr-2" />
+          <material-icon icon="check" size="lg" class="t-mr-2" />
           {{ $t('Done') }}
         </div>
         {{ $t('Thank you. We successfully received your data and will inform you about further steps.') }}
