@@ -104,6 +104,12 @@ export default {
     ButtonComponent
   },
   props: {
+    value: {
+      type: Object,
+      default: () => {
+        return {}
+      }
+    },
     formElements: {
       type: Array,
       required: true
@@ -121,6 +127,11 @@ export default {
         email: 'Please provide valid e-mail address.',
         required: 'Field is required.'
       }
+    }
+  },
+  watch: {
+    form (data) {
+      this.$emit('input', data)
     }
   },
   computed: {
