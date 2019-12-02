@@ -1,10 +1,12 @@
 import forEach from 'lodash-es/forEach'
 import Product from '@vue-storefront/core/modules/catalog/types/Product'
+import SearchQuery from '@vue-storefront/core/lib/search/searchQuery'
 
 class Rules {
   protected config: Record<string, any>
   protected product: Product
   protected type: string
+  protected query: SearchQuery
 
   protected assertionMap: Record<string, any> = {
     'not null': 'assertAttributeNotNull',
@@ -18,6 +20,8 @@ class Rules {
   public constructor (product: Product, type: string = 'crosssell') {
     this.type = type
     this.product = product
+    this.query = new SearchQuery()
+
     this.setConfig(type)
 
     forEach(this.config, (rule, ruleKey) => {
@@ -25,12 +29,19 @@ class Rules {
         return
       }
 
-      // Add filter
+      this.addFilter(rule, ruleKey)
 
       if (!rule.continue || rule.continue === false) {
         return false
       }
     })
+  }
+
+  /**
+   * @returns {SearchQuery}
+   */
+  public getSearchQuery (): SearchQuery {
+    return this.query
   }
 
   /**
@@ -49,7 +60,7 @@ class Rules {
   /**
    * @param {object} rule
    * @param {string} key
-   * @return {boolean}
+   * @returns {boolean}
    */
   protected isValid (rule: Record<string, any>, key: string): boolean {
     if (!rule.if || Object.values(rule.if).length === 0) {
@@ -70,7 +81,7 @@ class Rules {
   /**
    * @param {string} attribute
    * @param {string} value
-   * @return {boolean}
+   * @returns {boolean}
    */
   protected assert (attribute: string, value: string): boolean {
     let method = this.assertionMap[value] || 'assertAttributeSameAs'
@@ -80,7 +91,7 @@ class Rules {
   /**
    * @param {string} attribute
    * @param {string} value
-   * @return {boolean}
+   * @returns {boolean}
    */
   protected assertAttributeNotNull (attribute: string, value: string): boolean {
     return this.product[attribute] && this.product[attribute] !== null
@@ -89,7 +100,7 @@ class Rules {
   /**
    * @param {string} attribute
    * @param {string} value
-   * @return {boolean}
+   * @returns {boolean}
    */
   protected assertAttributeIsNull (attribute: string, value: string): boolean {
     return !this.assertAttributeNotNull(attribute, value)
@@ -99,7 +110,7 @@ class Rules {
    * @param {string} attribute
    * @param {string|any[]} value
    * @param {boolean} assertion
-   * @return {boolean}
+   * @returns {boolean}
    */
   protected assertAttributeSameAs (attribute: string, value: string|any[]): boolean {
     const productValue = this.product[attribute]
@@ -112,6 +123,15 @@ class Rules {
     } else {
       return value.includes(productValue)
     }
+  }
+
+  /**
+   * @param {object} rule
+   * @param {string} key
+   * @returns {void}
+   */
+  protected addFilter (rule: Record<string, any>, key: string) {
+
   }
 }
 
