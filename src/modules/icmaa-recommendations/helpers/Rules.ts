@@ -74,10 +74,6 @@ class Rules {
    */
   protected assert (attribute: string, value: string): boolean {
     let method = this.assertionMap[value] || 'assertAttributeSameAs'
-    if (typeof value === 'string' && value.startsWith('!')) {
-      method = 'assertAttributeNotSameAs'
-    }
-
     return this[method](attribute, value)
   }
 
@@ -105,26 +101,17 @@ class Rules {
    * @param {boolean} assertion
    * @return {boolean}
    */
-  protected assertAttributeSameAs (attribute: string, value: string|any[], assertion: boolean = true): boolean {
+  protected assertAttributeSameAs (attribute: string, value: string|any[]): boolean {
     const productValue = this.product[attribute]
     if (!Array.isArray(value)) {
       value = [value]
     }
 
     if (Array.isArray(productValue)) {
-      return productValue.find(v => value.includes(v) === assertion)
+      return productValue.find(v => value.includes(v))
     } else {
-      return value.includes(productValue) === assertion
+      return value.includes(productValue)
     }
-  }
-
-  /**
-   * @param {string} attribute
-   * @param {string|any[]} value
-   * @return {boolean}
-   */
-  protected assertAttributeNotSameAs (attribute: string, value: string|any[]): boolean {
-    return this.assertAttributeSameAs(attribute, value, false)
   }
 }
 
