@@ -1,6 +1,6 @@
 <template>
   <div>
-    {{ currentProduct }}
+    THIS IS WHERE THE RECS COME
   </div>
 </template>
 
