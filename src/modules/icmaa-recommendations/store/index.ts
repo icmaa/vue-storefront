@@ -5,6 +5,9 @@ import actions from './actions'
 import getters from './getters'
 import mutations from './mutations'
 
+export const stateKey = 'icmaaRecommendations'
+export const storageKey = 'recommendations'
+
 export const RecommendationsStore: Module<RecommendationsState, RootState> = {
   namespaced: true,
   state: {

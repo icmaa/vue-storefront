@@ -105,6 +105,7 @@
           </lazy-hydrate>
         </div>
       </div>
+      <recommendations />
     </div>
 
     <div class="spacer t-h-8" />
@@ -149,6 +150,7 @@ import ProductFeatures from 'theme/components/core/blocks/Product/ProductFeature
 import ProductCareInstructions from 'theme/components/core/blocks/Product/ProductCareInstructions'
 import ReviewsShort from 'theme/components/core/blocks/Reviews/ReviewsShort'
 import ReviewsClaim from 'theme/components/core/blocks/Reviews/ReviewsClaim'
+import Recommendations from 'icmaa-recommendations/components/Recommendations'
 import LoaderBackground from 'theme/components/core/LoaderBackground'
 import LazyHydrate from 'vue-lazy-hydration'
 
@@ -179,6 +181,7 @@ export default {
     Reviews,
     ReviewsShort,
     ReviewsClaim,
+    Recommendations,
     WebShare,
     LazyHydrate
   },
