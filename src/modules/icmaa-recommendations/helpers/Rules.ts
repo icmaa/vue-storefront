@@ -52,7 +52,7 @@ class Rules {
         return
       }
 
-      this.addFilter(rule, ruleKey)
+      this.addFilter(rule.then)
 
       if (!rule.continue || rule.continue === false) {
         return false
@@ -161,10 +161,91 @@ class Rules {
 
   /**
    * @param {Rule} rule
-   * @param {string} key
+   * @param {boolean} isOr
    * @returns {this}
    */
-  protected addFilter (rule: Rule, key: string): this {
+  protected addFilter (filter: Record<string, any>, isOr: boolean = false): this {
+    forEach(filter, (value, key) => {
+      if (key === 'or') {
+        this.addFilter(value, true)
+        return
+      }
+
+      let method = this.filterMap[key] || 'filterAttributeValue'
+      console.log(key, value, method)
+      this[method](key, value)
+    })
+
+    return this
+  }
+
+  /**
+   * @param {string} key
+   * @param {any} value
+   * @param {boolean} isOr
+   * @returns {this}
+   */
+  protected filterAttributeNotNull (key: string, value: any, isOr: boolean = false): this {
+    return this
+  }
+
+  /**
+   * @param {string} key
+   * @param {any} value
+   * @param {boolean} isOr
+   * @returns {this}
+   */
+  protected filterAttributeIsNull (key: string, value: any, isOr: boolean = false): this {
+    return this
+  }
+
+  /**
+   * @param {string} key
+   * @param {any} value
+   * @param {boolean} isOr
+   * @returns {this}
+   */
+  protected filterAttributeSameAsCurrent (key: string, value: any, isOr: boolean = false): this {
+    return this
+  }
+
+  /**
+   * @param {string} key
+   * @param {any} value
+   * @param {boolean} isOr
+   * @returns {this}
+   */
+  protected filterAttributeNotSameAsCurrent (key: string, value: any, isOr: boolean = false): this {
+    return this
+  }
+
+  /**
+   * @param {string} key
+   * @param {any} value
+   * @param {boolean} isOr
+   * @returns {this}
+   */
+  protected filterAttributeGreaterOrEqual (key: string, value: any, isOr: boolean = false): this {
+    return this
+  }
+
+  /**
+   * @param {string} key
+   * @param {any} value
+   * @param {boolean} isOr
+   * @returns {this}
+   */
+  protected filterAttributeLowerOrEqual (key: string, value: any, isOr: boolean = false): this {
+    return this
+  }
+
+  /**
+   * @param {string} key
+   * @param {any} value
+   * @param {boolean} isOr
+   * @returns {this}
+   */
+  protected filterAttributeValue (key: string, value: any, isOr: boolean = false): this {
     return this
   }
 }
