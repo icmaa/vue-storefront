@@ -19,8 +19,18 @@ const actions: ActionTree<CompetitionsState, RootState> = {
     singleAbstract<Competition>({ documentType, mutationTypes, storageKey, context, options }),
   list: async (context, options: ListOptionsInterface): Promise<Competition[]> =>
     listAbstract<Competition>({ documentType, mutationTypes, storageKey, context, options }),
-  post: async ({ state }, { sheetId, data }): Promise<boolean> => {
+  post: async ({ state, dispatch }, { sheetId, data }): Promise<boolean> => {
+    data.ip = await dispatch('getIp')
     return FormService.sendForm(sheetId, data)
+  },
+  getIp: async ({ state }): Promise<string|boolean> => {
+    const ipService = 'https://api.ipify.org?format=json'
+    const headers = { 'Content-Type': 'application/json' }
+    const response = await fetch(ipService, { headers })
+      .then(resp => resp.json())
+      .catch(err => false)
+
+    return response.ip || false
   }
 }
 
