@@ -1,4 +1,5 @@
 import SearchQuery from '@vue-storefront/core/lib/search/searchQuery'
+import config from 'config'
 import { Category } from '@vue-storefront/core/modules/catalog-next/types/Category'
 import { SearchResponse } from '@vue-storefront/core/types/search/SearchResponse'
 import { quickSearchByQuery } from '@vue-storefront/core/lib/search'
@@ -53,4 +54,7 @@ export const extractPrefix = (name) => name.replace(SORT_PREFIX_REGEXP, '')
 export const sortByLetter = (a: Category, b: Category) => {
   const [aName, bName] = [extractPrefix(a.name), extractPrefix(b.name)]
   return aName === bName ? 0 : aName < bName ? -1 : 1
+}
+export const isCategoryInWhitelist = (category: Category) => {
+  return config.icmaa.catalog.productListParentCategoryWhitelist.includes(category.parent_id)
 }
