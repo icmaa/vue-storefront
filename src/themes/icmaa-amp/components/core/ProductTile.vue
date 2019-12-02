@@ -6,7 +6,6 @@
         :to="productLink"
         data-testid="productLink"
       >
-        <!--placeholder ratio="161:233" v-if="imageLoading" /-->
         <product-image-amp :image="thumbnailObj" :alt="product.name | htmlDecode" data-testid="productImageAmp" @load="imageLoading = false" />
       </router-link>
     </div>
