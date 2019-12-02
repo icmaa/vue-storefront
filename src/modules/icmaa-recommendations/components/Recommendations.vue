@@ -20,7 +20,7 @@ export default {
     ...mapGetters({ currentProduct: 'product/getCurrentProduct' })
   },
   mounted () {
-    const rules = new Rules()
+    const rules = new Rules(this.currentProduct, 'crosssell')
   }
 }
 </script>
