@@ -1,354 +1,352 @@
 {
-  "rules": {
-    "crosssell": {
-      "default": {
-        "continue": "true",
-        "then": {
-          "category": "3278",
-          "department": "current"
-        }
-      },
-      "boys": {
-        "continue": "true",
-        "if": { "gender": "9" },
-        "then": { "category": "780" }
-      },
-      "girls": {
-        "continue": "true",
-        "if": { "gender": "8" },
-        "then": { "category": "781" }
-      },
-      "department_streetwear_merchandise": {
-        "continue": "true",
-        "if": { "department": "5,6" },
-        "then": { "gender": "current" }
-      },
-      "department_media": {
-        "if": { "department": "853" },
-        "then": {
-          "category": "780",
-          "or": {
-            "band": "current",
-            "customercluster": "current"
-          }
-        }
-      },
-      "department_entertainment": {
-        "if": { "department": "5258" },
-        "then": {
-          "or": {
-            "brand": "not current",
-            "customercluster": "current"
-          }
-        }
-      },
-      "band_type_top": {
-        "if": {
-          "band": "not null",
-          "type_top": "not null"
-        },
-        "then": {
-          "category": "1601",
-          "department": "5,6",
-          "type_shoes": "not null"
-        }
-      },
-      "band_type_pants": {
-        "if": {
-          "band": "not null",
-          "type_pants": "not null"
-        },
-        "then": {
-          "category": "1601",
-          "department": "5,6",
-          "type_shoes": "not null"
-        }
-      },
-      "band_type_accessories": {
-        "if": {
-          "band": "not null",
-          "type_accessories": "not null"
-        },
-        "then": {
-          "or": {
-            "customercluster": "current",
-            "band": "current"
-          }
-        }
-      },
-      "band_type_headwear": {
-        "if": {
-          "band": "not null",
-          "type_headwear": "not null"
-        },
-        "then": {
-          "customercluster": "current",
-          "band": "not current"
-        }
-      },
-      "band_ticket": {
-        "if": {
-          "band": "not null",
-          "department": "4"
-        },
-        "then": {
-          "department": "6",
-          "or": {
-            "band": "current",
-            "customercluster": "current"
-          }
-        }
-      },
-      "brand_type_top": {
-        "if": {
-          "brand": "not null",
-          "type_top": "not null"
-        },
-        "then": {
-          "or": {
-            "type_pants": "not null",
-            "type_shoes": "not null"
-          }
-        }
-      },
-      "brand_type_shoes": {
-        "if": {
-          "brand": "not null",
-          "type_shoes": "not null"
-        },
-        "then": {
-          "or": {
-            "type_pants": "not null",
-            "type_top": "not null"
-          }
-        }
-      },
-      "brand_type_pants": {
-        "if": {
-          "brand": "not null",
-          "type_pants": "not null"
-        },
-        "then": {
-          "or": {
-            "type_top": "not null",
-            "type_shoes": "not null"
-          }
-        }
-      },
-      "brand_type_accessories": {
-        "if": {
-          "brand": "not null",
-          "type_accessories": "not null"
-        },
-        "then": { "brand": "current" }
-      },
-      "brand_type_headwear": {
-        "if": {
-          "brand": "not null",
-          "type_headwear": "not null"
-        },
-        "then": { "brand": "current" }
-      },
-      "brand": {
-        "if": { "brand": "not null" },
-        "then": { "brand": "current" }
+  "crosssell": {
+    "default": {
+      "continue": "true",
+      "then": {
+        "category": "3278",
+        "department": "current"
       }
     },
-    "upsell": {
-      "default": {
-        "continue": "true",
-        "then": {
-          "category": "3278",
-          "department": "current"
+    "boys": {
+      "continue": "true",
+      "if": { "gender": "9" },
+      "then": { "category": "780" }
+    },
+    "girls": {
+      "continue": "true",
+      "if": { "gender": "8" },
+      "then": { "category": "781" }
+    },
+    "department_streetwear_merchandise": {
+      "continue": "true",
+      "if": { "department": "5,6" },
+      "then": { "gender": "current" }
+    },
+    "department_media": {
+      "if": { "department": "853" },
+      "then": {
+        "category": "780",
+        "or": {
+          "band": "current",
+          "customercluster": "current"
         }
-      },
-      "boys": {
-        "continue": "true",
-        "if": { "gender": "9" },
-        "then": { "category": "780" }
-      },
-      "girls": {
-        "continue": "true",
-        "if": { "gender": "8" },
-        "then": { "category": "781" }
-      },
-      "department_streetwear_merchandise": {
-        "continue": "true",
-        "if": { "department": "5,6" },
-        "then": { "gender": "current" }
-      },
-      "department_media": {
-        "if": { "department": "853" },
-        "then": {
-          "category": "79",
-          "or": {
-            "band": "current",
-            "customercluster": "current"
-          }
+      }
+    },
+    "department_entertainment": {
+      "if": { "department": "5258" },
+      "then": {
+        "or": {
+          "brand": "not current",
+          "customercluster": "current"
         }
+      }
+    },
+    "band_type_top": {
+      "if": {
+        "band": "not null",
+        "type_top": "not null"
       },
-      "department_entertainment": {
-        "if": { "department": "5258" },
-        "then": {
-          "or": {
-            "brand": "current",
-            "customercluster": "current"
-          }
-        }
+      "then": {
+        "category": "1601",
+        "department": "5,6",
+        "type_shoes": "not null"
+      }
+    },
+    "band_type_pants": {
+      "if": {
+        "band": "not null",
+        "type_pants": "not null"
       },
-      "band_type_top": {
-        "if": {
-          "band": "not null",
-          "type_top": "not null"
-        },
-        "then": {
-          "or": {
-            "band": "current",
-            "customercluster": "current"
-          },
-          "gender": "current"
-        }
+      "then": {
+        "category": "1601",
+        "department": "5,6",
+        "type_shoes": "not null"
+      }
+    },
+    "band_type_accessories": {
+      "if": {
+        "band": "not null",
+        "type_accessories": "not null"
       },
-      "band_type_pants": {
-        "if": {
-          "band": "not null",
-          "type_pants": "not null"
-        },
-        "then": {
-          "or": {
-            "band": "current",
-            "customercluster": "current"
-          },
-          "gender": "current"
-        }
-      },
-      "band_type_accessories": {
-        "if": {
-          "band": "not null",
-          "type_accessories": "not null"
-        },
-        "then": {
-          "or": {
-            "customercluster": "current",
-            "band": "current"
-          }
-        }
-      },
-      "band_type_headwear": {
-        "if": {
-          "band": "not null",
-          "type_headwear": "not null"
-        },
-        "then": {
-          "gender": "current",
-          "or": {
-            "band": "current",
-            "customercluster": "current"
-          }
-        }
-      },
-      "band_ticket": {
-        "if": {
-          "band": "not null",
-          "department": "4"
-        },
-        "then": {
-          "ticket_city_dropdown": "current",
-          "ticket_endofsale": "greater today",
-          "category": "550"
-        }
-      },
-      "band": {
-        "if": { "band": "not null" },
-        "then": {
+      "then": {
+        "or": {
           "customercluster": "current",
-          "band": "not current"
+          "band": "current"
         }
+      }
+    },
+    "band_type_headwear": {
+      "if": {
+        "band": "not null",
+        "type_headwear": "not null"
       },
-      "brand": {
-        "continue": "true",
-        "if": { "brand": "not null" },
-        "then": { "brand": "not current" }
+      "then": {
+        "customercluster": "current",
+        "band": "not current"
+      }
+    },
+    "band_ticket": {
+      "if": {
+        "band": "not null",
+        "department": "4"
       },
-      "brand_type_top": {
-        "if": {
-          "brand": "not null",
-          "type_top": "not null"
-        },
-        "then": { "type_top": "not null" }
-      },
-      "brand_type_shoes": {
-        "if": {
-          "brand": "not null",
-          "type_shoes": "not null"
-        },
-        "then": {
-          "type_shoes": "not null",
-          "or": {
-            "brand": "current",
-            "color": "current"
-          }
+      "then": {
+        "department": "6",
+        "or": {
+          "band": "current",
+          "customercluster": "current"
         }
+      }
+    },
+    "brand_type_top": {
+      "if": {
+        "brand": "not null",
+        "type_top": "not null"
       },
-      "brand_type_pants": {
-        "if": {
-          "brand": "not null",
-          "type_pants": "not null"
-        },
-        "then": {
+      "then": {
+        "or": {
           "type_pants": "not null",
-          "type_pant_cut": "current"
+          "type_shoes": "not null"
         }
-      },
-      "brand_type_accessories": {
-        "if": {
-          "brand": "not null",
-          "type_accessories": "not null"
-        },
-        "then": { "type_accessories": "not null" }
       }
     },
-    "crosssell_cart": {
-      "default": {
-        "continue": "true",
-        "then": {
-          "category": "3278",
-          "department": "current",
-          "price": { "lower": "20" }
+    "brand_type_shoes": {
+      "if": {
+        "brand": "not null",
+        "type_shoes": "not null"
+      },
+      "then": {
+        "or": {
+          "type_pants": "not null",
+          "type_top": "not null"
         }
+      }
+    },
+    "brand_type_pants": {
+      "if": {
+        "brand": "not null",
+        "type_pants": "not null"
       },
-      "boys": {
-        "continue": "true",
-        "if": { "gender": "9" },
-        "then": { "category": "780" }
-      },
-      "girls": {
-        "continue": "true",
-        "if": { "gender": "8" },
-        "then": { "category": "781" }
-      },
-      "department_streetwear_merchandise": {
-        "continue": "true",
-        "if": { "department": "5,6" },
-        "then": { "gender": "current" }
-      },
-      "department_media": {
-        "if": { "department": "853" },
-        "then": {
-          "category": "780",
-          "or": {
-            "band": "current",
-            "customercluster": "current"
-          }
+      "then": {
+        "or": {
+          "type_top": "not null",
+          "type_shoes": "not null"
         }
+      }
+    },
+    "brand_type_accessories": {
+      "if": {
+        "brand": "not null",
+        "type_accessories": "not null"
       },
-      "department_entertainment": {
-        "if": { "department": "5258" },
-        "then": {
-          "or": {
-            "brand": "not current",
-            "customercluster": "current"
-          }
+      "then": { "brand": "current" }
+    },
+    "brand_type_headwear": {
+      "if": {
+        "brand": "not null",
+        "type_headwear": "not null"
+      },
+      "then": { "brand": "current" }
+    },
+    "brand": {
+      "if": { "brand": "not null" },
+      "then": { "brand": "current" }
+    }
+  },
+  "upsell": {
+    "default": {
+      "continue": "true",
+      "then": {
+        "category": "3278",
+        "department": "current"
+      }
+    },
+    "boys": {
+      "continue": "true",
+      "if": { "gender": "9" },
+      "then": { "category": "780" }
+    },
+    "girls": {
+      "continue": "true",
+      "if": { "gender": "8" },
+      "then": { "category": "781" }
+    },
+    "department_streetwear_merchandise": {
+      "continue": "true",
+      "if": { "department": "5,6" },
+      "then": { "gender": "current" }
+    },
+    "department_media": {
+      "if": { "department": "853" },
+      "then": {
+        "category": "79",
+        "or": {
+          "band": "current",
+          "customercluster": "current"
+        }
+      }
+    },
+    "department_entertainment": {
+      "if": { "department": "5258" },
+      "then": {
+        "or": {
+          "brand": "current",
+          "customercluster": "current"
+        }
+      }
+    },
+    "band_type_top": {
+      "if": {
+        "band": "not null",
+        "type_top": "not null"
+      },
+      "then": {
+        "or": {
+          "band": "current",
+          "customercluster": "current"
+        },
+        "gender": "current"
+      }
+    },
+    "band_type_pants": {
+      "if": {
+        "band": "not null",
+        "type_pants": "not null"
+      },
+      "then": {
+        "or": {
+          "band": "current",
+          "customercluster": "current"
+        },
+        "gender": "current"
+      }
+    },
+    "band_type_accessories": {
+      "if": {
+        "band": "not null",
+        "type_accessories": "not null"
+      },
+      "then": {
+        "or": {
+          "customercluster": "current",
+          "band": "current"
+        }
+      }
+    },
+    "band_type_headwear": {
+      "if": {
+        "band": "not null",
+        "type_headwear": "not null"
+      },
+      "then": {
+        "gender": "current",
+        "or": {
+          "band": "current",
+          "customercluster": "current"
+        }
+      }
+    },
+    "band_ticket": {
+      "if": {
+        "band": "not null",
+        "department": "4"
+      },
+      "then": {
+        "ticket_city_dropdown": "current",
+        "ticket_endofsale": "greater today",
+        "category": "550"
+      }
+    },
+    "band": {
+      "if": { "band": "not null" },
+      "then": {
+        "customercluster": "current",
+        "band": "not current"
+      }
+    },
+    "brand": {
+      "continue": "true",
+      "if": { "brand": "not null" },
+      "then": { "brand": "not current" }
+    },
+    "brand_type_top": {
+      "if": {
+        "brand": "not null",
+        "type_top": "not null"
+      },
+      "then": { "type_top": "not null" }
+    },
+    "brand_type_shoes": {
+      "if": {
+        "brand": "not null",
+        "type_shoes": "not null"
+      },
+      "then": {
+        "type_shoes": "not null",
+        "or": {
+          "brand": "current",
+          "color": "current"
+        }
+      }
+    },
+    "brand_type_pants": {
+      "if": {
+        "brand": "not null",
+        "type_pants": "not null"
+      },
+      "then": {
+        "type_pants": "not null",
+        "type_pant_cut": "current"
+      }
+    },
+    "brand_type_accessories": {
+      "if": {
+        "brand": "not null",
+        "type_accessories": "not null"
+      },
+      "then": { "type_accessories": "not null" }
+    }
+  },
+  "crosssell_cart": {
+    "default": {
+      "continue": "true",
+      "then": {
+        "category": "3278",
+        "department": "current",
+        "price": { "lower": "20" }
+      }
+    },
+    "boys": {
+      "continue": "true",
+      "if": { "gender": "9" },
+      "then": { "category": "780" }
+    },
+    "girls": {
+      "continue": "true",
+      "if": { "gender": "8" },
+      "then": { "category": "781" }
+    },
+    "department_streetwear_merchandise": {
+      "continue": "true",
+      "if": { "department": "5,6" },
+      "then": { "gender": "current" }
+    },
+    "department_media": {
+      "if": { "department": "853" },
+      "then": {
+        "category": "780",
+        "or": {
+          "band": "current",
+          "customercluster": "current"
+        }
+      }
+    },
+    "department_entertainment": {
+      "if": { "department": "5258" },
+      "then": {
+        "or": {
+          "brand": "not current",
+          "customercluster": "current"
         }
       }
     }

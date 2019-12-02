@@ -6,6 +6,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import Rules from 'icmaa-recommendations/helpers/Rules.ts'
 
 export default {
   name: 'IcmaaRecommendations',
@@ -17,6 +18,9 @@ export default {
   },
   computed: {
     ...mapGetters({ currentProduct: 'product/getCurrentProduct' })
+  },
+  mounted () {
+    const rules = new Rules()
   }
 }
 </script>
