@@ -2,15 +2,36 @@ import forEach from 'lodash-es/forEach'
 import Product from '@vue-storefront/core/modules/catalog/types/Product'
 import SearchQuery from '@vue-storefront/core/lib/search/searchQuery'
 
+export interface RuleSets {
+  [ruleSetKey: string]: {
+    [ruleKey: string]: Rule
+  }
+}
+
+export interface Rule {
+  continue?: boolean,
+  if: Record<string, any>,
+  then: Record<string, any>
+}
+
 class Rules {
-  protected config: Record<string, any>
+  protected rules: { [ruleKey: string]: Rule }
   protected product: Product
   protected type: string
   protected query: SearchQuery
 
-  protected assertionMap: Record<string, any> = {
+  protected assertionMap: Record<string, string> = {
     'not null': 'assertAttributeNotNull',
     'is null': 'assertAttributeIsNull'
+  }
+
+  protected filterMap: Record<string, string> = {
+    'not null': 'filterAttributeNotNull',
+    'is null': 'filterAttributeIsNull',
+    'current': 'filterAttributeSameAsCurrent',
+    'not current': 'filterAttributeNotSameAsCurrent',
+    'greater': 'filterAttributeGreaterOrEqual',
+    'lower': 'filterAttributeLowerOrEqual'
   }
 
   /**
@@ -22,9 +43,11 @@ class Rules {
     this.product = product
     this.query = new SearchQuery()
 
-    this.setConfig(type)
+    this
+      .setRules(type)
+      .addDefaultFilter()
 
-    forEach(this.config, (rule, ruleKey) => {
+    forEach(this.rules, (rule, ruleKey) => {
       if (!this.isValid(rule, ruleKey)) {
         return
       }
@@ -48,21 +71,21 @@ class Rules {
    * @param {string} type
    * @returns {this}
    */
-  protected setConfig (type: string) {
-    const configs: Record<string, any> = require('../rules.json')
-    if (configs[type]) {
-      this.config = configs[type]
+  protected setRules (type: string) {
+    const rules: RuleSets = require('../rules.json')
+    if (rules[type]) {
+      this.rules = rules[type]
     }
 
     return this
   }
 
   /**
-   * @param {object} rule
+   * @param {Rule} rule
    * @param {string} key
    * @returns {boolean}
    */
-  protected isValid (rule: Record<string, any>, key: string): boolean {
+  protected isValid (rule: Rule, key: string): boolean {
     if (!rule.if || Object.values(rule.if).length === 0) {
       return true
     }
@@ -126,12 +149,23 @@ class Rules {
   }
 
   /**
-   * @param {object} rule
-   * @param {string} key
-   * @returns {void}
+   * @returns {this}
    */
-  protected addFilter (rule: Record<string, any>, key: string) {
+  protected addDefaultFilter (): this {
+    this.query
+      .applyFilter({ key: 'visibility', value: { in: [2, 3, 4] } })
+      .applyFilter({ key: 'status', value: { in: [0, 1] } })
 
+    return this
+  }
+
+  /**
+   * @param {Rule} rule
+   * @param {string} key
+   * @returns {this}
+   */
+  protected addFilter (rule: Rule, key: string): this {
+    return this
   }
 }
 
