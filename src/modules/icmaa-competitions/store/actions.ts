@@ -7,6 +7,8 @@ import * as types from './mutation-types'
 import CompetitionsState, { Competition } from '../types/CompetitionsState'
 import RootState from '@vue-storefront/core/types/RootState'
 
+import { getCurrentStoreviewDatetime } from 'icmaa-config/helpers/datetime'
+
 const documentType = 'competition'
 const mutationTypes: MutationTypesInterface = {
   add: types.ICMAA_COMPETITIONS_ADD,
@@ -21,6 +23,7 @@ const actions: ActionTree<CompetitionsState, RootState> = {
     listAbstract<Competition>({ documentType, mutationTypes, storageKey, context, options }),
   post: async ({ state, dispatch }, { sheetId, data }): Promise<boolean> => {
     data.ip = await dispatch('getIp')
+    data.created_at = getCurrentStoreviewDatetime()
     return FormService.sendForm(sheetId, data)
   },
   getIp: async ({ state }): Promise<string|boolean> => {
