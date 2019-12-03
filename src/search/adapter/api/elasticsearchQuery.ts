@@ -46,12 +46,6 @@ export async function prepareElasticsearchQueryBody (searchQuery) {
             } else {
               query = query.orFilter('terms', getMapping(filter.attribute), filter.value)
             }
-          } else if (operator === 'nin') {
-            if (filter.value === null) {
-              query = query.filter('exists', getMapping(filter.attribute))
-            } else {
-              query = query.notFilter('terms', getMapping(filter.attribute), filter.value)
-            }
           } else {
             if (filter.value === null) {
               query = query.notFilter('exists', getMapping(filter.attribute))
