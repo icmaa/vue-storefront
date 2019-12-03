@@ -6,16 +6,14 @@ import Product from '@vue-storefront/core/modules/catalog/types/Product'
 import * as types from './mutation-types'
 import Rules from '../helpers/Rules'
 
-import { quickSearchByQuery } from '@vue-storefront/core/lib/search'
-
 const actions: ActionTree<RecommendationsState, RootState> = {
-  async single ({ state, commit }, { product, type, size }): Promise<Recommendations|boolean> {
+  async single ({ commit, dispatch }, { product, type, size }): Promise<Recommendations|boolean> {
     const productId: string = product.id
     const rules = new Rules(product, type)
     const query = rules.getSearchQuery().build()
 
     const { includeFields, excludeFields } = entities.productList
-    const result = await quickSearchByQuery({ query, size, includeFields, excludeFields })
+    const result = await dispatch('product/findProducts', { query, size, includeFields, excludeFields }, { root: true })
     const products: Product[] = result.items
 
     const payload = { productId, type, products }
