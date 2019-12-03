@@ -37,7 +37,7 @@ const actions: ActionTree<ProductAlertState, RootState> = {
     let { productId } = params
 
     let query = new SearchQuery()
-    query.applyFilter({key: 'configurable_children.id', value: { in: productId }})
+    query.applyFilter({key: 'configurable_children.id', value: { 'eq': productId }})
 
     return dispatch('product/findProducts', { query }, { root: true }).then(products => {
       const payload = { childId: productId, product: products.items }
