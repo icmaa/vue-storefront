@@ -94,11 +94,6 @@ export default {
     removeAlert () {
       this.$store.dispatch('icmaaProductAlert/removeProductStockAlert', this.productId) // remove productId from backend
       this.$store.dispatch('icmaaProductAlert/removeProductByProductId', this.productId) // remove product data from state
-
-      this.$store.dispatch('notification/spawnNotification', {
-        type: 'success',
-        message: this.$t('Removed product alert')
-      })
     },
     getAttributeCodes () {
       const attributeCodes = this.product.configurable_options.map(el => el.attribute_code)
