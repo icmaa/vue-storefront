@@ -1,6 +1,7 @@
 import forEach from 'lodash-es/forEach'
-import Product from '@vue-storefront/core/modules/catalog/types/Product'
 import bodybuilder from 'bodybuilder'
+import Product from '@vue-storefront/core/modules/catalog/types/Product'
+import { Logger } from '@vue-storefront/core/lib/logger'
 
 export interface RuleSets {
   [ruleSetKey: string]: {
@@ -27,6 +28,7 @@ class Rules {
 
   protected query: bodybuilder.Bodybuilder
   protected isBuild: boolean = false
+  protected validRules: { [ruleKey: string]: Rule } = {}
   protected filter: { and: Record<string, any>, or: Record<string, any> } = {
     and: {},
     or: {}
@@ -65,11 +67,14 @@ class Rules {
       }
 
       this.addFilter(rule.then)
+      this.validRules[ruleKey] = rule
 
       if (!rule.continue || rule.continue === false) {
         return false
       }
     })
+
+    this.debug()
   }
 
   /**
@@ -90,6 +95,13 @@ class Rules {
     }
 
     return this.query
+  }
+
+  /**
+   * @returns {string}
+   */
+  protected getElasticSearchQueryString (): string {
+    return JSON.stringify(this.getSearchQuery().build())
   }
 
   /**
@@ -368,6 +380,21 @@ class Rules {
     }
 
     return value
+  }
+
+  /**
+   * @returns {object}
+   */
+  public debug (): Record<string, any> {
+    const debugMessage: Record<string, any> = {
+      ruleSet: this.type,
+      rules: this.validRules,
+      query: this.getElasticSearchQueryString()
+    }
+
+    Logger.log('Recommendation rules: ', 'icmaaRecommendations', debugMessage)()
+
+    return debugMessage
   }
 }
 

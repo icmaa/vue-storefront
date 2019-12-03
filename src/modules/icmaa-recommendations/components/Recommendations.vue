@@ -1,7 +1,7 @@
 <template>
-  <div>
-    THIS IS WHERE THE RECS COME
-  </div>
+  <pre>
+    {{ query }}
+  </pre>
 </template>
 
 <script>
@@ -21,16 +21,18 @@ export default {
     }
   },
   computed: {
-    ...mapGetters({ currentProduct: 'product/getCurrentProduct' })
+    ...mapGetters({ currentProduct: 'product/getCurrentProduct' }),
+    query () {
+      const rules = new Rules(this.currentProduct, this.type)
+      const query = rules.getSearchQuery()
+
+      query.size(this.limit)
+
+      return query.build()
+    }
   },
   mounted () {
-    const rules = new Rules(this.currentProduct, this.type)
-    const query = rules.getSearchQuery()
-
-    query.rawOption('_source', ['name', 'customercluster', 'department', 'gender'])
-    query.size(this.limit)
-
-    console.log(JSON.stringify(query.build()))
+    // Load products by bodybuilder query
   }
 }
 </script>
