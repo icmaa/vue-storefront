@@ -105,11 +105,16 @@
           </lazy-hydrate>
         </div>
       </div>
-      <recommendations type="crosssell" class="t-mt-8" />
-      <recommendations type="upsell" class="t-mt-8" />
     </div>
 
     <div class="spacer t-h-8" />
+
+    <lazy-hydrate when-visible>
+      <div class="t-container t-px-4">
+        <recommendations type="crosssell" :title="$t('You may like these too')" />
+        <recommendations type="upsell" :title="$t('Similar products')" />
+      </div>
+    </lazy-hydrate>
 
     <async-sidebar
       :async-component="AddToCartSidebar"
