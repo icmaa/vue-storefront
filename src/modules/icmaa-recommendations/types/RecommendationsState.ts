@@ -7,5 +7,6 @@ export interface Recommendations {
 }
 
 export default interface RecommendationsState {
-  list: Recommendations[]
+  list: Recommendations[],
+  rules: Record<string, any>
 }

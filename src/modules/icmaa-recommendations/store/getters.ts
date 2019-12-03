@@ -3,9 +3,10 @@ import RecommendationsState, { Recommendations } from '../types/RecommendationsS
 import RootState from '@vue-storefront/core/types/RootState'
 
 const getters: GetterTree<RecommendationsState, RootState> = {
-  list: (state): Recommendations[] => state.list,
+  getList: (state): Recommendations[] => state.list,
+  getRules: (state): Record<string, any> => state.rules,
   getByTypeAndProductId: (state, getters) => (productId: string, type: string): Recommendations =>
-    getters.list.find(r => r.productId === productId && r.type === type)
+    getters.getList.find(r => r.productId === productId && r.type === type)
 }
 
 export default getters

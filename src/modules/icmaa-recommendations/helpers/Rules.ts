@@ -52,14 +52,17 @@ class Rules {
    * @param {Product} product
    * @param  {string} type
    */
-  public constructor (product: Product, type: string = 'crosssell') {
+  public constructor (product: Product, type: string = 'crosssell', rules: Record<string, any>) {
+    if (!rules[type]) {
+      return
+    }
+
+    this.rules = rules[type]
     this.type = type
     this.product = product
     this.query = bodybuilder()
 
-    this
-      .setRules(type)
-      .addDefaultFilter()
+    this.addDefaultFilter()
 
     forEach(this.rules, (rule, ruleKey) => {
       if (!this.isValid(rule, ruleKey)) {
@@ -102,19 +105,6 @@ class Rules {
    */
   protected getElasticSearchQueryString (): string {
     return JSON.stringify(this.getSearchQuery().build())
-  }
-
-  /**
-   * @param {string} type
-   * @returns {this}
-   */
-  protected setRules (type: string) {
-    const rules: RuleSets = require('../rules.json')
-    if (rules[type]) {
-      this.rules = rules[type]
-    }
-
-    return this
   }
 
   /**

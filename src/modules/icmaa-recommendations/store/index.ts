@@ -11,7 +11,8 @@ export const storageKey = 'recommendations'
 export const RecommendationsStore: Module<RecommendationsState, RootState> = {
   namespaced: true,
   state: {
-    list: []
+    list: [],
+    rules: {}
   },
   actions,
   getters,
