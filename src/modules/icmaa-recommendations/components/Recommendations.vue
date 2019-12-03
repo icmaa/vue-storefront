@@ -21,6 +21,8 @@ export default {
   },
   mounted () {
     const rules = new Rules(this.currentProduct, 'crosssell')
+    console.log(rules.getSearchQuery())
+    console.log(JSON.stringify(rules.getSearchQuery()))
   }
 }
 </script>

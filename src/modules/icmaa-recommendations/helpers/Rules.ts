@@ -1,6 +1,6 @@
 import forEach from 'lodash-es/forEach'
 import Product from '@vue-storefront/core/modules/catalog/types/Product'
-import SearchQuery from '@vue-storefront/core/lib/search/searchQuery'
+import bodybuilder from 'bodybuilder'
 
 export interface RuleSets {
   [ruleSetKey: string]: {
@@ -14,11 +14,17 @@ export interface Rule {
   then: Record<string, any>
 }
 
+export interface FilterOptions {
+  key: string,
+  value: any,
+  isOr: boolean
+}
+
 class Rules {
   protected rules: { [ruleKey: string]: Rule }
   protected product: Product
   protected type: string
-  protected query: SearchQuery
+  protected query: bodybuilder.Bodybuilder
 
   protected assertionMap: Record<string, string> = {
     'not null': 'assertAttributeNotNull',
@@ -41,7 +47,7 @@ class Rules {
   public constructor (product: Product, type: string = 'crosssell') {
     this.type = type
     this.product = product
-    this.query = new SearchQuery()
+    this.query = bodybuilder()
 
     this
       .setRules(type)
@@ -61,10 +67,10 @@ class Rules {
   }
 
   /**
-   * @returns {SearchQuery}
+   * @returns {bodybuilder.Bodybuilder}
    */
-  public getSearchQuery (): SearchQuery {
-    return this.query
+  public getSearchQuery (): Record<string, any> {
+    return this.query.build()
   }
 
   /**
@@ -153,8 +159,8 @@ class Rules {
    */
   protected addDefaultFilter (): this {
     this.query
-      .applyFilter({ key: 'visibility', value: { in: [2, 3, 4] } })
-      .applyFilter({ key: 'status', value: { in: [0, 1] } })
+      .filter('terms', 'visibility', [2, 3, 4])
+      .filter('terms', 'status', [0, 1])
 
     return this
   }
@@ -171,82 +177,126 @@ class Rules {
         return
       }
 
-      let method = this.filterMap[key] || 'filterAttributeValue'
-      console.log(key, value, method)
-      this[method](key, value)
+      const method = this.filterMap[value] || 'filterAttributeValue'
+      const filter = this[method]({ key, value, isOr })
+
+      if (filter) {
+
+      }
     })
 
     return this
   }
 
   /**
-   * @param {string} key
-   * @param {any} value
-   * @param {boolean} isOr
    * @returns {this}
    */
-  protected filterAttributeNotNull (key: string, value: any, isOr: boolean = false): this {
+  protected filterAttributeNotNull ({ key, isOr }: FilterOptions): this {
+    if (isOr) {
+      this.query.orQuery('bool', (b) => {
+        return b.query('exists', key, null)
+      })
+    } else {
+      this.query.query('exists', key, null)
+    }
+
     return this
   }
 
   /**
-   * @param {string} key
-   * @param {any} value
-   * @param {boolean} isOr
    * @returns {this}
    */
-  protected filterAttributeIsNull (key: string, value: any, isOr: boolean = false): this {
+  protected filterAttributeIsNull ({ key, isOr }: FilterOptions): this {
+    if (isOr) {
+      this.query.orQuery('bool', (b) => {
+        return b.notQuery('exists', key, null)
+      })
+    } else {
+      this.query.notQuery('exists', key, null)
+    }
+
     return this
   }
 
   /**
-   * @param {string} key
-   * @param {any} value
-   * @param {boolean} isOr
    * @returns {this}
    */
-  protected filterAttributeSameAsCurrent (key: string, value: any, isOr: boolean = false): this {
+  protected filterAttributeSameAsCurrent ({ key, value, isOr }: FilterOptions): this|boolean {
+    value = this.product[key]
+    if (!value) {
+      return this
+    }
+
+    if (isOr) {
+      this.query.orQuery('bool', (b) => {
+        return b.query('terms', key, this.getArrayFilterValue(value))
+      })
+    } else {
+      this.query.query('terms', key, this.getArrayFilterValue(value))
+    }
+
     return this
   }
 
   /**
-   * @param {string} key
-   * @param {any} value
-   * @param {boolean} isOr
    * @returns {this}
    */
-  protected filterAttributeNotSameAsCurrent (key: string, value: any, isOr: boolean = false): this {
+  protected filterAttributeNotSameAsCurrent ({ key, value, isOr }: FilterOptions): this|boolean {
+    value = this.product[key]
+    if (!value) {
+      return this
+    }
+
+    if (isOr) {
+      this.query.orQuery('bool', (b) => {
+        return b.notQuery('terms', key, this.getArrayFilterValue(value))
+      })
+    } else {
+      this.query.notQuery('terms', key, this.getArrayFilterValue(value))
+    }
+
     return this
   }
 
   /**
-   * @param {string} key
-   * @param {any} value
-   * @param {boolean} isOr
    * @returns {this}
    */
-  protected filterAttributeGreaterOrEqual (key: string, value: any, isOr: boolean = false): this {
+  protected filterAttributeGreaterOrEqual ({ key, value, isOr }: FilterOptions): this {
     return this
   }
 
   /**
-   * @param {string} key
-   * @param {any} value
-   * @param {boolean} isOr
    * @returns {this}
    */
-  protected filterAttributeLowerOrEqual (key: string, value: any, isOr: boolean = false): this {
+  protected filterAttributeLowerOrEqual ({ key, value, isOr }: FilterOptions): this {
     return this
   }
 
   /**
-   * @param {string} key
-   * @param {any} value
-   * @param {boolean} isOr
    * @returns {this}
    */
-  protected filterAttributeValue (key: string, value: any, isOr: boolean = false): this {
+  protected filterAttributeValue ({ key, value, isOr }: FilterOptions): this {
+    if (isOr) {
+      this.query.orQuery('bool', (b) => {
+        return b.query('terms', key, this.getArrayFilterValue(value))
+      })
+    } else {
+      this.query.query('terms', key, this.getArrayFilterValue(value))
+    }
+
     return this
+  }
+
+  /**
+   * @param {any[]} value
+   * @returns {any[]}
+   */
+  protected getArrayFilterValue (value: any): any[] {
+    if (!Array.isArray(value)) {
+      return [value]
+    }
+
+    return value
   }
 }
 
