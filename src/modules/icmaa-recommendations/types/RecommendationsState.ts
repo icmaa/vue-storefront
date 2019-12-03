@@ -1,8 +1,9 @@
 import Product from '@vue-storefront/core/modules/catalog/types/Product'
 
 export interface Recommendations {
-  product: string,
-  recommendations: Product[]
+  type: string,
+  productId: string,
+  products: Product[]
 }
 
 export default interface RecommendationsState {

@@ -3,19 +3,19 @@
     "default": {
       "continue": "true",
       "then": {
-        "category": 3278,
+        "category_ids": 3278,
         "department": "current"
       }
     },
     "boys": {
       "continue": "true",
       "if": { "gender": 9 },
-      "then": { "category": 780 }
+      "then": { "category_ids": 780 }
     },
     "girls": {
       "continue": "true",
       "if": { "gender": 8 },
-      "then": { "category": 781 }
+      "then": { "category_ids": 781 }
     },
     "department_streetwear_merchandise": {
       "continue": "true",
@@ -25,7 +25,7 @@
     "department_media": {
       "if": { "department": 853 },
       "then": {
-        "category": 780,
+        "category_ids": 780,
         "or": {
           "band": "current",
           "customercluster": "current"
@@ -47,7 +47,7 @@
         "type_top": "not null"
       },
       "then": {
-        "category": 1601,
+        "category_ids": 1601,
         "department": [5, 6],
         "type_shoes": "not null"
       }
@@ -58,7 +58,7 @@
         "type_pants": "not null"
       },
       "then": {
-        "category": 1601,
+        "category_ids": 1601,
         "department": [5,6],
         "type_shoes": "not null"
       }
@@ -157,19 +157,19 @@
     "default": {
       "continue": "true",
       "then": {
-        "category": 3278,
+        "category_ids": 3278,
         "department": "current"
       }
     },
     "boys": {
       "continue": "true",
       "if": { "gender": 9 },
-      "then": { "category": 780 }
+      "then": { "category_ids": 780 }
     },
     "girls": {
       "continue": "true",
       "if": { "gender": 8 },
-      "then": { "category": 781 }
+      "then": { "category_ids": 781 }
     },
     "department_streetwear_merchandise": {
       "continue": "true",
@@ -179,7 +179,7 @@
     "department_media": {
       "if": { "department": 853 },
       "then": {
-        "category": 79,
+        "category_ids": 79,
         "or": {
           "band": "current",
           "customercluster": "current"
@@ -254,7 +254,7 @@
       "then": {
         "ticket_city_dropdown": "current",
         "ticket_endofsale": "greater today",
-        "category": 550
+        "category_ids": 550
       }
     },
     "band": {
@@ -311,7 +311,7 @@
     "default": {
       "continue": "true",
       "then": {
-        "category": 3278,
+        "category_ids": 3278,
         "department": "current",
         "price": { "lower": 20 }
       }
@@ -319,12 +319,12 @@
     "boys": {
       "continue": "true",
       "if": { "gender": 9 },
-      "then": { "category": 780 }
+      "then": { "category_ids": 780 }
     },
     "girls": {
       "continue": "true",
       "if": { "gender": 8 },
-      "then": { "category": 781 }
+      "then": { "category_ids": 781 }
     },
     "department_streetwear_merchandise": {
       "continue": "true",
@@ -334,7 +334,7 @@
     "department_media": {
       "if": { "department": 853 },
       "then": {
-        "category": 780,
+        "category_ids": 780,
         "or": {
           "band": "current",
           "customercluster": "current"
