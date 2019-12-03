@@ -42,7 +42,7 @@
 import rootStore from '@vue-storefront/core/store'
 import { ProductTile } from '@vue-storefront/core/modules/catalog/components/ProductTile.ts'
 import config from 'config'
-import ProductImageAmp from '@icmaa/vsf-theme-imp/components/core/ProductImageAmp'
+import ProductImageAmp from './ProductImageAmp'
 
 export default {
   mixins: [ProductTile],
