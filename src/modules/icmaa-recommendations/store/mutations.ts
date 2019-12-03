@@ -12,11 +12,6 @@ const mutations: MutationTree<RecommendationsState> = {
     }
 
     state.list.push(payload)
-  },
-  [types.ICMAA_RECOMMENDATIONS_SET_RULES] (state, payload: Record<string, any>) {
-    console.log(payload)
-
-    state.rules = payload
   }
 }
 

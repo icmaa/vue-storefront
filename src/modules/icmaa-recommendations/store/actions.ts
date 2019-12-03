@@ -24,21 +24,13 @@ const actions: ActionTree<RecommendationsState, RootState> = {
     return payload
   },
   async getRulesFromCms ({ state, dispatch, commit }, identifier: string = 'recommendations'): Promise<Record<string, any>> {
-    if (Object.values(state.rules).length > 0) {
-      return new Promise(resolve => resolve(state.rules))
-    }
-
     const block: Promise<BlockStateItem> = dispatch(
       'icmaaCmsBlock/single',
       { value: identifier },
       { root: true }
     )
 
-    return block.then(rules => {
-      const rulesDTO = JSON.parse(rules.content)
-      commit(types.ICMAA_RECOMMENDATIONS_SET_RULES, rulesDTO)
-      return rulesDTO
-    })
+    return block.then(rules => JSON.parse(rules.content))
   }
 }
 
