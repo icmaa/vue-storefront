@@ -262,6 +262,14 @@ class Rules {
    * @returns {this}
    */
   protected filterAttributeGreaterOrEqual ({ key, value, isOr }: FilterOptions): this {
+    if (isOr) {
+      this.query.orQuery('bool', (b) => {
+        return b.query('range', key, { gte: value })
+      })
+    } else {
+      this.query.query('range', key, { gte: value })
+    }
+
     return this
   }
 
@@ -269,6 +277,14 @@ class Rules {
    * @returns {this}
    */
   protected filterAttributeLowerOrEqual ({ key, value, isOr }: FilterOptions): this {
+    if (isOr) {
+      this.query.orQuery('bool', (b) => {
+        return b.query('range', key, { lte: value })
+      })
+    } else {
+      this.query.query('range', key, { lte: value })
+    }
+
     return this
   }
 
