@@ -105,7 +105,8 @@
           </lazy-hydrate>
         </div>
       </div>
-      <recommendations />
+      <recommendations type="crosssell" />
+      <recommendations type="upsell" />
     </div>
 
     <div class="spacer t-h-8" />

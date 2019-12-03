@@ -11,6 +11,10 @@ import Rules from 'icmaa-recommendations/helpers/Rules.ts'
 export default {
   name: 'IcmaaRecommendations',
   props: {
+    type: {
+      type: String,
+      default: 'crosssell'
+    },
     limit: {
       type: Number,
       default: 4
@@ -20,7 +24,7 @@ export default {
     ...mapGetters({ currentProduct: 'product/getCurrentProduct' })
   },
   mounted () {
-    const rules = new Rules(this.currentProduct, 'crosssell')
+    const rules = new Rules(this.currentProduct, this.type)
     const query = rules.getSearchQuery()
 
     query.rawOption('_source', ['name', 'customercluster', 'department', 'gender'])
