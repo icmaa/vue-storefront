@@ -24,7 +24,13 @@ class Rules {
   protected rules: { [ruleKey: string]: Rule }
   protected product: Product
   protected type: string
+
   protected query: bodybuilder.Bodybuilder
+  protected isBuild: boolean = false
+  protected filter: { and: Record<string, any>, or: Record<string, any> } = {
+    and: {},
+    or: {}
+  }
 
   protected assertionMap: Record<string, string> = {
     'not null': 'assertAttributeNotNull',
@@ -67,10 +73,23 @@ class Rules {
   }
 
   /**
+   * Returns bodybuilder object representation of current string
    * @returns {bodybuilder.Bodybuilder}
    */
-  public getSearchQuery (): Record<string, any> {
-    return this.query.build()
+  public getSearchQuery (): bodybuilder.Bodybuilder {
+    if (!this.isBuild) {
+      forEach(this.filter, (filters, andOrKey) => {
+        const isOr = andOrKey === 'or'
+        forEach(filters, filter => {
+          const { key, value } = filter
+          this[filter.method]({ key, value, isOr })
+        })
+      })
+
+      this.isBuild = true
+    }
+
+    return this.query
   }
 
   /**
@@ -178,10 +197,9 @@ class Rules {
       }
 
       const method = this.filterMap[value] || 'filterAttributeValue'
-      const filter = this[method]({ key, value, isOr })
-
-      if (filter) {
-
+      const andOr = isOr ? 'or' : 'and'
+      this.filter[andOr][key] = {
+        method, key, value
       }
     })
 
@@ -192,7 +210,11 @@ class Rules {
    * @returns {this}
    */
   protected filterAttributeNotNull ({ key, value, isOr }: FilterOptions): this {
-    this.filterAttributeIsNullAndIsNotNull({ key, value, isOr }, 'query')
+    this.filterAttributeIsNullAndIsNotNull(
+      { key, value, isOr },
+      'query'
+    )
+
     return this
   }
 
@@ -200,7 +222,11 @@ class Rules {
    * @returns {this}
    */
   protected filterAttributeIsNull ({ key, value, isOr }: FilterOptions): this {
-    this.filterAttributeIsNullAndIsNotNull({ key, value, isOr }, 'notQuery')
+    this.filterAttributeIsNullAndIsNotNull(
+      { key, value, isOr },
+      'notQuery'
+    )
+
     return this
   }
 
@@ -224,7 +250,11 @@ class Rules {
    * @returns {this}
    */
   protected filterAttributeSameAsCurrent ({ key, value, isOr }: FilterOptions): this|boolean {
-    this.filterAttributeSameAndNotSameAsCurrent({ key, value, isOr }, 'query')
+    this.filterAttributeSameAndNotSameAsCurrent(
+      { key, value, isOr },
+      'query'
+    )
+
     return this
   }
 
@@ -232,7 +262,11 @@ class Rules {
    * @returns {this}
    */
   protected filterAttributeNotSameAsCurrent ({ key, value, isOr }: FilterOptions): this|boolean {
-    this.filterAttributeSameAndNotSameAsCurrent({ key, value, isOr }, 'notQuery')
+    this.filterAttributeSameAndNotSameAsCurrent(
+      { key, value, isOr },
+      'notQuery'
+    )
+
     return this
   }
 
@@ -261,7 +295,11 @@ class Rules {
    * @returns {this}
    */
   protected filterAttributeGreaterOrEqual ({ key, value, isOr }: FilterOptions): this {
-    this.filterAttributeLowerOrGreaterOrEqual({ key, value, isOr }, 'gte')
+    this.filterAttributeLowerOrGreaterOrEqual(
+      { key, value, isOr },
+      'gte'
+    )
+
     return this
   }
 
@@ -269,7 +307,11 @@ class Rules {
    * @returns {this}
    */
   protected filterAttributeLowerOrEqual ({ key, value, isOr }: FilterOptions): this {
-    this.filterAttributeLowerOrGreaterOrEqual({ key, value, isOr }, 'lte')
+    this.filterAttributeLowerOrGreaterOrEqual(
+      { key, value, isOr },
+      'lte'
+    )
+
     return this
   }
 
