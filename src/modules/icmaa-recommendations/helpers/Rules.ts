@@ -191,28 +191,30 @@ class Rules {
   /**
    * @returns {this}
    */
-  protected filterAttributeNotNull ({ key, isOr }: FilterOptions): this {
-    if (isOr) {
-      this.query.orQuery('bool', (b) => {
-        return b.query('exists', key, null)
-      })
-    } else {
-      this.query.query('exists', key, null)
-    }
-
+  protected filterAttributeNotNull ({ key, value, isOr }: FilterOptions): this {
+    this.filterAttributeIsNullAndIsNotNull({ key, value, isOr }, 'query')
     return this
   }
 
   /**
    * @returns {this}
    */
-  protected filterAttributeIsNull ({ key, isOr }: FilterOptions): this {
+  protected filterAttributeIsNull ({ key, value, isOr }: FilterOptions): this {
+    this.filterAttributeIsNullAndIsNotNull({ key, value, isOr }, 'notQuery')
+    return this
+  }
+
+  /**
+   * @param {string} keyword
+   * @returns {this}
+   */
+  protected filterAttributeIsNullAndIsNotNull ({ key, isOr }: FilterOptions, keyword: string = 'query'): this {
     if (isOr) {
       this.query.orQuery('bool', (b) => {
-        return b.notQuery('exists', key, null)
+        return b[keyword]('exists', key, null)
       })
     } else {
-      this.query.notQuery('exists', key, null)
+      this.query[keyword]('exists', key, null)
     }
 
     return this
@@ -222,19 +224,7 @@ class Rules {
    * @returns {this}
    */
   protected filterAttributeSameAsCurrent ({ key, value, isOr }: FilterOptions): this|boolean {
-    value = this.product[key]
-    if (!value) {
-      return this
-    }
-
-    if (isOr) {
-      this.query.orQuery('bool', (b) => {
-        return b.query('terms', key, this.getArrayFilterValue(value))
-      })
-    } else {
-      this.query.query('terms', key, this.getArrayFilterValue(value))
-    }
-
+    this.filterAttributeSameAndNotSameAsCurrent({ key, value, isOr }, 'query')
     return this
   }
 
@@ -242,6 +232,15 @@ class Rules {
    * @returns {this}
    */
   protected filterAttributeNotSameAsCurrent ({ key, value, isOr }: FilterOptions): this|boolean {
+    this.filterAttributeSameAndNotSameAsCurrent({ key, value, isOr }, 'notQuery')
+    return this
+  }
+
+  /**
+   * @param {string} keyword
+   * @returns {this}
+   */
+  protected filterAttributeSameAndNotSameAsCurrent ({ key, value, isOr }: FilterOptions, keyword: string = 'query'): this|boolean {
     value = this.product[key]
     if (!value) {
       return this
@@ -249,10 +248,10 @@ class Rules {
 
     if (isOr) {
       this.query.orQuery('bool', (b) => {
-        return b.notQuery('terms', key, this.getArrayFilterValue(value))
+        return b[keyword]('terms', key, this.getArrayFilterValue(value))
       })
     } else {
-      this.query.notQuery('terms', key, this.getArrayFilterValue(value))
+      this.query[keyword]('terms', key, this.getArrayFilterValue(value))
     }
 
     return this
@@ -262,14 +261,7 @@ class Rules {
    * @returns {this}
    */
   protected filterAttributeGreaterOrEqual ({ key, value, isOr }: FilterOptions): this {
-    if (isOr) {
-      this.query.orQuery('bool', (b) => {
-        return b.query('range', key, { gte: value })
-      })
-    } else {
-      this.query.query('range', key, { gte: value })
-    }
-
+    this.filterAttributeLowerOrGreaterOrEqual({ key, value, isOr }, 'gte')
     return this
   }
 
@@ -277,12 +269,21 @@ class Rules {
    * @returns {this}
    */
   protected filterAttributeLowerOrEqual ({ key, value, isOr }: FilterOptions): this {
+    this.filterAttributeLowerOrGreaterOrEqual({ key, value, isOr }, 'lte')
+    return this
+  }
+
+  /**
+   * @param {string} keyword
+   * @returns {this}
+   */
+  protected filterAttributeLowerOrGreaterOrEqual ({ key, value, isOr }: FilterOptions, keyword: string = 'lte'): this {
     if (isOr) {
       this.query.orQuery('bool', (b) => {
-        return b.query('range', key, { lte: value })
+        return b.query('range', key, { [keyword]: value })
       })
     } else {
-      this.query.query('range', key, { lte: value })
+      this.query.query('range', key, { [keyword]: value })
     }
 
     return this
