@@ -55,6 +55,3 @@ export const sortByLetter = (a: Category, b: Category) => {
   const [aName, bName] = [extractPrefix(a.name), extractPrefix(b.name)]
   return aName === bName ? 0 : aName < bName ? -1 : 1
 }
-export const isCategoryInWhitelist = (category: Category) => {
-  return config.icmaa.catalog.productListParentCategoryWhitelist.includes(category.parent_id)
-}

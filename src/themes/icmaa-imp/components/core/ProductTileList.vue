@@ -3,6 +3,7 @@
     <router-link :to="productLink" tag="div" class="t-text-sm" v-if="!onlyImage">
       <p class="t-mb-1 t-text-primary t-leading-tight">
         {{ translatedProductName | htmlDecode }}
+        {{ product.id }}
       </p>
       <p>
         <span class="price-original t-text-base-light t-line-through t-mr-2" v-if="product.special_price && parseFloat(product.original_price_incl_tax) > 0">
@@ -17,9 +18,6 @@
           {{ product.price_incl_tax | price }}
         </span>
       </p>
-      <p>
-        <AddToWishlist class="t-absolute t-bottom-0 t-left-0 t-z-1" :class="{'': isOnWishlist }" :is-overlay="true" :product="product" />
-      </p>
     </router-link>
   </div>
 </template>
@@ -27,27 +25,15 @@
 <script>
 import config from 'config'
 import rootStore from '@vue-storefront/core/store'
-import Placeholder from 'theme/components/core/blocks/Placeholder'
-import ProductImage from 'theme/components/core/ProductImage'
-import AddToWishlist from 'theme/components/core/blocks/Wishlist/AddToWishlist'
 import PromoBanner from 'theme/components/core/blocks/Category/PromoBanner'
 import ProductNameMixin from 'icmaa-catalog/mixins/ProductNameMixin'
 import ProductPriceMixin from 'theme/mixins/product/priceMixin'
 import { ProductTile } from '@vue-storefront/core/modules/catalog/components/ProductTile'
-import { IsOnWishlist } from '@vue-storefront/core/modules/wishlist/components/IsOnWishlist'
 
 export default {
-  mixins: [ProductTile, IsOnWishlist, ProductNameMixin, ProductPriceMixin],
+  mixins: [ProductTile, ProductNameMixin, ProductPriceMixin],
   components: {
-    Placeholder,
-    ProductImage,
-    PromoBanner,
-    AddToWishlist
-  },
-  data () {
-    return {
-      imageLoading: true
-    }
+    PromoBanner
   },
   props: {
     labelsActive: {
@@ -65,9 +51,6 @@ export default {
         src: this.thumbnail,
         loading: this.thumbnail
       }
-    },
-    favoriteIcon () {
-      return this.isOnWishlist ? 'favorite' : 'favorite_border'
     }
   },
   methods: {
