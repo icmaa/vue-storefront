@@ -4,6 +4,7 @@
       <p class="t-mb-1 t-text-primary t-leading-tight">
         {{ translatedProductName | htmlDecode }}
         {{ product.id }}
+        {{ product.band }}
       </p>
       <p>
         <span class="price-original t-text-base-light t-line-through t-mr-2" v-if="product.special_price && parseFloat(product.original_price_incl_tax) > 0">

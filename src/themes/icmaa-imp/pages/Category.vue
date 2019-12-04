@@ -40,9 +40,11 @@
 
     <div class="t-container">
       <lazy-hydrate :trigger-hydration="!loading" v-if="isLazyHydrateEnabled">
-        <product-listing :products="getCategoryProducts" />
+        <product-listing-list v-if="isParentIdInWhitelist" :products="getCategoryProducts" />
+        <product-listing v-if="!isParentIdInWhitelist" :products="getCategoryProducts" />
       </lazy-hydrate>
-      <product-listing v-else :products="getCategoryProducts" />
+      <product-listing v-if="!isParentIdInWhitelist" :products="getCategoryProducts" />
+      <product-listing-list v-if="isParentIdInWhitelist" :products="getCategoryProducts" />
       <div class="t-flex t-items-center t-justify-center t-pb-8" v-if="moreProductsInSearchResults">
         <button-component type="ghost" @click.native="loadMoreProducts" :disabled="loadingProducts" class="t-w-2/3 lg:t-w-1/4" :class="{ 't-relative t-opacity-60': loadingProducts }">
           {{ $t('Load more') }}
@@ -88,6 +90,7 @@ import Sidebar from 'theme/components/core/blocks/Category/Sidebar'
 import SortBy from 'theme/components/core/blocks/Category/SortBy'
 import Presets from 'theme/components/core/blocks/Category/Presets'
 import ProductListing from 'theme/components/core/ProductListing'
+import ProductListingList from 'theme/components/core/ProductListingList'
 import Breadcrumbs from 'theme/components/core/Breadcrumbs'
 import Dropdown from 'theme/components/core/blocks/Dropdown'
 import ButtonComponent from 'theme/components/core/blocks/Button'
@@ -131,6 +134,7 @@ export default {
     LoaderBackground,
     Presets,
     ProductListing,
+    ProductListingList,
     Breadcrumbs,
     SortBy,
     CategoryExtrasHeader,
@@ -171,6 +175,11 @@ export default {
     moreProductsInSearchResults () {
       const { perPage, start, total } = this.getProductsStats
       return (start + perPage < total)
+    },
+    isParentIdInWhitelist () {
+      let category = this.getCurrentCategory.parent_id
+      let whitelist = config.icmaa.catalog.productListList.parentCategoryWhitelist
+      return whitelist.includes(category)
     }
   },
   async asyncData ({ store, route, context }) { // this is for SSR purposes to prefetch data - and it's always executed before parent component methods
