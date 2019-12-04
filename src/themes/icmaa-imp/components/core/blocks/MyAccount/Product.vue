@@ -5,17 +5,17 @@
         <product-image :image="image" />
       </router-link>
     </div>
-    <div class="t-w-2/3 lg:t-w-3/4 t-flex t-flex-col lg:t-py-4 t-py-2">
-      <div class="t-mb-2 lg:t-mb-4 t-w-full">
+    <div class="t-w-2/3 lg:t-w-3/4 lg:t-py-4 t-py-2">
+      <div class="t-mb-2 t-w-full">
         <router-link :to="productLink" class="t-text-primary t-w-full t-text-sm t-leading-tight">
           {{ product.name | htmlDecode }}
         </router-link>
       </div>
-      <div v-if="options.length > 0">
-        {{ options.join(', ') }}
+      <div v-if="options.length > 0" class="t-text-sm t-text-base-tone t-mb-4">
+        <div v-for="(option, i) in options" :key="i" v-text="option" />
       </div>
-      <button-component type="second" size="md" icon="delete" :confirm="true" @click="removeAlert">
-        {{ $t('Delete notification') }}
+      <button-component type="second" icon="delete" :confirm="true" @click="removeAlert">
+        {{ $t('Delete') }}
       </button-component>
     </div>
   </div>
@@ -64,7 +64,7 @@ export default {
       this.product.configurable_options.forEach(o => {
         const attributeKey = o.attribute_code
         const optionId = this.childProduct[o.attribute_code]
-        options.push(this.getOptionLabel({ attributeKey, optionId }))
+        options.push([o.label, this.getOptionLabel({ attributeKey, optionId })].join(': '))
       })
 
       return options
