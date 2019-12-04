@@ -1,13 +1,28 @@
 <template>
   <div v-if="product">
-    <product-tile :product="product" />
-    <div class="t-flex t-items-center t-justify-between t-mt-2">
-      <div v-if="options.length > 0" class="t-flex-grow t-text-sm t-text-base-tone">
-        <button-component v-for="(option, i) in options" :key="i" type="ghost" size="sm" :cursor-pointer="false" v-text="option.value" class="t-mr-2" />
+    <div class="t-flex t-bg-white">
+      <div class="t-w-1/3">
+        <router-link :to="productLink" :title="translatedProductName" class="t-block">
+          <placeholder ratio="161:233" v-if="imageLoading" />
+          <product-image :image="image" :alt="product.name | htmlDecode" data-testid="productImage" @load="imageLoading = false" />
+        </router-link>
       </div>
-      <button-component type="second" icon="delete" :icon-only="true" :confirm="true" @click="removeAlert">
-        {{ $t('Delete') }}
-      </button-component>
+      <div class="t-flex-1 t-flex t-flex-col t-justify-center t-p-4">
+        <div class="t-mb-2 t-leading-tight">
+          <router-link :to="productLink" v-text="translatedProductName" class="t-text-sm t-text-primary" />
+        </div>
+        <div v-if="options.length > 0" class="t-mb-8">
+          <div v-for="(option, i) in options" :key="i" class="t-flex t-items-center">
+            <span v-text="option.label + ':'" class="t-text-xs t-mr-2" />
+            <button-component type="ghost" size="xs" :cursor-pointer="false" v-text="option.value" class="t-mr-2" />
+          </div>
+        </div>
+        <div>
+          <button-component type="second" icon="delete" size="sm" :confirm="true" @click="removeAlert">
+            {{ $t('Delete') }}
+          </button-component>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -19,13 +34,23 @@ import { formatProductLink } from '@vue-storefront/core/modules/url/helpers'
 import { htmlDecode } from '@vue-storefront/core/lib/store/filters'
 import i18n from '@vue-storefront/i18n'
 
-import ProductTile from 'theme/components/core/ProductTile'
+import ProductNameMixin from 'icmaa-catalog/mixins/ProductNameMixin'
+import Placeholder from 'theme/components/core/blocks/Placeholder'
+import ProductImage from 'theme/components/core/ProductImage'
 import ButtonComponent from 'theme/components/core/blocks/Button'
 
 export default {
+  name: 'MyProductsAlertProduct',
+  mixins: [ ProductNameMixin ],
   components: {
-    ProductTile,
+    Placeholder,
+    ProductImage,
     ButtonComponent
+  },
+  data () {
+    return {
+      imageLoading: true
+    }
   },
   props: {
     stockItemId: {
@@ -70,7 +95,7 @@ export default {
       }
     },
     thumbnail () {
-      return this.getThumbnail(this.product.image, 150, 150)
+      return this.getThumbnail(this.product.image)
     }
   },
   methods: {
