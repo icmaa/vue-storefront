@@ -36,7 +36,7 @@ const actions: ActionTree<ProductAlertState, RootState> = {
       }
     }
 
-    return product
+    return true
   },
   clearProductStockAlerts ({ commit }): void {
     commit(types.ICMAA_PRODUCT_ALERT_CLR_STOCK)

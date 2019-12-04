@@ -1,8 +1,11 @@
 <template>
-  <button :type="submit ? 'submit' : 'button'" class="t-flex t-items-center t-rounded-sm t-cursor-pointer t-webkit-tap-transparent" :class="[ { 't-uppercase': !['select', 'tag', 'tag-active'].includes(type) }, sizeClass, colorClass, alignClass ]" :style="customColorStyle" @click="click">
+  <button :type="submit ? 'submit' : 'button'" class="t-flex t-items-center t-rounded-sm t-webkit-tap-transparent" :class="[ { 't-uppercase': !['select', 'tag', 'tag-active'].includes(type) }, { 't-cursor-pointer': cursorPointer }, sizeClass, colorClass, alignClass ]" :style="customColorStyle" @click="click">
     <material-icon v-if="icon && iconPosition === 'left'" :icon="icon" :icon-set="iconSet" :size="size === 'md' ? size : 'xs'" class="t-align-middle" :class="[{ 't-mr-4': !iconOnly }, iconClass ]" />
     <template v-if="iconOnly">
-      <span class="t-sr-only">
+      <template v-if="confirm && confirmState === 'unconfirmed'">
+        {{ $t('Are you sure?') }}
+      </template>
+      <span class="t-sr-only" v-else>
         <slot />
       </span>
     </template>
@@ -89,6 +92,10 @@ export default {
     submit: {
       type: Boolean,
       default: false
+    },
+    cursorPointer: {
+      type: Boolean,
+      default: true
     },
     confirm: {
       type: Boolean,

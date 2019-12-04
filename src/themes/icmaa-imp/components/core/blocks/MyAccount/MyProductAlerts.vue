@@ -1,16 +1,21 @@
 <template>
-  <div class="t-p-4 t-bg-white">
-    <headline icon="alarm_on">
-      {{ $t('My product-alerts') }}
-    </headline>
-    <div>
-      <template v-if="isLoaded && stockItems.length > 0">
-        <product v-for="(stockItemId, i) in stockItems" :key="i" :stock-item-id="stockItemId" />
-      </template>
+  <div>
+    <div class="t-p-4 t-bg-white">
+      <headline icon="alarm_on" class="t-mb-0">
+        {{ $t('My product-alerts') }}
+      </headline>
       <div class="t-text-sm t-text-base-light" v-if="isLoaded && stockItems.length === 0">
         {{ $t('You aren\'t subscribed to any product alerts.') }}
       </div>
+      <div class="t-text-sm t-text-base-tone" v-if="isLoaded && stockItems.length > 0">
+        {{ $t('You\'re subscribed to the following products and will be notified as soon as they are back in stock.') }}
+      </div>
     </div>
+    <template v-if="isLoaded && stockItems.length > 0">
+      <div class="t-flex t-flex-wrap t--mx-2">
+        <product v-for="(stockItemId, i) in stockItems" :key="i" :stock-item-id="stockItemId" class="t-w-full lg:t-w-1/3 t-mt-4 t-px-2" />
+      </div>
+    </template>
   </div>
 </template>
 
