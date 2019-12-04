@@ -1,11 +1,18 @@
 <template>
-  <div class="product t-cursor-pointer" v-observe-visibility="visibilityChanged">
-    <router-link :to="productLink" tag="div" class="t-text-sm" v-if="!onlyImage">
-      <p class="t-mb-1 t-text-primary t-leading-tight">
-        {{ translatedProductName | htmlDecode }}
-        {{ product.id }}
-        {{ product.band }}
-      </p>
+  <router-link :to="productLink" tag="tr">
+    <td class="t-w-1/2 t-px-4 t-py-2">
+      {{ translatedProductName | htmlDecode }}
+    </td>
+    <td class="t-w-1/10 t-px-4 t-py-2">
+      {{ product.stock.is_in_stock }}
+    </td>
+    <td class="t-w-1/10 t-px-4 t-py-2">
+      {{ product.ticket_city }}<br>{{ product.ticket_venue }}
+    </td>
+    <td class="t-w-1/10 t-px-4 t-py-2">
+      {{ product.ticket_eventdate }}<br>{{ product.ticket_start }}
+    </td>
+    <td class="t-w-1/10 t-px-4 t-py-2">
       <p>
         <span class="price-original t-text-base-light t-line-through t-mr-2" v-if="product.special_price && parseFloat(product.original_price_incl_tax) > 0">
           {{ product.original_price_incl_tax | price }}
@@ -19,8 +26,8 @@
           {{ product.price_incl_tax | price }}
         </span>
       </p>
-    </router-link>
-  </div>
+    </td>
+  </router-link>
 </template>
 
 <script>
@@ -40,18 +47,6 @@ export default {
     labelsActive: {
       type: Boolean,
       default: true
-    },
-    onlyImage: {
-      type: Boolean,
-      default: false
-    }
-  },
-  computed: {
-    thumbnailObj () {
-      return {
-        src: this.thumbnail,
-        loading: this.thumbnail
-      }
     }
   },
   methods: {
