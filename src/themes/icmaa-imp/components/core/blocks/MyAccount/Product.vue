@@ -11,17 +11,10 @@
           {{ product.name | htmlDecode }}
         </router-link>
       </div>
-      <div class="t-w-full t-text-sm t-font-bold">
-        {{ $t("You're waiting for") }}
+      <div v-if="options.length > 0">
+        {{ options.join(', ') }}
       </div>
-      <div class="t-flex-grow">
-        <template v-if="optionLabels.length > 0">
-          <button-component v-for="(label, i) in optionLabels" :key="i" type="tag" size="sm" :class="'t-flex-fix t-mr-2 t-mb-2'" :icon-only="false">
-            {{ label }}
-          </button-component>
-        </template>
-      </div>
-      <button-component type="second" size="md" :class="'t-mr-2'" icon="delete" :icon-only="false" @click.native="removeAlert">
+      <button-component type="second" size="md" icon="delete" :confirm="true" @click="removeAlert">
         {{ $t('Delete notification') }}
       </button-component>
     </div>
@@ -46,30 +39,35 @@ export default {
     ButtonComponent
   },
   props: {
-    product: {
-      type: Object,
-      required: true
-    },
-    productId: {
-      type: Number,
+    stockItemId: {
+      type: [String, Number],
       required: true
     }
   },
   computed: {
-    ...mapGetters({ attributeList: 'attribute/getAttributeListByCode' }),
-    optionLabels () {
-      const attributeList = this.attributeList
-      const attributeCode = this.getAttributeCodes()
+    ...mapGetters({
+      getOptionLabel: 'attribute/getOptionLabel',
+      getParentProductByStockItem: 'icmaaProductAlert/getParentProductByStockItem',
+      getProducts: 'icmaaProductAlert/getProducts'
+    }),
+    product () {
+      return this.getParentProductByStockItem(this.stockItemId)
+    },
+    productId () {
+      return this.product.id
+    },
+    childProduct () {
+      return this.product.configurable_children.find(el => el.id === this.stockItemId)
+    },
+    options () {
+      const options = []
+      this.product.configurable_options.forEach(o => {
+        const attributeKey = o.attribute_code
+        const optionId = this.childProduct[o.attribute_code]
+        options.push(this.getOptionLabel({ attributeKey, optionId }))
+      })
 
-      const options = intersection(attributeCode, Object.keys(attributeList))
-      if (options.length > 0) {
-        const labels = []
-        for (const option of options) {
-          labels.push(attributeList[option].options.find(el => parseInt(el.value) === this.getChildProduct()[option]).label)
-        }
-        return labels
-      }
-      return [this.getChildProduct().sku]
+      return options
     },
     productLink () {
       return formatProductLink(this.product, currentStoreView().storeCode)
@@ -85,23 +83,9 @@ export default {
     }
   },
   methods: {
-    getChildProduct () {
-      return this.product.configurable_children.find(el => el.id === this.productId)
-    },
-    redirect () {
-      this.$router.push(this.localizedRoute(this.productLink))
-    },
     removeAlert () {
-      this.$store.dispatch('icmaaProductAlert/removeProductStockAlert', this.productId) // remove productId from backend
-      this.$store.dispatch('icmaaProductAlert/removeProductByProductId', this.productId) // remove product data from state
-    },
-    getAttributeCodes () {
-      const attributeCodes = this.product.configurable_options.map(el => el.attribute_code)
-      return attributeCodes
+      this.$store.dispatch('icmaaProductAlert/removeProductStockAlert', this.stockItemId)
     }
-  },
-  async mounted () {
-    this.$store.dispatch('attribute/list', { filterValues: [...this.getAttributeCodes()] })
   }
 }
 </script>

@@ -4,20 +4,20 @@
       {{ $t('My product-alerts') }}
     </headline>
     <div>
-      <template v-if="products.length > 0">
-        <product v-for="(product, i) in products" :key="product.childId" :product="product.product[0]" :product-id="product.childId" :class="{ 't-border-b': stockItems.length !== i + 1 }" />
+      <template v-if="isLoaded && stockItems.length > 0">
+        <product v-for="(stockItemId, i) in stockItems" :key="i" :stock-item-id="stockItemId" />
       </template>
-      <template v-else>
-        {{ $t('You have no product alerts') }}
-      </template>
+      <div class="t-text-sm t-text-base-light" v-if="isLoaded && stockItems.length === 0">
+        {{ $t('You aren\'t subscribed to any product alerts.') }}
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
-import Headline from 'theme/components/core/blocks/MyAccount/Headline'
 import i18n from '@vue-storefront/i18n'
+import Headline from 'theme/components/core/blocks/MyAccount/Headline'
 import Product from 'theme/components/core/blocks/MyAccount/Product'
 
 export default {
@@ -28,23 +28,32 @@ export default {
   },
   data () {
     return {
-      productIds: []
+      isLoaded: false
     }
   },
   computed: {
     ...mapGetters({
-      products: 'icmaaProductAlert/getProducts',
-      stockItems: 'icmaaProductAlert/getStockItems'
-    })
-  },
-  async mounted () {
-    this.productIds = await this.$store.dispatch('icmaaProductAlert/fetchProductStockAlerts')
-
-    this.productIds.forEach(async element => {
-      await this.$store.dispatch('icmaaProductAlert/fetchProductsByProductId', {
-        productId: element
+      stockItems: 'icmaaProductAlert/getStockItems',
+      products: 'icmaaProductAlert/getProducts'
+    }),
+    attributeCodes () {
+      let attributeCodes = []
+      this.products.forEach(p => {
+        p.configurable_options.forEach(ch => {
+          if (!attributeCodes.includes(ch.attribute_code)) {
+            attributeCodes.push(ch.attribute_code)
+          }
+        })
       })
-    })
+
+      return attributeCodes
+    }
+  },
+  async created () {
+    await this.$store.dispatch('icmaaProductAlert/fetchProductStockAlerts')
+    await this.$store.dispatch('icmaaProductAlert/fetchParentProductsByStockIds', this.stockItems)
+    await this.$store.dispatch('attribute/list', { filterValues: this.attributeCodes })
+    this.isLoaded = true
   }
 }
 </script>
