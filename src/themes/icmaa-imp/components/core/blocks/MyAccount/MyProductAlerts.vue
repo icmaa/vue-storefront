@@ -4,7 +4,7 @@
       <headline icon="alarm_on" class="t-mb-0">
         {{ $t('My product-alerts') }}
       </headline>
-      <div class="t-text-sm t-text-base-light" v-if="isLoaded && stockItems.length === 0">
+      <div class="t-text-sm t-text-base-light" v-if="stockItems.length === 0">
         {{ $t('You aren\'t subscribed to any product alerts.') }}
       </div>
       <div class="t-text-sm t-text-base-tone" v-if="isLoaded && stockItems.length > 0">
