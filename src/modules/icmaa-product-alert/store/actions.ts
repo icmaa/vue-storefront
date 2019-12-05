@@ -31,7 +31,7 @@ const actions: ActionTree<ProductAlertState, RootState> = {
 
       const parentId = getters.getParentProductByStockItem(productId).id
       const hasSameParent = getters.getStockItems.filter(i => parentId === getters.getParentProductByStockItem(i).id)
-      if (hasSameParent.length === 1) {
+      if (hasSameParent.length < 1) {
         commit(types.ICMAA_PRODUCT_ALERT_RMV_PRODUCTS_DATA, parentId)
       }
     }
