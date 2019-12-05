@@ -23,7 +23,7 @@
 import { mapGetters, mapActions } from 'vuex'
 import i18n from '@vue-storefront/i18n'
 import Headline from 'theme/components/core/blocks/MyAccount/Headline'
-import Product from 'theme/components/core/blocks/MyAccount/Product'
+import Product from 'theme/components/core/blocks/MyAccount/MyProductAlerts/Product'
 
 export default {
   name: 'MyProductAlerts',
