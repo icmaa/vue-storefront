@@ -11,14 +11,14 @@
         <div class="t-mb-2 t-leading-tight">
           <router-link :to="productLink" v-text="translatedProductName" class="t-text-sm t-text-primary" />
         </div>
-        <div v-if="options.length > 0" class="t-mb-8">
+        <div v-if="options.length > 0" class="t-mb-10">
           <div v-for="(option, i) in options" :key="i" class="t-flex t-items-center">
             <span v-text="option.label + ':'" class="t-text-xs t-mr-2" />
-            <button-component type="ghost" size="xs" :cursor-pointer="false" v-text="option.value" class="t-mr-2" />
+            <button-component type="tag" size="xs" :cursor-pointer="false" v-text="option.value" class="t-mr-2" />
           </div>
         </div>
         <div>
-          <button-component type="second" icon="delete" size="sm" :confirm="true" @click="removeAlert">
+          <button-component type="ghost" icon="delete" icon-position="left" :icon-only="true" :confirm="true" @click="removeAlert">
             {{ $t('Delete') }}
           </button-component>
         </div>
