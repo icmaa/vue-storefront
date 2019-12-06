@@ -1,12 +1,15 @@
 <template>
-  <div class="t-p-4 t-bg-white">
-    <headline icon="subject">
-      {{ $t('Review your order #{orderId}', { orderId }) }}
-    </headline>
-    <div>{{ $t('Write a product review of your last orders products.') }}</div>
-    <div>
-      <product v-for="item in products" :key="item.item_id" :product="item" />
+  <div>
+    <div class="t-p-4 t-bg-white">
+      <headline icon="subject">
+        {{ $t('Review order') }}
+        <span class="t-text-sm t-text-base-light t-flex-grow lg:t-flex-fix t-ml-8 lg:t-ml-4"># {{ order.increment_id }}</span>
+      </headline>
+      <div class="t-text-sm t-text-base-tone">
+        {{ $t('Write a product review of your last orders products.') }}
+      </div>
     </div>
+    <product v-for="(product, i) in products" :key="i" :product="product" class="t-mt-4" />
   </div>
 </template>
 
@@ -17,6 +20,7 @@ import { registerModule } from '@vue-storefront/core/lib/modules'
 import { ReviewModule } from '@vue-storefront/core/modules/review'
 import { IcmaaExtendedReviewModule } from 'icmaa-review'
 import SearchQuery from '@vue-storefront/core/lib/search/searchQuery'
+import last from 'lodash-es/last'
 
 import Headline from 'theme/components/core/blocks/MyAccount/Headline'
 import Product from 'icmaa-review/components/MyAccount/MyOrderReview/Product'
@@ -37,7 +41,7 @@ export default {
       ordersHistory: 'user/getOrdersHistory'
     }),
     orderId () {
-      return this.$route.params.orderId || this.ordersHistory.length > 0 ? this.ordersHistory[0].entity_id : false
+      return this.$route.params.orderId || this.ordersHistory.length > 0 ? last(this.ordersHistory).entity_id : false
     },
     order () {
       return this.ordersHistory.find(order =>
