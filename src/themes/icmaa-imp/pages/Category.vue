@@ -40,11 +40,13 @@
 
     <div class="t-container">
       <lazy-hydrate :trigger-hydration="!loading" v-if="isLazyHydrateEnabled">
-        <product-listing-ticket v-if="isParentIdInWhitelist" :products="getCategoryProducts" />
-        <product-listing v-if="!isParentIdInWhitelist" :products="getCategoryProducts" />
+        <component v-if="isParentIdInTicketWhitelist" :is="ProductListingTicket" :products="getCategoryProducts" />
+        <product-listing v-else :products="getCategoryProducts" />
       </lazy-hydrate>
-      <product-listing v-if="!isParentIdInWhitelist" :products="getCategoryProducts" />
-      <product-listing-ticket v-if="isParentIdInWhitelist" :products="getCategoryProducts" />
+      <div>
+        <component v-if="isParentIdInTicketWhitelist" :is="ProductListingTicket" :products="getCategoryProducts" />
+        <product-listing v-else :products="getCategoryProducts" />
+      </div>
       <div class="t-flex t-items-center t-justify-center t-pb-8" v-if="moreProductsInSearchResults">
         <button-component type="ghost" @click.native="loadMoreProducts" :disabled="loadingProducts" class="t-w-2/3 lg:t-w-1/4" :class="{ 't-relative t-opacity-60': loadingProducts }">
           {{ $t('Load more') }}
@@ -90,7 +92,6 @@ import Sidebar from 'theme/components/core/blocks/Category/Sidebar'
 import SortBy from 'theme/components/core/blocks/Category/SortBy'
 import Presets from 'theme/components/core/blocks/Category/Presets'
 import ProductListing from 'theme/components/core/ProductListing'
-import ProductListingTicket from 'theme/components/core/ProductListingTicket'
 import Breadcrumbs from 'theme/components/core/Breadcrumbs'
 import Dropdown from 'theme/components/core/blocks/Dropdown'
 import ButtonComponent from 'theme/components/core/blocks/Button'
@@ -104,6 +105,7 @@ import CategoryExtrasMixin from 'icmaa-category-extras/mixins/categoryExtras'
 import CategoryMetaMixin from 'icmaa-meta/mixins/categoryMeta'
 
 const FilterSidebar = () => import(/* webpackPreload: true */ /* webpackChunkName: "vsf-sidebar-categoryfilter" */ 'theme/components/core/blocks/Category/Sidebar')
+const ProductListingTicket = () => import(/* webpackPreload: true */ /* webpackChunkName: "vsf-product-listing-ticket" */ 'theme/components/core/ProductListingTicket')
 
 const composeInitialPageState = async (store, route, forceLoad = false, pageSize) => {
   try {
@@ -134,7 +136,6 @@ export default {
     LoaderBackground,
     Presets,
     ProductListing,
-    ProductListingTicket,
     Breadcrumbs,
     SortBy,
     CategoryExtrasHeader,
@@ -148,7 +149,8 @@ export default {
       mobileFilters: false,
       loadingProducts: false,
       loading: true,
-      FilterSidebar
+      FilterSidebar,
+      ProductListingTicket
     }
   },
   computed: {
@@ -176,7 +178,7 @@ export default {
       const { perPage, start, total } = this.getProductsStats
       return (start + perPage < total)
     },
-    isParentIdInWhitelist () {
+    isParentIdInTicketWhitelist () {
       let category = this.getCurrentCategory.parent_id
       let whitelist = config.icmaa.catalog.productListTicket.parentCategoryWhitelist
       return whitelist.includes(category)
