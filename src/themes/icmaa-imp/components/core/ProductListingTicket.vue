@@ -3,7 +3,7 @@
     <table class="t-table-fixed t-w-full">
       <tbody>
         <template v-for="(product, i) in products">
-          <product-tile-list :product="product" :key="`product-${i}`" class="t-w-full" />
+          <product-tile-ticket :product="product" :key="`product-${i}`" class="t-w-full" />
           <list-banner v-if="i === 7 || i%28 === 27" :key="`listbanner-${i}`" class="t-w-full t-px-1 lg:t-px-2 t-mb-8" />
         </template>
       </tbody>
@@ -12,13 +12,13 @@
 </template>
 
 <script>
-import ProductTileList from 'theme/components/core/ProductTileList'
+import ProductTileTicket from 'theme/components/core/ProductTileTicket'
 import ListBanner from 'theme/components/core/blocks/CategoryExtras/ListBanner'
 
 export default {
-  name: 'ProductListingList',
+  name: 'ProductListingTicket',
   components: {
-    ProductTileList,
+    ProductTileTicket,
     ListBanner
   },
   props: {

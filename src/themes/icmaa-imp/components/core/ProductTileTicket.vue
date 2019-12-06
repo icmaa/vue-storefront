@@ -1,5 +1,5 @@
 <template>
-  <router-link :to="productLink" tag="tr">
+  <router-link :to="productLink" tag="tr" class="t-border-b t-border-t-0 t-border-l-0 t-border-r-0 t-border-solid t-border-black">
     <td class="t-w-1/2 t-px-4 t-py-2">
       {{ translatedProductName | htmlDecode }}
     </td>
@@ -26,6 +26,11 @@
           {{ product.price_incl_tax | price }}
         </span>
       </p>
+    </td>
+    <td class="t-w-1/10 t-px-4 t-py-2">
+      <button type="button" class="t-flex t-items-center t-rounded-sm t-cursor-pointer t-webkit-tap-transparent t-flex-grow disabled:t-opacity-75 t-relative t-uppercase t-h-10 t-px-4 t-text-xs t-bg-primary t-text-white t-justify-center">
+        <i class="t-flex t-flex-fix material-icons t-text-2xl">info</i>
+      </button>
     </td>
   </router-link>
 </template>
