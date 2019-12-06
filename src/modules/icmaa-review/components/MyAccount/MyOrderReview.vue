@@ -69,10 +69,6 @@ export default {
   beforeCreate () {
     registerModule(ReviewModule)
     registerModule(IcmaaExtendedReviewModule)
-
-    this.$bus.$emit('myAccount-switch-route', {
-      title: this.$t('Order-Review'), icon: 'subject', link: '/my-account/order-review'
-    })
   },
   async mounted () {
     this.products = await this.fetchProducts()
