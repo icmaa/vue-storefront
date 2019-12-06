@@ -27,6 +27,7 @@ import MyNewsletter from '../components/core/blocks/MyAccount/MyNewsletter'
 import MyOrders from '../components/core/blocks/MyAccount/MyOrders'
 import MyOrder from '../components/core/blocks/MyAccount/MyOrder'
 import MyProductAlerts from '../components/core/blocks/MyAccount/MyProductAlerts'
+import MyOrderReview from 'icmaa-review/components/MyAccount/MyOrderReview'
 import NoSSR from 'vue-no-ssr'
 
 export default {
@@ -53,6 +54,7 @@ export default {
     MyOrders,
     MyOrder,
     MyProductAlerts,
+    MyOrderReview,
     'no-ssr': NoSSR
   },
   beforeMount () {
