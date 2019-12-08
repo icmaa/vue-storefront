@@ -1,13 +1,11 @@
 <template>
   <div class="product-listing t-flex t-flex-wrap t-justify-start t-px-3 lg:t-px-4 lg:t--mx-2">
-    <table class="t-table-fixed t-w-full">
-      <tbody>
-        <template v-for="(product, i) in products">
-          <product-tile-ticket :product="product" :key="`product-${i}`" class="t-w-full" />
-          <list-banner v-if="i === 7 || i%28 === 27" :key="`listbanner-${i}`" class="t-w-full t-px-1 lg:t-px-2 t-mb-8" />
-        </template>
-      </tbody>
-    </table>
+    <ul>
+      <template v-for="(product, i) in products">
+        <product-tile-ticket :product="product" :key="`product-${i}`" />
+        <list-banner v-if="i === 7 || i%28 === 27" :key="`listbanner-${i}`" class="t-w-full t-px-1 lg:t-px-2 t-mb-8" />
+      </template>
+    </ul>
   </div>
 </template>
 

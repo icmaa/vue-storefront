@@ -1,18 +1,15 @@
 <template>
-  <router-link :to="productLink" tag="tr" class="t-border-b t-border-t-0 t-border-l-0 t-border-r-0 t-border-solid t-border-black">
-    <td class="t-w-1/2 t-px-4 t-py-2  block md:t-table-cell">
-      {{ translatedProductName | htmlDecode }}
-    </td>
-    <td class="t-w-1/10 t-px-4 t-py-2  block md:t-table-cell">
-      {{ product.stock.is_in_stock }}
-    </td>
-    <td class="t-w-1/10 t-px-4 t-py-2  block md:t-table-cell">
-      {{ product.ticket_city }}<br>{{ product.ticket_venue }}
-    </td>
-    <td class="t-w-1/10 t-px-4 t-py-2  block md:t-table-cell">
-      {{ product.ticket_eventdate }}<br>{{ product.ticket_start }}
-    </td>
-    <td class="t-w-1/10 t-px-4 t-py-2  block md:t-table-cell">
+  <router-link :to="productLink" tag="li" class="t-border-b-2 t-border-t-0 t-border-l-o t-border-r-0 t-flex">
+    <div class="t-flex">
+      {{ translatedProductName | htmlDecode }} {{ product.stock.is_in_stock }}
+    </div>
+    <div class="t-flex">
+      {{ product.ticket_city }}<br><span class="t-uppercase t-text-gray-500">{{ product.ticket_venue }}</span>
+    </div>
+    <div class="t-flex">
+      {{ ticket_eventdate }}<br>{{ product.ticket_start }}
+    </div>
+    <div class="t-flex">
       <p>
         <span class="price-original t-text-base-light t-line-through t-mr-2" v-if="product.special_price && parseFloat(product.original_price_incl_tax) > 0">
           {{ product.original_price_incl_tax | price }}
@@ -26,12 +23,12 @@
           {{ product.price_incl_tax | price }}
         </span>
       </p>
-    </td>
-    <td class="t-w-1/10 t-px-4 t-py-2  block md:t-table-cell">
+    </div>
+    <div class="t-flex">
       <button type="button" class="t-flex t-items-center t-rounded-sm t-cursor-pointer t-webkit-tap-transparent t-flex-grow disabled:t-opacity-75 t-relative t-uppercase t-h-10 t-px-4 t-text-xs t-bg-primary t-text-white t-justify-center">
         <i class="t-flex t-flex-fix material-icons t-text-2xl">info</i>
       </button>
-    </td>
+    </div>
   </router-link>
 </template>
 
@@ -42,6 +39,7 @@ import PromoBanner from 'theme/components/core/blocks/Category/PromoBanner'
 import ProductNameMixin from 'icmaa-catalog/mixins/ProductNameMixin'
 import ProductPriceMixin from 'theme/mixins/product/priceMixin'
 import { ProductTile } from '@vue-storefront/core/modules/catalog/components/ProductTile'
+import { toDate } from 'icmaa-config/helpers/datetime'
 
 export default {
   mixins: [ProductTile, ProductNameMixin, ProductPriceMixin],
@@ -52,6 +50,11 @@ export default {
     labelsActive: {
       type: Boolean,
       default: true
+    }
+  },
+  computed: {
+    ticket_eventdate () {
+      return toDate(this.product.ticket_eventdate)
     }
   },
   methods: {
