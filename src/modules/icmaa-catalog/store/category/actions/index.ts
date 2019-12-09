@@ -24,7 +24,7 @@ const actions: ActionTree<CategoryState, RootState> = {
     }
     const searchQuery = getters.getCurrentFiltersFrom(route[products.routerFiltersSource], categoryMappedFilters)
     let filterQr = buildFilterProductsQuery(searchCategory, searchQuery.filters)
-    const { includeFields, excludeFields } = getters.getIncludeExcludeFields(category)
+    const { includeFields, excludeFields } = getters.getIncludeExcludeFields(searchCategory)
     const { items, perPage, start, total, aggregations } = await quickSearchByQuery({
       query: filterQr,
       sort: searchQuery.sort,
