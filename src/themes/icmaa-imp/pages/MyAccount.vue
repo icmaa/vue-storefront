@@ -27,6 +27,7 @@ import MyNewsletter from '../components/core/blocks/MyAccount/MyNewsletter'
 import MyOrders from '../components/core/blocks/MyAccount/MyOrders'
 import MyOrder from '../components/core/blocks/MyAccount/MyOrder'
 import MyProductAlerts from '../components/core/blocks/MyAccount/MyProductAlerts'
+import MyOrderReview from 'icmaa-review/components/MyAccount/MyOrderReview'
 import NoSSR from 'vue-no-ssr'
 
 export default {
@@ -38,11 +39,6 @@ export default {
       default: 'MyProfile'
     }
   },
-  data () {
-    return {
-      navigation: []
-    }
-  },
   components: {
     Navigation,
     MyProfile,
@@ -51,6 +47,7 @@ export default {
     MyOrders,
     MyOrder,
     MyProductAlerts,
+    MyOrderReview,
     'no-ssr': NoSSR
   },
   beforeMount () {
@@ -69,7 +66,21 @@ export default {
   computed: {
     ...mapGetters({
       viewport: 'ui/getViewport'
-    })
+    }),
+    metaTitle () {
+      const titleMap = {
+        'MyAccount': 'My profile',
+        'MyOrder': 'My order',
+        'MyOrders': 'My orders',
+        'MyAddresses': 'My addresses',
+        'MyNewsletter': 'My newsletter',
+        'MyProductAlerts': 'My product-alerts',
+        'MyOrderReview': 'Order-Review',
+        'MyCoupons': 'My coupons'
+      }
+
+      return i18n.t(titleMap[this.activeBlock] || 'My Account')
+    }
   },
   methods: {
     async onBeforeUpdateUser (updatedData, passwordData = false, message = false) {
@@ -120,7 +131,7 @@ export default {
   },
   metaInfo () {
     return {
-      title: this.$route.meta.title || i18n.t('My Account'),
+      title: this.$route.meta.title || this.metaTitle,
       meta: this.$route.meta.description ? [{ vmid: 'description', name: 'description', content: this.$route.meta.description }] : []
     }
   },

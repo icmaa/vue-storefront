@@ -35,16 +35,16 @@
 
               <div v-if="product.type_id !== 'grouped'" class="price t-mt-5 t-mb-8 t-text-1xl">
                 <template v-if="product.special_price && product.price_incl_tax && product.original_price_incl_tax">
-                  <span class="t-text-base-tone t-line-through">{{ product.original_price_incl_tax * product.qty | price }}</span>
+                  <span class="t-text-base-tone t-line-through">{{ price(product.original_price_incl_tax * product.qty) }}</span>
                   &nbsp;
                   <span class="t-text-sale t-font-bold">
                     <span v-if="hasMultiplePrices" v-text="$t('as low as')" class="t-text-sm" />
-                    {{ product.price_incl_tax * product.qty | price }}
+                    {{ price(product.price_incl_tax * product.qty) }}
                   </span>
                 </template>
                 <span class="t-font-bold" v-if="!product.special_price && product.price_incl_tax">
                   <span v-if="hasMultiplePrices" v-text="$t('as low as')" class="t-text-sm" />
-                  {{ product.qty > 0 ? product.price_incl_tax * product.qty : product.price_incl_tax | price }}
+                  {{ price(product.qty > 0 ? product.price_incl_tax * product.qty : product.price_incl_tax) }}
                 </span>
                 <div class="t-mt-1 t-text-xs t-text-base-light" v-html="taxDisclaimer" />
               </div>
@@ -109,6 +109,13 @@
 
     <div class="spacer t-h-8" />
 
+    <lazy-hydrate when-visible>
+      <div class="t-container t-px-4">
+        <recommendations type="crosssell" :title="$t('You may like these too')" class="lg:t-mb-8" />
+        <recommendations type="upsell" :title="$t('Similar products')" class="lg:t-mb-8" />
+      </div>
+    </lazy-hydrate>
+
     <async-sidebar
       :async-component="AddToCartSidebar"
       :is-open="isAddToCartSidebarOpen"
@@ -149,6 +156,7 @@ import ProductFeatures from 'theme/components/core/blocks/Product/ProductFeature
 import ProductCareInstructions from 'theme/components/core/blocks/Product/ProductCareInstructions'
 import ReviewsShort from 'theme/components/core/blocks/Reviews/ReviewsShort'
 import ReviewsClaim from 'theme/components/core/blocks/Reviews/ReviewsClaim'
+import Recommendations from 'icmaa-recommendations/components/Recommendations'
 import LoaderBackground from 'theme/components/core/LoaderBackground'
 import LazyHydrate from 'vue-lazy-hydration'
 
@@ -179,6 +187,7 @@ export default {
     Reviews,
     ReviewsShort,
     ReviewsClaim,
+    Recommendations,
     WebShare,
     LazyHydrate
   },
