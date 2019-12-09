@@ -65,9 +65,6 @@ export default {
     MaterialIcon,
     StatusIcon
   },
-  computed: {
-    ...mapGetters({ viewport: 'ui/getViewport' })
-  },
   methods: {
     redirect (orderId) {
       this.$router.push(this.localizedRoute(`/my-account/orders/${orderId}`))
