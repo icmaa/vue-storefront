@@ -1,5 +1,4 @@
 import SearchQuery from '@vue-storefront/core/lib/search/searchQuery'
-import config from 'config'
 import { Category } from '@vue-storefront/core/modules/catalog-next/types/Category'
 import { SearchResponse } from '@vue-storefront/core/types/search/SearchResponse'
 import { quickSearchByQuery } from '@vue-storefront/core/lib/search'
