@@ -7,40 +7,39 @@
     <!-- My orders body -->
     <div class="t-text-sm" v-show="!isHistoryEmpty">
       <template v-for="order in ordersHistory">
-        <div :order="order" :key="order.entity_id" class="t-flex t-flex-wrap t-items-center t-justify-between t-cursor-pointer t-border-t t-mb-2 t-px-2 t-py-3" @click="redirect(order.entity_id)">
-          <div class="t-mr-2">
-            <div class="t-mb-4">
-              <div class="t-font-bold">
-                {{ $t('Order number') }}
+        <div :order="order" :key="order.entity_id" class="t-flex t-items-center t-justify-between t-cursor-pointer t-border-t t-mb-2 t-px-2 t-py-3" @click="redirect(order.entity_id)">
+          <!-- order date -->
+          <div class="t-flex t-flex-grow t-flex-wrap t-mr-8">
+            <div class="t-w-full t-flex t-flex-wrap t-items-center">
+              <div class="t-w-1/2 t-mb-4 t-mr-4">
+                <div>{{ order.created_at | date }}</div>
               </div>
-              <div>#{{ order.increment_id }}</div>
+              <!-- total -->
+              <div class="t-text-2xl t-mb-4">
+                <div>{{ order.grand_total | price }}</div>
+              </div>
             </div>
-            <div class="t-mb-4">
-              <div class="t-font-bold">
-                {{ $t('Order date') }}
+
+            <div class="t-w-full t-flex t-flex-wrap t-items-center">
+              <div class="t-w-1/2 t-mb-4 t-mr-4">
+                <div class="t-font-bold">
+                  {{ $t('Order number') }}
+                </div>
+                <div>#{{ order.increment_id }}</div>
               </div>
-              <div>{{ order.created_at | date }}</div>
+
+              <div class="t-mb-4">
+                <div class="t-font-bold">
+                  Status
+                </div>
+                <div class="t-flex t-items-center">
+                  <status-icon :status="order.status" /><span> {{ order.status | capitalize }}</span>
+                </div>
+              </div>
             </div>
           </div>
 
-          <div class="t-mr-2">
-            <div class="t-mb-4">
-              <div class="t-font-bold">
-                {{ $t('Grand total') }}
-              </div>
-              <div>{{ order.grand_total | price }}</div>
-            </div>
-            <div class="t-mb-4">
-              <div class="t-font-bold">
-                Status
-              </div>
-              <div class="t-flex t-items-center">
-                <status-icon :status="order.status" /><span> {{ order.status | capitalize }}</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="t-flex t-justify-end">
+          <div class="">
             <material-icon icon="chevron_right" size="md" class="t-align-middle" />
           </div>
         </div>
