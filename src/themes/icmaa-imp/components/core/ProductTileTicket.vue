@@ -1,20 +1,20 @@
 <template>
   <router-link :to="productLink" tag="li" class="t-flex t-flex-wrap t-px-2 t-bg-white t-py-4 t-cursor-pointer">
-    <div class="t-w-full md:t-w-5/12 t-px-2 t-mb-3 md:t-mb-3 t-flex-grow t-text-primary">
-      {{ translatedProductName | htmlDecode }} <span class="t-float-right t-clearfix">{{ ticketStockStatus }}</span>
-    </div>
-    <div class="t-w-full md:t-w-3/12 t-px-2">
-      <div class="" v-text="product.ticket_city" />
-      <div class="t-uppercase t-text-base-light" v-text="product.ticket_venue" />
-    </div>
-    <div class="t-w-full  md:t-w-2/12 t-px-2">
-      {{ ticketEventdate }}
-      <div class="t-inline md:t-block">
-        {{ product.ticket_start }}
+    <div class="t-w-full md:t-w-7/12 t-px-2 t-flex-grow">
+      <div class="t-text-primary t-mb-2 md:t-mb-0">
+        {{ translatedProductName }}
+      </div>
+      <div class="t-text-sm">
+        <span v-text="product.ticket_city" />
+        <span class="t-uppercase" v-if="product.ticket_venue && product.ticket_venue.length > 0" v-text="`@ ${product.ticket_venue}`" />
       </div>
     </div>
-    <div class="t-w-10/12 md:t-w-1/12 t-px-2 t-text-right">
-      <p>
+    <div class="t-flex md:t-block t-w-full md:t-w-2/12 t-px-2 t-items-baseline t-text-sm md:t-text-base t-mb-2 md:t-mb-0">
+      <div class="t-mr-2" v-text="ticketEventdate" />
+      <div class="md:t-text-sm" v-text="product.ticket_start" />
+    </div>
+    <div class="t-flex md:t-block t-w-full md:t-w-2/12 t-px-2">
+      <div class="t-flex-grow t-order-2 md:t-order-0 t-text-right md:t-text-left">
         <span class="price-original t-text-base-light t-line-through t-mr-2" v-if="product.special_price && parseFloat(product.original_price_incl_tax) > 0">
           {{ price(product.original_price_incl_tax) }}
         </span>
@@ -26,9 +26,13 @@
           <span v-if="hasMultiplePrices" v-text="$t('as low as')" />
           {{ price(product.price_incl_tax) }}
         </span>
-      </p>
+      </div>
+      <div class="t-flex t-items-center t-text-sm t-order-1 md:t-order-0" :class="[stockStatus.color]">
+        <material-icon icon="lens" size="sm" class="t-mr-1" />
+        {{ $t(stockStatus.text) }}
+      </div>
     </div>
-    <div class="t-w-2/12 md:t-w-1/12 t-px-2 t-flex-1 t-self-center">
+    <div class="t-hidden md:t-block md:t-w-1/12 t-px-2 t-flex-1 t-self-center">
       <button-component type="transparent" icon="keyboard_arrow_right" :icon-only="true">
         {{ $t('Show product') }}
       </button-component>
@@ -39,6 +43,7 @@
 <script>
 import config from 'config'
 import rootStore from '@vue-storefront/core/store'
+import MaterialIcon from 'theme/components/core/blocks/MaterialIcon'
 import ButtonComponent from 'theme/components/core/blocks/Button'
 import ProductNameMixin from 'icmaa-catalog/mixins/ProductNameMixin'
 import ProductPriceMixin from 'theme/mixins/product/priceMixin'
@@ -48,7 +53,15 @@ import { toDate } from 'icmaa-config/helpers/datetime'
 export default {
   mixins: [ProductTile, ProductNameMixin, ProductPriceMixin],
   components: {
+    MaterialIcon,
     ButtonComponent
+  },
+  data () {
+    return {
+      status: {
+        'in_stock': { text: 'Is in stock', color: 't-text-alt-3' }
+      }
+    }
   },
   props: {
     labelsActive: {
@@ -60,8 +73,8 @@ export default {
     ticketEventdate () {
       return toDate(this.product.ticket_eventdate)
     },
-    ticketStockStatus () {
-      return this.product.stock.is_in_stock
+    stockStatus () {
+      return this.status['in_stock']
     }
   },
   methods: {
