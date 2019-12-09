@@ -2,18 +2,18 @@
   <div class="t-p-4 t-bg-white" v-if="order">
     <!-- My order header -->
     <headline icon="local_mall">
-{{ $t('Order #') }}{{ order.increment_id }}
-</headline>
+      {{ $t('Order #') }}{{ order.increment_id }}
+    </headline>
 
     <!-- Order status -->
-    <div class="t-flex t-flex-wrap t-justify-between t-border-b t-text-sm t-p-2 t-mb-4">
-      <div class="t-py-2 t-mr-2">
+    <div class="t-flex t-flex-wrap t-justify-between t-border-b t-text-sm t-p-2 t-mb-8">
+      <div class="t-py-2">
         <div class="t-font-bold">
           {{ $t('Order date') }}
         </div>
         {{ order.created_at | date('LLL') }}
       </div>
-      <div class="t-py-2 t-mr-2">
+      <div class="t-w-1/3 t-py-2">
         <div class="t-font-bold">
           {{ $t('Status') }}
         </div>
@@ -36,7 +36,7 @@
     </div>
 
     <!-- Order information -->
-    <div class="t-text-sm t-mb-2">
+    <div class="t-text-sm t-mb-8">
       <div class="t-block t-text-2xl t-font-thin t-leading-relaxed t-mb-2">
         {{ $t('Order informations') }}
       </div>
@@ -84,8 +84,11 @@
       </div>
       <div class="t-w-2/3 t-py-2">
         <div class="t-block t-text-primary t-w-full t-text-sm t-leading-tight t-mb-2" :data-div="$t('Product Name')">
-{{ item.qty_ordered }} x {{ item.name }}
-</div>
+          {{ item.qty_ordered }} x {{ item.name }}
+        </div>
+        <button-component v-for="(option, key) in parseProductOptions(item.product_options)" :key="key" class="t-mr-2 t-mb-2" type="tag" size="sm" :cursor-pointer="false">
+          {{ option }}
+        </button-component>
         <div class="t-font-bold" :data-div="$t('Subtotal')">
           {{ item.row_total_incl_tax | price }}
         </div>
@@ -143,16 +146,6 @@ export default {
     TrackingLink,
     ButtonComponent
   },
-  data () {
-    return {
-      itemThumbnail: []
-    }
-  },
-  methods: {
-    ...mapActions({
-      getProduct: 'product/findConfigurableParent'
-    })
-  },
   computed: {
     ...mapGetters('icmaaCmsBlock', ['getJsonBlockByIdentifier']),
     service () {
@@ -160,13 +153,15 @@ export default {
       return `/${currentStoreView().storeCode}${metaNavigation.route}`
     }
   },
-  mounted () {
-    const products = []
-    this.singleOrderItems.forEach(async item => {
-      const product = await this.$store.dispatch('product/findConfigurableParent', { item }, { root: true })
-      console.log(product)
-    })
-    return products
+  methods: {
+    parseProductOptions (options) {
+      if (options) {
+        const regex = /(?<="value";s:\d+:")[^"]*/
+        const match = regex.exec(options)
+        return match === null ? [] : match
+      }
+      return []
+    }
   }
 }
 </script>
