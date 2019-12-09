@@ -1,5 +1,5 @@
 <template>
-  <div class="product-listing t-flex t-flex-wrap t-justify-start t-px-3 lg:t-px-4 lg:t--mx-2">
+  <div class="product-listing t-px-3 lg:t-px-4 lg:t--mx-2">
     <ul>
       <template v-for="(product, i) in products">
         <product-tile-ticket :product="product" :key="`product-${i}`" />
