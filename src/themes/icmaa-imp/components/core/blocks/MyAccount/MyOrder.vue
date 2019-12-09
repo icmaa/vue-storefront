@@ -32,8 +32,8 @@
           {{ $t('Remake order') }}
         </button-component>
       </div>
-       <router-link class="t-font-hairline" :to="localizedRoute(service)">
-       {{ $t('Are there any questions left?') }}
+      <router-link class="t-font-hairline" :to="localizedRoute(service)">
+        {{ $t('Are there any questions left?') }}
       </router-link>
       <router-link class="t-w-1/3 t-font-hairline" :to="localizedRoute('/my-account/order-review/' + order.id)">
         {{ $t('Review order') }}
@@ -91,7 +91,7 @@
         <div class="t-block t-text-primary t-w-full t-text-sm t-leading-tight t-mb-2" :data-div="$t('Product Name')">
           {{ item.qty_ordered }} x {{ item.name }}
         </div>
-        <button-component v-for="(option, key) in parseProductOptions(item.product_options)" :key="key" class="t-mr-2 t-mb-2" type="tag" size="sm" :cursor-pointer="false">
+        <button-component v-for="(option, key) in extractProductOptionValues(item.product_options)" :key="key" class="t-mr-2 t-mb-2" type="tag" size="sm" :cursor-pointer="false">
           {{ option }}
         </button-component>
         <div class="t-font-bold" :data-div="$t('Subtotal')">
@@ -158,7 +158,7 @@ export default {
     }
   },
   methods: {
-    parseProductOptions (options) {
+    extractProductOptionValues (options) {
       if (options) {
         const regex = /(?<="value";s:\d+:")[^"]*/
         const match = regex.exec(options)
