@@ -1,12 +1,12 @@
-import config from 'config'
+import config, { entities, icmaa } from 'config'
 import { GetterTree } from 'vuex'
 import RootState from '@vue-storefront/core/types/RootState'
 import CategoryState from '@vue-storefront/core/modules/catalog-next/store/category/CategoryState'
+import { Category } from '@vue-storefront/core/modules/catalog-next/types/Category'
 import { parseCategoryPath } from '@vue-storefront/core/modules/breadcrumbs/helpers'
 import { _prepareCategoryPathIds } from '@vue-storefront/core/modules/catalog-next/helpers/categoryHelpers';
 import intersection from 'lodash-es/intersection'
-
-import { Logger } from '@vue-storefront/core/lib/logger'
+import merge from 'lodash-es/merge'
 
 const getters: GetterTree<CategoryState, RootState> = {
   getBreadcrumbsFor: (state, getters) => category => {
@@ -48,6 +48,22 @@ const getters: GetterTree<CategoryState, RootState> = {
     }
 
     return intersection(parents, currentFilterKeys).length > 0
+  },
+  isCategoryInTicketWhitelist: (state) => (category: Category): boolean => {
+    let whitelist = config.icmaa.catalog.productListTicket.parentCategoryWhitelist || []
+    const pathIds = category.path.split('/').map(id => Number(id))
+    return intersection(pathIds, whitelist).length > 0
+  },
+  isCurrentCategoryInTicketWhitelist: (state, getters): boolean => {
+    return getters.isCategoryInTicketWhitelist(getters.getCurrentCategory)
+  },
+  getIncludeExcludeFields: (state, getters) => (category: Category): { includeFields, excludeFields } => {
+    let { includeFields, excludeFields } = entities.productList
+    if (getters.isCategoryInTicketWhitelist(category)) {
+      includeFields = merge(includeFields, icmaa.catalog.productListTicket.ticketAttributes)
+    }
+
+    return { includeFields, excludeFields }
   }
 }
 

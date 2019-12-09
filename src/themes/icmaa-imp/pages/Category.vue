@@ -40,11 +40,11 @@
 
     <div class="t-container">
       <lazy-hydrate :trigger-hydration="!loading" v-if="isLazyHydrateEnabled">
-        <component v-if="isParentIdInTicketWhitelist" :is="ProductListingTicket" :products="getCategoryProducts" />
+        <component v-if="isInTicketWhitelist" :is="ProductListingTicket" :products="getCategoryProducts" />
         <product-listing v-else :products="getCategoryProducts" />
       </lazy-hydrate>
       <div>
-        <component v-if="isParentIdInTicketWhitelist" :is="ProductListingTicket" :products="getCategoryProducts" />
+        <component v-if="isInTicketWhitelist" :is="ProductListingTicket" :products="getCategoryProducts" />
         <product-listing v-else :products="getCategoryProducts" />
       </div>
       <div class="t-flex t-items-center t-justify-center t-pb-8" v-if="moreProductsInSearchResults">
@@ -163,7 +163,8 @@ export default {
       getCategoryProducts: 'category-next/getCategoryProducts',
       getCurrentCategory: 'category-next/getCurrentCategory',
       getCategoryProductsTotal: 'category-next/getCategoryProductsTotal',
-      getProductsStats: 'category-next/getCategorySearchProductsStats'
+      getProductsStats: 'category-next/getCategorySearchProductsStats',
+      isInTicketWhitelist: 'category-next/isCurrentCategoryInTicketWhitelist'
     }),
     isLazyHydrateEnabled () {
       return config.ssr.lazyHydrateFor.includes('category-next.products')
@@ -177,13 +178,7 @@ export default {
     moreProductsInSearchResults () {
       const { perPage, start, total } = this.getProductsStats
       return (start + perPage < total)
-    },
-    isParentIdInTicketWhitelist () {
-      let category = this.getCurrentCategory.parent_id
-      let whitelist = config.icmaa.catalog.productListTicket.parentCategoryWhitelist
-      return whitelist.includes(category)
     }
-    //     config.entities.productList.includeFields.concat(config.icmaa.catalog.productListTicket.ticketAttributes)
   },
   async asyncData ({ store, route, context }) { // this is for SSR purposes to prefetch data - and it's always executed before parent component methods
     const { pageSize } = this.data()
