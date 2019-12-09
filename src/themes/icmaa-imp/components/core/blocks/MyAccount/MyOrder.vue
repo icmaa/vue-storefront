@@ -2,11 +2,17 @@
   <div class="t-p-4 t-bg-white" v-if="order">
     <!-- My order header -->
     <headline icon="local_mall">
-      {{ $t('Order #') }}{{ order.increment_id }}
-    </headline>
+{{ $t('Order #') }}{{ order.increment_id }}
+</headline>
 
     <!-- Order status -->
     <div class="t-flex t-flex-wrap t-justify-between t-border-b t-text-sm t-p-2 t-mb-4">
+      <div class="t-py-2 t-mr-2">
+        <div class="t-font-bold">
+          {{ $t('Order date') }}
+        </div>
+        {{ order.created_at | date('LLL') }}
+      </div>
       <div class="t-py-2 t-mr-2">
         <div class="t-font-bold">
           {{ $t('Status') }}
@@ -15,12 +21,6 @@
           <status-icon :status="order.status" />
           {{ order.status | capitalize }}
         </div>
-      </div>
-      <div class="t-py-2 t-mr-2">
-        <div class="t-font-bold">
-          {{ $t('Order date') }}
-        </div>
-        {{ order.created_at | date('LLL') }}
       </div>
       <div class="t-w-full t-flex t-flex-wrap t-justify-between t-mb-2">
         <tracking-link :order-id="order.id" :status="order.status" class="t-my-2 t-mr-2">
@@ -84,8 +84,8 @@
       </div>
       <div class="t-w-2/3 t-py-2">
         <div class="t-block t-text-primary t-w-full t-text-sm t-leading-tight t-mb-2" :data-div="$t('Product Name')">
-          {{ item.qty_ordered }} x {{ item.name }}
-        </div>
+{{ item.qty_ordered }} x {{ item.name }}
+</div>
         <div class="t-font-bold" :data-div="$t('Subtotal')">
           {{ item.row_total_incl_tax | price }}
         </div>
@@ -150,7 +150,7 @@ export default {
   },
   methods: {
     ...mapActions({
-      getProduct: 'product/single'
+      getProduct: 'product/findConfigurableParent'
     })
   },
   computed: {
@@ -161,10 +161,12 @@ export default {
     }
   },
   mounted () {
+    const products = []
     this.singleOrderItems.forEach(async item => {
-      const product = await this.getProduct({ options: { sku: item.sku }, setCurrentProduct: false, setCurrentCategoryPath: false, selectDefaultVariant: false }, {root: true})
-      this.itemThumbnail.push([item.sku, product])
+      const product = await this.$store.dispatch('product/findConfigurableParent', { item }, { root: true })
+      console.log(product)
     })
+    return products
   }
 }
 </script>
