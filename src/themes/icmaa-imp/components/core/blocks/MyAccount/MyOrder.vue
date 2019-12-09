@@ -32,7 +32,12 @@
           {{ $t('Remake order') }}
         </button-component>
       </div>
-      <a :href="service" class="t-block t-w-full t-font-hairline">{{ $t('Are there any questions left?') }}</a>
+       <router-link class="t-font-hairline" :to="localizedRoute(service)">
+       {{ $t('Are there any questions left?') }}
+      </router-link>
+      <router-link class="t-w-1/3 t-font-hairline" :to="localizedRoute('/my-account/order-review/' + order.id)">
+        {{ $t('Review order') }}
+      </router-link>
     </div>
 
     <!-- Order information -->
@@ -132,7 +137,6 @@ import ProductImage from 'theme/components/core/ProductImage'
 import { getThumbnailPath, productThumbnailPath } from '@vue-storefront/core/helpers'
 import { mapActions } from 'vuex'
 import StatusIcon from 'theme/components/core/blocks/MyAccount/StatusIcon.vue'
-import { currentStoreView } from '@vue-storefront/core/lib/multistore'
 import { formatProductLink } from '@vue-storefront/core/modules/url/helpers'
 import ButtonComponent from 'theme/components/core/blocks/Button'
 import { mapGetters } from 'vuex'
@@ -150,7 +154,7 @@ export default {
     ...mapGetters('icmaaCmsBlock', ['getJsonBlockByIdentifier']),
     service () {
       const metaNavigation = this.getJsonBlockByIdentifier('navigation-meta').find(el => el.name === 'Service') || { route: '/service' }
-      return `/${currentStoreView().storeCode}${metaNavigation.route}`
+      return `${metaNavigation.route}`
     }
   },
   methods: {
