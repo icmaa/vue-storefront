@@ -1,5 +1,5 @@
 <template>
-  <div class="reviews-form t-bg-white t-p-4 t-mb-8" id="reviews-form">
+  <div class="reviews-form" id="reviews-form">
     <form name="review" action="#" @submit.prevent="outOfScope()">
       <div class="t-mb-4">
         <base-label form-id="name" :label-text="$t('First name')" />
@@ -87,7 +87,7 @@
         />
       </div>
       <div>
-        <div class="t-mb-2 t-text-sm t-text-alert" v-if="this.$v.reviewForm.recaptcha.$error && !this.$v.reviewForm.recaptcha.required">
+        <div class="t-mb-2 t-text-sm t-text-alert" v-if="$v.reviewForm.recaptcha.$error && !this.$v.reviewForm.recaptcha.required">
           {{ $t('Your Google reCAPTCHA validation is invalid.') }}<br>
           {{ $t('Please try again or contact our customer-support.') }}
         </div>
