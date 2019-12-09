@@ -43,7 +43,7 @@
         <component v-if="isInTicketWhitelist" :is="ProductListingTicket" :products="getCategoryProducts" />
         <product-listing v-else :products="getCategoryProducts" />
       </lazy-hydrate>
-      <div>
+      <div v-else>
         <component v-if="isInTicketWhitelist" :is="ProductListingTicket" :products="getCategoryProducts" />
         <product-listing v-else :products="getCategoryProducts" />
       </div>
