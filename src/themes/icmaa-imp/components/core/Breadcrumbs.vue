@@ -50,10 +50,14 @@ export default {
   },
   computed: {
     ...mapGetters({
-      breadcrumbs: 'category-next/getBreadcrumbs'
+      getBreadcrumbsRoutes: 'breadcrumbs/getBreadcrumbsRoutes',
+      getBreadcrumbsCurrent: 'breadcrumbs/getBreadcrumbsCurrent'
     }),
     paths () {
-      let routes = (this.routes ? this.routes : this.breadcrumbs).filter(r => r.name !== this.current)
+      let routes = this.routes ? this.routes : this.getBreadcrumbsRoutes
+
+      // Remove last element – got it already in `current`
+      routes.pop()
 
       if (this.withHomepage) {
         return [
@@ -65,7 +69,7 @@ export default {
       return routes
     },
     current () {
-      return this.activeRoute || last(this.breadcrumbs.name)
+      return this.activeRoute || this.getBreadcrumbsCurrent
     }
   }
 }
