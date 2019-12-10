@@ -36,5 +36,6 @@ export const toDayjsDate = (date: string, format?: string, inputFormat: string =
 }
 
 export const toDate = (date: string, format?: string, inputFormat: string = 'YYYY-MM-DD H:i'): string => {
+  format = format || storeDateFormat()
   return toDayjsDate(date, format, inputFormat).format(format)
 }
