@@ -6,6 +6,7 @@
 </template>
 
 <script>
+import { toDayjsDate, getCurrentStoreviewDayjsDatetime } from 'icmaa-config/helpers/datetime'
 import MaterialIcon from 'theme/components/core/blocks/MaterialIcon'
 
 export default {
@@ -47,6 +48,24 @@ export default {
 
       return qty
     },
+    isEndOfSale () {
+      return this.endOfSale <= 0
+    },
+    endOfSale () {
+      const current = getCurrentStoreviewDayjsDatetime()
+      if (this.product.ticket_endofsale) {
+        let endOfSale = toDayjsDate(this.product.ticket_endofsale)
+
+        // If endOfSale date is on weekend, subtract until weekday
+        if ([0, 6].includes(endOfSale.day())) {
+          endOfSale = endOfSale.subtract(endOfSale.day() === 0 ? 2 : 1, 'day')
+        }
+
+        return endOfSale.diff(current, 'day')
+      }
+
+      return false
+    },
     stockStatus () {
       let status = 'available'
       let qty = this.product.stock.qty
@@ -62,6 +81,8 @@ export default {
 
       if (this.product.preorder) {
         status = 'preorder'
+      } else if (this.isEndOfSale) {
+        status = 'endofsale'
       }
 
       return this.statusMap[status]
