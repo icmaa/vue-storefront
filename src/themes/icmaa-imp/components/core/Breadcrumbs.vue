@@ -56,8 +56,9 @@ export default {
     paths () {
       let routes = this.routes ? this.routes : this.getBreadcrumbsRoutes
 
-      // Remove last element – got it already in `current`
-      routes.pop()
+      // Remove last element
+      // – got it already in `current`
+      routes = routes.slice(0, -1)
 
       if (this.withHomepage) {
         return [
