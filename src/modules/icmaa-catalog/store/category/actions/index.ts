@@ -6,6 +6,10 @@ import { products, entities } from 'config'
 import { quickSearchByQuery } from '@vue-storefront/core/lib/search'
 import { buildFilterProductsQuery, isServer } from '@vue-storefront/core/helpers'
 import { _prepareCategoryPathIds } from '@vue-storefront/core/modules/catalog-next/helpers/categoryHelpers'
+import { parseCategoryPath } from '@vue-storefront/core/modules/breadcrumbs/helpers'
+
+import { icmaa } from 'config'
+import intersection from 'lodash-es/intersection'
 
 /**
  * These methods are overwrites of the original ones to extend them for our needs
@@ -68,6 +72,30 @@ const actions: ActionTree<CategoryState, RootState> = {
     commit(types.CATEGORY_ADD_PRODUCTS, configuredProducts)
 
     return searchResult.items
+  },
+  /**
+   * Changes:
+   * * Add category whitelist support to hide unimportant categories
+   */
+  async loadCategoryBreadcrumbs ({ dispatch, getters }, { category, currentRouteName, omitCurrent = false }) {
+    if (!category) return
+    let categoryHierarchyIds = _prepareCategoryPathIds(category)
+    categoryHierarchyIds = intersection(
+      categoryHierarchyIds.map(id => Number(id)),
+      icmaa.breadcrumbs.whitelist
+    )
+
+    const categoryFilters = { 'id': categoryHierarchyIds }
+    const categories = await dispatch('loadCategories', {filters: categoryFilters})
+    const sorted = []
+    for (const id of categoryHierarchyIds) {
+      const index = categories.findIndex(cat => cat.id.toString() === id)
+      if (index >= 0 && (!omitCurrent || categories[index].id !== category.id)) {
+        sorted.push(categories[index])
+      }
+    }
+    await dispatch('breadcrumbs/set', { current: currentRouteName, routes: parseCategoryPath(sorted) }, { root: true })
+    return sorted
   }
 }
 
