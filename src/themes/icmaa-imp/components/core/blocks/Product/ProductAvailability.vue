@@ -68,10 +68,7 @@ export default {
     },
     stockStatus () {
       let status = 'available'
-      let qty = this.product.stock.qty
-      if (this.product.type_id === 'configurable') {
-        qty = this.confChildrenQty
-      }
+      let qty = this.product.stock.qty + this.confChildrenQty
 
       if (!this.product.stock.is_in_stock || qty === 0) {
         status = 'unavailable'

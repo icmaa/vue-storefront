@@ -1,7 +1,7 @@
 <template>
   <router-link :to="productLink" tag="li" class="t-flex t-flex-wrap t-px-2 t-bg-white t-py-4 t-cursor-pointer">
     <div class="t-w-full md:t-w-7/12 t-px-2 t-flex-grow">
-      <div class="t-text-primary t-mb-2 md:t-mb-0">
+      <div class="t-text-primary t-mb-2 md:t-mb-0 t-leading-tight md:t-leading-normal">
         {{ translatedProductName }}
       </div>
       <div class="t-text-sm">
@@ -39,17 +39,16 @@
 
 <script>
 import config from 'config'
-import rootStore from '@vue-storefront/core/store'
 import ProductAvailability from 'theme/components/core/blocks/Product/ProductAvailability'
 import ButtonComponent from 'theme/components/core/blocks/Button'
+import ProductTileMixin from 'theme/mixins/product/tileMixin'
 import ProductNameMixin from 'icmaa-catalog/mixins/ProductNameMixin'
 import ProductPriceMixin from 'theme/mixins/product/priceMixin'
-import { ProductTile } from '@vue-storefront/core/modules/catalog/components/ProductTile'
 import { toDate } from 'icmaa-config/helpers/datetime'
 
 export default {
   name: 'ProductTicketTile',
-  mixins: [ProductTile, ProductNameMixin, ProductPriceMixin],
+  mixins: [ProductTileMixin, ProductNameMixin, ProductPriceMixin],
   components: {
     ProductAvailability,
     ButtonComponent
@@ -64,41 +63,6 @@ export default {
     ticketEventdate () {
       return toDate(this.product.ticket_eventdate)
     }
-  },
-  methods: {
-    onProductPriceUpdate (product) {
-      if (product.sku === this.product.sku) {
-        Object.assign(this.product, product)
-      }
-    },
-    visibilityChanged (isVisible, entry) {
-      if (
-        isVisible &&
-        config.products.configurableChildrenStockPrefetchDynamic &&
-        config.products.filterUnavailableVariants &&
-        this.product.type_id === 'configurable' &&
-        this.product.configurable_children &&
-        this.product.configurable_children.length > 0
-      ) {
-        const skus = [this.product.sku]
-        for (const confChild of this.product.configurable_children) {
-          const cachedItem = rootStore.state.stock.cache[confChild.id]
-          if (typeof cachedItem === 'undefined' || cachedItem === null) {
-            skus.push(confChild.sku)
-          }
-        }
-        if (skus.length > 0) {
-          rootStore.dispatch('stock/list', { skus: skus }) // store it in the cache
-        }
-      }
-    }
-  },
-  beforeMount () {
-    this.$bus.$on('product-after-priceupdate', this.onProductPriceUpdate)
-  },
-  beforeDestroy () {
-    this.$bus.$off('product-after-priceupdate', this.onProductPriceUpdate)
   }
-
 }
 </script>
