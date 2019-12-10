@@ -27,10 +27,7 @@
           {{ price(product.price_incl_tax) }}
         </span>
       </div>
-      <div class="t-flex t-items-center t-text-sm t-order-1 md:t-order-0" :class="[stockStatus.color]">
-        <material-icon icon="lens" size="sm" class="t-mr-1" />
-        {{ $t(stockStatus.text) }}
-      </div>
+      <ProductAvailability :product="product" class="t-order-1 md:t-order-0" />
     </div>
     <div class="t-hidden md:t-block md:t-w-1/12 t-px-2 t-flex-1 t-self-center">
       <button-component type="transparent" icon="keyboard_arrow_right" :icon-only="true">
@@ -43,7 +40,7 @@
 <script>
 import config from 'config'
 import rootStore from '@vue-storefront/core/store'
-import MaterialIcon from 'theme/components/core/blocks/MaterialIcon'
+import ProductAvailability from 'theme/components/core/blocks/Product/ProductAvailability'
 import ButtonComponent from 'theme/components/core/blocks/Button'
 import ProductNameMixin from 'icmaa-catalog/mixins/ProductNameMixin'
 import ProductPriceMixin from 'theme/mixins/product/priceMixin'
@@ -51,17 +48,11 @@ import { ProductTile } from '@vue-storefront/core/modules/catalog/components/Pro
 import { toDate } from 'icmaa-config/helpers/datetime'
 
 export default {
+  name: 'ProductTicketTile',
   mixins: [ProductTile, ProductNameMixin, ProductPriceMixin],
   components: {
-    MaterialIcon,
+    ProductAvailability,
     ButtonComponent
-  },
-  data () {
-    return {
-      status: {
-        'in_stock': { text: 'Is in stock', color: 't-text-alt-3' }
-      }
-    }
   },
   props: {
     labelsActive: {
@@ -72,9 +63,6 @@ export default {
   computed: {
     ticketEventdate () {
       return toDate(this.product.ticket_eventdate)
-    },
-    stockStatus () {
-      return this.status['in_stock']
     }
   },
   methods: {
