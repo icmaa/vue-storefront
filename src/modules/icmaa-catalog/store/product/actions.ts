@@ -16,8 +16,7 @@ const actions: ActionTree<ProductState, RootState> = {
     if (product && product.category_ids) {
       let currentCategory = rootGetters['category-next/getCurrentCategory'] // use current category, if set
       if (!currentCategory || !currentCategory.id || !product.category_ids.includes(currentCategory.id.toString())) {
-        const categoryHierarchyIds = intersection(product.category_ids, icmaa.breadcrumbs.whitelist)
-        const categoryFilters = Object.assign({ 'id': [...categoryHierarchyIds] }, cloneDeep(config.entities.category.breadcrumbFilterFields))
+        const categoryFilters = Object.assign({ 'id': [...product.category_ids] }, cloneDeep(config.entities.category.breadcrumbFilterFields))
         const categories = await dispatch('category-next/loadCategories', {filters: categoryFilters}, { root: true })
         currentCategory = categories.sort((a, b) => (a.level > b.level) ? -1 : 1)[0] // sort starting by deepest level
       }
