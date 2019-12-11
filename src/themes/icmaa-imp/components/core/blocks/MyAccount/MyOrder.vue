@@ -5,7 +5,7 @@
         {{ $t('Order') }}
         <span v-if="order" class="t-text-sm t-text-base-light t-flex-grow lg:t-flex-fix t-ml-4"># {{ order.increment_id }}</span>
       </headline>
-      <div class="t-flex t-flex-wrap t-justify-between t-text-sm">
+      <div class="t-flex t-flex-wrap t-justify-between t-text-sm t-text-base-tone">
         <div class="t-w-1/2 lg:t-w-1/4 t-mb-4 lg:t-mb-0">
           <div class="t-font-bold t-mb-1 t-text-base-lighter t-text-xxs t-uppercase">
             {{ $t('Date') }}
@@ -38,7 +38,7 @@
       </div>
     </div>
     <div class="t-p-4 t-bg-white t-mb-4">
-      <div class="t-flex t-flex-wrap t--mx-2 t-text-sm">
+      <div class="t-flex t-flex-wrap t--mx-2 t-text-sm t-text-base-tone">
         <div class="t-w-full sm:t-w-1/2 t-order-1 sm:t-order-0 t-px-2 t-mb-4">
           <div class="t-font-bold t-mb-1 t-text-base-lighter t-text-xxs t-uppercase">
             {{ $t('Billing address') }}
@@ -93,29 +93,18 @@
       </div>
     </div>
 
-    <!-- order price -->
-    <div class="t-bg-base-lightest t-p-4 t-text-sm t-rounded-sm">
-      <div class="t-w-full t-text-right">
-        <div class="t-flex t-justify-between sm:t-justify-end">
-          <span class="t-w-1/2 sm:t-w-1/3">{{ $t('Subtotal') }}</span>
-          <span class="t-w-1/2 sm:t-w-1/3">{{ order.subtotal | price }}</span>
-        </div>
-        <div class="t-flex t-justify-between sm:t-justify-end">
-          <span class="t-w-1/2 sm:t-w-1/3">{{ $t('Shipping') }}</span>
-          <span class="t-w-1/2 sm:t-w-1/3">{{ order.shipping_amount | price }}</span>
-        </div>
-        <div class="t-flex t-justify-between sm:t-justify-end">
-          <span class="t-w-1/2 sm:t-w-1/3">{{ $t('Tax') }}</span>
-          <span class="t-w-1/2 sm:t-w-1/3">{{ (order.tax_amount + order.discount_tax_compensation_amount) | price }}</span>
-        </div>
-        <div v-if="order.discount_amount" class="t-flex t-justify-between sm:t-justify-end">
-          <span class="t-w-1/2 sm:t-w-1/3">{{ $t('Discount') }}</span>
-          <span class="t-w-1/2 sm:t-w-1/3">{{ order.discount_amount | price }}</span>
-        </div>
-        <div class="t-flex t-justify-between sm:t-justify-end t-font-bold">
-          <span class="t-w-1/2 sm:t-w-1/3">{{ $t('Grand total') }}</span>
-          <span class="t-w-1/2 sm:t-w-1/3">{{ order.grand_total | price }}</span>
-        </div>
+    <div class="t-p-4 t-bg-white t-mb-4">
+      <div class="t-flex t-flex-wrap t--mx-2 t-text-sm t-text-base-tone">
+        <div class="t-w-2/3 lg:t-w-3/4 t-px-2 t-text-right" v-text="$t('Subtotal')" />
+        <div class="t-w-1/3 lg:t-w-1/4 t-px-2 t-text-right" v-text="price(order.subtotal)" />
+        <div class="t-w-2/3 lg:t-w-3/4 t-px-2 t-text-right" v-text="$t('Shipping')" />
+        <div class="t-w-1/3 lg:t-w-1/4 t-px-2 t-text-right" v-text="price(order.shipping_amount)" />
+        <div class="t-w-2/3 lg:t-w-3/4 t-px-2 t-text-right" v-text="$t('Tax')" />
+        <div class="t-w-1/3 lg:t-w-1/4 t-px-2 t-text-right" v-text="price((order.tax_amount + order.discount_tax_compensation_amount))" />
+        <div class="t-w-2/3 lg:t-w-3/4 t-px-2 t-text-right" v-text="$t('Discount')" />
+        <div class="t-w-1/3 lg:t-w-1/4 t-px-2 t-text-right" v-text="price(order.discount_amount)" />
+        <div class="t-w-2/3 lg:t-w-3/4 t-px-2 t-text-right t-text-lg t-font-bold t-text-base-darkest t-mt-2" v-text="$t('Grand total')" />
+        <div class="t-w-1/3 lg:t-w-1/4 t-px-2 t-text-right t-text-lg t-font-bold t-text-base-darkest t-mt-2" v-text="price(order.grand_total)" />
       </div>
     </div>
   </div>
@@ -132,6 +121,7 @@ import StatusIcon from 'theme/components/core/blocks/MyAccount/MyOrders/StatusIc
 import ButtonComponent from 'theme/components/core/blocks/Button'
 import { getThumbnailPath, productThumbnailPath } from '@vue-storefront/core/helpers'
 import { formatProductLink } from '@vue-storefront/core/modules/url/helpers'
+import { price } from 'icmaa-config/helpers/price'
 
 export default {
   mixins: [MyOrder],
@@ -150,6 +140,7 @@ export default {
     }
   },
   methods: {
+    price,
     extractProductOptionValues (options) {
       if (options) {
         const regex = /(?<="value";s:\d+:")[^"]*/

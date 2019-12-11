@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="t-p-4 t-bg-white">
+    <div class="t-p-4 t-bg-white t-mb-3">
       <headline icon="local_mall">
         {{ $t('My orders') }}
       </headline>
@@ -12,14 +12,14 @@
       </p>
     </div>
     <template v-if="!isHistoryEmpty">
-      <router-link tag="div" v-for="order in ordersHistory" :key="order.entity_id" class="t-flex t-items-center t-p-4 t-mt-4 t-bg-white t-text-sm t-cursor-pointer" :to="localizedRoute(`/my-account/orders/${order.id}`)">
+      <router-link tag="div" v-for="order in ordersHistory" :key="order.entity_id" class="t-flex t-items-center t-p-4 t-mt-1 t-bg-white t-text-sm t-text-base-tone t-cursor-pointer" :to="localizedRoute(`/my-account/orders/${order.id}`)">
         <div class="t-flex t-flex-grow t-flex-wrap t-items-center t-justify-between">
           <div class="t-w-1/2 lg:t-w-1/4 lg:t-order-4 t-mb-2 lg:t-mb-0">
             <status-icon :status="order.status">
               {{ $t(`orderStatus_${order.status}`) }}
             </status-icon>
           </div>
-          <div class="t-w-1/2 lg:t-w-1/4 lg:t-order-3 t-text-2xl t-mb-2 lg:t-mb-0">
+          <div class="t-w-1/2 lg:t-w-1/4 lg:t-order-3 t-text-2xl t-text-base-darkest t-mb-2 lg:t-mb-0">
             {{ order.grand_total | price }}
           </div>
           <div class="t-w-1/2 lg:t-w-1/4 lg:t-order-1">
