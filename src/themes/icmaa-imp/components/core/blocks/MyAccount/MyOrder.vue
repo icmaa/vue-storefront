@@ -1,50 +1,46 @@
 <template>
-  <div class="t-p-4 t-bg-white" v-if="order">
-    <!-- My order header -->
-    <headline icon="local_mall">
-      {{ $t('Order #') }}{{ order.increment_id }}
-    </headline>
-
-    <!-- Order status -->
-    <div class="t-flex t-flex-wrap t-justify-between t-border-b t-text-sm t-p-2 t-mb-8">
-      <div class="t-py-2">
-        <div class="t-font-bold">
-          {{ $t('Order date') }}
+  <div>
+    <div class="t-p-4 t-bg-white t-mb-4" v-if="order">
+      <headline icon="local_mall">
+        {{ $t('Order') }}
+        <span v-if="order" class="t-text-sm t-text-base-light t-flex-grow lg:t-flex-fix t-ml-4"># {{ order.increment_id }}</span>
+      </headline>
+      <div class="t-flex t-flex-wrap t-justify-between t-text-sm">
+        <div class="t-w-1/2 lg:t-w-1/4 t-mb-4 lg:t-mb-0">
+          <div class="t-font-bold t-mb-1 t-text-base-lighter t-text-xxs t-uppercase">
+            {{ $t('Date') }}
+          </div>
+          {{ order.created_at | date }}
         </div>
-        {{ order.created_at | date('LLL') }}
-      </div>
-      <div class="t-w-1/3 t-py-2">
-        <div class="t-font-bold">
-          {{ $t('Status') }}
+        <div class="t-w-1/2 lg:t-w-1/4 t-mb-4 lg:t-mb-0">
+          <div class="t-font-bold t-mb-1 t-text-base-lighter t-text-xxs t-uppercase">
+            {{ $t('Status') }}
+          </div>
+          <status-icon :status="order.status">
+            {{ $t(`orderStatus_${order.status}`) }}
+          </status-icon>
         </div>
-        <div class="t-flex t-items-center">
-          <status-icon :status="order.status" />
-          {{ order.status | capitalize }}
-        </div>
-      </div>
-      <div class="t-w-full t-flex t-flex-wrap t-justify-between t-mb-2">
-        <tracking-link :order-id="order.id" :status="order.status" class="t-my-2 t-mr-2">
-          <button-component type="second" icon="local_shipping" :icon-only="false" class="t-flex-fix">
-            {{ $t('Shipment tracking') }}
+        <div class="t-w-full lg:t-w-2/4 t-flex t-flex-wrap t-items-center t-justify-between lg:t-justify-end">
+          <router-link :to="localizedRoute(service)" class="t-w-full t-mb-2 lg:t-w-auto lg:t-mb-0 lg:t-mr-4 t-font-light t-text-normal">
+            {{ $t('Are there any questions left?') }}
+          </router-link>
+          <button-component type="ghost" @click="$router.push(localizedRoute(`/my-account/order-review/${order.id}`))">
+            {{ $t('Review order') }}
           </button-component>
-        </tracking-link>
+        </div>
+        <div class="t-w-1/2 lg:t-w-1/4 t-flex t-flex-wrap t-justify-between">
+          <tracking-link :order-id="order.id" :status="order.status">
+            <button-component type="second" icon="local_shipping" :icon-only="false">
+              {{ $t('Shipment tracking') }}
+            </button-component>
+          </tracking-link>
+        </div>
       </div>
-      <router-link class="t-font-hairline" :to="localizedRoute(service)">
-        {{ $t('Are there any questions left?') }}
-      </router-link>
-      <router-link class="t-w-1/3 t-font-hairline" :to="localizedRoute('/my-account/order-review/' + order.id)">
-        {{ $t('Review order') }}
-      </router-link>
     </div>
-
-    <!-- Order information -->
-    <div class="t-text-sm t-mb-8">
-      <div class="t-block t-text-2xl t-font-thin t-leading-relaxed t-mb-2">
-        {{ $t('Order informations') }}
-      </div>
-      <div class="t-flex t-flex-wrap">
-        <div class="t-w-full sm:t-w-1/2 t-mb-4 sm:t-pr-4">
-          <div class="t-border-b t-font-bold">
+    <div class="t-p-4 t-bg-white t-mb-4">
+      <div class="t-flex t-flex-wrap t--mx-2 t-text-sm">
+        <div class="t-w-full sm:t-w-1/2 t-order-1 sm:t-order-0 t-px-2 t-mb-4">
+          <div class="t-font-bold t-mb-1 t-text-base-lighter t-text-xxs t-uppercase">
             {{ $t('Billing address') }}
           </div>
           <p>{{ billingAddress.firstname }} {{ billingAddress.lastname }}</p>
@@ -52,8 +48,8 @@
           <p>{{ billingAddress.postcode }} {{ billingAddress.city }}</p>
           <p>{{ billingAddress.country }}</p>
         </div>
-        <div class="t-w-full sm:t-w-1/2 t-mb-4 sm:t-pr-4">
-          <div class="t-border-b t-font-bold">
+        <div class="t-w-full sm:t-w-1/2 t-order-3 sm:t-order-0 t-px-2 t-mb-4">
+          <div class="t-font-bold t-mb-1 t-text-base-lighter t-text-xxs t-uppercase">
             {{ $t('Shipping address') }}
           </div>
           <p>{{ shippingAddress.firstname }} {{ shippingAddress.lastname }}</p>
@@ -61,17 +57,17 @@
           <p>{{ shippingAddress.postcode }} {{ shippingAddress.city }}</p>
           <p>{{ shippingAddress.country }}</p>
         </div>
-        <div class="t-w-full sm:t-w-1/2 t-mb-4 sm:t-pr-4">
-          <div class="t-border-b t-font-bold">
-            {{ $t('Shipping method') }}
-          </div>
-          <p>{{ order.shipping_description }}</p>
-        </div>
-        <div class="t-w-full sm:t-w-1/2 t-mb-4 sm:t-pr-4">
-          <div class="t-border-b t-font-bold">
+        <div class="t-w-full sm:t-w-1/2 t-order-2 sm:t-order-0 t-px-2 t-mb-4 sm:t-mb-0">
+          <div class="t-font-bold t-mb-1 t-text-base-lighter t-text-xxs t-uppercase">
             {{ $t('Payment method') }}
           </div>
           <p>{{ paymentMethod }}</p>
+        </div>
+        <div class="t-w-full sm:t-w-1/2 t-order-4 sm:t-order-0 t-px-2">
+          <div class="t-font-bold t-mb-1 t-text-base-lighter t-text-xxs t-uppercase">
+            {{ $t('Shipping method') }}
+          </div>
+          <p>{{ order.shipping_description }}</p>
         </div>
       </div>
     </div>
@@ -127,16 +123,15 @@
 
 <script>
 import Vue from 'vue'
+import { mapGetters, mapActions } from 'vuex'
 import Headline from 'theme/components/core/blocks/MyAccount/Headline'
 import MyOrder from '@vue-storefront/core/compatibility/components/blocks/MyAccount/MyOrder'
 import TrackingLink from 'icmaa-tracking/components/TrackingLink'
 import ProductImage from 'theme/components/core/ProductImage'
-import { getThumbnailPath, productThumbnailPath } from '@vue-storefront/core/helpers'
-import { mapActions } from 'vuex'
 import StatusIcon from 'theme/components/core/blocks/MyAccount/MyOrders/StatusIcon'
-import { formatProductLink } from '@vue-storefront/core/modules/url/helpers'
 import ButtonComponent from 'theme/components/core/blocks/Button'
-import { mapGetters } from 'vuex'
+import { getThumbnailPath, productThumbnailPath } from '@vue-storefront/core/helpers'
+import { formatProductLink } from '@vue-storefront/core/modules/url/helpers'
 
 export default {
   mixins: [MyOrder],
