@@ -28,9 +28,6 @@
             {{ $t('Shipment tracking') }}
           </button-component>
         </tracking-link>
-        <button-component type="primary" :icon="false" @click="remakeOrder(singleOrderItems)" class="t-flex-fix t-my-2 t-mr-2">
-          {{ $t('Remake order') }}
-        </button-component>
       </div>
       <router-link class="t-font-hairline" :to="localizedRoute(service)">
         {{ $t('Are there any questions left?') }}
