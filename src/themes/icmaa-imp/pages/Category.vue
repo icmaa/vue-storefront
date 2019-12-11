@@ -40,9 +40,13 @@
 
     <div class="t-container">
       <lazy-hydrate :trigger-hydration="!loading" v-if="isLazyHydrateEnabled">
-        <product-listing :products="getCategoryProducts" />
+        <component v-if="isInTicketWhitelist" :is="ProductListingTicket" :products="getCategoryProducts" />
+        <product-listing v-else :products="getCategoryProducts" />
       </lazy-hydrate>
-      <product-listing v-else :products="getCategoryProducts" />
+      <div v-else>
+        <component v-if="isInTicketWhitelist" :is="ProductListingTicket" :products="getCategoryProducts" />
+        <product-listing v-else :products="getCategoryProducts" />
+      </div>
       <div class="t-flex t-items-center t-justify-center t-mb-8" v-if="moreProductsInSearchResults">
         <button-component type="ghost" @click.native="loadMoreProducts" :disabled="loadingProducts" class="t-w-2/3 lg:t-w-1/4" :class="{ 't-relative t-opacity-60': loadingProducts }">
           {{ $t('Load more') }}
@@ -101,6 +105,7 @@ import CategoryExtrasMixin from 'icmaa-category-extras/mixins/categoryExtras'
 import CategoryMetaMixin from 'icmaa-meta/mixins/categoryMeta'
 
 const FilterSidebar = () => import(/* webpackPreload: true */ /* webpackChunkName: "vsf-sidebar-categoryfilter" */ 'theme/components/core/blocks/Category/Sidebar')
+const ProductListingTicket = () => import(/* webpackPreload: true */ /* webpackChunkName: "vsf-product-listing-ticket" */ 'theme/components/core/ProductListingTicket')
 
 const composeInitialPageState = async (store, route, forceLoad = false, pageSize) => {
   try {
@@ -110,7 +115,10 @@ const composeInitialPageState = async (store, route, forceLoad = false, pageSize
     const currentCategory = cachedCategory && !forceLoad && hasCategoryExtras ? cachedCategory : await store.dispatch('category-next/loadCategoryWithExtras', { filters })
     await store.dispatch('category-next/loadCategoryProducts', { route, category: currentCategory, pageSize })
 
-    const breadCrumbsLoader = store.dispatch('category-next/loadCategoryBreadcrumbs', currentCategory)
+    const breadCrumbsLoader = store.dispatch(
+      'category-next/loadCategoryBreadcrumbs',
+      { category: currentCategory, currentRouteName: currentCategory.name, omitCurrent: true }
+    )
     if (isServer) {
       await breadCrumbsLoader
     }
@@ -144,7 +152,8 @@ export default {
       mobileFilters: false,
       loadingProducts: false,
       loading: true,
-      FilterSidebar
+      FilterSidebar,
+      ProductListingTicket
     }
   },
   computed: {
@@ -157,7 +166,8 @@ export default {
       getCategoryProducts: 'category-next/getCategoryProducts',
       getCurrentCategory: 'category-next/getCurrentCategory',
       getCategoryProductsTotal: 'category-next/getCategoryProductsTotal',
-      getProductsStats: 'category-next/getCategorySearchProductsStats'
+      getProductsStats: 'category-next/getCategorySearchProductsStats',
+      isInTicketWhitelist: 'category-next/isCurrentCategoryInTicketWhitelist'
     }),
     isLazyHydrateEnabled () {
       return config.ssr.lazyHydrateFor.includes('category-next.products')
