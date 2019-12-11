@@ -20,7 +20,6 @@
 import { mapGetters } from 'vuex'
 import { localizedRoute, currentStoreView } from '@vue-storefront/core/lib/multistore'
 import i18n from '@vue-storefront/i18n'
-import last from 'lodash-es/last'
 
 import MaterialIcon from 'theme/components/core/blocks/MaterialIcon'
 
