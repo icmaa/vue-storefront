@@ -58,7 +58,7 @@ export default {
 
       // Remove last element
       // – got it already in `current`
-      if (last(routes).name === this.current.name) {
+      if (routes.length && last(routes).name === this.current) {
         routes = routes.slice(0, -1)
       }
 
