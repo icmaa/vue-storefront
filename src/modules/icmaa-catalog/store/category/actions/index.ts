@@ -10,6 +10,7 @@ import { parseCategoryPath } from '@vue-storefront/core/modules/breadcrumbs/help
 
 import { icmaa } from 'config'
 import intersection from 'lodash-es/intersection'
+import union from 'lodash-es/union'
 
 /**
  * These methods are overwrites of the original ones to extend them for our needs
@@ -79,17 +80,19 @@ const actions: ActionTree<CategoryState, RootState> = {
    */
   async loadCategoryBreadcrumbs ({ dispatch, getters }, { category, currentRouteName, omitCurrent = false }) {
     if (!category) return
-    let categoryHierarchyIds = _prepareCategoryPathIds(category)
-    categoryHierarchyIds = intersection(
-      categoryHierarchyIds.map(id => Number(id)),
-      icmaa.breadcrumbs.whitelist
-    )
+    let categoryHierarchyIds = _prepareCategoryPathIds(category).map(id => Number(id))
+    let whitelistCategoryHierarchyIds = intersection(categoryHierarchyIds, icmaa.breadcrumbs.whitelist)
+    if (whitelistCategoryHierarchyIds.length > 0) {
+      categoryHierarchyIds = union(whitelistCategoryHierarchyIds, categoryHierarchyIds.slice(-1))
+    } else {
+      categoryHierarchyIds = whitelistCategoryHierarchyIds
+    }
 
-    const categoryFilters = { 'id': categoryHierarchyIds }
-    const categories = await dispatch('loadCategories', {filters: categoryFilters})
+    const categoryFilters = { 'id': categoryHierarchyIds.map(id => id.toString()) }
+    const categories = await dispatch('loadCategories', { filters: categoryFilters })
     const sorted = []
     for (const id of categoryHierarchyIds) {
-      const index = categories.findIndex(cat => cat.id.toString() === id)
+      const index = categories.findIndex(cat => cat.id === id)
       if (index >= 0 && (!omitCurrent || categories[index].id !== category.id)) {
         sorted.push(categories[index])
       }
