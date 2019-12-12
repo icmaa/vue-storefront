@@ -16,9 +16,7 @@
           <div class="t-font-bold t-mb-1 t-text-base-lighter t-text-xxs t-uppercase">
             {{ $t('Status') }}
           </div>
-          <status-icon :status="order.status">
-            {{ $t(`orderStatus_${order.status}`) }}
-          </status-icon>
+          <status-icon :status="order.status" />
         </div>
         <div class="t-w-full lg:t-w-2/4 t-flex t-flex-wrap t-items-center t-justify-between lg:t-justify-end">
           <router-link :to="localizedRoute(service)" class="t-w-full t-mb-2 lg:t-w-auto lg:t-mb-0 lg:t-mr-4 t-font-light t-text-normal">
