@@ -26,13 +26,6 @@
             {{ $t('Review order') }}
           </button-component>
         </div>
-        <div class="t-w-1/2 lg:t-w-1/4 t-flex t-flex-wrap t-justify-between">
-          <tracking-link :order-id="order.id" :status="order.status">
-            <button-component type="second" icon="local_shipping" :icon-only="false">
-              {{ $t('Shipment tracking') }}
-            </button-component>
-          </tracking-link>
-        </div>
       </div>
     </div>
     <div class="t-p-4 t-bg-white t-mb-4">
@@ -59,13 +52,28 @@
           <div class="t-font-bold t-mb-1 t-text-base-lighter t-text-xxs t-uppercase">
             {{ $t('Payment method') }}
           </div>
-          <p>{{ paymentMethod }}</p>
+          <p v-if="paymentMethod">
+            {{ paymentMethod }}
+          </p>
+          <p v-else>
+            {{ $t('No informations') }}
+          </p>
         </div>
         <div class="t-w-full sm:t-w-1/2 t-order-4 sm:t-order-none t-px-2">
           <div class="t-font-bold t-mb-1 t-text-base-lighter t-text-xxs t-uppercase">
             {{ $t('Shipping method') }}
           </div>
-          <p>{{ order.shipping_description }}</p>
+          <p v-if="order.shipping_description">
+            {{ order.shipping_description }}
+          </p>
+          <p v-else>
+            {{ $t('No informations') }}
+          </p>
+          <tracking-link :order-id="order.id" :status="order.status" class="t-mt-2">
+            <button-component type="ghost" icon="local_shipping">
+              {{ $t('Shipment tracking') }}
+            </button-component>
+          </tracking-link>
         </div>
       </div>
     </div>
