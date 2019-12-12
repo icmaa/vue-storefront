@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="t-p-4 t-bg-white t-mb-4" v-if="order">
+    <div class="t-p-4 t-bg-white t-mb-4" v-if="order && typeof order !== 'undefined'">
       <headline icon="local_mall">
         {{ $t('Order') }}
         <span v-if="order" class="t-text-sm t-text-base-light t-flex-grow lg:t-flex-fix t-ml-4"># {{ order.increment_id }}</span>
@@ -74,7 +74,7 @@
       <div class="t-text-base-tone t-text-xl t-font-thin t-mb-4 t-pl-4">
         {{ $t('Items ordered') }}
       </div>
-      <div class="t-flex t-items-center t-bg-white t-p-4 t-pb-0">
+      <div class="t-hidden md:t-flex t-items-center t-bg-white t-p-4 t-pb-0">
         <div class="t-w-8/12 t-font-bold t-text-base-lighter t-text-xxs t-uppercase">
           {{ $t('Product name') }}
         </div>
@@ -85,20 +85,21 @@
           {{ $t('Subtotal') }}
         </div>
       </div>
-      <div class="t-mb-1 t-bg-white t-p-4 t-text-sm t-text-base-tone" v-for="item in singleOrderItems" :key="item.item_id">
-        <div class="t-flex t-items-end">
-          <div class="t-w-8/12 t-text-sm" :data-div="$t('Product Name')">
-            <div class="t-text-primary">
+      <div class="t-mb-1 t-bg-white t-p-4 t-text-sm t-text-base-tone" v-for="item in singleOrderItemsWithOptions" :key="item.item_id">
+        <div class="t-flex t-flex-wrap t-items-end">
+          <div class="t-w-full md:t-w-8/12 t-mb-2 md:t-mb-0 t-text-sm" :data-div="$t('Product Name')">
+            <router-link :to="item.product_link" class="t-text-primary">
               {{ item.name }}
-            </div>
-            <div class="">
-              {{ item.sku }}
+            </router-link>
+            <div v-for="(option, i) in item.options" :key="i">
+              {{ option.label }}: {{ option.value }}
             </div>
           </div>
-          <div class="t-w-2/12 t-text-right">
+          <div class="t-w-2/3 md:t-w-2/12 t-text-right">
             {{ item.qty_ordered }}
+            <span class="t-text-xxs t-uppercase md:t-hidden" v-text="$t('Pcs.')" />
           </div>
-          <div class="t-w-2/12 t-text-right" :data-div="$t('Subtotal')">
+          <div class="t-w-1/3 md:t-w-2/12 t-text-right" :data-div="$t('Subtotal')">
             {{ item.row_total_incl_tax | price }}
           </div>
         </div>
@@ -124,13 +125,16 @@
 
 <script>
 import Vue from 'vue'
+import { mapGetters } from 'vuex'
+import { formatProductLink } from '@vue-storefront/core/modules/url/helpers'
+import { currentStoreView } from '@vue-storefront/core/lib/multistore'
+import { price } from 'icmaa-config/helpers/price'
+import i18n from '@vue-storefront/i18n'
 import Headline from 'theme/components/core/blocks/MyAccount/Headline'
 import MyOrder from '@vue-storefront/core/compatibility/components/blocks/MyAccount/MyOrder'
 import TrackingLink from 'icmaa-tracking/components/TrackingLink'
 import StatusIcon from 'theme/components/core/blocks/MyAccount/MyOrders/StatusIcon'
 import ButtonComponent from 'theme/components/core/blocks/Button'
-import { formatProductLink } from '@vue-storefront/core/modules/url/helpers'
-import { price } from 'icmaa-config/helpers/price'
 
 export default {
   mixins: [MyOrder],
@@ -140,8 +144,71 @@ export default {
     TrackingLink,
     ButtonComponent
   },
+  computed: {
+    ...mapGetters({
+      getOptionLabel: 'attribute/getOptionLabel'
+    }),
+    singleOrderItemsWithOptions () {
+      return this.singleOrderItems.map(item => {
+        const product = this.getProduct(item)
+        item.product_link = product ? formatProductLink(product, currentStoreView().storeCode) : ''
+        item.options = this.getProductOptions(item)
+        return item
+      })
+    },
+    attributeCodes () {
+      let attributeCodes = []
+      if (!this.order.products) {
+        return attributeCodes
+      }
+
+      this.order.products
+        .filter(p => p.configurable_options)
+        .forEach(p => {
+          p.configurable_options.forEach(ch => {
+            if (!attributeCodes.includes(ch.attribute_code)) {
+              attributeCodes.push(ch.attribute_code)
+            }
+          })
+        })
+
+      return attributeCodes
+    }
+  },
   methods: {
-    price
+    price,
+    getProduct (orderItem) {
+      if (!this.order || !this.order.products) {
+        return false
+      }
+
+      return this.order.products.find(p => p.id === orderItem.product_id) || false
+    },
+    getProductOptions (orderItem) {
+      if (!this.order || !this.order.products) {
+        return []
+      }
+
+      const product = this.getProduct(orderItem)
+      if (!product || !product.configurable_options) {
+        return []
+      }
+
+      const options = []
+      product.configurable_options.forEach(o => {
+        const attributeKey = o.attribute_code
+        const label = /size/.test(attributeKey) ? i18n.t('Size') : o.label
+        const childProduct = product.configurable_children.find(c => c.sku === orderItem.sku)
+        const optionId = childProduct[o.attribute_code]
+        const value = this.getOptionLabel({ attributeKey, optionId })
+        options.push({ label, value })
+      })
+
+      return options
+    }
+  },
+  async mounted () {
+    await await this.$store.dispatch('attribute/list', { filterValues: this.attributeCodes })
   }
 }
 </script>
