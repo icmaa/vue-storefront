@@ -49,7 +49,7 @@ const actions: ActionTree<UserState, RootState> = {
     if (resp.code === 200) {
       /** Load orders products to order state item and localstorage */
       await asyncForEach(resp.result.items, async (order, index) => {
-        resp.result.items[index] = await dispatch('loadOrderProducts', order)
+        resp.result.items[index] = await dispatch('loadOrderProducts', { order, history: resp.result.items })
       })
 
       commit(userTypes.USER_ORDERS_HISTORY_LOADED, resp.result) // this also stores the current user to localForage
@@ -62,12 +62,10 @@ const actions: ActionTree<UserState, RootState> = {
 
     return resp
   },
-  async loadOrderProducts ({ dispatch, commit, getters }, order) {
-    let orderHistory = getters.getOrdersHistory
-    const index = orderHistory.findIndex(o => o.id === order.id)
-
-    if (orderHistory[index] && orderHistory[index].products) {
-      return orderHistory[index]
+  async loadOrderProducts ({ dispatch, getters }, { order, history }) {
+    const index = history.findIndex(o => o.id === order.id)
+    if (history[index] && history[index].products) {
+      return history[index]
     }
 
     let query = new SearchQuery()
@@ -79,8 +77,8 @@ const actions: ActionTree<UserState, RootState> = {
 
     return dispatch('product/findProducts', { query, includeFields, excludeFields }, { root: true })
       .then(products => {
-        orderHistory[index].products = products.items
-        return orderHistory[index]
+        history[index].products = products.items
+        return history[index]
       })
   },
   setCluster ({ commit }, cluster) {
