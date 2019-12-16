@@ -41,34 +41,23 @@ export function afterRegistration (config, store: Store<any>) {
     }
 
     store.subscribe(({ type, payload }, state) => {
-      // Adding a Product to a Shopping Cart
-      if (type === 'cart/cart/ADD') {
-        GTM.trackEvent({
-          event: 'addToCart',
-          ecommerce: {
-            currencyCode: currencyCode,
-            add: {
-              products: [getProduct(payload.product)]
-            }
-          }
-        });
-      }
-
-      // Removing a Product from a Shopping Cart
-      if (type === 'cart/cart/DEL') {
-        GTM.trackEvent({
-          event: 'removeFromCart',
-          ecommerce: {
-            remove: {
-              products: [getProduct(payload.product)]
-            }
-          }
-        });
-      }
-
       // Measuring Views of Product Details
-      if (type === 'product/product/SET_PRODUCT_CURRENT') {
+      if (type === 'product/product/SET_CURRENT') {
         GTM.trackEvent({
+          event: 'productView',
+          ecommerce: {
+            detail: {
+              'actionField': { 'list': '' }, // 'detail' actions have an optional list property.
+              'products': [getProduct(payload)]
+            }
+          }
+        });
+      }
+
+      // Measuring Views of Category
+      if (type === 'category-next/category/SET_PRODUCTS') {
+        GTM.trackEvent({
+          event: 'categoryView',
           ecommerce: {
             detail: {
               'actionField': { 'list': '' }, // 'detail' actions have an optional list property.
@@ -106,6 +95,43 @@ export function afterRegistration (config, store: Store<any>) {
             })
           }
         })
+      }
+
+      // Adding a Product to a Shopping Cart
+      if (type === 'cart/cart/ADD') {
+        GTM.trackEvent({
+          event: 'addToCart',
+          ecommerce: {
+            currencyCode: currencyCode,
+            add: {
+              products: [getProduct(payload.product)]
+            }
+          }
+        });
+      }
+
+      // Removing a Product from a Shopping Cart
+      if (type === 'cart/cart/DEL') {
+        GTM.trackEvent({
+          event: 'removeFromCart',
+          ecommerce: {
+            remove: {
+              products: [getProduct(payload.product)]
+            }
+          }
+        });
+      }
+
+      // Default Measuring
+      if (type === 'user/user/START_SESSION') {
+        GTM.trackEvent({
+          event: 'defaultView',
+          currencyCode: currencyCode,
+          website_code: 'base', // todo
+          store_code: storeView.storeCode,
+          controller: 'cms_page_view', // todo
+          pageType: 'cms/page/view' // todo
+        });
       }
     })
   }
