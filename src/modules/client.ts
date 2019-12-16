@@ -10,7 +10,6 @@ import { UrlModule } from '@vue-storefront/core/modules/url'
 import { BreadcrumbsModule } from '@vue-storefront/core/modules/breadcrumbs'
 import { UserModule } from '@vue-storefront/core/modules/user'
 import { CmsModule } from '@vue-storefront/core/modules/cms'
-import { GoogleTagManagerModule } from './google-tag-manager';
 // import { AmpRendererModule } from './amp-renderer';
 import { PaymentBackendMethodsModule } from './payment-backend-methods'
 import { PaymentCashOnDeliveryModule } from './payment-cash-on-delivery'
@@ -35,6 +34,7 @@ import { IcmaaProductAlertModule } from 'icmaa-product-alert'
 import { IcmaaTrackingModule } from 'icmaa-tracking'
 import { IcmaaExternalCheckoutModule } from 'icmaa-external-checkout'
 import { IcmaaAmpRendererModule } from './icmaa-amp-renderer'
+import { IcmaaGoogleTagManagerModule } from './icmaa-google-tag-manager';
 
 import { registerModule } from '@vue-storefront/core/lib/modules'
 
@@ -52,7 +52,6 @@ export function registerClientModules () {
   registerModule(CatalogNextModule)
   registerModule(CompareModule)
   registerModule(BreadcrumbsModule)
-  registerModule(GoogleTagManagerModule)
   // registerModule(AmpRendererModule)
   registerModule(CmsModule)
   registerModule(NewsletterModule)
@@ -76,6 +75,7 @@ export function registerClientModules () {
   registerModule(IcmaaTrackingModule)
   registerModule(IcmaaExternalCheckoutModule)
   registerModule(IcmaaAmpRendererModule)
+  registerModule(IcmaaGoogleTagManagerModule)
 }
 
 // Deprecated API, will be removed in 2.0

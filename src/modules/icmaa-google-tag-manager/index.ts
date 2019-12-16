@@ -5,12 +5,11 @@ import { once, isServer } from '@vue-storefront/core/helpers'
 import { StorefrontModule } from '@vue-storefront/core/lib/modules'
 import { Logger } from '@vue-storefront/core/lib/logger'
 
-import { googleTagManagerModule } from './store'
+import { icmaaGoogleTagManagerModule } from './store'
 import { afterRegistration, isEnabled } from './hooks/afterRegistration'
+export const KEY = 'icmaa-google-tag-manager'
 
-export const KEY = 'google-tag-manager'
-
-export const GoogleTagManagerModule: StorefrontModule = function ({store, router, appConfig}) {
+export const IcmaaGoogleTagManagerModule: StorefrontModule = function ({store, router, appConfig}) {
   if (isEnabled(appConfig.googleTagManager.id)) {
     once('__VUE_EXTEND_GTM__', () => {
       Vue.use(VueGtm, {
@@ -24,7 +23,7 @@ export const GoogleTagManagerModule: StorefrontModule = function ({store, router
     Logger.warn('Google Tag Manager extensions is not working. Ensure Google Tag Manager container ID is defined in config', 'GTM')()
   }
 
-  store.registerModule(KEY, googleTagManagerModule)
+  store.registerModule(KEY, icmaaGoogleTagManagerModule)
 
   afterRegistration(appConfig, store)
 }
