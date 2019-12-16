@@ -1,7 +1,7 @@
 <template>
   <div id="page_not_found" class="t-container">
     <div class="t-p-4 t-flex t-flex-wrap t-justify-center">
-      <h1 class="t-w-full lg:t-w-auto t-flex-fix t-no-underlinet-flex t-items-center t-bg-primary t-font-black t-font-mono t-py-4 t-px-8 t-text-5xl t-text-white">
+      <h1 class="t-w-full lg:t-w-auto t-flex-fix t-no-underline t-flex t-items-center t-justify-center t-bg-primary t-font-black t-font-mono t-py-4 t-px-8 t-text-5xl t-text-white">
         {{ $t('404') }}
       </h1>
       <div class="t-p-8 t-bg-white t-text-base-tone t-text-sm">
