@@ -24,6 +24,7 @@ import Navigation from '../components/core/blocks/MyAccount/Navigation'
 import MyProfile from '../components/core/blocks/MyAccount/MyProfile'
 import MyAddresses from '../components/core/blocks/MyAccount/MyAddresses'
 import MyNewsletter from '../components/core/blocks/MyAccount/MyNewsletter'
+import MyCoupons from '../components/core/blocks/MyAccount/MyCoupons'
 import MyOrders from '../components/core/blocks/MyAccount/MyOrders'
 import MyOrder from '../components/core/blocks/MyAccount/MyOrder'
 import MyProductAlerts from '../components/core/blocks/MyAccount/MyProductAlerts'
@@ -44,6 +45,7 @@ export default {
     MyProfile,
     MyAddresses,
     MyNewsletter,
+    MyCoupons,
     MyOrders,
     MyOrder,
     MyProductAlerts,
@@ -74,9 +76,9 @@ export default {
         'MyOrders': 'My orders',
         'MyAddresses': 'My addresses',
         'MyNewsletter': 'My newsletter',
+        'MyCoupons': 'My coupons',
         'MyProductAlerts': 'My product-alerts',
-        'MyOrderReview': 'Order-Review',
-        'MyCoupons': 'My coupons'
+        'MyOrderReview': 'Order-Review'
       }
 
       return i18n.t(titleMap[this.activeBlock] || 'My Account')
