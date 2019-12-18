@@ -42,30 +42,30 @@ export function afterRegistration (config, store: Store<any>) {
 
     store.subscribe(({ type, payload }, state) => {
       // Measuring Views of Product Details
-      if (type === 'product/product/SET_CURRENT') {
-        GTM.trackEvent({
-          event: 'productView',
-          ecommerce: {
-            detail: {
-              'actionField': { 'list': '' }, // 'detail' actions have an optional list property.
-              'products': [getProduct(payload)]
-            }
-          }
-        });
-      }
+      // if (type === 'product/product/SET_CURRENT') {
+      //   GTM.trackEvent({
+      //     event: 'productView',
+      //     ecommerce: {
+      //       detail: {
+      //         'actionField': { 'list': '' }, // 'detail' actions have an optional list property.
+      //         'products': [getProduct(payload)]
+      //       }
+      //     }
+      //   });
+      // }
 
       // Measuring Views of Category
-      if (type === 'category-next/category/SET_PRODUCTS') {
-        GTM.trackEvent({
-          event: 'categoryView',
-          ecommerce: {
-            detail: {
-              'actionField': { 'list': '' }, // 'detail' actions have an optional list property.
-              'products': [getProduct(payload)]
-            }
-          }
-        });
-      }
+      // if (type === 'category-next/category/SET_PRODUCTS') {
+      //   GTM.trackEvent({
+      //     event: 'categoryView',
+      //     ecommerce: {
+      //       detail: {
+      //         'actionField': { 'list': '' }, // 'detail' actions have an optional list property.
+      //         'products': [getProduct(payload)]
+      //       }
+      //     }
+      //   });
+      // }
 
       // Measuring Purchases
       if (type === 'order/order/LAST_ORDER_CONFIRMATION') {
