@@ -103,6 +103,7 @@ import CategoryExtrasHeader from 'theme/components/core/blocks/CategoryExtras/He
 import CategoryExtrasFooter from 'theme/components/core/blocks/CategoryExtras/Footer'
 import CategoryExtrasMixin from 'icmaa-category-extras/mixins/categoryExtras'
 import CategoryMetaMixin from 'icmaa-meta/mixins/categoryMeta'
+import CategoryGtmMixin from 'icmaa-google-tag-manager/mixins/categoryGtm'
 
 const FilterSidebar = () => import(/* webpackPreload: true */ /* webpackChunkName: "vsf-sidebar-categoryfilter" */ 'theme/components/core/blocks/Category/Sidebar')
 const ProductListingTicket = () => import(/* webpackPreload: true */ /* webpackChunkName: "vsf-product-listing-ticket" */ 'theme/components/core/ProductListingTicket')
@@ -144,7 +145,7 @@ export default {
     CategoryExtrasHeader,
     CategoryExtrasFooter
   },
-  mixins: [ CategoryMixin, CategoryExtrasMixin, CategoryMetaMixin ],
+  mixins: [ CategoryMixin, CategoryExtrasMixin, CategoryMetaMixin, CategoryGtmMixin ],
   data () {
     return {
       pageSizes: [24, 48, 60, 100],
