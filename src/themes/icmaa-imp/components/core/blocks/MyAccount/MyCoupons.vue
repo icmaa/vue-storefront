@@ -4,48 +4,56 @@
       {{ $t('My coupons') }}
     </headline>
 
-    <div class="t-w-full t-px-2">
-      <base-input
-        class="mb10"
-        type="text"
-        name="text"
-        :placeholder="$t('Coupon code')"
-        v-model="coupon.code"
-        @blur="$v.coupon.code.$touch()"
-        :validations="[
-          {
-            condition: $v.coupon.code.$error && !$v.coupon.code.required,
-            text: $t('Field is required')
-          },
-          {
-            condition: !$v.coupon.code.minLength,
-            text: $t('Name must have at least 2 letters.')
-          }
-        ]"
-      />
+    <div class="t-w-full t-flex t-flex-wrap">
+      <div class="t-w-full lg:t-w-1/2 t-px-2 t-mb-4">
+        <base-input
+          class=""
+          type="text"
+          name="code"
+          :label="$t('Coupon') + ' *'"
+          v-model="coupon.code"
+          mask="X-XXXXX-XXXXX"
+          @blur="$v.coupon.code.$touch()"
+          :validations="[
+            {
+              condition: $v.coupon.code.$error && !$v.coupon.code.required,
+              text: $t('Field is required')
+            },
+            {
+              condition: !$v.coupon.code.coupon && $v.coupon.code.$error,
+              text: $t('Wrong Format. Format must look like X-XXXXX-XXXXX')
+            }
+          ]"
+        />
+      </div>
 
-      <base-input
-        class="mb10"
-        type="number"
-        name="pin"
-        :placeholder="$t('Pin')"
-        v-model="coupon.pin"
-        @blur="$v.coupon.pin.$touch()"
-        :validations="[
-          {
-            condition: $v.coupon.pin.$error && !$v.coupon.pin.required,
-            text: $t('Field is required')
-          },
-          {
-            condition: !$v.coupon.pin.minlength,
-            text: $t('Pin must have 4 digits.')
-          }
-        ]"
-      />
+      <div class="t-w-full lg:t-w-1/2 t-px-2 t-mb-4">
+        <base-input
+          class=""
+          type="number"
+          name="pin"
+          mask="####"
+          :label="$t('Pin') + ' *'"
+          v-model="coupon.pin"
+          @blur="$v.coupon.pin.$touch()"
+          :validations="[
+            {
+              condition: $v.coupon.pin.$error && !$v.coupon.pin.required,
+              text: $t('Field is required')
+            },
+            {
+              condition: !$v.coupon.pin.minlength && $v.coupon.pin.$error,
+              text: $t('Pin must have 4 digits.')
+            }
+          ]"
+        />
+      </div>
 
-      <button-component type="primary" class="t-flex-1 lg:t-flex-fix">
-        check coupons
-      </button-component>
+      <div class="t-px-2 t-w-full">
+        <button-component type="primary" class="t-flex-1 lg:t-flex-fix">
+          check coupon
+        </button-component>
+      </div>
     </div>
   </div>
 </template>
@@ -57,6 +65,8 @@ import i18n from '@vue-storefront/i18n'
 import { required, minLength, helpers } from 'vuelidate/lib/validators'
 import ButtonComponent from 'theme/components/core/blocks/Button'
 import BaseInput from 'theme/components/core/blocks/Form/BaseInput'
+
+const coupon = helpers.regex('coupon', /\w-\w{5}-\w{5}/)
 
 export default {
   name: 'MyCoupons',
@@ -77,7 +87,7 @@ export default {
     coupon: {
       code: {
         required,
-        minLength: minLength(5)
+        coupon
       },
       pin: {
         required,
