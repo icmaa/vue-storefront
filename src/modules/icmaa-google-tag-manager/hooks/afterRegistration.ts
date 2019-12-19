@@ -3,6 +3,8 @@ import VueGtm from 'vue-gtm'
 import { Store } from 'vuex'
 import { currentStoreView } from '@vue-storefront/core/lib/multistore'
 import { isServer } from '@vue-storefront/core/helpers'
+import { urlStore } from '@vue-storefront/core/modules/url/store'
+import { StoreReader } from 'apollo-cache-inmemory'
 
 export const isEnabled = (gtmId: string | null) => {
   return typeof gtmId === 'string' && gtmId.length > 0 && !isServer
@@ -123,16 +125,18 @@ export function afterRegistration (config, store: Store<any>) {
       }
 
       // Default Measuring
-      if (type === 'user/user/START_SESSION') {
-        GTM.trackEvent({
-          event: 'defaultView',
-          currencyCode: currencyCode,
-          website_code: 'base', // todo
-          store_code: storeView.storeCode,
-          controller: 'cms_page_view', // todo
-          pageType: 'cms/page/view' // todo
-        });
-      }
+      // if (type === "cart/cart/DEL") {
+      //   GTM.trackView({ // extend content-view
+      //     event: 'content-view',
+      //     currencyCode: currencyCode,
+      //     website_code: "base", // todo
+      //     store_code: storeView.storeCode,
+      //     controller: "cms_page_view", // todo
+      //     pageType: "cms/page/view", // todo
+      //     pagePath: "todo",
+      //     pageTitle: "todo"
+      //   });
+      // }
     })
   }
 }

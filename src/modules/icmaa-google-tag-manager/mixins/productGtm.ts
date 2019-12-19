@@ -35,7 +35,7 @@ export default {
       }
 
       GTM.trackEvent({
-        event: 'productView',
+        event: 'ProductView',
         ecommerce: {
           detail: {
             'actionField': { 'list': '' }, // 'detail' actions have an optional list property.
