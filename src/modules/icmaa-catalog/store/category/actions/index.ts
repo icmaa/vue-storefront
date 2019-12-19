@@ -93,8 +93,9 @@ const actions: ActionTree<CategoryState, RootState> = {
       categoryHierarchyIds = whitelistCategoryHierarchyIds
     }
 
-    const categoryFilters = Object.assign({ 'id': categoryHierarchyIds }, cloneDeep(config.entities.category.breadcrumbFilterFields))
-    const categories = await dispatch('loadCategories', { filters: categoryFilters, reloadAll: Object.keys(config.entities.category.breadcrumbFilterFields).length > 0 })
+    const filters = Object.assign({}, { 'id': [...categoryHierarchyIds] }, cloneDeep(config.entities.category.breadcrumbFilterFields))
+    const reloadAll = Object.keys(config.entities.category.breadcrumbFilterFields).length > 0 || categoryHierarchyIds.length > 0
+    const categories = await dispatch('loadCategories', { filters, reloadAll })
     const sorted = []
     for (const id of categoryHierarchyIds) {
       const index = categories.findIndex(cat => cat.id === id)
