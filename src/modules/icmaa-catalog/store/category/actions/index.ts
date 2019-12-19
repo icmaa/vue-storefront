@@ -2,8 +2,7 @@ import { ActionTree } from 'vuex'
 import * as types from '@vue-storefront/core/modules/catalog-next/store/category/mutation-types'
 import RootState from '@vue-storefront/core/types/RootState'
 import CategoryState from '@vue-storefront/core/modules/catalog-next/store/category/CategoryState'
-import { CategoryService } from '@vue-storefront/core/data-resolver'
-import { products } from 'config'
+import { products, entities } from 'config'
 import { quickSearchByQuery } from '@vue-storefront/core/lib/search'
 import { buildFilterProductsQuery, isServer } from '@vue-storefront/core/helpers'
 import { _prepareCategoryPathIds } from '@vue-storefront/core/modules/catalog-next/helpers/categoryHelpers'
@@ -80,10 +79,6 @@ const actions: ActionTree<CategoryState, RootState> = {
   /**
    * Changes:
    * * Add category whitelist support to hide unimportant categories
-   * * Load categories not with default method to prevent overwrites of current categories in state.
-   *
-   * ! There is a bug when using `category-next/loadCategories`. Categories aren't returned if
-   * ! already loaded and filtered by id with more than one filter.
    */
   async loadCategoryBreadcrumbs ({ dispatch, getters }, { category, currentRouteName, omitCurrent = false }) {
     if (!category) {
@@ -98,10 +93,9 @@ const actions: ActionTree<CategoryState, RootState> = {
       categoryHierarchyIds = whitelistCategoryHierarchyIds
     }
 
-    const includeFields = ['id', 'name', 'url_path', 'slug']
-    const filters = Object.assign({ 'id': [...categoryHierarchyIds] }, cloneDeep(config.entities.category.breadcrumbFilterFields))
-    const categories = await CategoryService.getCategories({ filters, includeFields })
-
+    const filters = Object.assign({}, { 'id': [...categoryHierarchyIds] }, cloneDeep(config.entities.category.breadcrumbFilterFields))
+    const reloadAll = Object.keys(config.entities.category.breadcrumbFilterFields).length > 0 || categoryHierarchyIds.length > 0
+    const categories = await dispatch('loadCategories', { filters, reloadAll })
     const sorted = []
     for (const id of categoryHierarchyIds) {
       const index = categories.findIndex(cat => cat.id === id)
