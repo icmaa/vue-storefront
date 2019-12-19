@@ -1,7 +1,7 @@
 <template>
   <div v-if="isVisible">
     <div class="category-header t-relative">
-      <retina-image :image="banner" @error="onBannerError" :alt="category.name" v-if="banner" class="t-w-screen" />
+      <retina-image :image="banner" @error="onBannerError" :key="banner || 'default'" :alt="category.name" v-if="banner" class="t-w-screen" />
       <div class="t-flex t-items-center t-justify-end t-absolute t-bottom-0 t-left-0 t-pb-6 t-px-6 t-w-full">
         <slot />
       </div>
