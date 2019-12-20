@@ -106,15 +106,19 @@ export default {
       this.$bus.$emit('notification-progress-start', i18n.t('Please wait'))
       this.$store.dispatch('cart/applyCoupon', this.couponCode).then(couponApplied => {
         this.$bus.$emit('notification-progress-stop')
+
+        let type = 'success'
+        let message = 'Your coupon has been successfully applied.'
         if (couponApplied) {
           this.couponCode = ''
         } else {
-          this.$store.dispatch('notification/spawnNotification', {
-            type: 'warning',
-            message: i18n.t("You've entered an incorrect coupon code. Please try again."),
-            action1: { label: i18n.t('OK') }
-          })
+          type = 'error'
+          message = 'You\'ve entered an incorrect coupon code. Please try again.'
         }
+
+        this.$store.dispatch('notification/spawnNotification', {
+          type, message, action1: { label: i18n.t('OK') }
+        })
       })
     },
     clearCart () {
