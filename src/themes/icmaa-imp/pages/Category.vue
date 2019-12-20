@@ -12,7 +12,7 @@
             </button-component>
           </div>
         </category-extras-header>
-        <breadcrumbs :routes="breadcrumbs" :active-route="getCurrentCategory.name" class="t-w-full t-my-8" />
+        <breadcrumbs :active-route="getCurrentCategory.name" class="t-w-full t-my-8" />
         <div class="t-w-full">
           <div class="t-flex t-flex-wrap t-items-center t--mx-1 lg:t--mx-2">
             <h1 class="category-title t-hidden lg:t-block t-w-3/4 t-px-1 lg:t-px-2 t-mb-4 t-font-light t-text-2xl t-text-base-dark" v-text="title" />
@@ -98,12 +98,13 @@ import ButtonComponent from 'theme/components/core/blocks/Button'
 import MaterialIcon from 'theme/components/core/blocks/MaterialIcon'
 import LoaderBackground from 'theme/components/core/LoaderBackground'
 
-import CategoryMixin from 'icmaa-catalog/components/Category'
 import CategoryExtrasHeader from 'theme/components/core/blocks/CategoryExtras/Header'
 import CategoryExtrasFooter from 'theme/components/core/blocks/CategoryExtras/Footer'
+import CategoryMixin from 'icmaa-catalog/components/Category'
 import CategoryExtrasMixin from 'icmaa-category-extras/mixins/categoryExtras'
 import CategoryMetaMixin from 'icmaa-meta/mixins/categoryMeta'
 import CategoryGtmMixin from 'icmaa-google-tag-manager/mixins/categoryGtm'
+import ClusterMixin from 'icmaa-user/mixins/cluster'
 
 const FilterSidebar = () => import(/* webpackPreload: true */ /* webpackChunkName: "vsf-sidebar-categoryfilter" */ 'theme/components/core/blocks/Category/Sidebar')
 const ProductListingTicket = () => import(/* webpackPreload: true */ /* webpackChunkName: "vsf-product-listing-ticket" */ 'theme/components/core/ProductListingTicket')
@@ -145,7 +146,7 @@ export default {
     CategoryExtrasHeader,
     CategoryExtrasFooter
   },
-  mixins: [ CategoryMixin, CategoryExtrasMixin, CategoryMetaMixin, CategoryGtmMixin ],
+  mixins: [ CategoryMixin, CategoryExtrasMixin, CategoryMetaMixin, ClusterMixin, CategoryGtmMixin ],
   data () {
     return {
       pageSizes: [24, 48, 60, 100],
@@ -162,7 +163,6 @@ export default {
       isSidebarOpen: state => state.ui.categoryfilter
     }),
     ...mapGetters({
-      breadcrumbs: 'category-next/getBreadcrumbs',
       getCurrentSearchQuery: 'category-next/getCurrentSearchQuery',
       getCategoryProducts: 'category-next/getCategoryProducts',
       getCurrentCategory: 'category-next/getCurrentCategory',

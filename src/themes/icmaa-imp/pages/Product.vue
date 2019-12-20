@@ -165,6 +165,7 @@ import ProductPriceMixin from 'theme/mixins/product/priceMixin'
 import ProductOptionsMixin from 'theme/mixins/product/optionsMixin'
 import ProductAddToCartMixin from 'theme/mixins/product/addtocartMixin'
 import FeaturesMixin from 'theme/mixins/product/featuresMixin'
+import ClusterMixin from 'icmaa-user/mixins/cluster'
 
 const AddToCartSidebar = () => import(/* webpackPreload: true */ /* webpackChunkName: "vsf-addtocart-sidebar" */ 'theme/components/core/blocks/AddToCartSidebar/AddToCartSidebar')
 
@@ -189,7 +190,7 @@ export default {
     WebShare,
     LazyHydrate
   },
-  mixins: [ProductOption, IcmaaProduct, ProductMetaMixin, ProductPriceMixin, ProductOptionsMixin, ProductAddToCartMixin, FeaturesMixin, ProductGtmMixin],
+  mixins: [ProductOption, IcmaaProduct, ProductMetaMixin, ProductPriceMixin, ProductOptionsMixin, ProductAddToCartMixin, FeaturesMixin, ClusterMixin, ProductGtmMixin],
   directives: { focusClean },
   beforeCreate () {
     registerModule(ReviewModule)
