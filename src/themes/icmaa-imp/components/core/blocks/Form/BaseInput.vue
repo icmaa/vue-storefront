@@ -20,6 +20,7 @@
         :ref="name"
         v-mask="maskSettings"
         @input="$emit('input', $event.target.value)"
+        @focus="$emit('focus')"
         @blur="$emit('blur')"
         @keyup.enter="$emit('keyup.enter', $event.target.value)"
         @keyup="$emit('keyup', $event)"

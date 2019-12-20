@@ -12,7 +12,7 @@
       <template v-if="productsInCart.length">
         <div class="coupon-code t-flex t-items-end t-justify-between t-mb-4 t-pb-4 t-border-b t-border-base-lightest">
           <base-input :placeholder="$t('Discount code')" name="couponCode" v-model.trim="couponCode" @keyup.enter="setCoupon" class="t-flex-grow" />
-          <button-component icon="keyboard_arrow_right" :icon-only="true" :disabled="!couponCode" @click="setCoupon" class="t-ml-2" v-if="couponCode.length > 3">
+          <button-component icon="keyboard_arrow_right" :icon-only="true" :disabled="!couponCode" @click="setCoupon" class="t-ml-2" v-if="couponCode.length > 0">
             {{ $t('Add discount code') }}
           </button-component>
         </div>
@@ -69,7 +69,8 @@ export default {
   data () {
     return {
       componentLoaded: false,
-      couponCode: ''
+      couponCode: '',
+      couponCodeButton: false
     }
   },
   props: {
