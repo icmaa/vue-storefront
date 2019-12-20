@@ -8,9 +8,8 @@ import { Logger } from '@vue-storefront/core/lib/logger'
 
 import { icmaaGoogleTagManagerModule } from './store'
 import { afterRegistration, isEnabled } from './hooks/afterRegistration'
-export const KEY = 'icmaa-google-tag-manager'
 
-const initGTM = async ({ appConfig, router }) => {
+const initGTM = async ({ store, router, appConfig }) => {
   const { id, debug } = appConfig.googleTagManager
   const enabled = await isEnabled(id)
   if (enabled) {
@@ -27,17 +26,20 @@ const initGTM = async ({ appConfig, router }) => {
         'content-view-name': name
       })
     })
+
+    store.dispatch('icmaaGoogleTagManager/enable', true)
   } else {
     Logger.log('Google Tag Manager extensions is not enabled', 'icmaa-gtm')()
   }
 }
 
 export const IcmaaGoogleTagManagerModule: StorefrontModule = async ({store, router, appConfig}) => {
-  initGTM({ appConfig, router })
+  store.registerModule('icmaaGoogleTagManager', icmaaGoogleTagManagerModule)
+
+  initGTM({ appConfig, router, store })
   EventBus.$on('cookiesAccepted', () => {
-    initGTM({ appConfig, router })
+    initGTM({ appConfig, router, store })
   })
 
-  store.registerModule(KEY, icmaaGoogleTagManagerModule)
   afterRegistration(appConfig, store)
 }

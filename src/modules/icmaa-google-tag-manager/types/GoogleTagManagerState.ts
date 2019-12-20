@@ -1,3 +1,4 @@
 export default interface GoogleTagManagerState {
-  key?: null|string
+  key?: null|string,
+  enabled: boolean
 }

@@ -1,19 +1,23 @@
 import Vue from 'vue'
 import VueGtm from 'vue-gtm'
 import { currentStoreView } from '@vue-storefront/core/lib/multistore'
-import PageViewGtmMixin from './pageViewGtm'
+import AbstractMixin from './abstractMixin'
 
 export default {
-  mixins: [PageViewGtmMixin],
+  mixins: [AbstractMixin],
   computed: {
 
   },
   methods: {
     categoryGtm () {
-      const GTM: VueGtm = (Vue as any).gtm;
+      if (!this.enabled) {
+        return
+      }
 
-      const storeView = currentStoreView();
-      const currencyCode = storeView.i18n.currencyCode;
+      const GTM: VueGtm = (Vue as any).gtm
+
+      const storeView = currentStoreView()
+      const currencyCode = storeView.i18n.currencyCode
 
       GTM.trackEvent({
         event: 'CategoryView',
@@ -24,11 +28,11 @@ export default {
             products: {}
           }
         }
-      });
-      console.log('hello from gtm-category-mixin!');
+      })
+      console.log('hello from gtm-category-mixin!')
     }
   },
   mounted () {
-    this.categoryGtm();
+    this.categoryGtm()
   }
-};
+}
