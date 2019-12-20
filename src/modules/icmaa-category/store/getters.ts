@@ -29,7 +29,11 @@ const getters: GetterTree<CategoryState, RootState> = {
   },
   getProductListingWidget: (state): ProductListingWidgetState[] => state.productListingWidget,
   getProductListingWidgetByCategoryId: (state, getters, RootState, rootGetters) => (parent: number): ProductListingWidgetState => {
-    const cluster = parseInt(rootGetters['user/getCluster'])
+    let cluster = rootGetters['user/getCluster']
+    if (cluster !== false) {
+      cluster = parseInt(rootGetters['user/getCluster'])
+    }
+
     return state.productListingWidget.find(i => i.parent === parent && i.cluster === cluster)
   }
 }

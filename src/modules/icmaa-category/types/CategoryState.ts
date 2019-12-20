@@ -18,6 +18,6 @@ export interface CategoryStateListItemHydrated {
 
 export interface ProductListingWidgetState {
   parent: number,
-  cluster: number|null,
+  cluster: number|boolean,
   list: Product[]
 }

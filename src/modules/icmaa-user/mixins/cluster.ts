@@ -9,7 +9,6 @@ export default {
   },
   methods: {
     setCluster () {
-      console.log('SETCLUSTERREERER', this.categoryExtras.cluster)
       if (this.categoryExtras && this.categoryExtras.cluster) {
         this.$store.dispatch('user/setCluster', this.categoryExtras.cluster)
       }
