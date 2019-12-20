@@ -37,10 +37,10 @@ const actions: ActionTree<CategoryState, RootState> = {
       return { parent, list: list as Category[] }
     }
   },
-  async loadProductListingWidgetProducts ({ state, commit, dispatch }, params: { categoryId: number, cluster: string, size: number, sort: string|string[] }): Promise<ProductListingWidgetState> {
+  async loadProductListingWidgetProducts ({ state, commit, dispatch }, params: { categoryId: number, cluster: any, size: number, sort: string|string[] }): Promise<ProductListingWidgetState> {
     let { categoryId, cluster, size, sort } = params
 
-    if (state.productListingWidget.find(i => i.parent === categoryId && i.list.length >= size)) {
+    if (state.productListingWidget.find(i => i.parent === categoryId && i.cluster === cluster && i.list.length >= size)) {
       return
     }
 
@@ -51,16 +51,20 @@ const actions: ActionTree<CategoryState, RootState> = {
       .query('terms', 'category_ids', [categoryId])
 
     if (cluster) {
-      query
-        .orQuery('bool', (b) => {
-          return b.notQuery('exists', 'customercluster')
-        })
-        .orQuery('terms', 'customercluster', [parseInt(cluster)])
+      cluster = parseInt(cluster)
+      query.query('bool', (b) => {
+        return b
+          .orQuery('terms', 'customercluster', [cluster])
+          .orQuery('bool', (b) => {
+            return b.notQuery('exists', 'customercluster')
+          })
+      })
+
       sort = [sort as string, 'customercluster:desc']
     }
 
     return dispatch('product/findProducts', { query: query.build(), size, sort }, { root: true }).then(products => {
-      const payload = { parent: categoryId, list: products.items }
+      const payload = { parent: categoryId, list: products.items, cluster }
       commit(types.ICMAA_CATEGORY_LIST_ADD_PRODUCT, payload)
       return payload
     })
