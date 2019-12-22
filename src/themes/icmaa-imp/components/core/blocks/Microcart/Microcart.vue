@@ -88,7 +88,8 @@ export default {
   computed: {
     ...mapGetters({
       productsInCart: 'cart/getCartItems',
-      totals: 'cart/getTotals'
+      totals: 'cart/getTotals',
+      coupon: 'cart/getCoupon'
     }),
     filteredTotals () {
       return this.totals.filter(segment => segment.code !== 'grand_total')
@@ -104,22 +105,24 @@ export default {
     },
     async setCoupon () {
       this.$bus.$emit('notification-progress-start', i18n.t('Please wait'))
-      this.$store.dispatch('cart/applyCoupon', this.couponCode).then(couponApplied => {
-        this.$bus.$emit('notification-progress-stop')
+      this.$store.dispatch('cart/applyCoupon', this.couponCode)
+        .then(async couponApplied => {
+          await this.$store.dispatch('cart/sync', { forceClientState: true })
+          this.$bus.$emit('notification-progress-stop')
 
-        let type = 'success'
-        let message = 'Your coupon has been successfully applied.'
-        if (couponApplied) {
-          this.couponCode = ''
-        } else {
-          type = 'error'
-          message = 'You\'ve entered an incorrect coupon code. Please try again.'
-        }
+          let type = 'success'
+          let message = 'Your coupon has been successfully applied.'
+          if (couponApplied) {
+            this.couponCode = ''
+          } else {
+            type = 'error'
+            message = 'You\'ve entered an incorrect coupon code. Please try again.'
+          }
 
-        this.$store.dispatch('notification/spawnNotification', {
-          type, message, action1: { label: i18n.t('OK') }
+          this.$store.dispatch('notification/spawnNotification', {
+            type, message, action1: { label: i18n.t('OK') }
+          })
         })
-      })
     },
     clearCart () {
       this.$store.dispatch('notification/spawnNotification', {
