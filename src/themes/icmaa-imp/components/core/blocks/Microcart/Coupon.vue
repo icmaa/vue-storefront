@@ -1,7 +1,7 @@
 <template>
   <div class="coupon-code t-flex t-items-end t-justify-between t-mb-4 t-pb-4 t-border-b t-border-base-lightest">
     <template v-if="hasCoupon">
-      <base-input :placeholder="$t('Discount code')" icon="check" icon-position="left" name="couponCode" :value="coupon.code" :disabled="true" class="t-flex-grow" />
+      <base-input :placeholder="$t('Discount code')" icon="receipt" icon-position="left" name="couponCode" :value="coupon.code" :disabled="true" class="t-flex-grow" />
       <button-component icon="close" :icon-only="true" @click="removeCoupon" class="t-ml-2">
         {{ $t('Remove discount code') }}
       </button-component>
