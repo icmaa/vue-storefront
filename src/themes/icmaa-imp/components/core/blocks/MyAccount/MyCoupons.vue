@@ -18,10 +18,6 @@
             {
               condition: $v.coupon.code.$error && !$v.coupon.code.required,
               text: $t('Field is required')
-            },
-            {
-              condition: !$v.coupon.code.coupon && $v.coupon.code.$error,
-              text: $t('Wrong Format. Format must look like X-XXXXX-XXXXX')
             }
           ]"
         />
@@ -50,7 +46,7 @@
       </div>
 
       <div class="t-px-2 t-w-full">
-        <button-component type="primary" class="t-flex-1 lg:t-flex-fix">
+        <button-component type="primary" class="t-flex-1 lg:t-flex-fix" @click="checkCoupon">
           check coupon
         </button-component>
       </div>
@@ -62,11 +58,10 @@
 import { mapGetters } from 'vuex'
 import Headline from 'theme/components/core/blocks/MyAccount/Headline'
 import i18n from '@vue-storefront/i18n'
-import { required, minLength, helpers } from 'vuelidate/lib/validators'
+import { required, minLength } from 'vuelidate/lib/validators'
 import ButtonComponent from 'theme/components/core/blocks/Button'
 import BaseInput from 'theme/components/core/blocks/Form/BaseInput'
-
-const coupon = helpers.regex('coupon', /\w-\w{5}-\w{5}/)
+import CouponService from 'icmaa-coupon/data-resolver/CouponService'
 
 export default {
   name: 'MyCoupons',
@@ -86,13 +81,19 @@ export default {
   validations: {
     coupon: {
       code: {
-        required,
-        coupon
+        required
       },
       pin: {
         required,
         minLength: minLength(4)
       }
+    }
+  },
+  methods: {
+    async checkCoupon () {
+      const resp = await this.CouponService.checkCoupon(this.coupon.code)
+      console.log(resp)
+      return resp
     }
   }
 }
