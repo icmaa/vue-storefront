@@ -45,11 +45,17 @@
         />
       </div>
 
-      <div class="t-px-2 t-w-full">
+      <div class="t-px-2 t-w-full t-mb-4">
         <button-component type="primary" class="t-flex-1 lg:t-flex-fix" @click="checkCoupon">
           check coupon
         </button-component>
       </div>
+      <template v-if="coupon.credit > 0">
+        <div class="t-flex t-w-full t-px-2 t-mb-4">Your credit is {{ coupon.credit }} €</div>
+      </template>
+       <template v-if="coupon.expires.length > 0">
+        <div class="t-flex t-w-full t-px-2 t-mb-4">Expires on: {{ coupon.expires }}</div>
+      </template>
     </div>
   </div>
 </template>
@@ -61,7 +67,6 @@ import i18n from '@vue-storefront/i18n'
 import { required, minLength } from 'vuelidate/lib/validators'
 import ButtonComponent from 'theme/components/core/blocks/Button'
 import BaseInput from 'theme/components/core/blocks/Form/BaseInput'
-import CouponService from 'icmaa-coupon/data-resolver/CouponService'
 
 export default {
   name: 'MyCoupons',
@@ -74,7 +79,9 @@ export default {
     return {
       coupon: {
         code: '',
-        pin: ''
+        pin: '',
+        credit: 0,
+        expires: ''
       }
     }
   },
@@ -91,9 +98,8 @@ export default {
   },
   methods: {
     async checkCoupon () {
-      const resp = await this.CouponService.checkCoupon(this.coupon.code)
-      console.log(resp)
-      return resp
+      this.coupon.credit = 555
+      const credit = await this.$store.dispatch('icmaaCoupon/fetchCouponCredit', { coupon: this.coupon.code, pin: this.coupon.pin })
     }
   }
 }
