@@ -1,0 +1,3 @@
+export const SN_ICMAA_COUPON = 'ICMAA_COUPON'
+export const ICMAA_COUPON_ADD = `${SN_ICMAA_COUPON}/ADD`
+export const ICMAA_COUPON_CLR = `${SN_ICMAA_COUPON}/CLR`
