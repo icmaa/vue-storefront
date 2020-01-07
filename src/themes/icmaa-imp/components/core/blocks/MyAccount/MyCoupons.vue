@@ -46,15 +46,39 @@
       </div>
 
       <div class="t-px-2 t-w-full t-mb-4">
-        <button-component type="primary" class="t-flex-1 lg:t-flex-fix" @click="checkCoupon">
+        <button-component type="primary" class="t-flex-1 lg:t-flex-fix" @click="loadCoupon">
           check coupon
         </button-component>
       </div>
-      <template v-if="coupon.credit > 0">
-        <div class="t-flex t-w-full t-px-2 t-mb-4">Your credit is {{ coupon.credit }} €</div>
+      <template v-if="getCoupon.length > 0">
+        <div class="t-flex t-w-full t-flex-wrap">
+          <div class="t-w-full t-px-2 t-font-bold">
+            Coupon
+          </div>
+          <div class="t-w-full t-px-2 t-mb-4">
+            {{ getCoupon }}
+          </div>
+        </div>
       </template>
-       <template v-if="coupon.expires.length > 0">
-        <div class="t-flex t-w-full t-px-2 t-mb-4">Expires on: {{ coupon.expires }}</div>
+      <template v-if="getBalance > 0">
+        <div class="t-flex t-w-full t-flex-wrap">
+          <div class="t-w-full t-px-2 t-font-bold">
+            Balance
+          </div>
+          <div class="t-w-full t-px-2 t-mb-4">
+            {{ getBalance }}
+          </div>
+        </div>
+      </template>
+      <template v-if="getExpires.length > 0">
+        <div class="t-flex t-w-full t-flex-wrap">
+          <div class="t-w-full t-px-2 t-font-bold">
+            Expires
+          </div>
+          <div class="t-w-full t-px-2 t-mb-4">
+            {{ getExpires }}
+          </div>
+        </div>
       </template>
     </div>
   </div>
@@ -85,6 +109,12 @@ export default {
       }
     }
   },
+  computed: {
+    ...mapGetters({
+      getCoupon: 'icmaaCoupon/getCoupon',
+      getBalance: 'icmaaCoupon/getCouponBalance',
+      getExpires: 'icmaaCoupon/getCouponExpires' })
+  },
   validations: {
     coupon: {
       code: {
@@ -97,9 +127,8 @@ export default {
     }
   },
   methods: {
-    async checkCoupon () {
-      this.coupon.credit = 555
-      const credit = await this.$store.dispatch('icmaaCoupon/fetchCouponCredit', { coupon: this.coupon.code, pin: this.coupon.pin })
+    async loadCoupon () {
+      const credit = await this.$store.dispatch('icmaaCoupon/fetchCoupon', { coupon: this.coupon.code, pin: this.coupon.pin })
     }
   }
 }
