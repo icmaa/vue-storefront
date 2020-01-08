@@ -45,7 +45,7 @@ const actions: ActionTree<CartState, RootState> = {
 
       // Force server sync of totals
       if (!isTotalsSyncRequired && clientItems.length > 0) {
-        await dispatch('syncTotals')
+        dispatch('syncTotals', { forceServerSync: true })
       }
 
       cartHooksExecutors.afterSync(diffLog)
