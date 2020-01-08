@@ -10,7 +10,7 @@
           class=""
           type="text"
           name="code"
-          :label="$t('Coupon') + ' *'"
+          :label="$t('Card number') + ' *'"
           v-model="coupon.number"
           @blur="$v.coupon.number.$touch()"
           :validations="[
@@ -25,7 +25,7 @@
       <div class="t-w-full lg:t-w-1/2 t-px-2 t-mb-4">
         <base-input
           class=""
-          type="number"
+          type="password"
           name="pin"
           mask="####"
           :label="$t('Pin') + ' *'"
@@ -52,33 +52,33 @@
       <template v-if="getCoupon.length > 0">
         <div class="t-flex t-w-full t-flex-wrap">
           <div class="t-w-full t-px-2 t-font-bold">
-            Coupon
+            {{ $t('Card number') }}
           </div>
           <div class="t-w-full t-px-2 t-mb-4">
             {{ getCoupon }}
           </div>
         </div>
       </template>
-      <template v-if="getBalance > 0">
+      <template v-if="getBalance >= 0">
         <div class="t-flex t-w-full t-flex-wrap">
           <div class="t-w-full t-px-2 t-font-bold">
-            Balance
+            {{ $t('Balance') }}
           </div>
           <div class="t-w-full t-px-2 t-mb-4">
             {{ getBalance }} {{ getCurrency }}
           </div>
         </div>
       </template>
-      <!--template v-if="getExpires.length > 0">
+      <template v-if="getExpires !== null && getExpires.length > 0">
         <div class="t-flex t-w-full t-flex-wrap">
           <div class="t-w-full t-px-2 t-font-bold">
-            Expires
+            {{ $t('Expires at') }}
           </div>
           <div class="t-w-full t-px-2 t-mb-4">
             {{ getExpires }}
           </div>
         </div>
-      </template-->
+      </template>
     </div>
   </div>
 </template>
@@ -102,9 +102,7 @@ export default {
     return {
       coupon: {
         number: '',
-        pin: '',
-        credit: 0,
-        expires: ''
+        pin: ''
       }
     }
   },
@@ -112,8 +110,8 @@ export default {
     ...mapGetters({
       getCoupon: 'icmaaCoupon/getCoupon',
       getBalance: 'icmaaCoupon/getCouponBalance',
-      getExpires: 'icmaaCoupon/getCouponExpires',
-      getCurrency: 'icmaaCoupon/getCouponCurrency'
+      getCurrency: 'icmaaCoupon/getCouponCurrency',
+      getExpires: 'icmaaCoupon/getCouponExpires'
     })
   },
   validations: {

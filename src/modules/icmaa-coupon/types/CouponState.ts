@@ -1,8 +1,7 @@
 export default interface Coupon {
   number: string,
-  pin: string,
-  expires: string,
   balance: number,
+  expires: string,
   currency: string
 }
 

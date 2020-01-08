@@ -9,9 +9,8 @@ export const CouponStore: Module<CouponState, RootState> = {
   namespaced: true,
   state: {
     number: '',
-    pin: '',
     expires: '',
-    balance: 0,
+    balance: -1,
     currency: ''
   },
   getters,

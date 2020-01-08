@@ -15,7 +15,7 @@ const actions: ActionTree<CouponState, RootState> = {
 
     commit(
       types.ICMAA_COUPON_ADD,
-      { number: result.cert_number, pin: result.pin, balance: result.balance, expires: result.expire_at, currency: result.currency_code }
+      { number: result.cert_number, balance: result.balance, expires: result.expire_at, currency: result.currency_code }
     )
     return true
   }
