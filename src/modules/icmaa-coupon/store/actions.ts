@@ -18,6 +18,9 @@ const actions: ActionTree<CouponState, RootState> = {
       { number: result.cert_number, balance: result.balance, expires: result.expire_at, currency: result.currency_code }
     )
     return true
+  },
+  clearCoupon ({ commit }): void {
+    commit(types.ICMAA_COUPON_CLR)
   }
 }
 
