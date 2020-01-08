@@ -6,16 +6,16 @@ import CouponState from '../types/CouponState'
 import * as types from './mutation-types'
 
 const actions: ActionTree<CouponState, RootState> = {
-  async fetchCoupon ({ commit }, { code = '', pin = '' } = {}): Promise<CouponState|boolean> {
-    const coupon = await CouponService.loadCoupon(code, pin)
-
+  async fetchCoupon ({ commit }, { number = '', pin = '' } = {}): Promise<boolean> {
     commit(
       types.ICMAA_COUPON_CLR
     )
 
+    const result = await CouponService.loadCoupon(number, pin)
+
     commit(
       types.ICMAA_COUPON_ADD,
-      {coupon: coupon.coupon, pin: coupon.pin, balance: coupon.balance, expires: coupon.expires}
+      { number: result.cert_number, pin: result.pin, balance: result.balance, expires: result.expire_at, currency: result.currency_code }
     )
     return true
   }

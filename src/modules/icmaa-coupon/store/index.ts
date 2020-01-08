@@ -8,10 +8,11 @@ import mutations from './mutations'
 export const CouponStore: Module<CouponState, RootState> = {
   namespaced: true,
   state: {
-    coupon: '',
+    number: '',
     pin: '',
     expires: '',
-    balance: 0
+    balance: 0,
+    currency: ''
   },
   getters,
   actions,

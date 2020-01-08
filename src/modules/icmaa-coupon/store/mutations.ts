@@ -4,16 +4,18 @@ import * as types from './mutation-types'
 
 const mutations: MutationTree<CouponState> = {
   [types.ICMAA_COUPON_ADD] (state, payload) {
-    state.coupon = (payload.coupon)
+    state.number = (payload.number)
     state.pin = (payload.pin)
     state.expires = (payload.expires)
     state.balance = (payload.balance)
+    state.currency = (payload.currency)
   },
   [types.ICMAA_COUPON_CLR] (state) {
-    state.coupon = ''
+    state.number = ''
     state.pin = ''
-    state.balance = 0
     state.expires = ''
+    state.balance = 0
+    state.currency = ''
   }
 }
 
