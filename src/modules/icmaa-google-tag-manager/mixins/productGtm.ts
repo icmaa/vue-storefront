@@ -7,7 +7,6 @@ import AbstractMixin from './abstractMixin'
 export default {
   mixins: [AbstractMixin],
   computed: {
-
   },
   methods: {
     productGtm () {
@@ -47,11 +46,11 @@ export default {
 
       GTM.trackEvent({
         event: 'ProductView',
-        testcategoryvalue: currencyCode,
         ecommerce: {
+          currencyCode: currencyCode,
           detail: {
             actionField: { list: '' }, // 'detail' actions have an optional list property.
-            products: [getProduct]
+            products: [getProduct(this.product)]
           }
         }
       })
