@@ -11,12 +11,11 @@
           type="text"
           name="code"
           :label="$t('Coupon') + ' *'"
-          v-model="coupon.code"
-          mask="X-XXXXX-XXXXX"
-          @blur="$v.coupon.code.$touch()"
+          v-model="coupon.number"
+          @blur="$v.coupon.number.$touch()"
           :validations="[
             {
-              condition: $v.coupon.code.$error && !$v.coupon.code.required,
+              condition: $v.coupon.number.$error && !$v.coupon.number.required,
               text: $t('Field is required')
             }
           ]"
@@ -66,11 +65,11 @@
             Balance
           </div>
           <div class="t-w-full t-px-2 t-mb-4">
-            {{ getBalance }}
+            {{ getBalance }} {{ getCurrency }}
           </div>
         </div>
       </template>
-      <template v-if="getExpires.length > 0">
+      <!--template v-if="getExpires.length > 0">
         <div class="t-flex t-w-full t-flex-wrap">
           <div class="t-w-full t-px-2 t-font-bold">
             Expires
@@ -79,7 +78,7 @@
             {{ getExpires }}
           </div>
         </div>
-      </template>
+      </template-->
     </div>
   </div>
 </template>
@@ -102,7 +101,7 @@ export default {
   data () {
     return {
       coupon: {
-        code: '',
+        number: '',
         pin: '',
         credit: 0,
         expires: ''
@@ -113,11 +112,13 @@ export default {
     ...mapGetters({
       getCoupon: 'icmaaCoupon/getCoupon',
       getBalance: 'icmaaCoupon/getCouponBalance',
-      getExpires: 'icmaaCoupon/getCouponExpires' })
+      getExpires: 'icmaaCoupon/getCouponExpires',
+      getCurrency: 'icmaaCoupon/getCouponCurrency'
+    })
   },
   validations: {
     coupon: {
-      code: {
+      number: {
         required
       },
       pin: {
@@ -128,7 +129,7 @@ export default {
   },
   methods: {
     async loadCoupon () {
-      const credit = await this.$store.dispatch('icmaaCoupon/fetchCoupon', { coupon: this.coupon.code, pin: this.coupon.pin })
+      await this.$store.dispatch('icmaaCoupon/fetchCoupon', { number: this.coupon.number, pin: this.coupon.pin })
     }
   }
 }
