@@ -10,7 +10,7 @@ const actions: ActionTree<CartState, RootState> = {
     if (getters.canSyncTotals) {
       const { result } = await CartService.removeCoupon()
       if (result) {
-        await dispatch('afterCoupon')
+        await dispatch('couponCallback')
         return result
       }
     }
@@ -19,7 +19,7 @@ const actions: ActionTree<CartState, RootState> = {
     if (couponCode && getters.canSyncTotals) {
       const { result } = await CartService.applyCoupon(couponCode)
       if (result) {
-        await dispatch('afterCoupon')
+        await dispatch('couponCallback')
       }
       return result
     }
@@ -30,7 +30,7 @@ const actions: ActionTree<CartState, RootState> = {
    * of `syncTotals` but this isn't returned so we can't use it without extending the core excessivly.
    * @param param
    */
-  async afterCoupon ({ getters, dispatch, commit }) {
+  async couponCallback ({ getters, dispatch, commit }) {
     const { getCartItems, isTotalsSyncRequired } = getters
     const { result, resultCode } = await CartService.getItems()
     const { serverItems, clientItems } = cartHooksExecutors.beforeSync({ clientItems: getCartItems, serverItems: result })
