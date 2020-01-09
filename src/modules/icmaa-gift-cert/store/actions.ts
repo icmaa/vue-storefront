@@ -7,12 +7,9 @@ import * as types from './mutation-types'
 
 const actions: ActionTree<GiftCertState, RootState> = {
   async fetchGiftCert ({ commit }, { number = '', pin = '' } = {}): Promise<boolean> {
-    commit(
-      types.ICMAA_GIFTCERT_CLR
-    )
+    commit(types.ICMAA_GIFTCERT_CLR)
 
     const result = await GiftCertService.loadGiftCert(number)
-
     commit(
       types.ICMAA_GIFTCERT_ADD,
       { number: result.cert_number, balance: result.balance, expires: result.expire_at, currency: result.currency_code }

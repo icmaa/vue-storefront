@@ -23,17 +23,17 @@
       </div>
 
       <div class="t-px-2 t-w-full t-mb-4">
-        <button-component type="primary" class="t-flex-1 lg:t-flex-fix" @click="loadGiftCert">
+        <button-component type="primary" class="t-flex-1 lg:t-flex-fix" @click="fetchGiftCert">
           {{ $t('Check balance') }}
         </button-component>
       </div>
-      <template v-if="getCoupon.length > 0">
+      <template v-if="getNumber.length > 0">
         <div class="t-flex t-w-full t-flex-wrap">
           <div class="t-w-full t-px-2 t-font-bold">
             {{ $t('Card number') }}
           </div>
           <div class="t-w-full t-px-2 t-mb-4">
-            {{ getCoupon }}
+            {{ getNumber }}
           </div>
         </div>
       </template>
@@ -65,7 +65,7 @@
 import { mapGetters } from 'vuex'
 import Headline from 'theme/components/core/blocks/MyAccount/Headline'
 import i18n from '@vue-storefront/i18n'
-import { required, minLength } from 'vuelidate/lib/validators'
+import { required } from 'vuelidate/lib/validators'
 import ButtonComponent from 'theme/components/core/blocks/Button'
 import BaseInput from 'theme/components/core/blocks/Form/BaseInput'
 
@@ -85,10 +85,10 @@ export default {
   },
   computed: {
     ...mapGetters({
-      getCoupon: 'icmaaGiftCert/getCoupon',
-      getBalance: 'icmaaGiftCert/getCouponBalance',
-      getCurrency: 'icmaaGiftCert/getCouponCurrency',
-      getExpires: 'icmaaGiftCert/getCouponExpires'
+      getNumber: 'icmaaGiftCert/getGiftCertNumber',
+      getBalance: 'icmaaGiftCert/getGiftCertBalance',
+      getCurrency: 'icmaaGiftCert/getGiftCertCurrency',
+      getExpires: 'icmaaGiftCert/getGiftCertExpires'
     })
   },
   validations: {
@@ -99,7 +99,7 @@ export default {
     }
   },
   methods: {
-    async loadGiftCert () {
+    async fetchGiftCert () {
       await this.$store.dispatch('icmaaGiftCert/fetchGiftCert', { number: this.giftCert.number })
     }
   }
