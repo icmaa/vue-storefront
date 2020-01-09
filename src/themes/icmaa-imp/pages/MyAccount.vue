@@ -24,7 +24,7 @@ import Navigation from '../components/core/blocks/MyAccount/Navigation'
 import MyProfile from '../components/core/blocks/MyAccount/MyProfile'
 import MyAddresses from '../components/core/blocks/MyAccount/MyAddresses'
 import MyNewsletter from '../components/core/blocks/MyAccount/MyNewsletter'
-import MyCoupons from '../components/core/blocks/MyAccount/MyGiftCert'
+import MyGiftCert from '../components/core/blocks/MyAccount/MyGiftCert'
 import MyOrders from '../components/core/blocks/MyAccount/MyOrders'
 import MyOrder from '../components/core/blocks/MyAccount/MyOrder'
 import MyProductAlerts from '../components/core/blocks/MyAccount/MyProductAlerts'
@@ -45,7 +45,7 @@ export default {
     MyProfile,
     MyAddresses,
     MyNewsletter,
-    MyCoupons,
+    MyGiftCert,
     MyOrders,
     MyOrder,
     MyProductAlerts,
@@ -76,7 +76,7 @@ export default {
         'MyOrders': 'My orders',
         'MyAddresses': 'My addresses',
         'MyNewsletter': 'My newsletter',
-        'MyCoupons': 'My coupons',
+        'MyGiftCert': 'My coupons',
         'MyProductAlerts': 'My product-alerts',
         'MyOrderReview': 'Order-Review'
       }
