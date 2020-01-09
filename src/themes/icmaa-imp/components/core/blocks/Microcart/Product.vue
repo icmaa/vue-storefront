@@ -24,27 +24,21 @@
       </div>
 
       <div class="t-flex-grow">
-        <template v-if="isTotalsActive">
-          <div class="t-flex t-w-full t-flex-wrap" v-for="opt in product.totals.options" :key="opt.label">
-            <button-component class="t-mr-2" type="tag" size="xs" :cursor-pointer="false">
-              {{ opt.value }}
-            </button-component>
+        <div class="t-flex t-w-full t-flex-wrap t-items-center t-mb-4" v-if="totals.length > 0 || isFree">
+          <button-component class="t-mr-2" type="tag" size="xs" :cursor-pointer="false" v-for="opt in totals" :key="opt.label">
+            {{ opt.value }}
+          </button-component>
+          <div class="t-text-xs t-text-sale t-font-bold t-uppercase" v-if="isFree">
+            {{ $t('Free') }}
           </div>
-        </template>
-        <template v-else-if="product.options">
-          <div class="t-flex t-w-full t-flex-wrap" v-for="opt in product.options" :key="opt.label">
-            <button-component class="t-mr-2" type="tag" size="xs" :cursor-pointer="false">
-              {{ opt.value }}
-            </button-component>
-          </div>
-        </template>
+        </div>
 
         <div class="t-text-sm" v-if="hasProductErrors">
           {{ product.errors | formatProductMessages }}
         </div>
       </div>
 
-      <div class="t-flex t-items-center t-flex-wrap t-justify-end t-text-base-light">
+      <div class="t-flex t-items-center t-flex-wrap t-justify-end t-text-base-light" v-if="!isFree">
         <button-component type="transparent" :size="'sm'" :icon="'remove_shopping_cart'" :icon-only="true" @click="removeItem" />
       </div>
     </div>
@@ -98,6 +92,18 @@ export default {
     },
     productQty () {
       return this.product.qty
+    },
+    totals () {
+      if (this.isTotalsActive) {
+        return this.product.totals.options
+      } else if (this.product.options) {
+        return this.product.options
+      }
+      return []
+    },
+    isFree () {
+      /** @todo Find a way to identify a free product */
+      return false
     }
   },
   methods: {
