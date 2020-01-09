@@ -11,42 +11,20 @@
           type="text"
           name="code"
           :label="$t('Card number') + ' *'"
-          v-model="coupon.number"
-          @blur="$v.coupon.number.$touch()"
+          v-model="giftCert.number"
+          @blur="$v.giftCert.number.$touch()"
           :validations="[
             {
-              condition: $v.coupon.number.$error && !$v.coupon.number.required,
+              condition: $v.giftCert.number.$error && !$v.giftCert.number.required,
               text: $t('Field is required')
-            }
-          ]"
-        />
-      </div>
-
-      <div class="t-w-full lg:t-w-1/2 t-px-2 t-mb-4">
-        <base-input
-          class=""
-          type="password"
-          name="pin"
-          mask="####"
-          :label="$t('Pin') + ' *'"
-          v-model="coupon.pin"
-          @blur="$v.coupon.pin.$touch()"
-          :validations="[
-            {
-              condition: $v.coupon.pin.$error && !$v.coupon.pin.required,
-              text: $t('Field is required')
-            },
-            {
-              condition: !$v.coupon.pin.minlength && $v.coupon.pin.$error,
-              text: $t('Pin must have 4 digits.')
             }
           ]"
         />
       </div>
 
       <div class="t-px-2 t-w-full t-mb-4">
-        <button-component type="primary" class="t-flex-1 lg:t-flex-fix" @click="loadCoupon">
-          check coupon
+        <button-component type="primary" class="t-flex-1 lg:t-flex-fix" @click="loadGiftCert">
+          {{ $t('Check balance') }}
         </button-component>
       </div>
       <template v-if="getCoupon.length > 0">
@@ -92,7 +70,7 @@ import ButtonComponent from 'theme/components/core/blocks/Button'
 import BaseInput from 'theme/components/core/blocks/Form/BaseInput'
 
 export default {
-  name: 'MyCoupons',
+  name: 'MyGiftCert',
   components: {
     ButtonComponent,
     BaseInput,
@@ -100,34 +78,29 @@ export default {
   },
   data () {
     return {
-      coupon: {
-        number: '',
-        pin: ''
+      giftCert: {
+        number: ''
       }
     }
   },
   computed: {
     ...mapGetters({
-      getCoupon: 'icmaaCoupon/getCoupon',
-      getBalance: 'icmaaCoupon/getCouponBalance',
-      getCurrency: 'icmaaCoupon/getCouponCurrency',
-      getExpires: 'icmaaCoupon/getCouponExpires'
+      getCoupon: 'icmaaGiftCert/getCoupon',
+      getBalance: 'icmaaGiftCert/getCouponBalance',
+      getCurrency: 'icmaaGiftCert/getCouponCurrency',
+      getExpires: 'icmaaGiftCert/getCouponExpires'
     })
   },
   validations: {
-    coupon: {
+    giftCert: {
       number: {
         required
-      },
-      pin: {
-        required,
-        minLength: minLength(4)
       }
     }
   },
   methods: {
-    async loadCoupon () {
-      await this.$store.dispatch('icmaaCoupon/fetchCoupon', { number: this.coupon.number, pin: this.coupon.pin })
+    async loadGiftCert () {
+      await this.$store.dispatch('icmaaGiftCert/fetchGiftCert', { number: this.giftCert.number })
     }
   }
 }

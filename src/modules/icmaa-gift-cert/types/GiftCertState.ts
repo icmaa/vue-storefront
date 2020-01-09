@@ -1,11 +1,11 @@
-export default interface Coupon {
+export default interface GiftCert {
   number: string,
   balance: number,
   expires: string,
   currency: string
 }
 
-export interface CouponResult {
+export interface GiftCertResult {
   cert_id: number,
   cert_number: string,
   balance: number,

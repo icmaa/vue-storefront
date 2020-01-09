@@ -1,19 +1,19 @@
 import config from 'config';
 import { processURLAddress } from '@vue-storefront/core/helpers';
 import { TaskQueue } from '@vue-storefront/core/lib/sync';
-import { CouponResult } from '../types/CouponState'
+import { GiftCertResult } from '../types/GiftCertState'
 
-const loadCoupon = (number: string, pin: string): Promise<CouponResult> =>
+const loadGiftCert = (number: string): Promise<GiftCertResult> =>
   TaskQueue.execute({
-    url: processURLAddress(config.icmaa_coupon.endpoint) + '/index?token={{token}}',
+    url: processURLAddress(config.icmaa_giftcert.endpoint) + '/index?token={{token}}',
     payload: {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       mode: 'cors',
-      body: JSON.stringify({ number: number, pin: pin })
+      body: JSON.stringify({ number: number })
     }
   }).then(resp => resp.result);
 
 export default {
-  loadCoupon
+  loadGiftCert
 };
