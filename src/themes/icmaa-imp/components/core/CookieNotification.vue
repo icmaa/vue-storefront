@@ -59,7 +59,7 @@ export default {
     },
     async setVisited () {
       await this.$store.dispatch('claims/set', {claimCode: 'cookiesAccepted', value: true})
-      EventBus.$once('cookiesAccepted', true)
+      this.$bus.$emit('cookiesAccepted', true)
     }
   },
   created () {

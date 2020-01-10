@@ -37,8 +37,11 @@ export const IcmaaGoogleTagManagerModule: StorefrontModule = async ({store, rout
   store.registerModule('icmaaGoogleTagManager', icmaaGoogleTagManagerModule)
 
   initGTM({ appConfig, router, store })
-  EventBus.$on('cookiesAccepted', () => {
-    initGTM({ appConfig, router, store })
+  EventBus.$on('cookiesAccepted', async (enabled: boolean) => {
+    if (enabled) {
+      Logger.log('Google Tag Manager extensions has been enabled', 'icmaa-gtm')()
+      await initGTM({ appConfig, router, store })
+    }
   })
 
   afterRegistration(appConfig, store)
