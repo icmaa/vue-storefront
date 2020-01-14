@@ -8,6 +8,12 @@
 import Page from 'icmaa-cms/components/Page'
 
 export default {
-  mixins: [ Page ]
+  mixins: [ Page ],
+  props: {
+    dataType: {
+      type: String,
+      default: 'html'
+    }
+  }
 }
 </script>

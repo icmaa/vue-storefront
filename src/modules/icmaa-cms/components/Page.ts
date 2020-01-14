@@ -9,12 +9,6 @@ import CmsMetaMixin from 'icmaa-meta/mixins/cmsMeta'
 export default {
   name: 'IcmaaCmsPage',
   mixins: [ CmsMetaMixin ],
-  props: {
-    dataType: {
-      type: String,
-      default: 'html'
-    }
-  },
   computed: {
     ...mapGetters('icmaaCmsPage', ['getPageByIdentifier']),
     identifier (): string {
