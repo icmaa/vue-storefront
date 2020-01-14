@@ -20,6 +20,9 @@ export default {
     pageData (): string {
       return this.page.content
     },
+    richText (): string {
+      return this.page.rte
+    },
     content (): any|string {
       switch (this.dataType) {
         case 'yaml':

@@ -1,8 +1,5 @@
 <template>
-  <div id="cms-page" class="t-container t-p-4" v-if="page">
-    <h1 v-html="content.headline" />
-    <p v-html="content.text" />
-  </div>
+  <div id="cms-page" class="t-container t-p-4" v-if="page && richText" v-html="richText" />
 </template>
 
 <script>

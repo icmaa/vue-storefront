@@ -5,17 +5,19 @@ const NAME_PREFIX = 'icmaa-cms-custom'
 
 // Route components
 const DefaultComponent = () => import(/* webpackChunkName: "vsf-icmaa-cms-page" */ 'icmaa-cms/pages/Page.vue')
+const DefaultRTEComponent = () => import(/* webpackChunkName: "vsf-icmaa-cms-page-rte" */ 'icmaa-cms/pages/PageRTE.vue')
 
-// Default/fallback route
-routes.unshift({
-  name: 'icmaa-cms-page', path: '/icmaa-cms-page/:identifier', component: DefaultComponent
-})
+// Default/fallback routes
+routes.unshift(
+  { name: 'icmaa-cms-page-rte', path: '/icmaa-cms-page-rte/:identifier', component: DefaultRTEComponent },
+  { name: 'icmaa-cms-page', path: '/icmaa-cms-page/:identifier', component: DefaultComponent }
+)
 
 export const prefixedName = (name: string): string => NAME_PREFIX + '-' + name
 
 export const icmaaCmsRoutes = routes.map((route, index) => {
-  if (index === 0) {
-    // Skip first route with default/fallback route
+  if (index <= 1) {
+    // Skip first two routes with default/fallback routes
     return route
   }
 
