@@ -1,11 +1,11 @@
-export default interface GiftCert {
+export default interface Giftcert {
   number: string,
   balance: number,
   expires: string,
   currency: string
 }
 
-export interface GiftCertResult {
+export interface GiftcertResult {
   cert_id: number,
   cert_number: string,
   balance: number,

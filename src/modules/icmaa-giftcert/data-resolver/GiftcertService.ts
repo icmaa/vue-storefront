@@ -1,9 +1,9 @@
-import config from 'config';
-import { processURLAddress } from '@vue-storefront/core/helpers';
-import { TaskQueue } from '@vue-storefront/core/lib/sync';
-import { GiftCertResult } from '../types/GiftCertState'
+import config from 'config'
+import { processURLAddress } from '@vue-storefront/core/helpers'
+import { TaskQueue } from '@vue-storefront/core/lib/sync'
+import { GiftcertResult } from '../types/GiftcertState'
 
-const loadGiftCert = (number: string): Promise<GiftCertResult> =>
+const loadGiftcert = (number: string): Promise<GiftcertResult> =>
   TaskQueue.execute({
     url: processURLAddress(config.icmaa_giftcert.endpoint) + '/index?token={{token}}',
     payload: {
@@ -15,5 +15,5 @@ const loadGiftCert = (number: string): Promise<GiftCertResult> =>
   }).then(resp => resp.result);
 
 export default {
-  loadGiftCert
+  loadGiftcert
 };

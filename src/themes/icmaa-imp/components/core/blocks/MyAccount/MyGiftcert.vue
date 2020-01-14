@@ -23,7 +23,7 @@
       </div>
 
       <div class="t-px-2 t-w-full t-mb-4">
-        <button-component type="primary" class="t-flex-1 lg:t-flex-fix" @click="fetchGiftCert">
+        <button-component type="primary" class="t-flex-1 lg:t-flex-fix" @click="fetchGiftcert">
           {{ $t('Check balance') }}
         </button-component>
       </div>
@@ -70,7 +70,7 @@ import ButtonComponent from 'theme/components/core/blocks/Button'
 import BaseInput from 'theme/components/core/blocks/Form/BaseInput'
 
 export default {
-  name: 'MyGiftCert',
+  name: 'MyGiftcert',
   components: {
     ButtonComponent,
     BaseInput,
@@ -85,10 +85,10 @@ export default {
   },
   computed: {
     ...mapGetters({
-      getNumber: 'icmaaGiftCert/getGiftCertNumber',
-      getBalance: 'icmaaGiftCert/getGiftCertBalance',
-      getCurrency: 'icmaaGiftCert/getGiftCertCurrency',
-      getExpires: 'icmaaGiftCert/getGiftCertExpires'
+      getNumber: 'icmaaGiftcert/getGiftcertNumber',
+      getBalance: 'icmaaGiftcert/getGiftcertBalance',
+      getCurrency: 'icmaaGiftcert/getGiftcertCurrency',
+      getExpires: 'icmaaGiftcert/getGiftcertExpires'
     })
   },
   validations: {
@@ -99,8 +99,8 @@ export default {
     }
   },
   methods: {
-    async fetchGiftCert () {
-      await this.$store.dispatch('icmaaGiftCert/fetchGiftCert', { number: this.giftCert.number })
+    async fetchGiftcert () {
+      await this.$store.dispatch('icmaaGiftcert/fetchGiftcert', { number: this.giftCert.number })
     }
   }
 }

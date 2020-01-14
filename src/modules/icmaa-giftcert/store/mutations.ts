@@ -1,8 +1,8 @@
 import { MutationTree } from 'vuex'
-import GiftCertState from '../types/GiftCertState'
+import GiftcertState from '../types/GiftcertState'
 import * as types from './mutation-types'
 
-const mutations: MutationTree<GiftCertState> = {
+const mutations: MutationTree<GiftcertState> = {
   [types.ICMAA_GIFTCERT_ADD] (state, payload) {
     state.number = (payload.number)
     state.expires = (payload.expires)

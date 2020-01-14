@@ -33,7 +33,7 @@ import { IcmaaRecommendationsModule } from 'icmaa-recommendations'
 import { IcmaaCompetitionsModule } from 'icmaa-competitions'
 import { IcmaaSpotifyModule } from 'icmaa-spotify'
 import { IcmaaProductAlertModule } from 'icmaa-product-alert'
-import { IcmaaGiftCertModule } from 'icmaa-gift-cert'
+import { IcmaaGiftcertModule } from 'icmaa-giftcert'
 import { IcmaaTrackingModule } from 'icmaa-tracking'
 import { IcmaaExternalCheckoutModule } from 'icmaa-external-checkout'
 import { IcmaaAmpRendererModule } from './icmaa-amp-renderer'
@@ -79,7 +79,7 @@ export function registerClientModules () {
   registerModule(IcmaaTrackingModule)
   registerModule(IcmaaExternalCheckoutModule)
   registerModule(IcmaaAmpRendererModule)
-  registerModule(IcmaaGiftCertModule)
+  registerModule(IcmaaGiftcertModule)
 }
 
 // Deprecated API, will be removed in 2.0

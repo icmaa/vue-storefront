@@ -1,11 +1,11 @@
 import { Module } from 'vuex'
 import RootState from '@vue-storefront/core/types/RootState'
-import GiftCertState from '../types/GiftCertState'
+import GiftcertState from '../types/GiftcertState'
 import actions from './actions'
 import getters from './getters'
 import mutations from './mutations'
 
-export const GiftCertStore: Module<GiftCertState, RootState> = {
+export const GiftcertStore: Module<GiftcertState, RootState> = {
   namespaced: true,
   state: {
     number: '',
