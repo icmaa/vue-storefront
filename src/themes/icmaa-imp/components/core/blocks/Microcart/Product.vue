@@ -47,7 +47,7 @@
 
 <script>
 import config from 'config'
-import { mapActions } from 'vuex'
+import { mapGetters } from 'vuex'
 import { currentStoreView } from '@vue-storefront/core/lib/multistore'
 import { formatProductLink } from '@vue-storefront/core/modules/url/helpers'
 import Product from '@vue-storefront/core/compatibility/components/blocks/Microcart/Product'
@@ -69,6 +69,7 @@ export default {
   },
   mixins: [Product, ProductOption],
   computed: {
+    ...mapGetters({ freeCartItems: 'cart/getFreeCartItems' }),
     hasProductInfo () {
       return this.product.info && Object.keys(this.product.info).length > 0
     },
@@ -102,8 +103,7 @@ export default {
       return []
     },
     isFree () {
-      /** @todo Find a way to identify a free product */
-      return false
+      return this.freeCartItems.includes(this.product.sku)
     }
   },
   methods: {

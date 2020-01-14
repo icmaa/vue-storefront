@@ -3,7 +3,7 @@ import RootState from '@vue-storefront/core/types/RootState'
 import CartState from '@vue-storefront/core/modules/cart/types/CartState'
 import { CartService } from '@vue-storefront/core/data-resolver'
 import { cartHooksExecutors } from '@vue-storefront/core/modules/cart/hooks'
-import * as types from '@vue-storefront/core/modules/cart/store/mutation-types'
+import * as types from '../store/mutation-types'
 
 const actions: ActionTree<CartState, RootState> = {
   async removeCoupon ({ getters, dispatch }) {
@@ -36,6 +36,8 @@ const actions: ActionTree<CartState, RootState> = {
     const { serverItems, clientItems } = cartHooksExecutors.beforeSync({ clientItems: getCartItems, serverItems: result })
 
     if (resultCode === 200) {
+      dispatch('updateFreeCartItems', result)
+
       const diffLog = await dispatch('merge', {
         dryRun: false,
         serverItems,
@@ -43,7 +45,7 @@ const actions: ActionTree<CartState, RootState> = {
         forceClientState: false
       })
 
-      // Force server sync of totals
+      // Force server sync of totals if not already done after `merge`
       if (!isTotalsSyncRequired && clientItems.length > 0) {
         dispatch('syncTotals', { forceServerSync: true })
       }
@@ -52,6 +54,17 @@ const actions: ActionTree<CartState, RootState> = {
 
       return diffLog
     }
+  },
+  updateFreeCartItems ({ commit, getters }, result): number[] {
+    commit(types.CART_DEL_FREE_ITEM)
+    result.forEach(cartItem => {
+      const { fooman_auto_added_qty, sku } = cartItem
+      if (fooman_auto_added_qty && fooman_auto_added_qty > 0) {
+        commit(types.CART_ADD_FREE_ITEM, sku)
+      }
+    })
+
+    return getters.getFreeCartItems
   }
 }
 

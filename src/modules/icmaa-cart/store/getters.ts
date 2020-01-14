@@ -1,6 +1,6 @@
 import { GetterTree } from 'vuex'
 import RootState from '@vue-storefront/core/types/RootState'
-import CartState from '@vue-storefront/core/modules/cart/types/CartState'
+import CartState from '../types/CartState'
 import AppliedCoupon from '@vue-storefront/core/modules/cart/types/AppliedCoupon'
 
 const getters: GetterTree<CartState, RootState> = {
@@ -17,7 +17,8 @@ const getters: GetterTree<CartState, RootState> = {
     if (giftcert) {
       return { code: giftcert.giftcert_code, discount: giftcert.base_balances * -1 }
     }
-  }
+  },
+  getFreeCartItems: (state): string[] => state.freeCartItems
 }
 
 export default getters
