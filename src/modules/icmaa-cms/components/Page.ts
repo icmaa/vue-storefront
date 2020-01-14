@@ -20,9 +20,6 @@ export default {
     pageData (): string {
       return this.page.content
     },
-    richText (): string {
-      return this.page.rte
-    },
     content (): any|string {
       switch (this.dataType) {
         case 'yaml':
@@ -30,7 +27,7 @@ export default {
         case 'json':
           return JSON.parse(this.pageData)
         case 'markdown':
-          return this.richText
+          return this.page.rte
         default:
           return stringToComponent(this.pageData)
       }
