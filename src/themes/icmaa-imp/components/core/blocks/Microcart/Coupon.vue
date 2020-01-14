@@ -62,6 +62,8 @@ export default {
             message = 'You\'ve entered an incorrect coupon code. Please try again.'
           }
 
+          message = i18n.t(message)
+
           this.$store.dispatch('notification/spawnNotification', {
             type, message, action1: { label: i18n.t('OK') }
           })
@@ -81,6 +83,8 @@ export default {
             type = 'error'
             message = 'There was an error while removing your coupon code. Please try again.'
           }
+
+          message = i18n.t(message)
 
           this.$store.dispatch('notification/spawnNotification', {
             type, message, action1: { label: i18n.t('OK') }
