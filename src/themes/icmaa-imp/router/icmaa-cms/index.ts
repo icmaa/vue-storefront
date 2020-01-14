@@ -5,12 +5,11 @@ const NAME_PREFIX = 'icmaa-cms-custom'
 
 // Route components
 const DefaultComponent = () => import(/* webpackChunkName: "vsf-icmaa-cms-page" */ 'icmaa-cms/pages/Page.vue')
-const DefaultRTEComponent = () => import(/* webpackChunkName: "vsf-icmaa-cms-page-rte" */ 'icmaa-cms/pages/PageRTE.vue')
 
 // Default/fallback routes
 routes.unshift(
-  { name: 'icmaa-cms-page-rte', path: '/icmaa-cms-page-rte/:identifier', component: DefaultRTEComponent },
-  { name: 'icmaa-cms-page', path: '/icmaa-cms-page/:identifier', component: DefaultComponent }
+  { name: 'icmaa-cms-page-rte', path: '/icmaa-cms-page-rte/:identifier', component: DefaultComponent, props: { dataType: 'markdown' } },
+  { name: 'icmaa-cms-page', path: '/icmaa-cms-page/:identifier', component: DefaultComponent, props: { dataType: 'html' } }
 )
 
 export const prefixedName = (name: string): string => NAME_PREFIX + '-' + name

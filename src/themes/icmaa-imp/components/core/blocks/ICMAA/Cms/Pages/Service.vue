@@ -33,9 +33,10 @@ import Page from 'icmaa-cms/components/Page'
 
 export default {
   mixins: [ Page ],
-  data () {
-    return {
-      dataType: 'yaml'
+  props: {
+    dataType: {
+      type: String,
+      default: 'yaml'
     }
   }
 }
