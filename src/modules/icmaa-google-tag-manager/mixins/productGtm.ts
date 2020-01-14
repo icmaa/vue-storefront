@@ -3,10 +3,14 @@ import VueGtm from 'vue-gtm'
 import config from 'config'
 import { currentStoreView } from '@vue-storefront/core/lib/multistore'
 import AbstractMixin from './abstractMixin'
+import { mapGetters } from 'vuex'
 
 export default {
   mixins: [AbstractMixin],
   computed: {
+    ...mapGetters({
+      getOptionLabel: 'attribute/getOptionLabel'
+    })
   },
   methods: {
     productGtm () {
