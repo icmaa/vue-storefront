@@ -4,10 +4,36 @@
       {{ $t('My coupons') }}
     </headline>
 
-    <div class="t-w-full t-flex t-flex-wrap">
+    <div class="t-w-full lg:t-w-1/2 t-flex t-flex-wrap t-p-4 t-pb-2 t-mb-6 t-bg-base-lightest t-rounded-sm" v-if="number && number.length > 0">
+      <template v-if="number && number.length > 0">
+        <div class="t-w-full lg:t-w-1/3 t-px-2 t-mb-2 t-font-bold t-text-sm">
+          {{ $t('Card number') }}
+        </div>
+        <div class="t-w-full lg:t-w-2/3 t-px-2 t-mb-2 t-font-mono">
+          {{ number }}
+        </div>
+      </template>
+      <template v-if="balance && currency && balance >= 0">
+        <div class="t-w-full lg:t-w-1/3 t-px-2 t-mb-2 t-font-bold t-text-sm">
+          {{ $t('Balance') }}
+        </div>
+        <div class="t-w-full lg:t-w-2/3 t-px-2 t-mb-2 t-font-mono">
+          {{ balance }} {{ currency }}
+        </div>
+      </template>
+      <template v-if="expires && expires !== null && expires.length > 0">
+        <div class="t-w-full lg:t-w-1/3 t-px-2 t-mb-2 t-font-bold t-text-sm">
+          {{ $t('Expires at') }}
+        </div>
+        <div class="t-w-full lg:t-w-2/3 t-px-2 t-mb-2 t-font-mono">
+          {{ expires }}
+        </div>
+      </template>
+    </div>
+
+    <div class="t-w-full t-flex t-flex-wrap t--mx-2">
       <div class="t-w-full lg:t-w-1/2 t-px-2 t-mb-4">
         <base-input
-          class=""
           type="text"
           name="code"
           :label="$t('Card number') + ' *'"
@@ -27,36 +53,6 @@
           {{ $t('Check balance') }}
         </button-component>
       </div>
-      <template v-if="getNumber.length > 0">
-        <div class="t-flex t-w-full t-flex-wrap">
-          <div class="t-w-full t-px-2 t-font-bold">
-            {{ $t('Card number') }}
-          </div>
-          <div class="t-w-full t-px-2 t-mb-4">
-            {{ getNumber }}
-          </div>
-        </div>
-      </template>
-      <template v-if="getBalance >= 0">
-        <div class="t-flex t-w-full t-flex-wrap">
-          <div class="t-w-full t-px-2 t-font-bold">
-            {{ $t('Balance') }}
-          </div>
-          <div class="t-w-full t-px-2 t-mb-4">
-            {{ getBalance }} {{ getCurrency }}
-          </div>
-        </div>
-      </template>
-      <template v-if="getExpires !== null && getExpires.length > 0">
-        <div class="t-flex t-w-full t-flex-wrap">
-          <div class="t-w-full t-px-2 t-font-bold">
-            {{ $t('Expires at') }}
-          </div>
-          <div class="t-w-full t-px-2 t-mb-4">
-            {{ getExpires }}
-          </div>
-        </div>
-      </template>
     </div>
   </div>
 </template>
@@ -85,10 +81,10 @@ export default {
   },
   computed: {
     ...mapGetters({
-      getNumber: 'icmaaGiftcert/getGiftcertNumber',
-      getBalance: 'icmaaGiftcert/getGiftcertBalance',
-      getCurrency: 'icmaaGiftcert/getGiftcertCurrency',
-      getExpires: 'icmaaGiftcert/getGiftcertExpires'
+      number: 'icmaaGiftcert/getGiftcertNumber',
+      balance: 'icmaaGiftcert/getGiftcertBalance',
+      currency: 'icmaaGiftcert/getGiftcertCurrency',
+      expires: 'icmaaGiftcert/getGiftcertExpires'
     })
   },
   validations: {
