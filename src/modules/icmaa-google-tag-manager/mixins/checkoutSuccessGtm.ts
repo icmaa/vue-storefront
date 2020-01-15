@@ -2,8 +2,6 @@ import Vue from 'vue'
 import VueGtm from 'vue-gtm'
 import { currentStoreView } from '@vue-storefront/core/lib/multistore'
 import AbstractMixin from './abstractMixin'
-import { state } from '@vue-storefront/core/modules/url/store/state'
-import config from 'config'
 import { mapGetters } from 'vuex'
 
 export default {
@@ -46,16 +44,15 @@ export default {
   methods: {
     checkoutSuccessGtm () {
       if (!this.enabled) {
-        return;
+        return
       }
 
-      console.log('debug', this.paymentMethod);
-      console.log('debug', this.orderId);
+      console.log('debug', this.orderId)
 
-      const GTM: VueGtm = (Vue as any).gtm;
+      const GTM: VueGtm = (Vue as any).gtm
 
-      const storeView = currentStoreView();
-      const currencyCode = storeView.i18n.currencyCode;
+      const storeView = currentStoreView()
+      const currencyCode = storeView.i18n.currencyCode
 
       GTM.trackEvent({
         event: 'CheckoutSuccessView',
@@ -75,11 +72,12 @@ export default {
             products: [this.singleOrderItems]
           }
         }
-      });
-      console.log('hello from gtm-checkout-success-mixin!');
+      })
     }
   },
   mounted () {
-    this.checkoutSuccessGtm();
+    this.$bus.$on('checkout-success-last-order-loaded', () => {
+      this.checkoutSuccessGtm()
+    })
   }
-};
+}

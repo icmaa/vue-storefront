@@ -33,8 +33,10 @@ export default {
       return this.orderHistory.length > 0 ? this.orderHistory[0] : false
     }
   },
-  beforeMount () {
-    this.$store.dispatch('user/getOrdersHistory', { refresh: true, useCache: true })
+  async beforeMount () {
+    await this.$store.dispatch('user/getOrdersHistory', { refresh: true, useCache: true })
+    this.$bus.$emit('checkout-success-last-order-loaded', this.lastOrder)
+
     this.$bus.$on('application-after-loaded', (payload) => {
       this.clearTheCart()
     })
