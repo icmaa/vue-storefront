@@ -8,6 +8,7 @@
         />
         <h2 class="category-title">
           {{ $t('Order confirmation') }}
+          <span v-if="lastOrder" v-text="lastOrder.increment_id" />
         </h2>
       </div>
     </header>
@@ -54,24 +55,28 @@
 
 <script>
 import Vue from 'vue'
+import { mapGetters } from 'vuex'
 import Composite from '@vue-storefront/core/mixins/composite'
 import Breadcrumbs from 'theme/components/core/Breadcrumbs'
 import BaseTextarea from 'theme/components/core/blocks/Form/BaseTextarea'
 import ButtonOutline from 'theme/components/theme/ButtonOutline'
 import VueOfflineMixin from 'vue-offline/mixin'
 import { EmailForm } from '@vue-storefront/core/modules/mailer/components/EmailForm'
-import rootStore from '@vue-storefront/core/store'
 import CheckoutSuccessGtmMixin from 'icmaa-google-tag-manager/mixins/checkoutSuccessGtm'
 
 export default {
   name: 'ExternalThankYouPage',
-  mixins: [Composite, VueOfflineMixin, EmailForm, CheckoutSuccessGtmMixin],
+  mixins: [Composite, VueOfflineMixin, EmailForm],
   data () {
     return {
       feedback: ''
     }
   },
   computed: {
+    ...mapGetters({ orderHistory: 'user/getOrdersHistory' }),
+    lastOrder () {
+      return this.orderHistory.length > 0 ? this.orderHistory[0] : false
+    },
     isNotificationSupported () {
       if (Vue.prototype.$isServer || !('Notification' in window)) return false
       return 'Notification' in window
@@ -90,6 +95,8 @@ export default {
     ButtonOutline
   },
   beforeMount () {
+    this.$store.dispatch('user/getOrdersHistory', { refresh: true, useCache: true })
+
     this.$bus.$on('application-after-loaded', (payload) => {
       if (document.getElementById('thank_you_external') != null) {
         this.clearTheCart()
@@ -104,8 +111,8 @@ export default {
   methods: {
     clearTheCart () {
       if (this.getNumberOfItemsInCart() > 0) {
-        rootStore.dispatch('cart/clear', {}, { root: true })
-        rootStore.dispatch('cart/serverCreate', {guestCart: false}, {root: true})
+        this.$store.dispatch('cart/clear', {})
+        this.$store.dispatch('cart/serverCreate', { guestCart: false })
       }
     },
     getNumberOfItemsInCart () {
