@@ -40,11 +40,7 @@ export default {
       return this.order && this.order.coupon_rule_name
     },
     singleOrderItems () {
-      if (!this.order) return []
-
-      return this.order.items.filter((item) => {
-        return !item.parent_item_id
-      })
+      return this.order && this.order.items
     }
   },
   methods: {
@@ -76,7 +72,7 @@ export default {
               coupon: this.couponCodeRule,
               couponrule: this.couponCodeRule
             },
-            products: 'products'
+            products: [this.singleOrderItems]
           }
         }
       });
