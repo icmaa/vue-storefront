@@ -18,6 +18,7 @@ import { IcmaaExtendedConfigModule } from 'icmaa-config'
 import { IcmaaExtendedUrlModule } from 'icmaa-url'
 import { IcmaaExtendedCatalogModule } from 'icmaa-catalog'
 import { IcmaaExtendedUserModule } from 'icmaa-user'
+import { IcmaaExtendedCartModule } from 'icmaa-cart'
 import { IcmaaExtendedNewsletterModule } from 'icmaa-newsletter'
 import { IcmaaExtendedReviewRoutes } from 'icmaa-review'
 import { IcmaaCategoryModule } from 'icmaa-category'
@@ -26,14 +27,15 @@ import { IcmaaCmsModule } from 'icmaa-cms'
 import { IcmaaTeaserModule } from 'icmaa-teaser'
 import { IcmaaAdviceModule } from 'icmaa-advice'
 import { IcmaaMetaModule } from 'icmaa-meta'
+import { IcmaaGoogleTagManagerModule } from './icmaa-google-tag-manager';
 import { IcmaaRecommendationsModule } from 'icmaa-recommendations'
 import { IcmaaCompetitionsModule } from 'icmaa-competitions'
 import { IcmaaSpotifyModule } from 'icmaa-spotify'
 import { IcmaaProductAlertModule } from 'icmaa-product-alert'
+import { IcmaaGiftcertModule } from 'icmaa-giftcert'
 import { IcmaaTrackingModule } from 'icmaa-tracking'
 import { IcmaaExternalCheckoutModule } from 'icmaa-external-checkout'
 import { IcmaaAmpRendererModule } from './icmaa-amp-renderer'
-import { IcmaaGoogleTagManagerModule } from './icmaa-google-tag-manager';
 
 import { registerModule } from '@vue-storefront/core/lib/modules'
 
@@ -58,6 +60,7 @@ export function registerClientModules () {
   registerModule(IcmaaExtendedUrlModule)
   registerModule(IcmaaExtendedCatalogModule)
   registerModule(IcmaaExtendedUserModule)
+  registerModule(IcmaaExtendedCartModule)
   registerModule(IcmaaExtendedNewsletterModule)
   registerModule(IcmaaExtendedReviewRoutes)
   registerModule(IcmaaCategoryModule)
@@ -66,14 +69,15 @@ export function registerClientModules () {
   registerModule(IcmaaTeaserModule)
   registerModule(IcmaaAdviceModule)
   registerModule(IcmaaMetaModule)
+  registerModule(IcmaaGoogleTagManagerModule)
   registerModule(IcmaaRecommendationsModule)
   registerModule(IcmaaCompetitionsModule)
   registerModule(IcmaaSpotifyModule)
   registerModule(IcmaaProductAlertModule)
+  registerModule(IcmaaGiftcertModule)
   registerModule(IcmaaTrackingModule)
   registerModule(IcmaaExternalCheckoutModule)
   registerModule(IcmaaAmpRendererModule)
-  registerModule(IcmaaGoogleTagManagerModule)
 }
 
 // Deprecated API, will be removed in 2.0
