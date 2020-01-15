@@ -10,6 +10,7 @@ import Page from 'icmaa-cms/components/Page'
 import VueMarkdown from 'vue-markdown'
 
 export default {
+  name: 'Page',
   mixins: [ Page ],
   components: {
     VueMarkdown
