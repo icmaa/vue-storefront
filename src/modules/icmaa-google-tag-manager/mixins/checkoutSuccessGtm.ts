@@ -38,7 +38,7 @@ export default {
       return this.order && this.order.coupon_rule_name
     },
     singleOrderItems () {
-      return this.order && this.order.items
+      return this.order && this.order.products
     }
   },
   methods: {
@@ -66,7 +66,7 @@ export default {
               tax: this.orderTaxAmount,
               shipping: this.orderShippingDescription,
               payment: this.paymentMethod,
-              coupon: this.couponCodeRule,
+              coupon: this.couponCode,
               couponrule: this.couponCodeRule
             },
             products: [this.singleOrderItems]
