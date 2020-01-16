@@ -14,6 +14,8 @@
           #{{ lastOrder.increment_id }}
         </router-link>
       </p>
+      <google-customer-review type="batch" />
+      <google-customer-review />
     </div>
   </div>
 </template>
@@ -22,11 +24,15 @@
 import { mapGetters } from 'vuex'
 import Composite from '@vue-storefront/core/mixins/composite'
 
+import GoogleCustomerReview from 'icmaa-google-tag-manager/components/GoogleCustomerReview'
 import CheckoutSuccessGtmMixin from 'icmaa-google-tag-manager/mixins/checkoutSuccessGtm'
 
 export default {
   name: 'ExternalThankYouPage',
   mixins: [ Composite, CheckoutSuccessGtmMixin ],
+  components: {
+    GoogleCustomerReview
+  },
   computed: {
     ...mapGetters({ orderHistory: 'user/getOrdersHistory' }),
     lastOrder () {
