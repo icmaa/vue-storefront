@@ -9,6 +9,8 @@ import { Logger } from '@vue-storefront/core/lib/logger'
 import { icmaaGoogleTagManagerModule } from './store'
 import { afterRegistration, isEnabled } from './hooks/afterRegistration'
 
+import { currentStoreView } from '@vue-storefront/core/lib/multistore'
+
 const initGTM = async ({ store, router, appConfig }) => {
   const { id, debug } = appConfig.googleTagManager
   const enabled = await isEnabled(id)
@@ -19,11 +21,13 @@ const initGTM = async ({ store, router, appConfig }) => {
 
     router.afterEach((to, from) => {
       const name = to.meta.gtm || to.name
+      const storeView = currentStoreView()
       let dataLayer = (window['dataLayer'] = window['dataLayer'] || [])
       dataLayer.push({
         event: 'icmaa-content-view',
         'content-name': to.fullPath,
-        'content-view-name': name
+        'content-view-name': name,
+        'store_code': storeView.storeCode
       })
     })
 
