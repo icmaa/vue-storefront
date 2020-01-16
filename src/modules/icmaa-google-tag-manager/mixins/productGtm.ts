@@ -49,7 +49,7 @@ export default {
       }
 
       GTM.trackEvent({
-        event: 'ProductView',
+        event: 'icmaa-product-view',
         ecommerce: {
           currencyCode: currencyCode,
           detail: {

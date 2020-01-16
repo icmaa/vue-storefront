@@ -20,7 +20,7 @@ export default {
       const currencyCode = storeView.i18n.currencyCode
 
       GTM.trackEvent({
-        event: 'CategoryView',
+        event: 'icmaa-category-view',
         testcategoryvalue: currencyCode,
         ecommerce: {
           detail: {

@@ -55,7 +55,7 @@ export default {
       const currencyCode = storeView.i18n.currencyCode
 
       GTM.trackEvent({
-        event: 'CheckoutSuccessView',
+        event: 'icmaa-checkout-success-view',
         ecommerce: {
           currencyCode: currencyCode,
           purchase: {
