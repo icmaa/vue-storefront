@@ -15,7 +15,7 @@
         </router-link>
       </p>
       <google-customer-review type="batch" />
-      <google-customer-review />
+      <google-customer-review type="popup" />
     </div>
   </div>
 </template>
