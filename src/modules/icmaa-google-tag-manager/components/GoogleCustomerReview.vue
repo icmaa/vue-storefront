@@ -9,6 +9,7 @@ import { icmaa } from 'config'
 import { mapGetters } from 'vuex'
 import { isServer } from '@vue-storefront/core/helpers'
 import { toDayjsDate } from 'icmaa-config/helpers/datetime'
+import { currentStoreView } from '@vue-storefront/core/lib/multistore'
 
 export default {
   name: 'GoogleCustomerReview',
@@ -90,7 +91,7 @@ export default {
       })
 
       window.___gcfg = {
-        lang: 'de'
+        lang: currentStoreView.storeCode === 'de' ? 'de' : 'en'
       }
     }
   },
