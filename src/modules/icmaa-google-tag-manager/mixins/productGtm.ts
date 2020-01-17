@@ -1,9 +1,16 @@
 import Vue from 'vue'
 import VueGtm from 'vue-gtm'
-import config from 'config'
-import { currentStoreView } from '@vue-storefront/core/lib/multistore'
-import AbstractMixin from './abstractMixin'
 import { mapGetters } from 'vuex'
+import { googleTagManager } from 'config'
+import { currentStoreView } from '@vue-storefront/core/lib/multistore'
+import { price } from 'icmaa-config/helpers/price'
+import AbstractMixin from './abstractMixin'
+
+interface AttributeMapItem {
+  field: string,
+  name?: string,
+  type?: string
+}
 
 export default {
   mixins: [AbstractMixin],
@@ -26,14 +33,12 @@ export default {
       const getProduct = item => {
         let product = {}
 
-        const attributeMap: string[] | Record<string, any>[] =
-          config.googleTagManager.product_attributes
+        const attributeMap: string[] | AttributeMapItem[] = googleTagManager.product_attributes
         attributeMap.forEach(attribute => {
           const isObject = typeof attribute === 'object'
-          let attributeField = isObject ? Object.keys(attribute)[0] : attribute
-          let attributeName = isObject
-            ? Object.values(attribute)[0]
-            : attribute
+          const attributeField: string = isObject ? attribute.field : attribute
+          const attributeName: string = isObject ? attribute.name || attributeField : attribute
+          const attributeType: string|boolean = isObject ? attribute.type || false : false
 
           if (
             item.hasOwnProperty(attributeField) ||
@@ -41,7 +46,16 @@ export default {
           ) {
             const value = item[attributeField] || product[attributeName]
             if (value) {
-              product[attributeName] = value
+              switch (attributeType) {
+                case 'price':
+                  product[attributeName] = price(value)
+                  break
+                case 'attribute':
+                  product[attributeName] = this.getOptionLabel({ attributeKey: attributeField, optionId: value })
+                  break
+                default:
+                  product[attributeName] = value
+              }
             }
           }
         })
