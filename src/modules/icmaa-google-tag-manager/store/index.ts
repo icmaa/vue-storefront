@@ -2,7 +2,7 @@ import { Module } from 'vuex'
 import GoogleTagManagerState, { AttributeMapItem } from '../types/GoogleTagManagerState'
 
 import { googleTagManager } from 'config'
-import { price } from 'icmaa-config/helpers/price'
+import { formatValue } from 'icmaa-config/helpers/price'
 import pick from 'lodash-es/pick'
 
 export const icmaaGoogleTagManagerModule: Module<GoogleTagManagerState, any> = {
@@ -44,7 +44,7 @@ export const icmaaGoogleTagManagerModule: Module<GoogleTagManagerState, any> = {
           if (value) {
             switch (attributeType) {
               case 'price':
-                product[attributeName] = price(value)
+                product[attributeName] = formatValue(value, 'en-US')
                 break
               case 'attribute':
                 product[attributeName] = rootGetters['attribute/getOptionLabel']({ attributeKey: attributeField, optionId: value })

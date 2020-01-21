@@ -20,8 +20,8 @@ export default {
     orderStoreName () {
       return this.order.store_name
     },
-    orderTotalDue () {
-      return this.order.total_due
+    orderGrandTotal () {
+      return this.order.grand_total
     },
     orderTaxAmount () {
       return this.order.tax_amount
@@ -62,7 +62,7 @@ export default {
             actionField: {
               id: this.orderId,
               affiliation: this.orderStoreName,
-              revenue: this.orderTotalDue,
+              revenue: this.orderGrandTotal,
               tax: this.orderTaxAmount,
               shipping: this.orderShippingDescription,
               payment: this.paymentMethod,

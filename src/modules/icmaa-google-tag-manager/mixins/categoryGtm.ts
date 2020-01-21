@@ -14,7 +14,7 @@ export default {
     products () {
       return this.categoryProducts
         .slice(0, googleTagManager.categoryProductCount)
-        .map(p => this.getGTMProductDTO(p, googleTagManager.categoryAttributes))
+        .map(p => this.getGTMProductDTO(p, googleTagManager.categoryProductAttributes))
     }
   },
   methods: {
@@ -31,6 +31,8 @@ export default {
         event: 'icmaa-category-view',
         ecommerce: {
           currencyCode,
+          categoryId: this.getCurrentCategory.id,
+          categoryName: this.getCurrentCategory.name,
           detail: {
             actionField: { list: '' },
             impressions: this.products
