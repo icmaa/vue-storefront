@@ -6,11 +6,6 @@ import AbstractMixin from './abstractMixin'
 
 export default {
   mixins: [ AbstractMixin ],
-  computed: {
-    ...mapGetters({
-      getOptionLabel: 'attribute/getOptionLabel'
-    })
-  },
   methods: {
     productGtm () {
       if (!this.enabled) {

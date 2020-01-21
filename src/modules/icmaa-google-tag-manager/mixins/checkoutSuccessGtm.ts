@@ -76,8 +76,9 @@ export default {
     }
   },
   mounted () {
-    this.$bus.$on('checkout-success-last-order-loaded', () => {
-      this.checkoutSuccessGtm()
-    })
+    this.$bus.$on('checkout-success-last-order-loaded', this.checkoutSuccessGtm)
+  },
+  beforeDestroy () {
+    this.$bus.$off('checkout-success-last-order-loaded', this.checkoutSuccessGtm)
   }
 }

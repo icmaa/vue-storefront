@@ -93,6 +93,15 @@ export default {
       window.___gcfg = {
         lang: currentStoreView.storeCode === 'de' ? 'de' : 'en'
       }
+    },
+    async onCheckoutSuccessLastOrderLoaded () {
+      await this.loadScript()
+      this.renderOptIn()
+
+      this.$bus.$off(
+        'checkout-success-last-order-loaded',
+        this.onCheckoutSuccessLastOrderLoaded
+      )
     }
   },
   async mounted () {
@@ -105,13 +114,17 @@ export default {
         case 'popup':
           this.$bus.$on(
             'checkout-success-last-order-loaded',
-            async () => {
-              await this.loadScript()
-              this.renderOptIn()
-            })
+            this.onCheckoutSuccessLastOrderLoaded
+          )
           break
       }
     }
+  },
+  beforeDestroy () {
+    this.$bus.$off(
+      'checkout-success-last-order-loaded',
+      this.onCheckoutSuccessLastOrderLoaded
+    )
   }
 }
 </script>
