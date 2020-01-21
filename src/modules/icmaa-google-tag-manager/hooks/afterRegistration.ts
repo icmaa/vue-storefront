@@ -22,88 +22,9 @@ export async function afterRegistration (config, store: Store<any>) {
   const storeView = currentStoreView()
   const currencyCode = storeView.i18n.currencyCode
 
-  const getProduct = (item) => {
-    let product = {}
-
-    const attributeMap: string[]|Record<string, any>[] = config.googleTagManager.product_attributes
-    attributeMap.forEach(attribute => {
-      const isObject = typeof attribute === 'object'
-      let attributeField = isObject ? Object.keys(attribute)[0] : attribute
-      let attributeName = isObject ? Object.values(attribute)[0] : attribute
-
-      if (item.hasOwnProperty(attributeField) || product.hasOwnProperty(attributeName)) {
-        const value = item[attributeField] || product[attributeName]
-        if (value) {
-          product[attributeName] = value
-        }
-      }
-    })
-
-    const { category } = item
-    if (category && category.length > 0) {
-      product['category'] = category.slice(-1)[0].name
-    }
-
-    return product
-  }
+  const getProduct = item => store.getters['icmaaGoogleTagManager/getGTMProductDTO'](item)
 
   store.subscribe(({ type, payload }, state) => {
-    // Measuring Views of Product Details
-    // if (type === 'product/product/SET_CURRENT') {
-    //   GTM.trackEvent({
-    //     event: 'productView',
-    //     ecommerce: {
-    //       detail: {
-    //         'actionField': { 'list': '' }, // 'detail' actions have an optional list property.
-    //         'products': [getProduct(payload)]
-    //       }
-    //     }
-    //   });
-    // }
-
-    // Measuring Views of Category
-    // if (type === 'category-next/category/SET_PRODUCTS') {
-    //   GTM.trackEvent({
-    //     event: 'categoryView',
-    //     ecommerce: {
-    //       detail: {
-    //         'actionField': { 'list': '' }, // 'detail' actions have an optional list property.
-    //         'products': [getProduct(payload)]
-    //       }
-    //     }
-    //   });
-    // }
-
-    // Measuring Purchases
-    if (type === 'order/order/LAST_ORDER_CONFIRMATION') {
-      const orderId = payload.confirmation.backendOrderId
-      const products = payload.order.products.map(product => getProduct(product))
-      store.dispatch(
-        'user/getOrdersHistory',
-        { refresh: true, useCache: false }
-      ).then(() => {
-        const orderHistory = state.user.orders_history
-        const order = orderHistory.items.find((order) => order['entity_id'].toString() === orderId)
-        if (order) {
-          GTM.trackEvent({
-            'ecommerce': {
-              'purchase': {
-                'actionField': {
-                  'id': orderId,
-                  'affiliation': order.store_name,
-                  'revenue': order.total_due,
-                  'tax': order.tax_amount,
-                  'shipping': order.shipping_amount,
-                  'coupon': ''
-                },
-                'products': products
-              }
-            }
-          })
-        }
-      })
-    }
-
     // Adding a Product to a Shopping Cart
     if (type === 'cart/cart/ADD') {
       GTM.trackEvent({
@@ -114,7 +35,7 @@ export async function afterRegistration (config, store: Store<any>) {
             products: [getProduct(payload.product)]
           }
         }
-      });
+      })
     }
 
     // Removing a Product from a Shopping Cart
@@ -126,21 +47,7 @@ export async function afterRegistration (config, store: Store<any>) {
             products: [getProduct(payload.product)]
           }
         }
-      });
+      })
     }
-
-    // Default Measuring
-    // if (type === "cart/cart/DEL") {
-    //   GTM.trackView({ // extend content-view
-    //     event: 'content-view',
-    //     currencyCode: currencyCode,
-    //     website_code: "base", // todo
-    //     store_code: storeView.storeCode,
-    //     controller: "cms_page_view", // todo
-    //     pageType: "cms/page/view", // todo
-    //     pagePath: "todo",
-    //     pageTitle: "todo"
-    //   });
-    // }
   })
 }

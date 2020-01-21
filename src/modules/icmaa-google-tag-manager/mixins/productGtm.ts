@@ -11,11 +11,6 @@ export default {
       getOptionLabel: 'attribute/getOptionLabel'
     })
   },
-  watch: {
-    product () {
-      this.productGtm()
-    }
-  },
   methods: {
     productGtm () {
       if (!this.enabled) {
@@ -30,10 +25,10 @@ export default {
       GTM.trackEvent({
         event: 'icmaa-product-view',
         ecommerce: {
-          currencyCode: currencyCode,
+          currencyCode,
           detail: {
             actionField: { list: '' },
-            products: [this.getGTMProductDTO(this.product)]
+            products: [this.getGTMProductDTO(this.originalProduct)]
           }
         }
       })

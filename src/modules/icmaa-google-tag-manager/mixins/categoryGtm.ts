@@ -17,24 +17,23 @@ export default {
         .map(p => this.getGTMProductDTO(p, googleTagManager.categoryAttributes))
     }
   },
-  watch: {
-    products () {
-      this.categoryGtm()
-    }
-  },
   methods: {
     categoryGtm () {
       if (!this.enabled && this.products.length > 0) {
         return
       }
 
+      const storeView = currentStoreView()
+      const { currencyCode } = storeView.i18n
+
       const GTM: VueGtm = (Vue as any).gtm
       GTM.trackEvent({
         event: 'icmaa-category-view',
         ecommerce: {
+          currencyCode,
           detail: {
             actionField: { list: '' },
-            products: this.products
+            impressions: this.products
           }
         }
       })
