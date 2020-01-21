@@ -19,7 +19,7 @@ export default {
   },
   methods: {
     categoryGtm () {
-      if (!this.enabled && this.products.length > 0) {
+      if (!this.enabled || this.products.length === 0) {
         return
       }
 
@@ -39,6 +39,11 @@ export default {
           }
         }
       })
+    }
+  },
+  watch: {
+    categoryProducts (data) {
+      this.categoryGtm()
     }
   },
   mounted () {

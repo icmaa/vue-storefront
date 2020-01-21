@@ -29,6 +29,11 @@ export default {
       })
     }
   },
+  watch: {
+    originalProduct (data) {
+      this.productGtm()
+    }
+  },
   mounted () {
     this.productGtm()
   }
