@@ -15,8 +15,7 @@ export default {
   computed: {
     ...mapGetters({ viewport: 'ui/getViewport' }),
     imageUrl () {
-      const image = this.viewport !== 'sm' && this.teaser['largeImageUrl'] ? 'largeImageUrl' : 'imageUrl'
-      return getThumbnailPath('/' + this.teaser[image], 0, 0, 'media')
+      return this.teaser.imageUrl
     },
     backgroundColor () {
       const { backgroundColor } = this.teaser
