@@ -38,9 +38,8 @@ export default {
     }
   },
   async beforeMount () {
-    this.$store.dispatch('user/getOrdersHistory', { refresh: true, useCache: true })
+    await this.$store.dispatch('user/refreshOrdersHistory', { resolvedFromCache: false })
     this.$bus.$emit('checkout-success-last-order-loaded', this.lastOrder)
-
     this.$bus.$on('application-after-loaded', (payload) => {
       this.clearTheCart()
     })
