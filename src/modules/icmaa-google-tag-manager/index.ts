@@ -27,7 +27,9 @@ const initGTM = async ({ store, router, appConfig }) => {
         'event': 'icmaa-content-view',
         'content-name': to.fullPath,
         'content-view-name': name,
-        'store_code': storeView.storeCode
+        'store_code': storeView.storeCode,
+        'customerLoggedIn': store.getters['user/isLoggedIn'],
+        'customerEmail': store.getters['user/getUserEmail']
       })
     })
 

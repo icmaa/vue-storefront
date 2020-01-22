@@ -33,10 +33,7 @@ export default {
           currencyCode,
           categoryId: this.getCurrentCategory.id,
           categoryName: this.getCurrentCategory.name,
-          detail: {
-            actionField: { list: '' },
-            impressions: this.products
-          }
+          impressions: this.products
         }
       })
     }

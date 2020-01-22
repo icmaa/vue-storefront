@@ -12,6 +12,8 @@
           #{{ lastOrder.increment_id }}
         </router-link>
       </div>
+      <google-customer-review type="batch" />
+      <google-customer-review type="popup" />
     </div>
   </div>
 </template>
@@ -25,6 +27,9 @@ import CheckoutSuccessGtmMixin from 'icmaa-google-tag-manager/mixins/checkoutSuc
 
 export default {
   name: 'ExternalThankYouPage',
+  components: {
+    GoogleCustomerReview
+  },
   mixins: [ Composite, CheckoutSuccessGtmMixin ],
   computed: {
     ...mapGetters({ orderHistory: 'user/getOrdersHistory' }),
@@ -33,9 +38,7 @@ export default {
     }
   },
   async beforeMount () {
-    console.log('VueGTM', 'BEFORE_MOUNT')
-
-    await this.$store.dispatch('user/getOrdersHistory', { refresh: true, useCache: true })
+    this.$store.dispatch('user/getOrdersHistory', { refresh: true, useCache: true })
     this.$bus.$emit('checkout-success-last-order-loaded', this.lastOrder)
 
     this.$bus.$on('application-after-loaded', (payload) => {

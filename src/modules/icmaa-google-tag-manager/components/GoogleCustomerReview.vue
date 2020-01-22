@@ -1,15 +1,25 @@
 <template>
-  <div v-if="type === 'batch'">
-    <g:ratingbadge :merchant_id="merchantId" />
+  <div v-if="type === 'batch'" ref="batch" class="t-w-full lg:t-w-1/3 t-mt-4">
+    <!-- <g:ratingbadge :merchant_id="merchantId" /> -->
   </div>
 </template>
 
 <script>
+import Vue from 'vue'
 import { icmaa } from 'config'
 import { mapGetters } from 'vuex'
 import { isServer } from '@vue-storefront/core/helpers'
 import { toDayjsDate } from 'icmaa-config/helpers/datetime'
-import { currentStoreView } from '@vue-storefront/core/lib/multistore'
+
+/**
+ * Add GoogleReview from Google Merchant Center:
+ * @see https://support.google.com/merchants/answer/7105655?hl=de
+ */
+
+/**
+ * Ignore the custom HTML element to prevent error
+ */
+Vue.config.ignoredElements = ['g:ratingbadge']
 
 export default {
   name: 'GoogleCustomerReview',
@@ -22,6 +32,7 @@ export default {
   },
   computed: {
     ...mapGetters({
+      enabled: 'icmaaGoogleTagManager/enabled',
       orderHistory: 'user/getOrdersHistory'
     }),
     merchantId () {
@@ -51,37 +62,32 @@ export default {
   methods: {
     async loadScript () {
       return new Promise(resolve => {
-        if (!this.hasScript() && (window && !window.gapi)) {
-          window.renderOptIn = this.renderOptIn
-
-          const script = document.createElement('script');
-          script.async = true;
+        if (!this.hasScript()) {
+          const script = document.createElement('script')
+          script.async = true
           script.src = `https://apis.google.com/js/platform.js`
-          script.onload = () => {
-            resolve()
-          }
-
+          script.onload = () => { resolve() }
           document.body.appendChild(script)
-        }
-
-        if (this.hasScript() && (window && window.gapi)) {
+        } else if (this.hasScript() && window) {
           resolve()
         }
       })
     },
     hasScript () {
-      return Array
+      const scriptInDOM = Array
         .from(document.getElementsByTagName('script'))
         .some(script => script.src.includes('apis.google.com/js/platform.js'))
+
+      return scriptInDOM && window !== undefined && window.gapi !== undefined
     },
     renderOptIn () {
+      window.renderOptIn = this.renderOptIn
       window.gapi.load('surveyoptin', () => {
         window.gapi.surveyoptin.render(this.orderDTO)
       })
     },
     renderBadge () {
-      var ratingBadgeContainer = document.createElement('div');
-      document.body.appendChild(ratingBadgeContainer);
+      var ratingBadgeContainer = this.$refs.batch
       window.gapi.load('ratingbadge', () => {
         window.gapi.ratingbadge.render(
           ratingBadgeContainer, {
@@ -89,10 +95,6 @@ export default {
             'position': 'INLINE'
           })
       })
-
-      window.___gcfg = {
-        lang: currentStoreView.storeCode === 'de' ? 'de' : 'en'
-      }
     },
     async onCheckoutSuccessLastOrderLoaded () {
       await this.loadScript()
@@ -105,7 +107,7 @@ export default {
     }
   },
   async mounted () {
-    if (!isServer) {
+    if (!isServer && this.enabled) {
       switch (this.type) {
         case 'batch':
           await this.loadScript()
@@ -128,3 +130,20 @@ export default {
   }
 }
 </script>
+
+<style lang="scss">
+
+#___ratingbadge_0 {
+  position: static !important;
+  border: none !important;
+  box-shadow: none !important;
+  height: 54px !important;
+
+  iframe {
+    position: static !important;
+    width: 100% !important;
+    height: 54px !important;
+  }
+}
+
+</style>

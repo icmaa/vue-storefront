@@ -12,7 +12,7 @@ export default {
       ordersHistory: 'user/getOrdersHistory'
     }),
     order () {
-      return this.ordersHistory[0]
+      return this.ordersHistory.length > 0 ? this.ordersHistory[0] : false
     },
     orderId () {
       return this.order.id
@@ -45,7 +45,7 @@ export default {
   },
   methods: {
     checkoutSuccessGtm () {
-      if (!this.enabled) {
+      if (!this.enabled || !this.order) {
         return
       }
 
@@ -75,7 +75,7 @@ export default {
       })
     }
   },
-  mounted () {
+  beforeMount () {
     this.$bus.$on('checkout-success-last-order-loaded', this.checkoutSuccessGtm)
   },
   beforeDestroy () {
