@@ -2,7 +2,9 @@
   <div>
     <h2>{{ content.headline | capitalize }}</h2>
     <div class="t-flex t-flex-wrap t-mb-4">
-      <div class="t-w-1/2" v-if="content.description">{{ content.description }}</div>
+      <div class="t-w-1/2" v-if="content.description">
+        {{ content.description }}
+      </div>
       <img class="t-w-1/2" v-if="content.icon" :src="content.icon">
     </div>
     <div class="t-w-full t-flex t-flex-wrap t-justify-center">
@@ -11,18 +13,18 @@
       </div>
     </div>
     <div v-for="(table, index) in tables" :key="table">
-      <multi-size-table v-show="show==index" :content="content[table]" />
+      <size-table v-show="show==index" :content="content[table]" />
     </div>
   </div>
 </template>
 
 <script>
-import MultiSizeTable from 'theme/components/core/blocks/ICMAA/Cms/Pages/Service/Size/MultiSizeTable'
+import SizeTable from 'theme/components/core/blocks/ICMAA/Cms/Pages/Service/Size/SizeTable'
 
 export default {
   name: 'ServiceShoeLayout',
   components: {
-    MultiSizeTable
+    SizeTable
   },
   props: {
     content: {

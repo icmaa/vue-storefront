@@ -1,6 +1,8 @@
 <template>
   <div class="t-mb-4">
-    <h3 v-if="headline">{{ content.headline | capitalize }}</h3>
+    <h3 v-if="headline">
+      {{ content.headline | capitalize }}
+    </h3>
     <table class="t-w-full t-text-xs">
       <thead />
       <tbody>
@@ -29,8 +31,8 @@ export default {
     }
   },
   computed: {
-    rows () {
-      return Object.keys(this.content).filter(el => el !== 'headline')
+    data () {
+      return Object.keys(this.content).filter(el => el.includes('row'))
     }
   }
 }
