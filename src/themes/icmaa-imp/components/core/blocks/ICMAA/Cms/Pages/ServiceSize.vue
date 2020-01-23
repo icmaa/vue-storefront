@@ -3,16 +3,18 @@
     <size-layout :content="content.headgear" />
     <size-layout :content="content.tops" />
     <size-layout :content="content.pants" />
-    <shoe-size-layout :content="content.shoes.boys" />
-    <shoe-size-layout :content="content.shoes.girls" />
+    <shoe-layout :content="content.shoes.boys" />
+    <shoe-layout :content="content.shoes.girls" />
+    <blank-layout :content="content.blanks" />
   </layout>
 </template>
 
 <script>
 import Page from 'icmaa-cms/components/Page'
 import Layout from 'theme/components/core/blocks/ICMAA/Cms/Pages/Service/Layout'
-import SizeLayout from 'theme/components/core/blocks/ICMAA/Cms/Pages/Service/SizeLayout'
-import ShoeSizeLayout from 'theme/components/core/blocks/ICMAA/Cms/Pages/Service/ShoeSizeLayout'
+import SizeLayout from 'theme/components/core/blocks/ICMAA/Cms/Pages/Service/Size/SizeLayout'
+import ShoeLayout from 'theme/components/core/blocks/ICMAA/Cms/Pages/Service/Size/ShoeLayout'
+import BlankLayout from 'theme/components/core/blocks/ICMAA/Cms/Pages/Service/Size/BlankLayout'
 
 export default {
   name: 'Size',
@@ -20,7 +22,8 @@ export default {
   components: {
     Layout,
     SizeLayout,
-    ShoeSizeLayout
+    ShoeLayout,
+    BlankLayout
   },
   data () {
     return {

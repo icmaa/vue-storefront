@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import SizeTable from 'theme/components/core/blocks/ICMAA/Cms/Pages/Service/SizeTable'
+import SizeTable from 'theme/components/core/blocks/ICMAA/Cms/Pages/Service/Size/SizeTable'
 
 export default {
   name: 'ServiceSizeLayout',

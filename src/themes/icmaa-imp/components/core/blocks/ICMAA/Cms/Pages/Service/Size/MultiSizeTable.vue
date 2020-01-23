@@ -1,12 +1,11 @@
 <template>
   <div class="t-mb-4">
-    <h3>{{ content.headline | capitalize }}</h3>
     <table class="t-w-full t-text-xs">
       <thead />
       <tbody>
-        <tr v-for="row in rows" :key="row">
-          <td v-for="(value, key) in content[row]" :key="key">
-            {{ value }}
+        <tr v-for="row in data" :key="row" class="t-text-center t-border-b t-border-base-lighter">
+          <td v-for="(col, index) in content[row]" :key="index">
+            {{ col }}
           </td>
         </tr>
       </tbody>
@@ -17,7 +16,7 @@
 <script>
 
 export default {
-  name: 'ServiceSizeTable',
+  name: 'ServiceShoeSizeTable',
   props: {
     content: {
       required: true,
@@ -25,8 +24,8 @@ export default {
     }
   },
   computed: {
-    rows () {
-      return Object.keys(this.content).filter(el => el !== 'headline')
+    data () {
+      return Object.keys(this.content).filter(el => el.includes('row'))
     }
   }
 }
