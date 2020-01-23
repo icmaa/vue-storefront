@@ -1,5 +1,4 @@
 import { mapGetters } from 'vuex'
-import { getThumbnailPath } from '@vue-storefront/core/helpers'
 
 export default {
   props: {
@@ -24,11 +23,14 @@ export default {
     textColor () {
       const { textColor } = this.teaser
       return (!textColor || !textColor.startsWith('#')) ? false : textColor
+    },
+    link () {
+      return this.localizedRoute(this.teaser.link)
     }
   },
   methods: {
     redirect () {
-      this.$router.push(this.localizedRoute(this.teaser.link))
+      this.$router.push(this.link)
     }
   }
 }
