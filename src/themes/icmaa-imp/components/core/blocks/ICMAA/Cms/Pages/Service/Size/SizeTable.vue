@@ -1,13 +1,13 @@
 <template>
   <div class="t-mb-4">
-    <h3 v-if="headline">
-      {{ content.headline | capitalize }}
-    </h3>
-    <table class="t-w-full t-text-xs">
+    <div class="t-font-bold t-uppercase" v-if="headline">
+      {{ table.headline }}
+    </div>
+    <table class="t-w-full t-text-xs t-table-auto">
       <thead />
       <tbody>
-        <tr v-for="row in data" :key="row" class="t-text-center t-border-b t-border-base-lighter">
-          <td v-for="(value, key) in content[row]" :key="key">
+        <tr v-for="rowKey in tableRowKeys" :key="rowKey" class="t-border-b t-border-base-lighter">
+          <td class="t-border t-border-base-lighter t-p-1" v-for="(value, key) in table[rowKey]" :key="key">
             {{ value }}
           </td>
         </tr>
@@ -21,7 +21,7 @@
 export default {
   name: 'ServiceSizeTable',
   props: {
-    content: {
+    table: {
       required: true,
       type: Object
     },
@@ -31,8 +31,8 @@ export default {
     }
   },
   computed: {
-    data () {
-      return Object.keys(this.content).filter(el => el.includes('row'))
+    tableRowKeys () {
+      return Object.keys(this.table).filter(el => el.includes('row'))
     }
   }
 }

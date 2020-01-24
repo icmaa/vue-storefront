@@ -17,7 +17,7 @@ import ShoeLayout from 'theme/components/core/blocks/ICMAA/Cms/Pages/Service/Siz
 import BlankLayout from 'theme/components/core/blocks/ICMAA/Cms/Pages/Service/Size/BlankLayout'
 
 export default {
-  name: 'Size',
+  name: 'ServiceSize',
   mixins: [Page],
   components: {
     Layout,
