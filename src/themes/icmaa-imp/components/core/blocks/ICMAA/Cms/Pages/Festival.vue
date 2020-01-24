@@ -1,5 +1,6 @@
-<template>
+<template :class="content.backgroundcolor">
   <layout id="festival" :headline="content.headline">
+    <div :class="content.backgroundcolor">
     <!-- Header -->
     <div>
       <router-link :to="content.header.link">
@@ -8,7 +9,7 @@
     </div>
 
     <!-- Cities -->
-    <ul class="t-flex t-mt-8 t-bg-primary">
+    <ul class="t-flex t-justify-center t-mt-4" :class="content.highlightcolor">
       <li class="city-item" v-for="(city, index) in content.cities" :key="index" @click="currentTab = index" :class="{active: currentTab === index}">
         <router-link :to="'#' + city.name" class="t-text-white t-block t-m-5 t-uppercase t-text-xl">
           {{ city.name }}
@@ -31,32 +32,35 @@
       </router-link>
     </div>
     <!-- Video -->
-    <div class="t-container t-text-center">
-      <h2 class="t-text-white" v-html="content.video.headline" />
-      <iframe height="315" width="560" :src="content.video.link" frameborder="0" allowfullscreen />
+    <div class="t-container t-w-full">
+      <h2 class="t-text-white t-text-center t-text-4xl t-my-4" v-html="content.video.headline" />
+      <div class="responsive-video">
+        <iframe width="560" height="315" class="t-w-full" :src="content.video.link" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen />
+      </div>
     </div>
 
     <!-- Sponsors -->
-    <div class="t-container t-flex t-flex-wrap">
-      <div v-for="sponsor in content.sponsors" :key="sponsor.name">
-        <router-link :to="sponsor.link">
+    <div class="t-flex t-justify-center t-flex t-flex-wrap">
+      <div v-for="sponsor in content.sponsors" :key="sponsor.name" class="t-block t-my-6">
+        <a :href="sponsor.link">
           <img :src="getMediaThumbnail(sponsor.img, 0, 0)" :alt="sponsor.name" :title="sponsor.name" width="120">
-        </router-link>
+        </a>
       </div>
     </div>
 
     <!-- Press -->
-    <div class="t-container">
-      <router-link :to="content.press.link" :title="content.press.button">
-        <button-component type="primary" size="sm" class="t-text-xs t-uppercase t-truncate">
+    <div class="t-flex t-justify-center">
+      <a :href="content.press.link">
+        <button-component type="primary" size="sm" class="t-w-full t-my-6 t-block t-bg-primary t-text-white t-px-4 t-py-2">
           {{ content.press.button }}
         </button-component>
-      </router-link>
+      </a>
     </div>
 
     <!-- Gallery-->
     <div class="t-flex t-flex-wrap">
       <img v-for="galleryitem in content.gallery" :key="galleryitem.name" :src="getMediaThumbnail(galleryitem.img, 0, 0)" :alt="galleryitem.name" :title="galleryitem.name" class="t-w-1/2 md:t-w-1/3 lg:t-w-1/6">
+    </div>
     </div>
   </layout>
 </template>
@@ -79,7 +83,19 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-li.city-item:first-child {
-  display: none
+.responsive-video {
+  position: relative;
+  padding-bottom: 55%;
+  padding-top: 15px;
+  height: 0;
+  overflow: hidden;
+
+  iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
 }
 </style>
