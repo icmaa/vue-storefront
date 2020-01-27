@@ -2,8 +2,8 @@
   <layout id="insd" :headline="content.headline">
     <div class="t-bg-insd-container">
       <!-- if coming soon -->
-      <div v-if="content.comingsoon">
-        <img :src="getMediaThumbnail(content.comingsoon.img, 0, 0)" :alt="content.comingsoon.name" :title="content.comingsoon.name">
+      <div v-if="content.coming_soon.img">
+        <img :src="getMediaThumbnail(content.coming_soon.img, 0, 0)" :alt="content.coming_soon.name" :title="content.coming_soon.name">
       </div>
 
       <div v-else class="t-container t-px-4 t-pb-1">
