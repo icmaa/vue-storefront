@@ -53,42 +53,44 @@
           <h2 class="t-text-white t-block t-m-5 t-uppercase t-text-xl" v-html="content.bands_headline" />
         </div>
 
-        <div class="t-flex t-flex-wrap t-bg-insd-box t-text-white">
-          <div v-for="headlineband in content.headlinebands" :key="headlineband.name" class="t-block">
-            <h3 v-html="headlineband.name" class="t-mx-1 t-flex t-text-white" />
+        <div class="t-bg-insd-containert t-text-white">
+          <div v-for="headlineband in content.headlinebands" :key="headlineband.name" class="t-p-4 t-block t-bg-insd-box t-mb-1">
+            <h3 v-html="headlineband.name" class="t-mx-1 t-flex t-text-white t-mb-4" />
 
             <div class="t-flex">
               <div class="t-w-1/2">
                 <img :src="getMediaThumbnail(headlineband.img, 0, 0)" :alt="headlineband.name" :title="headlineband.name">
               </div>
               <div class="t-w-1/2">
-                <div class="t-relative t-w-full t-bg-white" style="padding-top: 56.25%">
+                <div class="t-relative t-w-full t-bg-white" style="padding-top: 55%">
                   <iframe class="t-absolute t-top-0" width="100%" height="100%" :src="headlineband.video" frameborder="0" allowfullscreen />
                 </div>
               </div>
-              <a :href="headlineband.facebook" class="t-mx-4">Facebook</a>
-              <a :href="headlineband.link" class="t-mx-4">Merchandise shoppen</a>
+            </div>
+            <div class="t-mt-2">
+              <a :href="headlineband.facebook" class="t-mr-4 t-text-white">Facebook</a>
+              <a :href="headlineband.link" class="t-mr-4 t-text-white">Merchandise shoppen</a>
             </div>
           </div>
         </div>
 
-        <div class="t-flex t-justify-center t-flex t-flex-wrap t-bg-insd-box t-text-white">
+        <div class="t-flex t-flex-wrap t-bg-insd-box t-text-white">
           <div v-for="band in content.bands" :key="band.name" class="t-block t-my-6">
             <h3 v-html="band.name" />
 
             <div class="t-flex">
               <div class="t-w-1/2">
-                <div class="t-w-1/2">
-                  <img :src="getMediaThumbnail(band.img, 0, 0)" :alt="band.name" :title="band.name">
-                </div>
-                <div class="t-w-1/2">
-                  <div class="t-relative t-w-full t-bg-white" style="padding-top: 56.25%">
-                    <iframe class="t-absolute t-top-0" width="100%" height="100%" :src="band.video" frameborder="0" allowfullscreen />
-                  </div>
-                </div>
-                <a :href="band.facebook" class="t-mx-4">Facebook</a>
-                <a :href="band.link" class="t-mx-4">Merchandise shoppen</a>
+                <img :src="getMediaThumbnail(band.img, 0, 0)" :alt="band.name" :title="band.name">
               </div>
+              <div class="t-w-1/2">
+                <div class="t-relative t-w-full t-bg-white" style="padding-top: 56.25%">
+                  <iframe class="t-absolute t-top-0" width="100%" height="100%" :src="band.video" frameborder="0" allowfullscreen />
+                </div>
+              </div>
+            </div>
+            <div class="t-mt-2">
+              <a :href="band.facebook" class="t-mx-4">Facebook</a>
+              <a :href="band.link" class="t-mx-4">Merchandise shoppen</a>
             </div>
           </div>
         </div>
@@ -98,20 +100,18 @@
           <h2 class="t-text-white t-block t-m-5 t-uppercase t-text-xl" v-html="content.tickets_headline" />
         </div>
 
-        <div class="t-flex t-flex-wrap">
-          <div v-for="ticket in content.tickets" :key="ticket.date" class="t-mb-1 t-bg-insd-box">
-            <div class="t-w-1/1">
-              {{ ticket.date }}
-            </div>
-            <div class="t-w-1/3">
-              {{ ticket.city }}, <span class="t-text-insd">{{ ticket.venue }}</span>
-            </div>
-            <div class="t-w-1/6">
-              <a :href="ticket.shoplink">{ticket.shoplinktext}</a>
-            </div>
-            <div class="t-w-1/3">
-              <a :href="ticket.facebooklink">{ticket.facebooklinktext}</a>
-            </div>
+        <div v-for="ticket in content.tickets" :key="ticket.date" class="t-flex t-mb-1 t-p-5 t-bg-insd-box">
+          <div class="t-w-1/6">
+            {{ ticket.date }}
+          </div>
+          <div class="t-w-1/3">
+            {{ ticket.city }}, <span class="t-text-insd">{{ ticket.venue }}</span>
+          </div>
+          <div class="t-w-1/6">
+            <a :href="ticket.shoplink" class="t-text-white">{{ ticket.shoplinktext }}</a>
+          </div>
+          <div class="t-w-1/3 t-text-white">
+            <a :href="ticket.facebooklink" class="t-text-white">{{ ticket.facebooklinktext }}</a>
           </div>
         </div>
 
