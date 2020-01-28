@@ -19,7 +19,7 @@
     <!-- gallery -->
     <div class="t-flex t-flex-wrap t-justify-center t-items-center t-mb-16">
       <div v-for="img in content.img" :key="img.link" class="t-w-full md:t-w-2/5 t-mb-6 md:t-mr-6">
-        <img :src="getMediaThumbnail(img.link, 0, 0)" :alt="img.alt" :title="img.alt">
+        <img :src="getMediaThumbnail(img.link, 0, 0)" :alt="img.alt" :title="img.alt" class="t-w-full">
       </div>
     </div>
 
@@ -43,7 +43,7 @@
           </ul>
         </template>
         <template v-else>
-          <div class="t-px-4">
+          <div class="t-flex t-justify-center t-px-4">
             <img :src="getMediaThumbnail(block.img.link, 0, 0)">
           </div>
         </template>
@@ -52,8 +52,8 @@
 
     <!-- affilinet -->
     <div class="t-flex t-justify-center t-flex t-flex-wrap t-mb-8">
-      <a :href="content.affilinet.link">
-        <img :src="getMediaThumbnail(content.affilinet.img, 0, 0)" :alt="content.affilinet.alt" :title="content.affilinet.alt" class="t-cursor-pointer">
+      <a :href="content.affilinet.link" class="lg:t-w-2/3 t-cursor-pointer">
+        <img :src="getMediaThumbnail(content.affilinet.img, 0, 0)" :alt="content.affilinet.alt" :title="content.affilinet.alt" class="t-w-full">
       </a>
     </div>
 
