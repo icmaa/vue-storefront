@@ -46,12 +46,20 @@ $color-primary: #611122;
       color: $color-primary;
     }
 
+    p {
+      margin-bottom: 10px;
+    }
+
     table {
       border: 1px solid;
       width: 100%;
 
+      @at-root div#{&} {
+        overflow: scroll
+      }
+
       thead {
-        border-bottom: 1px solid
+        border-bottom: 1px solid;
       }
 
       td, th {
