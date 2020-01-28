@@ -1,5 +1,5 @@
 <template>
-  <layout id="cms-page" :headline="content.headline">
+  <layout id="cms-page-rte" :headline="content.headline">
     <vue-markdown :source="content" />
   </layout>
 </template>
@@ -26,3 +26,39 @@ export default {
   }
 }
 </script>
+
+<style lang="scss">
+@import '~theme/css/variables/colors';
+@import '~theme/css/helpers/functions/color';
+
+$color-primary: #611122;
+
+#cms-page-rte {
+
+  .cms-page-rte {
+
+    ul {
+      list-style: disc;
+      margin-left: 30px;
+    }
+
+    a {
+      color: $color-primary;
+    }
+
+    table {
+      border: 1px solid;
+      width: 100%;
+
+      thead {
+        border-bottom: 1px solid
+      }
+
+      td, th {
+        text-align: left;
+        padding: 8px;
+      }
+    }
+  }
+}
+</style>
