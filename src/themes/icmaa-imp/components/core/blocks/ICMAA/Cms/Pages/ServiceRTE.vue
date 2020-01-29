@@ -53,6 +53,7 @@ $color-primary: #611122;
     table {
       border: 1px solid;
       width: 100%;
+      background-color: white;
 
       thead {
         border-bottom: 1px solid;
@@ -61,6 +62,20 @@ $color-primary: #611122;
       td, th {
         text-align: left;
         padding: 8px;
+      }
+
+      tbody {
+
+        tr {
+
+          &:last-Child td {
+            padding-bottom: 16px;
+          }
+
+          &:first-Child td {
+            padding-top: 16px;
+          }
+        }
       }
     }
   }
