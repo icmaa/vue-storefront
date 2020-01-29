@@ -42,11 +42,16 @@ $color-primary: #611122;
       margin-left: 30px;
     }
 
+    ol {
+      list-style: decimal;
+      margin-left: 30px;
+    }
+
     a {
       color: $color-primary;
     }
 
-    p {
+    p, ul, ol {
       margin-bottom: 10px;
     }
 
