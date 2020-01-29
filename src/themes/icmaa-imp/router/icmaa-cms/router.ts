@@ -4,6 +4,7 @@ const ServiceRTEComponent = () => import(/* webpackChunkName: "vsf-icmaa-cms-pag
 const ServiceSizeComponent = () => import(/* webpackChunkName: "vsf-icmaa-cms-page-custom-service-size" */ 'theme/components/core/blocks/ICMAA/Cms/Pages/ServiceSize.vue')
 const TicketsComponent = () => import(/* webpackChunkName: "vsf-icmaa-cms-page-custom-tickets" */ 'theme/pages/Tickets.vue')
 const FestivalComponent = () => import(/* webpackChunkName: "vsf-icmaa-cms-page-custom-festival" */ 'theme/components/core/blocks/ICMAA/Cms/Pages/Festival.vue')
+const INSDComponent = () => import(/* webpackChunkName: "vsf-icmaa-cms-page-custom-impericon-never-say-die" */ 'theme/components/core/blocks/ICMAA/Cms/Pages/ImpericonNeverSayDie.vue')
 
 export const routes: any = [
   // Custom cms routes, like /service or /festivals
@@ -11,5 +12,6 @@ export const routes: any = [
   { name: 'service-rte', path: '/:identifier', component: ServiceRTEComponent },
   { name: 'service-size', path: '/:identifier', component: ServiceSizeComponent },
   { name: 'tickets', path: '/:identifier', component: TicketsComponent },
-  { name: 'festival', path: '/:identifier', component: FestivalComponent }
+  { name: 'festival', path: '/:identifier', component: FestivalComponent },
+  { name: 'impericon-never-say-die', path: '/:identifier', component: INSDComponent }
 ]
