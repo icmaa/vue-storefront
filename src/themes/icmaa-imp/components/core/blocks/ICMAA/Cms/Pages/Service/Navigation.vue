@@ -2,12 +2,20 @@
   <nav role="service-navigation">
     <ul>
       <li class="t-w-full t-relative">
-        <a class="t-block lg:t-hidden t-bg-white t-border-black t-border t-p-2 t-appearance-none focus:outline-none focus:shadow-outline" href="#">Service
+        <a class="t-block lg:t-hidden t-bg-white t-border-base-light t-border t-px-3 t-py-2 t-appearance-none focus:outline-none focus:shadow-outline" @click="toggleView">Service
           <div class="t-pointer-events-none t-absolute t-inset-y-0 t-right-0 t-flex t-items-center t-px-2"><i class="material-icons t-text-2xl">keyboard_arrow_down</i></div>
         </a>
-        <ul class="t-hidden lg:t-block t-bg-white lg:t-bg-transparent t-absolute lg:t-relative t-w-full t-z-10">
-          <li v-for="(item, index) in navigation" :key="index" class="t-border-b t-border-base-lighter">
-            <router-link :to="localizedRoute(item.path)" class="t-flex t-p-2 t-text-sm">
+        <ul class="t-hidden lg:t-block lg:t-bg-transparent t-relative t-w-full">
+          <li v-for="(item, index) in navigation" :key="index" class="t-border-b t-border-base-light">
+            <router-link :to="localizedRoute(item.path)" class="t-flex t-px-3 t-py-2 t-text-sm">
+              {{ item.label }}
+            </router-link>
+          </li>
+        </ul>
+
+        <ul v-if="show" class="lg:t-hidden t-bg-white t-absolute t-w-full t-z-10 t-border-l t-border-r t-border-t t-border-base-light">
+          <li v-for="(item, index) in navigation" :key="index" class="t-border-b t-border-base-light">
+            <router-link :to="localizedRoute(item.path)" class="t-flex t-px-3 t-py-2 t-text-sm">
               {{ item.label }}
             </router-link>
           </li>
@@ -22,6 +30,11 @@ import { mapGetters } from 'vuex'
 
 export default {
   name: 'ServiceNavigation',
+  data () {
+    return {
+      show: false
+    }
+  },
   computed: {
     ...mapGetters('icmaaCmsBlock', ['getJsonBlockByIdentifier']),
     block () {
@@ -30,13 +43,12 @@ export default {
     navigation () {
       return this.block.navigation || []
     }
+  },
+  methods: {
+    toggleView () {
+      this.show = !this.show
+      this.$emit('toggle', this.show)
+    }
   }
 }
 </script>
-
-<style lang="scss" scoped>
-/* Display the ServiceNav on hover and tap*/
-ul li a:hover + .t-hidden, .t-hidden:hover {
-    display: block;
-}
-</style>
