@@ -54,10 +54,6 @@ $color-primary: #611122;
       border: 1px solid;
       width: 100%;
 
-      @at-root div#{&} {
-        overflow: scroll
-      }
-
       thead {
         border-bottom: 1px solid;
       }
