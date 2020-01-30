@@ -5,7 +5,12 @@
     <size-layout :content="content.pants" />
     <shoe-layout :content="content.shoes.boys" />
     <shoe-layout :content="content.shoes.girls" />
-    <blank-layout :content="content.blanks" />
+    <h2 class="t-mt-8 t-pb-4 t-border-b-2">
+      {{ content.blanks.headline }}
+    </h2>
+    <template v-for="(obj, index) in blanksContent">
+      <shoe-layout :content="obj" :key="index" />
+    </template>
   </layout>
 </template>
 
@@ -14,7 +19,8 @@ import Page from 'icmaa-cms/components/Page'
 import Layout from 'theme/components/core/blocks/ICMAA/Cms/Pages/Service/Layout'
 import SizeLayout from 'theme/components/core/blocks/ICMAA/Cms/Pages/Service/Size/SizeLayout'
 import ShoeLayout from 'theme/components/core/blocks/ICMAA/Cms/Pages/Service/Size/ShoeLayout'
-import BlankLayout from 'theme/components/core/blocks/ICMAA/Cms/Pages/Service/Size/BlankLayout'
+
+import omit from 'lodash-es/omit'
 
 export default {
   name: 'ServiceSize',
@@ -22,12 +28,16 @@ export default {
   components: {
     Layout,
     SizeLayout,
-    ShoeLayout,
-    BlankLayout
+    ShoeLayout
   },
   data () {
     return {
       dataType: 'yaml'
+    }
+  },
+  computed: {
+    blanksContent () {
+      return omit(this.content.blanks, ['headline'])
     }
   },
   asyncData ({ store }) {

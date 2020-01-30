@@ -3,7 +3,7 @@
     <h2 v-html="content.quickHelp.headline" />
     <ul class="t-list-disc t-ml-5">
       <li v-for="question in content.quickHelp.questions" :key="question.text">
-        <router-link :to="localizedRoute(question.link)" class="t-flex t-mb-3 t-text-base-tone">
+        <router-link :to="localizedRoute(question.link)" class="t-flex t-mb-2 t-text-base-tone">
           {{ question.text }}
         </router-link>
       </li>

@@ -1,14 +1,14 @@
 <template>
-  <div class="t-bg-white t-p-2 t-rounded t-mb-2">
-    <size-navigation @toggle="updateShow" :headline="content.headline" :show="show" />
+  <div>
+    <size-navigation @toggle="toggle" :headline="content.headline" :show="show" />
     <template v-if="show==true">
       <div class="t-flex t-flex-wrap">
-        <div class="t-mt-2 t-text-sm lg:t-w-1/3 t-mb-2 t-mr-2">
+        <div class="t-text-sm lg:t-w-1/3 t-mt-4 t-mb-4 t-mr-4">
           {{ content.description }}
         </div>
-        <div class="t-flex t-justify-between t-mb-2">
-          <img :src="content.image.boys" class="t-w-1/2 t-pr-2">
-          <img :src="content.image.girls" class="t-w-1/2 t-pl-2">
+        <div class="t-flex t-justify-between t-my-4">
+          <img :src="getMediaThumbnail(content.image.boys, 0, 0)" class="t-w-1/2 t-pr-2">
+          <img :src="getMediaThumbnail(content.image.girls, 0, 0)" class="t-w-1/2 t-pl-2">
         </div>
       </div>
       <div v-for="table in tables" :key="table">
@@ -46,7 +46,7 @@ export default {
     }
   },
   methods: {
-    updateShow (param) {
+    toggle (param) {
       this.show = param
     }
   }

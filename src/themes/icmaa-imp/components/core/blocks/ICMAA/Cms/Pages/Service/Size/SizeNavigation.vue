@@ -1,5 +1,5 @@
 <template>
-  <div class="t-flex t-items-center t-justify-between t-flex-wrap t-cursor-pointer t-font-bold" @click="toggleView">
+  <div class="t-flex t-items-center t-justify-between t-flex-wrap t-cursor-pointer t-font-bold t-py-2 t-border-b-2" :class="{ 't-border-base-lightest': !show }" @click="toggle">
     <div>{{ headline }}</div>
     <material-icon :icon="icon" size="lg" class="t-text-base-lighter t-ml-2" />
   </div>
@@ -17,11 +17,10 @@ export default {
     headline: {
       required: true,
       type: String
-    }
-  },
-  data () {
-    return {
-      show: false
+    },
+    show: {
+      type: Boolean,
+      default: false
     }
   },
   computed: {
@@ -30,9 +29,8 @@ export default {
     }
   },
   methods: {
-    toggleView () {
-      this.show = !this.show
-      this.$emit('toggle', this.show)
+    toggle () {
+      this.$emit('toggle', !this.show)
     }
   }
 }

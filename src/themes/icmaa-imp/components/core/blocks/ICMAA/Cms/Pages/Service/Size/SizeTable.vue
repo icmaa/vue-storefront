@@ -1,6 +1,6 @@
 <template>
   <div class="t-mb-4">
-    <div class="t-font-bold t-uppercase" v-if="headline">
+    <div class="t-font-bold t-mb-4" v-if="headline">
       {{ table.headline }}
     </div>
     <table class="t-w-full t-text-xs t-table-auto">

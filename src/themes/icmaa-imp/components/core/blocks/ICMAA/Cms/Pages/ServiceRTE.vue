@@ -38,10 +38,6 @@ $color-matterhorn: color(matterhorn);
 
   .cms-page-rte {
 
-    h1:first-child {
-      margin-top: 1rem;
-    }
-
     a {
       color: $color-primary;
     }
