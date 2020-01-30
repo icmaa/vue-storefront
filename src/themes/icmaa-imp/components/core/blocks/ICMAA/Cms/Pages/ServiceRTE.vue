@@ -31,11 +31,18 @@ export default {
 @import '~theme/css/variables/colors';
 @import '~theme/css/helpers/functions/color';
 
-$color-primary: #611122;
+$color-primary: color(primary);
+$color-matterhorn: color(matterhorn);
 
 #cms-page-rte {
 
   .cms-page-rte {
+
+    hr {
+      margin-top: 2rem;
+      margin-bottom: 2rem;
+      border-color: $color-matterhorn;
+    }
 
     ul {
       list-style: disc;
