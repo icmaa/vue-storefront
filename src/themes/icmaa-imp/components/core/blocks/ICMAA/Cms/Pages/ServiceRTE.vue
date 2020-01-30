@@ -38,20 +38,8 @@ $color-matterhorn: color(matterhorn);
 
   .cms-page-rte {
 
-    hr {
-      margin-top: 2rem;
-      margin-bottom: 2rem;
-      border-color: $color-matterhorn;
-    }
-
-    ul {
-      list-style: disc;
-      margin-left: 30px;
-    }
-
-    ol {
-      list-style: decimal;
-      margin-left: 30px;
+    h1:first-child {
+      margin-top: 1rem;
     }
 
     a {
@@ -59,7 +47,19 @@ $color-matterhorn: color(matterhorn);
     }
 
     p, ul, ol {
-      margin-bottom: 10px;
+      margin-bottom: 1rem;
+    }
+
+    ul, ol {
+      margin-left: 2rem;
+    }
+
+    ul {
+      list-style: disc;
+    }
+
+    ol {
+      list-style: decimal;
     }
 
     table {
@@ -73,7 +73,7 @@ $color-matterhorn: color(matterhorn);
 
       td, th {
         text-align: left;
-        padding: 8px;
+        padding: .5rem;
       }
 
       tbody {
@@ -81,14 +81,20 @@ $color-matterhorn: color(matterhorn);
         tr {
 
           &:last-Child td {
-            padding-bottom: 16px;
+            padding-bottom: 1rem;
           }
 
           &:first-Child td {
-            padding-top: 16px;
+            padding-top: 1rem;
           }
         }
       }
+    }
+
+    hr {
+      margin-top: 2rem;
+      margin-bottom: 2rem;
+      border-color: $color-matterhorn;
     }
   }
 }

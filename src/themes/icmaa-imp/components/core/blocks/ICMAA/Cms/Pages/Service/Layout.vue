@@ -1,9 +1,9 @@
 <template>
   <div class="t-container">
     <div class="t-flex t-flex-wrap t-py-4">
-      <navigation class="service-navigation t-w-full lg:t-w-2/12 t-px-4 t-mb-8" />
+      <navigation class="service-navigation t-w-full lg:t-w-2/12 t-px-4 lg:t-mt-4 t-mb-4" />
       <div class="cms-page-rte t-w-full lg:t-w-10/12 t-px-4">
-        <h1 v-html="headline" v-if="headline" />
+        <h1 v-html="headline" v-if="headline" class="t-text-2xl t-font-medium t-mt-4 t-mb-3" />
         <slot />
       </div>
     </div>
