@@ -57,11 +57,7 @@ export default {
     }
   },
   asyncData ({ store }) {
-    return Promise.all([
-      store.dispatch('icmaaCmsBlock/single', { value: 'service-navigation' }),
-      store.dispatch('icmaaCmsBlock/single', { value: 'service-contact' }),
-      store.dispatch('icmaaForms/single', { value: 'service-contact' })
-    ])
+    return store.dispatch('icmaaCmsBlock/single', { value: 'service-navigation' })
   },
   methods: {
     getEmailSubject () {
