@@ -38,8 +38,16 @@ export default {
     formElements () {
       return this.form.elements || []
     },
+    submitButtonText () {
+      return this.form.submitButtonText || false
+    },
     attrs () {
-      return omit(this.$attrs, ['elements', 'value'])
+      const $attrs = this.$attrs
+      if (this.submitButtonText) {
+        Object.assign($attrs, { submitButtonText: this.submitButtonText })
+      }
+
+      return omit($attrs, ['elements', 'value'])
     }
   },
   methods: {
