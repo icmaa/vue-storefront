@@ -57,8 +57,8 @@ export default {
       this.$emit('submit')
     }
   },
-  mounted () {
-    this.$store.dispatch('icmaaForms/single', { value: this.formIdentifier })
+  async mounted () {
+    return this.$store.dispatch('icmaaForms/single', { value: this.formIdentifier })
   }
 }
 </script>

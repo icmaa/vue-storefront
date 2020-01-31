@@ -26,6 +26,11 @@ export default {
       formData: { }
     }
   },
+  methods: {
+    submit () {
+      console.log('SUBMIT')
+    }
+  },
   asyncData ({ store }) {
     return store.dispatch('icmaaCmsBlock/single', { value: 'service-navigation' })
   }

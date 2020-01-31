@@ -7,6 +7,6 @@ const mutations: MutationTree<FormsState> = mutationsFactory({
   add: types.ICMAA_FORMS_ADD,
   upd: types.ICMAA_FORMS_UPD,
   rmv: types.ICMAA_FORMS_RMV
-}, 'uuid')
+}, 'identifier')
 
 export default mutations
