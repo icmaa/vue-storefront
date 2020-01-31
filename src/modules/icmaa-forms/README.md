@@ -13,7 +13,7 @@ You can pass all attributes which you can pass to the `theme/components/core/blo
 ```vue
 <template>
   <div>
-    <form-component :recaptcha="false" form-identifier="service-contact" v-model="formData" @submit="submit" />
+    <form-component form-identifier="service-contact" v-model="formData" @submit="submit" />
   </div>
 </template>
 

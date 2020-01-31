@@ -38,13 +38,15 @@ export default {
     formElements () {
       return this.form.elements || []
     },
-    submitButtonText () {
-      return this.form.submitButtonText || false
-    },
     attrs () {
-      const $attrs = this.$attrs
-      if (this.submitButtonText) {
-        Object.assign($attrs, { submitButtonText: this.submitButtonText })
+      let $attrs = this.$attrs
+
+      const { submitButtonText, recaptcha } = this.form
+      if (submitButtonText) {
+        $attrs = Object.assign({ submitButtonText }, $attrs)
+      }
+      if (recaptcha) {
+        $attrs = Object.assign({ recaptcha }, $attrs)
       }
 
       return omit($attrs, ['elements', 'value'])
