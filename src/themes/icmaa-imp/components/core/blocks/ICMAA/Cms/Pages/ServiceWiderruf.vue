@@ -1,8 +1,8 @@
 <template>
   <layout id="cms-page" :headline="content.headline">
-    <p>{{ content.text }}</p>
-    <p class="t-mb-4">{{ content.subtext }}</p>
-    <form-component :recaptcha="false" form-identifier="widerruf-formular" v-model="formData" @submit="submit" />
+    <p class="t-mb-2" v-html="content.text" />
+    <p class="t-mb-4" v-html="content.subtext" />
+    <form-component form-identifier="widerruf-formular" v-model="formData" @submit="submit" />
   </layout>
 </template>
 
