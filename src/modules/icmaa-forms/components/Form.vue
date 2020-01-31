@@ -39,7 +39,17 @@ export default {
       return this.form.elements || []
     },
     attrs () {
-      return omit(this.$attrs, ['elements', 'value'])
+      let $attrs = this.$attrs
+
+      const { submitButtonText, recaptcha } = this.form
+      if (submitButtonText) {
+        $attrs = Object.assign({ submitButtonText }, $attrs)
+      }
+      if (recaptcha) {
+        $attrs = Object.assign({ recaptcha }, $attrs)
+      }
+
+      return omit($attrs, ['elements', 'value'])
     }
   },
   methods: {
