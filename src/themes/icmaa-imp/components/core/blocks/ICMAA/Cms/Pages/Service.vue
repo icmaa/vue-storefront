@@ -11,8 +11,8 @@
     <h2 v-html="content.serviceTeam.headline" />
     <div class="t-flex t-flex-wrap t--mx-2">
       <div v-for="member in content.serviceTeam.team" :key="member.name" class="t-w-full sm:t-w-1/2 md:t-w-1/3 xl:t-w-1/4 t-px-2 t-pb-4">
-        <div class="t-relative t-border t-border-gray-600">
-          <div v-html="member.name" class="t-absolute t-b t-bg-gray t-left-0 t-mr-4 t-px-3 t-py-2 t-text-sm t-top-0 t-text-white t-bg-gray-600" />
+        <div class="t-relative t-border t-border-base-light">
+          <div v-html="member.name" class="t-absolute t-b t-bg-gray t-left-0 t-mr-4 t-px-3 t-py-2 t-text-sm t-top-0 t-text-white t-bg-base-light" />
           <img :src="getMediaThumbnail(member.img, 0, 0)" :alt="member.name">
         </div>
       </div>
