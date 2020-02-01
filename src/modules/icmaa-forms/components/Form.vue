@@ -42,10 +42,10 @@ export default {
       let $attrs = this.$attrs
 
       const { submitButtonText, recaptcha } = this.form
-      if (submitButtonText) {
+      if (submitButtonText !== '') {
         $attrs = Object.assign({ submitButtonText }, $attrs)
       }
-      if (recaptcha) {
+      if (recaptcha !== undefined) {
         $attrs = Object.assign({ recaptcha }, $attrs)
       }
 
