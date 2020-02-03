@@ -1,7 +1,7 @@
 <template>
   <layout id="cms-page" :headline="content.headline">
-    <p class="t-mb-2 t-font-bold t-text-sm" v-html="content.context" />
-    <div :class="{ 't-mb-6': formVisible }">
+    <p class="t-mb-2 t-font-bold t-text-sm" v-html="content.context" v-if="!isSend" />
+    <div :class="{ 't-mb-6': formVisible }" v-if="!isSend">
       <div v-for="(s, i) in subjects" :key="i">
         <div class="t-flex t-items-center t-justify-between t-cursor-pointer t-border-t t-border-base-lightest t-p-2 t-pl-0" :class="{ 't-opacity-50': !isSelectedSubject(s.name) && selectedSubject}" @click="toggleSubject(s)">
           <material-icon icon="indeterminate_check_box" v-if="isSelectedSubject(s.name)" />
@@ -22,7 +22,13 @@
         </div>
       </div>
     </div>
-    <form-component form-identifier="service-contact" v-model="formData" @submit="sendMail()" v-if="formVisible" />
+    <form-component form-identifier="service-contact" v-model="formData" @submit="sendEmail()" v-if="formVisible && !isSend" />
+    <div v-if="isSend">
+      <p class="t-font-bold t-text-alt-3">
+        {{ $t('Thank you, your email has successfully been sent.') }}
+      </p>
+      <p>{{ $t('We are going to reach out to you as soon as possible.') }}</p>
+    </div>
   </layout>
 </template>
 
@@ -31,6 +37,11 @@ import Page from 'icmaa-cms/components/Page'
 import Layout from 'theme/components/core/blocks/ICMAA/Cms/Pages/Service/Layout'
 import FormComponent from 'icmaa-forms/components/Form'
 import MaterialIcon from 'theme/components/core/blocks/MaterialIcon'
+
+import { mailer } from 'config'
+import i18n from '@vue-storefront/i18n'
+import { registerModule } from '@vue-storefront/core/lib/modules'
+import { MailerModule } from '@vue-storefront/core/modules/mailer'
 
 export default {
   name: 'ServiceContact',
@@ -42,10 +53,11 @@ export default {
   },
   data () {
     return {
-      formData: { },
       dataType: 'yaml',
+      formData: { },
       selectedSubject: false,
-      selectedChildSubject: false
+      selectedChildSubject: false,
+      isSend: false
     }
   },
   computed: {
@@ -62,6 +74,21 @@ export default {
     selectedSubjectHasChildren () {
       const subject = this.content.subjects.find(s => s.name === this.selectedSubject)
       return (subject && subject.hasOwnProperty('children'))
+    },
+    emailText () {
+      const { name, email, phone, order_number, message } = this.formData
+      const array = [
+        { label: 'Name:', value: name },
+        { label: 'Email:', value: email },
+        { label: 'Telefon:', value: phone },
+        { label: 'Bestellnummer:', value: order_number },
+        { label: 'Nachricht:', value: message }
+      ]
+
+      return array
+        .filter(l => l.value.length > 0)
+        .map(l => `${l.label}\n ${l.value}`)
+        .join(`\n\n`)
     }
   },
   methods: {
@@ -77,18 +104,62 @@ export default {
       this.selectedSubject = false
       this.selectedChildSubject = false
     },
-    sendMail () {
-      return this.$store.dispatch('icmaaForms/mail', { subject: this.subject, data: this.formData })
-    },
     isSelectedSubject (subject) {
       return subject === this.selectedSubject
     },
     isSelectedChildSubject (subject) {
       return subject === this.selectedChildSubject
+    },
+    sendEmail (success, failure) {
+      const mail = {
+        sourceAddress: this.formData.email,
+        targetAddress: mailer.contactAddress,
+        subject: this.subject,
+        emailText: this.emailText,
+        ...this.formData
+      }
+
+      this.$store.dispatch('mailer/sendEmail', mail)
+        .then(res => {
+          if (res.ok) {
+            this.onSuccess()
+          } else {
+            return res.json()
+          }
+        })
+        .then(res => {
+          if (res) {
+            const errorPrefix = i18n.t('An error appeared:')
+            this.onError(errorPrefix + ' ' + i18n.t(res.result))
+          }
+        })
+        .catch(() => {
+          this.onError(i18n.t('Could not send an email. Please try again later.'))
+        })
+    },
+    onError (message) {
+      this.$store.dispatch('notification/spawnNotification', {
+        type: 'error',
+        message: message,
+        action1: { label: i18n.t('OK') }
+      })
+    },
+    onSuccess () {
+      this.$store.dispatch('notification/spawnNotification', {
+        type: 'success',
+        message: i18n.t('Email has successfully been sent.'),
+        action1: { label: i18n.t('OK') }
+      })
+
+      this.formData = {}
+      this.isSend = true
     }
   },
   asyncData ({ store }) {
     return store.dispatch('icmaaCmsBlock/single', { value: 'service-navigation' })
+  },
+  beforeCreate () {
+    registerModule(MailerModule)
   }
 }
 </script>
