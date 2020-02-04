@@ -75,7 +75,7 @@ export default {
       const subject = this.content.subjects.find(s => s.name === this.selectedSubject)
       return (subject && subject.hasOwnProperty('children'))
     },
-    emailText () {
+    emailData () {
       const { name, email, phone, order_number, message } = this.formData
       const array = [
         { label: 'Name:', value: name },
@@ -87,8 +87,16 @@ export default {
 
       return array
         .filter(l => l.value.length > 0)
+    },
+    emailText () {
+      return this.emailData
         .map(l => `${l.label}\n ${l.value}`)
         .join(`\n\n`)
+    },
+    emailHtml () {
+      return this.emailData
+        .map(l => `<strong>${l.label}</strong><br> ${l.value}`)
+        .join(`<br><br>`)
     }
   },
   methods: {
@@ -111,29 +119,31 @@ export default {
       return subject === this.selectedChildSubject
     },
     sendEmail (success, failure) {
+      this.$bus.$emit('notification-progress-start', i18n.t('Please wait'))
+
       const mail = {
-        sourceAddress: this.formData.email,
+        sourceAddress: `${this.formData.name} <${this.formData.email}>`,
         targetAddress: mailer.contactAddress,
         subject: this.subject,
-        emailText: this.emailText,
+        text: this.emailText,
+        html: this.emailHtml,
         ...this.formData
       }
 
       this.$store.dispatch('mailer/sendEmail', mail)
         .then(res => {
+          this.$bus.$emit('notification-progress-stop')
+
           if (res.ok) {
             this.onSuccess()
           } else {
-            return res.json()
-          }
-        })
-        .then(res => {
-          if (res) {
+            res = res.json()
             const errorPrefix = i18n.t('An error appeared:')
             this.onError(errorPrefix + ' ' + i18n.t(res.result))
           }
         })
         .catch(() => {
+          this.$bus.$emit('notification-progress-stop')
           this.onError(i18n.t('Could not send an email. Please try again later.'))
         })
     },
