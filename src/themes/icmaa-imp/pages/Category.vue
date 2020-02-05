@@ -98,7 +98,7 @@ import Dropdown from 'theme/components/core/blocks/Dropdown'
 import ButtonComponent from 'theme/components/core/blocks/Button'
 import MaterialIcon from 'theme/components/core/blocks/MaterialIcon'
 import LoaderBackground from 'theme/components/core/LoaderBackground'
-import BlockWrapper from 'theme/components/core/blocks/ICMAA/Cms/Wrapper'
+import BlockWrapper from 'icmaa-cms/components/Wrapper'
 
 import CategoryExtrasHeader from 'theme/components/core/blocks/CategoryExtras/Header'
 import CategoryExtrasFooter from 'theme/components/core/blocks/CategoryExtras/Footer'

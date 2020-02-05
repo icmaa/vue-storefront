@@ -1,5 +1,5 @@
 <template>
-  <div id="cms-page" class="t-container t-p-4" v-if="page">
+  <div id="cms-landing-page" class="t-container t-p-4" v-if="page">
     <block-wrapper :components="page.content" />
   </div>
 </template>
@@ -7,7 +7,7 @@
 <script>
 import { mapGetters } from 'vuex'
 
-import BlockWrapper from 'theme/components/core/blocks/ICMAA/Cms/Wrapper'
+import BlockWrapper from 'icmaa-cms/components/Wrapper'
 import CmsMetaMixin from 'icmaa-meta/mixins/cmsMeta'
 
 export default {
