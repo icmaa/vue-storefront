@@ -1,6 +1,6 @@
 <template>
   <div class="t-flex t-flex-wrap t--mx-4">
-    <div v-for="(c, i) in componentsReady" :key="`${c.name}-${i}`" class="t-w-full t-px-4">
+    <div v-for="(c, i) in componentsReady" :key="`${c.name}-${i}`" class="t-w-full" :class="[{ 't-px-4': c.padding, 'lg:t-w-1/2': (c.size === 'half') }, c.cssClass]">
       <component :is="c.component" v-bind="c.props" :name="c.name" />
     </div>
   </div>
@@ -32,14 +32,23 @@ export default {
           propsTypes: {
             limit: 'number',
             tags: (v) => v.join(',')
-          }
+          },
+          propsDefaults: {},
+          cssClass: 't-mb-8',
+          padding: false
         },
         'component_logoline': {
           component: AsyncLogoline,
           propsTypes: {
             parentId: 'number',
             limit: 'number'
-          }
+          },
+          propsDefaults: {
+            placeholder: true,
+            columnClass: 't-w-1/3 md:t-w-1/6 lg:t-w-1/4 t-pb-2'
+          },
+          cssClass: 't-mb-4 lg:t-mb-6',
+          padding: true
         }
       }
     },
@@ -48,12 +57,16 @@ export default {
         .filter(c => Object.keys(this.componentsMap).includes(c.component))
         .map(c => {
           const componentsMap = this.componentsMap[c.component]
-          const { component, propsTypes } = componentsMap
+          const { component, propsTypes, propsDefaults, cssClass, padding } = componentsMap
+
+          const size = c.hasOwnProperty('width') ? c.width : 'full'
 
           let props = mapKeys(
-            omit(c, ['_uid', 'component']),
+            omit(c, ['_uid', 'component', 'width']),
             (v, k) => camelCase(k)
           )
+
+          props = Object.assign(props, propsDefaults)
 
           props = mapValues(props, (p, k) => {
             if (Object.keys(propsTypes).includes(k)) {
@@ -61,19 +74,17 @@ export default {
                 case 'number':
                   p = parseInt(p)
                   break
-              }
-
-              if (typeof propsTypes[k] === 'function') {
-                p = propsTypes[k](p)
+                default:
+                  if (typeof propsTypes[k] === 'function') {
+                    p = propsTypes[k](p)
+                  }
               }
             }
 
             return p
           })
 
-          console.log(props)
-
-          return { component, props }
+          return { component, props, cssClass, padding, size }
         })
     }
   }
