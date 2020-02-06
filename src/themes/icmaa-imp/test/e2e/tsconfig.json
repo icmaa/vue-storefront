@@ -1,12 +1,12 @@
 {
-    "compilerOptions": {
-      "allowJs": true,
-      "baseUrl": "../../../../../node_modules",
-      "types": [
-        "cypress"
-      ]
-    },
-    "include": [
-      "**/*.*"
-    ]
+  "compilerOptions": {
+    "baseUrl": "../../../../../node_modules",
+    "typeRoots": [ "../../../../../node_modules/@types", "./support" ],
+    "outDir": "./dist/",
+    "noImplicitAny": true,
+    "module": "es6",
+    "target": "es6",
+    "allowJs": true,
+    "types": ["cypress", "node"]
   }
+}

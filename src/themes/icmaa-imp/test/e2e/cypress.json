@@ -3,5 +3,9 @@
   "fixturesFolder": "test/e2e/fixtures",
   "integrationFolder": "test/e2e/integration",
   "pluginsFile": "test/e2e/plugins/index.js",
-  "supportFile": "test/e2e/support/index.js"
+  "supportFile": "test/e2e/support/index.ts",
+  "env": {
+    "store_codes": ["de", "fr", "it", "uk"],
+    "current_store_code": "de"
+  }
 }
