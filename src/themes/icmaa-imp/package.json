@@ -5,8 +5,8 @@
   "private": true,
   "main": "index.js",
   "scripts": {
-    "test:e2e": "cypress open",
-    "test:e2e:ci": "cypress run"
+    "test:e2e": "cypress open --config-file test/e2e/cypress.json",
+    "test:e2e:ci": "cypress run --config-file test/e2e/cypress.json"
   },
   "author": "cewald <c.ewald@impericon.com> and contributors",
   "license": "MIT",
