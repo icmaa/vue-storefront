@@ -1,5 +1,3 @@
-/// <reference types="cypress" />
-
 declare namespace Cypress {
 
   interface ExtVisitOptions extends VisitOptions {

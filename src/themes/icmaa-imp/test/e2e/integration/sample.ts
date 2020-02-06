@@ -1,5 +1,3 @@
-/// <reference types="../support" />
-
 describe('Homepage', () => {
   it('Teaser should be visible in two blocks on homepage', () => {
     cy.visit('/')
