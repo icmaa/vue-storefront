@@ -46,7 +46,7 @@ Cypress.Commands.overwrite('visit', (originalFn, url, options) => {
   const storeCodes: string[] = Settings.availableStoreViews
 
   let storeCode: string = storeCodes[Math.floor(Math.random() * (storeCodes.length - 1))]
-  if (options && options.hasOwnProperty('storeCode')) {
+  if (options && options.hasOwnProperty('storeCode') && storeCodes.includes(options.storeCode)) {
     storeCode = options.storeCode
   }
 

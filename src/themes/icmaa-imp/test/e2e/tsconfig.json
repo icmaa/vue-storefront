@@ -7,6 +7,7 @@
     "module": "es6",
     "target": "es6",
     "allowJs": true,
+    "lib": ["es2017", "es2016", "DOM"],
     "types": ["cypress", "node"]
   }
 }
