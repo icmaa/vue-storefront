@@ -1,9 +1,12 @@
 {
   "baseUrl": "http://localhost:3000",
-  "fixturesFolder": "test/e2e/fixtures",
-  "integrationFolder": "test/e2e/integration",
-  "pluginsFile": "test/e2e/plugins/index.js",
-  "supportFile": "test/e2e/support/index.ts",
+  "fixturesFolder": "fixtures",
+  "integrationFolder": "integration",
+  "pluginsFile": "plugins/index.js",
+  "supportFile": "support/index.ts",
+  "screenshotsFolder": "screenshots",
+  "trashAssetsBeforeRuns": true,
+  "video": false,
   "env": {
     "store_codes": ["de", "fr", "it", "uk"],
     "current_store_code": "de"

@@ -28,6 +28,20 @@ import Settings from './utils/settings'
 
 const { _ } = Cypress
 
+Cypress.Commands.add(
+  'random',
+  { prevSubject: 'element' },
+  subject => cy.wrap(subject).eq(Math.floor(Math.random() * subject.length))
+)
+
+Cypress.Commands.add(
+  'clickRandomElement',
+  { prevSubject: 'element' },
+  (subject) => {
+    cy.wrap(subject).random().click()
+  }
+)
+
 Cypress.Commands.overwrite('visit', (originalFn, url, options) => {
   const storeCodes: string[] = Settings.availableStoreViews
 

@@ -7,6 +7,21 @@ declare namespace Cypress {
   }
 
   interface Chainable<Subject> {
+
+    /**
+   * Get random element from previous element
+   * @example
+   * cy.random()
+   */
+    random(): Chainable<any>,
+
+    /**
+     * Click a random element of specific selector
+     * @example
+     * cy.clickRandomElement()
+     */
+    clickRandomElement(skipFirst: boolean): Chainable<any>,
+
     /**
      * Visit the given url
      *
