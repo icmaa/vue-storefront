@@ -35,12 +35,9 @@ export default {
     }
   },
   computed: {
-    ...mapGetters({ storeConfigs: 'icmaaConfig/getMap' }),
+    ...mapGetters({ storeViews: 'icmaaConfig/getCompleteMap' }),
     currentStoreView () {
       return currentStoreView()
-    },
-    storeViews () {
-      return this.storeConfigs.map(s => config.storeViews[s.storeCode])
     }
   },
   methods: {
