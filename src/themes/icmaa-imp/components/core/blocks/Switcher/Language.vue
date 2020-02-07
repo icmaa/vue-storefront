@@ -8,7 +8,7 @@
         <span>{{ $t('We detected a different language.') }}</span><br>
         <span class="t-font-bold">{{ $t('Are you in the right store?') }}</span>
       </div>
-      <div class="t-w-1/2 t-px-2 t-pb-4" v-for="(storeView) in storeViews" :key="storeView.storeCode" @click="setLanguageAccepted">
+      <div class="t-w-1/2 t-px-2 t-pb-4" v-for="(storeView) in storeViews" :key="storeView.languageCode" @click="setLanguageAccepted">
         <language-button :store-view="storeView" :is-current="storeView.storeCode === currentStoreView.storeCode" />
       </div>
     </div>
