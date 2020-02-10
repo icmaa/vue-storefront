@@ -52,6 +52,9 @@ export default {
     const sort = this.query && this.query.sort ? this.query.sort : null
     if (sort && Object.values(this.sortingConfigOptions).includes(sort)) {
       this.selected = sort
+    } else {
+      const { attribute, order } = products.defaultSortBy
+      this.selected = `${attribute}:${order}`
     }
   },
   methods: {
