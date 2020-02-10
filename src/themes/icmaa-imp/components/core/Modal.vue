@@ -8,7 +8,7 @@
           <h2 class="t-text-lg t-text-base-dark" v-if="title" v-text="title" />
           <slot name="header" />
           <div class="t-flex-expand" />
-          <top-button icon="close" text="Close" :tab-index="1" @click.native="close" class="t--mr-2 t-text-base" />
+          <top-button icon="close" text="Close" :tab-index="1" @click.native="close" data-test-id="ModalClose" class="t--mr-2 t-text-base" />
         </div>
         <div class="modal-content" :class="[ padding ]">
           <slot />
