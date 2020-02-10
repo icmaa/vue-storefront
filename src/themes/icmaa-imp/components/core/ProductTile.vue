@@ -1,5 +1,5 @@
 <template>
-  <div class="product t-cursor-pointer" v-observe-visibility="visibilityChanged">
+  <div data-test-id="ProductTile" class="product t-cursor-pointer" v-observe-visibility="visibilityChanged">
     <div class="product-cover t-relative t-bg-white" :class="{ 't-mb-4': !onlyImage }">
       <slot name="imageOverlay">
         <AddToWishlist class="t-absolute t-bottom-0 t-left-0 t-z-1" :is-overlay="true" :product="product" />
