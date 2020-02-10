@@ -21,7 +21,7 @@
           v-for="(option, key) in options"
           :key="key"
           :value="option.value"
-          v-bind="{ selected: option.value === selected || option.value === value }"
+          v-bind="{ selected: option.value === selected }"
         >
           {{ option.label }}
         </option>
