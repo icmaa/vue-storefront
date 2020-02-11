@@ -1,5 +1,5 @@
 <template>
-  <sidebar :close-on-click="false" :use-expander-in-title="false" ref="searchSidebar" data-testid="searchSidebar">
+  <sidebar :close-on-click="false" :use-expander-in-title="false" ref="searchSidebar" data-testid="searchSidebar" data-test-id="searchSidebar">
     <template v-slot:top>
       <label for="search" class="t-flex">
         <span class="t-sr-only">{{ $t('Search') }}</span>

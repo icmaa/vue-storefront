@@ -7,6 +7,7 @@
       @click="execAction(action1, index)"
       class="message t-p-4 t-pb-1"
       data-testid="notificationMessage"
+      data-test-id="notificationMessage"
     >
       {{ message }}
     </div>

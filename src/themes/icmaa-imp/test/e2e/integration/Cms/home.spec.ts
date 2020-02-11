@@ -1,31 +1,23 @@
 describe('Homepage', () => {
-  it('Fullsize-Teaser should be visible on homepage', () => {
-    cy.visit('/')
-    cy.get('[data-test-id="TeaserFullsize"]').should('be.visible')
-  })
-
-  it('Split-Teaser should be visible on homepage', () => {
-    cy.visit('/')
-    cy.get('[data-test-id="TeaserSplit"]').should('be.visible')
-  })
-
-  it('Teaser should be visible on homepage', () => {
-    cy.visit('/')
-    cy.get('[data-test-id="Teaser"]').should('be.visible')
-  })
-
-  it('Logoline should be visible in two blocks on homepage', () => {
-    cy.visit('/')
+  it('Check HomePage with all Elements (Fullsize-Teaser, Split-Teaser und Teaser, LogoLines, ProductListings', () => {
+    cy.visitAsRecurringUser('/')
+    // Fullsize-Teaser is a Image with "teaser" in img src
+    cy.get('[data-test-id="TeaserFullsize"]').find('img').should('have.attr', 'src').should('include', 'teaser')
+    // Split-Teaser is a Image with "teaser" in img src
+    cy.get('[data-test-id="TeaserSplit"]').find('img').should('have.attr', 'src').should('include', 'teaser')
+    // Teaser is a Image with "teaser" in img src
+    cy.get('[data-test-id="Teaser"]').find('img').should('have.attr', 'src').should('include', 'teaser')
+    // 2 LogoLineBlocks
     cy.get('[data-test-id="LogoLineBlock"]').should('have.length', 2)
-  })
-
-  it('Product-Listing should be visible in two blocks on homepage', () => {
-    cy.visit('/')
+    // 2 LogoLines
+    cy.get('[data-test-id="LogoLine"]').should('have.length', 2)
+    // 24 LogoItems
+    cy.get('[data-test-id="LogoLineItem"]').should('have.length', 24)
+    // LogoItems is a Image with "department-logos" in img src
+    cy.get('[data-test-id="LogoLineItem"]').find('img').should('have.attr', 'src').should('include', 'department-logos')
+    // 2 ProductListings
     cy.get('[data-test-id="ProductListingWidget"]').should('have.length', 2)
-  })
-
-  it('Product-Listing should be have 2x4 Products on homepage', () => {
-    cy.visit('/')
-    cy.get('[data-test-id="ProductListingWidget"] [data-test-id="ProductTile"] ').should('have.length', 8)
+    // 2x4 ProductTiles
+    cy.get('div[data-test-id="ProductListingWidget"]').find('[data-test-id="ProductTile"]').should('have.length', 8)
   })
 })
