@@ -17,7 +17,7 @@ import Settings from './Settings'
  * Import faker.js using the current storeview or a specific one
  * @param country
  */
-export const Faker = (country?: string) => {
+export const Faker = (country?: string): Faker.FakerStatic => {
   faker.locale = country || Settings.currentStoreView
   return faker
 }

@@ -30,6 +30,7 @@
     "@cypress/webpack-preprocessor": "^4.1.1",
     "@fullhuman/postcss-purgecss": "^1.2.0",
     "@types/chai": "^4.2.8",
+    "@types/faker": "^4.1.9",
     "@types/mocha": "^7.0.1",
     "@types/node": "^13.7.0",
     "cypress": "^3.8.3",
