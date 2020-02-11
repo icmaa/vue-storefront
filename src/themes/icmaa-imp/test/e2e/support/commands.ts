@@ -24,7 +24,7 @@
 // -- This is will overwrite an existing command --
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
 
-import Settings from './utils/settings'
+import Settings from './utils/Settings'
 
 const { _ } = Cypress
 
