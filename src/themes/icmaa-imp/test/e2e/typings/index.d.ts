@@ -8,6 +8,7 @@ declare namespace Cypress {
 
     /**
      * Get random element from previous element
+     *
      * @example
      * cy.random()
      */
@@ -15,13 +16,15 @@ declare namespace Cypress {
 
     /**
      * Click a random element of specific selector
+     *
      * @example
      * cy.clickRandomElement()
      */
-    clickRandomElement(skipFirst: boolean): Chainable<any>,
+    clickRandomElement(): Chainable<any>,
 
     /**
      * Check image for visibility and dimensions
+     *
      * @example
      * cy.get('img').checkImage()
      */
@@ -53,6 +56,16 @@ declare namespace Cypress {
      * cy.visitAsRecurringUser('/merchandise', { storeCode: 'de' })
      */
     visitAsRecurringUser(url: string, options?: Partial<ExtVisitOptions>): Chainable<Window>,
-    visitAsRecurringUser(options: Partial<ExtVisitOptions> & { url: string }): Chainable<Window>
+    visitAsRecurringUser(options: Partial<ExtVisitOptions> & { url: string }): Chainable<Window>,
+
+    /**
+     * Open main navigation sidebar
+     * Adds alias `sidebar` for further use
+     *
+     * @example
+     * cy.openNavigationSidebar()
+     * cy.openNavigationSidebar('[data-test-id="HeaderButtonWishlist"]')
+     */
+    openNavigationSidebar(triggerSelector?: string): Chainable<Window>
   }
 }
