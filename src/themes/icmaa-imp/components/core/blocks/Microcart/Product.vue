@@ -59,11 +59,11 @@
 import config from 'config'
 import { mapGetters } from 'vuex'
 import { currentStoreView } from '@vue-storefront/core/lib/multistore'
-import { formatProductLink } from '@vue-storefront/core/modules/url/helpers'
+import { getThumbnailForProduct } from '@vue-storefront/core/modules/cart/helpers'
+import { formatProductLink } from 'icmaa-url/helpers'
 import Product from '@vue-storefront/core/compatibility/components/blocks/Microcart/Product'
 import ButtonComponent from 'theme/components/core/blocks/Button'
 import ProductImage from 'theme/components/core/ProductImage'
-import { getThumbnailForProduct } from '@vue-storefront/core/modules/cart/helpers'
 
 export default {
   name: 'MicroCartProduct',
