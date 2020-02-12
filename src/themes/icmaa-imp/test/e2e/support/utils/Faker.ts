@@ -32,3 +32,15 @@ export const getRandomIcmaaEmail = () => {
     '@impericon.com'
   ].join('')
 }
+
+/**
+ * Return a random birthday in locale format
+ * @param locale
+ */
+export const getRandomBirthday = (locale: string = 'de-DE'): string => {
+  const dobDate = faker.date.between(faker.date.past(18), faker.date.past(40))
+  return dobDate.toLocaleDateString(
+    locale,
+    { month: '2-digit', day: '2-digit', year: 'numeric' }
+  )
+}

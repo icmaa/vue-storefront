@@ -20,7 +20,37 @@ declare namespace Cypress {
      * @example
      * cy.clickRandomElement()
      */
-    clickRandomElement(): Chainable<any>,
+    clickRandomElement(): Chainable<Element>,
+
+    /**
+     * Select a random option from a select
+     * @example
+     * cy.selectRandomOption()
+     */
+    selectRandomOption(skipFirst?: boolean): Chainable<Element>,
+
+    /**
+     * Click or don't click on an element
+     * @example
+     * cy.randomlyClickElement()
+     */
+    randomlyClickElement(): Chainable<Element>,
+
+    /**
+     * Get item by data-test-id attribute
+     *
+     * @example
+     * cy.getByTestId('Modal')
+     */
+    getByTestId(selector: string): Chainable<any>,
+
+    /**
+     * Find child items by data-test-id attribute
+     *
+     * @example
+     * cy.findByTestId('Modal')
+     */
+    findByTestId(selector: string): Chainable<JQuery<any>>,
 
     /**
      * Check image for visibility and dimensions
@@ -65,7 +95,8 @@ declare namespace Cypress {
      * @example
      * cy.openNavigationSidebar()
      * cy.openNavigationSidebar('[data-test-id="HeaderButtonWishlist"]')
+     * cy.openNavigationSidebar('[data-test-id="HeaderButtonAccount"]', '[data-test-id="Modal"]')
      */
-    openNavigationSidebar(triggerSelector?: string): Chainable<Window>
+    openNavigationSidebar(triggerSelector?: string, overlaySelector?: string): Chainable<Window>
   }
 }
