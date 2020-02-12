@@ -6,7 +6,7 @@ describe('Homepage', () => {
     // Split-Teaser is a Image with "teaser" in img src
     cy.get('[data-test-id="TeaserSplit"] > img').checkImage()
     // Teaser is a Image with "teaser" in img src
-    cy.get('[data-test-id="Teaser"] > img').checkImage()
+    cy.get('[data-test-id="TeaserSmall"] > img').checkImage()
     // 2 LogoLineBlocks
     cy.get('[data-test-id="LogoLineBlock"]').should('have.length', 2)
     // 2 LogoLines

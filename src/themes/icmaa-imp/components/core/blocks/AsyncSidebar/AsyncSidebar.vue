@@ -24,6 +24,7 @@ import LoadingError from 'theme/components/core/blocks/AsyncSidebar/LoadingError
 import { disableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock'
 
 export default {
+  name: 'Sidebar',
   components: {
     Submenu
   },

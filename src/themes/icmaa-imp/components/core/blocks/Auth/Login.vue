@@ -1,5 +1,5 @@
 <template>
-  <form class="" @submit.prevent="login" novalidate>
+  <form class="" @submit.prevent="login" novalidate data-test-id="Login">
     <div v-if="hasRedirect" class="t-mb-4 t-text-sm">
       {{ $t('You need to be logged in to see this page') }}
     </div>

@@ -1,6 +1,6 @@
 <template>
   <transition name="fade-in-down">
-    <div class="modal" v-if="isVisible">
+    <div class="modal" v-if="isVisible" data-test-id="Modal">
       <div class="modal-backdrop" @click="close" />
       <div class="modal-container t-bg-white t-scrolling-touch t-pb-20 sm:t-pb-0" ref="modal-container" :style="style">
         <div class="t-h-60px t-flex-fix t-px-4 t-bg-white t-border-b t-border-base-lighter t-flex t-items-center">
