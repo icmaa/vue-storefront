@@ -39,13 +39,13 @@
         {{ $t('Forgot the password?') }}
       </div>
     </div>
-    <button-component :submit="true" type="primary" class="t-w-full t-mb-2" data-testid="loginSubmit">
+    <button-component :submit="true" type="primary" class="t-w-full t-mb-2" data-test-id="loginSubmit">
       {{ $t('Login to your account') }}
     </button-component>
     <no-ssr>
       <facebook-login-button class="t-w-full t-mb-2" />
     </no-ssr>
-    <button-component type="transparent" class="t-w-full t--mb-2" @click="callRegister" data-testid="registerLink">
+    <button-component type="transparent" class="t-w-full t--mb-2" @click="callRegister" data-test-id="registerLink">
       {{ $t('Not yet an account?') }} <span class="t-ml-1">{{ $t('Register now') }}</span>
     </button-component>
   </form>

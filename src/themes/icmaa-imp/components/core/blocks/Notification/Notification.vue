@@ -2,11 +2,11 @@
   <div
     class="notification t-text-white t-text-base t-cursor-pointer"
     :class="[type, backgroundColor]"
+    data-test-id="NotificationItem"
   >
     <div
       @click="execAction(action1, index)"
       class="message t-p-4 t-pb-1"
-      data-testid="notificationMessage"
       data-test-id="notificationMessage"
     >
       {{ message }}
@@ -16,7 +16,7 @@
         class="t-px-4 t-py-3 t-uppercase t-font-medium t-border-r-2"
         :class="[borderColor]"
         id="notificationAction1"
-        data-testid="notificationAction1"
+        data-test-id="notificationAction1"
         @click="execAction(action1, index)"
       >
         {{ action1 ? action1.label : $t('OK') }}
@@ -24,7 +24,7 @@
       <div
         class="t-w-full t-px-4 t-py-3 t-uppercase t-font-medium"
         id="notificationAction2"
-        data-testid="notificationAction2"
+        data-test-id="notificationAction2"
         @click="execAction(action2, index)"
         v-if="action2"
       >

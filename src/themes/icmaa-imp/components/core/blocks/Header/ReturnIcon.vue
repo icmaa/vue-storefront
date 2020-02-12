@@ -1,5 +1,5 @@
 <template>
-  <button type="button" class="inline-flex brdr-none" @click="goBack" data-testid="returnButton">
+  <button type="button" class="inline-flex brdr-none" @click="goBack" data-test-id="returnButton">
     <i class="material-icons">keyboard_backspace</i>
   </button>
 </template>

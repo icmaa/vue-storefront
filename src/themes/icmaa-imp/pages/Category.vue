@@ -56,7 +56,7 @@
       </div>
       <div class="t-mb-8" v-if="isCategoryEmpty">
         <div class="t-bg-white t-mx-4 t-p-4 t-py-10 t-text-center">
-          <h4 class="t-text-base t-bold" data-testid="noProductsInfo">
+          <h4 class="t-text-base t-bold" data-test-id="noProductsInfo">
             {{ $t('No products found!') }}
           </h4>
           <p class="t-text-sm t-text-base-light">

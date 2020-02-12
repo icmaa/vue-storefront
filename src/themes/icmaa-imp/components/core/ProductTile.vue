@@ -4,10 +4,10 @@
       <slot name="imageOverlay">
         <AddToWishlist class="t-absolute t-bottom-0 t-left-0 t-z-1" :is-overlay="true" :product="product" />
       </slot>
-      <router-link :to="productLink" data-testid="productLink" class="product-link t-block t-z-0">
+      <router-link :to="productLink" data-test-id="productLink" class="product-link t-block t-z-0">
         <promo-banner :product="product" class="t-absolute t-top-0 t-right-0" />
         <placeholder ratio="161:233" v-if="imageLoading" />
-        <product-image :image="thumbnailObj" :alt="product.name | htmlDecode" data-testid="productImage" @load="imageLoading = false" />
+        <product-image :image="thumbnailObj" :alt="product.name | htmlDecode" data-test-id="productImage" @load="imageLoading = false" />
       </router-link>
     </div>
     <router-link :to="productLink" tag="div" class="t-text-sm" v-if="!onlyImage">
