@@ -12,9 +12,9 @@ describe('Homepage', () => {
     // 2 LogoLines
     cy.get('[data-test-id="LogoLine"]').should('have.length', 2)
     // 24 LogoItems
-    cy.get('[data-test-id="LogoLineItem"]').should('have.length', 24)
+    cy.get('[data-test-id="DepartmentLogo"]').should('have.length', 24)
     // LogoItems is a Image with "department-logos" in img src
-    cy.get('[data-test-id="LogoLineItem"]').find('img').should('have.attr', 'src').should('include', 'department-logos')
+    cy.get('[data-test-id="DepartmentLogo"]').find('img').each(e => cy.wrap(e).checkImage())
     // 2 ProductListings
     cy.get('[data-test-id="ProductListingWidget"]').should('have.length', 2)
     // 2x4 ProductTiles
