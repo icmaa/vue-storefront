@@ -2,11 +2,11 @@ describe('Homepage', () => {
   it('Check HomePage with all Elements (Fullsize-Teaser, Split-Teaser und Teaser, LogoLines, ProductListings', () => {
     cy.visitAsRecurringUser('/')
     // Fullsize-Teaser is a Image with "teaser" in img src
-    cy.get('[data-test-id="TeaserFullsize"]').find('img').should('have.attr', 'src').should('include', 'teaser')
+    cy.get('[data-test-id="TeaserFullsize"] > div > img').checkImage()
     // Split-Teaser is a Image with "teaser" in img src
-    cy.get('[data-test-id="TeaserSplit"]').find('img').should('have.attr', 'src').should('include', 'teaser')
+    cy.get('[data-test-id="TeaserSplit"] > img').checkImage()
     // Teaser is a Image with "teaser" in img src
-    cy.get('[data-test-id="Teaser"]').find('img').should('have.attr', 'src').should('include', 'teaser')
+    cy.get('[data-test-id="Teaser"] > img').checkImage()
     // 2 LogoLineBlocks
     cy.get('[data-test-id="LogoLineBlock"]').should('have.length', 2)
     // 2 LogoLines

@@ -21,6 +21,13 @@ declare namespace Cypress {
     clickRandomElement(skipFirst: boolean): Chainable<any>,
 
     /**
+     * Check image for visibility and dimensions
+     * @example
+     * cy.get('img').checkImage()
+     */
+    checkImage(): Chainable<any>,
+
+    /**
      * Visit the given url
      *
      * @param {string} url The URL to visit. If relative uses `baseUrl`

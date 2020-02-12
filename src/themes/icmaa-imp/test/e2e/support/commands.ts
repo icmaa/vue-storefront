@@ -42,6 +42,12 @@ Cypress.Commands.add(
   }
 )
 
+Cypress.Commands.add('checkImage', { prevSubject: 'element' }, (subject) => {
+  cy.wrap(subject)
+    .should('be.visible')
+    .and($img => expect($img[0].naturalWidth).to.be.greaterThan(0))
+})
+
 Cypress.Commands.overwrite('visit', (originalFn, url, options) => {
   const storeCodes: string[] = Settings.availableStoreViews
 
