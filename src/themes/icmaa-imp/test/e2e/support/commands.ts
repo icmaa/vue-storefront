@@ -80,3 +80,13 @@ Cypress.Commands.add('visitAsRecurringUser', (url, options) => {
 
   cy.visit(url, options)
 })
+
+Cypress.Commands.add('openNavigationSidebar', (trigger: string = '[data-test-id="HeaderButtonSidebar"]') => {
+  cy.get(trigger)
+    .should('be.visible')
+    .click()
+
+  cy.get('[data-test-id="Sidebar"]')
+    .as('sidebar')
+    .should('be.visible')
+})
