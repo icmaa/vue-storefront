@@ -15,7 +15,7 @@ describe('Contact', () => {
       cy.get('input#phone').type(faker.phone.phoneNumber())
       cy.get('input#email').type(getIcmaaEmail())
       cy.get('input#order_number').type(faker.random.number({ min: 100000, max: 999999 }).toString())
-      cy.get('textarea#message').type(faker.random.words())
+      cy.get('textarea#message').type('Testmessage ' + faker.random.words(35))
     })
 
     cy.get('#cms-page').find('button').click()
