@@ -1,9 +1,9 @@
 describe('Add to Cart', () => {
   it('Is it possible to add a product to the cart.', () => {
-    cy.visitAsRecurringUser('/sales.html')
-    cy.get('div[data-test-id="ProductTile"]:first-child a').click({force: true})
-    cy.get('button[data-test-id="AddToCart"]').should('not.be.disabled').click({force: true})
-    cy.get('.sidebar-content > div > div > div:first-child').click()
-    cy.get('[data-test-id="notificationMessage"]').should('be.visible')
+    cy.visitAsRecurringUser('/new')
+    cy.get('div[data-test-id="ProductTile"]').find('[data-test-id="productLink"]').random().click()
+    cy.get('button[data-test-id="AddToCart"]').should('not.be.disabled').click()
+    cy.get('.sidebar-content > div > div > div ').random().click().wait(1000) // TODO "Größe anfordern" abfangen data-test-id="StockAlertSubscrbe"
+    cy.get('[data-test-id="NotificationItem"].t-bg-alt-3')
   })
 })
