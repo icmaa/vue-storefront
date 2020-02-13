@@ -143,7 +143,7 @@ declare namespace Cypress {
     getCustomer(): Chainable<Customer>,
 
     /**
-     * Open main navigation sidebar.
+     * Open main navigation sidebar
      * Adds alias `sidebar` for further use
      *
      * @example
@@ -152,6 +152,14 @@ declare namespace Cypress {
      * cy.openNavigationSidebar('[data-test-id="HeaderButtonAccount"]', '[data-test-id="Modal"]')
      */
     openNavigationSidebar(triggerSelector?: string, overlaySelector?: string): Chainable<Window>,
-    openFilterMenu(triggerSelector?: string): Chainable<Window>
+
+    /**
+     * Open filter sidebar
+     * Adds alias `sidebar` for further use
+     *
+     * @example
+     * cy.openFilterSidebar()
+     */
+    openFilterSidebar(): Chainable<Window>
   }
 }

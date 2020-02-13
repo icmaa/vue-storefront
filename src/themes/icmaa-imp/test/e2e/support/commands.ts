@@ -147,6 +147,10 @@ Cypress.Commands.add('openNavigationSidebar', (trigger: string = '[data-test-id=
     .should('be.visible')
 })
 
+Cypress.Commands.add('openFilterSidebar', () => {
+  cy.openNavigationSidebar('[data-test-id="ButtonFilter"]')
+})
+
 Cypress.Commands.add('registerCustomer', () => {
   cy.visitAsRecurringUser('/')
   cy.createCustomerWithFaker()
@@ -178,14 +182,4 @@ Cypress.Commands.add('registerCustomer', () => {
 
 Cypress.Commands.add('getCustomer', () => {
   cy.get<Cypress.Customer>('@customer')
-})
-
-Cypress.Commands.add('openFilterMenu', (trigger: string = '[data-test-id="ButtonFilter"]') => {
-  cy.get(trigger)
-    .should('be.visible')
-    .click()
-
-  cy.get('[data-test-id="Sidebar"]')
-    .as('sidebar')
-    .should('be.visible')
 })
