@@ -6,6 +6,6 @@ describe('Newsletter', () => {
     cy.get('.newsletter > div > input').click()
     cy.get('.modal-container').find('input').type(getIcmaaEmail())
     cy.get('.modal-container').find('button[type="submit"]').click()
-    cy.get('[data-test-id="NotificationItem"].t-bg-alt-3')
+    cy.checkNotification('success')
   })
 })

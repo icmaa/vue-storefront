@@ -19,6 +19,6 @@ describe('Contact', () => {
     })
 
     cy.get('#cms-page').find('button').click()
-    cy.getByTestId('NotificationItem').should('be.visible')
+    cy.checkNotification('success')
   })
 })

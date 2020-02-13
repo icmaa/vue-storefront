@@ -14,6 +14,6 @@ describe('widerruf-formular', () => {
     })
 
     cy.get('#cms-page').find('button').click()
-    cy.get('[data-test-id="NotificationItem"].t-bg-alt-3')
+    cy.checkNotification('success')
   })
 })
