@@ -13,20 +13,12 @@ import Settings from './Settings'
  * const email = getRandomIcmaaEmail()
  */
 
-export interface Customer {
-  firstName: string,
-  lastName: string,
-  email: string,
-  password: string,
-  dob: string
-}
-
 /**
  * Import faker.js using the current storeview or a specific one
  * @param country
  */
 const Faker = (country?: string): Faker.FakerStatic => {
-  faker.locale = country || Settings.currentStoreView
+  faker.locale = country || 'de'
   return faker
 }
 
@@ -53,18 +45,9 @@ const getBirthday = (locale: string = 'de-DE'): string => {
   )
 }
 
-const getCustomer = (): Customer => ({
-  firstName: faker.name.firstName(),
-  lastName: faker.name.lastName(),
-  email: getIcmaaEmail(),
-  password: faker.internet.password(10, true),
-  dob: getBirthday()
-})
-
 export default Faker
 
 export {
   getIcmaaEmail,
-  getBirthday,
-  getCustomer
+  getBirthday
 }

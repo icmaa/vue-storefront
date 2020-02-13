@@ -4,7 +4,33 @@ declare namespace Cypress {
     storeCode: string
   }
 
+  interface Customer {
+    firstName: string,
+    lastName: string,
+    email: string,
+    password: string,
+    dob: string
+  }
+
   interface Chainable<Subject> {
+
+    /**
+     * Get faker instance from alias
+     * Adds alias `customer` for further use
+     *
+     * @example
+     * cy.getFaker()
+     */
+    getFaker(): Chainable<Faker.FakerStatic>,
+
+    /**
+     * Create a customer object for current storeview and register it as alias
+     *
+     *
+     * @example
+     * cy.createCustomerWithFaker()
+     */
+    createCustomerWithFaker(): Chainable<Customer>,
 
     /**
      * Get random element from previous element
@@ -24,6 +50,7 @@ declare namespace Cypress {
 
     /**
      * Select a random option from a select
+     *
      * @example
      * cy.selectRandomOption()
      */
@@ -62,6 +89,7 @@ declare namespace Cypress {
 
     /**
      * Visit the given url
+     * Adds alias `storeCode` for further use
      *
      * @param {string} url The URL to visit. If relative uses `baseUrl`
      * @param {VisitOptions} [options] Pass in an options object to change the default behavior of `cy.visit()`
@@ -80,6 +108,7 @@ declare namespace Cypress {
 
     /**
      * Visit a page as recurring visitor
+     * Adds alias `storeCode` for further use
      *
      * @example
      * cy.visitAsRecurringUser()
@@ -89,14 +118,32 @@ declare namespace Cypress {
     visitAsRecurringUser(options: Partial<ExtVisitOptions> & { url: string }): Chainable<Window>,
 
     /**
+     * Get current string value of `storeCode` alias
+     *
+     * @example
+     * cy.getStoreCode()
+     */
+    getStoreCode(): Chainable<string>,
+
+    /**
      * Register a new customer using the registration routine
+     * Adds alias `customer` for further use of customer object
+     *
      * @example
      * cy.registerCustomer()
      */
     registerCustomer(): Chainable<Window>,
 
     /**
-     * Open main navigation sidebar
+     * Get current customer object from `customer` alias
+     *
+     * @example
+     * cy.getCustomer()
+     */
+    getCustomer(): Chainable<Customer>,
+
+    /**
+     * Open main navigation sidebar.
      * Adds alias `sidebar` for further use
      *
      * @example

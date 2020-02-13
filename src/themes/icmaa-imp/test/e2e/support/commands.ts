@@ -25,9 +25,27 @@
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
 
 import Settings from './utils/Settings'
-import Faker, { getCustomer } from './utils/Faker'
+import Faker, { getIcmaaEmail, getBirthday } from './utils/Faker'
 
 const { _ } = Cypress
+
+Cypress.Commands.add('getFaker', () => {
+  cy.getStoreCode().then(storeCode => {
+    cy.wrap(Faker(storeCode)).as('faker')
+  })
+})
+
+Cypress.Commands.add('createCustomerWithFaker', () => {
+  cy.getFaker().then(faker => {
+    cy.wrap({
+      firstName: faker.name.firstName(),
+      lastName: faker.name.lastName(),
+      email: getIcmaaEmail(),
+      password: faker.internet.password(10, true),
+      dob: getBirthday()
+    }).as('customer')
+  })
+})
 
 Cypress.Commands.add(
   'random',
@@ -89,15 +107,16 @@ Cypress.Commands.overwrite('visit', (originalFn, url, options) => {
     storeCode = options.storeCode
   }
 
-  Settings.currentStoreView = storeCode
-
   if (!url.startsWith('/')) {
     url = '/' + url
   }
 
   url = `${storeCode}${url}`
 
-  return originalFn(url, _.omit(options, ['storeCode']))
+  // Register current storeCode as global alias
+  return cy.wrap(storeCode).as('storeCode').then(() =>
+    originalFn(url, _.omit(options, ['storeCode']))
+  )
 })
 
 Cypress.Commands.add('visitAsRecurringUser', (url, options) => {
@@ -114,6 +133,10 @@ Cypress.Commands.add('visitAsRecurringUser', (url, options) => {
   cy.visit(url, options)
 })
 
+Cypress.Commands.add('getStoreCode', () => {
+  cy.get<string>('@storeCode')
+})
+
 Cypress.Commands.add('openNavigationSidebar', (trigger: string = '[data-test-id="HeaderButtonSidebar"]', overlaySelector: string = '[data-test-id="Sidebar"]') => {
   cy.get(trigger)
     .should('be.visible')
@@ -125,9 +148,9 @@ Cypress.Commands.add('openNavigationSidebar', (trigger: string = '[data-test-id=
 })
 
 Cypress.Commands.add('registerCustomer', () => {
-  const customer = getCustomer()
-
   cy.visitAsRecurringUser('/')
+  cy.createCustomerWithFaker()
+
   cy.openNavigationSidebar('[data-test-id="HeaderButtonAccount"]', '[data-test-id="Modal"]')
     .get('@sidebar')
     .findByTestId('registerLink')
@@ -137,16 +160,22 @@ Cypress.Commands.add('registerCustomer', () => {
     .find('form').as('form')
     .should('be.visible')
 
-  cy.get('@form').find('input[name="email"]').type(customer.email)
-  cy.get('@form').find('input[name="first-name"]').type(customer.firstName)
-  cy.get('@form').find('input[name="last-name"]').type(customer.lastName)
-  cy.get('@form').find('select[name="gender"]').selectRandomOption(true)
-  cy.get('@form').find('input[name="dob"]').type(customer.dob)
-  cy.get('@form').find('input[name="password"]').type(customer.password)
-  cy.get('@form').find('input[name="password-confirm"]').type(customer.password)
-  cy.get('@form').findByTestId('newsletterCheckbox').randomlyClickElement()
-  cy.get('@form').findByTestId('registerSubmit').click()
+  cy.getCustomer().then(customer => {
+    cy.get('@form').find('input[name="email"]').type(customer.email)
+    cy.get('@form').find('input[name="first-name"]').type(customer.firstName)
+    cy.get('@form').find('input[name="last-name"]').type(customer.lastName)
+    cy.get('@form').find('select[name="gender"]').selectRandomOption(true)
+    cy.get('@form').find('input[name="dob"]').type(customer.dob)
+    cy.get('@form').find('input[name="password"]').type(customer.password)
+    cy.get('@form').find('input[name="password-confirm"]').type(customer.password)
+    cy.get('@form').findByTestId('newsletterCheckbox').randomlyClickElement()
+    cy.get('@form').findByTestId('registerSubmit').click()
+  })
 
   cy.getByTestId('Loader').should('be.visible')
   cy.getByTestId('NotificationItem').should('be.visible')
+})
+
+Cypress.Commands.add('getCustomer', () => {
+  cy.get<Cypress.Customer>('@customer')
 })
