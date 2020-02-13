@@ -120,23 +120,19 @@ Cypress.Commands.overwrite('visit', (originalFn, url, options?) => {
 })
 
 Cypress.Commands.add('visitAsRecurringUser', (url, options?) => {
-  localStorage.setItem(
-    'shop/uniClaims/cookiesAccepted',
-    `{"code":"cookiesAccepted","created_at":"${new Date().toISOString()}","value":true}`
-  )
-
-  localStorage.setItem(
-    'shop/uniClaims/languageAccepted',
-    `{"code":"languageAccepted","created_at":"${new Date().toISOString()}","value":"de-DE"}`
-  )
-
-  cy.visit(url, options)
+  cy.hideLanguageModal()
+    .acceptCookieNotice()
+    .visit(url, options)
 })
 
 Cypress.Commands.add('visitCategoryPage', (options?) => {
   cy.wrap<string>(Settings.randomCategoryPage)
     .as('categoryEntryPointUrl')
     .then(url => cy.visitAsRecurringUser(url, options))
+})
+
+Cypress.Commands.add('getCategoryEntryPointUrl', () => {
+  cy.get<string>('@categoryEntryPointUrl')
 })
 
 Cypress.Commands.add('getStoreCode', () => {
@@ -190,6 +186,16 @@ Cypress.Commands.add('getCustomer', () => {
   cy.get<Cypress.Customer>('@customer')
 })
 
-Cypress.Commands.add('getCategoryEntryPointUrl', () => {
-  cy.get<string>('@categoryEntryPointUrl')
+Cypress.Commands.add('acceptCookieNotice', () => {
+  localStorage.setItem(
+    'shop/uniClaims/cookiesAccepted',
+    `{"code":"cookiesAccepted","created_at":"${new Date().toISOString()}","value":true}`
+  )
+})
+
+Cypress.Commands.add('hideLanguageModal', () => {
+  localStorage.setItem(
+    'shop/uniClaims/languageAccepted',
+    `{"code":"languageAccepted","created_at":"${new Date().toISOString()}","value":"de-DE"}`
+  )
 })

@@ -1,10 +1,13 @@
 describe('Cookie-Notice', () => {
-  it('Visit and close the Language-Switcher', () => {
-    cy.visit('/')
-    cy.get('[data-test-id="ModalClose"]').click();
-  })
+  it('should be visible for new user', () => {
+    cy.hideLanguageModal()
+      .visit('/')
 
-  it('Visit next page without cookie notice', () => {
-    cy.visitAsRecurringUser('/merchandise')
+    cy.getByTestId('CookieNotification')
+      .should('be.visible')
+      .find('button').first().click()
+
+    cy.getByTestId('CookieNotification')
+      .should('not.be.visible')
   })
 })

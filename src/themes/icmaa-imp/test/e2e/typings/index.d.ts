@@ -129,6 +129,14 @@ declare namespace Cypress {
     visitCategoryPage(options?: Partial<ExtVisitOptions>): Chainable<Window>,
 
     /**
+     * Get entry point category path from `categoryEntryPointUrl` alias
+     *
+     * @example
+     * cy.getCategoryEntryPointUrl()
+     */
+    getCategoryEntryPointUrl(): Chainable<string>,
+
+    /**
      * Get current string value of `storeCode` alias
      *
      * @example
@@ -174,11 +182,20 @@ declare namespace Cypress {
     getCustomer(): Chainable<Customer>,
 
     /**
-     * Get entry point category path from `categoryEntryPointUrl` alias
+     * Set local storage to mark cookie-notice as accepted
+     * Adds alias `customer` for further use of customer object
      *
      * @example
-     * cy.getCategoryEntryPointUrl()
+     * cy.acceptCookieNotice()
      */
-    getCategoryEntryPointUrl(): Chainable<string>
+    acceptCookieNotice(): Chainable<Window>,
+
+    /**
+     * Set local storage to mark language modal as clicked away
+     *
+     * @example
+     * cy.hideLanguageModal()
+     */
+    hideLanguageModal(): Chainable<Window>
   }
 }
