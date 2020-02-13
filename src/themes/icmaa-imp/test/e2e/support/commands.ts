@@ -99,7 +99,7 @@ Cypress.Commands.add('findByTestId', { prevSubject: 'element' }, (subject, id) =
     .find(`[data-test-id="${id}"]`)
 })
 
-Cypress.Commands.overwrite('visit', (originalFn, url, options) => {
+Cypress.Commands.overwrite('visit', (originalFn, url, options?) => {
   const storeCodes: string[] = Settings.availableStoreViews
 
   let storeCode: string = storeCodes[Math.floor(Math.random() * (storeCodes.length - 1))]
@@ -119,7 +119,7 @@ Cypress.Commands.overwrite('visit', (originalFn, url, options) => {
   )
 })
 
-Cypress.Commands.add('visitAsRecurringUser', (url, options) => {
+Cypress.Commands.add('visitAsRecurringUser', (url, options?) => {
   localStorage.setItem(
     'shop/uniClaims/cookiesAccepted',
     `{"code":"cookiesAccepted","created_at":"${new Date().toISOString()}","value":true}`
@@ -131,6 +131,12 @@ Cypress.Commands.add('visitAsRecurringUser', (url, options) => {
   )
 
   cy.visit(url, options)
+})
+
+Cypress.Commands.add('visitCategoryPage', (options?) => {
+  cy.wrap<string>(Settings.randomCategoryPage)
+    .as('categoryEntryPointUrl')
+    .then(url => cy.visitAsRecurringUser(url, options))
 })
 
 Cypress.Commands.add('getStoreCode', () => {
@@ -182,4 +188,8 @@ Cypress.Commands.add('registerCustomer', () => {
 
 Cypress.Commands.add('getCustomer', () => {
   cy.get<Cypress.Customer>('@customer')
+})
+
+Cypress.Commands.add('getCategoryEntryPointUrl', () => {
+  cy.get<string>('@categoryEntryPointUrl')
 })

@@ -118,29 +118,23 @@ declare namespace Cypress {
     visitAsRecurringUser(options: Partial<ExtVisitOptions> & { url: string }): Chainable<Window>,
 
     /**
+     * Visit a random category page as recurring visitor
+     * Adds alias `storeCode` for further use
+     * Adds alias `categoryEntryPointUrl` for further use
+     *
+     * @example
+     * cy.visitCategoryPage()
+     * cy.visitAsRecurringUser({ storeCode: 'de' })
+     */
+    visitCategoryPage(options?: Partial<ExtVisitOptions>): Chainable<Window>,
+
+    /**
      * Get current string value of `storeCode` alias
      *
      * @example
      * cy.getStoreCode()
      */
     getStoreCode(): Chainable<string>,
-
-    /**
-     * Register a new customer using the registration routine
-     * Adds alias `customer` for further use of customer object
-     *
-     * @example
-     * cy.registerCustomer()
-     */
-    registerCustomer(): Chainable<Window>,
-
-    /**
-     * Get current customer object from `customer` alias
-     *
-     * @example
-     * cy.getCustomer()
-     */
-    getCustomer(): Chainable<Customer>,
 
     /**
      * Open main navigation sidebar
@@ -160,6 +154,31 @@ declare namespace Cypress {
      * @example
      * cy.openFilterSidebar()
      */
-    openFilterSidebar(): Chainable<Window>
+    openFilterSidebar(): Chainable<Window>,
+
+    /**
+     * Register a new customer using the registration routine
+     * Adds alias `customer` for further use of customer object
+     *
+     * @example
+     * cy.registerCustomer()
+     */
+    registerCustomer(): Chainable<Window>,
+
+    /**
+     * Get current customer object from `customer` alias
+     *
+     * @example
+     * cy.getCustomer()
+     */
+    getCustomer(): Chainable<Customer>,
+
+    /**
+     * Get entry point category path from `categoryEntryPointUrl` alias
+     *
+     * @example
+     * cy.getCategoryEntryPointUrl()
+     */
+    getCategoryEntryPointUrl(): Chainable<string>
   }
 }

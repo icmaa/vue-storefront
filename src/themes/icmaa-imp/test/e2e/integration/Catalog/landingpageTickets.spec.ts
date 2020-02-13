@@ -1,7 +1,7 @@
 describe('Landingpage Tickets ', () => {
   it(`Tourposter on Tickes Landingpage`, () => {
     cy.visitAsRecurringUser('/tickets')
-    cy.get('[data-test-id="Tickets"]').find('img').each(e => cy.wrap(e).checkImage())
+    cy.getByTestId('Tickets').find('img').each(e => cy.wrap(e).checkImage())
   })
 })
 

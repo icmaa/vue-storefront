@@ -1,11 +1,4 @@
 describe('Filter', () => {
-  it('Filter sidebar should be visible', () => {
-    cy.visitAsRecurringUser('/girls.html')
-    cy.get('[data-test-id="ButtonFilter"]')
-      .should('be.visible')
-      .click()
-  })
-
   it('Select department filter', () => {
     cy.visitAsRecurringUser('/girls.html')
     cy.openFilterSidebar()

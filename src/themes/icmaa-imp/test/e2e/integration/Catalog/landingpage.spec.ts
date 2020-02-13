@@ -1,6 +1,7 @@
 describe('Productlisting', () => {
   it('Teaser, Logoline and Productlistings should be visible on New', () => {
     cy.visitAsRecurringUser('/new')
+
     // if Teaser
     cy.get('#app').then(($selector) => {
       if ($selector.find('div[data-test-id="TeaserSmall"]').length > 0) {

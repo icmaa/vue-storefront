@@ -1,5 +1,4 @@
 import faker from 'faker'
-import Settings from './Settings'
 
 /**
  * Example usage:
