@@ -13,11 +13,19 @@ import Settings from './Settings'
  * const email = getRandomIcmaaEmail()
  */
 
+export interface Customer {
+  firstName: string,
+  lastName: string,
+  email: string,
+  password: string,
+  dob: string
+}
+
 /**
  * Import faker.js using the current storeview or a specific one
  * @param country
  */
-export const Faker = (country?: string): Faker.FakerStatic => {
+const Faker = (country?: string): Faker.FakerStatic => {
   faker.locale = country || Settings.currentStoreView
   return faker
 }
@@ -25,7 +33,7 @@ export const Faker = (country?: string): Faker.FakerStatic => {
 /**
  * Return a random ICMAA-like email address
  */
-export const getRandomIcmaaEmail = () => {
+const getIcmaaEmail = () => {
   return [
     'a9.tests+',
     new Date().getTime(),
@@ -37,10 +45,26 @@ export const getRandomIcmaaEmail = () => {
  * Return a random birthday in locale format
  * @param locale
  */
-export const getRandomBirthday = (locale: string = 'de-DE'): string => {
+const getBirthday = (locale: string = 'de-DE'): string => {
   const dobDate = faker.date.between(faker.date.past(18), faker.date.past(40))
   return dobDate.toLocaleDateString(
     locale,
     { month: '2-digit', day: '2-digit', year: 'numeric' }
   )
+}
+
+const getCustomer = (): Customer => ({
+  firstName: faker.name.firstName(),
+  lastName: faker.name.lastName(),
+  email: getIcmaaEmail(),
+  password: faker.internet.password(10, true),
+  dob: getBirthday()
+})
+
+export default Faker
+
+export {
+  getIcmaaEmail,
+  getBirthday,
+  getCustomer
 }

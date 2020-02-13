@@ -89,6 +89,13 @@ declare namespace Cypress {
     visitAsRecurringUser(options: Partial<ExtVisitOptions> & { url: string }): Chainable<Window>,
 
     /**
+     * Register a new customer using the registration routine
+     * @example
+     * cy.registerCustomer()
+     */
+    registerCustomer(): Chainable<Window>,
+
+    /**
      * Open main navigation sidebar
      * Adds alias `sidebar` for further use
      *

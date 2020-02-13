@@ -25,7 +25,7 @@
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
 
 import Settings from './utils/Settings'
-import { Faker } from './utils/Faker'
+import Faker, { getCustomer } from './utils/Faker'
 
 const { _ } = Cypress
 
@@ -122,4 +122,31 @@ Cypress.Commands.add('openNavigationSidebar', (trigger: string = '[data-test-id=
   cy.get(overlaySelector)
     .as('sidebar')
     .should('be.visible')
+})
+
+Cypress.Commands.add('registerCustomer', () => {
+  const customer = getCustomer()
+
+  cy.visitAsRecurringUser('/')
+  cy.openNavigationSidebar('[data-test-id="HeaderButtonAccount"]', '[data-test-id="Modal"]')
+    .get('@sidebar')
+    .findByTestId('registerLink')
+    .click()
+
+  cy.getByTestId('Register')
+    .find('form').as('form')
+    .should('be.visible')
+
+  cy.get('@form').find('input[name="email"]').type(customer.email)
+  cy.get('@form').find('input[name="first-name"]').type(customer.firstName)
+  cy.get('@form').find('input[name="last-name"]').type(customer.lastName)
+  cy.get('@form').find('select[name="gender"]').selectRandomOption(true)
+  cy.get('@form').find('input[name="dob"]').type(customer.dob)
+  cy.get('@form').find('input[name="password"]').type(customer.password)
+  cy.get('@form').find('input[name="password-confirm"]').type(customer.password)
+  cy.get('@form').findByTestId('newsletterCheckbox').randomlyClickElement()
+  cy.get('@form').findByTestId('registerSubmit').click()
+
+  cy.getByTestId('Loader').should('be.visible')
+  cy.getByTestId('NotificationItem').should('be.visible')
 })

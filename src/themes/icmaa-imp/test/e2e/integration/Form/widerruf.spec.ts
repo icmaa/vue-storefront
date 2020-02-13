@@ -1,7 +1,7 @@
-import { Faker, getRandomIcmaaEmail } from '../../support/utils/Faker'
+import Faker, { getIcmaaEmail } from '../../support/utils/Faker'
 
 const faker = Faker()
-const email = getRandomIcmaaEmail()
+const email = getIcmaaEmail()
 
 describe('widerruf-formular', () => {
   it('Check Form', () => {
