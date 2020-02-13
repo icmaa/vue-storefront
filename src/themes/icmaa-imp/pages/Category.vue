@@ -26,7 +26,7 @@
               </dropdown>
             </div>
             <div class="t-w-1/2 lg:t-w-3/4 t-px-1 lg:t-px-2 t-flex t-items-center">
-              <button-component style="second" align="stretch" icon="filter_list" @click.native="openFilters" class="t-w-full lg:t-w-auto">
+              <button-component style="second" align="stretch" icon="filter_list" @click.native="openFilters" class="t-w-full lg:t-w-auto" data-test-id="ButtonFilter">
                 {{ $t('Filters') }}
               </button-component>
               <presets class="t-hidden lg:t-flex t-items-center t-ml-2" />
