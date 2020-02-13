@@ -21,8 +21,8 @@ describe('Customer', () => {
       cy.get('@sidebar').findByTestId('loginSubmit').click()
     })
 
-    cy.getByTestId('Loader').should('be.visible')
-    cy.getByTestId('NotificationItem').should('be.visible')
+    cy.waitForLoader()
+      .checkNotification('success')
 
     cy.get('@accountButton')
       .should('have.class', 'logged-in')

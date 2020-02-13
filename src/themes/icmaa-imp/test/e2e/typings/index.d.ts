@@ -196,6 +196,22 @@ declare namespace Cypress {
      * @example
      * cy.hideLanguageModal()
      */
-    hideLanguageModal(): Chainable<Window>
+    hideLanguageModal(): Chainable<Window>,
+
+    /**
+     * Check if loader is appearing and disappearing
+     *
+     * @example
+     * cy.waitForLoader()
+     */
+    waitForLoader(): Chainable<Window>,
+
+    /**
+     * Check for notification and its status and returns
+     *
+     * @example
+     * cy.checkNotification()
+     */
+    checkNotification(status: 'success' | 'error' | 'warning' | 'info'): Chainable<string>
   }
 }
