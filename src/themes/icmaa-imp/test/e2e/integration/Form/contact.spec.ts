@@ -1,7 +1,4 @@
-import Faker, { getIcmaaEmail } from '../../support/utils/Faker'
-
-const faker = Faker()
-const email = getIcmaaEmail()
+import { getIcmaaEmail } from '../../support/utils/Faker'
 
 describe('Contact', () => {
   it('Check Form', () => {
@@ -11,11 +8,15 @@ describe('Contact', () => {
         cy.get('div[data-test-id="ServiceContactChildrenSelector"]').random().click()
       }
     })
-    cy.get('input#name').click().type(faker.name.findName())
-    cy.get('input#phone').click().type(faker.phone.phoneNumber())
-    cy.get('input#email').click().type(email)
-    cy.get('input#order_number').click().type('123456789')
-    cy.get('textarea#message').click().type(faker.random.words())
+
+    cy.getFaker().then(faker => {
+      cy.get('input#name').click().type(faker.name.findName())
+      cy.get('input#phone').click().type(faker.phone.phoneNumber())
+      cy.get('input#email').click().type(getIcmaaEmail())
+      cy.get('input#order_number').click().type('123456789')
+      cy.get('textarea#message').click().type(faker.random.words())
+    })
+
     cy.get('#cms-page').find('button').click()
     cy.get('[data-test-id="NotificationItem"].t-bg-alt-3')
   })
