@@ -69,7 +69,7 @@ declare namespace Cypress {
      * @example
      * cy.getByTestId('Modal')
      */
-    getByTestId(selector: string): Chainable<any>,
+    getByTestId(selector: string): Chainable<JQuery<any>>,
 
     /**
      * Find child items by data-test-id attribute
