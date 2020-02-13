@@ -178,8 +178,8 @@ Cypress.Commands.add('registerCustomer', () => {
     cy.get('@form').findByTestId('registerSubmit').click()
   })
 
-  cy.getByTestId('Loader').should('be.visible')
-  cy.getByTestId('NotificationItem').should('be.visible')
+  cy.waitForLoader()
+    .checkNotification('success')
 })
 
 Cypress.Commands.add('getCustomer', () => {
@@ -198,4 +198,28 @@ Cypress.Commands.add('hideLanguageModal', () => {
     'shop/uniClaims/languageAccepted',
     `{"code":"languageAccepted","created_at":"${new Date().toISOString()}","value":"de-DE"}`
   )
+})
+
+Cypress.Commands.add('waitForLoader', () => {
+  cy.getByTestId('Loader')
+    .should('be.visible')
+  cy.getByTestId('Loader')
+    .should('not.exist')
+})
+
+Cypress.Commands.add('checkNotification', (status: string) => {
+  const map: Record<string, string> = {
+    'success': 't-bg-alt-3',
+    'error': 't-bg-alert',
+    'warning': 't-bg-alt-2',
+    'info': 't-bg-alt-2'
+  }
+
+  cy.wrap(Object.keys(map)).should('include', status)
+
+  cy.getByTestId('NotificationItem').first()
+    .should('be.visible')
+    .should('have.class', map[status])
+
+  cy.getByTestId('NotificationItem').invoke('text')
 })
