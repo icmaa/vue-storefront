@@ -151,6 +151,7 @@ declare namespace Cypress {
      * cy.openNavigationSidebar('[data-test-id="HeaderButtonWishlist"]')
      * cy.openNavigationSidebar('[data-test-id="HeaderButtonAccount"]', '[data-test-id="Modal"]')
      */
-    openNavigationSidebar(triggerSelector?: string, overlaySelector?: string): Chainable<Window>
+    openNavigationSidebar(triggerSelector?: string, overlaySelector?: string): Chainable<Window>,
+    openFilterMenu(triggerSelector?: string): Chainable<Window>
   }
 }

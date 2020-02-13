@@ -179,3 +179,13 @@ Cypress.Commands.add('registerCustomer', () => {
 Cypress.Commands.add('getCustomer', () => {
   cy.get<Cypress.Customer>('@customer')
 })
+
+Cypress.Commands.add('openFilterMenu', (trigger: string = '[data-test-id="ButtonFilter"]') => {
+  cy.get(trigger)
+    .should('be.visible')
+    .click()
+
+  cy.get('[data-test-id="Sidebar"]')
+    .as('sidebar')
+    .should('be.visible')
+})
