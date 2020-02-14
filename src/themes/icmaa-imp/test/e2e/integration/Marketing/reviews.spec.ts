@@ -1,8 +1,10 @@
 describe('Reviews', () => {
   it('Select random product and create review', () => {
-    cy.visitAsRecurringUser('/new', { storeCode: 'de' })
-      .getByTestId('productLink')
-      .clickRandomElement()
+    cy.visitCategoryPage()
+      .getByTestId('ProductTile')
+      .random()
+      .findByTestId('productLink')
+      .click()
 
     cy.getByTestId('Reviews')
       .find('button')
