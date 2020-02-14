@@ -1,8 +1,14 @@
-describe('Search', () => {
-  it('Search', () => {
+describe('SearchAlias', () => {
+  it('Search Pants', () => {
     cy.visitAsRecurringUser('/')
-    cy.get('[data-test-id="SearchInput"]').click()
-    cy.get('[data-test-id="SearchPanel"]').find('input').type('Shirt')
-    cy.get('[data-test-id="ProductTile"]').find('img').each(e => cy.wrap(e).checkImage())
+    cy.getByTestId('SearchInput').click()
+    cy.getByTestId('Sidebar').find('input').type('Pants')
+    cy.getByTestId('Sidebar').findByTestId('ProductTile').log('search')
+  })
+  it('Search Hosen', () => {
+    cy.visitAsRecurringUser('/')
+    cy.getByTestId('SearchInput').click()
+    cy.getByTestId('Sidebar').find('input').type('Hosen')
+    cy.getByTestId('Sidebar').findByTestId('ProductTile').log('search')
   })
 })
