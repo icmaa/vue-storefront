@@ -3,8 +3,9 @@ describe('Recommendations', () => {
     // Click random product
     cy.visitCategoryPage()
       .getByTestId('ProductTile')
+      .random()
       .findByTestId('productLink')
-      .clickRandomElement()
+      .click()
 
     // Product has recommendations
     cy.getByTestId('Recommendations')
