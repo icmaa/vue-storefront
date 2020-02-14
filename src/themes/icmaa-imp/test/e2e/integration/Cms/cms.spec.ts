@@ -1,11 +1,7 @@
 describe('CMS', () => {
-  it('Check Festival CMS Page', () => {
+  it('Check CMS Pages', () => {
     cy.visitAsRecurringUser('/festival')
-  })
-  it('Check INSD CMS Page', () => {
-    cy.visitAsRecurringUser('/impericon-never-say-die')
-  })
-  it('Check Affilinet CMS Page', () => {
-    cy.visitAsRecurringUser('/partnerprogramm')
+    cy.visit('/impericon-never-say-die')
+    cy.visit('/partnerprogramm')
   })
 })
