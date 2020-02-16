@@ -1,34 +1,22 @@
 describe('Menu sidebar', () => {
   it('Sidebar should be visible and contain links', () => {
     cy.visitAsRecurringUser('/')
-
-    // Click menu button
-    cy.get('button[aria-label="Menu"]')
-      .should('be.visible')
-      .click()
-
-    // Sidebar should show up
-    cy.get('[data-test-id="Sidebar"]')
-      .as('menu')
-      .should('be.visible')
+    cy.openNavigationSidebar()
 
     // Check if all links exist
-    cy.get('@menu')
+    cy.get('@sidebar')
       .find('a')
-      .should('have.length', 15)
+      .should('have.length.gt', 0)
 
-    // Check new products link
-    cy.get('@menu')
+    // Click random link and check url
+    cy.get('@sidebar')
       .find('a')
-      .first()
-      .as('new')
+      .random()
+      .as('link')
       .should('have.attr', 'href')
-      .and('include', '/new')
-
-    // Click new products link
-    cy.get('@new').click()
-
-    // Should be on new products page now
-    cy.url().should('include', '/new')
+      .then(href => {
+        cy.get('@link').click()
+        cy.location('pathname').should('be.eq', href)
+      })
   })
 })

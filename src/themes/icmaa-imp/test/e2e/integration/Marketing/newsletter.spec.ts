@@ -3,9 +3,9 @@ import { getIcmaaEmail } from '../../support/utils/Faker'
 describe('Newsletter', () => {
   it('Subscribe', () => {
     cy.visitAsRecurringUser('/')
-    cy.get('.newsletter > div > input').click()
-    cy.get('.modal-container').find('input').type(getIcmaaEmail())
-    cy.get('.modal-container').find('button[type="submit"]').click()
+    cy.getByTestId('Newsletter').find('div > input').click()
+    cy.getByTestId('Modal').find('input').type(getIcmaaEmail())
+    cy.getByTestId('Modal').find('button[type="submit"]').click()
     cy.checkNotification('success')
   })
 })

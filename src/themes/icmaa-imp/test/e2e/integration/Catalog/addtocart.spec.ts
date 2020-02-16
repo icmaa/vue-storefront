@@ -1,29 +1,11 @@
 describe('Add to Cart', () => {
   it('Is it possible to add a product to the cart.', () => {
-    cy.visitAsRecurringUser('/new')
-
-    cy.get('div[data-test-id="ProductTile"]').find('[data-test-id="productLink"]').random().click()
-
-    cy.get('#product').then(($btn) => {
-      if ($btn.find('button[data-test-id="AddToCart"]').attr('disabled')) {
-        // noch mal
-      } else {
-        cy.get('button[data-test-id="AddToCart"]').click().then(($abtn) => {
-          if ($abtn.find('.sidebar-content').should('be.visible')) {
-            cy.get('.sidebar-content > div > div > div ').then(($outofstock) => {
-              if ($outofstock.find('[data-item-id="StockAlertSubscrbe"]')) {
-                // to14
-              } else {
-                cy.get('.sidebar-content > div > div > div ').random().click()
-              }
-            })
-          } else {
-            cy.get('button[data-test-id="AddToCart"]').click()
-          }
-        })
-        cy.get('[data-test-id="NotificationItem"].t-bg-alt-3')
-      }
-    })
+    cy.visitCategoryPage()
+    cy.getByTestId('ProductTile').random().findByTestId('productLink').click()
+    cy.getByTestId('AddToCart').click()
+    cy.openNavigationSidebar('[data-test-id="HeaderButtonCart"]')
+    cy.getByTestId('Sidebar').find('.sidebar-content > div > div > div ').random().click()
+    cy.checkNotification('success')
   })
 })
 

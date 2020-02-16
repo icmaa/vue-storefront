@@ -18,7 +18,7 @@
           <div class="t-flex t-flex-wrap t-items-center t--mx-1 lg:t--mx-2">
             <h1 class="category-title t-hidden lg:t-block t-w-3/4 t-px-1 lg:t-px-2 t-mb-4 t-font-light t-text-2xl t-text-base-dark" v-text="title" />
             <div class="t-hidden lg:t-block t-w-1/4 t-px-1 lg:t-px-2 t-text-sm t-text-base-dark t-text-right">
-              <span class="t-font-bold">{{ getCategoryProductsTotal }}</span> {{ $t('items') }}
+              <span class="t-font-bold" data-test-id="productsTotal">{{ getCategoryProductsTotal }}</span> {{ $t('items') }}
               <span class="t-mx-2 t-text-base-lighter">|</span>
               <dropdown @change="changePageSize" :options="pageSizeOptions" :current="parseInt(pageSize)" position="right" name="pagesize" class="t-inline-block" :dropdown-class="{ 't-w-32 t-mt-2': true }">
                 {{ pageSize }} {{ $t('items per page') }}
