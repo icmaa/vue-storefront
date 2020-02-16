@@ -4,7 +4,7 @@ describe('Add to Cart', () => {
     cy.getByTestId('ProductTile').random().findByTestId('productLink').click()
     cy.getByTestId('AddToCart').click()
     cy.openNavigationSidebar('[data-test-id="HeaderButtonCart"]')
-    cy.getByTestId('Sidebar').find('.sidebar-content > div > div > div ').random().click()
+    cy.get('@sidebar').find('.sidebar-content > div > div > div ').random().click()
     cy.checkNotification('success')
   })
 })

@@ -3,12 +3,10 @@ describe('Menu sidebar', () => {
     cy.visitAsRecurringUser('/')
     cy.openNavigationSidebar()
 
-    // Check if all links exist
     cy.get('@sidebar')
       .find('a')
       .should('have.length.gt', 0)
 
-    // Click random link and check url
     cy.get('@sidebar')
       .find('a')
       .random()

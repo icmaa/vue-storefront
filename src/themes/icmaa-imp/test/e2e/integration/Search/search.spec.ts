@@ -1,18 +1,21 @@
 describe('Search and SearchAliases', () => {
   it('Search Pants and his Alias Hosen', () => {
     cy.visitAsRecurringUser('/', { storeCode: 'de' })
-    cy.getByTestId('SearchInput').click()
-    cy.getByTestId('Sidebar').find('input').type('Pants')
-    cy.getByTestId('Sidebar').findByTestId('ProductTile').as('target')
+
+    cy.openNavigationSidebar('[data-test-id="SearchInput"]')
+    cy.get('@sidebar').find('input').as('searchInput')
+      .type('Pants')
+
+    cy.get('@sidebar')
+      .findByTestId('ProductTile')
+      .as('target')
 
     cy.get('@target')
       .then(listing => {
         const countTarget = Cypress.$(listing).length
 
-        cy.visitAsRecurringUser('/', { storeCode: 'de' })
-        cy.getByTestId('SearchInput').click()
-        cy.getByTestId('Sidebar').find('input').type('Hosen')
-        cy.getByTestId('Sidebar').findByTestId('ProductTile').as('alias')
+        cy.get('@searchInput').clear().type('Hosen')
+        cy.get('@sidebar').findByTestId('ProductTile').as('alias')
 
         cy.get('@alias')
           .then(listing => {

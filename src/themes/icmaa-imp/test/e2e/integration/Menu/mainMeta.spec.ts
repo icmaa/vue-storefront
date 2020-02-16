@@ -3,7 +3,6 @@ describe('Menu sidebar footer', () => {
     cy.visitAsRecurringUser('/')
     cy.openNavigationSidebar()
 
-    // Footer navigation should be visible
     cy.get('@sidebar')
       .find('[data-test-id="SidebarMenuFooter"]')
       .should('be.visible')

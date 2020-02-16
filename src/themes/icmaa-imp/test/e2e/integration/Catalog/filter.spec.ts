@@ -1,13 +1,11 @@
 describe('Filter', () => {
   it('Select department filter', () => {
-    cy.visitAsRecurringUser('/girls.html')
+    cy.visitCategoryPage()
     cy.openFilterSidebar()
 
-    // compare product totals before and after a filter is selected
     cy.getByTestId('productsTotal').then((element) => {
       const productsTotalNumber = parseInt(element.text())
 
-      // Select deparment filter
       cy.get('@sidebar').find('[data-attribute-key="department"] button')
         .clickRandomElement()
 

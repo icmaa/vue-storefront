@@ -4,6 +4,10 @@ declare namespace Cypress {
     storeCode: string
   }
 
+  interface VisitProductDetailsOptions extends ExtVisitOptions {
+    categoryUrl: string
+  }
+
   interface Customer {
     firstName: string,
     lastName: string,
@@ -124,9 +128,18 @@ declare namespace Cypress {
      *
      * @example
      * cy.visitCategoryPage()
-     * cy.visitAsRecurringUser({ storeCode: 'de' })
+     * cy.visitCategoryPage({ storeCode: 'de' })
      */
     visitCategoryPage(options?: Partial<ExtVisitOptions>): Chainable<Window>,
+
+    /**
+     * Visit a random product page from random or specific category as recurring visitor
+     *
+     * @example
+     * cy.visitProductDetailPage()
+     * cy.visitProductDetailPage({ categoryUrl: 'girls.html', storeCode: 'de' })
+     */
+    visitProductDetailPage(options?: Partial<VisitProductDetailsOptions>): Chainable<Window>,
 
     /**
      * Get entry point category path from `categoryEntryPointUrl` alias
@@ -212,6 +225,15 @@ declare namespace Cypress {
      * @example
      * cy.checkNotification()
      */
-    checkNotification(status: 'success' | 'error' | 'warning' | 'info'): Chainable<string>
+    checkNotification(status: 'success' | 'error' | 'warning' | 'info'): Chainable<string>,
+
+    /**
+     * Gets browser language from window object
+     * Adds alias `browserLanguage` and `browserStoreCode` for further use
+     *
+     * @example
+     * cy.getBrowserLanguage()
+     */
+    getBrowserLanguage(): Chainable<Window>
   }
 }

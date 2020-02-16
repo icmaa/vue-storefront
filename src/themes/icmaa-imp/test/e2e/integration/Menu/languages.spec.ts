@@ -1,40 +1,33 @@
+import Settings from '../../support/utils/Settings'
+
+const { _ } = Cypress
+
 describe('Language selector', () => {
   it('Modal popup as new user', () => {
-    cy.visit('/')
+    cy.getBrowserLanguage()
 
-    // Only show modal if browser language != storecode
-    cy.getStoreCode().then((storeCode) => {
-      cy.window().then((win) => {
-        const language = win.navigator.language.split('-')[0].toLocaleLowerCase()
-        if (language === storeCode) {
-          cy.getByTestId('Modal').should('not.be.visible')
-        } else {
-          cy.getByTestId('Modal').should('be.visible')
-          cy.getByTestId('ModalClose').click()
-          cy.getByTestId('Modal').should('not.be.visible')
-        }
-      })
+    cy.get<string>('@browserStoreCode').then(lang => {
+      const storeViews = _.omit(Settings.availableStoreViews, [lang])
+      cy.visit('/', { storeCode: _.sample(storeViews) })
     })
+
+    cy.getByTestId('Modal').should('be.visible')
+    cy.getByTestId('ModalClose').click()
+    cy.getByTestId('Modal').should('not.be.visible')
   })
 
   it('Language modal should show', () => {
     cy.visitAsRecurringUser('/')
 
-    // Click language icon
     cy.openNavigationSidebar()
+      .get('@sidebar')
       .getByTestId('SidebarMenuFooter')
       .find('svg')
       .click()
 
-    // Language model should be visible
     cy.getByTestId('Modal')
       .should('be.visible')
-
-    // check href attribute and number of <a> elements
-    cy.getByTestId('Modal').find('a')
+      .find('a')
       .should('have.length.gt', 0)
-      .random()
-      .should('have.attr', 'href')
-      .should('include', 'www.impericon.com/')
   })
 })

@@ -113,7 +113,6 @@ Cypress.Commands.overwrite('visit', (originalFn, url, options?) => {
 
   url = `${storeCode}${url}`
 
-  // Register current storeCode as global alias
   return cy.wrap(storeCode).as('storeCode').then(() =>
     originalFn(url, _.omit(options, ['storeCode']))
   )
@@ -129,6 +128,21 @@ Cypress.Commands.add('visitCategoryPage', (options?) => {
   cy.wrap<string>(Settings.randomCategoryPage)
     .as('categoryEntryPointUrl')
     .then(url => cy.visitAsRecurringUser(url, options))
+})
+
+Cypress.Commands.add('visitProductDetailPage', (options?) => {
+  if (options && options.categoryUrl) {
+    cy.wrap<string>(options.categoryUrl)
+      .as('categoryEntryPointUrl')
+    cy.visitAsRecurringUser(options.categoryUrl, _.omit(options, ['categoryUrl']))
+  } else {
+    cy.visitCategoryPage(options)
+  }
+
+  cy.getByTestId('ProductTile')
+    .random()
+    .findByTestId('productLink')
+    .click()
 })
 
 Cypress.Commands.add('getCategoryEntryPointUrl', () => {
@@ -222,4 +236,13 @@ Cypress.Commands.add('checkNotification', (status: string) => {
     .should('have.class', map[status])
 
   cy.getByTestId('NotificationItem').invoke('text')
+})
+
+Cypress.Commands.add('getBrowserLanguage', () => {
+  cy.window().then(win => {
+    cy.wrap(win.navigator.language)
+      .as('browserStoreCode')
+    cy.wrap(win.navigator.language.split('-')[0].toLocaleLowerCase())
+      .as('browserLanguage')
+  })
 })
