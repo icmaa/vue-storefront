@@ -113,8 +113,8 @@ Cypress.Commands.overwrite('visit', (originalFn, url, options?) => {
 
   url = `${storeCode}${url}`
 
-  cy.wrap(storeCode).as('storeCode').then(() =>
-    originalFn(url, _.omit(options, ['storeCode'])))
+  cy.wrap(storeCode).as('storeCode')
+    .then(() => originalFn(url, _.omit(options, ['storeCode'])))
 })
 
 Cypress.Commands.add('visitAsRecurringUser', (url, options?) => {
@@ -244,4 +244,8 @@ Cypress.Commands.add('getBrowserLanguage', () => {
     cy.wrap(win.navigator.language.split('-')[0].toLocaleLowerCase())
       .as('browserLanguage')
   })
+})
+
+Cypress.Commands.add('findImageWithPlaceholder', { prevSubject: 'element' }, (subject, selector: string = 'img') => {
+  cy.wrap(subject).find(selector + ':not(.t-hidden)')
 })

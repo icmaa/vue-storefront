@@ -234,6 +234,14 @@ declare namespace Cypress {
      * @example
      * cy.getBrowserLanguage()
      */
-    getBrowserLanguage(): Chainable<Window>
+    getBrowserLanguage(): Chainable<Window>,
+
+    /**
+     * Find child image but wait for placeholder to disappear
+     *
+     * @example
+     * cy.findImageWithPlaceholder()
+     */
+    findImageWithPlaceholder(selector?: string): Chainable<any>
   }
 }

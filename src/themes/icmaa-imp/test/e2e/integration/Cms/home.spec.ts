@@ -4,11 +4,11 @@ describe('Homepage', () => {
   it('Check HomePage with all Elements (Fullsize-Teaser, Split-Teaser und Teaser, LogoLines, ProductListings', () => {
     cy.visitAsRecurringUser('/')
     // Fullsize-Teaser is a Image with "teaser" in img src
-    cy.getByTestId('TeaserFullsize').find('div > img').checkImage()
+    cy.getByTestId('TeaserFullsize').findImageWithPlaceholder('div > img').checkImage()
     // Split-Teaser is a Image with "teaser" in img src
-    cy.getByTestId('TeaserSplit').find('img').checkImage()
+    cy.getByTestId('TeaserSplit').findImageWithPlaceholder().checkImage()
     // Teaser is a Image with "teaser" in img src
-    cy.getByTestId('TeaserSmall').find('img').checkImage()
+    cy.getByTestId('TeaserSmall').findImageWithPlaceholder().checkImage()
     // 2 LogoLineBlocks
     cy.getByTestId('LogoLineBlock').should('have.length', 2)
     // 2 LogoLines
@@ -16,7 +16,7 @@ describe('Homepage', () => {
     // 24 LogoItems
     cy.getByTestId('DepartmentLogo').should('have.length', 24)
     // LogoItems is a Image with "department-logos" in img src
-    cy.getByTestId('DepartmentLogo').find('img').each(e => cy.wrap(e).checkImage())
+    cy.getByTestId('DepartmentLogo').findImageWithPlaceholder().each(e => cy.wrap(e).checkImage())
     // 2 ProductListings
     cy.getByTestId('ProductListingWidget').should('have.length', 2)
     // 2x4 ProductTiles
