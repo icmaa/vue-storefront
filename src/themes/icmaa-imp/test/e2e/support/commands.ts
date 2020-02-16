@@ -113,9 +113,8 @@ Cypress.Commands.overwrite('visit', (originalFn, url, options?) => {
 
   url = `${storeCode}${url}`
 
-  return cy.wrap(storeCode).as('storeCode').then(() =>
-    originalFn(url, _.omit(options, ['storeCode']))
-  )
+  cy.wrap(storeCode).as('storeCode').then(() =>
+    originalFn(url, _.omit(options, ['storeCode'])))
 })
 
 Cypress.Commands.add('visitAsRecurringUser', (url, options?) => {

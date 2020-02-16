@@ -9,6 +9,8 @@
   "video": false,
   "viewportWidth": 375,
   "viewportHeight": 812,
+  "defaultCommandTimeout": 10000,
+  "requestTimeout": 10000,
   "env": {
     "store_codes": ["de", "fr", "it", "uk"],
     "category_pages": ["new", "boys.html", "girls.html"]
