@@ -16,7 +16,7 @@
         class="t-flex-fix t-text-xs t-leading-1-em t-text-right"
         :class="{ 't-text-alt-3': isStockAlertSubscrided }"
         v-html="$t(isStockAlertSubscrided ? 'Size requested' : 'Request size')"
-        data-test-id="StockAlertSubscrbe"
+        data-test-id="StockAlertSubscribe"
       />
       <material-icon :icon="isStockAlertSubscrided ? 'check' : 'mail_outline'" class="t-flex-fix t-ml-2" :class="{ 't-text-alt-3': isStockAlertSubscrided }" />
     </template>

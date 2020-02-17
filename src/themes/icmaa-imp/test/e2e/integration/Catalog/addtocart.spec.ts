@@ -9,10 +9,9 @@ describe('Add to Cart', () => {
     cy.get('#product').then(($product) => {
       if ($product.find('[disabled="disabled"]').length > 0) {
         cy.log('AddToCart Button disabled - reload last step')
-        cy.go(-1)
-        cy.getByTestId('ProductTile').random().findByTestId('productLink').click()
+        cy.go(-4)
       } else {
-        cy.log('AddtoCart Button enabled')
+        cy.log('AddToCart Button enabled')
         cy.get('[data-test-id="AddToCart"]').click()
       }
     })
@@ -22,17 +21,17 @@ describe('Add to Cart', () => {
       if ($a2c.find('.sidebar-content').length > 0) {
         cy.log('Configurable Product - select Option')
         // if child is availible
-        cy.get('.sidebar-content').find('div > div > div').should('not.contain', 'span ["data-test-id="StockAlertSubscrbe"]').random().click()
+        cy.get('.sidebar-content').find('span').should('not.have.class', 't-text-base-light').random().click()
+        cy.checkNotification('success')
       } else {
+        cy.log('Simple Product')
         cy.get('[data-test-id="AddToCart"]').click()
+        cy.checkNotification('success')
       }
     })
-    cy.checkNotification('success')
   })
 })
 
-// click Button, wenn nicht disable (disabled="disabled") should('not.be.disabled')
-// click sidebar if "AddToCartSize"
-// - wenn sidebar ... configprodukt und click größe
-//     - klicke number, wo kein StockAlertSubscrbe ist should('not.contain', '["data-test-id="StockAlertSubscrbe"]')
-// check grün
+// disabled / enable  button works
+// simpleProduct works
+//
