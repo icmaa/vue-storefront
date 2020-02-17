@@ -49,7 +49,8 @@ describe('Price', () => {
         expect(detailsPrice).to.deep.equal(listPrice)
       })
     })
-  })
 
-  // @todo: Add add-to-cart routing like in add-to-cart and check price in cart
+    // @todo: Add add-to-cart routing like in add-to-cart and check price in cart
+    // cy.addCurrentProductToCart()
+  })
 })

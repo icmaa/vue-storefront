@@ -1,5 +1,5 @@
 <template>
-  <div id="product" itemscope itemtype="http://schema.org/Product">
+  <div id="product" data-test-id="product" itemscope itemtype="http://schema.org/Product">
     <div class="t-container t-px-4">
       <div class="t--mx-4 lg:t-px-4 t-flex t-flex-wrap">
         <breadcrumbs class="breadcrumbs t-w-full t-my-8 t-hidden lg:t-flex" />

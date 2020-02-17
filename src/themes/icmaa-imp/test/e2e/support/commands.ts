@@ -249,3 +249,76 @@ Cypress.Commands.add('getBrowserLanguage', () => {
 Cypress.Commands.add('findImageWithPlaceholder', { prevSubject: 'element' }, (subject, selector: string = 'img') => {
   cy.wrap(subject).find(selector + ':not(.t-hidden)')
 })
+
+Cypress.Commands.add('checkAvailabilityOfCurrentProduct', () => {
+  cy.getByTestId('AddToCart').then($button => {
+    if ($button.attr('disabled')) {
+      cy.wrap(false).as('availability')
+    } else {
+      cy.getByTestId('product').then($product => {
+        if ($product.find('[data-test-id="AddToCartSize"]').length) {
+          cy.wrap('configurable').as('productType')
+          cy.openNavigationSidebar('[data-test-id="AddToCartSize"]')
+          cy.get('@sidebar').findByTestId('DefaultSelector').filter('.available')
+            .then($selector => {
+              if ($selector.length === 0) {
+                cy.wrap(false).as('availability')
+              } else {
+                cy.wrap(true).as('availability')
+              }
+            })
+          cy.get('@sidebar').findByTestId('closeButton').click()
+        } else {
+          cy.wrap('simple').as('productType')
+          cy.wrap(true).as('availability')
+        }
+      })
+    }
+  })
+})
+
+Cypress.Commands.add('addRandomProductToCart', (options?: { tries: number }, count: number = 0) => {
+  options = Object.assign({ tries: 3 }, options)
+  let { tries } = options
+
+  if (count > tries) {
+    expect(true).to.be.equal(false, 'No buyable products found')
+  } else {
+    cy.log(`Try to find product which is in stock ${count}/${tries}`)
+  }
+
+  cy.visitProductDetailPage()
+  cy.checkAvailabilityOfCurrentProduct()
+
+  cy.get<boolean>('@availability')
+    .then(available => {
+      if (!available) {
+        cy.addRandomProductToCart({ tries }, count + 1)
+      } else {
+        cy.addCurrentProductToCart(false)
+      }
+    })
+})
+
+Cypress.Commands.add('addCurrentProductToCart', (checkAvailability = true) => {
+  if (checkAvailability) {
+    cy.checkAvailabilityOfCurrentProduct()
+  }
+
+  cy.get('@availability').should('be.true')
+
+  cy.get<'configurable'|'simple'>('@productType')
+    .then(type => {
+      if (type === 'configurable') {
+        cy.openNavigationSidebar('[data-test-id="AddToCartSize"]')
+        cy.get('@sidebar').findByTestId('DefaultSelector')
+          .filter('.available')
+          .random()
+          .click()
+      } else if (type === 'simple') {
+        cy.getByTestId('AddToCart').click()
+      }
+    })
+
+  cy.checkNotification('success')
+})
