@@ -32,7 +32,7 @@
       ]"
     />
     <div class="t-flex t-items-center t-justify-between t-mb-4">
-      <base-checkbox class="t-mr-4" id="remember" v-model="remember">
+      <base-checkbox class="t-mr-4" id="remember" name="remember" v-model="remember">
         {{ $t('Remember me') }}
       </base-checkbox>
       <div href="#" @click.prevent="callForgotPassword" class="t-text-sm t-cursor-pointer">
