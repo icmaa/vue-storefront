@@ -33,16 +33,16 @@
               <meta itemprop="availability" :content="structuredData.availability">
               <meta itemprop="url" :content="product.url_path">
 
-              <div v-if="product.type_id !== 'grouped'" class="price t-mt-5 t-mb-8 t-text-1xl">
+              <div v-if="product.type_id !== 'grouped'" class="price t-mt-5 t-mb-8 t-text-1xl" data-test-id="price">
                 <template v-if="product.special_price && product.price_incl_tax && product.original_price_incl_tax">
-                  <span class="t-text-base-tone t-line-through">{{ price(product.original_price_incl_tax * product.qty) }}</span>
+                  <span class="price-original t-text-base-tone t-line-through">{{ price(product.original_price_incl_tax * product.qty) }}</span>
                   &nbsp;
-                  <span class="t-text-sale t-font-bold">
+                  <span class="price-special t-text-sale t-font-bold">
                     <span v-if="hasMultiplePrices" v-text="$t('as low as')" class="t-text-sm" />
                     {{ price(product.price_incl_tax * product.qty) }}
                   </span>
                 </template>
-                <span class="t-font-bold" v-if="!product.special_price && product.price_incl_tax">
+                <span class="price t-font-bold" v-if="!product.special_price && product.price_incl_tax">
                   <span v-if="hasMultiplePrices" v-text="$t('as low as')" class="t-text-sm" />
                   {{ price(product.qty > 0 ? product.price_incl_tax * product.qty : product.price_incl_tax) }}
                 </span>
