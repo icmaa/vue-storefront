@@ -25,17 +25,34 @@ const collectPriceFromDOM = ($parent: JQuery<HTMLElement>): PriceDTO => {
   return priceDTO
 }
 
+const findProductInStock = (run: number = 1, tries: number = 3) => {
+  if (run > tries) {
+    expect(true).to.be.equal(false, 'No buyable products found')
+  } else {
+    cy.log(`Try to find product which is in stock ${run}/${tries}`)
+  }
+
+  cy.visitCategoryPage()
+  cy.getByTestId('ProductTile')
+    .random()
+    .then($product => {
+      cy.wrap<PriceDTO>(collectPriceFromDOM($product)).as('listPrice')
+      cy.wrap($product)
+    })
+    .click()
+
+  cy.checkAvailabilityOfCurrentProduct()
+  cy.get<boolean>('@availability')
+    .then(available => {
+      if (!available) {
+        findProductInStock(run + 1)
+      }
+    })
+}
+
 describe('Price', () => {
   it('Follow product and check price', () => {
-    cy.visitCategoryPage()
-
-    cy.getByTestId('ProductTile')
-      .random()
-      .then($product => {
-        cy.wrap<PriceDTO>(collectPriceFromDOM($product)).as('listPrice')
-        cy.wrap($product)
-      })
-      .click()
+    findProductInStock()
 
     cy.getByTestId('price').then($price => {
       cy.wrap<PriceDTO>(collectPriceFromDOM($price)).as('detailsPrice')
@@ -50,7 +67,7 @@ describe('Price', () => {
       })
     })
 
-    // @todo: Add add-to-cart routing like in add-to-cart and check price in cart
-    // cy.addCurrentProductToCart()
+    cy.addCurrentProductToCart(false)
+    // @todo: Check price in cart
   })
 })
