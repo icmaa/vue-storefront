@@ -277,7 +277,7 @@ Cypress.Commands.add('checkAvailabilityOfCurrentProduct', () => {
   })
 })
 
-Cypress.Commands.add('addRandomProductToCart', (options?: { tries: number }, count: number = 0) => {
+Cypress.Commands.add('addRandomProductToCart', (options?: { tries: number }, count: number = 1) => {
   options = Object.assign({ tries: 3 }, options)
   let { tries } = options
 

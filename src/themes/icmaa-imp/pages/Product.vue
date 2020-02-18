@@ -275,8 +275,7 @@ export default {
       if (!this.loading) {
         if (this.isSingleOptionProduct) {
           this.loading = true
-          this.getQuantity()
-            .then(() => this.addToCart(this.product))
+          this.addToCart(this.product)
             .then(() => { this.loading = false })
             .catch(() => { this.loading = false })
 
@@ -303,16 +302,6 @@ export default {
         ),
         action1: { label: this.$t('OK') }
       })
-    }
-  },
-  watch: {
-    isOnline: {
-      handler (isOnline) {
-        if (isOnline) {
-          this.getQuantity()
-        }
-      },
-      immediate: true
     }
   },
   async asyncData ({ store, route }) {
