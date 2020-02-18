@@ -12,7 +12,6 @@ describe('Menu sidebar footer', () => {
       .should('have.attr', 'href')
       .then(href => {
         cy.get('@link').click()
-        cy.location('pathname').should('be.eq', href) // Missing check for status yet
       })
   })
 })
