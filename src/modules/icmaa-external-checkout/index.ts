@@ -25,11 +25,15 @@ export const IcmaaExternalCheckoutModule: StorefrontModule = function ({ router 
 
     coreHooks.afterAppInit(() => {
       Logger.error('All keys: ', 'icmaa-external-checkout', Vue.$cookies.keys())()
+      console.log('icmaa-external-checkout', 'All keys: ', Vue.$cookies.keys())
+      Logger.error('Magento-Session-ID: ', 'icmaa-external-checkout', Vue.$cookies.get('frontend'))()
+      console.log('icmaa-external-checkout', 'Magento-Session-ID: ', Vue.$cookies.get('frontend'))
       Logger.error('Magento-Session-ID: ', 'icmaa-external-checkout', Vue.$cookies.get('frontend'))()
     })
 
     userHooks.afterUserUnauthorize(() => {
       Logger.error('Remove Magento session-cookie', 'DEBUG', Vue.$cookies.get('frontend'))()
+      console.log('icmaa-external-checkout', 'Remove Magento session-cookie', Vue.$cookies.get('frontend'))
       Vue.$cookies.remove('frontend')
     })
   }
