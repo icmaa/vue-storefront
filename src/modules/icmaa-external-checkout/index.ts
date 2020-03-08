@@ -22,7 +22,7 @@ export const IcmaaExternalCheckoutModule: StorefrontModule = function ({ router 
         // it is only possible to delete the session cookie using a non-client-/SSR-request.
         // So there is a special route for it to call using a server-side request.
         // The `{ credentials: 'include' }` is an important part to transfer cookies to SSR.
-        await fetch('/external-checkout-cookie-logout/', { credentials: 'include' })
+        await fetch('/vsf/external-checkout-cookie-logout/', { credentials: 'include' })
           .then(r => r.json())
           .then(json => {
             Logger.info('Remove Magento session-cookie', 'external-checkout', json)()
