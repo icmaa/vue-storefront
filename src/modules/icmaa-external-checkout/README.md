@@ -3,6 +3,8 @@
 Use our default magento checkout as bypass.
 Based on: https://github.com/Vendic/vsf-external-checkout
 
+**Because of the cookie-session handling, this module is only working when both systems, Magento and VSF, are running behind the same domain.**
+
 ## Session conflicts and logging out in both systems
 
 There are some major caveats for bypassing the checkout. One of it is that you have to handle two session routines.
