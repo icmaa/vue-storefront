@@ -11,6 +11,7 @@ import { Logger } from '@vue-storefront/core/lib/logger'
 import { StorefrontModule } from '@vue-storefront/core/lib/modules'
 import { setupMultistoreRoutes } from '@vue-storefront/core/lib/multistore'
 
+import { getCookieHostname } from './helper'
 import { beforeEachGuard } from './router/beforeEach'
 import moduleRoutes from './routes'
 
@@ -30,14 +31,14 @@ export const IcmaaExternalCheckoutModule: StorefrontModule = function ({ router,
         if (customerToken) {
           Logger.info('Customer token found in cookie – try to login:', 'external-checkout', customerToken)()
           store.dispatch('user/startSessionWithToken', customerToken).then(() => {
-            Vue.$cookies.remove('vsf_token_customer')
+            Vue.$cookies.remove('vsf_token_customer', undefined, getCookieHostname())
           })
         }
 
         if (quoteToken) {
           Logger.info('Quote token found in cookie – try to reconnect with:', 'external-checkout', quoteToken)()
           store.dispatch('cart/reconnect', { token: quoteToken }).then(() => {
-            Vue.$cookies.remove('vsf_token_quote')
+            Vue.$cookies.remove('vsf_token_quote', undefined, getCookieHostname())
           })
         }
       }
