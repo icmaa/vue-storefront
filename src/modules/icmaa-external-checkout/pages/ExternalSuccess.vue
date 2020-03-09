@@ -34,15 +34,15 @@ export default {
   mixins: [ Composite, CheckoutSuccessGtmMixin ],
   computed: {
     ...mapGetters({
-      cartItems: 'getCartItems/getCartItems',
+      cartItems: 'cart/getCartItems',
       orderHistory: 'user/getOrdersHistory',
       isLoggedIn: 'user/isLoggedIn'
     }),
     lastOrder () {
       return this.orderHistory.length > 0 ? this.orderHistory[0] : false
     },
-    cartIsEmpty () {
-      return this.cartItems.length <= 0
+    cartIsNotEmpty () {
+      return this.cartItems.length > 0
     }
   },
   async beforeMount () {
@@ -55,7 +55,7 @@ export default {
   },
   methods: {
     clearCart () {
-      if (!this.cartIsEmpty()) {
+      if (this.cartIsNotEmpty()) {
         this.$store.dispatch('cart/clear', {})
         this.$store.dispatch('cart/serverCreate', { guestCart: false })
       }
