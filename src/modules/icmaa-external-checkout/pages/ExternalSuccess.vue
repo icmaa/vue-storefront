@@ -34,22 +34,13 @@ export default {
   mixins: [ Composite, CheckoutSuccessGtmMixin ],
   computed: {
     ...mapGetters({
-      orderHistory: 'user/getOrdersHistory',
-      isLoggedIn: 'user/isLoggedIn'
+      orderHistory: 'user/getOrdersHistory'
     }),
     lastOrder () {
       return this.orderHistory.length > 0 ? this.orderHistory[0] : false
     }
   },
   async beforeMount () {
-    if (!this.isLoggedIn && this.$route.query.token) {
-      await this.$store.dispatch('user/startSessionWithToken', this.$route.query.token)
-      await this.$store.dispatch('user/me')
-    }
-
-    // Remove token from url
-    this.$router.push(this.localizedRoute('/order-success'))
-
     await this.$store.dispatch('user/refreshOrdersHistory', { resolvedFromCache: false })
     this.$bus.$emit('checkout-success-last-order-loaded', this.lastOrder)
 

@@ -1,6 +1,8 @@
 import Vue from 'vue'
+import VueCookies from 'vue-cookies'
 
 import config, { externalCheckout as checkoutConfig } from 'config'
+import EventBus from '@vue-storefront/core/compatibility/plugins/event-bus'
 import { once } from '@vue-storefront/core/helpers'
 import { userHooks } from '@vue-storefront/core/modules/user/hooks'
 import { isServer } from '@vue-storefront/core/helpers'
@@ -14,8 +16,22 @@ import moduleRoutes from './routes'
 
 export const KEY = 'external-checkout'
 
-export const IcmaaExternalCheckoutModule: StorefrontModule = function ({ router }) {
-  if (!isServer && checkoutConfig.clearCookieOnLogout) {
+export const IcmaaExternalCheckoutModule: StorefrontModule = function ({ router, store }) {
+  if (!isServer && checkoutConfig.enableCookieSessionTransfer) {
+    once('__VUE_EXTEND_COOKIES__', () => {
+      Vue.use(VueCookies)
+    })
+
+    EventBus.$on('session-after-nonauthorized', async () => {
+      const customerToken = Vue.$cookies.get('vsf_token_customer')
+      if (!store.getters['user/isLoggedIn'] && customerToken) {
+        Logger.info('Customer token found in cookie – try to login:', 'external-checkout', customerToken)()
+        store.dispatch('user/startSessionWithToken', customerToken).then(() => {
+          Vue.$cookies.remove('vsf_token_customer')
+        })
+      }
+    })
+
     userHooks.afterUserUnauthorize(async () => {
       if (checkoutConfig.httpOnlySupport) {
         // As Magento sets HTTP-Only cookies to prevent XSS attacks,
@@ -29,11 +45,6 @@ export const IcmaaExternalCheckoutModule: StorefrontModule = function ({ router 
           })
       } else {
         // If Magento isn't using HTTP-Only cookies, just use `vue-cookies` to remove the session cookies.
-        const VueCookies = await import('vue-cookies')
-        once('__VUE_EXTEND_COOKIES__', () => {
-          Vue.use(VueCookies)
-        })
-
         Logger.info('Remove Magento session-cookie', 'external-checkout', Vue.$cookies.get('frontend'))()
         Vue.$cookies.remove('frontend')
       }

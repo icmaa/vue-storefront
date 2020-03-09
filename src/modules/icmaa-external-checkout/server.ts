@@ -2,7 +2,7 @@ import Cookies from 'cookies'
 import { externalCheckout as config } from 'config'
 import { serverHooks } from '@vue-storefront/core/server/hooks'
 
-if (config.clearCookieOnLogout && config.httpOnlySupport) {
+if (config.enableCookieSessionTransfer && config.httpOnlySupport) {
   serverHooks.afterApplicationInitialized(({ app }) => {
     app.get('/vsf/external-checkout-cookie-logout', (req, res) => {
       var cookies = new Cookies(req, res)
