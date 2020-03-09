@@ -34,27 +34,31 @@ export default {
   mixins: [ Composite, CheckoutSuccessGtmMixin ],
   computed: {
     ...mapGetters({
-      orderHistory: 'user/getOrdersHistory'
+      cartItems: 'getCartItems/getCartItems',
+      orderHistory: 'user/getOrdersHistory',
+      isLoggedIn: 'user/isLoggedIn'
     }),
     lastOrder () {
       return this.orderHistory.length > 0 ? this.orderHistory[0] : false
+    },
+    cartIsEmpty () {
+      return this.cartItems.length <= 0
     }
   },
   async beforeMount () {
-    await this.$store.dispatch('user/refreshOrdersHistory', { resolvedFromCache: false })
-    this.$bus.$emit('checkout-success-last-order-loaded', this.lastOrder)
+    if (this.isLoggedIn) {
+      await this.$store.dispatch('user/refreshOrdersHistory', { resolvedFromCache: false })
+      this.$bus.$emit('checkout-success-last-order-loaded', this.lastOrder)
+    }
 
-    this.clearTheCart()
+    this.clearCart()
   },
   methods: {
-    clearTheCart () {
-      if (this.getNumberOfItemsInCart() > 0) {
+    clearCart () {
+      if (!this.cartIsEmpty()) {
         this.$store.dispatch('cart/clear', {})
         this.$store.dispatch('cart/serverCreate', { guestCart: false })
       }
-    },
-    getNumberOfItemsInCart () {
-      return this.$store.state.cart.cartItems.length
     }
   }
 }
