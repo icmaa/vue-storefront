@@ -55,7 +55,7 @@ export default {
   },
   methods: {
     clearCart () {
-      if (this.cartIsNotEmpty()) {
+      if (this.cartIsNotEmpty) {
         this.$store.dispatch('cart/clear', {})
         this.$store.dispatch('cart/serverCreate', { guestCart: false })
       }
