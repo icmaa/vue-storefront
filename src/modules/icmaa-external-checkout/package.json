@@ -9,7 +9,6 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "vue-cookies": "^1.7.0",
-    "cookies": "^0.8.0"
+    "vue-cookies": "^1.7.0"
   }
 }
