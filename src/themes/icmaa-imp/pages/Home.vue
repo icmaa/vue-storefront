@@ -10,10 +10,10 @@
       </div>
     </lazy-hydrate>
     <lazy-hydrate when-visible>
-      <product-listing-widget :category-id="3278" sort="online:desc" />
+      <product-listing-widget :category-id="3278" />
     </lazy-hydrate>
     <lazy-hydrate when-visible>
-      <product-listing-widget :category-id="4251" sort="online:desc" />
+      <product-listing-widget :category-id="4251" />
     </lazy-hydrate>
   </div>
 </template>
