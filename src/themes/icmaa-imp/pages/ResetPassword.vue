@@ -39,7 +39,7 @@
                 text: $t('Field is required.')
               },
               {
-                condition: !$v.rPassword.sameAsPassword && $v.rPassword.$error,
+                condition: !$v.password.minLength && $v.password.$error,
                 text: $t('Passwords must be identical.')
               }
             ]"
