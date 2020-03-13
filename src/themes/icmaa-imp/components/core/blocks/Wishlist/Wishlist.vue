@@ -37,6 +37,9 @@ export default {
       default: () => {}
     }
   },
+  created () {
+    window.addEventListener('popstate', this.closeSidebar)
+  },
   methods: {
     clearWishlist () {
       this.$store.dispatch('notification/spawnNotification', {
@@ -51,6 +54,9 @@ export default {
         action2: { label: this.$t('Cancel'), action: 'close' },
         hasNoTimeout: true
       })
+    },
+    closeSidebar () {
+      this.$store.dispatch('ui/closeAll')
     }
   },
   mixins: [Wishlist]
