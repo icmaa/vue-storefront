@@ -19,7 +19,7 @@
                 text: $t('Field is required.')
               },
               {
-                condition: !$v.rPassword.minLength && $v.rPassword.$error,
+                condition: !$v.password.minLength && $v.password.$error,
                 text: $t('Password must have at least 8 letters.')
               }
             ]"
@@ -39,7 +39,7 @@
                 text: $t('Field is required.')
               },
               {
-                condition: !$v.password.minLength && $v.password.$error,
+                condition: !$v.rPassword.sameAsPassword && $v.rPassword.$error,
                 text: $t('Passwords must be identical.')
               }
             ]"
