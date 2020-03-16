@@ -1,8 +1,14 @@
 <template>
   <div class="t-container">
-    <div class="t-flex t-flex-wrap t-p-2 t-py-8">
-      <base-select :options="typeOptions" name="type" id="type" v-model="type" label="View by" class="t-w-full lg:t-w-1/3 t-px-2" />
-      <base-select :options="options" name="value" id="value" v-model="current" :label="typeLabel" class="t-w-full lg:t-w-1/3 t-px-2" v-if="type" />
+    <div class="t-p-2 t-py-8">
+      <div class="t-flex t-flex-wrap">
+        <base-select :options="typeOptions" name="type" id="type" v-model="type" label="View by" class="t-w-full lg:t-w-1/3 t-px-2" />
+        <base-select :options="tagOptions" name="tag" id="tag" v-model="tag" label="Tag" class="t-w-full lg:t-w-1/3 t-px-2" v-show="type === 'tag'" />
+        <base-select :options="customerclusterOptions" name="cluster" id="cluster" v-model="cluster" label="Cluster" class="t-w-full lg:t-w-1/3 t-px-2" v-show="type !== ''" />
+      </div>
+      <pre v-for="(teaser, i) in teaserList" :key="i">
+        {{ teaser }}
+      </pre>
     </div>
   </div>
 </template>
@@ -12,7 +18,6 @@ import { mapGetters } from 'vuex'
 
 import BaseSelect from 'theme/components/core/blocks/Form/BaseSelect'
 import Teaser from 'theme/components/core/blocks/Teaser/Teaser'
-import capitalize from 'lodash-es/capitalize'
 
 export default {
   name: 'TeaserQualityAssurance',
@@ -23,13 +28,14 @@ export default {
   data () {
     return {
       type: '',
-      current: ''
+      tag: '',
+      cluster: ''
     }
   },
   computed: {
     ...mapGetters({
       attributes: 'attribute/getAttributeListByCode',
-      tag: 'icmaaTeaser/getTags'
+      tags: 'icmaaTeaser/getTags'
     }),
     typeOptions () {
       return [
@@ -37,14 +43,11 @@ export default {
         { label: 'Tag', value: 'tag' }
       ]
     },
-    typeLabel () {
-      return capitalize(this.type)
-    },
     options () {
       return this.type === 'cluster' ? this.customerclusterOptions : this.tagOptions
     },
     tagOptions () {
-      return this.tag
+      return this.tags
     },
     customerclusterOptions () {
       if (!this.attributes.customercluster) {
@@ -54,12 +57,25 @@ export default {
       return this.attributes.customercluster.options.map(o => {
         return { value: o.value, label: `#${o.value} ${o.label}` }
       })
+    },
+    teaserList () {
+      if (this.type === 'tag') {
+        return this.customerclusterOptions.map(c => {
+          return { tag: this.tag, customercluster: c }
+        })
+      } else if (this.type === 'cluster') {
+        return this.tagOptions.map(t => {
+          return { tag: t, customercluster: this.cluster }
+        })
+      }
+
+      return []
     }
   },
-  async asyncData ({ store }) {
+  async mounted () {
     return Promise.all([
-      store.dispatch('attribute/list', { filterValues: [ 'customercluster' ] }),
-      store.dispatch('icmaaTeaser/fetchTags')
+      this.$store.dispatch('attribute/list', { filterValues: [ 'customercluster' ] }),
+      this.$store.dispatch('icmaaTeaser/fetchTags')
     ])
   }
 }
