@@ -1,5 +1,5 @@
 import { GetterTree } from 'vuex'
-import TeaserState, { TeaserStateItem } from '../types/TeaserState'
+import TeaserState, { TeaserStateItem, TagStateItem } from '../types/TeaserState'
 import RootState from '@vue-storefront/core/types/RootState'
 
 import config from 'config'
@@ -58,7 +58,8 @@ const getters: GetterTree<TeaserState, RootState> = {
     items = orderBy(items, ['order'], ['desc'])
 
     return items
-  }
+  },
+  getTags: (state): TagStateItem[] => state.tags
 }
 
 export default getters
