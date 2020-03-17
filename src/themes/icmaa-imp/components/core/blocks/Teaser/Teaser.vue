@@ -13,16 +13,16 @@
     </div>
     <template v-else>
       <template v-if="showLarge && teaserLarge">
-        <teaser-fullsize :teaser="teaserLarge" class="t-mb-8" />
+        <teaser-fullsize :teaser="teaserLarge" :redirect-to-edit="redirectToEdit" class="t-mb-8" />
       </template>
       <template v-if="teaserSmall && teaserSmall.length > 0">
         <template v-if="showSmallInRow">
           <div class="t-flex t-flex-wrap">
-            <teaser-small v-for="(teaser, index) in teaserSmall" :teaser="teaser" :index="index" :key="'small_' + index" />
+            <teaser-small v-for="(teaser, index) in teaserSmall" :teaser="teaser" :index="index" :redirect-to-edit="redirectToEdit" :key="'small_' + index" />
           </div>
         </template>
         <template v-else>
-          <teaser-split v-for="(teaser, index) in teaserSmall" :teaser="teaser" :index="index" :key="'small_' + index" :class="{ 't-mb-8': index !== (teaserSmall.length - 1) }" />
+          <teaser-split v-for="(teaser, index) in teaserSmall" :teaser="teaser" :index="index" :redirect-to-edit="redirectToEdit" :key="'small_' + index" :class="{ 't-mb-8': index !== (teaserSmall.length - 1) }" />
         </template>
       </template>
     </template>
@@ -60,6 +60,10 @@ export default {
     limit: {
       type: Number,
       default: 4
+    },
+    redirectToEdit: {
+      type: Boolean,
+      default: false
     }
   },
   data () {
