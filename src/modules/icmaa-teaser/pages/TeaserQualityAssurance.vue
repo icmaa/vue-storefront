@@ -13,14 +13,14 @@
         </base-checkbox>
       </div>
       <lazy-hydrate when-visible v-for="(teaser, i) in teaserList" :key="getUniqueKey('lazy', i, teaser)">
-        <div :key="getUniqueKey('wrap', i, teaser)" class="t-pt-8 t-px-2">
+        <div class="t-pt-8 t-px-2">
           <div v-if="type === 'cluster'" class="t-font-bold t-mb-4 t-text-1xl t-font-mono">
             {{ teaser.tagsLabel }}
           </div>
           <div v-if="type === 'tag'" class="t-font-bold t-mb-4 t-text-1xl t-font-mono">
             {{ teaser.customerclusterLabel }}
           </div>
-          <teaser :tags="`${teaser.tags}`" :customercluster="`${teaser.customercluster}`" :show-small-in-row="showAsSplitTeaser" :redirect-to-edit="true" class="t--mx-4" />
+          <teaser :tags="`${teaser.tags}`" :customercluster="`${teaser.customercluster}`" :show-small-in-row="!showAsSplitTeaser" :redirect-to-edit="true" class="t--mx-4" />
         </div>
       </lazy-hydrate>
     </div>
@@ -66,10 +66,7 @@ export default {
       return this.type === 'cluster' ? this.customerclusterOptions : this.tagOptions
     },
     tagOptions () {
-      return this.tags.map(t => {
-        t.label = `#${t.value} ${t.label}`
-        return t
-      })
+      return this.tags
     },
     customerclusterOptions () {
       if (!this.attributes.customercluster) {
@@ -110,7 +107,7 @@ export default {
       return option ? option.label : value
     },
     getUniqueKey (prefix, index, teaser) {
-      [prefix, index, teaser.tags, teaser.customercluster, this.showAsSplitTeaser].join('_')
+      [prefix, index, teaser.tags, teaser.customercluster].join('_')
     }
   },
   async mounted () {

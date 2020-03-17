@@ -9,7 +9,7 @@
         {{ teaser.text1 }}
       </router-link>
     </h2>
-    <edit-button :edit-url="editUrl" class="t-left-0 t-ml-2 t--mt-4" />
+    <edit-button :edit-url="editUrl" class="t-left-0 t-ml-6 t--mt-4" />
   </div>
 </template>
 
