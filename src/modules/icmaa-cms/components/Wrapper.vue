@@ -1,5 +1,5 @@
 <template>
-  <div class="t-flex t-flex-wrap t--mx-4">
+  <div class="t-flex t-flex-wrap t--mx-4 t-w-full">
     <div v-for="(c, i) in componentsReady" :key="`${c.name}-${i}`" class="t-w-full" :class="[{ 't-px-4': c.padding, 'lg:t-w-1/2': (c.size === 'half') }, c.cssClass]">
       <component :is="c.component" v-bind="c.props" :name="c.name" />
     </div>

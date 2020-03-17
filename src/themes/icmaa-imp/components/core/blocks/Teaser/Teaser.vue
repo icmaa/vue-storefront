@@ -44,6 +44,11 @@ export default {
       type: String,
       required: true
     },
+    customercluster: {
+      type: [String, Boolean],
+      required: false,
+      default: false
+    },
     showLarge: {
       type: Boolean,
       default: true
@@ -69,13 +74,15 @@ export default {
     TeaserSmall
   },
   computed: {
-    ...mapGetters('icmaaTeaser', ['getSmallTeaser', 'getLargeTeaser']),
-    ...mapGetters({ viewport: 'ui/getViewport' }),
+    ...mapGetters({
+      teaserByType: 'icmaaTeaser/getTeaserByType',
+      viewport: 'ui/getViewport'
+    }),
     teaserLarge () {
-      return this.getLargeTeaser(this.tags)[0]
+      return this.teaserByType('large', this.tags, this.customercluster)[0]
     },
     teaserSmall () {
-      const teaser = this.getSmallTeaser(this.tags)
+      const teaser = this.teaserByType('small', this.tags, this.customerCluster)
       return teaser.slice(0, this.TeaserSmallRow ? 4 : this.limit)
     },
     isMobile () {
