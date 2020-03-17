@@ -2,19 +2,19 @@
   <div class="t-container">
     <div class="t-p-2 t-py-8">
       <div class="t-flex t-flex-wrap">
-        <base-select :options="typeOptions" name="type" id="type" v-model="type" label="View by" class="t-w-full lg:t-w-1/3 t-px-2" />
-        <base-select :options="tagOptions" name="tag" id="tag" v-model="tag" label="Tag" class="t-w-full lg:t-w-1/3 t-px-2" v-show="type === 'tag'" />
+        <base-select :options="typeOptions" name="type" id="type" v-model="type" label="View by" class="t-w-full lg:t-w-1/3 t-px-2 t-pb-4 lg:t-pb-0" />
+        <base-select :options="tagOptions" name="tag" id="tag" v-model="tag" label="Tag" class="t-w-full lg:t-w-1/3 t-px-2 t-pb-4 lg:t-pb-0" v-show="type === 'tag'" />
         <base-select :options="customerclusterOptions" name="cluster" id="cluster" v-model="cluster" label="Cluster" class="t-w-full lg:t-w-1/3 t-px-2" v-show="type === 'cluster'" />
       </div>
       <lazy-hydrate when-visible v-for="(teaser, i) in teaserList" :key="'lazy-' + i + '-' + teaser.tags + '-' + teaser.customercluster">
-        <div :key="'wrap-' + i + '-' + teaser.tags + '-' + teaser.customercluster" class="t-px-2">
+        <div :key="'wrap-' + i + '-' + teaser.tags + '-' + teaser.customercluster" class="t-pt-8 t-px-2">
           <div v-if="type === 'cluster'" class="t-font-bold t-mb-4 t-text-1xl t-font-mono">
             {{ teaser.tagsLabel }}
           </div>
           <div v-if="type === 'tag'" class="t-font-bold t-mb-4 t-text-1xl t-font-mono">
             {{ teaser.customerclusterLabel }}
           </div>
-          <teaser :tags="`${teaser.tags}`" :customercluster="`${teaser.customercluster}`" :show-small-in-row="true" class="t--mx-4 t-pb-8" />
+          <teaser :tags="`${teaser.tags}`" :customercluster="`${teaser.customercluster}`" :show-small-in-row="teaser.inRow" class="t--mx-4" />
         </div>
       </lazy-hydrate>
     </div>
@@ -78,7 +78,8 @@ export default {
             tags: this.tag,
             tagsLabel: this.getOptionLabel(this.tagOptions, this.tag),
             customercluster: c.value,
-            customerclusterLabel: c.label
+            customerclusterLabel: c.label,
+            inRow: this.showSmallInRow(this.tag)
           }
         })
       } else if (this.type === 'cluster' && this.cluster !== '') {
@@ -87,7 +88,8 @@ export default {
             tags: t.value,
             tagsLabel: t.label,
             customercluster: this.cluster,
-            customerclusterLabel: this.getOptionLabel(this.customerclusterOptions, this.cluster)
+            customerclusterLabel: this.getOptionLabel(this.customerclusterOptions, this.cluster),
+            inRow: this.showSmallInRow(t.value)
           }
         })
       }
@@ -99,6 +101,9 @@ export default {
     getOptionLabel (options, value) {
       const option = options.find(o => o.value === value)
       return option ? option.label : value
+    },
+    showSmallInRow (tag) {
+      return !['2'].includes(tag)
     }
   },
   async mounted () {
