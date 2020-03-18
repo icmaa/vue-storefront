@@ -4,25 +4,25 @@
       <h1 class="t-px-2 t-text-1xl t-mb-4 t-font-bold">
         Teaser Quality Assurance
       </h1>
-      <div class="t-flex t-flex-wrap t-px-2 t-mx-2 t-py-4 t-bg-white">
-        <base-select :options="typeOptions" name="type" id="type" v-model="type" label="View by" class="t-w-full lg:t-w-1/3 t-px-2 t-pb-4 lg:t-pb-0" />
-        <base-select :options="tagOptions" name="tag" id="tag" v-model="tag" label="Tag" class="t-w-full lg:t-w-1/3 t-px-2 t-pb-4 lg:t-pb-0" v-show="type === 'tag'" />
-        <base-select :options="customerclusterOptions" name="cluster" id="cluster" v-model="cluster" label="Cluster" class="t-w-full lg:t-w-1/3 t-px-2 t-pb-4 lg:t-pb-0" v-show="type === 'cluster'" />
-        <base-checkbox name="showAsSplitTeaser" id="showAsSplitTeaser" v-model="showAsSplitTeaser" class="t-w-full lg:t-w-1/3 lg:t-mt-6 t-px-2">
-          Show small teaser as split-teaser
-        </base-checkbox>
-      </div>
-      <lazy-hydrate when-visible v-for="(teaser, i) in teaserList" :key="getUniqueKey('lazy', i, teaser)">
-        <div class="t-pt-8 t-px-2">
-          <div v-if="type === 'cluster'" class="t-font-bold t-mb-4 t-text-1xl t-font-mono">
-            {{ teaser.tagsLabel }}
-          </div>
-          <div v-if="type === 'tag'" class="t-font-bold t-mb-4 t-text-1xl t-font-mono">
-            {{ teaser.customerclusterLabel }}
-          </div>
-          <teaser :tags="`${teaser.tags}`" :customercluster="`${teaser.customercluster}`" :show-small-in-row="!showAsSplitTeaser" :redirect-to-edit="true" class="t--mx-4" />
+      <no-ssr>
+        <div class="t-flex t-flex-wrap t-px-2 t-mx-2 t-py-4 t-bg-white">
+          <base-select :options="typeOptions" name="type" id="type" v-model="type" label="View by" class="t-w-full lg:t-w-1/3 t-px-2 t-pb-4 lg:t-pb-0" />
+          <base-select :options="tagOptions" name="tag" id="tag" v-model="tag" label="Tag" class="t-w-full lg:t-w-1/3 t-px-2 t-pb-4 lg:t-pb-0" v-show="type === 'tag'" />
+          <base-select :options="customerclusterOptions" name="cluster" id="cluster" v-model="cluster" label="Cluster" class="t-w-full lg:t-w-1/3 t-px-2 t-pb-4 lg:t-pb-0" v-show="type === 'cluster'" />
+          <base-checkbox name="showAsSplitTeaser" id="showAsSplitTeaser" v-model="showAsSplitTeaser" class="t-w-full lg:t-w-1/3 lg:t-mt-6 t-px-2">
+            Show small teaser as split-teaser
+          </base-checkbox>
         </div>
-      </lazy-hydrate>
+      </no-ssr>
+      <div class="t-pt-8 t-px-2" v-for="(teaser, i) in teaserList" :key="getUniqueKey('wrap', i, teaser)">
+        <div v-if="type === 'cluster'" class="t-font-bold t-mb-4 t-text-1xl t-font-mono">
+          {{ teaser.tagsLabel }}
+        </div>
+        <div v-if="type === 'tag'" class="t-font-bold t-mb-4 t-text-1xl t-font-mono">
+          {{ teaser.customerclusterLabel }}
+        </div>
+        <teaser :tags="`${teaser.tags}`" :customercluster="`${teaser.customercluster}`" :show-small-in-row="!showAsSplitTeaser" :redirect-to-edit="true" class="t--mx-4" />
+      </div>
     </div>
   </div>
 </template>
@@ -30,18 +30,18 @@
 <script>
 import { mapGetters } from 'vuex'
 
+import Teaser from 'theme/components/core/blocks/Teaser/Teaser'
 import BaseSelect from 'theme/components/core/blocks/Form/BaseSelect'
 import BaseCheckbox from 'theme/components/core/blocks/Form/BaseCheckbox'
-import Teaser from 'theme/components/core/blocks/Teaser/Teaser'
-import LazyHydrate from 'vue-lazy-hydration'
+import NoSSR from 'vue-no-ssr'
 
 export default {
   name: 'TeaserQualityAssurance',
   components: {
+    Teaser,
     BaseSelect,
     BaseCheckbox,
-    Teaser,
-    LazyHydrate
+    'no-ssr': NoSSR
   },
   data () {
     return {
@@ -62,14 +62,11 @@ export default {
         { label: 'Tag', value: 'tag' }
       ]
     },
-    options () {
-      return this.type === 'cluster' ? this.customerclusterOptions : this.tagOptions
-    },
     tagOptions () {
-      return this.tags
+      return this.tags || []
     },
     customerclusterOptions () {
-      if (!this.attributes.customercluster) {
+      if (!this.attributes.hasOwnProperty('customercluster')) {
         return []
       }
 
@@ -107,23 +104,23 @@ export default {
       return option ? option.label : value
     },
     getUniqueKey (prefix, index, teaser) {
-      [prefix, index, teaser.tags, teaser.customercluster].join('_')
+      return [prefix, index, teaser.tags, teaser.customercluster].join('_')
     }
   },
-  async mounted () {
-    const { cluster, tag } = this.$route.query
-    if (cluster) {
-      this.type = 'cluster'
-      this.cluster = cluster
-    } else if (tag) {
-      this.type = 'tag'
-      this.tag = tag
-    }
-
-    return Promise.all([
+  mounted () {
+    Promise.all([
       this.$store.dispatch('attribute/list', { filterValues: [ 'customercluster' ] }),
       this.$store.dispatch('icmaaTeaser/fetchTags')
-    ])
+    ]).then(() => {
+      const { cluster, tag } = this.$route.query
+      if (cluster) {
+        this.type = 'cluster'
+        this.cluster = cluster
+      } else if (tag) {
+        this.type = 'tag'
+        this.tag = tag
+      }
+    })
   }
 }
 </script>
