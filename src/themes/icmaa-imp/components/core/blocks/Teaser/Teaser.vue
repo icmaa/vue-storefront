@@ -93,9 +93,11 @@ export default {
       return ['xs', 'sm'].includes(this.viewport)
     }
   },
-  async mounted () {
-    await this.$store.dispatch('icmaaTeaser/list', this.tags)
-    this.loading = false
+  mounted () {
+    this.$store.dispatch('icmaaTeaser/list', this.tags)
+      .then(() => {
+        this.loading = false
+      })
   }
 }
 </script>
