@@ -2,10 +2,10 @@ name: Continuous Integration
 
 on:
   push:
-    paths:
-      - 'core/**'
-      - 'packages/**'
-      - 'src/**'
+    # paths:
+    #   - 'core/**'
+    #   - 'packages/**'
+    #   - 'src/**'
     # branches:
     #   - master
     #   - develop
