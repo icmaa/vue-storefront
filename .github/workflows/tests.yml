@@ -20,9 +20,12 @@ jobs:
       - uses: actions/checkout@v2
         with:
           repository: 'icmaa/vue-storefront-workspace'
-          path: 'vue-storefront-workspace'
+          path: './vue-storefront-workspace'
           token: ${{ secrets.GITHUB_PAT }}
       - uses: actions/setup-node@v1
+    
+      - name: Debug
+        run: ls ./vue-storefront-workspace
 
       - name: Sync config JSON files
         run: rsync -r vue-storefront-workspace/template/vue-storefront ./
