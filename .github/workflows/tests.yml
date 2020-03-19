@@ -17,18 +17,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/checkout@v2
-        with:
-          repository: 'icmaa/vue-storefront-workspace'
-          path: './vue-storefront-workspace'
-          token: ${{ secrets.GITHUB_PAT }}
       - uses: actions/setup-node@v1
-    
-      - name: Debug
-        run: ls ./vue-storefront-workspace
+
+      - name: Checkout "icmaa/vue-storefront-workspace" repo
+        run: |
+          git clone --no-tags --depth 1 https://${{ secrets.GITHUB_PAT }}@github.com/icmaa/vue-storefront-workspace
 
       - name: Sync config JSON files
-        run: rsync -r ./vue-storefront-workspace/template/vue-storefront ./
+        run: rsync -r ./vue-storefront-workspace/template/vue-storefront/ ./
 
       - name: Debug
         run: ls ./config
