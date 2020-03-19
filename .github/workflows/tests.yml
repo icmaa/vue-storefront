@@ -9,10 +9,11 @@ on:
     # branches:
     #   - master
     #   - develop
-    #   - test/*
+    #   - tests/*
 
 jobs:
-  build:
+
+  tests-e2e:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -27,4 +28,4 @@ jobs:
         run: rsync -r vue-storefront-workspace/template/vue-storefront ./
 
       - name: Debug
-        run: ls && ls config/
+        run: ls ./config
