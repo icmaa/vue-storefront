@@ -39,4 +39,12 @@ jobs:
       
       - name: Start
         run: yarn start
-          
+      
+      - name: Cypress run
+        uses: cypress-io/github-action@v1
+        with:
+          working-directory: src/themes/icmaa-imp/test/e2e
+          wait-on: http://localhost:3000
+          browser: chrome
+          headless: true
+
