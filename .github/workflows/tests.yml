@@ -6,10 +6,10 @@ on:
       - 'core/**'
       - 'packages/**'
       - 'src/**'
-    branches:
-      - master
-      - develop
-      - test/*
+    # branches:
+    #   - master
+    #   - develop
+    #   - test/*
 
 jobs:
   build:
