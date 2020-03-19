@@ -20,6 +20,7 @@ jobs:
         with:
           repository: 'icmaa/vue-storefront-workspace'
           path: 'vue-storefront-workspace'
+          token: ${{ secrets.GITHUB_PAT }}
       - uses: actions/setup-node@v1
 
       - name: Sync config JSON files
