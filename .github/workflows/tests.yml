@@ -44,9 +44,7 @@ jobs:
         uses: cypress-io/github-action@v1
         with:
           install: false
-          working-directory: src/themes/icmaa-imp
-          config-file: test/e2e/cypress.json
+          working-directory: src/themes/icmaa-imp/test/e2e
           wait-on: http://localhost:3000
           browser: chrome
           headless: true
-
