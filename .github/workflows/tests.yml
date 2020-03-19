@@ -28,7 +28,7 @@ jobs:
         run: ls ./vue-storefront-workspace
 
       - name: Sync config JSON files
-        run: rsync -r vue-storefront-workspace/template/vue-storefront ./
+        run: rsync -r ./vue-storefront-workspace/template/vue-storefront ./
 
       - name: Debug
         run: ls ./config
