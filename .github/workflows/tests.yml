@@ -69,33 +69,36 @@ jobs:
 
       - name: Sync config JSON files
         run: rsync -r ./vue-storefront-workspace/template/vue-storefront/ ./
+      
+      - run: echo "${secrets.CYPRESS_PROJECT_ID} - ${secrets.CYPRESS_RECORD_KEY}"
 
-      - name: Build
-        timeout-minutes: 15
-        run: |
-          yarn
-          yarn build
+      # - name: Build
+      #   timeout-minutes: 15
+      #   run: |
+      #     yarn
+      #     yarn build
 
-      - name: Start
-        run: yarn pm2 start ecosystem.ci.json
+      # - name: Start
+      #   run: yarn pm2 start ecosystem.ci.json
 
-      - name: Cypress run
-        uses: cypress-io/github-action@v1
-        with:
-          install: false
-          working-directory: src/themes/icmaa-imp/test/e2e
-          wait-on: http://localhost:3000
-          wait-on-timeout: 120
-          browser: chrome
-          headless: true
-          record: true
-          parallel: true
-        env:
-          CYPRESS_RECORD_KEY: ${secrets.CYPRESS_RECORD_KEY}
-          CYPRESS_PROJECT_ID: ${secrets.CYPRESS_PROJECT_ID}
+      # - name: Cypress run
+      #   uses: cypress-io/github-action@v1
+      #   with:
+      #     install: false
+      #     working-directory: src/themes/icmaa-imp/test/e2e
+      #     wait-on: http://localhost:3000
+      #     wait-on-timeout: 120
+      #     browser: chrome
+      #     headless: true
+      #     record: true
+      #     parallel: true
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #     CYPRESS_RECORD_KEY: ${secrets.CYPRESS_RECORD_KEY}
+      #     CYPRESS_PROJECT_ID: ${secrets.CYPRESS_PROJECT_ID}
 
-      - uses: actions/upload-artifact@v1
-        if: failure()
-        with:
-          name: cypress-screenshots
-          path: cypress/screenshots
+      # - uses: actions/upload-artifact@v1
+      #   if: failure()
+      #   with:
+      #     name: cypress-screenshots
+      #     path: cypress/screenshots
