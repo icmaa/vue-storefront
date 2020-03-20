@@ -16,7 +16,7 @@ env:
   NODE_CONFIG_ENV: "test"
   NODE_TLS_REJECT_UNAUTHORIZED: 0
   CI_TESTS: true
-  build_files: ./config/*  ./core/*  ./coverage/*  ./dist/*  ./packages/*  ./src/*  .env  .eslintignore  .eslintrc.js  .huskyrc.js  .jshintrc  .lintstagedrc.js  .node-version  .postcssrc  CHANGELOG.md  CODE_OF_CONDUCT.md  CONTRIBUTING.md  LICENSE  README.md  babel.config.js  ecosystem.json  lerna.json  package.json  shims.d.ts  tsconfig-build.json  tsconfig.json  yarn.lock  -x "*/node_modules/*"
+  build_files: ./config/*  ./core/*  ./coverage/*  ./dist/*  ./packages/*  ./src/*  .env  .eslintignore  .eslintrc.js  .huskyrc.js  .jshintrc  .lintstagedrc.js  .node-version  .postcssrc  CHANGELOG.md  CODE_OF_CONDUCT.md  CONTRIBUTING.md  LICENSE  README.md  babel.config.js  ecosystem.json ecosystem.ci.json lerna.json  package.json  shims.d.ts  tsconfig-build.json  tsconfig.json  yarn.lock  -x "*/node_modules/*"
 
 jobs:
 
@@ -51,6 +51,15 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
+
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn cache dir)"
+      - uses: actions/cache@v1
+        id: yarn-cache
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock') }}
 
       - name: Checkout "icmaa/vue-storefront-workspace" repo
         run: |
@@ -93,6 +102,15 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
+
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn cache dir)"
+      - uses: actions/cache@v1
+        id: yarn-cache
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock') }}
 
       - name: Download build
         uses: actions/download-artifact@v1
