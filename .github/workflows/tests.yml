@@ -16,6 +16,8 @@ env:
   NODE_CONFIG_ENV: "test"
   NODE_TLS_REJECT_UNAUTHORIZED: 0
   CI_TESTS: true
+  CYPRESS_RECORD_KEY: ${secrets.CYPRESS_RECORD_KEY}
+  CYPRESS_PROJECT_ID: ${secrets.CYPRESS_PROJECT_ID}
 
 jobs:
 
@@ -25,15 +27,19 @@ jobs:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
       - name: Run ESlint
-        run: yarn lint
-  
+        run: |
+          yarn
+          yarn lint
+
   test-unit:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
       - name: Run Jest-Unit-Tests
-        run: yarn test:unit  
+        run: |
+          yarn
+          yarn test:unit  
 
   tests-e2e:
     runs-on: ubuntu-latest
