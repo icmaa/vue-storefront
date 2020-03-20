@@ -102,10 +102,12 @@ jobs:
       
       - name: Unzip build
         run: unzip build.zip -d build
-
-      - name: Start
+      
+      - name: Install deps and start
         working-directory: build
-        run: yarn pm2 start ecosystem.ci.json
+        run: |
+          yarn
+          yarn pm2 start ecosystem.ci.json
 
       - name: Cypress run
         uses: cypress-io/github-action@v1
