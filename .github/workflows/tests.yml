@@ -50,7 +50,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        containers: [1,2,3,4]
+        containers: [ 'runner-1', 'runner-2', 'runner-3', 'runner-4' ]
     
     services:
       redis:
@@ -81,6 +81,7 @@ jobs:
 
       - name: Cypress run
         uses: cypress-io/github-action@v1
+        timeout-minutes: 7
         with:
           install: false
           working-directory: src/themes/icmaa-imp/test/e2e

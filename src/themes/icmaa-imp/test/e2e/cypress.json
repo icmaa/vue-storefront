@@ -12,7 +12,7 @@
   "defaultCommandTimeout": 20000,
   "requestTimeout": 20000,
   "env": {
-    "store_codes": ["de", "fr", "it", "uk"],
+    "store_codes": ["de", "fr", "es", "uk"],
     "category_pages": ["new", "boys.html", "girls.html"]
   }
 }
