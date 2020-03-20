@@ -16,6 +16,7 @@ env:
   NODE_CONFIG_ENV: "test"
   NODE_TLS_REJECT_UNAUTHORIZED: 0
   CI_TESTS: true
+  build_files: ./config/*  ./core/*  ./coverage/*  ./dist/*  ./packages/*  ./src/*  .env  .eslintignore  .eslintrc.js  .huskyrc.js  .jshintrc  .lintstagedrc.js  .node-version  .postcssrc  CHANGELOG.md  CODE_OF_CONDUCT.md  CONTRIBUTING.md  LICENSE  README.md  babel.config.js  ecosystem.json  lerna.json  package.json  shims.d.ts  tsconfig-build.json  tsconfig.json  yarn.lock  -x "*/node_modules/*"
 
 jobs:
 
@@ -44,21 +45,9 @@ jobs:
   #         yarn
   #         yarn test:unit
 
-  tests-e2e:
+  tests-e2e-build:
     runs-on: ubuntu-latest
-
-    strategy:
-      fail-fast: false
-      matrix:
-        containers: [ 'runner-1', 'runner-2', 'runner-3', 'runner-4' ]
     
-    services:
-      redis:
-        image: redis
-        ports:
-        - 6379:6379
-        options: --entrypoint redis-server
-
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
@@ -76,7 +65,45 @@ jobs:
       - name: Build
         run: yarn build
 
+      - name: Zip build
+        run: zip -r build.zip ${{ build_files }}
+
+      - name: Upload build
+        uses: actions/upload-artifact@v1
+        with:
+          name: build
+          path: build.zip
+
+  tests-e2e:
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        containers: [ 'runner-1', 'runner-2', 'runner-3', 'runner-4', 'runner-5' ]
+    
+    services:
+      redis:
+        image: redis
+        ports:
+        - 6379:6379
+        options: --entrypoint redis-server
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+
+      - name: Download build
+        uses: actions/download-artifact@v1
+        with:
+          name: build
+          path: ./
+      
+      - name: Unzip build
+        run: unzip build.zip -d build
+
       - name: Start
+        working-directory: build
         run: yarn pm2 start ecosystem.ci.json
 
       - name: Cypress run
