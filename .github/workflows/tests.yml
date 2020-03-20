@@ -50,7 +50,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        containers: [1]
+        containers: [1,2,3,4]
     
     services:
       redis:
@@ -70,11 +70,11 @@ jobs:
       - name: Sync config JSON files
         run: rsync -r ./vue-storefront-workspace/template/vue-storefront/ ./
       
+      - name: Install dependencies
+        run: yarn
+
       - name: Build
-        timeout-minutes: 15
-        run: |
-          yarn
-          yarn build
+        run: yarn build
 
       - name: Start
         run: yarn pm2 start ecosystem.ci.json
@@ -92,5 +92,5 @@ jobs:
           parallel: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          CYPRESS_RECORD_KEY: "062f2595-8f55-4e91-b41c-8c4524525170"
-          CYPRESS_PROJECT_ID: "8ywpxj"
+          CYPRESS_RECORD_KEY: ${{secrets.CYPRESS_RECORD_KEY}}
+          CYPRESS_PROJECT_ID: ${{secrets.CYPRESS_PROJECT_ID}}
