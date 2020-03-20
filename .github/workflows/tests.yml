@@ -16,8 +16,6 @@ env:
   NODE_CONFIG_ENV: "test"
   NODE_TLS_REJECT_UNAUTHORIZED: 0
   CI_TESTS: true
-  CYPRESS_RECORD_KEY: ${secrets.CYPRESS_RECORD_KEY}
-  CYPRESS_PROJECT_ID: ${secrets.CYPRESS_PROJECT_ID}
 
 jobs:
 
@@ -36,6 +34,11 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
+      - name: Checkout "icmaa/vue-storefront-workspace" repo
+        run: |
+          git clone --no-tags --depth 1 https://${{ secrets.GITHUB_PAT }}@github.com/icmaa/vue-storefront-workspace
+      - name: Sync config JSON files
+        run: rsync -r ./vue-storefront-workspace/template/vue-storefront/ ./
       - name: Run Jest-Unit-Tests
         run: |
           yarn
@@ -71,3 +74,7 @@ jobs:
           wait-on: http://localhost:3000
           browser: chrome
           headless: true
+          record: true
+        env:
+          CYPRESS_RECORD_KEY: ${secrets.CYPRESS_RECORD_KEY}
+          CYPRESS_PROJECT_ID: ${secrets.CYPRESS_PROJECT_ID}
