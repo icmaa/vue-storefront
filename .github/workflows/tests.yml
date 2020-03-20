@@ -59,12 +59,6 @@ jobs:
           path: node_modules
           key: nodemodules-${{ runner.os }}-${{ hashFiles('yarn.lock') }}
 
-      - name: "Cache: build"
-        uses: actions/cache@v1
-        with:
-          path: ./
-          key: build-${{ runner.os }}-${{ github.sha }}
-
       - name: Get yarn cache directory path
         id: yarn-cache-dir-path
         run: echo "::set-output name=dir::$(yarn cache dir)"
@@ -118,6 +112,7 @@ jobs:
           path: node_modules
           key: nodemodules-${{ runner.os }}-${{ hashFiles('yarn.lock') }}
 
+      # The order of the cache initialization is important to have a yarn.lock file to hash
       - name: Get yarn cache directory path
         id: yarn-cache-dir-path
         run: echo "::set-output name=dir::$(yarn cache dir)"
