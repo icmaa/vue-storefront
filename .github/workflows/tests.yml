@@ -55,6 +55,7 @@ jobs:
       - name: Get yarn cache directory path
         id: yarn-cache-dir-path
         run: echo "::set-output name=dir::$(yarn cache dir)"
+
       - uses: actions/cache@v1
         id: yarn-cache
         with:
@@ -106,6 +107,7 @@ jobs:
       - name: Get yarn cache directory path
         id: yarn-cache-dir-path
         run: echo "::set-output name=dir::$(yarn cache dir)"
+
       - uses: actions/cache@v1
         id: yarn-cache
         with:
@@ -131,7 +133,6 @@ jobs:
         uses: cypress-io/github-action@v1
         timeout-minutes: 7
         with:
-          install: false
           working-directory: src/themes/icmaa-imp/test/e2e
           wait-on: http://localhost:3000
           wait-on-timeout: 120
