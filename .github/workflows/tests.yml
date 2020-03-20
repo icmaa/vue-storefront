@@ -12,7 +12,6 @@ env:
   NODE_CONFIG_ENV: "test"
   NODE_TLS_REJECT_UNAUTHORIZED: 0
   CI_TESTS: true
-  build_files: ./config/*  ./core/*  ./coverage/*  ./dist/*  ./packages/*  ./src/*  .env  .eslintignore  .eslintrc.js  .huskyrc.js  .jshintrc  .lintstagedrc.js  .node-version  .postcssrc  CHANGELOG.md  CODE_OF_CONDUCT.md  CONTRIBUTING.md  LICENSE  README.md  babel.config.js  ecosystem.json ecosystem.ci.json lerna.json  package.json  shims.d.ts  tsconfig-build.json  tsconfig.json  yarn.lock  -x "*/node_modules/*"
 
 jobs:
 
@@ -51,18 +50,23 @@ jobs:
       - name: Get yarn cache directory path
         id: yarn-cache-dir-path
         run: echo "::set-output name=dir::$(yarn cache dir)"
-
       - name: "Cache: yarn"
         uses: actions/cache@v1
         with:
           path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-          key: ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock') }}
+          key: yarn-${{ runner.os }}-${{ hashFiles('yarn.lock') }}
 
       - name: "Cache: node_modules"
         uses: actions/cache@v1
         with:
           path: node_modules
-          key: ${{ runner.os }}-nodemodules-${{ hashFiles('yarn.lock') }}
+          key: nodemodules-${{ runner.os }}-${{ hashFiles('yarn.lock') }}
+
+      - name: "Cache: build"
+        uses: actions/cache@v1
+        with:
+          path: ./
+          key: build-${{ runner.os }}-${{ GITHUB_SHA }}
 
       - name: Checkout "icmaa/vue-storefront-workspace" repo
         run: |
@@ -76,15 +80,6 @@ jobs:
 
       - name: Build
         run: yarn build
-
-      - name: Zip build
-        run: zip -r build.zip ${{ env.build_files }}
-
-      - name: Upload build
-        uses: actions/upload-artifact@v1
-        with:
-          name: build
-          path: build.zip
 
   tests-e2e:
     needs: tests-e2e-build
@@ -104,34 +99,27 @@ jobs:
 
     steps:
       - uses: actions/setup-node@v1
-      - uses: actions/checkout@v2
-        with:
-          path: 'commit'
-
-      - name: Download build
-        uses: actions/download-artifact@v1
-        with:
-          name: build
-          path: ./
-
-      - name: Unzip build
-        run: unzip build.zip -d ./
 
       - name: Get yarn cache directory path
         id: yarn-cache-dir-path
         run: echo "::set-output name=dir::$(yarn cache dir)"
-
       - name: "Cache: yarn"
         uses: actions/cache@v1
         with:
           path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-          key: ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock') }}
+          key: yarn-${{ runner.os }}-${{ hashFiles('yarn.lock') }}
 
       - name: "Cache: node_modules"
         uses: actions/cache@v1
         with:
           path: node_modules
-          key: ${{ runner.os }}-nodemodules-${{ hashFiles('yarn.lock') }}
+          key: nodemodules-${{ runner.os }}-${{ hashFiles('yarn.lock') }}
+
+      - name: "Cache: build"
+        uses: actions/cache@v1
+        with:
+          path: ./
+          key: build-${{ runner.os }}-${{ GITHUB_SHA }}
 
       - name: Install deps and start
         run: |
@@ -142,8 +130,8 @@ jobs:
         uses: cypress-io/github-action@v1
         timeout-minutes: 5
         with:
-          cache-key: ${{ runner.os }}-cypress-${{ hashFiles('yarn.lock') }}
-          working-directory: commit/src/themes/icmaa-imp/test/e2e
+          cache-key: cypress-${{ runner.os }}-${{ hashFiles('yarn.lock') }}
+          working-directory: src/themes/icmaa-imp/test/e2e
           wait-on: http://localhost:3000
           wait-on-timeout: 120
           browser: chrome
