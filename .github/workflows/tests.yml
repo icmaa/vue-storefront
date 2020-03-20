@@ -13,8 +13,9 @@ on:
 
 env:
   NODE_APP_INSTANCE: "imp"
-  NODE_CONFIG_ENV: "development"
+  NODE_CONFIG_ENV: "test"
   NODE_TLS_REJECT_UNAUTHORIZED: 0
+  CI_TESTS: true
 
 jobs:
 
@@ -36,10 +37,10 @@ jobs:
         run: |
           yarn
           yarn build
-      
+
       - name: Start
-        run: yarn start
-      
+        run: yarn pm2 start ecosystem.ci.json
+
       - name: Cypress run
         uses: cypress-io/github-action@v1
         with:
