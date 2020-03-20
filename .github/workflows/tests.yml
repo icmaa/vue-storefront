@@ -54,7 +54,6 @@ jobs:
 
       - name: "Cache: yarn"
         uses: actions/cache@v1
-        id: yarn-cache
         with:
           path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
           key: ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock') }}
@@ -107,7 +106,7 @@ jobs:
       - uses: actions/setup-node@v1
       - uses: actions/checkout@v2
         with:
-          path: 'repo'
+          path: 'commit'
 
       - name: Download build
         uses: actions/download-artifact@v1
@@ -143,9 +142,7 @@ jobs:
         uses: cypress-io/github-action@v1
         timeout-minutes: 5
         with:
-          install: false
-          command-prefix: yarn
-          working-directory: src/themes/icmaa-imp/test/e2e
+          working-directory: commit/src/themes/icmaa-imp/test/e2e
           wait-on: http://localhost:3000
           wait-on-timeout: 120
           browser: chrome
