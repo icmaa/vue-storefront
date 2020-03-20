@@ -50,7 +50,14 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        containers: [1, 2, 3, 4]
+        containers: [1, 2]
+    
+    services:
+      redis:
+        image: redis
+        ports:
+        - 6379:6379
+        options: --entrypoint redis-server
 
     steps:
       - uses: actions/checkout@v2
@@ -78,9 +85,11 @@ jobs:
           install: false
           working-directory: src/themes/icmaa-imp/test/e2e
           wait-on: http://localhost:3000
+          wait-on-timeout: 120
           browser: chrome
           headless: true
           record: true
+          parallel: true
         env:
           CYPRESS_RECORD_KEY: ${secrets.CYPRESS_RECORD_KEY}
           CYPRESS_PROJECT_ID: ${secrets.CYPRESS_PROJECT_ID}
