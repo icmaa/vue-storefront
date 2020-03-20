@@ -6,10 +6,6 @@ on:
     #   - 'core/**'
     #   - 'packages/**'
     #   - 'src/**'
-    # branches:
-    #   - master
-    #   - develop
-    #   - tests/*
 
 env:
   NODE_APP_INSTANCE: "imp"
@@ -103,6 +99,15 @@ jobs:
     steps:
       - uses: actions/setup-node@v1
 
+      - name: Download build
+        uses: actions/download-artifact@v1
+        with:
+          name: build
+          path: ./
+
+      - name: Unzip build
+        run: unzip build.zip -d ./
+
       - name: Get yarn cache directory path
         id: yarn-cache-dir-path
         run: echo "::set-output name=dir::$(yarn cache dir)"
@@ -113,17 +118,7 @@ jobs:
           path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
           key: ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock') }}
 
-      - name: Download build
-        uses: actions/download-artifact@v1
-        with:
-          name: build
-          path: ./
-      
-      - name: Unzip build
-        run: unzip build.zip -d build
-      
       - name: Install deps and start
-        working-directory: build
         run: |
           yarn
           yarn pm2 start ecosystem.ci.json
@@ -133,7 +128,7 @@ jobs:
         timeout-minutes: 5
         with:
           install: false
-          working-directory: build/src/themes/icmaa-imp/test/e2e
+          working-directory: src/themes/icmaa-imp/test/e2e
           wait-on: http://localhost:3000
           wait-on-timeout: 120
           browser: chrome
