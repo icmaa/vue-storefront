@@ -2,7 +2,7 @@
   "apps": [
     {
       "name": "server",
-      "max_memory_restart": "500MB",
+      "max_memory_restart": "500M",
       "instances": "1",
       "exec_mode": "cluster",
       "env": {
