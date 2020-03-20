@@ -47,14 +47,11 @@ jobs:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
 
-      - name: Get yarn cache directory path
-        id: yarn-cache-dir-path
-        run: echo "::set-output name=dir::$(yarn cache dir)"
-      - name: "Cache: yarn"
+      - name: "Cache: build"
         uses: actions/cache@v1
         with:
-          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-          key: yarn-${{ runner.os }}-${{ hashFiles('yarn.lock') }}
+          path: ./
+          key: build-${{ runner.os }}-${{ github.sha }}
 
       - name: "Cache: node_modules"
         uses: actions/cache@v1
@@ -67,6 +64,15 @@ jobs:
         with:
           path: ./
           key: build-${{ runner.os }}-${{ github.sha }}
+
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn cache dir)"
+      - name: "Cache: yarn"
+        uses: actions/cache@v1
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: yarn-${{ runner.os }}-${{ hashFiles('yarn.lock') }}
 
       - name: Checkout "icmaa/vue-storefront-workspace" repo
         run: |
@@ -100,6 +106,18 @@ jobs:
     steps:
       - uses: actions/setup-node@v1
 
+      - name: "Cache: build"
+        uses: actions/cache@v1
+        with:
+          path: ./
+          key: build-${{ runner.os }}-${{ github.sha }}
+
+      - name: "Cache: node_modules"
+        uses: actions/cache@v1
+        with:
+          path: node_modules
+          key: nodemodules-${{ runner.os }}-${{ hashFiles('yarn.lock') }}
+
       - name: Get yarn cache directory path
         id: yarn-cache-dir-path
         run: echo "::set-output name=dir::$(yarn cache dir)"
@@ -108,18 +126,6 @@ jobs:
         with:
           path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
           key: yarn-${{ runner.os }}-${{ hashFiles('yarn.lock') }}
-
-      - name: "Cache: node_modules"
-        uses: actions/cache@v1
-        with:
-          path: node_modules
-          key: nodemodules-${{ runner.os }}-${{ hashFiles('yarn.lock') }}
-
-      - name: "Cache: build"
-        uses: actions/cache@v1
-        with:
-          path: ./
-          key: build-${{ runner.os }}-${{ github.sha }}
 
       - name: Install deps and start
         run: |
