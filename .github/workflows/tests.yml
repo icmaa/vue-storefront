@@ -75,6 +75,7 @@ jobs:
           path: build.zip
 
   tests-e2e:
+    needs: tests-e2e-build
     runs-on: ubuntu-latest
 
     strategy:
