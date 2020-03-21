@@ -156,6 +156,7 @@ jobs:
           headless: true
           record: true
           parallel: true
+          config: video=true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           CYPRESS_RECORD_KEY: ${{secrets.CYPRESS_RECORD_KEY}}
