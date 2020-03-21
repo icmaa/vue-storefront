@@ -1,5 +1,7 @@
 name: Continuous Delivery
 
+on: push
+
 env:
   SUBMODULE: "vue-storefront"
 
