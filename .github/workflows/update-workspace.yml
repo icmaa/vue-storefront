@@ -25,7 +25,8 @@ jobs:
       - name: Get branch name
         run: |
            echo ::set-env name=BRANCH_NAME::$(echo ${GITHUB_REF#refs/heads/})
-      - run: echo "${BRANCH_NAME}"
+      - run: |
+          echo "Test: ${BRANCH_NAME}"
 
       - name: Checkout "icmaa/vue-storefront-workspace" repo
         run: |
