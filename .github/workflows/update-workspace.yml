@@ -9,7 +9,6 @@ on:
 
 env:
   SUBMODULE: "vue-storefront"
-  TARGET_WORKSPACE_BRANCH: "develop"
 
 jobs:
 
@@ -17,6 +16,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+
+      - name: Get repository name
+        run: |
+           echo ::set-env name=SUBMODULE::$(echo ${GITHUB_REPOSITORY##*/})
 
       - name: Get commit message
         run: |
@@ -34,11 +37,11 @@ jobs:
       - name: Init and update to latest branch
         working-directory: vue-storefront-workspace
         run: |
-          git submodule init ${{ env.SUBMODULE }}
-          git submodule update --depth 1 ${{ env.SUBMODULE }}
+          git submodule init ${SUBMODULE}
+          git submodule update --depth 1 ${SUBMODULE}
 
       - name: Fetch and checkout current commit
-        working-directory: vue-storefront-workspace/${{ env.SUBMODULE }}
+        working-directory: vue-storefront-workspace/${SUBMODULE}
         run: |
           git fetch origin ${{ github.sha }}
           git checkout ${{ github.sha }}
@@ -47,11 +50,11 @@ jobs:
         working-directory: vue-storefront-workspace
         run: |
           git config user.email "a9.3@impericon.com"
-          git config user.name "${{ env.SUBMODULE }}-release-bot"
+          git config user.name "${SUBMODULE}-releasebo"
 
       - name: Update to latest commit in branch
         working-directory: vue-storefront-workspace
         run: |
-          git add ${{ env.SUBMODULE }}
-          git commit -m "$(echo -e "Update branch: ${{ env.SUBMODULE }}\n${COMMIT_MSG}")"
+          git add ${SUBMODULE}
+          git commit -m "$(echo -e "Update branch: ${SUBMODULE}\n$COMMIT_MS}")"
           git push origin ${BRANCH_NAME}
