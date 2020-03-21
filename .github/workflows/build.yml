@@ -11,8 +11,6 @@ jobs:
 
   build:
     runs-on: ubuntu-latest
-    env:
-      FILES: ./config/*  ./core/*  ./coverage/*  ./dist/*  ./packages/*  ./src/*  .env  .eslintignore  .eslintrc.js  .huskyrc.js  .jshintrc  .lintstagedrc.js  .node-version  .postcssrc  CHANGELOG.md  CODE_OF_CONDUCT.md  CONTRIBUTING.md  LICENSE  README.md  babel.config.js  ecosystem.json  lerna.json  package.json  shims.d.ts  tsconfig-build.json  tsconfig.json  yarn.lock  -x "*/node_modules/*"
 
     strategy:
       matrix:
@@ -69,7 +67,7 @@ jobs:
       - name: Zip build
         run: |
           mkdir builds
-          zip -r builds/${{ env.APP }}-${{ matrix.env.MANDANT }}-${{ env.ENV }}-latest.zip ${{ env.FILES }}
+          zip -r builds/${{ env.APP }}-${{ matrix.env.MANDANT }}-${{ env.ENV }}-latest.zip $(cat build/.FILES)
           cp builds/${{ env.APP }}-${{ matrix.env.MANDANT }}-${{ env.ENV }}-latest.zip builds/${{ env.APP }}-${{ matrix.env.MANDANT }}-${{ env.ENV }}-$(date '+%Y%m%d-%H%M%S').zip
 
       - name: Upload binary to S3 bucket
@@ -84,9 +82,9 @@ jobs:
   release:
     needs: build
     runs-on: ubuntu-latest
-    if: endsWith(${{ github.GITHUB_REF }}, 'master')
 
     steps:
+      - uses: actions/checkout@v2
       - name: Get commit message
         run: echo ::set-env name=COMMIT_MSG::$(git log --format=%B -n 1 ${{ github.event.after }})
       - id: get_date

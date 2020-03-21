@@ -9,6 +9,7 @@ config/local*.json
 config/custom-environment-variables.json
 var
 build/config.json
+build/.FILES
 core/build/config.json
 core/build/cache-version.json
 theme.js
