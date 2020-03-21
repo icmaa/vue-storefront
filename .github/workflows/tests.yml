@@ -33,7 +33,7 @@ jobs:
       - uses: actions/setup-node@v1
 
       - name: Get yarn cache directory path
-        run: echo "::set-output name=YARN_CACHE_DIR::$(yarn cache dir)"
+        run: echo ::set-env name=YARN_CACHE_DIR::$(yarn cache dir)
       - name: "Cache: yarn"
         uses: actions/cache@v1
         with:
@@ -77,7 +77,7 @@ jobs:
           key: nodemodules-${{ runner.os }}-${{ hashFiles('yarn.lock') }}
 
       - name: Get yarn cache directory path
-        run: echo "::set-output name=YARN_CACHE_DIR::$(yarn cache dir)"
+        run: echo ::set-env name=YARN_CACHE_DIR::$(yarn cache dir)
       - name: "Cache: yarn"
         uses: actions/cache@v1
         with:
@@ -131,7 +131,7 @@ jobs:
 
       # The order of the cache initialization is important to have a yarn.lock file to hash
       - name: Get yarn cache directory path
-        run: echo "::set-output name=YARN_CACHE_DIR::$(yarn cache dir)"
+        run: echo ::set-env name=YARN_CACHE_DIR::$(yarn cache dir)
       - name: "Cache: yarn"
         uses: actions/cache@v1
         with:
