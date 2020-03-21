@@ -49,6 +49,7 @@ jobs:
 
       - name: Checkout "icmaa/vue-storefront-workspace" repo
         run: |
+          rm -rf vue-storefront-workspace
           git clone --no-tags --depth 1 https://${{ secrets.GITHUB_PAT }}@github.com/icmaa/vue-storefront-workspace
       - name: Sync config JSON files
         run: rsync -r ./vue-storefront-workspace/template/vue-storefront/ ./

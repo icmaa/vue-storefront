@@ -1,0 +1,37 @@
+name: Continuous Delivery
+
+env:
+  SUBMODULE: "vue-storefront"
+
+jobs:
+
+  update-workspace-branch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Checkout "icmaa/vue-storefront-workspace" repo
+        run: |
+          rm -rf vue-storefront-workspace
+          git clone --no-tags --depth 1 https://${{ secrets.GITHUB_PAT }}@github.com/icmaa/vue-storefront-workspace
+      
+      - name: Init and update to latest branch
+        working-directory: vue-storefront-workspace
+        run: |
+          git submodule init ${{ env.SUBMODULE }}
+          git submodule update --depth 5 ${{ env.SUBMODULE }}
+
+      - name: Fetch and checkout latest commit
+        working-directory: vue-storefront-workspace/${{ env.SUBMODULE }}
+        run: |
+          git fetch origin ${{ github.sha }}
+          git checkout ${{ github.sha }}
+
+      - name: Init and update to latest branch
+        working-directory: vue-storefront-workspace
+        run: |
+          git add ${{ env.SUBMODULE }}
+          git commit -m "Update branch: ${{ env.SUBMODULE }}"
+          git checkout -b ${{ env.SUBMODULE }}-${{ github.sha }}
+          git push origin ${{ env.SUBMODULE }}-${{ github.sha }}
+
