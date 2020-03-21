@@ -160,6 +160,12 @@ Cypress.Commands.add('openNavigationSidebar', (trigger: string = '[data-test-id=
   cy.get(overlaySelector)
     .as('sidebar')
     .should('be.visible')
+    .find('.sidebar-content')
+})
+
+Cypress.Commands.add('closeNavigationSidebar', (alias: string = '@sidebar') => {
+  cy.get(alias).findByTestId('closeButton').click()
+  cy.get(alias).should('not.be.visible')
 })
 
 Cypress.Commands.add('openFilterSidebar', () => {
