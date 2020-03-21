@@ -5,6 +5,7 @@ on:
     branches:
       - master
       - develop
+      - build/*
       - feature/198003-cypress-and-github-actions
 
 jobs:
@@ -55,22 +56,22 @@ jobs:
 
       - name: Sync config JSON files
         run: rsync -r ./vue-storefront-workspace/template/${{ env.APP }}/ ./
+      
+      - name: Install dependencies
+        run: yarn
 
       - name: Build "${{ env.APP }}"
         timeout-minutes: 15
-        run: |
-          yarn
-          yarn build
+        run: yarn build
         env:
           NODE_CONFIG_ENV: ${{ env.ENV }}
           NODE_APP_INSTANCE: ${{ matrix.env.MANDANT }}
 
       - name: Zip build
-        working-directory: ${{ env.APP }}
         run: |
-          mkdir ../builds
-          zip -r ../builds/${{ env.APP }}-${{ matrix.env.MANDANT }}-${{ env.ENV }}-latest.zip ${{ env[format('files_{0}', env.APP)] }}
-          cp ../builds/${{ env.APP }}-${{ matrix.env.MANDANT }}-${{ env.ENV }}-latest.zip ../builds/${{ env.APP }}-${{ matrix.env.MANDANT }}-${{ env.ENV }}-$(date '+%Y%m%d-%H%M%S').zip
+          mkdir builds
+          zip -r builds/${{ env.APP }}-${{ matrix.env.MANDANT }}-${{ env.ENV }}-latest.zip ${{ env[format('files_{0}', env.APP)] }}
+          cp builds/${{ env.APP }}-${{ matrix.env.MANDANT }}-${{ env.ENV }}-latest.zip builds/${{ env.APP }}-${{ matrix.env.MANDANT }}-${{ env.ENV }}-$(date '+%Y%m%d-%H%M%S').zip
 
       - name: Upload binary to S3 bucket
         uses: jakejarvis/s3-sync-action@master

@@ -33,12 +33,11 @@ jobs:
       - uses: actions/setup-node@v1
 
       - name: Get yarn cache directory path
-        id: yarn-cache-dir-path
-        run: echo "::set-output name=dir::$(yarn cache dir)"
+        run: echo "::set-output name=YARN_CACHE_DIR::$(yarn cache dir)"
       - name: "Cache: yarn"
         uses: actions/cache@v1
         with:
-          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          path: ${{ env.YARN_CACHE_DIR }}
           key: yarn-${{ runner.os }}-${{ hashFiles('yarn.lock') }}
 
       - name: "Cache: node_modules"
@@ -78,12 +77,11 @@ jobs:
           key: nodemodules-${{ runner.os }}-${{ hashFiles('yarn.lock') }}
 
       - name: Get yarn cache directory path
-        id: yarn-cache-dir-path
-        run: echo "::set-output name=dir::$(yarn cache dir)"
+        run: echo "::set-output name=YARN_CACHE_DIR::$(yarn cache dir)"
       - name: "Cache: yarn"
         uses: actions/cache@v1
         with:
-          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          path: ${{ env.YARN_CACHE_DIR }}
           key: yarn-${{ runner.os }}-${{ hashFiles('yarn.lock') }}
 
       - name: Checkout "icmaa/vue-storefront-workspace" repo
@@ -133,12 +131,11 @@ jobs:
 
       # The order of the cache initialization is important to have a yarn.lock file to hash
       - name: Get yarn cache directory path
-        id: yarn-cache-dir-path
-        run: echo "::set-output name=dir::$(yarn cache dir)"
+        run: echo "::set-output name=YARN_CACHE_DIR::$(yarn cache dir)"
       - name: "Cache: yarn"
         uses: actions/cache@v1
         with:
-          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          path: ${{ env.YARN_CACHE_DIR }}
           key: yarn-${{ runner.os }}-${{ hashFiles('yarn.lock') }}
 
       - name: Install deps and start
