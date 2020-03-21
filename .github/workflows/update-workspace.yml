@@ -12,6 +12,12 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - name: get commit message
+        run: |
+           echo ::set-env name=commitmsg::$(git log --format=%B -n 1 ${{ github.event.after }})
+      - name: show commit message
+        run : echo $commitmsg
+
       - name: Checkout "icmaa/vue-storefront-workspace" repo
         run: |
           rm -rf vue-storefront-workspace
@@ -21,19 +27,19 @@ jobs:
         working-directory: vue-storefront-workspace
         run: |
           git submodule init ${{ env.SUBMODULE }}
-          git submodule update --depth 5 ${{ env.SUBMODULE }}
+          git submodule update --depth 1 ${{ env.SUBMODULE }}
 
       - name: Fetch and checkout latest commit
         working-directory: vue-storefront-workspace/${{ env.SUBMODULE }}
         run: |
           git fetch origin ${{ github.sha }}
           git checkout ${{ github.sha }}
-      
+
       - name: Set git user and identity
         working-directory: vue-storefront-workspace
         run: |
           git config user.email "a9.3@impericon.com"
-          git config user.name "release-bot"
+          git config user.name "${{ env.SUBMODULE }}-release-bot"
 
       - name: Init and update to latest branch
         working-directory: vue-storefront-workspace
