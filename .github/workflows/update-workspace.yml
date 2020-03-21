@@ -34,8 +34,8 @@ jobs:
       - name: Init and update to latest branch
         working-directory: vue-storefront-workspace
         run: |
-          git submodule init ${SUBMODULE}
-          git submodule update --depth 1 ${SUBMODULE}
+          git submodule init ${{ env.SUBMODULE }}
+          git submodule update --depth 1 ${{ env.SUBMODULE }}
 
       - name: Fetch and checkout current commit
         working-directory: vue-storefront-workspace/${{ env.SUBMODULE }}
@@ -47,11 +47,11 @@ jobs:
         working-directory: vue-storefront-workspace
         run: |
           git config user.email "a9.3@impericon.com"
-          git config user.name "${SUBMODULE}-releasebo"
+          git config user.name "${{ env.SUBMODULE }}-releasebo"
 
       - name: Update to latest commit in branch
         working-directory: vue-storefront-workspace
         run: |
-          git add ${SUBMODULE}
-          git commit -m "$(echo -e "Update branch: ${SUBMODULE}\n$COMMIT_MS}")"
-          git push origin ${BRANCH_NAME}
+          git add ${{ env.SUBMODULE }}
+          git commit -m "$(echo -e "Update branch: ${{ env.SUBMODULE }}\n${{ env.COMMIT_MSG }}")"
+          git push origin ${{ env.BRANCH_NAME }}
