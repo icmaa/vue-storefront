@@ -14,9 +14,7 @@ jobs:
 
       - name: get commit message
         run: |
-           echo ::set-env name=commitmsg::$(git log --format=%B -n 1 ${{ github.event.after }})
-      - name: show commit message
-        run : echo $commitmsg
+           echo ::set-env name=COMMIT_MSG::$(git log --format=%B -n 1 ${{ github.event.after }})
 
       - name: Checkout "icmaa/vue-storefront-workspace" repo
         run: |
@@ -45,6 +43,6 @@ jobs:
         working-directory: vue-storefront-workspace
         run: |
           git add ${{ env.SUBMODULE }}
-          git commit -m "Update branch: ${{ env.SUBMODULE }}"
+          git commit -m "Update branch: ${{ env.SUBMODULE }}\n ${COMMIT_MSG}"
           git checkout -b ${{ env.SUBMODULE }}-${{ github.sha }}
           git push origin ${{ env.SUBMODULE }}-${{ github.sha }}
