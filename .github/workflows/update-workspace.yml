@@ -38,7 +38,7 @@ jobs:
           git submodule update --depth 1 ${SUBMODULE}
 
       - name: Fetch and checkout current commit
-        working-directory: vue-storefront-workspace/${SUBMODULE}
+        working-directory: vue-storefront-workspace/${{ env.SUBMODULE }}
         run: |
           git fetch origin ${{ github.sha }}
           git checkout ${{ github.sha }}
