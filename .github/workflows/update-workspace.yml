@@ -43,6 +43,6 @@ jobs:
         working-directory: vue-storefront-workspace
         run: |
           git add ${{ env.SUBMODULE }}
-          git commit -m "Update branch: ${{ env.SUBMODULE }}\n ${COMMIT_MSG}"
+          git commit -m "$(echo -e "Update branch: ${{ env.SUBMODULE }}\n${COMMIT_MSG}")"
           git checkout -b ${{ env.SUBMODULE }}-${{ github.sha }}
           git push origin ${{ env.SUBMODULE }}-${{ github.sha }}
