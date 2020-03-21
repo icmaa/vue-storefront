@@ -157,6 +157,7 @@ jobs:
           record: true
           parallel: true
           config: video=true
+          group: ${{ runner.os }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           CYPRESS_RECORD_KEY: ${{secrets.CYPRESS_RECORD_KEY}}
