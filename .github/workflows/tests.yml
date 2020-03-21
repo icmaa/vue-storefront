@@ -21,6 +21,8 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
+        with:
+          node-version: '13.x'
       - name: Run ESlint
         run: |
           yarn
@@ -31,6 +33,8 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
+        with:
+          node-version: '13.x'
 
       - name: Get yarn cache directory path
         run: echo ::set-env name=YARN_CACHE_DIR::$(yarn cache dir)
@@ -63,6 +67,8 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
+        with:
+          node-version: '13.x'
 
       - name: "Cache: build"
         uses: actions/cache@v1
@@ -116,6 +122,8 @@ jobs:
 
     steps:
       - uses: actions/setup-node@v1
+        with:
+          node-version: '13.x'
 
       - name: "Cache: build"
         uses: actions/cache@v1

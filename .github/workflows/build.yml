@@ -6,7 +6,6 @@ on:
       - master
       - develop
       - build/*
-      - feature/198003-cypress-and-github-actions
 
 jobs:
 
@@ -23,14 +22,15 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
+        with:
+          node-version: '13.x'
 
       - name: Get yarn cache directory path
-        id: yarn-cache-dir-path
-        run: echo "::set-output name=dir::$(yarn cache dir)"
+        run: echo ::set-env name=YARN_CACHE_DIR::$(yarn cache dir)
       - name: "Cache: yarn"
         uses: actions/cache@v1
         with:
-          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          path: ${{ env.YARN_CACHE_DIR }}
           key: yarn-${{ runner.os }}-${{ hashFiles('yarn.lock') }}
 
       - name: "Cache: node_modules"
