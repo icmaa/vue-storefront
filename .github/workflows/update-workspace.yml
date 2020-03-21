@@ -7,9 +7,6 @@ on:
       - develop
       - feature/198003-cypress-and-github-actions
 
-env:
-  SUBMODULE: "vue-storefront"
-
 jobs:
 
   update-workspace-branch:
