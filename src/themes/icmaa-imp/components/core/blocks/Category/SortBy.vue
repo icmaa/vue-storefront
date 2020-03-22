@@ -23,7 +23,8 @@ export default {
   },
   computed: {
     ...mapGetters({
-      query: 'category-next/getCurrentSearchQuery'
+      query: 'category-next/getCurrentSearchQuery',
+      category: 'category-next/getCurrentCategory'
     }),
     sortingOptions () {
       let variants = []
@@ -35,6 +36,14 @@ export default {
         })
       })
 
+      const categorySort = this.categorySortingConfigOptions.find(op => op.categoryId === this.category.id)
+      if (categorySort && categorySort.categoryId === this.category.id && !variants.find(el => el.id === categorySort.sort)) {
+        variants.push({
+          label: categorySort.label,
+          id: categorySort.sort,
+          type: 'sort'
+        })
+      }
       return variants
     },
     sortingOptionsForSelect () {
@@ -44,22 +53,38 @@ export default {
     sortingConfigOptions () {
       return products.sortByAttributes
     },
+    categorySortingConfigOptions () {
+      return products.categorySortByAttributes
+    },
     currentOption () {
       return this.sortingOptions.find(o => o.id === this.selected)
     }
   },
   mounted () {
-    const sort = this.query && this.query.sort ? this.query.sort : null
-    if (sort && Object.values(this.sortingConfigOptions).includes(sort)) {
-      this.selected = sort
-    } else {
-      const { attribute, order } = products.defaultSortBy
-      this.selected = `${attribute}:${order}`
-    }
+    this.onMounted()
   },
   methods: {
     sort (value) {
       this.$emit('change', this.currentOption)
+    },
+    onMounted () {
+      const defaultSortBy = this.category.default_sort_by || ''
+      const categorySortBy = this.categorySortingConfigOptions.find(op => op.categoryId === this.category.id) || this.categorySortingConfigOptions.find(op => op.categoryId === this.category.parent_id)
+      const sort = this.query && this.query.sort ? this.query.sort : null
+      if ((sort && Object.values(this.sortingConfigOptions).includes(sort)) || (sort && this.categorySortingConfigOptions.find(el => el.sort === sort))) {
+        this.selected = sort
+      } else if (defaultSortBy && categorySortBy) {
+        this.selected = categorySortBy.sort
+        this.sort()
+      } else {
+        const { attribute, order } = products.defaultSortBy
+        this.selected = `${attribute}:${order}`
+      }
+    }
+  },
+  watch: {
+    '$route.params' () {
+      this.onMounted()
     }
   }
 }
