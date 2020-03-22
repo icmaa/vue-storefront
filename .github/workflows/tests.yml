@@ -156,7 +156,6 @@ jobs:
         uses: cypress-io/github-action@v1
         timeout-minutes: 5
         with:
-          cache-key: cypress-${{ runner.os }}-${{ hashFiles('yarn.lock') }}
           working-directory: src/themes/icmaa-imp/test/e2e
           wait-on: http://localhost:3000
           wait-on-timeout: 120
