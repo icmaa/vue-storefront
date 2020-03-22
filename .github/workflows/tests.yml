@@ -150,6 +150,7 @@ jobs:
       - name: Install deps and start
         run: |
           yarn
+          yarn cypress install
           yarn pm2 start ecosystem.ci.json
 
       - name: Cypress run
