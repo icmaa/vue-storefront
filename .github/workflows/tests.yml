@@ -150,13 +150,13 @@ jobs:
       - name: Install deps and start
         run: |
           yarn
-          yarn cypress install
           yarn pm2 start ecosystem.ci.json
 
       - name: Cypress run
         uses: cypress-io/github-action@v1
         timeout-minutes: 5
         with:
+          build: yarn cypress install
           working-directory: src/themes/icmaa-imp/test/e2e
           wait-on: http://localhost:3000
           wait-on-timeout: 120
