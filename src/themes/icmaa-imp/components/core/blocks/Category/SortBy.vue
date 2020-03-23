@@ -6,8 +6,10 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { products } from 'config'
+import { products, icmaa_catalog } from 'config'
 import i18n from '@vue-storefront/i18n'
+import isEmpty from 'lodash-es/isEmpty'
+
 import { CategorySort } from '@vue-storefront/core/modules/catalog/components/CategorySort'
 import BaseSelect from 'theme/components/core/blocks/Form/BaseSelect'
 
@@ -36,14 +38,6 @@ export default {
         })
       })
 
-      const categorySort = this.categorySortingConfigOptions.find(op => op.categoryId === this.category.id)
-      if (categorySort && categorySort.categoryId === this.category.id && !variants.find(el => el.id === categorySort.sort)) {
-        variants.push({
-          label: categorySort.label,
-          id: categorySort.sort,
-          type: 'sort'
-        })
-      }
       return variants
     },
     sortingOptionsForSelect () {
@@ -51,40 +45,53 @@ export default {
         .map(v => ({ label: `${i18n.t('Sort by')} ${i18n.t(v.label)}`, value: v.id }))
     },
     sortingConfigOptions () {
-      return products.sortByAttributes
+      return Object.assign(products.sortByAttributes, this.customConfigOptions)
     },
-    categorySortingConfigOptions () {
-      return products.categorySortByAttributes
+    customConfigOptions () {
+      /**
+       * We could do this the clean way by importing the values of `available_sort_by` and `default_sort_by` of the ES.
+       * But as we need this feature for only 3 categories yet we do it using a configuration array.
+       * This way we save space in our category payload and state which we would only use in 3 categories.
+       */
+      const customSortAttr = icmaa_catalog.entities.category.customSortByAttributes
+      const customCategory = customSortAttr.find(c => c.id === this.category.id)
+      if (customCategory) {
+        return { [customCategory.label]: customCategory.sort }
+      }
+
+      return {}
+    },
+    hasCustomConfigOptions () {
+      return !isEmpty(this.customConfigOptions)
     },
     currentOption () {
       return this.sortingOptions.find(o => o.id === this.selected)
     }
   },
   mounted () {
-    this.onMounted()
-  },
-  methods: {
-    sort (value) {
-      this.$emit('change', this.currentOption)
-    },
-    onMounted () {
-      const defaultSortBy = this.category.default_sort_by || ''
-      const categorySortBy = this.categorySortingConfigOptions.find(op => op.categoryId === this.category.id) || this.categorySortingConfigOptions.find(op => op.categoryId === this.category.parent_id)
-      const sort = this.query && this.query.sort ? this.query.sort : null
-      if ((sort && Object.values(this.sortingConfigOptions).includes(sort)) || (sort && this.categorySortingConfigOptions.find(el => el.sort === sort))) {
-        this.selected = sort
-      } else if (defaultSortBy && categorySortBy) {
-        this.selected = categorySortBy.sort
-        this.sort()
-      } else {
-        const { attribute, order } = products.defaultSortBy
-        this.selected = `${attribute}:${order}`
-      }
-    }
+    this.initSelected()
   },
   watch: {
-    '$route.params' () {
-      this.onMounted()
+    category () {
+      this.initSelected()
+    }
+  },
+  methods: {
+    initSelected () {
+      const sort = this.query && this.query.sort ? this.query.sort : null
+      if (sort && Object.values(this.sortingConfigOptions).includes(sort)) {
+        this.selected = sort
+      } else {
+        if (this.hasCustomConfigOptions) {
+          this.selected = Object.values(this.customConfigOptions)[0]
+        } else {
+          const { attribute, order } = products.defaultSortBy
+          this.selected = `${attribute}:${order}`
+        }
+      }
+    },
+    sort (value) {
+      this.$emit('change', this.currentOption)
     }
   }
 }
