@@ -4,6 +4,7 @@ on:
   pull_request:
     types: [ synchronize ]
     paths:
+      - config
       - 'core/**'
       - 'packages/**'
       - 'src/**'
