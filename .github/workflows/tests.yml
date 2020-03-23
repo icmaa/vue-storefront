@@ -3,12 +3,6 @@ name: Continuous Integration
 on:
   pull_request:
     types: [ synchronize ]
-    paths:
-      - config
-      - 'core/**'
-      - 'packages/**'
-      - 'src/**'
-      - '.github/workflows/tests.yml'
 
 env:
   NODE_APP_INSTANCE: "imp"
