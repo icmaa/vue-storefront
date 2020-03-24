@@ -1,0 +1,174 @@
+name: Continuous Integration
+
+on:
+  pull_request:
+    types: [ opened, reopened, synchronize ]
+
+env:
+  NODE_APP_INSTANCE: "imp"
+  NODE_CONFIG_ENV: "test"
+  NODE_TLS_REJECT_UNAUTHORIZED: 0
+  CI_TESTS: true
+
+jobs:
+
+  test-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: '13.x'
+
+      - name: Run ESlint
+        run: |
+          yarn
+          yarn lint
+
+  test-unit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: '13.x'
+
+      - name: "Cache: node_modules"
+        uses: actions/cache@v1
+        with:
+          path: node_modules
+          key: nodemodules-${{ runner.os }}-${{ hashFiles('yarn.lock') }}
+
+      - name: Get yarn cache directory path
+        run: echo ::set-env name=YARN_CACHE_DIR::$(yarn cache dir)
+      - name: "Cache: yarn"
+        uses: actions/cache@v1
+        with:
+          path: ${{ env.YARN_CACHE_DIR }}
+          key: yarn-${{ runner.os }}-${{ hashFiles('yarn.lock') }}
+
+      - name: Checkout "icmaa/vue-storefront-workspace" repo
+        run: |
+          rm -rf vue-storefront-workspace
+          git clone --no-tags --depth 1 https://${{ secrets.GITHUB_PAT }}@github.com/icmaa/vue-storefront-workspace
+
+      - name: Sync config JSON files
+        run: rsync -r ./vue-storefront-workspace/template/vue-storefront/ ./
+
+      - name: Run Jest-Unit-Tests
+        run: |
+          yarn
+          yarn test:unit
+
+  tests-e2e-build:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: '13.x'
+
+      - name: "Cache: build"
+        uses: actions/cache@v1
+        with:
+          path: ./
+          key: build-${{ runner.os }}-${{ github.sha }}
+
+      - name: "Cache: node_modules"
+        uses: actions/cache@v1
+        with:
+          path: node_modules
+          key: nodemodules-${{ runner.os }}-${{ hashFiles('yarn.lock') }}
+
+      - name: Get yarn cache directory path
+        run: echo ::set-env name=YARN_CACHE_DIR::$(yarn cache dir)
+      - name: "Cache: yarn"
+        uses: actions/cache@v1
+        with:
+          path: ${{ env.YARN_CACHE_DIR }}
+          key: yarn-${{ runner.os }}-${{ hashFiles('yarn.lock') }}
+
+      - name: Checkout "icmaa/vue-storefront-workspace" repo
+        run: |
+          rm -rf vue-storefront-workspace
+          git clone --no-tags --depth 1 https://${{ secrets.GITHUB_PAT }}@github.com/icmaa/vue-storefront-workspace
+
+      - name: Sync config JSON files
+        run: rsync -r ./vue-storefront-workspace/template/vue-storefront/ ./
+
+      - name: Install dependencies
+        run: yarn
+
+      - name: Build
+        run: yarn build
+
+  tests-e2e:
+    needs: tests-e2e-build
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        containers: [ 'runner-1', 'runner-2', 'runner-3', 'runner-4', 'runner-5' ]
+
+    services:
+      redis:
+        image: redis
+        ports:
+          - 6379:6379
+        options: --entrypoint redis-server
+
+    steps:
+      # We need to checkout the repo, to have a `${{ github.sha }}`
+      - uses: actions/checkout@v2
+        with:
+          path: 'repository'
+
+      - uses: actions/setup-node@v1
+        with:
+          node-version: '13.x'
+
+      - name: "Cache: build"
+        uses: actions/cache@v1
+        with:
+          path: ./
+          key: build-${{ runner.os }}-${{ github.sha }}
+
+      - name: "Cache: node_modules"
+        uses: actions/cache@v1
+        with:
+          path: node_modules
+          key: nodemodules-${{ runner.os }}-${{ hashFiles('yarn.lock') }}
+
+      - name: Get yarn cache directory path
+        run: echo ::set-env name=YARN_CACHE_DIR::$(yarn cache dir)
+      - name: "Cache: yarn"
+        uses: actions/cache@v1
+        with:
+          path: ${{ env.YARN_CACHE_DIR }}
+          key: yarn-${{ runner.os }}-${{ hashFiles('yarn.lock') }}
+
+      - name: Install deps and start
+        run: |
+          yarn
+          yarn pm2 start ecosystem.ci.json
+
+      - name: Cypress run
+        uses: cypress-io/github-action@v1
+        timeout-minutes: 5
+        with:
+          build: yarn cypress install
+          working-directory: src/themes/icmaa-imp/test/e2e
+          wait-on: http://localhost:3000
+          wait-on-timeout: 120
+          browser: chrome
+          headless: true
+          record: true
+          parallel: true
+          config: video=true
+          group: ${{ runner.os }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CYPRESS_RECORD_KEY: ${{secrets.CYPRESS_RECORD_KEY}}
+          CYPRESS_PROJECT_ID: ${{secrets.CYPRESS_PROJECT_ID}}
