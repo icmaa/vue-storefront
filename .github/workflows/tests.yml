@@ -44,14 +44,14 @@ jobs:
       - name: Get yarn cache directory path
         run: echo ::set-env name=YARN_CACHE_DIR::$(yarn cache dir)
       - name: "Cache: node_modules"
-        uses: actions/cache@v2
+        uses: actions/cache@master
         with:
           path: |
             node_modules
             ${{ env.YARN_CACHE_DIR }}
           key: nodemodules-${{ runner.os }}-${{ hashFiles('yarn.lock') }}
       - name: "Cache: build"
-        uses: actions/cache@v2
+        uses: actions/cache@master
         with:
           path: ${{ env.BUILD_CACHE_DIRS }}
           key: build-${{ runner.os }}-${{ github.sha }}
@@ -81,14 +81,14 @@ jobs:
       - name: Get yarn cache directory path
         run: echo ::set-env name=YARN_CACHE_DIR::$(yarn cache dir)
       - name: "Cache: node_modules"
-        uses: actions/cache@v2
+        uses: actions/cache@master
         with:
           path: |
             node_modules
             ${{ env.YARN_CACHE_DIR }}
           key: nodemodules-${{ runner.os }}-${{ hashFiles('yarn.lock') }}
       - name: "Cache: build"
-        uses: actions/cache@v2
+        uses: actions/cache@master
         with:
           path: ${{ env.BUILD_CACHE_DIRS }}
           key: build-${{ runner.os }}-${{ github.sha }}
@@ -132,14 +132,14 @@ jobs:
       - name: Get yarn cache directory path
         run: echo ::set-env name=YARN_CACHE_DIR::$(yarn cache dir)
       - name: "Cache: node_modules"
-        uses: actions/cache@v2
+        uses: actions/cache@master
         with:
           path: |
             node_modules
             ${{ env.YARN_CACHE_DIR }}
           key: nodemodules-${{ runner.os }}-${{ hashFiles('yarn.lock') }}
       - name: "Cache: build"
-        uses: actions/cache@v2
+        uses: actions/cache@master
         with:
           path: ${{ env.BUILD_CACHE_DIRS }}
           key: build-${{ runner.os }}-${{ github.sha }}
