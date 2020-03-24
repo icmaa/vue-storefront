@@ -49,12 +49,12 @@ jobs:
           path: |
             node_modules
             ${{ env.YARN_CACHE_DIR }}
-          key: nodemodules-${{ runner.os }}-${{ hashFiles('yarn.lock') }}
+          key: nodemodules-${{ hashFiles('yarn.lock') }}
       - name: "Cache: build"
         uses: actions/cache@master
         with:
           path: ${{ env.BUILD_CACHE_DIRS }}
-          key: build-${{ runner.os }}-${{ github.sha }}
+          key: build-${{ github.sha }}
 
       - name: Checkout "icmaa/vue-storefront-workspace" repo
         run: |
@@ -86,12 +86,12 @@ jobs:
           path: |
             node_modules
             ${{ env.YARN_CACHE_DIR }}
-          key: nodemodules-${{ runner.os }}-${{ hashFiles('yarn.lock') }}
+          key: nodemodules-${{ hashFiles('yarn.lock') }}
       - name: "Cache: build"
         uses: actions/cache@master
         with:
           path: ${{ env.BUILD_CACHE_DIRS }}
-          key: build-${{ runner.os }}-${{ github.sha }}
+          key: build-${{ github.sha }}
 
       - name: Checkout "icmaa/vue-storefront-workspace" repo
         run: |
@@ -137,12 +137,12 @@ jobs:
           path: |
             node_modules
             ${{ env.YARN_CACHE_DIR }}
-          key: nodemodules-${{ runner.os }}-${{ hashFiles('yarn.lock') }}
+          key: nodemodules-${{ hashFiles('yarn.lock') }}
       - name: "Cache: build"
         uses: actions/cache@master
         with:
           path: ${{ env.BUILD_CACHE_DIRS }}
-          key: build-${{ runner.os }}-${{ github.sha }}
+          key: build-${{ github.sha }}
 
       - name: Install deps and start
         run: |
@@ -167,3 +167,15 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           CYPRESS_RECORD_KEY: ${{secrets.CYPRESS_RECORD_KEY}}
           CYPRESS_PROJECT_ID: ${{secrets.CYPRESS_PROJECT_ID}}
+
+      - name: Dump and consolidate log outputs
+        if: failure()
+        run: |
+          yarn pm2 logs --format --nostream --lines 10000000 > server.log
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v1
+        if: failure()
+        with:
+          name: build
+          path: ./
