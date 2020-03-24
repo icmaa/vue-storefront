@@ -39,6 +39,12 @@ jobs:
           path: node_modules
           key: nodemodules-${{ runner.os }}-${{ hashFiles('yarn.lock') }}
 
+      - name: "Cache: yarn"
+        uses: actions/cache@v1
+        with:
+          path: $(yarn cache dir)
+          key: yarn-${{ runner.os }}-${{ hashFiles('yarn.lock') }}
+
       - name: Checkout "icmaa/vue-storefront-workspace" repo
         run: |
           rm -rf vue-storefront-workspace
