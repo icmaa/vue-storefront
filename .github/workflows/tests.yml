@@ -12,6 +12,7 @@ env:
   BUILD_CACHE_DIRS: |
     dist
     var
+    config
     build/config.json
     core/build/config.json
     core/build/cache-version.json
