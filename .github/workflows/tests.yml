@@ -9,6 +9,14 @@ env:
   NODE_CONFIG_ENV: "test"
   NODE_TLS_REJECT_UNAUTHORIZED: 0
   CI_TESTS: true
+  BUILD_CACHE_DIRS: |
+    dist
+    var
+    build/config.json
+    core/build/config.json
+    core/build/cache-version.json
+    src/**/i18n.json
+    core/resource/i18n/*.json
 
 jobs:
 
@@ -33,19 +41,20 @@ jobs:
         with:
           node-version: '13.x'
 
-      - name: "Cache: node_modules"
-        uses: actions/cache@v1
-        with:
-          path: node_modules
-          key: nodemodules-${{ runner.os }}-${{ hashFiles('yarn.lock') }}
-
       - name: Get yarn cache directory path
         run: echo ::set-env name=YARN_CACHE_DIR::$(yarn cache dir)
-      - name: "Cache: yarn"
-        uses: actions/cache@v1
+      - name: "Cache: node_modules"
+        uses: actions/cache@v2
         with:
-          path: ${{ env.YARN_CACHE_DIR }}
-          key: yarn-${{ runner.os }}-${{ hashFiles('yarn.lock') }}
+          path: |
+            node_modules
+            ${{ env.YARN_CACHE_DIR }}
+          key: nodemodules-${{ runner.os }}-${{ hashFiles('yarn.lock') }}
+      - name: "Cache: build"
+        uses: actions/cache@v2
+        with:
+          path: ${{ env.BUILD_CACHE_DIRS }}
+          key: build-${{ runner.os }}-${{ github.sha }}
 
       - name: Checkout "icmaa/vue-storefront-workspace" repo
         run: |
@@ -69,25 +78,20 @@ jobs:
         with:
           node-version: '13.x'
 
-      - name: "Cache: build"
-        uses: actions/cache@v1
-        with:
-          path: ./
-          key: build-${{ runner.os }}-${{ github.sha }}
-
-      - name: "Cache: node_modules"
-        uses: actions/cache@v1
-        with:
-          path: node_modules
-          key: nodemodules-${{ runner.os }}-${{ hashFiles('yarn.lock') }}
-
       - name: Get yarn cache directory path
         run: echo ::set-env name=YARN_CACHE_DIR::$(yarn cache dir)
-      - name: "Cache: yarn"
-        uses: actions/cache@v1
+      - name: "Cache: node_modules"
+        uses: actions/cache@v2
         with:
-          path: ${{ env.YARN_CACHE_DIR }}
-          key: yarn-${{ runner.os }}-${{ hashFiles('yarn.lock') }}
+          path: |
+            node_modules
+            ${{ env.YARN_CACHE_DIR }}
+          key: nodemodules-${{ runner.os }}-${{ hashFiles('yarn.lock') }}
+      - name: "Cache: build"
+        uses: actions/cache@v2
+        with:
+          path: ${{ env.BUILD_CACHE_DIRS }}
+          key: build-${{ runner.os }}-${{ github.sha }}
 
       - name: Checkout "icmaa/vue-storefront-workspace" repo
         run: |
@@ -120,34 +124,25 @@ jobs:
         options: --entrypoint redis-server
 
     steps:
-      # We need to checkout the repo, to have a `${{ github.sha }}`
       - uses: actions/checkout@v2
-        with:
-          path: 'repository'
-
       - uses: actions/setup-node@v1
         with:
           node-version: '13.x'
 
-      - name: "Cache: build"
-        uses: actions/cache@v1
-        with:
-          path: ./
-          key: build-${{ runner.os }}-${{ github.sha }}
-
-      - name: "Cache: node_modules"
-        uses: actions/cache@v1
-        with:
-          path: node_modules
-          key: nodemodules-${{ runner.os }}-${{ hashFiles('yarn.lock') }}
-
       - name: Get yarn cache directory path
         run: echo ::set-env name=YARN_CACHE_DIR::$(yarn cache dir)
-      - name: "Cache: yarn"
-        uses: actions/cache@v1
+      - name: "Cache: node_modules"
+        uses: actions/cache@v2
         with:
-          path: ${{ env.YARN_CACHE_DIR }}
-          key: yarn-${{ runner.os }}-${{ hashFiles('yarn.lock') }}
+          path: |
+            node_modules
+            ${{ env.YARN_CACHE_DIR }}
+          key: nodemodules-${{ runner.os }}-${{ hashFiles('yarn.lock') }}
+      - name: "Cache: build"
+        uses: actions/cache@v2
+        with:
+          path: ${{ env.BUILD_CACHE_DIRS }}
+          key: build-${{ runner.os }}-${{ github.sha }}
 
       - name: Install deps and start
         run: |
