@@ -171,11 +171,13 @@ jobs:
       - name: Dump and consolidate log outputs
         if: failure()
         run: |
-          yarn pm2 logs --format --nostream --lines 10000000 > server.log
+          mkdir artifacts
+          yarn pm2 logs --format --nostream --lines 10000000 > artifacts/server.log
+          zip -r artifacts/build.zip ./ -x "*node_modules/**/*" -x ".git/**/*"
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v1
         if: failure()
         with:
           name: build
-          path: ./
+          path: artifacts
