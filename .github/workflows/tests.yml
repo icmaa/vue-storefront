@@ -39,10 +39,12 @@ jobs:
           path: node_modules
           key: nodemodules-${{ runner.os }}-${{ hashFiles('yarn.lock') }}
 
+      - name: Get yarn cache directory path
+        run: echo ::set-env name=YARN_CACHE_DIR::$(yarn cache dir)
       - name: "Cache: yarn"
         uses: actions/cache@v1
         with:
-          path: $(yarn cache dir)
+          path: ${{ env.YARN_CACHE_DIR }}
           key: yarn-${{ runner.os }}-${{ hashFiles('yarn.lock') }}
 
       - name: Checkout "icmaa/vue-storefront-workspace" repo
@@ -79,6 +81,14 @@ jobs:
           path: node_modules
           key: nodemodules-${{ runner.os }}-${{ hashFiles('yarn.lock') }}
 
+      - name: Get yarn cache directory path
+        run: echo ::set-env name=YARN_CACHE_DIR::$(yarn cache dir)
+      - name: "Cache: yarn"
+        uses: actions/cache@v1
+        with:
+          path: ${{ env.YARN_CACHE_DIR }}
+          key: yarn-${{ runner.os }}-${{ hashFiles('yarn.lock') }}
+
       - name: Checkout "icmaa/vue-storefront-workspace" repo
         run: |
           rm -rf vue-storefront-workspace
@@ -106,7 +116,7 @@ jobs:
       redis:
         image: redis
         ports:
-        - 6379:6379
+          - 6379:6379
         options: --entrypoint redis-server
 
     steps:
@@ -130,6 +140,14 @@ jobs:
         with:
           path: node_modules
           key: nodemodules-${{ runner.os }}-${{ hashFiles('yarn.lock') }}
+
+      - name: Get yarn cache directory path
+        run: echo ::set-env name=YARN_CACHE_DIR::$(yarn cache dir)
+      - name: "Cache: yarn"
+        uses: actions/cache@v1
+        with:
+          path: ${{ env.YARN_CACHE_DIR }}
+          key: yarn-${{ runner.os }}-${{ hashFiles('yarn.lock') }}
 
       - name: Install deps and start
         run: |
