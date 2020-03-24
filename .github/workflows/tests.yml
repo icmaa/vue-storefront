@@ -19,6 +19,7 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: '13.x'
+
       - name: Run ESlint
         run: |
           yarn
@@ -32,14 +33,6 @@ jobs:
         with:
           node-version: '13.x'
 
-      - name: Get yarn cache directory path
-        run: echo ::set-env name=YARN_CACHE_DIR::$(yarn cache dir)
-      - name: "Cache: yarn"
-        uses: actions/cache@v1
-        with:
-          path: ${{ env.YARN_CACHE_DIR }}
-          key: yarn-${{ runner.os }}-${{ hashFiles('yarn.lock') }}
-
       - name: "Cache: node_modules"
         uses: actions/cache@v1
         with:
@@ -50,8 +43,10 @@ jobs:
         run: |
           rm -rf vue-storefront-workspace
           git clone --no-tags --depth 1 https://${{ secrets.GITHUB_PAT }}@github.com/icmaa/vue-storefront-workspace
+
       - name: Sync config JSON files
         run: rsync -r ./vue-storefront-workspace/template/vue-storefront/ ./
+
       - name: Run Jest-Unit-Tests
         run: |
           yarn
@@ -78,14 +73,6 @@ jobs:
           path: node_modules
           key: nodemodules-${{ runner.os }}-${{ hashFiles('yarn.lock') }}
 
-      - name: Get yarn cache directory path
-        run: echo ::set-env name=YARN_CACHE_DIR::$(yarn cache dir)
-      - name: "Cache: yarn"
-        uses: actions/cache@v1
-        with:
-          path: ${{ env.YARN_CACHE_DIR }}
-          key: yarn-${{ runner.os }}-${{ hashFiles('yarn.lock') }}
-
       - name: Checkout "icmaa/vue-storefront-workspace" repo
         run: |
           rm -rf vue-storefront-workspace
@@ -93,7 +80,7 @@ jobs:
 
       - name: Sync config JSON files
         run: rsync -r ./vue-storefront-workspace/template/vue-storefront/ ./
-      
+
       - name: Install dependencies
         run: yarn
 
@@ -117,6 +104,11 @@ jobs:
         options: --entrypoint redis-server
 
     steps:
+      # We need to checkout the repo, to have a `${{ github.sha }}`
+      - uses: actions/checkout@v2
+        with:
+          path: 'repository'
+
       - uses: actions/setup-node@v1
         with:
           node-version: '13.x'
@@ -132,15 +124,6 @@ jobs:
         with:
           path: node_modules
           key: nodemodules-${{ runner.os }}-${{ hashFiles('yarn.lock') }}
-
-      # The order of the cache initialization is important to have a yarn.lock file to hash
-      - name: Get yarn cache directory path
-        run: echo ::set-env name=YARN_CACHE_DIR::$(yarn cache dir)
-      - name: "Cache: yarn"
-        uses: actions/cache@v1
-        with:
-          path: ${{ env.YARN_CACHE_DIR }}
-          key: yarn-${{ runner.os }}-${{ hashFiles('yarn.lock') }}
 
       - name: Install deps and start
         run: |
