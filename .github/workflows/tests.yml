@@ -9,15 +9,6 @@ env:
   NODE_CONFIG_ENV: "test"
   NODE_TLS_REJECT_UNAUTHORIZED: 0
   CI_TESTS: true
-  BUILD_CACHE_DIRS: |
-    dist
-    var
-    config
-    build/config.json
-    core/build/config.json
-    core/build/cache-version.json
-    src/**/i18n.json
-    core/resource/i18n/*.json
 
 jobs:
 
@@ -47,15 +38,9 @@ jobs:
       - name: "Cache: node_modules"
         uses: actions/cache@master
         with:
-          path: |
-            node_modules
-            ${{ env.YARN_CACHE_DIR }}
-          key: nodemodules-${{ hashFiles('yarn.lock') }}
-      - name: "Cache: build"
-        uses: actions/cache@master
-        with:
-          path: ${{ env.BUILD_CACHE_DIRS }}
-          key: build-${{ github.sha }}
+          path: ${{ env.YARN_CACHE_DIR }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: ${{ runner.os }}-yarn-
 
       - name: Checkout "icmaa/vue-storefront-workspace" repo
         run: |
@@ -84,15 +69,9 @@ jobs:
       - name: "Cache: node_modules"
         uses: actions/cache@master
         with:
-          path: |
-            node_modules
-            ${{ env.YARN_CACHE_DIR }}
-          key: nodemodules-${{ hashFiles('yarn.lock') }}
-      - name: "Cache: build"
-        uses: actions/cache@master
-        with:
-          path: ${{ env.BUILD_CACHE_DIRS }}
-          key: build-${{ github.sha }}
+          path: ${{ env.YARN_CACHE_DIR }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: ${{ runner.os }}-yarn-
 
       - name: Checkout "icmaa/vue-storefront-workspace" repo
         run: |
@@ -107,6 +86,14 @@ jobs:
 
       - name: Build
         run: yarn build
+      
+      - name: Pack build
+        run: zip -r build.zip $(cat .build-files)
+      
+      - uses: actions/upload-artifact@v1
+        with:
+          name: build
+          path: build.zip
 
   tests-e2e:
     needs: tests-e2e-build
@@ -135,17 +122,22 @@ jobs:
       - name: "Cache: node_modules"
         uses: actions/cache@master
         with:
-          path: |
-            node_modules
-            ${{ env.YARN_CACHE_DIR }}
-          key: nodemodules-${{ hashFiles('yarn.lock') }}
-      - name: "Cache: build"
-        uses: actions/cache@master
+          path: ${{ env.YARN_CACHE_DIR }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: ${{ runner.os }}-yarn-
+      
+      - uses: actions/download-artifact@v1
         with:
-          path: ${{ env.BUILD_CACHE_DIRS }}
-          key: build-${{ github.sha }}
+          name: build
+          path: ./
+      
+      - name: Unzip build
+        run: |
+          unzip build.zip -d build
+          cp ecosystem.ci.json build/ecosystem.ci.json
 
       - name: Install deps and start
+        working-directory: build
         run: |
           yarn
           yarn pm2 start ecosystem.ci.json
@@ -155,7 +147,7 @@ jobs:
         timeout-minutes: 5
         with:
           build: yarn cypress install
-          working-directory: src/themes/icmaa-imp/test/e2e
+          working-directory: build/src/themes/icmaa-imp/test/e2e
           wait-on: http://localhost:3000
           wait-on-timeout: 120
           browser: chrome
@@ -171,10 +163,11 @@ jobs:
 
       - name: Dump and consolidate log outputs
         if: failure()
+        working-directory: build
         run: |
           mkdir artifacts
           yarn pm2 logs --format --nostream --lines 10000000 > artifacts/server.log
-          zip -r artifacts/build.zip ./ -x "*node_modules/**/*" -x ".git/**/*"
+          zip -r artifacts/build.zip ./build -x "*node_modules/**/*" -x ".git/**/*"
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v1
