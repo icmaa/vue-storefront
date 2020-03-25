@@ -26,4 +26,5 @@ tsconfig-build.json \
 tsconfig.json \
 yarn.lock \
 -x "*node_modules/**/*" \
--x ".git/**/*"
+-x ".git/**/*" \
+-x ".cache/**/*"

@@ -12,50 +12,42 @@ env:
 
 jobs:
 
-  # test-lint:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v2
-  #     - uses: actions/setup-node@v1
-  #       with:
-  #         node-version: '13.x'
+  test-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: '13.x'
 
-  #     - name: Run ESlint
-  #       run: |
-  #         yarn
-  #         yarn lint
+      - name: Run ESlint
+        run: |
+          yarn
+          yarn lint
 
-  # test-unit:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v2
-  #     - uses: actions/setup-node@v1
-  #       with:
-  #         node-version: '13.x'
+  test-unit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: '13.x'
 
-  #     - name: Get yarn cache directory path
-  #       run: echo ::set-env name=YARN_CACHE_DIR::$(yarn cache dir)
-  #     - name: "Cache: yarn"
-  #       uses: actions/cache@master
-  #       with:
-  #         path: |
-  #           ${{ env.YARN_CACHE_DIR }}
-  #           node_modules
-  #         key: node-${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
-  #         restore-keys: node-${{ runner.os }}-
+      - name: Install
+        uses: bahmutov/npm-install@v1
 
-  #     - name: Checkout "icmaa/vue-storefront-workspace" repo
-  #       run: |
-  #         rm -rf vue-storefront-workspace
-  #         git clone --no-tags --depth 1 https://${{ secrets.GITHUB_PAT }}@github.com/icmaa/vue-storefront-workspace
+      - name: Checkout "icmaa/vue-storefront-workspace" repo
+        run: |
+          rm -rf vue-storefront-workspace
+          git clone --no-tags --depth 1 https://${{ secrets.GITHUB_PAT }}@github.com/icmaa/vue-storefront-workspace
 
-  #     - name: Sync config JSON files
-  #       run: rsync -r ./vue-storefront-workspace/template/vue-storefront/ ./
+      - name: Sync config JSON files
+        run: rsync -r ./vue-storefront-workspace/template/vue-storefront/ ./
 
-  #     - name: Run Jest-Unit-Tests
-  #       run: |
-  #         yarn
-  #         yarn test:unit
+      - name: Run Jest-Unit-Tests
+        run: |
+          yarn
+          yarn test:unit
 
   tests-e2e:
     runs-on: ubuntu-latest
@@ -63,8 +55,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        # containers: [ 'runner-1', 'runner-2', 'runner-3', 'runner-4', 'runner-5' ]
-        containers: [ 'runner-1' ]
+        containers: [ 'runner-1', 'runner-2', 'runner-3', 'runner-4', 'runner-5' ]
 
     services:
       redis:
@@ -107,10 +98,10 @@ jobs:
           browser: chrome
           headless: true
           config: video=true
-          spec: integration/Cms/**/*
-          # record: true
-          # parallel: true
-          # group: ${{ runner.os }}
+          # spec: integration/Cms/**/*
+          record: true
+          parallel: true
+          group: ${{ runner.os }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           CYPRESS_RECORD_KEY: ${{secrets.CYPRESS_RECORD_KEY}}
@@ -121,7 +112,7 @@ jobs:
         run: |
           mkdir artifacts
           yarn pm2 logs --format --nostream --lines 10000000 > artifacts/server.log
-          zip -r artifacts/build.zip . -x "*node_modules/**/*" -x ".git/**/*"
+          zip -r artifacts/build.zip . -x "*node_modules/**/*" -x ".git/**/*" -x ".cache/**/*"
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v1
