@@ -79,24 +79,6 @@ jobs:
         with:
           node-version: '13.x'
 
-      - name: Get yarn cache directory path
-        run: echo ::set-env name=YARN_CACHE_DIR::$(yarn cache dir)
-      - run: |
-          ls -hal ${{ env.YARN_CACHE_DIR }}
-      - name: "Cache: yarn"
-        uses: actions/cache@master
-        with:
-          path: |
-            ${{ env.YARN_CACHE_DIR }}
-            node_modules
-          key: node-${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: node-${{ runner.os }}-
-      - run: |
-          pwd
-          ls -hal .cache/yarn/v6
-          ls -hal ${{ env.YARN_CACHE_DIR }}
-          ls -hal node_modules
-
       - name: Checkout "icmaa/vue-storefront-workspace" repo
         run: |
           rm -rf vue-storefront-workspace
@@ -105,8 +87,8 @@ jobs:
       - name: Sync config JSON files
         run: rsync -r ./vue-storefront-workspace/template/vue-storefront/ ./
 
-      - name: Install dependencies
-        run: yarn
+      - name: Install
+        uses: bahmutov/npm-install@v1
 
       - name: Build
         run: yarn build
