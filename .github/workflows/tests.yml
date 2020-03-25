@@ -83,6 +83,7 @@ jobs:
         run: echo ::set-env name=YARN_CACHE_DIR::$(yarn cache dir)
       - run: |
           ls -hal ${{ env.YARN_CACHE_DIR }}
+          ls -hal .cache
       - name: "Cache: yarn"
         uses: actions/cache@master
         with:
@@ -93,6 +94,7 @@ jobs:
           restore-keys: node-${{ runner.os }}-
       - run: |
           ls -hal .cache
+          ls -hal .cache/yarn
           ls -hal ${{ env.YARN_CACHE_DIR }}
           ls -hal node_modules
 
