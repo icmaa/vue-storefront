@@ -35,12 +35,14 @@ jobs:
 
       - name: Get yarn cache directory path
         run: echo ::set-env name=YARN_CACHE_DIR::$(yarn cache dir)
-      - name: "Cache: node_modules"
+      - name: "Cache: yarn"
         uses: actions/cache@master
         with:
-          path: ${{ env.YARN_CACHE_DIR }}
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: ${{ runner.os }}-yarn-
+          path: |
+            ${{ env.YARN_CACHE_DIR }}
+            node_modules
+          key: node-${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: node-${{ runner.os }}-
 
       - name: Checkout "icmaa/vue-storefront-workspace" repo
         run: |
@@ -55,48 +57,7 @@ jobs:
           yarn
           yarn test:unit
 
-  tests-e2e-build:
-    runs-on: ubuntu-latest
-    
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v1
-        with:
-          node-version: '13.x'
-
-      - name: Get yarn cache directory path
-        run: echo ::set-env name=YARN_CACHE_DIR::$(yarn cache dir)
-      - name: "Cache: node_modules"
-        uses: actions/cache@master
-        with:
-          path: ${{ env.YARN_CACHE_DIR }}
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: ${{ runner.os }}-yarn-
-
-      - name: Checkout "icmaa/vue-storefront-workspace" repo
-        run: |
-          rm -rf vue-storefront-workspace
-          git clone --no-tags --depth 1 https://${{ secrets.GITHUB_PAT }}@github.com/icmaa/vue-storefront-workspace
-
-      - name: Sync config JSON files
-        run: rsync -r ./vue-storefront-workspace/template/vue-storefront/ ./
-
-      - name: Install dependencies
-        run: yarn
-
-      - name: Build
-        run: yarn build
-      
-      - name: Pack build
-        run: zip -r build.zip $(cat .build-files)
-      
-      - uses: actions/upload-artifact@v1
-        with:
-          name: build
-          path: build.zip
-
   tests-e2e:
-    needs: tests-e2e-build
     runs-on: ubuntu-latest
 
     strategy:
@@ -119,25 +80,30 @@ jobs:
 
       - name: Get yarn cache directory path
         run: echo ::set-env name=YARN_CACHE_DIR::$(yarn cache dir)
-      - name: "Cache: node_modules"
+      - name: "Cache: yarn"
         uses: actions/cache@master
         with:
-          path: ${{ env.YARN_CACHE_DIR }}
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: ${{ runner.os }}-yarn-
-      
-      - uses: actions/download-artifact@v1
-        with:
-          name: build
-          path: ./
-      
-      - name: Unzip build
+          path: |
+            ${{ env.YARN_CACHE_DIR }}
+            node_modules
+          key: node-${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: node-${{ runner.os }}-
+
+      - name: Checkout "icmaa/vue-storefront-workspace" repo
         run: |
-          unzip build.zip -d build
-          cp ecosystem.ci.json build/ecosystem.ci.json
+          rm -rf vue-storefront-workspace
+          git clone --no-tags --depth 1 https://${{ secrets.GITHUB_PAT }}@github.com/icmaa/vue-storefront-workspace
+
+      - name: Sync config JSON files
+        run: rsync -r ./vue-storefront-workspace/template/vue-storefront/ ./
+
+      - name: Install dependencies
+        run: yarn
+
+      - name: Build
+        run: yarn build
 
       - name: Install deps and start
-        working-directory: build
         run: |
           yarn
           yarn pm2 start ecosystem.ci.json
@@ -146,8 +112,6 @@ jobs:
         uses: cypress-io/github-action@v1
         timeout-minutes: 5
         with:
-          build: yarn cypress install
-          working-directory: build/src/themes/icmaa-imp/test/e2e
           wait-on: http://localhost:3000
           wait-on-timeout: 120
           browser: chrome
