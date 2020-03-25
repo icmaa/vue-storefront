@@ -25,4 +25,6 @@ shims.d.ts \
 tsconfig-build.json \
 tsconfig.json \
 yarn.lock \
--x "*/node_modules/*"
+-x "*node_modules/**/*" \
+-x ".git/**/*" \
+-x ".cache/**/*"
