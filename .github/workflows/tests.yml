@@ -115,11 +115,11 @@ jobs:
           wait-on-timeout: 120
           browser: chrome
           headless: true
+          config: video=true
+          spec: src/themes/icmaa-imp/test/e2e/integration/Cms/**/*
           # record: true
           # parallel: true
-          config: video=true
-          group: ${{ runner.os }}
-          spec: src/themes/icmaa-imp/test/e2e/integration/Cms/**/*
+          # group: ${{ runner.os }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           CYPRESS_RECORD_KEY: ${{secrets.CYPRESS_RECORD_KEY}}
@@ -131,7 +131,7 @@ jobs:
         run: |
           mkdir artifacts
           yarn pm2 logs --format --nostream --lines 10000000 > artifacts/server.log
-          zip -r artifacts/build.zip ./ -x "*node_modules/**/*" -x ".git/**/*"
+          zip -r artifacts/build.zip . -x "*node_modules/**/*" -x ".git/**/*"
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v1
