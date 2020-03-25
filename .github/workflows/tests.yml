@@ -63,7 +63,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        containers: [ 'runner-1', 'runner-2', 'runner-3', 'runner-4', 'runner-5' ]
+        # containers: [ 'runner-1', 'runner-2', 'runner-3', 'runner-4', 'runner-5' ]
+        containers: [ 'runner-1' ]
 
     services:
       redis:
@@ -127,7 +128,6 @@ jobs:
 
       - name: Dump and consolidate log outputs
         if: failure()
-        working-directory: build
         run: |
           mkdir artifacts
           yarn pm2 logs --format --nostream --lines 10000000 > artifacts/server.log
