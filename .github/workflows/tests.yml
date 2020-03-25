@@ -92,7 +92,7 @@ jobs:
           key: node-${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
           restore-keys: node-${{ runner.os }}-
       - run: |
-          ls -hal .cache
+          pwd
           ls -hal .cache/yarn/v6
           ls -hal ${{ env.YARN_CACHE_DIR }}
           ls -hal node_modules
