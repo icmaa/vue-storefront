@@ -93,7 +93,7 @@ jobs:
           restore-keys: node-${{ runner.os }}-
       - run: |
           ls -hal .cache
-          ls -hal .cache/yarn
+          ls -hal .cache/yarn/v6
           ls -hal ${{ env.YARN_CACHE_DIR }}
           ls -hal node_modules
 
