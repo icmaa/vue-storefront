@@ -40,6 +40,7 @@
   font-family: 'ICMAA Icons';
   font-style: normal;
   font-weight: normal;
+  font-display: swap;
   src:  url('../assets/fonts/icmaa-icomoon/ICMAA-Icons.eot?9r526n');
   src:  url('../assets/fonts/icmaa-icomoon/ICMAA-Icons.eot?9r526n#iefix') format('embedded-opentype'),
     url('../assets/fonts/icmaa-icomoon/ICMAA-Icons.ttf?9r526n') format('truetype'),
@@ -49,6 +50,7 @@
 
 .icmaa-icons {
   font-family: 'ICMAA Icons' !important;
+  white-space: nowrap;
   speak: none;
   font-style: normal;
   font-weight: normal;
