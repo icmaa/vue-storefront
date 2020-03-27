@@ -19,7 +19,7 @@
         <span class="t-flex t-flex-fix t-items-center t-justify-center t-w-10 t-h-10 t-rounded-full t-text-white t-bg-twitter t-mr-2">
           <material-icon icon="twitter" icon-set="icmaa" class="t-flex md:t-text-lg lg:t-text-2xl" />
         </span>
-        <a :href="`https://twitter.com/${twitterId}`" target="_blank" class="t-text-twitter" v-if="twitterId">
+        <a :href="`https://twitter.com/${twitterId}`" target="_blank" rel="noopener noreferrer" class="t-text-twitter" v-if="twitterId">
           {{ '@' + twitterId }}
         </a>
         <span v-else>Twitter</span>

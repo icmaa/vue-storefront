@@ -16,7 +16,7 @@
               <router-link :to="localizedRoute(link.route)" class="t-flex t-flex-fit t-mr-6 t-text-xs t-uppercase t-text-base-tone" :key="index" v-if="link.isRoute === true">
                 {{ link.name }}
               </router-link>
-              <a :href="link.route" class="t-flex t-flex-fit t-mr-6 t-text-xs t-uppercase t-text-base-tone" target="_blank" :key="index" v-else>
+              <a :href="link.route" class="t-flex t-flex-fit t-mr-6 t-text-xs t-uppercase t-text-base-tone" target="_blank" rel="noopener noreferrer" :key="index" v-else>
                 {{ link.name }}
               </a>
             </template>
