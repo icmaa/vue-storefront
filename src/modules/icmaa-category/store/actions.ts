@@ -69,7 +69,7 @@ const actions: ActionTree<CategoryState, RootState> = {
     }
 
     return dispatch('product/findProducts', { query, size, sort }, { root: true }).then(products => {
-      const payload = { parent: categoryId, list: products.items, cluster, filter: filterHash }
+      const payload = { parent: categoryId, list: products.items, cluster, filterHash }
       commit(types.ICMAA_CATEGORY_LIST_ADD_PRODUCT, payload)
       return payload
     })

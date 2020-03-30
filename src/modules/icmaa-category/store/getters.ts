@@ -33,7 +33,7 @@ const getters: GetterTree<CategoryState, RootState> = {
       cluster = parseInt(rootGetters['user/getCluster'])
     }
 
-    return state.productListingWidget.find(i => i.parent === parent && i.cluster === cluster && i.filter === getFilterHash(filter))
+    return state.productListingWidget.find(i => i.parent === parent && i.cluster === cluster && i.filterHash === getFilterHash(filter))
   }
 }
 
