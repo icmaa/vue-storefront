@@ -28,9 +28,10 @@ export default {
       type: Number,
       required: true
     },
-    departmentId: {
-      type: Number,
-      required: true // prop as option
+    filter: {
+      type: [Object, Boolean],
+      required: false,
+      default: false
     },
     sort: {
       type: String,
@@ -61,6 +62,7 @@ export default {
         categoryId: this.categoryId,
         departmentId: this.departmentId,
         cluster: this.cluster,
+        filter: this.filter,
         sort: this.sort,
         size
       })
