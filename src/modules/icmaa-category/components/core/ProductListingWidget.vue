@@ -28,6 +28,10 @@ export default {
       type: Number,
       required: true
     },
+    departmentId: {
+      type: Number,
+      required: true // prop as option
+    },
     sort: {
       type: String,
       default: 'online:desc'
@@ -55,6 +59,7 @@ export default {
 
       await this.$store.dispatch('icmaaCategory/loadProductListingWidgetProducts', {
         categoryId: this.categoryId,
+        departmentId: this.departmentId,
         cluster: this.cluster,
         sort: this.sort,
         size
