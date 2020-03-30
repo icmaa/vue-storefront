@@ -6,6 +6,7 @@ import * as types from './mutation-types'
 import * as catTypes from '@vue-storefront/core/modules/catalog-next/store/category/mutation-types'
 import { fetchCategoryById, fetchChildCategories } from '../helpers'
 import { SearchQuery } from 'storefront-query-builder'
+import { getFilterHash } from '../helpers'
 
 import forEach from 'lodash-es/forEach'
 import { Logger } from '@vue-storefront/core/lib/logger'
@@ -52,7 +53,8 @@ const actions: ActionTree<CategoryState, RootState> = {
       .applyFilter({ key: 'status', value: { in: [0, 1] } })
       .applyFilter({ key: 'category_ids', value: { in: [categoryId] } })
 
-    if (filter) {
+    let filterHash = getFilterHash(filter)
+    if (filter !== false) {
       forEach(filter, (value, key) => {
         value = { in: [value] }
         query.applyFilter({ key, value })
@@ -67,7 +69,7 @@ const actions: ActionTree<CategoryState, RootState> = {
     }
 
     return dispatch('product/findProducts', { query, size, sort }, { root: true }).then(products => {
-      const payload = { parent: categoryId, list: products.items, cluster }
+      const payload = { parent: categoryId, list: products.items, cluster, filter: filterHash }
       commit(types.ICMAA_CATEGORY_LIST_ADD_PRODUCT, payload)
       return payload
     })
