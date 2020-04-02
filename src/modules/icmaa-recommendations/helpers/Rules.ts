@@ -225,16 +225,18 @@ class Rules {
    * @returns {this}
    */
   protected addSort (sort: Record<string, string>): this {
-    forEach(sort, (key, value) => {
-      if (value === 'random') {
+    for (let prop in sort) {
+      if (sort[prop] === 'random') {
         this.sort.random = true;
+        this.sort.criteria = []
+        return this
       }
 
-      const sortParam = `${value}:${key}`
+      const sortParam = `${prop}:${sort[prop]}`
       if (!this.sort.criteria.includes(sortParam)) {
         this.sort.criteria.push(sortParam)
       }
-    })
+    }
     return this
   }
 
