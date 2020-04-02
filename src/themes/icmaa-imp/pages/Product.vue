@@ -11,6 +11,7 @@
           :configuration="configuration"
           :product="product"
         />
+        <promo-banner :product="product" class="" />
         <div class="t-w-full t-p-8 t-bg-white lg:t-w-1/2">
           <category-extras-header class="t--mx-8 t--mt-8 t-mb-8 lg:t-pl-px t-border-b t-border-base-lightest" v-if="!['xs', 'sm', 'md'].includes(viewport)" :spotify-logo-limit="spotifyLogoLimit" />
           <div class="t-flex t-flex-wrap">
@@ -162,6 +163,7 @@ import ProductOptionsMixin from 'theme/mixins/product/optionsMixin'
 import ProductAddToCartMixin from 'theme/mixins/product/addtocartMixin'
 import FeaturesMixin from 'theme/mixins/product/featuresMixin'
 import ClusterMixin from 'icmaa-user/mixins/cluster'
+import PromoBanner from 'theme/components/core/blocks/Category/PromoBanner'
 
 const AddToCartSidebar = () => import(/* webpackPreload: true */ /* webpackChunkName: "vsf-addtocart-sidebar" */ 'theme/components/core/blocks/AddToCartSidebar/AddToCartSidebar')
 
@@ -179,6 +181,7 @@ export default {
     ProductDetails,
     ProductFeatures,
     ProductCareInstructions,
+    PromoBanner,
     Reviews,
     ReviewsShort,
     ReviewsClaim,
