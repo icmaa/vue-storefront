@@ -56,7 +56,7 @@ export default {
           'transparent-white',
           'transparent-primary',
           'select',
-          'cookie-accept'
+          'alt-3'
         ].includes(value)
       }
     },
@@ -148,7 +148,7 @@ export default {
         'transparent': 't-bg-transparent',
         'transparent-white': 't-bg-transparent t-text-white',
         'select': 't-border t-border-base-light t-bg-transparent t-text-base-tone t-text-left t-text-sm',
-        'cookie-accept': 't-bg-alt-3 t-text-white'
+        'alt-3': 't-bg-alt-3 t-text-white'
       }
 
       return map[this.type]
