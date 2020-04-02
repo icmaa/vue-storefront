@@ -6,16 +6,22 @@ import { BlockStateItem } from 'icmaa-cms/types/BlockState'
 import Product from '@vue-storefront/core/modules/catalog/types/Product'
 import * as types from './mutation-types'
 import Rules from '../helpers/Rules'
+import sampleSize from 'lodash-es/sampleSize'
 
 const actions: ActionTree<RecommendationsState, RootState> = {
   async single ({ commit, dispatch }, { product, type, size }): Promise<Recommendations|boolean> {
     const rulesDTO = await dispatch('getRulesFromCms')
     const rules = new Rules(product, type, rulesDTO)
     const query = rules.getSearchQuery()
+    const { random, criteria } = rules.getSort()
+    const displaySize = size
+    if (random === true) {
+      size *= 2
+    }
 
     const { includeFields, excludeFields } = entities.productList
-    const result = await dispatch('product/findProducts', { query, size, includeFields, excludeFields }, { root: true })
-    const products: Product[] = result.items
+    const result = await dispatch('product/findProducts', { query, size, includeFields, excludeFields, criteria }, { root: true })
+    const products: Product[] = sampleSize(result.items, displaySize)
 
     const productId: string = product.id
     const payload = { productId, type, products }
