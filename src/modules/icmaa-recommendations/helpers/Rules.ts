@@ -12,7 +12,8 @@ export interface RuleSets {
 export interface Rule {
   continue?: boolean,
   if: Record<string, any>,
-  then: Record<string, any>
+  then: Record<string, any>,
+  sort?: Record<string, string>
 }
 
 export interface FilterOptions {
@@ -27,6 +28,7 @@ class Rules {
   protected type: string
 
   protected query: SearchQuery
+  protected sort: { random: boolean, criteria: string[] }
   protected isBuild: boolean = false
   protected validRules: { [ruleKey: string]: Rule } = {}
   protected filter: { and: Record<string, any>, or: Record<string, any> } = {
@@ -61,6 +63,7 @@ class Rules {
     this.type = type
     this.product = product
     this.query = new SearchQuery()
+    this.sort = { random: false, criteria: [] }
 
     this.addDefaultFilter()
 
@@ -71,6 +74,8 @@ class Rules {
 
       this.addFilter(rule.then)
       this.validRules[ruleKey] = rule
+
+      this.addSort(rule.sort)
 
       if (!rule.continue || rule.continue === false) {
         return false
@@ -96,8 +101,14 @@ class Rules {
 
       this.isBuild = true
     }
-
     return this.query
+  }
+
+  /**
+   * Returns SearchQuery object representation of current string
+   */
+  public getSort (): { random: boolean, criteria: string[] } {
+    return this.sort
   }
 
   /**
@@ -206,6 +217,24 @@ class Rules {
       }
     })
 
+    return this
+  }
+
+  /**
+   * @param {Rule} rule
+   * @returns {this}
+   */
+  protected addSort (sort: Record<string, string>): this {
+    forEach(sort, (key, value) => {
+      if (value === 'random') {
+        this.sort.random = true;
+      }
+
+      const sortParam = `${value}:${key}`
+      if (!this.sort.criteria.includes(sortParam)) {
+        this.sort.criteria.push(sortParam)
+      }
+    })
     return this
   }
 
