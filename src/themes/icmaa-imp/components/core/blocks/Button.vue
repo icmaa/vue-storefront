@@ -45,6 +45,7 @@ export default {
           'primary',
           'second',
           'sale',
+          'alt-3',
           'facebook',
           'tag',
           'tag-active',
@@ -55,8 +56,7 @@ export default {
           'transparent',
           'transparent-white',
           'transparent-primary',
-          'select',
-          'alt-3'
+          'select'
         ].includes(value)
       }
     },
