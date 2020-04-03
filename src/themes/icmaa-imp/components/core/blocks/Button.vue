@@ -138,6 +138,7 @@ export default {
         'primary': 't-bg-primary t-text-white',
         'second': 't-bg-base-darkest t-text-white',
         'sale': 't-bg-sale t-text-white',
+        'alt-3': 't-bg-alt-3 t-text-white',
         'facebook': 't-bg-facebook t-text-white',
         'tag': 't-border t-border-base-light t-bg-white t-text-base-dark hover:t-border-base-dark',
         'tag-active': 't-border t-border-base-dark  t-bg-base-dark t-text-white',
@@ -147,8 +148,7 @@ export default {
         'ghost-custom': 't-border t-bg-transparent',
         'transparent': 't-bg-transparent',
         'transparent-white': 't-bg-transparent t-text-white',
-        'select': 't-border t-border-base-light t-bg-transparent t-text-base-tone t-text-left t-text-sm',
-        'alt-3': 't-bg-alt-3 t-text-white'
+        'select': 't-border t-border-base-light t-bg-transparent t-text-base-tone t-text-left t-text-sm'
       }
 
       return map[this.type]
