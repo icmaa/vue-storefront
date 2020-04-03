@@ -68,7 +68,8 @@
 "Default billing address","Standard Rechnungsadresse"
 "Default shipping address","Standard Versandadresse"
 "Delete","Löschen"
-"Delivery","Lieferung"
+"Delivery of your complete order not before {date}. The preorder date is the release date for Germany, as we were told by the record label or distributor. There is no guarantee for a delivery on that date. In exceptional cases, especially for imported products, there might be delays. As soon as we receive the article, we will ship it.","Lieferung der kompletten Bestellung nicht vor dem {date}. Das Preorderdatum ist das Veröffentlichungsdatum bzw. das Lieferdatum für Deutschland, das uns vom Plattenlabel bzw. Lieferanten genannt wurde. Es besteht keine Garantie auf Lieferung zu diesem Datum. Es kann in Ausnahmefällen, insbesondere bei Importen, zu Verzögerungen kommen. Sobald wir den Artikel bekommen, liefern wir ihn schnellstmöglich aus."
+"Delivery","Lieferung",
 "Departments","Kategorien"
 "Discount code","Rabatt-Code"
 "Discount","Rabatt"
