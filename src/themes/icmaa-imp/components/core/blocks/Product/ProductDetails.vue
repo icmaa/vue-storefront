@@ -1,9 +1,17 @@
 <template>
   <div class="t-text-sm">
     <div class="description t-whitespace-pre-line" v-text="stripHTML(product.description.trim())" />
-    <ul class="attributes t-mt-6" v-if="attributes.length > 0">
-      <product-attributes :key="attr.attribute_code" v-for="attr in attributes" :product="product" :attribute="attr" class="t-mb-3" />
-    </ul>
+    <no-ssr>
+      <ul class="attributes t-mt-6" v-if="attributes.length > 0">
+        <product-attributes
+          v-for="(attr, i) in attributes"
+          :key="'product-attribute-' + attr.attribute_code + '-' + i"
+          :product="product"
+          :attribute="attr"
+          class="t-mb-3"
+        />
+      </ul>
+    </no-ssr>
     <div class="blank t-mt-6" v-if="blank">
       <span class="t-font-bold t-block t-mb-2">{{ blank.label }}</span>
       <img :src="blank.image" :srcset="`${blank.image} 1x, ${blank.imageAt2x} 2x`" :alt="blank.label + ' - ' + blank.optionLabel">
@@ -42,7 +50,7 @@ export default {
     }),
     attributes () {
       return Object.values(this.attributesByCode).filter(a => {
-        return a.is_visible && a.is_visible_on_front === true && this.product[a.attribute_code] && this.product[a.attribute_code][0] !== ''
+        return a.is_visible && a.is_visible_on_front === true && this.original[a.attribute_code] && this.original[a.attribute_code][0] !== ''
       })
     },
     blank () {
