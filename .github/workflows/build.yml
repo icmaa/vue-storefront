@@ -10,8 +10,8 @@ on:
 
 jobs:
 
-  timeout-minutes: 10
   build:
+    timeout-minutes: 10
     runs-on: ubuntu-latest
 
     strategy:
@@ -49,7 +49,6 @@ jobs:
         run: yarn
 
       - name: Build "${{ env.APP }}"
-        timeout-minutes: 15
         run: yarn build
         env:
           NODE_CONFIG_ENV: ${{ env.ENV }}
