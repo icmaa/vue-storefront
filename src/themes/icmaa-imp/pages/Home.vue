@@ -15,6 +15,7 @@
     <lazy-hydrate when-visible>
       <product-listing-widget :category-id="3278" :filter="{ department: 5 }" />
     </lazy-hydrate>
+    <home-seo />
   </div>
 </template>
 
@@ -26,13 +27,15 @@ import LazyHydrate from 'vue-lazy-hydration'
 import Teaser from 'theme/components/core/blocks/Teaser/Teaser'
 import LogoLine from 'theme/components/core/blocks/CategoryExtras/LogoLineBlock'
 import ProductListingWidget from 'icmaa-category/components/core/ProductListingWidget'
+import HomeSeo from 'theme/components/core/blocks/ICMAA/Cms/Blocks/HomeSeo'
 
 export default {
   components: {
     LazyHydrate,
     Teaser,
     LogoLine,
-    ProductListingWidget
+    ProductListingWidget,
+    HomeSeo
   },
   mounted () {
     if (!this.isLoggedIn && localStorage.getItem('redirect')) {
