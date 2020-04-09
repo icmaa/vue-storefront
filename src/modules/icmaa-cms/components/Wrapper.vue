@@ -15,6 +15,7 @@ import camelCase from 'lodash-es/camelCase'
 
 const AsyncLogoline = () => import(/* webpackPreload: true */ /* webpackChunkName: "vsf-block-logoline" */ 'theme/components/core/blocks/CategoryExtras/LogoLine')
 const AsyncTeaser = () => import(/* webpackPreload: true */ /* webpackChunkName: "vsf-block-teaser" */ 'theme/components/core/blocks/Teaser/Teaser')
+const AsyncText = () => import(/* webpackPreload: true */ /* webpackChunkName: "vsf-block-text" */ 'theme/components/core/blocks/SeoText')
 
 export default {
   name: 'CmsBlockWrapper',
@@ -49,6 +50,15 @@ export default {
           },
           cssClass: 't-mb-4 lg:t-mb-6',
           padding: true
+        },
+        'component_text': {
+          component: AsyncText,
+          propsTypes: {
+            content: 'string'
+          },
+          propsDefaults: {},
+          cssClass: 't-mb-8',
+          padding: false
         }
       }
     },
