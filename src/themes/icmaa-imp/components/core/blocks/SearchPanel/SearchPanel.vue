@@ -64,6 +64,7 @@ export default {
   data () {
     return {
       searchString: '',
+      searchAlias: '',
       products: [],
       size: 12,
       start: 0,
@@ -102,7 +103,8 @@ export default {
       const splitChars = [' ', '-', ',']
       return this.categoryFilters.filter(category => {
         let searchStrings = []
-        splitChars.forEach(c => searchStrings.push(...this.searchString.split(c).filter(s => s.length >= 3)))
+        const strings = [this.searchString, this.searchAlias]
+        strings.forEach(s => splitChars.forEach(c => searchStrings.push(...s.split(c).filter(s => s.length >= 3))))
         searchStrings = uniq(searchStrings)
 
         const searchRegex = new RegExp(`(${searchStrings.join('|')})`, 'i')
@@ -157,7 +159,7 @@ export default {
     search: debounce(async function () {
       if (!this.$v.searchString.$invalid) {
         let query = prepareQuickSearchQuery(
-          await this.getAlias(this.searchString)
+          this.searchAlias = await this.getAlias(this.searchString)
         )
 
         this.start = 0
