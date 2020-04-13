@@ -66,7 +66,7 @@ export default {
       searchString: '',
       searchAlias: '',
       products: [],
-      size: 12,
+      size: 24,
       start: 0,
       placeholder: i18n.t('Type what you are looking for...'),
       emptyResults: true,
