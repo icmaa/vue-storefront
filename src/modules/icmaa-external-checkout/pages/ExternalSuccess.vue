@@ -54,11 +54,8 @@ export default {
      * logged in when the beforeMount event hook is called. Otherwise the `checkout-success-last-order-loaded`
      * event won't ever be fired on first request because `isLoggedIn` is false.
      */
-    isLoggedIn (value) {
-      this.onLogin(value)
-    },
-    lastOrder () {
-      this.guestOrder()
+    isLoggedIn (isLoggedIn) {
+      this.onLogin(isLoggedIn)
     }
   },
   methods: {
@@ -71,13 +68,6 @@ export default {
     async onLogin (value) {
       if (value || this.isLoggedIn) {
         await this.$store.dispatch('user/refreshOrdersHistory', { resolvedFromCache: false })
-        this.$bus.$emit('checkout-success-last-order-loaded', this.lastOrder)
-      } else if (!value && !this.isLoggedIn) {
-        await this.$store.dispatch('user/loadLastOrderFromCache')
-      }
-    },
-    async guestOrder () {
-      if (!this.isLoggedIn && this.lastOrder) {
         this.$bus.$emit('checkout-success-last-order-loaded', this.lastOrder)
       }
     }
