@@ -82,7 +82,7 @@ jobs:
         run: rsync -r ./vue-storefront-workspace/template/vue-storefront/ ./
 
       - name: Install
-        uses: bahmutov/npm-install
+        uses: bahmutov/npm-install@v1.1.0
 
       - name: Build
         run: yarn build

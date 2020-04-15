@@ -26,7 +26,7 @@ jobs:
           node-version: '13.x'
 
       - name: Install
-        uses: bahmutov/npm-install
+        uses: bahmutov/npm-install@v1.1.0
 
       - name: Get repository name, and branch name
         run: |
