@@ -83,7 +83,7 @@ jobs:
 
       - name: Install
         # uses: bahmutov/npm-install@v1
-        run: yarn build
+        run: yarn
 
       - name: Build
         run: yarn build
