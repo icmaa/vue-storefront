@@ -156,7 +156,7 @@ const actions: ActionTree<CategoryState, RootState> = {
           Vue.prototype.$cacheTags.add(`C${category.id}`)
         })
       }
-      const notFoundCategories = searchedIds.filter(categoryId => !categories.some(cat => cat.id === parseInt(categoryId)))
+      const notFoundCategories = searchedIds.filter(categoryId => !categories.some(cat => cat.id === parseInt(categoryId) || cat.id === categoryId))
 
       commit(types.CATEGORY_ADD_CATEGORIES, categories)
       commit(types.CATEGORY_ADD_NOT_FOUND_CATEGORY_IDS, notFoundCategories)
@@ -167,7 +167,7 @@ const actions: ActionTree<CategoryState, RootState> = {
   async loadCategory ({ commit }, categorySearchOptions: DataResolver.CategorySearchOptions): Promise<Category> {
     const categories: Category[] = await CategoryService.getCategories(categorySearchOptions)
     const category: Category = categories && categories.length ? categories[0] : null
-    if (Vue.prototype.$cacheTags) {
+    if (category && Vue.prototype.$cacheTags) {
       Vue.prototype.$cacheTags.add(`C${category.id}`)
     }
     commit(types.CATEGORY_ADD_CATEGORY, category)
@@ -216,7 +216,7 @@ const actions: ActionTree<CategoryState, RootState> = {
   },
   async loadCategoryBreadcrumbs ({ dispatch, getters }, { category, currentRouteName, omitCurrent = false }) {
     if (!category) return
-    const categoryHierarchyIds = _prepareCategoryPathIds(category) // getters.getCategoriesHierarchyMap.find(categoryMapping => categoryMapping.includes(category.id))
+    const categoryHierarchyIds = category.parent_ids ? [...category.parent_ids, category.id] : _prepareCategoryPathIds(category) // getters.getCategoriesHierarchyMap.find(categoryMapping => categoryMapping.includes(category.id))
     const categoryFilters = Object.assign({ 'id': categoryHierarchyIds }, cloneDeep(config.entities.category.breadcrumbFilterFields))
     const categories = await dispatch('loadCategories', { filters: categoryFilters, reloadAll: Object.keys(config.entities.category.breadcrumbFilterFields).length > 0 })
     const sorted = []
