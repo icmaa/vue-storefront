@@ -1,29 +1,25 @@
 <template>
   <div class="t-my-8 t-container t-px-4">
-    <vue-markdown :source="content" />
+    <component :is="htmlContent" class="t-text-sm t-leading-relaxed t-text-base-tone" />
   </div>
 </template>
 
 <script>
 import config from 'config'
 import { mapGetters } from 'vuex'
-import VueMarkdown from 'vue-markdown'
+import { stringToComponent } from 'icmaa-cms/helpers'
 
 export default {
-  name: 'SeoText',
-  components: {
-    VueMarkdown
-  },
+  name: 'RichtText',
   props: {
     content: {
       type: String,
       required: true
     }
   },
-  data () {
-    return {
-      loading: true,
-      dataType: 'markdown'
+  computed: {
+    htmlContent () {
+      return stringToComponent(this.content)
     }
   }
 }

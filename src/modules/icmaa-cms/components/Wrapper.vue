@@ -13,9 +13,9 @@ import mapKeys from 'lodash-es/mapKeys'
 import mapValues from 'lodash-es/mapValues'
 import camelCase from 'lodash-es/camelCase'
 
-const AsyncLogoline = () => import(/* webpackPreload: true */ /* webpackChunkName: "vsf-block-logoline" */ 'theme/components/core/blocks/CategoryExtras/LogoLine')
-const AsyncTeaser = () => import(/* webpackPreload: true */ /* webpackChunkName: "vsf-block-teaser" */ 'theme/components/core/blocks/Teaser/Teaser')
-const AsyncText = () => import(/* webpackPreload: true */ /* webpackChunkName: "vsf-block-text" */ 'theme/components/core/blocks/SeoText')
+const AsyncLogoline = () => import(/* webpackPreload: true */ /* webpackChunkName: "vsf-content-block-logoline" */ 'theme/components/core/blocks/CategoryExtras/LogoLine')
+const AsyncTeaser = () => import(/* webpackPreload: true */ /* webpackChunkName: "vsf-content-block-teaser" */ 'theme/components/core/blocks/Teaser/Teaser')
+const AsyncText = () => import(/* webpackPreload: true */ /* webpackChunkName: "vsf-content-block-text" */ 'theme/components/core/blocks/RichText')
 
 export default {
   name: 'CmsBlockWrapper',
