@@ -120,7 +120,9 @@ export default {
           'filter-changed-product',
           Object.assign({ attribute_code: option.type }, option)
         )
+
         this.setSelectedOptionByCurrentConfigurableProduct()
+        this.$bus.$emit('user-has-selected-product-variant')
 
         this.$store.dispatch('ui/closeAll')
       } else {

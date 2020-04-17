@@ -196,11 +196,23 @@ export default {
     return {
       AddToCartSidebar,
       quantity: 0,
-      loading: false
+      loading: false,
+      userHasSelectedVariant: false
     }
   },
   created () {
     this.getQuantity()
+
+    this.$bus.$on('user-has-selected-product-variant', () => {
+      this.userHasSelectedVariant = true
+    })
+  },
+  watch: {
+    originalProduct (newVal, oldVal) {
+      if (newVal.id !== oldVal.id) {
+        this.userHasSelectedVariant = false
+      }
+    }
   },
   computed: {
     ...mapGetters({
@@ -242,7 +254,21 @@ export default {
       return false
     },
     hasConfiguration () {
-      return Object.keys(this.configuration).length > 0
+      return this.configuration && Object.keys(this.configuration).length > 0 && this.userHasSelectedVariant
+    },
+    productOptionsLabel () {
+      if (this.hasConfiguration) {
+        let labels = []
+        const values = Object.values(this.configuration)
+        for (let conf of values) {
+          const label = this.getOptionLabel({ attributeKey: conf.attribute_code, optionId: conf.id })
+          labels.push(label)
+        }
+
+        return labels.join(', ')
+      }
+
+      return this.productOptionsLabelPlaceholder
     },
     detailsTabs () {
       let tabs = ['details']
