@@ -50,14 +50,14 @@
               </div>
 
               <div class="t-flex t-flex-wrap">
-                <div v-if="product.type_id === 'configurable' && !isOnesizeProduct && !loading" class="t-flex t-flex-grow t-w-full t-mb-4 lg:t-w-3/6 lg:t-mr-4">
+                <div v-if="product.type_id === 'configurable' && !isOnesizeProduct" class="t-flex t-flex-grow t-w-full t-mb-4 lg:t-w-3/6 lg:t-mr-4">
                   <button-component type="select" icon="arrow_forward" data-test-id="AddToCartSize" class="t-w-full" :disabled="isAddToCartDisabled" @click.native="openAddtocart">
                     {{ productOptionsLabel }}
                   </button-component>
                 </div>
                 <button-component type="primary" data-test-id="AddToCart" class="t-flex-grow lg:t-w-2/6 disabled:t-opacity-75 t-relative t-mb-4 t-mr-4" :disabled="isAddToCartDisabled" @click.native="addToCartButtonClick">
                   {{ $t('Add to cart') }}
-                  <loader-background v-if="loading && isSingleOptionProduct" class="t-bottom-0" height="t-h-1" bar="t-bg-base-lightest t-opacity-25" />
+                  <loader-background v-if="loading" class="t-bottom-0" height="t-h-1" bar="t-bg-base-lightest t-opacity-25" />
                 </button-component>
                 <add-to-wishlist :product="product" class="t-flex-fix" />
               </div>
@@ -241,6 +241,9 @@ export default {
 
       return false
     },
+    hasConfiguration () {
+      return Object.keys(this.configuration).length > 0
+    },
     detailsTabs () {
       let tabs = ['details']
 
@@ -273,7 +276,7 @@ export default {
     }),
     addToCartButtonClick () {
       if (!this.loading) {
-        if (this.isSingleOptionProduct) {
+        if (this.isSingleOptionProduct || this.hasConfiguration) {
           this.loading = true
           this.addToCart(this.product)
             .then(() => { this.loading = false })

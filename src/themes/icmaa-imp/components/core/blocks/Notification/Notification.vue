@@ -11,33 +11,39 @@
     >
       {{ message }}
     </div>
-    <div class="actions t-flex t-justify-between">
-      <div
-        class="t-px-4 t-py-3 t-uppercase t-font-medium t-border-r-2"
-        :class="[{ 't-pb-10 lg:t-pb-3' : isLast }, borderColor]"
+    <div class="actions t-flex t-px-4 t-pt-2" :class="[ isLast ? 't-pb-10 lg:t-pb-4' : 't-pb-4' ]">
+      <button-component
+        type="ghost-white"
+        size="sm"
         id="notificationAction1"
         data-test-id="NotificationItemAction1"
         @click="execAction(action1, index)"
       >
         {{ action1 ? action1.label : $t('OK') }}
-      </div>
-      <div
-        class="t-w-full t-px-4 t-py-3 t-uppercase t-font-medium"
-        :class="{ 't-pb-10 lg:t-pb-3' : isLast }"
+      </button-component>
+      <button-component
+        type="ghost-white"
+        size="sm"
+        class="t-ml-2"
         id="notificationAction2"
         data-test-id="NotificationItemAction2"
         @click="execAction(action2, index)"
         v-if="action2"
       >
         {{ action2.label }}
-      </div>
+      </button-component>
     </div>
   </div>
 </template>
 
 <script>
+import ButtonComponent from 'theme/components/core/blocks/Button'
+
 export default {
   name: 'NotificationItem',
+  components: {
+    ButtonComponent
+  },
   props: {
     index: {
       type: Number,

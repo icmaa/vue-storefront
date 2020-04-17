@@ -9,7 +9,9 @@ export default {
   computed: {
     ...mapGetters({
       getAttributeLabel: 'attribute/getAttributeLabel',
-      getAttributeListByCode: 'attribute/getAttributeListByCode'
+      getAttributeListByCode: 'attribute/getAttributeListByCode',
+      getOptionLabel: 'attribute/getOptionLabel',
+      configuration: 'product/getCurrentProductConfiguration'
     }),
     productOptions (): any[] {
       if (this.product.errors &&
@@ -47,6 +49,20 @@ export default {
       })
     },
     productOptionsLabel (): string|LocaleMessages {
+      if (this.configuration && Object.keys(this.configuration).length > 0) {
+        let labels = []
+        const values: any[] = Object.values(this.configuration)
+        for (let conf of values) {
+          const label = this.getOptionLabel({ attributeKey: conf.attribute_code, optionId: conf.id })
+          labels.push(label)
+        }
+
+        return labels.join(', ')
+      }
+
+      return this.productOptionsLabelPlaceholder
+    },
+    productOptionsLabelPlaceholder (): string|LocaleMessages {
       if (this.productOptions.length === 0 || this.productOptions.length > 1) {
         return i18n.t('Choose options')
       }
