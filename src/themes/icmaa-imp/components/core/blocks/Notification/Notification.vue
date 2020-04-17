@@ -13,7 +13,8 @@
     </div>
     <div class="actions t-flex t-px-4 t-pt-2" :class="[ isLast ? 't-pb-10 lg:t-pb-4' : 't-pb-4' ]">
       <button-component
-        type="ghost-white"
+        type="white-custom"
+        :class="[ 't-text-' + colorCode ]"
         size="sm"
         id="notificationAction1"
         data-test-id="NotificationItemAction1"
@@ -22,7 +23,8 @@
         {{ action1 ? action1.label : $t('OK') }}
       </button-component>
       <button-component
-        type="ghost-white"
+        type="white-custom"
+        :class="[ 't-text-' + colorCode ]"
         size="sm"
         class="t-ml-2"
         id="notificationAction2"
