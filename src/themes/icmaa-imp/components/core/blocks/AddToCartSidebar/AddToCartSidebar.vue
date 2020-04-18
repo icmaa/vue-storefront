@@ -10,7 +10,7 @@
             v-for="(filter, key) in availableFilters[option.attribute_code]"
             :key="key"
             :option="filter"
-            @change="changeFilter"
+            @change="onSelect"
             :price="getOptionPrice(filter)"
             :is-last="key === Object.keys(availableFilters[option.attribute_code]).length - 1"
             :is-loading="isLoading"
@@ -76,7 +76,7 @@ export default {
     }
   },
   mounted () {
-    this.setSelectedOptionByCurrentConfigurableProduct()
+    this.setSelectedOptionByCurrentConfiguration()
   },
   computed: {
     ...mapGetters({
@@ -91,7 +91,7 @@ export default {
     }
   },
   methods: {
-    setSelectedOptionByCurrentConfigurableProduct () {
+    setSelectedOptionByCurrentConfiguration () {
       if (this.product.type_id !== 'configurable') {
         return
       }
@@ -114,14 +114,11 @@ export default {
         })
       })
     },
-    changeFilter (option) {
+    async onSelect (option) {
       if (option.available) {
-        this.$bus.$emit(
-          'filter-changed-product',
-          Object.assign({ attribute_code: option.type }, option)
-        )
+        await this.$store.dispatch('product/updateConfiguration', { option })
 
-        this.setSelectedOptionByCurrentConfigurableProduct()
+        this.setSelectedOptionByCurrentConfiguration()
         this.$bus.$emit('user-has-selected-product-variant')
 
         this.$store.dispatch('ui/closeAll')

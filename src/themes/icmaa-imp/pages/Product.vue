@@ -261,7 +261,7 @@ export default {
         let labels = []
         const values = Object.values(this.configuration)
         for (let conf of values) {
-          const label = this.getOptionLabel({ attributeKey: conf.attribute_code, optionId: conf.id })
+          const label = conf.label !== conf.id ? conf.label : this.getOptionLabel({ attributeKey: conf.type, optionId: conf.id })
           labels.push(label)
         }
 
