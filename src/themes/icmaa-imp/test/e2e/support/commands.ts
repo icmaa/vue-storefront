@@ -152,7 +152,7 @@ Cypress.Commands.add('getStoreCode', () => {
   cy.get<string>('@storeCode')
 })
 
-Cypress.Commands.add('openNavigationSidebar', (trigger: string = '[data-test-id="HeaderButtonSidebar"]', overlaySelector: string = '[data-test-id="Sidebar"]') => {
+Cypress.Commands.add('openSidebar', (trigger: string = '[data-test-id="HeaderButtonSidebar"]', overlaySelector: string = '[data-test-id="Sidebar"]') => {
   cy.get(trigger)
     .should('be.visible')
     .click()
@@ -162,20 +162,20 @@ Cypress.Commands.add('openNavigationSidebar', (trigger: string = '[data-test-id=
     .should('be.visible')
 })
 
-Cypress.Commands.add('closeNavigationSidebar', (alias: string = '@sidebar') => {
+Cypress.Commands.add('closeSidebar', (alias: string = '@sidebar') => {
   cy.get(alias).findByTestId('closeButton').click()
   cy.get(alias).should('not.be.visible')
 })
 
 Cypress.Commands.add('openFilterSidebar', () => {
-  cy.openNavigationSidebar('[data-test-id="ButtonFilter"]')
+  cy.openSidebar('[data-test-id="ButtonFilter"]')
 })
 
 Cypress.Commands.add('registerCustomer', () => {
   cy.visitAsRecurringUser('/')
   cy.createCustomerWithFaker()
 
-  cy.openNavigationSidebar('[data-test-id="HeaderButtonAccount"]', '[data-test-id="Modal"]')
+  cy.openSidebar('[data-test-id="HeaderButtonAccount"]', '[data-test-id="Modal"]')
     .get('@sidebar')
     .findByTestId('registerLink')
     .click()
@@ -263,7 +263,7 @@ Cypress.Commands.add('checkAvailabilityOfCurrentProduct', () => {
       cy.getByTestId('product').then($product => {
         if ($product.find('[data-test-id="AddToCartSize"]').length) {
           cy.wrap('configurable').as('productType')
-          cy.openNavigationSidebar('[data-test-id="AddToCartSize"]')
+          cy.openSidebar('[data-test-id="AddToCartSize"]')
           cy.get('@sidebar').findByTestId('DefaultSelector').filter('.available')
             .then($selector => {
               if ($selector.length === 0) {
@@ -315,11 +315,14 @@ Cypress.Commands.add('addCurrentProductToCart', (checkAvailability = true) => {
   cy.get<'configurable'|'simple'>('@productType')
     .then(type => {
       if (type === 'configurable') {
-        cy.openNavigationSidebar('[data-test-id="AddToCartSize"]')
+        cy.openSidebar('[data-test-id="AddToCartSize"]')
         cy.get('@sidebar').findByTestId('DefaultSelector')
           .filter('.available')
           .random()
           .click()
+
+        cy.get('@sidebar').should('not.be.visible')
+        cy.getByTestId('AddToCart').click()
       } else if (type === 'simple') {
         cy.getByTestId('AddToCart').click()
       }
