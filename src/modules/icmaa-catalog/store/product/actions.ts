@@ -98,7 +98,7 @@ const actions: ActionTree<ProductState, RootState> = {
     const selectedVariant = await dispatch('configure', {
       product: getters.getCurrentProduct,
       configuration,
-      selectDefaultVariant: false,
+      selectDefaultVariant: true,
       fallbackToDefaultWhenNoAvailable: false,
       setProductErorrs: true
     })
