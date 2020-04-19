@@ -319,14 +319,23 @@ Cypress.Commands.add('addCurrentProductToCart', (checkAvailability = true) => {
         cy.get('@sidebar').findByTestId('DefaultSelector')
           .filter('.available')
           .random()
+          .then($item => {
+            cy.wrap<string>($item.text().trim()).as('optionLabel')
+            cy.wrap($item)
+          })
           .click()
 
         cy.get('@sidebar').should('not.be.visible')
-        cy.getByTestId('AddToCart').click()
-      } else if (type === 'simple') {
-        cy.getByTestId('AddToCart').click()
+
+        cy.get<string>('@optionLabel').then(label => {
+          cy.getByTestId('AddToCartSize').contains(label)
+        })
       }
+
+      cy.getByTestId('AddToCart').click()
     })
 
   cy.checkNotification('success')
+
+  cy.getByTestId('Sidebar').should('be.visible')
 })
