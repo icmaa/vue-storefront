@@ -1,24 +1,15 @@
 <template>
   <div class="t-text-sm">
     <div class="description t-whitespace-pre-line" v-text="stripHTML(product.description.trim())" />
-    <no-ssr>
-      <ul class="attributes t-mt-6" v-if="attributes.length > 0">
-        <product-attributes
-          v-for="(attr, i) in attributes"
-          :key="'product-attribute-' + attr.attribute_code + '-' + i"
-          :product="product"
-          :attribute="attr"
-          class="t-mb-3"
-        />
-      </ul>
-    </no-ssr>
+    <div class="description t-whitespace-pre-line" v-if="isPreorder" v-text="preorderText" />
+    <ul class="attributes t-mt-6" v-if="attributes.length > 0">
+      <product-attributes :key="attr.attribute_code" v-for="attr in attributes" :product="product" :attribute="attr" class="t-mb-3" />
+    </ul>
     <div class="blank t-mt-6" v-if="blank">
       <span class="t-font-bold t-block t-mb-2">{{ blank.label }}</span>
-      <img :src="blank.image" :srcset="`${blank.image} 1x, ${blank.imageAt2x} 2x`" :alt="blank.label + ' - ' + blank.optionLabel">
+      <img :src="blank.image" :srcset="`${blank.image} 1x, ${blank.imageAt2x} 2x`" :alt="blank.label + ' - ' + blank.optionLabel" />
     </div>
-    <div class="department-advice t-text-base-lighter t-mt-8" v-if="departmentAdvice">
-      <material-icon icon="asterisk" icon-set="icmaa" size="icon" /> {{ $t('This is a merch product of the above-named band. We want to point out that the article description is a paraphrasing specification in consideration of the imprinted motif.') }}
-    </div>
+    <div class="department-advice t-text-base-lighter t-mt-8" v-if="departmentAdvice"><material-icon icon="asterisk" icon-set="icmaa" size="icon" /> {{ $t('This is a merch product of the above-named band. We want to point out that the article description is a paraphrasing specification in consideration of the imprinted motif.') }}</div>
   </div>
 </template>
 
@@ -28,6 +19,8 @@ import { stripHTML } from '@vue-storefront/core/filters/strip-html'
 import ProductAttributes from 'theme/components/core/blocks/Product/ProductAttributes'
 import MaterialIcon from 'theme/components/core/blocks/MaterialIcon'
 import NoSSR from 'vue-no-ssr'
+import i18n from '@vue-storefront/i18n'
+import { toDayjsDate } from 'icmaa-config/helpers/datetime'
 
 export default {
   props: {
@@ -50,7 +43,7 @@ export default {
     }),
     attributes () {
       return Object.values(this.attributesByCode).filter(a => {
-        return a.is_visible && a.is_visible_on_front === true && this.original[a.attribute_code] && this.original[a.attribute_code][0] !== ''
+        return a.is_visible && a.is_visible_on_front === true && this.product[a.attribute_code] && this.product[a.attribute_code][0] !== ''
       })
     },
     blank () {
@@ -69,6 +62,16 @@ export default {
     },
     departmentAdvice () {
       return this.original.department === 6
+    },
+    isPreorder () {
+      return this.product.promo_id === '5'
+    },
+    preorderText () {
+      return i18n.t('Delivery of your complete order not before {date}. The preorder date is the release date for Germany, as we were told by the record label or distributor. There is no guarantee for a delivery on that date. In exceptional cases, especially for imported products, there might be delays. As soon as we receive the article, we will ship it.', { date: this.mediaReleaseDate })
+    },
+    mediaReleaseDate () {
+      return toDayjsDate(this.product.media_release)
+        .format('YYYY-MM-DD')
     }
   },
   methods: {
