@@ -1,7 +1,6 @@
 <template>
   <div class="t-text-sm">
     <div class="description t-whitespace-pre-line" v-text="stripHTML(product.description.trim())" />
-    <div class="description t-whitespace-pre-line" v-if="isPreorder" v-text="preorderText" />
     <ul class="attributes t-mt-6" v-if="attributes.length > 0">
       <product-attributes :key="attr.attribute_code" v-for="attr in attributes" :product="product" :attribute="attr" class="t-mb-3" />
     </ul>
@@ -19,8 +18,6 @@ import { stripHTML } from '@vue-storefront/core/filters/strip-html'
 import ProductAttributes from 'theme/components/core/blocks/Product/ProductAttributes'
 import MaterialIcon from 'theme/components/core/blocks/MaterialIcon'
 import NoSSR from 'vue-no-ssr'
-import i18n from '@vue-storefront/i18n'
-import { toDayjsDate } from 'icmaa-config/helpers/datetime'
 
 export default {
   props: {
@@ -62,16 +59,6 @@ export default {
     },
     departmentAdvice () {
       return this.original.department === 6
-    },
-    isPreorder () {
-      return this.product.promo_id === '5'
-    },
-    preorderText () {
-      return i18n.t('Delivery of your complete order not before {date}. The preorder date is the release date for Germany, as we were told by the record label or distributor. There is no guarantee for a delivery on that date. In exceptional cases, especially for imported products, there might be delays. As soon as we receive the article, we will ship it.', { date: this.mediaReleaseDate })
-    },
-    mediaReleaseDate () {
-      return toDayjsDate(this.product.media_release)
-        .format('YYYY-MM-DD')
     }
   },
   methods: {

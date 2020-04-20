@@ -64,6 +64,7 @@
               </div>
             </div>
           </div>
+          <product-preorder :product="product" />
         </div>
       </div>
     </div>
@@ -146,6 +147,7 @@ import AddToWishlist from 'theme/components/core/blocks/Wishlist/AddToWishlist'
 import CategoryExtrasHeader from 'theme/components/core/blocks/CategoryExtras/Header'
 import DepartmentLogo from 'theme/components/core/blocks/CategoryExtras/DepartmentLogo'
 import DetailsTabs from 'theme/components/core/blocks/Product/Tabs'
+import ProductPreorder from 'theme/components/core/blocks/Product/ProductPreorder'
 import ProductDetails from 'theme/components/core/blocks/Product/ProductDetails'
 import ProductFeatures from 'theme/components/core/blocks/Product/ProductFeatures'
 import ProductCareInstructions from 'theme/components/core/blocks/Product/ProductCareInstructions'
@@ -178,6 +180,7 @@ export default {
     LoaderBackground,
     ProductGallery,
     DetailsTabs,
+    ProductPreorder,
     ProductDetails,
     ProductFeatures,
     ProductCareInstructions,
