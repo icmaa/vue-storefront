@@ -49,7 +49,7 @@
                 <div class="t-mt-1 t-text-xs t-text-base-light" v-html="taxDisclaimer" />
               </div>
 
-              <div class="t-flex t-flex-wrap">
+              <div class="t-flex t-flex-wrap" :class="{ 't-animation-pulse t-animation-duration-1/2 t-animation-delay-1/3 t-animation-iteration-count-2 t-animation-timing-function-ease-in-out': optionSelectAnimation}">
                 <div v-if="product.type_id === 'configurable' && !isOnesizeProduct" class="t-flex t-flex-grow t-w-full t-mb-4 lg:t-w-3/6 lg:t-mr-4">
                   <button-component type="select" icon="arrow_forward" data-test-id="AddToCartSize" class="t-w-full" :disabled="isAddToCartDisabled" @click.native="openAddtocart">
                     {{ productOptionsLabel }}
@@ -197,7 +197,8 @@ export default {
       AddToCartSidebar,
       quantity: 0,
       loading: false,
-      userHasSelectedVariant: false
+      userHasSelectedVariant: false,
+      optionSelectAnimation: false
     }
   },
   created () {
@@ -205,6 +206,7 @@ export default {
 
     this.$bus.$on('user-has-selected-product-variant', () => {
       this.userHasSelectedVariant = true
+      this.animateOptionSelect()
     })
   },
   watch: {
@@ -332,6 +334,10 @@ export default {
         ),
         action1: { label: this.$t('OK') }
       })
+    },
+    animateOptionSelect () {
+      this.optionSelectAnimation = true
+      setTimeout(() => { this.optionSelectAnimation = false }, 2000)
     }
   },
   async asyncData ({ store, route }) {

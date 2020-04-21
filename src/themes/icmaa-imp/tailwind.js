@@ -83,6 +83,34 @@ module.exports = {
         '1': '1',
         '1000': '1000'
       }
+    },
+    animations: {
+      'pulse': {
+        // t-animation-pulse t-animation-duration-1/2 t-animation-iteration-count-2 t-animation-timing-function-ease-in-out
+        '0%, 100%': { transform: 'scaleX(1)' },
+        '50%': { transform: 'scale3d(1.05, 1.05, 1.05)' }
+      },
+      'wiggle': {
+        // t-animation-wiggle t-animation-duration-1/3 t-animation-iteration-count-2
+        '0%, 50%, 100%': { transform: 'translateX(0)' },
+        '25%': { transform: 'translateX(-5px)' },
+        '75%': { transform: 'translateX(5px)' }
+      }
+    },
+    animationDuration: {
+      '1/2s': '.5s',
+      '1/3s': '.33333s',
+      '1/4s': '.25s'
+    },
+    animationDelay: {
+      '1/2s': '.5s',
+      '1/3s': '.33333s',
+      '1/4s': '.25s'
+    },
+    animationIterationCount: {
+      '1': 1,
+      '2': 2,
+      '3': 3
     }
   },
   variants: {
@@ -92,6 +120,7 @@ module.exports = {
   },
   plugins: [
     require('tailwindcss-accessibility'),
+    require('tailwindcss-animations'),
     /**
      * Add placeholder variant
      * @see https://tailwindcss.com/docs/pseudo-class-variants/#creating-custom-variants
