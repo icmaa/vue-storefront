@@ -164,7 +164,6 @@ import ProductOptionsMixin from 'theme/mixins/product/optionsMixin'
 import ProductAddToCartMixin from 'theme/mixins/product/addtocartMixin'
 import FeaturesMixin from 'theme/mixins/product/featuresMixin'
 import ClusterMixin from 'icmaa-user/mixins/cluster'
-import PromoBanner from 'theme/components/core/blocks/Category/PromoBanner'
 
 const AddToCartSidebar = () => import(/* webpackPreload: true */ /* webpackChunkName: "vsf-addtocart-sidebar" */ 'theme/components/core/blocks/AddToCartSidebar/AddToCartSidebar')
 
@@ -183,7 +182,6 @@ export default {
     ProductDetails,
     ProductFeatures,
     ProductCareInstructions,
-    PromoBanner,
     Reviews,
     ReviewsShort,
     ReviewsClaim,
