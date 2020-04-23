@@ -6,9 +6,11 @@
     </ul>
     <div class="blank t-mt-6" v-if="blank">
       <span class="t-font-bold t-block t-mb-2">{{ blank.label }}</span>
-      <img :src="blank.image" :srcset="`${blank.image} 1x, ${blank.imageAt2x} 2x`" :alt="blank.label + ' - ' + blank.optionLabel" />
+      <img :src="blank.image" :srcset="`${blank.image} 1x, ${blank.imageAt2x} 2x`" :alt="blank.label + ' - ' + blank.optionLabel">
     </div>
-    <div class="department-advice t-text-base-lighter t-mt-8" v-if="departmentAdvice"><material-icon icon="asterisk" icon-set="icmaa" size="icon" /> {{ $t('This is a merch product of the above-named band. We want to point out that the article description is a paraphrasing specification in consideration of the imprinted motif.') }}</div>
+    <div class="department-advice t-text-base-lighter t-mt-8" v-if="departmentAdvice">
+      <material-icon icon="asterisk" icon-set="icmaa" size="icon" /> {{ $t('This is a merch product of the above-named band. We want to point out that the article description is a paraphrasing specification in consideration of the imprinted motif.') }}
+    </div>
   </div>
 </template>
 
