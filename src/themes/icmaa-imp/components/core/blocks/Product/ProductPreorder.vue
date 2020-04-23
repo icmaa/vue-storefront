@@ -7,8 +7,6 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-import { stripHTML } from '@vue-storefront/core/filters/strip-html'
 import MaterialIcon from 'theme/components/core/blocks/MaterialIcon'
 import { toDate } from 'icmaa-config/helpers/datetime'
 import i18n from '@vue-storefront/i18n'
