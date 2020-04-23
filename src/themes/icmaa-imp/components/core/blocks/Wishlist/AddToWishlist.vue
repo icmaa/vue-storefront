@@ -3,7 +3,7 @@
     <material-icon :icon="favoriteIcon" class="t-text-white" />
     <span class="t-sr-only">{{ !isOnWishlist ? $t('Add to favorite') : $t('Remove') }}</span>
   </div>
-  <button-component v-else :type="buttonType" :icon="favoriteIcon" :icon-only="true" @click.native="toggleWishlist" data-test-id="AddToWishlistButton">
+  <button-component v-else class="t-mb-4" :type="buttonType" :icon="favoriteIcon" :icon-only="true" @click.native="toggleWishlist" data-test-id="AddToWishlistButton">
     <slot>
       {{ !isOnWishlist ? $t('Add to favorite') : $t('Remove') }}
     </slot>
