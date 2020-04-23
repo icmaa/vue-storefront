@@ -11,7 +11,6 @@
           :configuration="configuration"
           :product="product"
         />
-        <promo-banner :product="product" class="" />
         <div class="t-w-full t-p-8 t-bg-white lg:t-w-1/2">
           <category-extras-header class="t--mx-8 t--mt-8 t-mb-8 lg:t-pl-px t-border-b t-border-base-lightest" v-if="!['xs', 'sm', 'md'].includes(viewport)" :spotify-logo-limit="spotifyLogoLimit" />
           <div class="t-flex t-flex-wrap">
@@ -64,7 +63,7 @@
               </div>
             </div>
           </div>
-          <product-preorder :product="product" />
+          <product-preorder v-if="isPreorder" :product="product" />
         </div>
       </div>
     </div>
@@ -259,6 +258,9 @@ export default {
       }
 
       return false
+    },
+    isPreorder () {
+      return this.product.promo_id === '5'
     },
     hasConfiguration () {
       return this.configuration && Object.keys(this.configuration).length > 0 && this.userHasSelectedVariant
