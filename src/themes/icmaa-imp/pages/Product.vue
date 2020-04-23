@@ -59,7 +59,7 @@
                   {{ $t('Add to cart') }}
                   <loader-background v-if="loading" class="t-bottom-0" height="t-h-1" bar="t-bg-base-lightest t-opacity-25" />
                 </button-component>
-                <add-to-wishlist :product="product" class="t-flex-fix" />
+                <add-to-wishlist :product="product" class="t-flex-fix t-mb-4" />
               </div>
             </div>
           </div>

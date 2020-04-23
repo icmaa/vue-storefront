@@ -1,5 +1,5 @@
 <template>
-  <div class="t--mb-8 t--mx-8 t-bg-base-tone t-px-8 t-py-4 t-text-sm t-text-white">
+  <div class="t-mt-4 t--mb-8 t--mx-8 t-bg-base-tone t-px-8 t-py-4 t-text-sm t-text-white">
     <material-icon icon="alarm" size="sm" class="t--ml-6 t-absolute" />
     <span class="t-font-bold">{{ $t('Notice') }}: </span>
     <span class="description" v-text="preorderText" />
