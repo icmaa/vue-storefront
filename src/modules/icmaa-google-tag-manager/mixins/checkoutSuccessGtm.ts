@@ -69,27 +69,29 @@ export default {
       const storeView = currentStoreView()
       const currencyCode = storeView.i18n.currencyCode
 
-      const dataLayer = {
-        'order-id': this.orderId,
-        'order-date': this.orderDate,
-        'order-website': this.orderStoreName,
-        'order-total': this.orderGrandTotal,
-        'order-subtotal': this.orderSubTotal,
-        'order-tax': this.orderTaxAmount,
-        'order-shipping': this.orderShippingAmount,
-        'order-shipping-method': this.orderShippingDescription,
-        'order-payment': this.paymentMethod,
-        'order-currency-code': currencyCode,
-        'order-promo-code': this.couponCode
-      }
+      /** These might cause problems */
+      // const dataLayer = {
+      //   'order-id': this.orderId,
+      //   'order-date': this.orderDate,
+      //   'order-website': this.orderStoreName,
+      //   'order-total': this.orderGrandTotal,
+      //   'order-subtotal': this.orderSubTotal,
+      //   'order-tax': this.orderTaxAmount,
+      //   'order-shipping': this.orderShippingAmount,
+      //   'order-shipping-method': this.orderShippingDescription,
+      //   'order-payment': this.paymentMethod,
+      //   'order-currency-code': currencyCode,
+      //   'order-promo-code': this.couponCode
+      // }
 
       GTM.trackEvent({
         event: 'icmaa-checkout-success-view',
-        ...dataLayer,
+        // ...dataLayer,
         ecommerce: {
           currencyCode: currencyCode,
           purchase: {
             actionField: {
+              action: 'purchase',
               id: this.orderId,
               affiliation: this.orderStoreName,
               revenue: this.orderGrandTotal,
