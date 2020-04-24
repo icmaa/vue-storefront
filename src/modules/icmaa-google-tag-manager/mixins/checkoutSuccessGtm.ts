@@ -3,6 +3,8 @@ import VueGtm from 'vue-gtm'
 import { mapGetters } from 'vuex'
 import { currentStoreView } from '@vue-storefront/core/lib/multistore'
 import { googleTagManager } from 'config'
+import { formatValue } from 'icmaa-config/helpers/price'
+import { toDate } from 'icmaa-config/helpers/datetime'
 import AbstractMixin from './abstractMixin'
 
 export default {
@@ -16,16 +18,25 @@ export default {
       return this.ordersHistory.length > 0 ? this.ordersHistory[0] : false
     },
     orderId () {
-      return this.order.increment_id || this.order.id
+      return this.order.increment_id || this.order.id ? (this.order.increment_id || this.order.id).toString() : null
     },
     orderStoreName () {
       return this.order.store_name
     },
+    orderDate () {
+      return toDate(this.order.created_at, 'YYYY-MM-DD HH:MM:ss')
+    },
     orderGrandTotal () {
-      return this.order.grand_total
+      return formatValue(this.order.grand_total, 'en-US')
+    },
+    orderSubTotal () {
+      return formatValue(this.order.subtotal, 'en-US')
     },
     orderTaxAmount () {
-      return this.order.tax_amount
+      return formatValue(this.order.tax_amount, 'en-US')
+    },
+    orderShippingAmount () {
+      return formatValue(this.order.shipping_amount, 'en-US')
     },
     orderShippingDescription () {
       return this.order.shipping_description
@@ -34,7 +45,7 @@ export default {
       return this.order.payment.additional_information[0]
     },
     couponCode () {
-      return this.order.coupon_code
+      return this.order.coupon_code ? String(this.order.coupon_code) : null
     },
     couponCodeRule () {
       return this.order.coupon_rule_name
@@ -55,8 +66,23 @@ export default {
       const storeView = currentStoreView()
       const currencyCode = storeView.i18n.currencyCode
 
+      const dataLayer = {
+        'order-id': this.orderId,
+        'order-date': this.orderDate,
+        'order-website': this.orderStoreName,
+        'order-total': this.orderGrandTotal,
+        'order-subtotal': this.orderSubTotal,
+        'order-tax': this.orderTaxAmount,
+        'order-shipping': this.orderShippingAmount,
+        'order-shipping-method': this.orderShippingDescription,
+        'order-payment': this.paymentMethod,
+        'order-currency-code': currencyCode,
+        'order-promo-code': this.couponCode
+      }
+
       GTM.trackEvent({
         event: 'icmaa-checkout-success-view',
+        ...dataLayer,
         ecommerce: {
           currencyCode: currencyCode,
           purchase: {
