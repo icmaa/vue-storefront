@@ -61,19 +61,19 @@ export default {
           currencyCode: currencyCode,
           purchase: {
             actionField: {
-              transactionId: this.orderId,
-              transactionAffiliation: this.orderStoreName,
-              transactionTotal: this.orderGrandTotal,
-              transactionTax: this.orderTaxAmount,
-              transactionShipping: this.orderShippingDescription,
+              id: this.orderId,
+              affiliation: this.orderStoreName,
+              revenue: this.orderGrandTotal,
+              tax: this.orderTaxAmount,
+              shipping: this.orderShippingDescription,
               payment: this.paymentMethod,
               coupon: this.couponCode,
               couponrule: this.couponCodeRule
             },
-            transactionProducts: this.singleOrderItems
+            products: this.singleOrderItems
           }
         }
-      });
+      })
 
       this.$store.dispatch('icmaaGoogleTagManager/setLastOrderId', this.orderId)
     }
