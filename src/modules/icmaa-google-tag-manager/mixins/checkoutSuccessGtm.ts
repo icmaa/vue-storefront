@@ -5,6 +5,7 @@ import { currentStoreView } from '@vue-storefront/core/lib/multistore'
 import { googleTagManager } from 'config'
 import { formatValue } from 'icmaa-config/helpers/price'
 import { toDate } from 'icmaa-config/helpers/datetime'
+import omit from 'lodash-es/omit'
 import AbstractMixin from './abstractMixin'
 
 export default {
@@ -51,8 +52,10 @@ export default {
       return this.order.coupon_rule_name
     },
     singleOrderItems () {
-      return this.order.products
+      return this.order.items
+        .map(i => Object.assign({}, this.order.products.find(p => p.sku === i.sku || (p.configurable_children && p.configurable_children.some(c => c.sku === i.sku))), { sku: i.sku }))
         .map(p => this.getGTMProductDTO(p, googleTagManager.categoryAttributes))
+        .map(p => omit(p, ['children']))
     }
   },
   methods: {
