@@ -63,7 +63,7 @@ export const icmaaGoogleTagManagerModule: Module<GoogleTagManagerState, any> = {
           if (value) {
             switch (attributeType) {
               case 'price':
-                product[attributeName] = formatValue(value)
+                product[attributeName] = formatValue(value, 'en-US')
                 break
               case 'attribute':
                 product[attributeName] = rootGetters['attribute/getOptionLabel']({ attributeKey: attributeField, optionId: value })
