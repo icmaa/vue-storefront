@@ -6,6 +6,7 @@ import { googleTagManager } from 'config'
 import { formatValue } from 'icmaa-config/helpers/price'
 import { toDate } from 'icmaa-config/helpers/datetime'
 import omit from 'lodash-es/omit'
+import round from 'lodash-es/round'
 import AbstractMixin from './abstractMixin'
 
 export default {
@@ -53,8 +54,12 @@ export default {
     },
     singleOrderItems () {
       return this.order.items
-        .map(i => Object.assign({}, this.order.products.find(p => p.sku === i.sku || (p.configurable_children && p.configurable_children.some(c => c.sku === i.sku))), { sku: i.sku }))
-        .map(p => this.getGTMProductDTO(p, googleTagManager.categoryAttributes))
+        .map(i => {
+          const product = this.order.products.find(p => p.sku === i.sku || (p.configurable_children && p.configurable_children.some(c => c.sku === i.sku))) || {}
+          const productDTO = this.getGTMProductDTO(product, googleTagManager.categoryAttributes)
+          const additionalData = { sku: i.sku, quantity: round(i.qty_ordered), id: String(productDTO.id).toString() }
+          return Object.assign(productDTO, additionalData)
+        })
         .map(p => omit(p, ['children']))
     }
   },
