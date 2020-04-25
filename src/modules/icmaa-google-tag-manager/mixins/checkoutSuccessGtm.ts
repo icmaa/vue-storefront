@@ -101,8 +101,9 @@ export default {
               affiliation: this.orderStoreName,
               revenue: this.orderGrandTotal,
               tax: this.orderTaxAmount,
-              shipping: this.orderShippingDescription,
-              payment: this.paymentMethod,
+              shipping: this.orderShippingAmount,
+              shipping_method: this.orderShippingDescription,
+              payment_method: this.paymentMethod,
               coupon: this.couponCode,
               couponrule: this.couponCodeRule
             },
