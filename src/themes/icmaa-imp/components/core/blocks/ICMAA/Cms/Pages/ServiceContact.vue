@@ -127,11 +127,12 @@ export default {
     sendEmail (success, failure) {
       this.$bus.$emit('notification-progress-start', i18n.t('Please wait'))
 
-      const targetAddress = icmaa.environment !== 'production' ? mailer.contactAddress : this.storeConfig.mailer.contactAddress || mailer.contactAddress
+      const targetAddress = icmaa.environment !== 'production'
+        ? mailer.contactAddress : this.storeConfig.mailer.contactAddress || mailer.contactAddress
 
       const mail = {
         sourceAddress: `${this.formData.name} <${this.formData.email}>`,
-        targetAddress: targetAddress,
+        targetAddress,
         subject: this.subject,
         text: this.emailText,
         html: this.emailHtml,
