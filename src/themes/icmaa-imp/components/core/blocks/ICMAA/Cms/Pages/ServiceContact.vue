@@ -40,7 +40,8 @@ import Layout from 'theme/components/core/blocks/ICMAA/Cms/Pages/Service/Layout'
 import FormComponent from 'icmaa-forms/components/Form'
 import MaterialIcon from 'theme/components/core/blocks/MaterialIcon'
 
-import { mailer } from 'config'
+import { mapGetters } from 'vuex'
+import { mailer, icmaa } from 'config'
 import i18n from '@vue-storefront/i18n'
 import { registerModule } from '@vue-storefront/core/lib/modules'
 import { MailerModule } from '@vue-storefront/core/modules/mailer'
@@ -63,6 +64,9 @@ export default {
     }
   },
   computed: {
+    ...mapGetters({
+      storeConfig: 'icmaaConfig/getCurrentStoreConfig'
+    }),
     formVisible () {
       return ((this.selectedSubject && this.selectedChildSubject) || (this.selectedSubject && !this.selectedSubjectHasChildren))
     },
@@ -123,9 +127,11 @@ export default {
     sendEmail (success, failure) {
       this.$bus.$emit('notification-progress-start', i18n.t('Please wait'))
 
+      const targetAddress = icmaa.environment !== 'production' ? mailer.contactAddress : this.storeConfig.mailer.contactAddress || mailer.contactAddress
+
       const mail = {
         sourceAddress: `${this.formData.name} <${this.formData.email}>`,
-        targetAddress: mailer.contactAddress,
+        targetAddress: targetAddress,
         subject: this.subject,
         text: this.emailText,
         html: this.emailHtml,
