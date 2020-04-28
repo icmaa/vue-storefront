@@ -1,5 +1,6 @@
 import rootStore from '@vue-storefront/core/store'
 import config from 'config'
+import queryString from 'query-string'
 import { currentStoreView } from '@vue-storefront/core/lib/multistore'
 import { isServer } from '@vue-storefront/core/helpers'
 
@@ -19,7 +20,13 @@ export const getExternalCheckoutUrl = (): string => {
     shopUrl = store.url.startsWith('/') ? shopUrl + store.url : store.url
   }
 
-  return shopUrl + '/vue/cart/sync/token/' + userToken + '/cart/' + cartToken
+  const url = shopUrl + '/vue/cart/sync/token'
+  const query: { token: string, cart: string } = {
+    token: userToken,
+    cart: cartToken
+  }
+
+  return queryString.stringifyUrl({ url, query })
 }
 
 export function getRedirectToExternalCheckoutUrl (routeName: string): string|boolean {
