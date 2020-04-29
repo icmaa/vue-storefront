@@ -20,7 +20,7 @@ export const getExternalCheckoutUrl = (): string => {
     shopUrl = store.url.startsWith('/') ? shopUrl + store.url : store.url
   }
 
-  const url = shopUrl + '/vue/cart/sync/token'
+  const url = shopUrl + '/vue/cart/sync'
   const query: { token: string, cart: string } = {
     token: userToken,
     cart: cartToken
