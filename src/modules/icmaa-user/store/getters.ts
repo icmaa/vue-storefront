@@ -1,11 +1,11 @@
 import { GetterTree } from 'vuex'
 import RootState from '@vue-storefront/core/types/RootState'
 import UserState from '../types/UserState'
-import UserProfile from '../types/UserProfile'
 
 import isEmpty from 'lodash-es/isEmpty'
 
 const getters: GetterTree<UserState, RootState> = {
+  isLoggedIn: (state): boolean => !isEmpty(state.current) && !isEmpty(state.token),
   getCustomer: (state) => state.current,
   getCluster: (state): string|false => {
     return (!isEmpty(state.sessionData) && state.sessionData.cluster)
