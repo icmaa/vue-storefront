@@ -1,7 +1,7 @@
 <template>
   <transition :name="direction === 'right' ? 'slide-left' : direction === 'left' ? 'slide-right' : null">
     <div
-      class="sidebar t-max-w-full t-fixed t-scrolling-touch t-bg-white"
+      class="sidebar t-max-w-90pc t-fixed t-scrolling-touch t-bg-white"
       :class="[direction === 'left' ? 'left-sidebar' : direction === 'right' ? 'right-sidebar' : null, { 'wide': wide }]"
       data-test-id="Sidebar"
       ref="sidebar"
