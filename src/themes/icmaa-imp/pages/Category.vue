@@ -26,8 +26,9 @@
               </dropdown>
             </div>
             <div class="t-w-1/2 lg:t-w-3/4 t-px-1 lg:t-px-2 t-flex t-items-center">
-              <button-component style="second" align="stretch" icon="filter_list" @click.native="openFilters" class="t-w-full lg:t-w-auto" data-test-id="ButtonFilter">
+              <button-component style="second" align="stretch" :icon="activeFilterCount > 0 ? 'check' : 'filter_list'" @click.native="openFilters" class="t-w-full lg:t-w-auto" data-test-id="ButtonFilter">
                 {{ $t('Filters') }}
+                <span v-if="activeFilterCount > 0" v-text="`(${activeFilterCount})`" class="t-flex-grow t-text-left t-pl-2" />
               </button-component>
               <presets class="t-hidden lg:t-flex t-items-center t-ml-2" />
             </div>
@@ -172,6 +173,7 @@ export default {
       getCategoryProducts: 'category-next/getCategoryProducts',
       getCurrentCategory: 'category-next/getCurrentCategory',
       getCategoryProductsTotal: 'category-next/getCategoryProductsTotal',
+      getCurrentFilters: 'category-next/getCurrentFilters',
       getProductsStats: 'category-next/getCategorySearchProductsStats',
       isInTicketWhitelist: 'category-next/isCurrentCategoryInTicketWhitelist',
       contentHeader: 'icmaaCategoryExtras/getContentHeaderByCurrentCategory'
@@ -188,6 +190,9 @@ export default {
     moreProductsInSearchResults () {
       const { perPage, start, total } = this.getProductsStats
       return (start + perPage < total)
+    },
+    activeFilterCount () {
+      return Object.keys(this.getCurrentFilters).length
     }
   },
   async asyncData ({ store, route, context }) { // this is for SSR purposes to prefetch data - and it's always executed before parent component methods
