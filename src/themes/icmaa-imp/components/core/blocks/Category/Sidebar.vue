@@ -140,7 +140,8 @@ export default {
     },
     openSubmenuFilter (filter) {
       if (filter.submenu) {
-        this.$store.dispatch('ui/addSidebarPath', { component: AsyncFilter, title: filter.attributeLabel, props: filter })
+        const sidebarProps = { title: filter.attributeLabel, closeIcon: this.closeIcon }
+        this.$store.dispatch('ui/addSidebarPath', { component: AsyncFilter, ...sidebarProps, props: filter })
       }
     }
   }

@@ -7,9 +7,15 @@
       ref="sidebar"
       v-if="isOpen"
     >
-      <div class="submenu-wrapper" :style="{ ...translateX }">
-        <component :is="component" @close="$emit('close')" @reload="getComponent" />
-        <submenu v-for="(item, i) in sidebarPath" :key="i" :index="i" :async-component="item.component" />
+      <div class="submenu-wrapper t-relative">
+        <transition :name="sidebarLength > 0 || (sidebarLength === 1 && sidebarAnimation) ? 'slide-right' : ''">
+          <component :is="component" @close="$emit('close')" @reload="getComponent" v-show="sidebarLength === 0 || (sidebarLength === 1 && sidebarAnimation)" />
+        </transition>
+        <template v-for="(item, i) in sidebarPath">
+          <transition :name="item.animation" :appear="item.appear" :key="'animation-' + i">
+            <submenu :key="'submenu-' + i" :index="i" :async-component="item.component" v-show="item.visible" />
+          </transition>
+        </template>
       </div>
     </div>
   </transition>
@@ -95,11 +101,7 @@ export default {
       return this.sidebarPath.length > 0
     },
     sidebarLength () {
-      return this.sidebarAnimation ? this.sidebarPath.length - 1 : this.sidebarPath.length
-    },
-    translateX () {
-      const translateX = this.sidebarLength > 0 ? (this.sidebarLength) * -100 : 0
-      return this.hasSubmenu ? { transform: `translateX(${translateX}%)` } : {}
+      return this.sidebarPath.length
     }
   }
 }
@@ -153,8 +155,4 @@ $z-index-modal: map-get($z-index, modal);
   right: 0;
 }
 
-.sidebar .submenu-wrapper {
-  position: relative;
-  transition: transform .5s;
-}
 </style>

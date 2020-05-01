@@ -36,6 +36,7 @@ export const uiStore = {
       state.addtocart = false
       state.categoryfilter = false
       state.overlay = false
+      state.sidebarPath = []
     },
     setCheckoutMode (state, action: boolean) {
       state.checkoutMode = action === true
@@ -47,14 +48,33 @@ export const uiStore = {
       state.overlay = status
     },
     addSidebarPath (state, payload) {
-      state.sidebarPath.push(payload)
+      let sidebars = state.sidebarPath.map(s => Object.assign(s, { visible: false, animation: 'slide-right' }))
+      sidebars.push(Object.assign({ appear: true }, payload, { visible: true, animation: 'slide-left' }))
+      Vue.set(state, 'sidebarPath', sidebars)
     },
     removeSidebarPath (state) {
+      const animationTime = 250
       state.sidebarAnimation = true
+
+      // Make last item invisible
+      const lastIndex = state.sidebarPath.length - 1
+      const last = Object.assign(state.sidebarPath[lastIndex], { visible: false })
+      Vue.set(state.sidebarPath, lastIndex, last)
+
+      // Make item before last item visible
+      const previousIndex = lastIndex - 1
+      if (previousIndex >= 0) {
+        const previous = Object.assign(state.sidebarPath[previousIndex], { visible: true })
+        Vue.set(state.sidebarPath, previousIndex, previous)
+        setTimeout(() => {
+          Vue.set(state.sidebarPath, previousIndex, Object.assign(previous, { animation: 'slide-left' }))
+        }, animationTime)
+      }
+
       setTimeout(() => {
         state.sidebarAnimation = false
-        Vue.delete(state.sidebarPath, state.sidebarPath.length - 1)
-      }, 500)
+        Vue.delete(state.sidebarPath, lastIndex)
+      }, animationTime)
     },
     setOverlay (state, action: boolean) {
       state.overlay = action === true
@@ -89,33 +109,33 @@ export const uiStore = {
       commit('setCloseAll')
       clearAllBodyScrollLocks()
     },
-    setSidebar ({ commit }, status: boolean) {
-      commit('toggleSidebar', 'sidebar', status)
+    setSidebar ({ commit }, active: boolean) {
+      commit('toggleSidebar', 'sidebar', active)
     },
-    setUserSidebar ({ commit, dispatch, rootGetters }, status) {
+    setUserSidebar ({ commit, dispatch, rootGetters }, { active, appear = true }) {
       if (!rootGetters['user/isLoggedIn']) {
         return
       }
 
-      commit('toggleSidebar', 'sidebar', status)
-      if (status === true) {
-        dispatch('addSidebarPath', { component: AsyncUserNavigation, title: i18n.t('My account') })
+      commit('toggleSidebar', 'sidebar', active)
+      if (active === true) {
+        dispatch('addSidebarPath', { component: AsyncUserNavigation, title: i18n.t('My account'), appear })
       }
     },
-    setSearchpanel ({ commit }, status: boolean) {
-      commit('toggleSidebar', 'searchpanel', status)
+    setSearchpanel ({ commit }, active: boolean) {
+      commit('toggleSidebar', 'searchpanel', active)
     },
-    setMicrocart ({ commit }, status: boolean) {
-      commit('toggleSidebar', 'microcart', status)
+    setMicrocart ({ commit }, active: boolean) {
+      commit('toggleSidebar', 'microcart', active)
     },
-    setWishlist ({ commit }, status: boolean) {
-      commit('toggleSidebar', 'wishlist', status)
+    setWishlist ({ commit }, active: boolean) {
+      commit('toggleSidebar', 'wishlist', active)
     },
-    setAddtocart ({ commit }, status: boolean) {
-      commit('toggleSidebar', 'addtocart', status)
+    setAddtocart ({ commit }, active: boolean) {
+      commit('toggleSidebar', 'addtocart', active)
     },
-    setCategoryfilter ({ commit }, status: boolean) {
-      commit('toggleSidebar', 'categoryfilter', status)
+    setCategoryfilter ({ commit }, active: boolean) {
+      commit('toggleSidebar', 'categoryfilter', active)
     },
     addSidebarPath ({ commit }, pathItem) {
       commit('addSidebarPath', pathItem)

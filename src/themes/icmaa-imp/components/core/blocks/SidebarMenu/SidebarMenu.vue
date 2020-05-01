@@ -79,7 +79,7 @@ export default {
       if (!this.isLoggedIn) {
         this.$bus.$emit('modal-toggle', 'modal-signup')
       } else {
-        this.$store.dispatch('ui/setUserSidebar', true)
+        this.$store.dispatch('ui/setUserSidebar', { active: true })
       }
     },
     showLanguageSwitcher () {
