@@ -10,7 +10,7 @@
       <div class="submenu-wrapper t-relative">
         <component :is="component" @close="$emit('close')" @reload="getComponent" v-show="!hasSubmenu" :key="'sidebar-home'" />
         <template v-for="(item, i) in sidebarPath">
-          <submenu :key="'submenu-' + i" :index="i" :async-component="item.component" />
+          <submenu :key="'submenu-' + i" :index="i" :async-component="item.component" v-show="i === sidebarLastIndex" />
         </template>
       </div>
     </div>
@@ -97,6 +97,9 @@ export default {
     },
     sidebarLength () {
       return this.sidebarPath.length
+    },
+    sidebarLastIndex () {
+      return this.sidebarLength - 1
     }
   }
 }
