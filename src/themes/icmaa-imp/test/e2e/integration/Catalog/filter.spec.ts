@@ -6,8 +6,11 @@ describe('Filter', () => {
       const productsTotalNumber = parseInt(element.text())
 
       cy.openFilterSidebar()
-      cy.get('@sidebar').find('[data-attribute-key="department"] button')
-        .clickRandomElement()
+      cy.get('@sidebar')
+        .find('[data-attribute-key="department"] button')
+        .random()
+        .scrollIntoView({ offset: { top: -200, left: 0 }, duration: 1000 })
+        .click({ force: true })
 
       cy.url().should('include', `?department=`)
 
