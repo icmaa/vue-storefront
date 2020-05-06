@@ -232,11 +232,6 @@ export default {
         loading: this.getThumbnail(this.product.image, config.products.thumbnails.width, config.products.thumbnails.height)
       }
     },
-    structuredData () {
-      return {
-        availability: this.product.stock.is_in_stock ? 'InStock' : 'OutOfStock'
-      }
-    },
     isAddToCartDisabled () {
       return this.$v.$invalid || this.loading || !this.quantity
     },

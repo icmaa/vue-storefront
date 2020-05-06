@@ -139,8 +139,7 @@ export default {
       breadcrumbs: 'product/getProductBreadcrumbs',
       product: 'product/getCurrentProduct',
       gallery: 'product/getProductGallery'
-    }),
-    priceCurrency: () => currentStoreView().i18n.currencyCode
+    })
   },
   methods: {
     showDetails (event) {
