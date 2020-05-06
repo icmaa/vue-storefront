@@ -1,5 +1,5 @@
 <template>
-  <div id="product" data-test-id="product" itemscope itemtype="http://schema.org/Product">
+  <div id="product" data-test-id="product">
     <div class="t-container t-px-4">
       <div class="t--mx-4 lg:t-px-4 t-flex t-flex-wrap">
         <breadcrumbs class="breadcrumbs t-w-full t-my-8 t-hidden lg:t-flex" />
@@ -14,7 +14,7 @@
         <div class="t-w-full t-p-8 t-bg-white lg:t-w-1/2" :class="{ 'lg:t-flex lg:t-flex-col lg:t-justify-between': isPreorder }">
           <category-extras-header class="t--mx-8 t--mt-8 t-mb-8 lg:t-pl-px t-border-b t-border-base-lightest" v-if="!['xs', 'sm', 'md'].includes(viewport)" :spotify-logo-limit="spotifyLogoLimit" />
           <div class="t-flex t-flex-wrap">
-            <h1 data-test-id="productName" itemprop="name" class="t-flex-grow t-w-1/2 t-mb-0 t-leading-snug">
+            <h1 data-test-id="productName" class="t-flex-grow t-w-1/2 t-mb-0 t-leading-snug">
               <template v-if="typeof productName === 'object'">
                 <span class="t-block t-text-2xl t-font-thin t-leading-relaxed t-mb-2">{{ productName.mandant | htmlDecode }}</span>
                 <span class="t-block t-text-lg t-font-bold">{{ productName.product | htmlDecode }}</span>
@@ -27,12 +27,7 @@
             <reviews-short :rating="reviewsTotalRating" :count="reviewsCount" class="t-flex-fix t-w-full t-mt-4 lg:t-flex-expand lg:t-w-2/3" />
             <web-share :webshare-text="webshareText" :webshare-image="image.src" class="t-flex-fix t-w-full t-mt-4 t-text-base-light lg:t-w-auto" />
 
-            <div class="t-w-full" itemprop="offers" itemscope itemtype="http://schema.org/Offer">
-              <meta itemprop="priceCurrency" :content="$store.state.storeView.i18n.currencyCode">
-              <meta itemprop="price" :content="parseFloat(product.price_incl_tax).toFixed(2)">
-              <meta itemprop="availability" :content="structuredData.availability">
-              <meta itemprop="url" :content="product.url_path">
-
+            <div class="t-w-full">
               <div v-if="product.type_id !== 'grouped'" class="price t-mt-5 t-mb-8 t-text-1xl" data-test-id="price">
                 <template v-if="product.special_price && product.price_incl_tax && product.original_price_incl_tax">
                   <span class="price-original t-text-base-tone t-line-through">{{ price(product.original_price_incl_tax * product.qty) }}</span>
