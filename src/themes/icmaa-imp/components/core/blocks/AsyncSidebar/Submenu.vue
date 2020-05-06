@@ -1,5 +1,5 @@
 <template>
-  <sidebar class="t-absolute t-top-0 t-w-full" :style="{ left: `${(index + 1) * 100}%` }" :title="sidebar.title" :close-on-click="false">
+  <sidebar class="t-absolute t-top-0" :title="sidebar.title" :close-icon="sidebar.closeIcon" :close-on-click="false">
     <template v-slot:top>
       <top-button icon="keyboard_arrow_left" text="Back" :tab-index="1" @click.native="close" class="t-text-base" />
     </template>

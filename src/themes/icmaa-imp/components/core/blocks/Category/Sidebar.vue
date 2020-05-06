@@ -1,5 +1,5 @@
 <template>
-  <sidebar :title="$t('Filter')" :close-on-click="false">
+  <sidebar :title="$t('Filter')" :close-icon="closeIcon" :close-on-click="false">
     <template v-slot:top-after-title>
       <button-component v-if="hasActiveFilters" type="transparent" size="sm" icon="delete_sweep" :icon-only="true" @click="resetAllFilters">
         {{ $t('Clear filters') }}
@@ -92,6 +92,9 @@ export default {
         allAvailableFilters.filter(f => parentsOfNestedFilters.includes(f.attributeKey)),
         allAvailableFilters.filter(f => !parentsOfNestedFilters.includes(f.attributeKey))
       ].map(this.sortOptions)
+    },
+    closeIcon () {
+      return this.hasActiveFilters ? 'check' : undefined
     }
   },
   methods: {
@@ -137,8 +140,15 @@ export default {
     },
     openSubmenuFilter (filter) {
       if (filter.submenu) {
-        this.$store.dispatch('ui/addSidebarPath', { component: AsyncFilter, title: filter.attributeLabel, props: filter })
+        const sidebarProps = { title: filter.attributeLabel, closeIcon: this.closeIcon }
+        const sidebar = { component: AsyncFilter, ...sidebarProps, props: filter }
+        this.$store.dispatch('ui/addSidebarPath', { sidebar })
       }
+    }
+  },
+  watch: {
+    closeIcon (closeIcon) {
+      this.$store.dispatch('ui/mapSidebarPathItems', sidebar => Object.assign(sidebar, { closeIcon }))
     }
   }
 }

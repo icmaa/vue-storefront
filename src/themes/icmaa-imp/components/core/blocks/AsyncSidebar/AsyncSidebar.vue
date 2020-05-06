@@ -1,15 +1,17 @@
 <template>
   <transition :name="direction === 'right' ? 'slide-left' : direction === 'left' ? 'slide-right' : null">
     <div
-      class="sidebar t-max-w-full t-fixed t-scrolling-touch t-bg-white"
+      class="sidebar t-max-w-90pc t-fixed t-scrolling-touch t-bg-white"
       :class="[direction === 'left' ? 'left-sidebar' : direction === 'right' ? 'right-sidebar' : null, { 'wide': wide }]"
       data-test-id="Sidebar"
       ref="sidebar"
       v-if="isOpen"
     >
-      <div class="submenu-wrapper" :style="{ ...translateX }">
-        <component :is="component" @close="$emit('close')" @reload="getComponent" />
-        <submenu v-for="(item, i) in sidebarPath" :key="i" :index="i" :async-component="item.component" />
+      <div class="submenu-wrapper t-relative">
+        <component :is="component" @close="$emit('close')" @reload="getComponent" v-show="!hasSubmenu" :key="'sidebar-home'" />
+        <template v-for="(item, i) in sidebarPath">
+          <submenu :key="'submenu-' + i" :index="i" :async-component="item.component" v-show="i === sidebarLastIndex" />
+        </template>
       </div>
     </div>
   </transition>
@@ -88,24 +90,22 @@ export default {
   },
   computed: {
     ...mapGetters({
-      sidebarPath: 'ui/getSidebarPath',
-      sidebarAnimation: 'ui/getSidebarAnimation'
+      sidebarPath: 'ui/getSidebarPath'
     }),
     hasSubmenu () {
       return this.sidebarPath.length > 0
     },
     sidebarLength () {
-      return this.sidebarAnimation ? this.sidebarPath.length - 1 : this.sidebarPath.length
+      return this.sidebarPath.length
     },
-    translateX () {
-      const translateX = this.sidebarLength > 0 ? (this.sidebarLength) * -100 : 0
-      return this.hasSubmenu ? { transform: `translateX(${translateX}%)` } : {}
+    sidebarLastIndex () {
+      return this.sidebarLength - 1
     }
   }
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 @import "~theme/css/animations/transitions";
 @import '~theme/css/base/global_vars';
 $z-index-modal: map-get($z-index, modal);
@@ -130,13 +130,24 @@ $z-index-modal: map-get($z-index, modal);
 .left-sidebar,
 .right-sidebar {
   top: 0;
-  z-index: $z-index-modal;
   height: 100vh;
   max-height: 100vh;
-  width: 460px;
   overflow: auto;
 
-  &.wide {
+  &.slide-left-enter-active .sidebar-menu .header,
+  &.slide-left-leave-active .sidebar-menu .header,
+  &.slide-right-enter-active .sidebar-menu .header,
+  &.slide-right-leave-active .sidebar-menu .header {
+    /** This prevents flickering of the header during the animation */
+    max-width: 100% !important;
+  }
+
+  &, .sidebar-menu .header {
+    z-index: $z-index-modal;
+    width: 460px;
+  }
+
+  &.wide, &.wide .sidebar-menu .header {
     width: 800px;
   }
 
@@ -153,8 +164,4 @@ $z-index-modal: map-get($z-index, modal);
   right: 0;
 }
 
-.sidebar .submenu-wrapper {
-  position: relative;
-  transition: transform .5s;
-}
 </style>
