@@ -10,8 +10,8 @@
     </template>
     <template v-slot:footer>
       <div class="t-flex-expand t-bg-base-lightest t-p-4" data-test-id="SidebarMenuFooter">
-        <div class="t-flex t-items-center t-w-full">
-          <div class="t-flex t-items-center t-w-full" @click="closeMenu">
+        <div class="t-flex t-items-center t-flex-wrap t-w-full">
+          <div class="t-flex t-items-center" @click="closeMenu">
             <template v-for="(link, index) in metaNavigation">
               <router-link :to="localizedRoute(link.route)" :title="link.name | htmlDecode" class="t-flex t-flex-fit t-mr-6 t-text-xs t-uppercase t-text-base-tone" :key="index" v-if="link.isRoute === true">
                 {{ link.name }}
@@ -63,7 +63,7 @@ export default {
     metaNavigation () {
       return this.getJsonBlockByIdentifier('navigation-meta').map(link =>
         Object.assign(link, { isRoute: (typeof link.route === 'object' || link.route.startsWith('/')) })
-      )
+      ).slice(0, 3)
     },
     country: () => currentStoreView().i18n.defaultCountry,
     loginButtonText () {
@@ -79,7 +79,7 @@ export default {
       if (!this.isLoggedIn) {
         this.$bus.$emit('modal-toggle', 'modal-signup')
       } else {
-        this.$store.dispatch('ui/setUserSidebar', true)
+        this.$store.dispatch('ui/setUserSidebar', { active: true })
       }
     },
     showLanguageSwitcher () {

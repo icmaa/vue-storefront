@@ -52,7 +52,8 @@ module.exports = {
         'screen-50': '50vw',
         'screen-75': '75vw',
         'screen-100': '100vw',
-        '1/2': '50%'
+        '1/2': '50%',
+        '90pc': '90%'
       },
       fontSize: {
         'reset': '0',
