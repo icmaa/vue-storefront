@@ -8,13 +8,9 @@
       v-if="isOpen"
     >
       <div class="submenu-wrapper t-relative">
-        <transition :name="sidebarLength > 0 || (sidebarLength === 1 && sidebarAnimation) ? 'slide-right' : ''">
-          <component :is="component" @close="$emit('close')" @reload="getComponent" v-show="sidebarLength === 0 || (sidebarLength === 1 && sidebarAnimation)" />
-        </transition>
+        <component :is="component" @close="$emit('close')" @reload="getComponent" v-show="!hasSubmenu" :key="'sidebar-home'" />
         <template v-for="(item, i) in sidebarPath">
-          <transition :name="item.animation" :appear="item.appear" :key="'animation-' + i">
-            <submenu :key="'submenu-' + i" :index="i" :async-component="item.component" v-show="item.visible" />
-          </transition>
+          <submenu :key="'submenu-' + i" :index="i" :async-component="item.component" />
         </template>
       </div>
     </div>
@@ -94,8 +90,7 @@ export default {
   },
   computed: {
     ...mapGetters({
-      sidebarPath: 'ui/getSidebarPath',
-      sidebarAnimation: 'ui/getSidebarAnimation'
+      sidebarPath: 'ui/getSidebarPath'
     }),
     hasSubmenu () {
       return this.sidebarPath.length > 0
@@ -107,7 +102,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 @import "~theme/css/animations/transitions";
 @import '~theme/css/base/global_vars';
 $z-index-modal: map-get($z-index, modal);
@@ -132,13 +127,16 @@ $z-index-modal: map-get($z-index, modal);
 .left-sidebar,
 .right-sidebar {
   top: 0;
-  z-index: $z-index-modal;
   height: 100vh;
   max-height: 100vh;
-  width: 460px;
   overflow: auto;
 
-  &.wide {
+  &, .sidebar-menu .header {
+    z-index: $z-index-modal;
+    width: 460px;
+  }
+
+  &.wide, &.wide .sidebar-menu .header {
     width: 800px;
   }
 

@@ -9,7 +9,6 @@ export const uiStore = {
   state: {
     viewport: false,
     sidebarPath: [],
-    sidebarAnimation: false,
     overlay: false,
     loader: false,
     authElem: 'login',
@@ -48,33 +47,10 @@ export const uiStore = {
       state.overlay = status
     },
     addSidebarPath (state, payload) {
-      let sidebars = state.sidebarPath.map(s => Object.assign(s, { visible: false, animation: 'slide-right' }))
-      sidebars.push(Object.assign({ appear: true }, payload, { visible: true, animation: 'slide-left' }))
-      Vue.set(state, 'sidebarPath', sidebars)
+      state.sidebarPath.push(payload)
     },
     removeSidebarPath (state) {
-      const animationTime = 250
-      state.sidebarAnimation = true
-
-      // Make last item invisible
-      const lastIndex = state.sidebarPath.length - 1
-      const last = Object.assign(state.sidebarPath[lastIndex], { visible: false })
-      Vue.set(state.sidebarPath, lastIndex, last)
-
-      // Make item before last item visible
-      const previousIndex = lastIndex - 1
-      if (previousIndex >= 0) {
-        const previous = Object.assign(state.sidebarPath[previousIndex], { visible: true })
-        Vue.set(state.sidebarPath, previousIndex, previous)
-        setTimeout(() => {
-          Vue.set(state.sidebarPath, previousIndex, Object.assign(previous, { animation: 'slide-left' }))
-        }, animationTime)
-      }
-
-      setTimeout(() => {
-        state.sidebarAnimation = false
-        Vue.delete(state.sidebarPath, lastIndex)
-      }, animationTime)
+      Vue.delete(state.sidebarPath, state.sidebarPath.length - 1)
     },
     setOverlay (state, action: boolean) {
       state.overlay = action === true
@@ -146,7 +122,6 @@ export const uiStore = {
   },
   getters: {
     getViewport: state => state.viewport,
-    getSidebarPath: state => state.sidebarPath,
-    getSidebarAnimation: state => state.sidebarAnimation
+    getSidebarPath: state => state.sidebarPath
   }
 }

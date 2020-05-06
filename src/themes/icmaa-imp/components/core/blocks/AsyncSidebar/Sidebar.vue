@@ -1,12 +1,13 @@
 <template>
   <div class="sidebar-menu t-w-full t-flex t-flex-col" ref="container">
-    <div class="t-h-60px t-flex-fix t-px-2 t-bg-white t-border-b t-border-base-lighter t-flex t-items-center">
+    <div class="header t-fixed t-z-1 t-w-full t-max-w-90pc t-h-60px t-flex-fix t-px-2 t-bg-white t-border-b t-border-base-lighter t-flex t-items-center">
       <slot name="top" />
       <h2 class="t-pl-2 t-text-lg t-text-base-dark" v-if="title" v-text="title" />
       <slot name="top-after-title" />
       <div class="t-flex-expand" v-if="useExpanderInTitle" />
       <top-button data-test-id="closeButton" :icon="closeIcon" text="Close" :tab-index="1" @click.native="closeMenu" class="t-text-base" />
     </div>
+    <div class="spacer t-h-60px" />
     <div @click="closeAfterClick" class="sidebar-content t-p-4">
       <slot />
     </div>
@@ -15,7 +16,6 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex'
 import { currentStoreView } from '@vue-storefront/core/lib/multistore'
 import onEscapePress from '@vue-storefront/core/mixins/onEscapePress'
 
