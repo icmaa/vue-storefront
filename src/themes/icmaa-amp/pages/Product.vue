@@ -1,5 +1,5 @@
 <template>
-  <div id="product" itemscope itemtype="http://schema.org/Product">
+  <div id="product">
     <section class="px20 product-top-section">
       <div class="container">
         <section class="row m0 between-xs">
@@ -28,12 +28,10 @@
               :routes="breadcrumbs"
               :active-route="product.name"
             />
-            <h1 class="t-block t-text-2xl t-font-thin t-leading-relaxed t-mb-2" data-testid="productName" itemprop="name">
+            <h1 class="t-block t-text-2xl t-font-thin t-leading-relaxed t-mb-2" data-testid="productName">
               {{ product.name | htmlDecode }}
             </h1>
-            <div itemprop="offers" itemscope itemtype="http://schema.org/Offer">
-              <meta itemprop="priceCurrency" :content="priceCurrency">
-              <meta itemprop="price" :content="parseFloat(product.price_incl_tax).toFixed(2)">
+            <div>
               <div
                 class="mb40 price"
                 v-if="product.type_id !== 'grouped'"
@@ -141,8 +139,7 @@ export default {
       breadcrumbs: 'product/getProductBreadcrumbs',
       product: 'product/getCurrentProduct',
       gallery: 'product/getProductGallery'
-    }),
-    priceCurrency: () => currentStoreView().i18n.currencyCode
+    })
   },
   methods: {
     showDetails (event) {
