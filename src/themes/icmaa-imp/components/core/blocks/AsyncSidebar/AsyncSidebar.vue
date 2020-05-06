@@ -131,6 +131,14 @@ $z-index-modal: map-get($z-index, modal);
   max-height: 100vh;
   overflow: auto;
 
+  &.slide-left-enter-active .sidebar-menu .header,
+  &.slide-left-leave-active .sidebar-menu .header,
+  &.slide-right-enter-active .sidebar-menu .header,
+  &.slide-right-leave-active .sidebar-menu .header {
+    /** This prevents flickering of the header during the animation */
+    max-width: 100% !important;
+  }
+
   &, .sidebar-menu .header {
     z-index: $z-index-modal;
     width: 460px;
