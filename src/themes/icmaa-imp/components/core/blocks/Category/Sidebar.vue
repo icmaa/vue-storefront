@@ -141,8 +141,14 @@ export default {
     openSubmenuFilter (filter) {
       if (filter.submenu) {
         const sidebarProps = { title: filter.attributeLabel, closeIcon: this.closeIcon }
-        this.$store.dispatch('ui/addSidebarPath', { component: AsyncFilter, ...sidebarProps, props: filter })
+        const sidebar = { component: AsyncFilter, ...sidebarProps, props: filter }
+        this.$store.dispatch('ui/addSidebarPath', { sidebar })
       }
+    }
+  },
+  watch: {
+    closeIcon (closeIcon) {
+      this.$store.dispatch('ui/mapSidebarPathItems', sidebar => Object.assign(sidebar, { closeIcon }))
     }
   }
 }

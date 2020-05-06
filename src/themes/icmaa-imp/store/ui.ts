@@ -46,8 +46,15 @@ export const uiStore = {
       state[property] = status
       state.overlay = status
     },
-    addSidebarPath (state, payload) {
-      state.sidebarPath.push(payload)
+    addSidebarPath (state, { sidebar, index }) {
+      if (index) {
+        Vue.set(state.sidebarPath, index, sidebar)
+      } else {
+        state.sidebarPath.push(sidebar)
+      }
+    },
+    mapSidebarPathItems (state, callback) {
+      Vue.set(state, 'sidebarPath', state.sidebarPath.map(callback))
     },
     removeSidebarPath (state) {
       Vue.delete(state.sidebarPath, state.sidebarPath.length - 1)
@@ -88,14 +95,15 @@ export const uiStore = {
     setSidebar ({ commit }, active: boolean) {
       commit('toggleSidebar', 'sidebar', active)
     },
-    setUserSidebar ({ commit, dispatch, rootGetters }, { active, appear = true }) {
+    setUserSidebar ({ commit, dispatch, rootGetters }, { active }) {
       if (!rootGetters['user/isLoggedIn']) {
         return
       }
 
       commit('toggleSidebar', 'sidebar', active)
       if (active === true) {
-        dispatch('addSidebarPath', { component: AsyncUserNavigation, title: i18n.t('My account'), appear })
+        const sidebar = { component: AsyncUserNavigation, title: i18n.t('My account') }
+        dispatch('addSidebarPath', { sidebar })
       }
     },
     setSearchpanel ({ commit }, active: boolean) {
@@ -113,8 +121,11 @@ export const uiStore = {
     setCategoryfilter ({ commit }, active: boolean) {
       commit('toggleSidebar', 'categoryfilter', active)
     },
-    addSidebarPath ({ commit }, pathItem) {
-      commit('addSidebarPath', pathItem)
+    addSidebarPath ({ commit }, { sidebar, index }) {
+      commit('addSidebarPath', { sidebar, index })
+    },
+    mapSidebarPathItems ({ commit }, callback) {
+      commit('mapSidebarPathItems', callback)
     },
     removeLastSidebarPath ({ commit }) {
       commit('removeSidebarPath')
