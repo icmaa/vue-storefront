@@ -1,6 +1,6 @@
 <template>
   <div class="t-container">
-    CREATE VOUCHER: {{ email }} – {{ rule }} - {{ voucher }}
+    CREATE VOUCHER ({{ isBirthday }}): {{ email }} - {{ voucher }}
   </div>
 </template>
 
@@ -9,6 +9,12 @@ import { mapGetters } from 'vuex'
 
 export default {
   name: 'NewsletterVoucher',
+  props: {
+    isBirthday: {
+      type: Boolean,
+      default: false
+    }
+  },
   computed: {
     ...mapGetters({
       voucher: 'newsletter/getVoucher'
@@ -20,9 +26,13 @@ export default {
       return this.$route.query.rule
     }
   },
-  async asyncData ({ store, route }) {
-    const email = route.params.email
-    return store.dispatch('newsletter/getVoucher', { email, birthday: true })
+  async serverPrefetch () {
+    this.$store.dispatch('newsletter/getVoucher', { email: this.email, rule: this.rule, birthday: this.isBirthday })
+  },
+  async mounted () {
+    if (!this.voucher) {
+      this.$store.dispatch('newsletter/getVoucher', { email: this.email, rule: this.rule, birthday: this.isBirthday })
+    }
   }
 }
 </script>

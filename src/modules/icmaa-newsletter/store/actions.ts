@@ -5,6 +5,8 @@ import * as types from './mutation-types'
 import NewsletterState, { NewsletterVoucher } from '../types/NewsletterState'
 import Task from '@vue-storefront/core/lib/sync/types/Task'
 
+import omit from 'lodash-es/omit'
+
 const actions: ActionTree<NewsletterState, any> = {
   async status ({ commit, rootGetters }, email): Promise<boolean> {
     const customer = rootGetters['user/getCustomer']
@@ -28,19 +30,19 @@ const actions: ActionTree<NewsletterState, any> = {
 
     let ServiceTask: Promise<Task>
     if (options.birthday) {
-      ServiceTask = NewsletterService.getBirthdayVoucher(options)
+      ServiceTask = NewsletterService.getBirthdayVoucher(omit(options, ['birthday']))
     } else {
       ServiceTask = NewsletterService.getVoucher(options)
     }
 
-    return ServiceTask.then((task) => {
-      if (task.resultCode !== 200) {
+    return ServiceTask.then((repsonse) => {
+      if (repsonse.resultCode !== 200) {
         return false
       }
 
-      commit(types.NEWSLETTER_SET_VOUCHER, task.resultCode)
+      commit(types.NEWSLETTER_SET_VOUCHER, repsonse.result)
 
-      return task.result as NewsletterVoucher
+      return repsonse.result as NewsletterVoucher
     })
   }
 }
