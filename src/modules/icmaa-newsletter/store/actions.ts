@@ -37,10 +37,10 @@ const actions: ActionTree<NewsletterState, any> = {
 
     return ServiceTask.then((repsonse) => {
       if (repsonse.resultCode !== 200) {
-        return false
+        commit(types.NEWSLETTER_SET_VOUCHER, { error: true, msg: repsonse.result })
+      } else {
+        commit(types.NEWSLETTER_SET_VOUCHER, repsonse.result)
       }
-
-      commit(types.NEWSLETTER_SET_VOUCHER, repsonse.result)
 
       return repsonse.result as NewsletterVoucher
     })
