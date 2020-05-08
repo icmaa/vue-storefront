@@ -1,7 +1,7 @@
 <template>
   <layout id="newsletter-page" :headline="content.headline">
     <div class="newsletter t-p-4 lg:t-p-8 lg:t-w-1/2 t-bg-white t-m-4 lg:t-my-8 lg:t-container lg:t-mx-auto" data-test-id="Newsletter">
-      <h1 class="t-text-2xl t-font-medium t-mb-3 t-text-primary">
+      <h1 class="t-text-2xl t-mb-3 t-text-primary">
         {{ $t("Get the Impericon Newsletter & and get yourself a 5€ gift.") }}
       </h1>
 

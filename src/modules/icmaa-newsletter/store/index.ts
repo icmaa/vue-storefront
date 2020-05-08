@@ -1,7 +1,17 @@
 import { Module } from 'vuex'
-import { actions } from './actions'
-import { NewsletterState } from '@vue-storefront/core/modules/newsletter/types/NewsletterState'
+import { newsletterStore } from '@vue-storefront/core/modules/newsletter/store'
+import actions from './actions'
+import getters from './getters'
+import mutations from './mutations'
+import NewsletterState from '../types/NewsletterState'
+
+import merge from 'lodash-es/merge'
 
 export const ExtendedNewsletterStore: Module<NewsletterState, any> = {
-  actions
+  actions,
+  getters,
+  mutations,
+  state: merge(newsletterStore.state, {
+    voucher: undefined
+  })
 }
