@@ -1,8 +1,6 @@
-const NewsletterComponent = () => import(/* webpackChunkName: "vsf-icmaa-newsletter-landingpage" */ 'icmaa-newsletter/pages/Newsletter.vue')
 const NewsletterVoucher = () => import(/* webpackChunkName: "vsf-icmaa-newsletter-newsletter-voucher" */ 'icmaa-newsletter/pages/NewsletterVoucher.vue')
 
 export default [
-  { name: 'newsletter', path: '/:identifier', component: NewsletterComponent },
-  { name: 'newsletter-voucher', path: '/newsletter/voucher', component: NewsletterVoucher },
-  { name: 'newsletter-birthday-voucher', path: '/newsletter/birthday-voucher', component: NewsletterVoucher, props: { isBirthday: true } }
+  { name: 'icmaa-newsletter-voucher', path: '/newsletter/voucher', component: NewsletterVoucher },
+  { name: 'icmaa-newsletter-birthday-voucher', path: '/newsletter/birthday-voucher', component: NewsletterVoucher, props: { isBirthday: true } }
 ]
