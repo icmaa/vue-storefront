@@ -9,7 +9,7 @@
           </router-link>
         </h2>
         <div class="t-w-full t-text-sm t-mb-10" :class="{ 't-text-base-darkest': !textColor }" :style="{ color: textColor }">
-          {{ teaser.text2 }}
+          {{ teaser.text2 | translate }}
         </div>
         <div class="t-w-full">
           <button-component class="t-text-xs t-uppercase t-truncate" :type="textColor ? 'ghost-custom' : 'ghost'" :custom-color="textColor">
@@ -17,7 +17,7 @@
           </button-component>
         </div>
         <div v-if="teaser.text3" class="t-w-full t-hidden lg:t-block t-text-sm t-mt-24" :class="{ 't-text-base-darkest': !textColor }" :style="{ color: textColor }">
-          * {{ teaser.text3 }}
+          * {{ teaser.text3 | translate }}
         </div>
       </div>
     </div>
