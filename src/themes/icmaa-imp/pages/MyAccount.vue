@@ -107,7 +107,11 @@ export default {
           }
         }
 
-        await this.$store.dispatch('user/update', { customer: updatedData })
+        // Set defaults to fulfill JSON scheme of API
+        const defaults = { dob: null, gender: '', cluster: '' }
+        const customer = Object.assign(defaults, updatedData)
+
+        await this.$store.dispatch('user/update', { customer })
           .then(response => {
             if (response.resultCode === 200) {
               if (!message) {
