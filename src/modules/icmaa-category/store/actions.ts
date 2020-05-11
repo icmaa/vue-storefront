@@ -61,14 +61,21 @@ const actions: ActionTree<CategoryState, RootState> = {
       })
     }
 
+    let sortArray: string[] = typeof sort === 'string' ? [sort] : sort
+
     if (cluster) {
       cluster = parseInt(cluster)
       query.applyFilter({ key: 'customercluster', value: { or: [cluster] } })
       query.applyFilter({ key: 'customercluster', value: { or: null } })
-      sort = [sort as string, 'customercluster:desc']
+      sortArray.push('customercluster:desc')
     }
 
-    return dispatch('product/findProducts', { query, size, sort }, { root: true }).then(products => {
+    sortArray.forEach(sort => {
+      const [ field, options ] = sort.split(':')
+      query.applySort({ field, options })
+    })
+
+    return dispatch('product/findProducts', { query, size }, { root: true }).then(products => {
       const payload = { parent: categoryId, list: products.items, cluster, filterHash }
       commit(types.ICMAA_CATEGORY_LIST_ADD_PRODUCT, payload)
       return payload
