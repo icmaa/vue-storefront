@@ -2,16 +2,12 @@ describe('Customer', () => {
   it('register account, logout and login again', () => {
     cy.registerCustomer()
 
-    cy.getByTestId('HeaderButtonAccount')
-      .as('accountButton')
-
-    cy.get('@accountButton').should('have.class', 'logged-in')
+    cy.isLoggedIn()
 
     cy.openSidebar('[data-test-id="HeaderButtonAccount"]')
     cy.get('@sidebar').findByTestId('logoutButton').click()
 
-    cy.get('@accountButton')
-      .should('have.class', 'logged-out')
+    cy.isLoggedIn(false)
 
     cy.openSidebar('[data-test-id="HeaderButtonAccount"]', '[data-test-id="Modal"]')
 
@@ -24,7 +20,6 @@ describe('Customer', () => {
     cy.waitForLoader()
       .checkNotification('success')
 
-    cy.get('@accountButton')
-      .should('have.class', 'logged-in')
+    cy.isLoggedIn()
   })
 })

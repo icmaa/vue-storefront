@@ -1,11 +1,11 @@
 <template>
-  <div class="t-p-4 t-bg-white">
+  <div class="t-p-4 t-bg-white" data-test-id="MyAddresses">
     <headline icon="home">
       {{ $t('My addresses') }}
     </headline>
 
     <div class="list t-flex t-flex-wrap t-flex-grow t--mx-2" v-if="!edit">
-      <div v-for="(a, i) in addresses" :key="i" class="t-flex t-w-full sm:t-w-1/2 lg:t-w-1/3 t-px-2 t-mb-4 t-cursor-pointer" @click="editAddress(a.entity_id)">
+      <div v-for="(a, i) in addresses" :key="i" class="t-flex t-w-full sm:t-w-1/2 lg:t-w-1/3 t-px-2 t-mb-4 t-cursor-pointer" @click="editAddress(a.entity_id)" data-test-id="AddressBox">
         <div class="t-w-full t-text-sm t-leading-snug t-border t-border-base-lightest t-p-4">
           <p v-if="a.company" v-text="a.company" />
           <p>{{ a.prefix }} {{ a.firstname }} {{ a.lastname }} {{ a.suffix }}</p>
@@ -35,13 +35,13 @@
         </div>
       </div>
       <div class="t-w-full t-px-2">
-        <button-component @click="editAddress(true)">
+        <button-component @click="editAddress(true)" data-test-id="AddNewAddressButton">
           {{ $t('New address') }}
         </button-component>
       </div>
     </div>
 
-    <div class="form" v-if="edit">
+    <div class="form" v-if="edit" data-test-id="MyAddressesForm">
       <form @submit.prevent="submit" novalidate class="t-flex t-flex-wrap t--mx-2">
         <base-input
           name="firstname"
@@ -201,6 +201,7 @@
           v-model="address.is_default_billing"
           class="t-w-full lg:t-w-1/2 t-px-2"
           :disabled="customerAddress && customerAddress.is_default_billing"
+          data-test-id="IsDefaultBillingCheckbox"
         >
           {{ $t('Use as my default billing address') }}
         </base-checkbox>
@@ -210,18 +211,19 @@
           v-model="address.is_default_shipping"
           class="t-w-full lg:t-w-1/2 t-px-2 t-mb-4"
           :disabled="customerAddress && customerAddress.is_default_shipping"
+          data-test-id="IsDefaultShippingCheckbox"
         >
           {{ $t('Use as my default shipping address') }}
         </base-checkbox>
         <div class="t-px-2 t-w-full t-flex t-flex-wrap t-justify-between">
-          <button-component :submit="true" type="primary" size="lg" class="t-w-full lg:t-w-auto lg:t-order-3">
+          <button-component :submit="true" type="primary" size="lg" class="t-w-full lg:t-w-auto lg:t-order-3" data-test-id="SubmitButton">
             {{ $t('Save address') }}
           </button-component>
-          <button-component type="ghost" icon="keyboard_arrow_left" icon-position="left" class="t-flex-1 lg:t-flex-fix t-w-1/2 t-mt-4 lg:t-mt-0 lg:t-w-auto lg:t-order-1" @click="back">
+          <button-component type="ghost" icon="keyboard_arrow_left" icon-position="left" class="t-flex-1 lg:t-flex-fix t-w-1/2 t-mt-4 lg:t-mt-0 lg:t-w-auto lg:t-order-1" @click="back" data-test-id="BackButton">
             {{ $t('Back') }}
           </button-component>
           <div v-if="!isNewAddress && !isDefaultAddress && address.entity_id" class="t-flex-1 t-w-1/2 t-pl-4 lg:t-order-2">
-            <button-component type="ghost" icon="delete" icon-position="left" class="t-w-full t-mt-4 lg:t-mt-0 lg:t-w-auto " :confirm="true" @click="deleteAddress(address.entity_id)">
+            <button-component type="ghost" icon="delete" icon-position="left" class="t-w-full t-mt-4 lg:t-mt-0 lg:t-w-auto " :confirm="true" @click="deleteAddress(address.entity_id)" data-test-id="DeleteButton">
               {{ $t('Delete') }}
             </button-component>
           </div>

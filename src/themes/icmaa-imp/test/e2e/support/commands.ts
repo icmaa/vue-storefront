@@ -210,6 +210,13 @@ Cypress.Commands.add('getCustomer', () => {
   cy.get<Cypress.Customer>('@customer')
 })
 
+Cypress.Commands.add('isLoggedIn', (status: boolean = true) => {
+  cy.getByTestId('HeaderButtonAccount')
+    .as('accountButton')
+
+  cy.get('@accountButton').should('have.class', status ? 'logged-in' : 'logged-out')
+})
+
 Cypress.Commands.add('acceptCookieNotice', () => {
   localStorage.setItem(
     'shop/uniClaims/cookiesAccepted',
