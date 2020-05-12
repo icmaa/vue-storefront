@@ -37,13 +37,13 @@ jobs:
         run: |
           echo ::set-env name=ENV::$(if [ ${{ env.BRANCH_NAME }} = "master" ]; then echo "production"; else echo "test"; fi)
 
-      - name: Checkout "icmaa/icmaa/a-9-3-workspace" repo
+      - name: Checkout "icmaa/icmaa/shop-workspace" repo
         run: |
-          rm -rf icmaa/a-9-3-workspace
-          git clone --no-tags --depth 1 https://${{ secrets.GITHUB_PAT }}@github.com/icmaa/icmaa/a-9-3-workspace
+          rm -rf icmaa/shop-workspace
+          git clone --no-tags --depth 1 https://${{ secrets.GITHUB_PAT }}@github.com/icmaa/icmaa/shop-workspace
 
       - name: Sync config JSON files
-        run: rsync -r ./icmaa/a-9-3-workspace/template/${{ env.APP }}/ ./
+        run: rsync -r ./icmaa/shop-workspace/template/${{ env.APP }}/ ./
 
       - name: Install dependencies
         run: yarn
