@@ -140,7 +140,8 @@ const actions: ActionTree<UserState, RootState> = {
       })
   },
   setCluster ({ commit }, cluster) {
-    if (!isEmpty(cluster) || cluster === false) {
+    // Don't set cluster for `always visible`/`0` as `customercluster` value
+    if ((!isEmpty(cluster) || cluster === false) && cluster !== '0' && cluster !== 0) {
       commit(types.USER_ADD_SESSION_DATA, { key: 'cluster', value: cluster })
     }
   },

@@ -14,7 +14,7 @@
       </div>
       <ul @click="$emit('click')" class="t-flex t-flex-wrap t-overflow-hidden" :class="[ visible ? 't-pt-3 t-max-h-screen-100 t-border-b t-border-base-lightest lg:t-border-none' : 't-max-h-0' ]" style="transition: all .5s">
         <li class="t-flex t-w-full" v-for="(page, index) in navigation" :key="index">
-          <router-link @click.native="onClick" :to="localizedRoute(page.link)" class="t-flex t-flex-grow t-items-center t-px-6 t-py-3 t-text-sm t-text-base-tone">
+          <router-link @click.native="onClick" :to="localizedRoute(page.link)" class="t-flex t-flex-grow t-items-center t-px-6 t-py-3 t-text-sm t-text-base-tone" :data-test-id="page.testId">
             <material-icon v-if="page.icon" :icon="page.icon" size="sm" class="t-mr-4" :class="[ isActive(page.link) ? 't-text-base-darkest' : 't-text-base-light' ]" />
             {{ page.title }}
           </router-link>
@@ -45,12 +45,12 @@ export default {
     return {
       visible: !this.accordion,
       navigation: [
-        { title: this.$t('My profile'), icon: 'account_circle', link: '/my-account' },
-        { title: this.$t('My orders'), icon: 'local_mall', link: '/my-account/orders' },
-        { title: this.$t('My addresses'), icon: 'home', link: '/my-account/addresses' },
-        { title: this.$t('My newsletter'), icon: 'mail', link: '/my-account/newsletter' },
-        { title: this.$t('My product-alerts'), icon: 'alarm_on', link: '/my-account/product-alerts' },
-        { title: this.$t('My coupons'), icon: 'receipt', link: '/my-account/coupons' }
+        { title: this.$t('My profile'), icon: 'account_circle', link: '/my-account', testId: 'MyAccountButton' },
+        { title: this.$t('My orders'), icon: 'local_mall', link: '/my-account/orders', testId: 'MyOrdersButton' },
+        { title: this.$t('My addresses'), icon: 'home', link: '/my-account/addresses', testId: 'MyAddressesButton' },
+        { title: this.$t('My newsletter'), icon: 'mail', link: '/my-account/newsletter', testId: 'MyNewsletterButton' },
+        { title: this.$t('My product-alerts'), icon: 'alarm_on', link: '/my-account/product-alerts', testId: 'MyProductAlertsButton' },
+        { title: this.$t('My coupons'), icon: 'receipt', link: '/my-account/coupons', testId: 'MyCouponsButton' }
       ]
     }
   },
