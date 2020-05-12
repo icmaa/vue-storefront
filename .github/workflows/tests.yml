@@ -40,11 +40,11 @@ jobs:
 
       - name: Checkout "icmaa/shop-workspace" repo
         run: |
-          rm -rf icmaa/shop-workspace
+          rm -rf shop-workspace
           git clone --no-tags --depth 1 https://${{ secrets.GITHUB_PAT }}@github.com/icmaa/shop-workspace
 
       - name: Sync config JSON files
-        run: rsync -r ./icmaa/shop-workspace/template/vue-storefront/ ./
+        run: rsync -r ./shop-workspace/template/vue-storefront/ ./
 
       - name: Run Jest-Unit-Tests
         run: |
@@ -75,11 +75,11 @@ jobs:
 
       - name: Checkout "icmaa/shop-workspace" repo
         run: |
-          rm -rf icmaa/shop-workspace
+          rm -rf shop-workspace
           git clone --no-tags --depth 1 https://${{ secrets.GITHUB_PAT }}@github.com/icmaa/shop-workspace
 
       - name: Sync config JSON files
-        run: rsync -r ./icmaa/shop-workspace/template/vue-storefront/ ./
+        run: rsync -r ./shop-workspace/template/vue-storefront/ ./
 
       - name: Install
         uses: bahmutov/npm-install@v1.1.0
