@@ -38,13 +38,13 @@ jobs:
       - name: Install
         uses: bahmutov/npm-install@v1
 
-      - name: Checkout "icmaa/vue-storefront-workspace" repo
+      - name: Checkout "icmaa/icmaa/a-9-3-workspace" repo
         run: |
-          rm -rf vue-storefront-workspace
-          git clone --no-tags --depth 1 https://${{ secrets.GITHUB_PAT }}@github.com/icmaa/vue-storefront-workspace
+          rm -rf icmaa/a-9-3-workspace
+          git clone --no-tags --depth 1 https://${{ secrets.GITHUB_PAT }}@github.com/icmaa/icmaa/a-9-3-workspace
 
       - name: Sync config JSON files
-        run: rsync -r ./vue-storefront-workspace/template/vue-storefront/ ./
+        run: rsync -r ./icmaa/a-9-3-workspace/template/vue-storefront/ ./
 
       - name: Run Jest-Unit-Tests
         run: |
@@ -73,13 +73,13 @@ jobs:
         with:
           node-version: '13.x'
 
-      - name: Checkout "icmaa/vue-storefront-workspace" repo
+      - name: Checkout "icmaa/icmaa/a-9-3-workspace" repo
         run: |
-          rm -rf vue-storefront-workspace
-          git clone --no-tags --depth 1 https://${{ secrets.GITHUB_PAT }}@github.com/icmaa/vue-storefront-workspace
+          rm -rf icmaa/a-9-3-workspace
+          git clone --no-tags --depth 1 https://${{ secrets.GITHUB_PAT }}@github.com/icmaa/icmaa/a-9-3-workspace
 
       - name: Sync config JSON files
-        run: rsync -r ./vue-storefront-workspace/template/vue-storefront/ ./
+        run: rsync -r ./icmaa/a-9-3-workspace/template/vue-storefront/ ./
 
       - name: Install
         uses: bahmutov/npm-install@v1.1.0
