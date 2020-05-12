@@ -205,6 +205,15 @@ declare namespace Cypress {
     getCustomer(): Chainable<Customer>,
 
     /**
+     * Check if user is logged-in or not.
+     *
+     * @example
+     * cy.isLoggedIn()
+     * cy.isLoggedIn(false)
+     */
+    isLoggedIn(status?: boolean): Chainable<Window>,
+
+    /**
      * Set local storage to mark cookie-notice as accepted.
      * Adds alias `customer` for further use of customer object.
      *
