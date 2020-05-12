@@ -38,10 +38,10 @@ jobs:
       - name: Install
         uses: bahmutov/npm-install@v1
 
-      - name: Checkout "icmaa/icmaa/shop-workspace" repo
+      - name: Checkout "icmaa/shop-workspace" repo
         run: |
           rm -rf icmaa/shop-workspace
-          git clone --no-tags --depth 1 https://${{ secrets.GITHUB_PAT }}@github.com/icmaa/icmaa/shop-workspace
+          git clone --no-tags --depth 1 https://${{ secrets.GITHUB_PAT }}@github.com/icmaa/shop-workspace
 
       - name: Sync config JSON files
         run: rsync -r ./icmaa/shop-workspace/template/vue-storefront/ ./
@@ -73,10 +73,10 @@ jobs:
         with:
           node-version: '13.x'
 
-      - name: Checkout "icmaa/icmaa/shop-workspace" repo
+      - name: Checkout "icmaa/shop-workspace" repo
         run: |
           rm -rf icmaa/shop-workspace
-          git clone --no-tags --depth 1 https://${{ secrets.GITHUB_PAT }}@github.com/icmaa/icmaa/shop-workspace
+          git clone --no-tags --depth 1 https://${{ secrets.GITHUB_PAT }}@github.com/icmaa/shop-workspace
 
       - name: Sync config JSON files
         run: rsync -r ./icmaa/shop-workspace/template/vue-storefront/ ./
