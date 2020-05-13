@@ -1,10 +1,10 @@
 <template>
   <div class="newsletter" data-test-id="Newsletter">
     <h4 class="t-text-primary t-text-lg t-font-bold t-mb-2">
-      {{ $t("Get your 5€ Voucher") }}
+      {{ $t('Get your {voucher_value} Voucher', { voucher_value }) }}
     </h4>
     <p class="t-text-sm t-mb-3 t-leading-tight">
-      {{ $t("Get the Impericon Newsletter & and get yourself a 5€ gift.") }}
+      {{ $t('Get the Impericon Newsletter & and get yourself a {voucher_value} gift.', { voucher_value }) }}
     </p>
     <div class="t-flex t-mb-2 ">
       <label class="t-sr-only" for="newsletter-input">{{ $t('Your email address') }}</label>
@@ -24,8 +24,11 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import SubscriptionStatus from '@vue-storefront/core/modules/newsletter/mixins/SubscriptionStatus'
 import MaterialIcon from 'theme/components/core/blocks/MaterialIcon'
+import { price } from '@vue-storefront/core/filters/price'
+
 const NewsletterPopup = () => import(/* webpackChunkName: "vsf-newsletter-modal" */ 'theme/components/core/NewsletterPopup.vue')
 
 export default {
@@ -35,6 +38,18 @@ export default {
     NewsletterPopup
   },
   mixins: [ SubscriptionStatus ],
+  computed: {
+    ...mapGetters({
+      storeConfig: 'icmaaConfig/getCurrentStoreConfig'
+    }),
+    voucher_value () {
+      const config = this.storeConfig
+      if (config.newsletter.voucher_value) {
+        return config.newsletter.voucher_value
+      }
+      return price(5)
+    }
+  },
   data () {
     return {
       loadNewsletterPopup: false

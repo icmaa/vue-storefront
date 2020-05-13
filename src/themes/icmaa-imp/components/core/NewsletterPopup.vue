@@ -2,7 +2,7 @@
   <modal name="modal-newsletter" :title="$t('Newsletter')" :width="400">
     <form @submit.prevent="subscribe(onSuccesfulSubmission)" novalidate v-if="!isSubscribed">
       <p class="t-text-sm t-mb-4">
-        {{ $t('Sign up to our newsletter and receive a coupon for 10% off!') }}
+        {{ $t('Sign up to our newsletter and receive a coupon for {voucher_value} off!', { voucher_value }) }}
       </p>
       <base-input
         focus
@@ -44,6 +44,7 @@ import Modal from 'theme/components/core/Modal'
 import BaseInput from 'theme/components/core/blocks/Form/BaseInput'
 import ButtonComponent from 'theme/components/core/blocks/Button'
 import { mapGetters } from 'vuex'
+import { price } from '@vue-storefront/core/filters/price'
 
 export default {
   name: 'NewsletterPopup',
@@ -62,8 +63,16 @@ export default {
   },
   computed: {
     ...mapGetters({
-      isSubscribed: 'newsletter/isSubscribed'
-    })
+      isSubscribed: 'newsletter/isSubscribed',
+      storeConfig: 'icmaaConfig/getCurrentStoreConfig'
+    }),
+    voucher_value () {
+      const config = this.storeConfig
+      if (config.newsletter.voucher_value) {
+        return config.newsletter.voucher_value
+      }
+      return price(5)
+    }
   },
   validations: {
     email: {
