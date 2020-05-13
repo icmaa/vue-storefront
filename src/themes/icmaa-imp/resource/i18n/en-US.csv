@@ -300,7 +300,7 @@
 "Shopping summary","Shopping summary"
 "Show less","Show less"
 "Show subcategories","Show subcategories"
-"Sign up to our newsletter and receive a coupon for 10% off!","Sign up to our newsletter and receive a coupon for 10% off!"
+"Sign up to our newsletter and receive a coupon for {voucher_value} off!","Sign up to our newsletter and receive a coupon for {voucher_value} off!"
 "Similar bands:","Similar bands:"
 "Similar products","Similar products"
 "Similar products","Similar products"
