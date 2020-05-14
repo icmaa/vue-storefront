@@ -24,7 +24,7 @@ export default {
   computed: {
     preorderText () {
       if (this.hasPreorderDate) {
-        return i18n.t('Delivery of your complete order not before {date}. The preorder date is the release date for Germany, as we were told by the record label or distributor. There is no guarantee for a delivery on that date. In exceptional cases, especially for imported products, there might be delays. As soon as we receive the article, we will ship it.', { date: this.hasPreorderDate })
+        return i18n.t('Delivery of your complete order not before {date}. The preorder date is the release date for Germany, as we were told by the record label or distributor. There is no guarantee for a delivery on that date. In exceptional cases, especially for imported products, there might be delays. As soon as we receive the article, we will ship it.', { date: this.preorderDate })
       }
       return i18n.t('Delivery of your complete order not before official release. The preorder date is the release or delivery date for Germany, as we were told by the record label,the producer or the shipping company. There is no guarantee for a delivery on that date. In exceptional cases, especially for US imported products, there might be delays. As soon as we receive the article, we will ship it.')
     },
