@@ -1,0 +1,18 @@
+{
+  "name": "icmaa-monitoring",
+  "version": "1.0.0",
+  "author": "cewald <c.ewald@impericon.com> and contributors",
+  "main": "index.js",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "dd-trace": "^0.20.3",
+    "node-dogstatsd": "^0.0.7"
+  },
+  "devDependencies": {
+    "@vue-storefront/core": "^1.11.1"
+  },
+  "peerDependencies": {
+    "@vue-storefront/core": "^1.11.1"
+  }
+}
