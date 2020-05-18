@@ -8,8 +8,6 @@
 
 export default {
   name: 'ProfileHeadline',
-  components: {
-  },
   props: {
     icon: {
       type: String,
