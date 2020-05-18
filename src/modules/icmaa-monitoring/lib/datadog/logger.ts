@@ -1,18 +1,18 @@
-import { createLogger, format, transports } from 'winston'
+import winston from 'winston'
 
 const httpTransportOptions = {
   host: 'http-intake.logs.datadoghq.com',
-  path: '/v1/input/cb2d5379b72c927f746c87964f3d31f5?ddsource=nodejs&service=<APPLICATION_NAME>',
+  path: '/v1/input/cb2d5379b72c927f746c87964f3d31f5?ddsource=nodejs&service=vue-storefront',
   ssl: true
 }
 
 export default ({ type, message, tag, context }) => {
-  const logger = createLogger({
+  winston.createLogger({
     level: type,
     exitOnError: false,
-    format: format.json(),
+    format: winston.format.json(),
     transports: [
-      new transports.Http(httpTransportOptions)
+      new winston.transports.Http(httpTransportOptions)
     ]
   })
 
