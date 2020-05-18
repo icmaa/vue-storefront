@@ -5,7 +5,7 @@
         {{ $t('Clear cart') }}
       </button-component>
     </template>
-    <div class="t-pb-20">
+    <div>
       <h4 v-if="!productsInCart.length" class="t-text-sm">
         {{ $t('Your shopping cart is empty.') }}
       </h4>
@@ -14,33 +14,36 @@
         <ul class="t-mb-4">
           <product v-for="product in productsInCart" :key="product.checksum || product.sku" :product="product" />
         </ul>
-        <div class="t-mb-4">
-          <div v-for="(segment, index) in filteredTotals" :key="`total-${index}`" class="t-flex t-items-center t-justify-between t-mb-2 t-text-sm">
-            <span>
-              {{ segment.title }}
-            </span>
-            <span v-if="segment.value !== null">
-              {{ segment.value | price }}
-            </span>
+        <div class="spacer t-h-56"></div>
+        <div class="header t-bg-white t-bottom-0 t-fixed t-max-w-90pc t-p-4 t-right-0 t-pb-10 t-border-t t-border-base-lighter">
+          <div class="t-mb-4">
+            <div v-for="(segment, index) in filteredTotals" :key="`total-${index}`" class="t-flex t-items-center t-justify-between t-mb-2 t-text-sm">
+              <span>
+                {{ segment.title }}
+              </span>
+              <span v-if="segment.value !== null">
+                {{ segment.value | price }}
+              </span>
+            </div>
+            <div class="t-flex t-items-center t-justify-between t-font-bold" v-for="(segment, index) in grandTotals" :key="`grand-total-${index}`">
+              <span>
+                {{ segment.title }}
+              </span>
+              <span>
+                {{ segment.value | price }}
+              </span>
+            </div>
           </div>
-          <div class="t-flex t-items-center t-justify-between t-font-bold" v-for="(segment, index) in grandTotals" :key="`grand-total-${index}`">
-            <span>
-              {{ segment.title }}
-            </span>
-            <span>
-              {{ segment.value | price }}
-            </span>
-          </div>
-        </div>
 
-        <template v-if="!isCheckoutMode">
-          <button-component type="primary" class="t-w-full" @click.native="continueShopping(true)">
-            {{ $t('Go to checkout') }}
-          </button-component>
-          <button-component type="transparent" class="t-w-full t-mt-2" @click.native="continueShopping()">
-            {{ $t('Continue shopping') }}
-          </button-component>
-        </template>
+          <template v-if="!isCheckoutMode">
+            <button-component type="primary" class="t-w-full" @click.native="continueShopping(true)">
+              {{ $t('Go to checkout') }}
+            </button-component>
+            <button-component type="transparent" class="t-w-full t-mt-2" @click.native="continueShopping()">
+              {{ $t('Continue shopping') }}
+            </button-component>
+          </template>
+        </div>
       </template>
     </div>
   </sidebar>
