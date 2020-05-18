@@ -1,7 +1,7 @@
 <template>
   <li class="t-flex t-py-2 t-border-b t-border-base-lightest" data-test-id="MicroCartProduct">
     <div class="t-w-1/3 t-mr-4">
-      <router-link :to="productLink" data-test-id="productLink" @click.native="$store.dispatch('ui/setMicrocart', false)">
+      <router-link :to="productLink" @click.native="$store.dispatch('ui/setMicrocart', false)">
         <product-image :image="image" :alt="product.name | htmlDecode" />
       </router-link>
     </div>
