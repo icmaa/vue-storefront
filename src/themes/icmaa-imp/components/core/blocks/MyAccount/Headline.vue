@@ -7,13 +7,7 @@
 <script>
 
 export default {
-  name: 'ProfileHeadline',
-  props: {
-    icon: {
-      type: String,
-      default: 'account_circle'
-    }
-  }
+  name: 'ProfileHeadline'
 }
 
 </script>
