@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="t-p-4 t-bg-white">
-      <headline icon="subject">
+      <headline>
         {{ $t('Review order') }} {{ orderId }}
         <span v-if="order" class="t-text-sm t-text-base-light t-flex-grow lg:t-flex-fix t-ml-8 lg:t-ml-4"># {{ order.increment_id }}</span>
       </headline>

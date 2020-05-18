@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="t-p-4 t-bg-white">
-      <headline icon="alarm_on" class="t-mb-0">
+      <headline class="t-mb-0">
         {{ $t('My product-alerts') }}
       </headline>
       <div class="t-text-sm t-text-base-light" v-if="stockItems.length === 0">
