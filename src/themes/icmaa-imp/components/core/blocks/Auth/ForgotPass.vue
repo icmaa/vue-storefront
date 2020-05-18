@@ -41,7 +41,6 @@
 <script>
 
 import i18n from '@vue-storefront/i18n'
-import { Logger } from '@vue-storefront/core/lib/logger'
 import { required, email } from 'vuelidate/lib/validators'
 import BaseInput from 'theme/components/core/blocks/Form/BaseInput'
 import ButtonComponent from 'theme/components/core/blocks/Button'
@@ -87,7 +86,7 @@ export default {
           })
         }
       }).catch((err) => {
-        Logger.error(err)
+        console.error(err)
         this.$bus.$emit('notification-progress-stop')
       })
     },

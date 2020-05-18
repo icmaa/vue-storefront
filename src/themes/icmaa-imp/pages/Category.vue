@@ -88,7 +88,6 @@ import { mapGetters, mapState } from 'vuex'
 import { isServer } from '@vue-storefront/core/helpers'
 import { catalogHooksExecutors } from '@vue-storefront/core/modules/catalog-next/hooks'
 import { getSearchOptionsFromRouteParams } from '@vue-storefront/core/modules/catalog-next/helpers/categoryHelpers'
-import { Logger } from '@vue-storefront/core/lib/logger'
 
 import AsyncSidebar from 'theme/components/core/blocks/AsyncSidebar/AsyncSidebar.vue'
 import Sidebar from 'theme/components/core/blocks/Category/Sidebar'
@@ -133,7 +132,7 @@ const composeInitialPageState = async (store, route, forceLoad = false, pageSize
 
     catalogHooksExecutors.categoryPageVisited(currentCategory)
   } catch (e) {
-    Logger.error('Problem with setting Category initial data!', 'category', e)
+    console.error('Problem with setting Category initial data!', e)
   }
 }
 
@@ -241,7 +240,7 @@ export default {
         this.loadingProducts = true
         await this.$store.dispatch('category-next/loadMoreCategoryProducts')
       } catch (e) {
-        Logger.error('Problem with fetching more products', e)
+        console.error('Problem with fetching more products', e)
       } finally {
         this.loadingProducts = false
       }
