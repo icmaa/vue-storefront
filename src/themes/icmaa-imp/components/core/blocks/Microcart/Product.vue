@@ -1,7 +1,9 @@
 <template>
   <li class="t-flex t-py-2 t-border-b t-border-base-lightest" data-test-id="MicroCartProduct">
     <div class="t-w-1/3 t-mr-4">
-      <product-image :image="image" :alt="product.name | htmlDecode" />
+      <router-link :to="productLink" @click.native="$store.dispatch('ui/setMicrocart', false)">
+        <product-image :image="image" :alt="product.name | htmlDecode" />
+      </router-link>
     </div>
 
     <div class="t-w-2/3 t-flex t-flex-col t-py-2">
@@ -14,10 +16,10 @@
       <div class="t-w-full t-text-sm t-mb-4" v-if="product.totals">
         <template v-if="product.totals.discount_amount">
           <span class="t-text-base-light t-line-through t-mr-2">
-            {{ (product.totals.row_total - product.totals.discount_amount + product.totals.tax_amount) | price }}
+            {{ product.totals.row_total_incl_tax | price }}
           </span>
           <span class="t-text-sale t-font-bold">
-            {{ product.totals.row_total_incl_tax | price }}
+            {{ (product.totals.row_total - product.totals.discount_amount + product.totals.tax_amount) | price }}
           </span>
         </template>
         <template v-else>
