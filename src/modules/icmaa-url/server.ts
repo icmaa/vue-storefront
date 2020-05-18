@@ -7,6 +7,7 @@ if (appConfig.storeViews.multistore) {
     const blacklist = [
       '__webpack_hmr',
       'invalidate',
+      'error',
       'health'
     ]
 
