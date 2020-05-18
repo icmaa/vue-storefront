@@ -7,7 +7,8 @@
   "private": true,
   "dependencies": {
     "dd-trace": "^0.20.3",
-    "node-dogstatsd": "^0.0.7"
+    "node-dogstatsd": "^0.0.7",
+    "winston": "^3.2.1"
   },
   "devDependencies": {
     "@vue-storefront/core": "^1.11.1"

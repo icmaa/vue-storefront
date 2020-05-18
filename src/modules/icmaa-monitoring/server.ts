@@ -1,6 +1,7 @@
 import { serverHooks } from '@vue-storefront/core/server/hooks'
 
-import './lib/datadog'
+// Enable tracing by datadog
+import './lib/datadog/dd-trace'
 
 serverHooks.afterApplicationInitialized(({ app }) => {
   app.get('/health', async (req, res) => {
