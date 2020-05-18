@@ -1,10 +1,10 @@
 <template>
   <nav data-test-id="MyAccountNavigation">
     <div class="t-flex t-flex-wrap t-bg-white">
-      <div class="t-flex t-flex-expand t-px-4 t-py-6 t-border-b t-border-base-lightest">
+      <div class="t-flex t-flex-expand t-px-6 t-py-6">
         <material-icon icon="account_circle" size="xl" class="t-mr-3 t-text-primary" />
         <div class="t-leading-1-rem t-mt-2">
-          <div class="t-text-base t-font-bold">
+          <div class="t-text-xl t-font-bold">
             {{ welcome }}
           </div>
           <router-link :to="localizedRoute('/my-account')" @click.native="$emit('click')" class="t-text-xs t-text-base-light">
@@ -12,17 +12,19 @@
           </router-link>
         </div>
       </div>
-      <ul @click="$emit('click')" class="t-flex t-flex-wrap t-overflow-hidden" :class="[ visible ? 't-pt-3 t-max-h-screen-100 t-border-b t-border-base-lightest lg:t-border-none' : 't-max-h-0' ]" style="transition: all .5s">
+      <ul @click="$emit('click')" class="t-flex t-flex-wrap t-overflow-hidden" :class="[ visible ? 't-pt-3 t-max-h-screen-100 lg:t-border-none' : 't-max-h-0' ]" style="transition: all .5s">
         <li class="t-flex t-w-full" v-for="(page, index) in navigation" :key="index">
-          <router-link @click.native="onClick" :to="localizedRoute(page.link)" class="t-flex t-flex-grow t-items-center t-px-6 t-py-3 t-text-sm t-text-base-tone" :data-test-id="page.testId">
-            <material-icon v-if="page.icon" :icon="page.icon" size="sm" class="t-mr-4" :class="[ isActive(page.link) ? 't-text-base-darkest' : 't-text-base-light' ]" />
-            {{ page.title }}
+          <router-link @click.native="onClick" :to="localizedRoute(page.link)" class="t-flex t-flex-grow t-items-center t-px-6 t-py-2 t-text-sm t-text-base-tone" :data-test-id="page.testId">
+            <button-component icon="arrow_forward" type="select" class="t-w-full">
+              {{ page.title }}
+            </button-component>
           </router-link>
         </li>
         <li class="t-flex t-w-full t-pt-3">
-          <router-link :to="localizedRoute('')" @click.native="logout" class="t-flex t-flex-grow t-items-center t-text-sm t-px-6 t-py-6 t-border-t t-border-base-lightest t-text-base-light" data-test-id="logoutButton">
-            <material-icon icon="exit_to_app" size="sm" class="t-mr-2 t-text-base-light" />
-            {{ $t('Logout') }}
+          <router-link :to="localizedRoute('')" @click.native="logout" class="t-flex t-flex-grow t-items-center t-text-sm t-px-6 t-pb-6 t-text-base-light" data-test-id="logoutButton">
+            <button-component type="second" class="t-w-full">
+              {{ $t('Logout') }}
+            </button-component>
           </router-link>
         </li>
       </ul>
@@ -38,6 +40,7 @@
 import { mapGetters } from 'vuex'
 import i18n from '@vue-storefront/i18n'
 import MaterialIcon from 'theme/components/core/blocks/MaterialIcon'
+import ButtonComponent from 'theme/components/core/blocks/Button'
 
 export default {
   name: 'MyAccountNavigation',
@@ -55,7 +58,8 @@ export default {
     }
   },
   components: {
-    MaterialIcon
+    MaterialIcon,
+    ButtonComponent
   },
   props: {
     accordion: {
