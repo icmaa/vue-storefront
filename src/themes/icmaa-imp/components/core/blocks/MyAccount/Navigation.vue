@@ -48,12 +48,12 @@ export default {
     return {
       visible: !this.accordion,
       navigation: [
-        { title: this.$t('My profile'), icon: 'account_circle', link: '/my-account', testId: 'MyAccountButton' },
-        { title: this.$t('My orders'), icon: 'local_mall', link: '/my-account/orders', testId: 'MyOrdersButton' },
-        { title: this.$t('My addresses'), icon: 'home', link: '/my-account/addresses', testId: 'MyAddressesButton' },
-        { title: this.$t('My newsletter'), icon: 'mail', link: '/my-account/newsletter', testId: 'MyNewsletterButton' },
-        { title: this.$t('My product-alerts'), icon: 'alarm_on', link: '/my-account/product-alerts', testId: 'MyProductAlertsButton' },
-        { title: this.$t('My coupons'), icon: 'receipt', link: '/my-account/coupons', testId: 'MyCouponsButton' }
+        { title: this.$t('My profile'), link: '/my-account', testId: 'MyAccountButton' },
+        { title: this.$t('My orders'), link: '/my-account/orders', testId: 'MyOrdersButton' },
+        { title: this.$t('My addresses'), link: '/my-account/addresses', testId: 'MyAddressesButton' },
+        { title: this.$t('My newsletter'), link: '/my-account/newsletter', testId: 'MyNewsletterButton' },
+        { title: this.$t('My product-alerts'), link: '/my-account/product-alerts', testId: 'MyProductAlertsButton' },
+        { title: this.$t('My coupons'), link: '/my-account/coupons', testId: 'MyCouponsButton' }
       ]
     }
   },
