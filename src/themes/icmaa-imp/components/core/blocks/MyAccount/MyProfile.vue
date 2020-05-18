@@ -1,6 +1,6 @@
 <template>
   <div class="t-p-4 t-bg-white">
-    <headline icon="account_circle">
+    <headline>
       {{ $t('My profile') }}
     </headline>
     <form @submit.prevent="submit" novalidate class="t-flex t-flex-wrap t--mx-2">

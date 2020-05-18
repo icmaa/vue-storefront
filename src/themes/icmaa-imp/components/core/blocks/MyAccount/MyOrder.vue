@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="t-p-4 t-bg-white t-mb-4" v-if="order && typeof order !== 'undefined'">
-      <headline icon="local_mall">
+      <headline>
         {{ $t('Order') }}
         <span v-if="order" class="t-text-sm t-text-base-light t-flex-grow lg:t-flex-fix t-ml-4"># {{ order.increment_id }}</span>
       </headline>
