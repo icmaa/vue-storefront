@@ -3,6 +3,8 @@ import { coreHooks } from '@vue-storefront/core/hooks'
 
 import winstonLoggingHook from './lib/datadog/logger'
 
-export const IcmaaMonitoringModule: StorefrontModule = function () {
-  coreHooks.beforeLogRendered(winstonLoggingHook)
+export const IcmaaMonitoringModule: StorefrontModule = function ({ appConfig }) {
+  if (appConfig.icmaa_monitoring.datadog.enabled === true) {
+    coreHooks.beforeLogRendered(winstonLoggingHook)
+  }
 }

@@ -1,18 +1,20 @@
-import winston from 'winston'
-
-const httpTransportOptions = {
-  host: 'http-intake.logs.datadoghq.com',
-  path: '/v1/input/cb2d5379b72c927f746c87964f3d31f5?ddsource=nodejs&service=vue-storefront',
-  ssl: true
-}
+import config from 'config'
+import Winston from 'winston'
 
 export default ({ type, message, tag, context }) => {
-  winston.createLogger({
+  const apiKey = process.env.DD_API_KEY || config.icmaa_monitoring.datadog.apiKey
+  const httpTransportOptions = {
+    host: 'http-intake.logs.datadoghq.com',
+    path: `/v1/input/${apiKey}?ddsource=nodejs&service=vue-storefront`,
+    ssl: true
+  }
+
+  Winston.createLogger({
     level: type,
     exitOnError: false,
-    format: winston.format.json(),
+    format: Winston.format.json(),
     transports: [
-      new winston.transports.Http(httpTransportOptions)
+      new Winston.transports.Http(httpTransportOptions)
     ]
   })
 
