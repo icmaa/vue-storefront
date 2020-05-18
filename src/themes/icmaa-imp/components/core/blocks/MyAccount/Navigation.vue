@@ -12,15 +12,15 @@
           </router-link>
         </div>
       </div>
-      <ul @click="$emit('click')" class="t-flex t-flex-wrap t-overflow-hidden" :class="[ visible ? 't-pt-3 t-max-h-screen-100 lg:t-border-none' : 't-max-h-0' ]" style="transition: all .5s">
+      <ul @click="$emit('click')" class="t-flex t-flex-wrap t-overflow-hidden" :class="[ visible ? 't-max-h-screen-100 lg:t-border-none' : 't-max-h-0' ]" style="transition: all .5s">
         <li class="t-flex t-w-full" v-for="(page, index) in navigation" :key="index">
-          <router-link @click.native="onClick" :to="localizedRoute(page.link)" class="t-flex t-flex-grow t-items-center t-px-6 t-py-2 t-text-sm t-text-base-tone" :data-test-id="page.testId">
+          <router-link @click.native="onClick" :to="localizedRoute(page.link)" class="t-flex t-flex-grow t-items-center t-px-6 t-pb-4 t-text-sm t-text-base-tone" :data-test-id="page.testId">
             <button-component icon="arrow_forward" type="select" class="t-w-full">
               {{ page.title }}
             </button-component>
           </router-link>
         </li>
-        <li class="t-flex t-w-full t-pt-3">
+        <li class="t-flex t-w-full t-pt-2">
           <router-link :to="localizedRoute('')" @click.native="logout" class="t-flex t-flex-grow t-items-center t-text-sm t-px-6 t-pb-6 t-text-base-light" data-test-id="logoutButton">
             <button-component type="second" class="t-w-full">
               {{ $t('Logout') }}
