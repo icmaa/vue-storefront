@@ -6,8 +6,8 @@
   "license": "MIT",
   "private": true,
   "dependencies": {
+    "@datadog/browser-logs": "^1.11.4",
     "dd-trace": "^0.20.3",
-    "node-dogstatsd": "^0.0.7",
     "winston": "^3.2.1"
   },
   "devDependencies": {
