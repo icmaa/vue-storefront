@@ -10,7 +10,8 @@ Integrate a health-check and monitoring providers into VSF.
     "icmaa_monitoring": {
       "datadog": {
         "enabled": true,
-        "apiKey": "XXX"
+        "clientToken": "XXX",
+        "dataCenter": "eu"
       }
     }
   }

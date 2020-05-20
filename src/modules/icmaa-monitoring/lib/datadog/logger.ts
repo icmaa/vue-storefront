@@ -5,12 +5,8 @@ import { datadogLogs } from '@datadog/browser-logs'
 
 if (!isServer) {
   const clientToken = process.env.DD_CLIENT_TOKEN || config.icmaa_monitoring.datadog.clientToken
-  datadogLogs.init({
-    clientToken,
-    datacenter: 'eu',
-    forwardErrorsToLogs: true,
-    sampleRate: 100
-  })
+  const datacenter = config.icmaa_monitoring.datadog.dataCenter || 'eu'
+  datadogLogs.init({ clientToken, datacenter })
 }
 
 /**
@@ -35,9 +31,9 @@ function convertToObject (payload: any) {
 }
 
 export default ({ type, message, tag, context }) => {
-  if (!isServer) {
-    datadogLogs.logger.log(convertToString(message), convertToObject(context) || {}, type || 'info')
-  } else {
+  const { environment, mandant } = config.icmaa
+
+  if (isServer) {
     const logger = winston.createLogger({
       format: winston.format.json(),
       transports: [
@@ -48,6 +44,12 @@ export default ({ type, message, tag, context }) => {
     })
 
     logger.log(type, tag ? `[${tag}] ${convertToString(message)}` : convertToString(message), convertToObject(context))
+  } else {
+    datadogLogs.logger.log(
+      convertToString(message),
+      Object.assign({ environment, mandant, vsf: true }, convertToObject(context)),
+      type || 'info'
+    )
   }
 
   return { message, tag, context }
