@@ -31,7 +31,7 @@ function convertToObject (payload: any) {
   if (typeof payload === 'string' || typeof payload === 'boolean' || typeof payload === 'number') {
     return { payload }
   }
-  return payload
+  return { payload }
 }
 
 export default ({ type, message, tag, context }) => {
@@ -47,7 +47,7 @@ export default ({ type, message, tag, context }) => {
       exitOnError: false
     })
 
-    logger.log(type, tag ? `${tag} - ${message}` : message, context || {})
+    logger.log(type, tag ? `[${tag}] ${convertToString(message)}` : convertToString(message), convertToObject(context))
   }
 
   return { message, tag, context }
