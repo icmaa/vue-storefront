@@ -1,11 +1,11 @@
 <template>
   <div id="page_not_found" class="t-container">
-    <div class="t-p-4 t-flex t-flex-wrap t-justify-center">
-      <img class="t-w-full lg:t-w-1/3 t-flex-fix t-flex t-px-8 t-mb-4 lg:t-mb-0"
+    <div class="t-px-4 t-py-8 t-flex t-flex-wrap t-justify-center">
+      <img class="t-w-full lg:t-w-1/3 t-flex-fix t-flex t-px-8 t-mb-8 lg:t-mb-0 lg:t-pr-20"
            src="/assets/404.svg"
            :alt="$t('404')"
       >
-      <div class="t-p-8 t-bg-white t-text-base-tone t-text-sm t-items-center t-w-full lg:t-w-2/3 t-flex t-items-center">
+      <div class="t-p-8 t-bg-white t-text-base-tone t-text-sm t-items-center t-w-full lg:t-w-2/3 t-flex t-items-center lg:t-self-center">
         <div class="t-w-full">
           <h2 class="t-text-base-dark t-font-bold t-text-xl t-mb-2">
             {{ $t("Unfortunately we can't find the page you are looking for.") }}
