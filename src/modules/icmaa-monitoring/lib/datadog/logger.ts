@@ -1,4 +1,5 @@
 import config from 'config'
+import * as winston from 'winston'
 import { isServer } from '@vue-storefront/core/helpers'
 import { datadogLogs } from '@datadog/browser-logs'
 
@@ -36,7 +37,17 @@ function convertToObject (payload: any) {
 export default ({ type, message, tag, context }) => {
   if (!isServer) {
     datadogLogs.logger.log(convertToString(message), convertToObject(context) || {}, type || 'info')
-    return { message, tag, context, type }
+  } else {
+    const logger = winston.createLogger({
+      format: winston.format.json(),
+      transports: [
+        new winston.transports.File({ filename: `${process.cwd()}/winston.error.log`, level: 'error' }),
+        new winston.transports.File({ filename: `${process.cwd()}/winston.combined.log` })
+      ],
+      exitOnError: false
+    })
+
+    logger.log(type, tag ? `${tag} - ${message}` : message, context || {})
   }
 
   return { message, tag, context }

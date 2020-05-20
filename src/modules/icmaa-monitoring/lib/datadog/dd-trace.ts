@@ -6,6 +6,7 @@ if (config.icmaa_monitoring.datadog.enabled === true) {
     service: 'vue-storefront',
     env: config.icmaa.mandant + '-' + config.icmaa.environment,
     clientToken: process.env.DD_API_KEY || config.icmaa_monitoring.datadog.apiKey,
+    analytics: true,
     logInjection: true
   })
 }
