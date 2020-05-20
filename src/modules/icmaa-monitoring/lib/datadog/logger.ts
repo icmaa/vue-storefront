@@ -43,7 +43,11 @@ export default ({ type, message, tag, context }) => {
       exitOnError: false
     })
 
-    logger.log(type, tag ? `[${tag}] ${convertToString(message)}` : convertToString(message), convertToObject(context))
+    logger.log(
+      type,
+      tag ? `[${tag}] ${convertToString(message)}` : convertToString(message),
+      Object.assign({ environment, mandant, vsf: true }, convertToObject(context))
+    )
   } else {
     datadogLogs.logger.log(
       convertToString(message),
