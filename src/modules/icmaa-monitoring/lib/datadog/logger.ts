@@ -4,9 +4,9 @@ import { isServer } from '@vue-storefront/core/helpers'
 import { datadogLogs } from '@datadog/browser-logs'
 
 if (!isServer) {
-  const apiKey = process.env.DD_API_KEY || config.icmaa_monitoring.datadog.apiKey
+  const clientToken = process.env.DD_CLIENT_TOKEN || config.icmaa_monitoring.datadog.clientToken
   datadogLogs.init({
-    clientToken: apiKey,
+    clientToken,
     datacenter: 'eu',
     forwardErrorsToLogs: true,
     sampleRate: 100
