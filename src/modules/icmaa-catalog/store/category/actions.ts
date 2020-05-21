@@ -34,7 +34,7 @@ const actions: ActionTree<CategoryState, RootState> = {
   async setSearchFilters ({ dispatch }, filterVariants: FilterVariant[] = []) {
     let currentQuery = {}
     filterVariants.forEach(filterVariant => {
-      currentQuery = changeFilterQuery({currentQuery, filterVariant})
+      currentQuery = changeFilterQuery({ currentQuery, filterVariant })
     })
     await dispatch('changeRouterFilterParameters', currentQuery)
   },
