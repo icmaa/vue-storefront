@@ -58,15 +58,15 @@ export default {
       this.isOpen = false
     },
     async setVisited () {
-      await this.$store.dispatch('claims/set', {claimCode: 'cookiesAccepted', value: true})
+      await this.$store.dispatch('claims/set', { claimCode: 'cookiesAccepted', value: true })
       this.$bus.$emit('cookiesAccepted', true)
     }
   },
   created () {
-    this.$store.dispatch('claims/check', {claimCode: 'cookiesAccepted'}).then((cookieClaim) => {
+    this.$store.dispatch('claims/check', { claimCode: 'cookiesAccepted' }).then((cookieClaim) => {
       if (!cookieClaim) {
         this.isOpen = true
-        this.$store.dispatch('claims/set', {claimCode: 'cookiesAccepted', value: false})
+        this.$store.dispatch('claims/set', { claimCode: 'cookiesAccepted', value: false })
       } else {
         this.isOpen = !cookieClaim.value
       }

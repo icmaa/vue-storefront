@@ -60,7 +60,7 @@ export default {
       let { includeFields, excludeFields } = entities.productList
 
       let query = new SearchQuery()
-      query.applyFilter({key: 'id', value: { 'eq': this.parentOrderItems.map(i => i.product_id) }})
+      query.applyFilter({ key: 'id', value: { 'eq': this.parentOrderItems.map(i => i.product_id) } })
 
       return this.$store.dispatch('product/findProducts', { query, includeFields, excludeFields })
         .then(result => result.items)
