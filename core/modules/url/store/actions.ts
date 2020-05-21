@@ -78,17 +78,17 @@ export const actions: ActionTree<UrlState, any> = {
    * This method could be overriden in custom module to provide custom URL mapping logic
    */
   async mappingFallback ({ dispatch }, { url, params }: { url: string, params: any}) {
-    Logger.warn(`
+    console.warn(`
       Deprecated action mappingFallback - use mapFallbackUrl instead.
       You can enable mapFallbackUrl by changing 'config.urlModule.enableMapFallbackUrl' to true
-    `)()
+    `)
     const { storeCode, appendStoreCode } = currentStoreView()
     const productQuery = new SearchQuery()
     url = (removeStoreCodeFromRoute(url.startsWith('/') ? url.slice(1) : url) as string)
     productQuery.applyFilter({key: 'url_path', value: {'eq': url}}) // Tees category
     const products = await dispatch('product/list', { query: productQuery }, { root: true })
     if (products && products.items && products.items.length) {
-      Logger.log(url, 'search', productQuery)()
+      console.log(url, productQuery)
       const product = products.items[0]
       return {
         name: localizedDispatcherRouteName(product.type_id + '-product', storeCode, appendStoreCode),

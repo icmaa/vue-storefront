@@ -1,5 +1,4 @@
 import { isServer } from '@vue-storefront/core/helpers'
-import { coreHooksExecutors } from '@vue-storefront/core/hooks'
 import buildTimeConfig from 'config'
 const bgColorStyle = (color) => `color: white; background: ${color}; padding: 4px; font-weight: bold; font-size: 0.8em'`
 
@@ -72,12 +71,6 @@ class Logger {
       return () => {}
     }
 
-    let noDefaultOutput
-    ({ message, tag, context, noDefaultOutput } = coreHooksExecutors.beforeLogRendered({ message, tag, context }))
-    if (noDefaultOutput === true) {
-      return () => {}
-    }
-
     if (isServer) {
       return console.debug.bind(console, (tag ? `[${tag}] ` : '') + this.convertToString(message), context)
     }
@@ -114,12 +107,6 @@ class Logger {
       return () => {}
     }
 
-    let noDefaultOutput
-    ({ message, tag, context, noDefaultOutput } = coreHooksExecutors.beforeLogRendered({ message, tag, context }))
-    if (noDefaultOutput === true) {
-      return () => {}
-    }
-
     if (isServer) {
       return console.log.bind(console, (tag ? `[${tag}] ` : '') + this.convertToString(message), context)
     }
@@ -143,13 +130,6 @@ class Logger {
     if (!this.canPrint('warn')) {
       return () => {}
     }
-
-    let noDefaultOutput
-    ({ message, tag, context, noDefaultOutput } = coreHooksExecutors.beforeLogRendered({ message, tag, context }))
-    if (noDefaultOutput === true) {
-      return () => {}
-    }
-
     if (isServer) {
       return console.warn.bind(console, (tag ? `[${tag}] ` : '') + this.convertToString(message), context)
     }
@@ -170,12 +150,6 @@ class Logger {
    * @param context meaningful data related to this message
    */
   public error (message: any, tag: string = null, context: any = null): () => void {
-    let noDefaultOutput
-    ({ message, tag, context, noDefaultOutput } = coreHooksExecutors.beforeLogRendered({ message, tag, context }))
-    if (noDefaultOutput === true) {
-      return () => {}
-    }
-
     if (isServer) { // always show errors in SSR
       return console.error.bind(console, (tag ? `[${tag}] ` : '') + this.convertToString(message), context)
     }

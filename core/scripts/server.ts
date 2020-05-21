@@ -175,7 +175,6 @@ app.get('*', (req, res, next) => {
       res.redirect('/error')
       console.error(`Error during render : ${req.url}`)
       console.error(err)
-      serverHooksExecutors.ssrException({ err, req, isProd })
       next()
     }
   }
@@ -323,21 +322,20 @@ app.get('*', (req, res, next) => {
 let port = process.env.PORT || config.server.port
 const host = process.env.HOST || config.server.host
 const start = () => {
-  const server = app.listen(port, host)
-  server.on('listening', () => {
-    console.log(`\n\n----------------------------------------------------------`)
-    console.log('|                                                        |')
-    console.log(`| Vue Storefront Server started at http://${host}:${port} |`)
-    console.log('|                                                        |')
-    console.log(`----------------------------------------------------------\n\n`)
-
-    serverHooksExecutors.httpServerIsReady({ server, config: config.server, isProd })
-  }).on('error', (e) => {
-    if (e.code === 'EADDRINUSE') {
-      port = parseInt(port) + 1
-      console.log(`The port is already in use, trying ${port}`)
-      start()
-    }
-  })
+  app.listen(port, host)
+    .on('listening', () => {
+      console.log(`\n\n----------------------------------------------------------`)
+      console.log('|                                                        |')
+      console.log(`| Vue Storefront Server started at http://${host}:${port} |`)
+      console.log('|                                                        |')
+      console.log(`----------------------------------------------------------\n\n`)
+    })
+    .on('error', (e) => {
+      if (e.code === 'EADDRINUSE') {
+        port = parseInt(port) + 1
+        console.log(`The port is already in use, trying ${port}`)
+        start()
+      }
+    })
 }
 start()
