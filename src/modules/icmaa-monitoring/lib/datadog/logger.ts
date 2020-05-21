@@ -37,8 +37,8 @@ export default ({ type, message, tag, context }) => {
     const logger = winston.createLogger({
       format: winston.format.json(),
       transports: [
-        new winston.transports.File({ filename: `${process.cwd()}/winston.error.log`, level: 'error' }),
-        new winston.transports.File({ filename: `${process.cwd()}/winston.combined.log` })
+        new winston.transports.File({ filename: `${process.cwd()}/dist/log/winston.error.log`, level: 'error' }),
+        new winston.transports.File({ filename: `${process.cwd()}/dist/log/winston.combined.log` })
       ],
       exitOnError: false
     })
