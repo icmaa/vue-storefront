@@ -41,7 +41,7 @@ const actions: ActionTree<CategoryState, RootState> = {
       filterQr.applySort({ field: 'is_in_sale', options: { 'missing': '_first' } })
     }
 
-    const {items, perPage, start, total, aggregations, attributeMetadata} = await quickSearchByQuery({
+    const { items, perPage, start, total, aggregations, attributeMetadata } = await quickSearchByQuery({
       query: filterQr,
       sort,
       includeFields,
@@ -108,9 +108,6 @@ const actions: ActionTree<CategoryState, RootState> = {
    *   * overwrite products who got the same children (unisex-products)
    */
   async processCategoryProducts ({ dispatch, rootState }, { products = [], filters = {}, configureChildProduct } = {}) {
-    await dispatch('tax/calculateTaxes', { products: products }, { root: true })
-    dispatch('registerCategoryProductsMapping', products) // we don't need to wait for this
-
     let configureChild = true
     if (configureChildProduct !== undefined) {
       configureChild = configureChildProduct
@@ -118,7 +115,9 @@ const actions: ActionTree<CategoryState, RootState> = {
       configureChild = icmaa_catalog.entities.category.configureChildProductsInCategoryList
     }
 
-    return configureChild ? dispatch('configureProducts', { products, filters }) : products
+    const configuredProducts = configureChild ? await dispatch('configureProducts', { products, filters }) : products
+    dispatch('registerCategoryProductsMapping', products) // we don't need to wait for this
+    return dispatch('tax/calculateTaxes', { products: configuredProducts }, { root: true })
   },
   /**
    * Changes:
