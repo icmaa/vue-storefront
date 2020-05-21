@@ -28,7 +28,7 @@ const {
 const {
   hook: beforeLogRenderedHook,
   executor: beforeLogRenderedExecutor
-} = createMutatorHook<{ type: string, message: any, tag: any, context: any, noDefaultOutput?: boolean }, { message: any, tag: any, context: any, noDefaultOutput?: boolean }>()
+} = createMutatorHook<{ message: any, tag: any, context: any, noDefaultOutput?: boolean }, { message: any, tag: any, context: any, noDefaultOutput?: boolean }>()
 
 /** Only for internal usage in core */
 const coreHooksExecutors = {
