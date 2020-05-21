@@ -14,7 +14,6 @@ import rootStore from '@vue-storefront/core/store'
 import { currentStoreView } from '@vue-storefront/core/lib/multistore'
 import { registerModule } from '@vue-storefront/core/lib/modules'
 import { OrderModule } from '@vue-storefront/core/modules/order'
-import { Logger } from '@vue-storefront/core/lib/logger'
 
 export default {
   name: 'InstantCheckoutButton',
@@ -154,7 +153,7 @@ export default {
           })
         })
         .catch(e => {
-          Logger.log(e)()
+          console.log(e)
         })
     },
     shippingOptionChange (event) {
@@ -180,7 +179,7 @@ export default {
             total: this.total
           })
         }).catch(e => {
-          Logger.error(e)()
+          console.error(e)
           reject(e)
         })
       })
@@ -210,7 +209,7 @@ export default {
               total: this.total
             })
           }).catch(e => {
-            Logger.error(e)()
+            console.error(e)
             reject(e)
           })
       })
@@ -237,7 +236,7 @@ export default {
           })
           resolve()
         }).catch(e => {
-          Logger.error(e)()
+          console.error(e)
           reject(e)
         })
       })
