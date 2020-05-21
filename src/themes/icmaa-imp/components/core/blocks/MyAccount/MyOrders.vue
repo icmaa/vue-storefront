@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="t-p-4 t-bg-white t-mb-3">
-      <headline icon="local_mall">
+      <headline>
         {{ $t('My orders') }}
       </headline>
       <p v-if="!isHistoryEmpty" class="t-text-sm">

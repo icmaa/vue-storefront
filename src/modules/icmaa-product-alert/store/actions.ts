@@ -43,7 +43,7 @@ const actions: ActionTree<ProductAlertState, RootState> = {
   },
   async fetchParentProductsByStockIds ({ commit, dispatch }, productId: string[]): Promise<Product[]> {
     let query = new SearchQuery()
-    query.applyFilter({key: 'configurable_children.id', value: { 'eq': productId }})
+    query.applyFilter({ key: 'configurable_children.id', value: { 'eq': productId } })
 
     let { includeFields, excludeFields } = entities.productList
     excludeFields = excludeFields.filter(f => f !== 'configurable_options')

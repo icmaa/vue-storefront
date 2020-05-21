@@ -15,7 +15,7 @@ const createSprites = (srcPath = '1x1') => {
     .filter(file => file.isFile())
     .forEach(file => {
       const filePath = path.resolve(srcPath, file.name)
-      spriter.add(filePath, null, fs.readFileSync(filePath, {encoding: 'utf-8'}))
+      spriter.add(filePath, null, fs.readFileSync(filePath, { encoding: 'utf-8' }))
     })
 
   spriter.compile((_error, result) => {

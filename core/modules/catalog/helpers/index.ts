@@ -168,7 +168,7 @@ export function filterOutUnavailableVariants (context, product) {
           }
           Logger.debug('Cached stock items and delta' + stockItems + confChildSkus)()
           if (confChildSkus.length > 0) {
-            context.dispatch('stock/list', { skus: confChildSkus }, {root: true}).then((task) => {
+            context.dispatch('stock/list', { skus: confChildSkus }, { root: true }).then((task) => {
               if (task && task.resultCode === 200) {
                 const diffLog = []
                 _filterChildrenByStockitem(context, union(task.result, stockItems), product, diffLog)
@@ -192,7 +192,7 @@ export function filterOutUnavailableVariants (context, product) {
       }
       const rootStockCached = context.rootState.stock.cache[product.id]
       if (!rootStockCached) {
-        context.dispatch('stock/list', { skus: [product.sku] }, {root: true}).then((task) => {
+        context.dispatch('stock/list', { skus: [product.sku] }, { root: true }).then((task) => {
           _filterRootProductByStockitem(context, task && task.result && task.result.length ? task.result[0] : null, product, reject)
           Logger.debug('Filtered root product stock with the network call')()
           _filterConfigurableHelper()
@@ -474,8 +474,7 @@ export function populateProductConfigurationAsync (context, { product, selectedV
         id: selectedOption.value,
         label: selectedOption.label ? selectedOption.label : /* if not set - find by attribute */optionLabel(context.rootState.attribute, { attributeKey: selectedOption.attribute_code, searchBy: 'code', optionId: selectedOption.value })
       }
-      const conf = Object.assign({}, context.state.current_configuration, { [attribute_code]: confVal })
-      Vue.set(context.state, 'current_configuration', conf)
+      Vue.set(context.state.current_configuration, attribute_code, confVal)
     }
     if (config.cart.setConfigurableProductOptions) {
       const productOption = setConfigurableProductOptionsAsync(context, { product: product, configuration: context.state.current_configuration }) // set the custom options

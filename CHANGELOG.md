@@ -8,6 +8,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.12.0-rc1] - UNRELEASED
 
 ### Added
+
+- Add `vsf-capybara` support as a dependency and extend CLI to support customization - @psmyrek (#4209)
 - Allow parent_ids field on product as an alternative to urlpath based breadcrumb navigation (#4219)
 - Pass the original item_id when updating/deleting a cart entry @carlokok (#4218)
 - Separating endpoints for CSR/SSR - @Fifciu (#2861)
@@ -33,10 +35,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Support `useSpecificImagePaths` with `useExactUrlsNoProxy` - @cewald (#4243)
 - Adds module which handles cache invalidation for Fastly. - @gibkigonzo (#4096)
 - Add vsf-cache-nginx and vsf-cache-varnish modules - @gibkigonzo (#4096)
+- Add useful core events to server & logger - @cewald (#4419)
 
 ### Fixed
 
 - Fixed `resultPorcessor` typo - @psmyrek
+- Negative price has doubled minus sign - @psmyrek (#4353)
 - Fixed Search product fails for category filter when categoryId is string - @adityasharma7 (#3929)
 - Revert init filters in Vue app - @gibkigonzo (#3929)
 - All categories disappearing if you add the child category name to includeFields - @1070rik (#4015)
@@ -53,6 +57,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Use `setProductGallery` in `product/setCurrent` to use logic of the action - @cewald (#4153)
 - Use same data format in getConfigurationMatchLevel - @gibkigonzo (#4208)
 - removed possible memory leak in ssr - @resubaka (#4247)
+- Bugfix for reactivity of `current_configuration` in `populateProductConfigurationAsync` - @cewald (#4258)
+- Bugfix for build exception in Node v13.13+ - @cewald (#4249)
 
 ### Changed / Improved
 
@@ -68,6 +74,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Disable `mapFallback` url by default - @gibkigonzo(#4092)
 - Include token in pricing sync -  @carlokok (#4156)
 - Move 'graphql' search adapter from core to src (deprecated) - @gibkigonzo (#4214)
+- Homepage, new products query, uses now `new` attribute - @mdanilwoicz
+
+## [1.11.3] - 2020.04.27
+
+### Changed / Improved
+
+- The default config file is now in more human-readable format - @juho-jaakkola (#4197)
+- Create only once aside async component - @gibkigonzo (#4229, #4268)
+
+### Fixed
+- Fixes when having multiple custom options with overlapping option_type_id values, selecting 1 changes the others - @carlokok (#4196)
+- Update eslint and fix code style. - @gibkigonzo (#4179 #4181)
+- Fixes bug that caused addToCart action not to display messages to user - @juho-jaakkola (#4185)
+- add missing cache tags for category and product - @gibkigonzo (#4173)
+- add ssrAppId to avoid second meta render on csr - @gibkigonzo (#4203)
+- take control over default broswer behavior and use saved category page size to load prev products - @gibkigonzo (#4201)
+- update getCurrentCartHash after add/remove coupon - @gibkigonzo (#4220)
+- update replaceNumberToString, so it will change ONLY numbers to string - @gibkigonzo (#4217)
+- allow empty shipping methods in checkout - @gibkigozno (#4192)
+- configure products before price update - this is needed to have variant sku as product sku - @gibkigonzo (#4053)
+- omit stock and totals when creating cart hash, it is not needed to compare products - @gibkigozno (#4235, #4273)
 
 ## [1.11.2] - 2020.03.10
 

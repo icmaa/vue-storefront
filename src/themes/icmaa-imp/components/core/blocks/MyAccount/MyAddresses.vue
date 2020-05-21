@@ -1,6 +1,6 @@
 <template>
   <div class="t-p-4 t-bg-white" data-test-id="MyAddresses">
-    <headline icon="home">
+    <headline>
       {{ $t('My addresses') }}
     </headline>
 

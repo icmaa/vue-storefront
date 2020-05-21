@@ -18,7 +18,7 @@ export const fetchChildCategories = async ({ parentId, sort = 'position:asc', le
 
   if (onlyActive) {
     searchQuery.applyFilter({ key: 'is_active', value: { 'eq': true } })
-    searchQuery.applyFilter({ key: 'product_count', value: {'gt': 0} })
+    searchQuery.applyFilter({ key: 'product_count', value: { 'gt': 0 } })
   }
 
   return quickSearchByQuery({ entityType: 'category', query: searchQuery, sort, includeFields, size: 5000 })

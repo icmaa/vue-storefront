@@ -1,6 +1,6 @@
 import { price as orgPriceFilter } from '@vue-storefront/core/filters/price'
 import { currentStoreView } from '@vue-storefront/core/lib/multistore'
-import { default as _round } from 'lodash-es/round'
+import _round from 'lodash-es/round'
 
 export const formatValue = (value, locale?) => {
   if (!locale) {
