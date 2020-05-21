@@ -1,6 +1,6 @@
 # `icmaa-monitoring` module
 
-Integrate a health-check and monitoring providers into VSF.
+Integrate monitoring and tracing using Datadog into VSF.
 
 ## Configs
 
@@ -20,4 +20,3 @@ Integrate a health-check and monitoring providers into VSF.
 ## Todo
 
 [ ] Add health-check which checks for dropped exceptions and used services (mainly common API requests)
-[ ] Add client-side tracing and exceptions handling
