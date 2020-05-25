@@ -85,6 +85,13 @@ export default {
       sameAsPassword: sameAs('password')
     }
   },
+  mounted () {
+    if (!this.$route.query.email || !this.$route.query.token) {
+      this.$bus.$emit('modal-toggle', 'modal-signup')
+      this.$store.commit('ui/setAuthElem', 'forgot-pass')
+      this.$router.push(localizedRoute('/'))
+    }
+  },
   methods: {
     async resetPassword () {
       this.$v.$touch()
@@ -148,11 +155,6 @@ export default {
           type: 'error'
         })
       }
-    }
-  },
-  async asyncData ({ context, route }) {
-    if (context && (!route.query.token || !route.query.email)) {
-      context.server.response.redirect(localizedRoute('/'))
     }
   }
 }
