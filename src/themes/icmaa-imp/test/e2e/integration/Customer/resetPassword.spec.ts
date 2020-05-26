@@ -1,4 +1,3 @@
-/* eslint no-undef: 0 */
 describe('Resetpassword page', () => {
   it('Show forgot-password modal', () => {
     cy.visit('/customer/account/resetpassword')
