@@ -39,6 +39,7 @@ import { IcmaaGiftcertModule } from 'icmaa-giftcert'
 import { IcmaaTrackingModule } from 'icmaa-tracking'
 import { IcmaaExternalCheckoutModule } from 'icmaa-external-checkout'
 import { IcmaaAmpRendererModule } from './icmaa-amp-renderer'
+import { IcmaaMonitoringModule } from './icmaa-monitoring'
 
 // import { DeviceModule } from './device/index';
 import { registerModule } from '@vue-storefront/core/lib/modules'
@@ -86,6 +87,7 @@ export function registerClientModules () {
   registerModule(IcmaaTrackingModule)
   registerModule(IcmaaExternalCheckoutModule)
   registerModule(IcmaaAmpRendererModule)
+  registerModule(IcmaaMonitoringModule)
 }
 
 // Deprecated API, will be removed in 2.0
