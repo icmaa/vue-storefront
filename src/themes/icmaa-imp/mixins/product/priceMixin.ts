@@ -3,7 +3,7 @@ import { price } from 'icmaa-config/helpers/price'
 export default {
   computed: {
     hasMultiplePrices () {
-      const product = this.originalProduct || this.product
+      const product = this.product
       if (product.type_id === 'configurable' &&
         product.configurable_children &&
         product.configurable_children.length > 0

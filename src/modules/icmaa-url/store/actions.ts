@@ -104,7 +104,7 @@ const forCmsCompetitionsUrls = async ({ dispatch }, { urlPath }: UrlMapperOption
 }
 
 export const actions: ActionTree<UrlState, any> = {
-  async mapFallbackUrl ({ dispatch }, { url, params }: { url: string, params: any}) {
+  async mapFallbackUrl ({ dispatch }, { url, params }: { url: string, params: any }) {
     const urlPath = getUrlPathFromUrl(url)
     const paramsObj = { urlPath, params }
 
@@ -114,7 +114,7 @@ export const actions: ActionTree<UrlState, any> = {
     }
 
     // This is the code of VSF
-    const fallbackData = await dispatch('getFallbackByUrl', { url: urlPath })
+    const fallbackData = await dispatch('getFallbackByUrl', { url: urlPath, params })
     if (fallbackData) {
       const [result] = await Promise.all([
         dispatch('transformFallback', { ...fallbackData, params }),

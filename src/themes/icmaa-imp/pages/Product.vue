@@ -89,7 +89,7 @@
         </div>
         <div class="reviews t-relative t-w-full t-p-8 t-bg-base-lighter lg:t-w-1/2" id="reviews">
           <lazy-hydrate when-idle>
-            <reviews :product="originalProduct" :product-name="translatedProductName" v-show="isOnline" />
+            <reviews :product="product" :product-name="translatedProductName" v-show="isOnline" />
           </lazy-hydrate>
           <lazy-hydrate when-idle>
             <reviews-claim />
@@ -206,7 +206,7 @@ export default {
     })
   },
   watch: {
-    originalProduct (newVal, oldVal) {
+    product (newVal, oldVal) {
       if (newVal.id !== oldVal.id) {
         this.userHasSelectedVariant = false
       }
@@ -218,7 +218,6 @@ export default {
       product: 'product/getCurrentProduct',
       gallery: 'product/getProductGallery',
       configuration: 'product/getCurrentProductConfiguration',
-      originalProduct: 'product/getOriginalProduct',
       viewport: 'ui/getViewport'
     }),
     ...mapState({ isAddToCartSidebarOpen: state => state.ui.addtocart }),
