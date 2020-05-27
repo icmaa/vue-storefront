@@ -7,8 +7,7 @@ import config, { icmaa } from 'config'
 import cloneDeep from 'lodash-es/cloneDeep'
 import uniqBy from 'lodash-es/uniqBy'
 
-import { Logger } from '@vue-storefront/core/lib/logger'
-import { getMediaGallery, configurableChildrenImages, populateProductConfigurationAsync } from '@vue-storefront/core/modules/catalog/helpers'
+import { getMediaGallery, configurableChildrenImages } from '@vue-storefront/core/modules/catalog/helpers'
 
 const actions: ActionTree<ProductState, RootState> = {
   /**
@@ -69,17 +68,16 @@ const actions: ActionTree<ProductState, RootState> = {
       await dispatch('category-next/loadCategoryBreadcrumbs', { category: breadcrumbCategory, currentRouteName: product.name }, { root: true })
     }
   },
-  async updateConfiguration ({ dispatch, commit, getters }, { option }) {
+  async updateConfiguration ({ dispatch, commit, getters }, { option }): Promise<{ selectedVariant: any, configuration: any }> {
     const configuration = Object.assign({}, getters.getCurrentProductConfiguration, { [option.type]: option })
-    const selectedVariant = await dispatch('configure', {
+    const selectedVariant = await dispatch('getProductVariant', {
       product: getters.getCurrentProduct,
-      configuration,
-      selectDefaultVariant: true,
-      fallbackToDefaultWhenNoAvailable: false,
-      setProductErorrs: true
+      configuration
     })
 
     commit(types.PRODUCT_SET_CURRENT_CONFIGURATION, selectedVariant ? configuration : {})
+
+    return { selectedVariant, configuration }
   }
 }
 
