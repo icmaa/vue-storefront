@@ -23,14 +23,14 @@ export default {
           currencyCode,
           detail: {
             actionField: { list: '' },
-            products: [this.getGTMProductDTO(this.originalProduct)]
+            products: [this.getGTMProductDTO(this.product)]
           }
         }
       })
     }
   },
   watch: {
-    originalProduct (data) {
+    product (data) {
       this.productGtm()
     }
   },

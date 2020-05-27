@@ -81,7 +81,6 @@ export default {
   computed: {
     ...mapGetters({
       product: 'product/getCurrentProduct',
-      originalProduct: 'product/getOriginalProduct',
       configuration: 'product/getCurrentProductConfiguration',
       options: 'product/getCurrentProductOptions',
       isAddingToCart: 'cart/getIsAdding'
