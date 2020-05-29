@@ -1,5 +1,5 @@
 import config from 'config'
-import * as winston from 'winston'
+import createLogger from 'icmaa-monitoring/lib/winston/logger'
 import { isServer } from '@vue-storefront/core/helpers'
 import { datadogLogs } from '@datadog/browser-logs'
 
@@ -34,15 +34,7 @@ export default ({ type, message, tag, context }) => {
   const { environment, mandant } = config.icmaa
 
   if (isServer) {
-    const logger = winston.createLogger({
-      format: winston.format.json(),
-      transports: [
-        new winston.transports.File({ filename: `${process.cwd()}/dist/log/winston.error.log`, level: 'error' }),
-        new winston.transports.File({ filename: `${process.cwd()}/dist/log/winston.combined.log` })
-      ],
-      exitOnError: false
-    })
-
+    const logger = createLogger()
     logger.log(
       type,
       tag ? `[${tag}] ${convertToString(message)}` : convertToString(message),
