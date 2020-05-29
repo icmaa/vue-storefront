@@ -5,7 +5,7 @@ import { setupMultistoreRoutes } from '@vue-storefront/core/lib/multistore'
 import { CompetitionsStore, competitionsStateKey, competitionsStorageKey } from './store'
 import moduleRoutes from './routes'
 
-export const cacheStorage = StorageManager.init(competitionsStorageKey)
+export const cacheStorage = StorageManager.init(competitionsStorageKey, undefined, 128)
 
 export const IcmaaCompetitionsModule: StorefrontModule = async function ({ store, appConfig, router }) {
   store.registerModule(competitionsStateKey, CompetitionsStore)

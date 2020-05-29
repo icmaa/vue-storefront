@@ -5,7 +5,7 @@ import { SpotifyStore } from './store'
 
 export const KEY = 'icmaa-spotify'
 export const storageKey = 'spotify'
-export const cacheStorage = StorageManager.init(KEY)
+export const cacheStorage = StorageManager.init(KEY, undefined, 128)
 
 export const IcmaaSpotifyModule: StorefrontModule = function ({ store }) {
   store.registerModule('icmaaSpotify', SpotifyStore)
