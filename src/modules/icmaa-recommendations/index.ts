@@ -3,7 +3,7 @@ import { StorageManager } from '@vue-storefront/core/lib/storage-manager'
 
 import { RecommendationsStore, storageKey, stateKey } from './store'
 
-export const cacheStorage = StorageManager.init(storageKey)
+export const cacheStorage = StorageManager.init(storageKey, undefined, 512)
 
 export const IcmaaRecommendationsModule: StorefrontModule = function ({ store }) {
   store.registerModule(stateKey, RecommendationsStore)
