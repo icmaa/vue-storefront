@@ -65,6 +65,11 @@ export default {
     componentsReady () {
       return this.components
         .filter(c => Object.keys(this.componentsMap).includes(c.component))
+        // filter teaser when get params are present
+        .filter(c => {
+          if (Object.keys(this.$route.query).length > 0) { return c.component !== 'component_teaser' }
+          return true
+        })
         .map(c => {
           const componentsMap = this.componentsMap[c.component]
           const { component, propsTypes, propsDefaults, cssClass, padding } = componentsMap
