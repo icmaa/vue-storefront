@@ -6,7 +6,7 @@ import Vue from 'vue'
 import { StorageManager } from '@vue-storefront/core/lib/storage-manager'
 
 export const CartModule: StorefrontModule = function ({ store }) {
-  StorageManager.init('cart')
+  StorageManager.init('cart', undefined, 512)
 
   store.registerModule('cart', cartStore)
 
