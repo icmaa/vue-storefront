@@ -73,11 +73,7 @@ export default {
     componentsReady () {
       return this.components
         .filter(c => Object.keys(this.componentsMap).includes(c.component))
-        // filter teaser when get params are present
-        .filter(c => {
-          if (this.hideTeaser) { return c.component !== 'component_teaser' }
-          return true
-        })
+        .filter(c => this.hideTeaser ? c.component !== 'component_teaser' : true)
         .map(c => {
           const componentsMap = this.componentsMap[c.component]
           const { component, propsTypes, propsDefaults, cssClass, padding } = componentsMap
