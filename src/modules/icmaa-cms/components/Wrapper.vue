@@ -27,9 +27,9 @@ export default {
   },
   computed: {
     hideTeaser () {
-      const { whitelist } = config.icmaa_teaser
+      const { urlParamWhitelist } = config.icmaa_teaser
       const query = Object.keys(this.$route.query)
-      if (query.length > 0 && query.some(el => whitelist.includes(el))) {
+      if (query.length > 0 && query.some(el => urlParamWhitelist.includes(el))) {
         return false
       }
       return query.length > 0
