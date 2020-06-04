@@ -18,23 +18,16 @@
           />
         </div>
       </template>
-      <product-links
-        v-if="product.type_id === 'grouped'"
-        :products="product.product_links"
-      />
-      <product-bundle-options
-        v-if="product.bundle_options && product.bundle_options.length > 0"
-        :product="product"
-      />
-      <product-custom-options
-        v-else-if="product.custom_options && product.custom_options.length > 0"
-        :product="product"
-      />
-      <model :product="product" class="t-w-full t-p-4 t-mt-6 t-mb-px t-bg-base-lightest t-text-sm t-text-base-tone" />
-      <router-link :to="localizedRoute('/service-size')" class="t-w-full t-p-4 t-bg-base-lightest t-text-sm t-text-primary" @click.native="$emit('close')">
-        {{ $t('Which size fits me?') }}
-        <material-icon icon="call_made" size="md" class="t-float-right t-align-middle" />
-      </router-link>
+      <template v-if="product.type_id === 'bundle'">
+        <bundle-selector :product="product" />
+      </template>
+      <div class="t-flex t-flex-wrap t-mt-6 t-w-full">
+        <model :product="product" class="t-w-full t-p-4 t-mb-px t-bg-base-lightest t-text-sm t-text-base-tone" />
+        <router-link :to="localizedRoute('/service-size')" class="t-w-full t-p-4 t-bg-base-lightest t-text-sm t-text-primary" @click.native="$emit('close')">
+          {{ $t('Which size fits me?') }}
+          <material-icon icon="call_made" size="md" class="t-float-right t-align-middle" />
+        </router-link>
+      </div>
     </div>
   </sidebar>
 </template>
@@ -50,9 +43,7 @@ import ProductStockAlertMixin from 'icmaa-product-alert/mixins/productStockAlert
 
 import Sidebar from 'theme/components/core/blocks/AsyncSidebar/Sidebar'
 import DefaultSelector from 'theme/components/core/blocks/AddToCartSidebar/DefaultSelector'
-import ProductLinks from 'theme/components/core/ProductLinks.vue'
-import ProductCustomOptions from 'theme/components/core/ProductCustomOptions.vue'
-import ProductBundleOptions from 'theme/components/core/ProductBundleOptions.vue'
+import BundleSelector from 'theme/components/core/blocks/AddToCartSidebar/BundleSelector'
 import Model from 'theme/components/core/blocks/AddToCartSidebar/Model'
 import MaterialIcon from 'theme/components/core/blocks/MaterialIcon'
 
@@ -62,9 +53,7 @@ export default {
   components: {
     Sidebar,
     DefaultSelector,
-    ProductBundleOptions,
-    ProductCustomOptions,
-    ProductLinks,
+    BundleSelector,
     Model,
     MaterialIcon
   },

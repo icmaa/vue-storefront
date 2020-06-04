@@ -45,7 +45,7 @@
               </div>
 
               <div class="t-flex t-flex-wrap">
-                <div v-if="product.type_id === 'configurable' && !isOnesizeProduct" class="t-flex t-flex-grow t-w-full t-mb-4 lg:t-w-3/6 lg:t-mr-4">
+                <div v-if="['configurable', 'bundle'].includes(product.type_id) && !isOnesizeProduct" class="t-flex t-flex-grow t-w-full t-mb-4 lg:t-w-3/6 lg:t-mr-4">
                   <button-component type="select" icon="arrow_forward" data-test-id="AddToCartSize" class="t-w-full" :disabled="isAddToCartDisabled" @click.native="openAddtocart">
                     {{ productOptionsLabel }}
                   </button-component>
@@ -233,6 +233,10 @@ export default {
       }
     },
     isAddToCartDisabled () {
+      if (this.isBundle) {
+        return this.$v.$invalid || this.loading || !this.product.stock.is_in_stock
+      }
+
       return this.$v.$invalid || this.loading || !this.quantity
     },
     isSingleOptionProduct () {
@@ -246,6 +250,9 @@ export default {
       }
 
       return false
+    },
+    isBundle () {
+      return this.product.type_id === 'bundle'
     },
     isPreorder () {
       return this.product.promo_id === '5'

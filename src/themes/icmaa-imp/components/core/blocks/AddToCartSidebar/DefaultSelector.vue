@@ -3,16 +3,19 @@
     class="t-flex t-items-center t-h-12 t-px-4 t-text-base-tone t-text-sm t-border-base-lightest t-cursor-pointer t-webkit-tap-transparent"
     :class="[ {'t-flex t-text-base-light': !option.available}, {'t-bg-base-lightest t-text-black t-relative': isActive && isLoading}, {'t-text-base-light': !isActive && isLoading}, isLast ? 't-border-b-0' : 't-border-b', option.available ? 'available' : 'unavailable']"
     @click="selectVariant"
-    :aria-label="$t('Select ' + option.label)"
+    :aria-label="$t('Select ' + optionLabel)"
     data-test-id="DefaultSelector"
   >
+    <span class="t-flex-auto" v-if="ticked">
+      <material-icon icon="done" class="t-flex-fix t-mr-2 t-text-alt-1" />
+    </span>
     <span class="t-flex-auto">
-      {{ getOptionLabel({ attributeKey: option.type, optionId: option.id }) }}
+      {{ optionLabel }}
     </span>
     <template v-if="option.available">
       <span v-if="price" class="t-flex-fix t-text-base-light">{{ price | price }}</span>
     </template>
-    <template v-else>
+    <template v-else-if="productAlert">
       <span
         class="t-flex-fix t-text-xs t-leading-1-em t-text-right"
         :class="{ 't-text-alt-3': isStockAlertSubscrided }"
@@ -41,6 +44,10 @@ export default {
       type: Object,
       default: () => ({})
     },
+    label: {
+      type: [String, Boolean],
+      default: false
+    },
     price: {
       type: [Number, Boolean],
       default: false
@@ -53,6 +60,14 @@ export default {
       type: Boolean,
       default: false
     },
+    productAlert: {
+      type: Boolean,
+      default: true
+    },
+    ticked: {
+      type: Boolean,
+      default: false
+    },
     isLast: {
       type: Boolean,
       default: false
@@ -62,7 +77,10 @@ export default {
     ...mapGetters('attribute', ['getOptionLabel']),
     ...mapGetters('icmaaProductAlert', ['isOptionSubscribedToStock']),
     isStockAlertSubscrided () {
-      return this.isOptionSubscribedToStock(this.option)
+      return this.productAlert && this.isOptionSubscribedToStock(this.option)
+    },
+    optionLabel () {
+      return this.label ? this.label : this.getOptionLabel({ attributeKey: this.option.type, optionId: this.option.id })
     }
   },
   methods: {

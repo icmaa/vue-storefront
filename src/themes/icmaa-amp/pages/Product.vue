@@ -63,18 +63,6 @@
                 </div>
               </div>
             </div>
-            <product-links
-              v-if="product.type_id =='grouped' && !loading"
-              :products="product.product_links"
-            />
-            <product-bundle-options
-              v-if="product.bundle_options && product.bundle_options.length > 0 && !loading"
-              :product="product"
-            />
-            <product-custom-options
-              v-else-if="product.custom_options && product.custom_options.length > 0 && !loading"
-              :product="product"
-            />
             <div class="row m0">
               <router-link class="t-flex t-items-center t-rounded-sm t-cursor-pointer t-webkit-tap-transparent t-flex-grow lg:t-w-2/6 disabled:t-opacity-75 t-relative t-uppercase t-h-10 t-px-4 t-text-xs t-bg-primary t-text-white t-justify-center" :to="localizedRoute({
                 name: product.type_id + '-product',
@@ -112,9 +100,6 @@
 <script>
 import { mapGetters } from 'vuex'
 import Breadcrumbs from 'theme/components/core/Breadcrumbs.vue'
-import ProductLinks from 'theme/components/core/ProductLinks.vue'
-import ProductCustomOptions from 'theme/components/core/ProductCustomOptions.vue'
-import ProductBundleOptions from 'theme/components/core/ProductBundleOptions.vue'
 import { isServer } from '@vue-storefront/core/helpers'
 import { currentStoreView } from '@vue-storefront/core/lib/multistore'
 import ProductDetails from 'theme/components/core/blocks/Product/ProductDetails'
@@ -123,9 +108,6 @@ import ProductGtmMixin from 'icmaa-google-tag-manager/mixins/productGtm'
 export default {
   components: {
     Breadcrumbs,
-    ProductBundleOptions,
-    ProductCustomOptions,
-    ProductLinks,
     ProductDetails
   },
   mixins: [ProductGtmMixin],
