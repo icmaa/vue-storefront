@@ -7,7 +7,7 @@
 </template>
 
 <script>
-
+import config from 'config'
 import omit from 'lodash-es/omit'
 import mapKeys from 'lodash-es/mapKeys'
 import mapValues from 'lodash-es/mapValues'
@@ -26,6 +26,14 @@ export default {
     }
   },
   computed: {
+    hideTeaser () {
+      const { whitelist } = config.icmaa_teaser
+      const query = Object.keys(this.$route.query)
+      if (query.length > 0 && query.some(el => whitelist.includes(el))) {
+        return false
+      }
+      return query.length > 0
+    },
     componentsMap () {
       return {
         'component_teaser': {
@@ -67,7 +75,7 @@ export default {
         .filter(c => Object.keys(this.componentsMap).includes(c.component))
         // filter teaser when get params are present
         .filter(c => {
-          if (Object.keys(this.$route.query).length > 0) { return c.component !== 'component_teaser' }
+          if (this.hideTeaser) { return c.component !== 'component_teaser' }
           return true
         })
         .map(c => {
