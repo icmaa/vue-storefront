@@ -213,7 +213,7 @@ class Rules {
    * @returns {this}
    */
   protected filterAttributeNotNull ({ key, value, isOr }: FilterOptions): this {
-    this.filterAttributeIsNullAndIsNotNull({ key, value, isOr }, false)
+    this.filterAttributeIsNullAndIsNotNull({ key, value, isOr }, true)
     return this
   }
 
@@ -221,7 +221,7 @@ class Rules {
    * @returns {this}
    */
   protected filterAttributeIsNull ({ key, value, isOr }: FilterOptions): this {
-    this.filterAttributeIsNullAndIsNotNull({ key, value, isOr }, true)
+    this.filterAttributeIsNullAndIsNotNull({ key, value, isOr }, false)
     return this
   }
 
