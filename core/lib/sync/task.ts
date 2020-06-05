@@ -176,7 +176,7 @@ export function initializeSyncTaskStorage () {
   const storeView = currentStoreView()
   const dbNamePrefix = storeView.storeCode ? storeView.storeCode + '-' : ''
 
-  StorageManager.init('syncTasks')
+  StorageManager.init('syncTasks', undefined, config.server.elasticCacheQuota)
 }
 
 export function registerSyncTaskProcessor () {

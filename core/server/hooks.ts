@@ -53,7 +53,7 @@ const {
 } = createListenerHook<Server>()
 
 interface Exception {
-  err: Exception,
+  err: Error,
   req: Request,
   isProd: boolean
 }
