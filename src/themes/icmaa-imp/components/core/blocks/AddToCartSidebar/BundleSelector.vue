@@ -6,12 +6,13 @@
       </h4>
       <default-selector
         v-for="(selectorOption, j) in option.selectorOptions"
-        :key="'productLink_' + selectorOption.option_id"
+        :key="`productLink_${selectorOption.optionId}_${selectorOption.productLink.id}`"
         :option="selectorOption"
         :label="selectorOption.label"
         :ticked="selectorOption.ticked"
         :product-alert="selectorOption.productAlert"
         :is-last="(j + 1) === option.selectorOptions.length"
+        @change="optionChanged"
       />
     </div>
   </div>
@@ -19,6 +20,7 @@
 
 <script>
 
+import { mapGetters } from 'vuex'
 import DefaultSelector from 'theme/components/core/blocks/AddToCartSidebar/DefaultSelector'
 
 export default {
@@ -33,28 +35,43 @@ export default {
     }
   },
   computed: {
+    ...mapGetters({
+      currentBundleOptions: 'product/getCurrentBundleOptions',
+      isCurrentBundleOptionsSelection: 'product/isCurrentBundleOptionsSelection'
+    }),
     bundleOptions () {
       return this.product.bundle_options.map(option => {
         option.selectorOptions = option.product_links.map(productLink => {
-          const available = productLink.stock.is_in_stock && productLink.stock.qty > 0
+          let selectorOption
+
+          const ticked = Object.values(this.currentBundleOptions).some(o => {
+            return o.option_id === option.option_id && o.option_selections.includes(productLink.id)
+          })
+
           if (option.configurable_options && option.configurable_options.length > 0) {
             const attributeCode = option.configurable_options[0]['attribute_code']
-            return {
-              option_id: productLink.id,
-              available,
-              productAlert: false,
+            selectorOption = {
               type: attributeCode,
-              id: productLink[attributeCode]
+              id: productLink[attributeCode],
+              optionId: option.option_id,
+              productLink
             }
           } else {
-            return {
-              option_id: productLink.id,
-              available,
-              productAlert: false,
+            selectorOption = {
               label: productLink.product.name,
-              ticked: true
+              optionId: option.option_id,
+              productLink
             }
           }
+
+          return Object.assign(
+            {
+              ticked,
+              productAlert: false,
+              available: productLink.stock.is_in_stock && productLink.stock.qty > 0
+            },
+            selectorOption
+          )
         })
 
         return option
@@ -62,16 +79,21 @@ export default {
     }
   },
   methods: {
-    optionChanged ({ fieldName, option, qty, value }) {
-      if (!fieldName) return
-      this.setBundleOptionValue({ optionId: option.option_id, optionQty: parseInt(qty), optionSelections: [parseInt(value.id)] })
-      this.$store.dispatch('product/setBundleOptions', { product: this.product, bundleOptions: this.$store.state.product.current_bundle_options }) // TODO: move it to "AddToCart"
-      this.selectedOptions[fieldName] = { qty, value }
-      const valueId = value ? value.id : null
-      if (this.validateField(option, qty, valueId)) {
-        this.$bus.$emit('product-after-bundleoptions', { product: this.product, option: option, optionValues: this.selectedOptions })
+    optionChanged (option) {
+      this.$store.dispatch('product/updateBundleOptions', option)
+      if (this.isCurrentBundleOptionsSelection) {
+        this.$store.dispatch('ui/closeAll')
+        this.$bus.$emit('change')
       }
     }
+  },
+  mounted () {
+    // Select first option if only one is found for a bundle option
+    this.bundleOptions.forEach(option => {
+      if (option.selectorOptions.length === 1) {
+        this.$store.dispatch('product/updateBundleOptions', option.selectorOptions[0])
+      }
+    })
   }
 }
 </script>

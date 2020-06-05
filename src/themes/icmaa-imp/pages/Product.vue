@@ -208,6 +208,7 @@ export default {
   watch: {
     originalProduct (newVal, oldVal) {
       if (newVal.id !== oldVal.id) {
+        this.getQuantity()
         this.userHasSelectedVariant = false
       }
     }
@@ -219,6 +220,8 @@ export default {
       gallery: 'product/getProductGallery',
       configuration: 'product/getCurrentProductConfiguration',
       originalProduct: 'product/getOriginalProduct',
+      isCurrentBundleOptionsSelection: 'product/isCurrentBundleOptionsSelection',
+      currentBundleOptions: 'product/getCurrentBundleOptions',
       viewport: 'ui/getViewport'
     }),
     ...mapState({ isAddToCartSidebarOpen: state => state.ui.addtocart }),
@@ -234,7 +237,7 @@ export default {
     },
     isAddToCartDisabled () {
       if (this.isBundle) {
-        return this.$v.$invalid || this.loading || !this.product.stock.is_in_stock
+        return this.$v.$invalid || this.loading
       }
 
       return this.$v.$invalid || this.loading || !this.quantity
@@ -270,6 +273,21 @@ export default {
         }
 
         return labels.join(', ')
+      } else if (this.isBundle && this.isCurrentBundleOptionsSelection) {
+        const labels = []
+        this.product.bundle_options.forEach(option => {
+          this.currentBundleOptions[option.option_id].option_selections.forEach(id => {
+            const productLink = option.product_links.find(productLink => productLink.id === id)
+            if (option.configurable_options && option.configurable_options.length > 0) {
+              const attributeKey = option.configurable_options[0]['attribute_code']
+              labels.push(this.getOptionLabel({ attributeKey, optionId: productLink[attributeKey] }))
+            } else {
+              labels.push(option.title || productLink.product.name)
+            }
+          })
+        })
+
+        return labels.join(' + ')
       }
 
       return this.productOptionsLabelPlaceholder
@@ -310,7 +328,7 @@ export default {
     }),
     addToCartButtonClick () {
       if (!this.loading) {
-        if (this.isSingleOptionProduct || this.hasConfiguration) {
+        if (this.isSingleOptionProduct || this.hasConfiguration || (this.isBundle && this.isCurrentBundleOptionsSelection)) {
           this.loading = true
           this.addToCart(this.product)
             .then(() => { this.loading = false })

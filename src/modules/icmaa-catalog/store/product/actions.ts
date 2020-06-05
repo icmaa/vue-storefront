@@ -104,6 +104,11 @@ const actions: ActionTree<ProductState, RootState> = {
     })
 
     commit(types.PRODUCT_SET_CURRENT_CONFIGURATION, selectedVariant ? configuration : {})
+  },
+  async updateBundleOptions ({ commit, dispatch, getters }, option: { optionId: string, productLink: any, [key: string]: any }) {
+    const { optionId, productLink } = option
+    commit(types.PRODUCT_SET_BUNDLE_OPTION, { optionId, optionQty: productLink.qty, optionSelections: [ parseInt(productLink.id) ] })
+    dispatch('setBundleOptions', { product: getters.getCurrentProduct, bundleOptions: getters.getCurrentBundleOptions })
   }
 }
 

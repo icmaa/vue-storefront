@@ -19,7 +19,10 @@
         </div>
       </template>
       <template v-if="product.type_id === 'bundle'">
-        <bundle-selector :product="product" />
+        <bundle-selector
+          :product="product"
+          @change="onBundleSelect"
+        />
       </template>
       <div class="t-flex t-flex-wrap t-mt-6 t-w-full">
         <model :product="product" class="t-w-full t-p-4 t-mb-px t-bg-base-lightest t-text-sm t-text-base-tone" />
@@ -115,6 +118,9 @@ export default {
         this.selectedOption = option
         this.addProductStockAlert(option)
       }
+    },
+    async onBundleSelect (option) {
+      this.$bus.$emit('user-has-selected-product-variant')
     },
     getOptionPrice (option) {
       if (this.hasMultiplePrices) {

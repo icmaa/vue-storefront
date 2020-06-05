@@ -6,12 +6,10 @@
     :aria-label="$t('Select ' + optionLabel)"
     data-test-id="DefaultSelector"
   >
-    <span class="t-flex-auto" v-if="ticked">
-      <material-icon icon="done" class="t-flex-fix t-mr-2 t-text-alt-1" />
-    </span>
     <span class="t-flex-auto">
       {{ optionLabel }}
     </span>
+    <material-icon icon="done" class="t-flex-fix t-ml-2 t-text-alt-1" v-if="ticked" />
     <template v-if="option.available">
       <span v-if="price" class="t-flex-fix t-text-base-light">{{ price | price }}</span>
     </template>
