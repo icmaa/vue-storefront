@@ -36,8 +36,8 @@
       </div>
 
       <div class="t-flex-grow">
-        <div class="t-flex t-w-full t-flex-wrap t-items-center t-mb-4" v-if="totals.length > 0 || isFree">
-          <button-component class="t-mr-2" type="tag" size="xs" :cursor-pointer="false" v-for="opt in totals" :key="opt.label">
+        <div class="t-flex t-w-full t-flex-wrap t-items-center t-mb-2" v-if="totals.length > 0 || isFree">
+          <button-component class="t-mr-2 t-mb-2" type="tag" size="xs" :cursor-pointer="false" v-for="opt in totals" :key="opt.label">
             {{ opt.value }}
           </button-component>
           <div class="t-text-xs t-text-sale t-font-bold t-uppercase" v-if="isFree">
@@ -81,7 +81,11 @@ export default {
   },
   mixins: [Product],
   computed: {
-    ...mapGetters({ freeCartItems: 'cart/getFreeCartItems' }),
+    ...mapGetters({
+      freeCartItems: 'cart/getFreeCartItems',
+      getOptionLabel: 'attribute/getOptionLabel',
+      getAttributeLabel: 'attribute/getAttributeLabel'
+    }),
     hasProductInfo () {
       return this.product.info && Object.keys(this.product.info).length > 0
     },
@@ -109,16 +113,56 @@ export default {
     totals () {
       if (this.isTotalsActive) {
         return this.product.totals.options
-      } else if (this.product.options) {
-        return this.product.options
+      } else if (this.customProductOptions) {
+        return this.customProductOptions
       }
       return []
+    },
+    customProductOptions () {
+      return this.getCustomProductOptions(this.product)
     },
     isFree () {
       return this.freeCartItems.includes(this.product.sku)
     }
   },
   methods: {
+    getCustomProductOptions (product) {
+      console.error(product)
+
+      if (product.product_option) {
+        const { configurable_item_options, custom_options, bundle_options } = product.product_option.extension_attributes
+        if (product.type_id === 'configurable') {
+          /**
+           * The `populateProductConfigurationAsync()` method already populate option label
+           * and value into state for configurable product – nothing to do here.
+           */
+          return this.product.options
+        } else if (product.type_id === 'bundle') {
+          let options = []
+          this.product.bundle_options.forEach(option => {
+            bundle_options[option.option_id].option_selections.forEach(id => {
+              const productLink = option.product_links.find(productLink => productLink.id === id)
+              if (option.configurable_options && option.configurable_options.length > 0) {
+                const attributeKey = option.configurable_options[0]['attribute_code']
+                options.push({
+                  label: this.getAttributeLabel({ attributeKey }),
+                  value: this.getOptionLabel({ attributeKey, optionId: productLink[attributeKey] })
+                })
+              } else {
+                options.push({
+                  label: option.title,
+                  value: productLink.product.name
+                })
+              }
+            })
+          })
+
+          return options
+        }
+      }
+
+      return []
+    },
     removeFromCart () {
       this.$store.dispatch('cart/removeItem', { product: this.product })
     }

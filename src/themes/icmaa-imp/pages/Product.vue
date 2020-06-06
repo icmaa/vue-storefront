@@ -264,15 +264,8 @@ export default {
       return this.configuration && Object.keys(this.configuration).length > 0 && this.userHasSelectedVariant
     },
     productOptionsLabel () {
-      if (this.hasConfiguration) {
-        let labels = []
-        const values = Object.values(this.configuration)
-        for (let conf of values) {
-          const label = conf.label !== conf.id ? conf.label : this.getOptionLabel({ attributeKey: conf.type, optionId: conf.id })
-          labels.push(label)
-        }
-
-        return labels.join(', ')
+      if (this.hasConfiguration && this.product.options.length > 0) {
+        return this.product.options.map(o => o.value).join(', ')
       } else if (this.isBundle && this.isCurrentBundleOptionsSelection) {
         const labels = []
         this.product.bundle_options.forEach(option => {
