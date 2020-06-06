@@ -127,8 +127,6 @@ export default {
   },
   methods: {
     getCustomProductOptions (product) {
-      console.error(product)
-
       if (product.product_option) {
         const { configurable_item_options, custom_options, bundle_options } = product.product_option.extension_attributes
         if (product.type_id === 'configurable') {
