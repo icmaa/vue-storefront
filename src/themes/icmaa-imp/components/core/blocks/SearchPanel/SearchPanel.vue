@@ -203,8 +203,8 @@ export default {
       searchQuery = searchQuery
         .applyFilter({ key: searchFilterKey, value })
         .applyFilter({ key: 'stock', value: '' })
-        .applyFilter({ key: 'visibility', value: {'in': [3, 4]} })
-        .applyFilter({ key: 'status', value: {'in': [0, 1]} })
+        .applyFilter({ key: 'visibility', value: { 'in': [3, 4] } })
+        .applyFilter({ key: 'status', value: { 'in': [0, 1] } })
 
       return searchQuery
     },

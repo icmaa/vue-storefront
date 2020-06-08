@@ -135,5 +135,18 @@ module.exports = function (config, { isClient, isDev }) {
 
   config = merge(config, sprites)
 
+  /**
+   * As we include `winston` as ssr logging library and this is a universal app, we need to tell
+   * webpack that it should ignore this dependency for the client version to prevent an error while compilation.
+   * @see https://github.com/webpack-contrib/css-loader/issues/447
+   */
+  if (isClient) {
+    config = merge(config, {
+      node: {
+        fs: 'empty'
+      }
+    })
+  }
+
   return config
 }

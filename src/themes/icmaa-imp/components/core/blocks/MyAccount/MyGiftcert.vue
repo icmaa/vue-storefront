@@ -1,6 +1,6 @@
 <template>
   <div class="t-p-4 t-bg-white">
-    <headline icon="mail">
+    <headline>
       {{ $t('My coupons') }}
     </headline>
 

@@ -22,7 +22,7 @@ const registerGenericCmsStateModule = (stateKey: string, documentType: string, e
   }
 
   const Module: StorefrontModule = function ({ store }) {
-    StorageManager.init(namespace)
+    StorageManager.init(namespace, undefined, 128)
     store.registerModule(ccNamespace, createGenericStore(stateKey, namespace, documentType, extendStore))
 
     Logger.debug('Loaded generic cms state module:', 'icmaa-cms', ccNamespace)()

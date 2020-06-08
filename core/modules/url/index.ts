@@ -3,9 +3,9 @@ import { StorefrontModule } from '@vue-storefront/core/lib/modules'
 import { beforeEachGuard } from './router/beforeEach'
 import { StorageManager } from '@vue-storefront/core/lib/storage-manager'
 
-export const cacheStorage = StorageManager.init('url')
+export const cacheStorage = StorageManager.init('url', undefined, 2048)
 
-export const UrlModule: StorefrontModule = function ({store, router}) {
+export const UrlModule: StorefrontModule = function ({ store, router }) {
   store.registerModule('url', urlStore)
   router.beforeEach(beforeEachGuard)
 }

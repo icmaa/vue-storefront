@@ -1,6 +1,6 @@
 {
   "name": "vue-storefront",
-  "version": "1.11.2",
+  "version": "1.11.3",
   "description": "A Vue.js, PWA eCommerce frontend",
   "private": true,
   "engines": {
@@ -100,7 +100,7 @@
     "vuex-router-sync": "^5.0.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.8.6",
+    "@babel/core": "^7.9.0",
     "@babel/plugin-syntax-dynamic-import": "^7.8.3",
     "@babel/polyfill": "^7.8.3",
     "@babel/preset-env": "^7.9.0",
@@ -125,7 +125,7 @@
     "detect-installed": "^2.0.4",
     "empty-dir": "^1.0.0",
     "eslint": "^5.0.0",
-    "eslint-config-standard": "^11.0.0",
+    "eslint-config-standard": "^12.0.0",
     "eslint-friendly-formatter": "^4.0.1",
     "eslint-loader": "^2.0.0",
     "eslint-plugin-import": "^2.13.0",

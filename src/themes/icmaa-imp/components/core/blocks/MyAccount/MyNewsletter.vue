@@ -1,6 +1,6 @@
 <template>
   <div class="t-p-4 t-bg-white">
-    <headline icon="mail">
+    <headline>
       {{ $t('My newsletter') }}
     </headline>
     <base-checkbox class="t-w-full t-px-2 t-mb-4" id="generalAgreement" name="generalAgreement" v-model="isSubscribed">
