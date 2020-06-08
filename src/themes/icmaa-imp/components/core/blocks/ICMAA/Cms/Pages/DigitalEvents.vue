@@ -15,7 +15,7 @@
     </div>
 
     <!-- SEO text-->
-    <div class="t-w-full t-px-3 lg:t-px-4 t-mb-4">
+    <div class="t-w-full t-px-4 t-mb-4">
       <p>{{ seoText }}</p>
     </div>
 
