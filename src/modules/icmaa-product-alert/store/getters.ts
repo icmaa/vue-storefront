@@ -9,10 +9,15 @@ const getters: GetterTree<ProductAlert, RootState> = {
   getChildProductIdByCurrentProductOption: (state, getters, RootState, rootGetters) =>
     (option: { type: string, id: string }): string|boolean => {
       const confChildren = rootGetters['product/getCurrentProduct'].configurable_children
-      const childProduct = confChildren.find(c => c[option.type] === option.id)
+      if (!confChildren) {
+        return false
+      }
+
+      const childProduct = confChildren.find(c => c[option.type] === option.id) || false
       if (childProduct) {
         return childProduct.id
       }
+
       return false
     },
   isOptionSubscribedToStock: (state, getters) => (option): boolean => {

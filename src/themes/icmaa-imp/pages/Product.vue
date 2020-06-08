@@ -45,7 +45,7 @@
               </div>
 
               <div class="t-flex t-flex-wrap">
-                <div v-if="product.type_id === 'configurable' && !isOnesizeProduct" class="t-flex t-flex-grow t-w-full t-mb-4 lg:t-w-3/6 lg:t-mr-4">
+                <div v-if="['configurable', 'bundle'].includes(product.type_id) && !isOnesizeProduct" class="t-flex t-flex-grow t-w-full t-mb-4 lg:t-w-3/6 lg:t-mr-4">
                   <button-component type="select" icon="arrow_forward" data-test-id="AddToCartSize" class="t-w-full" :disabled="isAddToCartDisabled" @click.native="openAddtocart">
                     {{ productOptionsLabel }}
                   </button-component>
@@ -208,6 +208,7 @@ export default {
   watch: {
     originalProduct (newVal, oldVal) {
       if (newVal.id !== oldVal.id) {
+        this.getQuantity()
         this.userHasSelectedVariant = false
       }
     }
@@ -219,6 +220,8 @@ export default {
       gallery: 'product/getProductGallery',
       configuration: 'product/getCurrentProductConfiguration',
       originalProduct: 'product/getOriginalProduct',
+      isCurrentBundleOptionsSelection: 'product/isCurrentBundleOptionsSelection',
+      currentBundleOptions: 'product/getCurrentBundleOptions',
       viewport: 'ui/getViewport'
     }),
     ...mapState({ isAddToCartSidebarOpen: state => state.ui.addtocart }),
@@ -233,6 +236,10 @@ export default {
       }
     },
     isAddToCartDisabled () {
+      if (this.isBundle) {
+        return this.$v.$invalid || this.loading
+      }
+
       return this.$v.$invalid || this.loading || !this.quantity
     },
     isSingleOptionProduct () {
@@ -247,6 +254,9 @@ export default {
 
       return false
     },
+    isBundle () {
+      return this.product.type_id === 'bundle'
+    },
     isPreorder () {
       return this.product.promo_id === '5'
     },
@@ -254,15 +264,23 @@ export default {
       return this.configuration && Object.keys(this.configuration).length > 0 && this.userHasSelectedVariant
     },
     productOptionsLabel () {
-      if (this.hasConfiguration) {
-        let labels = []
-        const values = Object.values(this.configuration)
-        for (let conf of values) {
-          const label = conf.label !== conf.id ? conf.label : this.getOptionLabel({ attributeKey: conf.type, optionId: conf.id })
-          labels.push(label)
-        }
+      if (this.hasConfiguration && this.product.options.length > 0) {
+        return this.product.options.map(o => o.value).join(', ')
+      } else if (this.isBundle && this.isCurrentBundleOptionsSelection) {
+        const labels = []
+        this.product.bundle_options.forEach(option => {
+          this.currentBundleOptions[option.option_id].option_selections.forEach(id => {
+            const productLink = option.product_links.find(productLink => productLink.id === id)
+            if (option.configurable_options && option.configurable_options.length > 0) {
+              const attributeKey = option.configurable_options[0]['attribute_code']
+              labels.push(this.getOptionLabel({ attributeKey, optionId: productLink[attributeKey] }))
+            } else {
+              labels.push(option.title || productLink.product.name)
+            }
+          })
+        })
 
-        return labels.join(', ')
+        return labels.join(' + ')
       }
 
       return this.productOptionsLabelPlaceholder
@@ -303,7 +321,7 @@ export default {
     }),
     addToCartButtonClick () {
       if (!this.loading) {
-        if (this.isSingleOptionProduct || this.hasConfiguration) {
+        if (this.isSingleOptionProduct || this.hasConfiguration || (this.isBundle && this.isCurrentBundleOptionsSelection)) {
           this.loading = true
           this.addToCart(this.product)
             .then(() => { this.loading = false })

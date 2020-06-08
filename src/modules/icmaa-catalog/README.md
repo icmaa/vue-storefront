@@ -4,14 +4,26 @@ Add our custom functionality for the original `catalog` and `catalog-next` modul
 
 ## Config
 
-You can prefetch attribute option values and labels for specific attributes on several pages by adding them to `prefetchAttributes` value in configs. This way you can show option labels and values without the need to fetch them each time.
 ```
 ...
 "icmaa_catalog": {
   "entities": {
+    "category": {
+      "configureChildProductsInCategoryList": false,
+      "customSortByAttributes": []
+    },
     "product": {
-      "prefetchAttributes": [
-        "band", "brand", ...
+      "calculateBundledPriceByChildren": false
+    },
+    "productListTicket": {
+      "parentCategoryWhitelist": [],
+      "includeFields": [
+        "band", 
+        "ticket_eventdate", 
+        "ticket_start", 
+        "ticket_venue", 
+        "ticket_city",
+        "ticket_endofsale"
       ]
     }
   }
@@ -23,7 +35,7 @@ You can prefetch attribute option values and labels for specific attributes on s
 There are some new filter options to setup our filter logic. To find out what they are doing, look at the categore sidebar component in the theme.
 ```
 ...
-"systemFilterNames": ["sort", "pagesize"],
+  "systemFilterNames": ["sort", "pagesize"],
   "defaultFilters": [
     "price",
     "size",
