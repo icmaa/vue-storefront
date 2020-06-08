@@ -21,7 +21,7 @@
 
     <!-- Products -->
     <lazy-hydrate when-visible>
-      <product-listing-widget :category-id="content.products.category" :limit="content.products.limit" />
+      <product-listing-widget :category-id="content.products.category_id" :limit="content.products.limit" />
     </lazy-hydrate>
   </div>
 </template>
