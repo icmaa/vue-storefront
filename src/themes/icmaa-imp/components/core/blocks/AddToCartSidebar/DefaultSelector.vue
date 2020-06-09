@@ -1,9 +1,9 @@
 <template>
   <div
-    class="t-flex t-items-center t-h-12 t-px-4 t-text-base-tone t-text-sm t-border-base-lightest t-cursor-pointer t-webkit-tap-transparent"
-    :class="[ {'t-flex t-text-base-light': !option.available}, {'t-bg-base-lightest t-text-black t-relative': isActive && isLoading}, {'t-text-base-light': !isActive && isLoading}, isLast ? 't-border-b-0' : 't-border-b', option.available ? 'available' : 'unavailable']"
+    class="t-flex t-items-center t-px-4 t-text-base-tone t-text-sm t-border-base-lightest t-cursor-pointer t-webkit-tap-transparent"
+    :class="[ optionLabel.length > 45 ? 't-py-2' : 't-h-12', {'t-flex t-text-base-light': !option.available}, {'t-bg-base-lightest t-text-black t-relative': isActive && isLoading}, {'t-text-base-light': !isActive && isLoading}, isLast ? 't-border-b-0' : 't-border-b', option.available ? 'available' : 'unavailable']"
     @click="selectVariant"
-    :aria-label="$t('Select ' + optionLabel)"
+    :aria-label="$t('Select') + ' ' + optionLabel"
     data-test-id="DefaultSelector"
   >
     <span class="t-flex-auto">
