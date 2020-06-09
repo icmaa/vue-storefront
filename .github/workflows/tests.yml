@@ -111,12 +111,12 @@ jobs:
           CYPRESS_RECORD_KEY: ${{secrets.CYPRESS_RECORD_KEY}}
           CYPRESS_PROJECT_ID: ${{secrets.CYPRESS_PROJECT_ID}}
 
-      - name: Dump and consolidate log outputs
+      - name: Dump and consolidate outputs
         if: failure()
         run: |
           mkdir artifacts
           yarn pm2 logs --format --nostream --lines 10000000 > artifacts/server.log
-          zip -r artifacts/build.zip . -x "*node_modules/**/*" -x ".git/**/*" -x ".cache/**/*"
+          rsync -avzr --ignore-missing-args src/themes/icmaa-imp/test/e2e/screenshots src/themes/icmaa-imp/test/e2e/videos dist/log ./artifacts/
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v1
