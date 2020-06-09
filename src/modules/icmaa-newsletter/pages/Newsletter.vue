@@ -2,7 +2,7 @@
   <layout id="newsletter-page" :headline="content.headline">
     <div class="newsletter t-p-4 lg:t-p-8 lg:t-w-1/2 t-bg-white t-m-4 lg:t-my-8 lg:t-container lg:t-mx-auto" data-test-id="Newsletter">
       <h1 class="t-text-2xl t-mb-3 t-text-primary">
-        {{ $t("Get the Impericon Newsletter & and get yourself a 5€ gift.") }}
+        {{ $t("Get the Impericon Newsletter & and get yourself a {voucher_value} gift.") }}
       </h1>
 
       <ul class="t-my-4 t-py-4 t-border-t t-border-base-lighter">
