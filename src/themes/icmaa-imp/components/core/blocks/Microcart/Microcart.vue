@@ -14,8 +14,8 @@
         <ul class="t-mb-4">
           <product v-for="product in productsInCart" :key="product.checksum || product.sku" :product="product" />
         </ul>
-        <div class="spacer t-h-240px"></div>
-        <div class="header t-bg-white t-h-240px t-bottom-0 t-fixed t-max-w-90pc t-p-4 t-right-0 t-pb-10 t-border-t t-border-base-lighter">
+        <div class="spacer t-h-240px" />
+        <div class="sidebar-footer t-bg-white t-h-240px t-bottom-0 t-fixed t-max-w-90pc t-p-4 t-right-0 t-pb-10 t-border-t t-border-base-lighter">
           <div class="t-mb-4">
             <div v-for="(segment, index) in filteredTotals" :key="`total-${index}`" class="t-flex t-items-center t-justify-between t-mb-2 t-text-sm">
               <span>
@@ -122,3 +122,9 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.sidebar-footer {
+  width: 460px;
+}
+</style>
