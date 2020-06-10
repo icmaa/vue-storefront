@@ -3,38 +3,14 @@ import RootState from '@vue-storefront/core/types/RootState'
 import ProductState from '@vue-storefront/core/modules/catalog/types/ProductState'
 import * as types from '@vue-storefront/core/modules/catalog/store/product/mutation-types'
 import config, { icmaa } from 'config'
+import { Logger } from '@vue-storefront/core/lib/logger'
 
 import cloneDeep from 'lodash-es/cloneDeep'
 import uniqBy from 'lodash-es/uniqBy'
 
-import { Logger } from '@vue-storefront/core/lib/logger'
-import { getMediaGallery, configurableChildrenImages, populateProductConfigurationAsync } from '@vue-storefront/core/modules/catalog/helpers'
+import { getMediaGallery, configurableChildrenImages } from '@vue-storefront/core/modules/catalog/helpers'
 
 const actions: ActionTree<ProductState, RootState> = {
-  /**
-   * Clone of originial `product/setCurrent`
-   *
-   * Changes:
-   * * Don't just set product-gallery by commit – use action `setProductGallery` which is including more advanced logic
-   * * @see https://github.com/DivanteLtd/vue-storefront/pull/4153
-   */
-  setCurrent (context, productVariant) {
-    const { commit, dispatch, getters } = context
-    if (productVariant && typeof productVariant === 'object') {
-      // get original product
-      const originalProduct = getters.getOriginalProduct
-
-      // check if passed variant is the same as original
-      const productUpdated = Object.assign({}, originalProduct, productVariant)
-      populateProductConfigurationAsync(context, { product: productUpdated, selectedVariant: productVariant })
-      if (!config.products.gallery.mergeConfigurableChildren) {
-        // This line is our overwrite – see PR#4153 of DivanteLtd/vue-storefront
-        dispatch('setProductGallery', { product: productUpdated })
-      }
-      commit(types.PRODUCT_SET_CURRENT, Object.assign({}, productUpdated))
-      return productUpdated
-    } else Logger.debug('Unable to update current product.', 'product')()
-  },
   /**
    * Clone of originial `product/setProductGallery`
    *
@@ -93,17 +69,16 @@ const actions: ActionTree<ProductState, RootState> = {
       await dispatch('category-next/loadCategoryBreadcrumbs', { category: breadcrumbCategory, currentRouteName: product.name }, { root: true })
     }
   },
-  async updateConfiguration ({ dispatch, commit, getters }, { option }) {
+  async updateConfiguration ({ dispatch, commit, getters }, { option }): Promise<{ selectedVariant: any, configuration: any }> {
     const configuration = Object.assign({}, getters.getCurrentProductConfiguration, { [option.type]: option })
-    const selectedVariant = await dispatch('configure', {
+    const selectedVariant = await dispatch('getProductVariant', {
       product: getters.getCurrentProduct,
-      configuration,
-      selectDefaultVariant: true,
-      fallbackToDefaultWhenNoAvailable: false,
-      setProductErorrs: true
+      configuration
     })
 
     commit(types.PRODUCT_SET_CURRENT_CONFIGURATION, selectedVariant ? configuration : {})
+
+    return { selectedVariant, configuration }
   },
   async updateBundleOptions ({ commit, dispatch, getters }, option: { optionId: string, productLink: any, [key: string]: any }) {
     const { optionId, productLink } = option

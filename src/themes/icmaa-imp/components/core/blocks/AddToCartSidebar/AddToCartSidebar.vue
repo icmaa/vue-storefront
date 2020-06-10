@@ -39,6 +39,7 @@
 import i18n from '@vue-storefront/i18n'
 import { mapGetters } from 'vuex'
 import { notifications } from '@vue-storefront/core/modules/cart/helpers'
+import { filterChangedProduct } from '@vue-storefront/core/modules/catalog/events'
 import Composite from '@vue-storefront/core/mixins/composite'
 import ProductPriceMixin from 'theme/mixins/product/priceMixin'
 import ProductOptionsMixin from 'theme/mixins/product/optionsMixin'
@@ -73,7 +74,6 @@ export default {
   computed: {
     ...mapGetters({
       product: 'product/getCurrentProduct',
-      originalProduct: 'product/getOriginalProduct',
       configuration: 'product/getCurrentProductConfiguration',
       options: 'product/getCurrentProductOptions',
       isAddingToCart: 'cart/getIsAdding'
@@ -108,7 +108,8 @@ export default {
     },
     async onSelect (option) {
       if (option.available) {
-        await this.$store.dispatch('product/updateConfiguration', { option })
+        const { selectedVariant, configuration } = await this.$store.dispatch('product/updateConfiguration', { option })
+        await filterChangedProduct(configuration, this.$store, this.$router)
 
         this.setSelectedOptionByCurrentConfiguration()
         this.$bus.$emit('user-has-selected-product-variant')
