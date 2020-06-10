@@ -67,7 +67,7 @@ const forCmsPageUrls = async ({ dispatch }, { urlPath }: UrlMapperOptions) => {
  * This is our cms landing page url fallback mapper
  */
 const forCmsLandingPageUrls = async ({ dispatch }, { urlPath }: UrlMapperOptions) => {
-  return dispatch('icmaaCmsLangingPages/single', { value: urlPath }, { root: true })
+  return dispatch('icmaaCmsLandingPages/single', { value: urlPath }, { root: true })
     .then((page: GenericStateItem) => {
       if (page !== null && Object.values(page).length > 0) {
         return {
