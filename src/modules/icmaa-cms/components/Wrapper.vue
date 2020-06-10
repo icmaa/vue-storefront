@@ -16,6 +16,7 @@ import camelCase from 'lodash-es/camelCase'
 const AsyncLogoline = () => import(/* webpackPreload: true */ /* webpackChunkName: "vsf-content-block-logoline" */ 'theme/components/core/blocks/CategoryExtras/LogoLine')
 const AsyncTeaser = () => import(/* webpackPreload: true */ /* webpackChunkName: "vsf-content-block-teaser" */ 'theme/components/core/blocks/Teaser/Teaser')
 const AsyncText = () => import(/* webpackPreload: true */ /* webpackChunkName: "vsf-content-block-text" */ 'theme/components/core/blocks/RichText')
+const AsyncProductlisting = () => import(/* webpackPreload: true */ /* webpackChunkName: "vsf-content-block-productlisting" */ '../../icmaa-category/components/core/ProductListingWidget')
 
 export default {
   name: 'CmsBlockWrapper',
@@ -63,6 +64,17 @@ export default {
           component: AsyncText,
           propsTypes: {
             content: 'string'
+          },
+          propsDefaults: {},
+          cssClass: 't-mb-8',
+          padding: false
+        },
+        'component_productlisting': {
+          component: AsyncProductlisting,
+          propsTypes: {
+            limit: 'number',
+            categoryId: 'number',
+            sort: 'string'
           },
           propsDefaults: {},
           cssClass: 't-mb-8',
