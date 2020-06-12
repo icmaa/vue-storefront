@@ -45,7 +45,11 @@ module.exports = {
       },
       maxHeight: {
         '0': '0',
+        '60': '60px',
         'screen-100': '100vh'
+      },
+      top: {
+        '40': '40px'
       },
       maxWidth: {
         'screen-25': '25vw',
@@ -70,7 +74,7 @@ module.exports = {
       },
       height: {
         '50px': '50px',
-        '60px': '60px'
+        '220px': '220px'
       },
       flex: {
         'fix': '0 0 auto',
