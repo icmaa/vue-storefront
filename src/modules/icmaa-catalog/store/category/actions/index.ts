@@ -17,7 +17,9 @@ import union from 'lodash-es/union'
 const actions: ActionTree<CategoryState, RootState> = {
   /**
    * Changes:
+   * * Add custom default sort and filter
    * * Add custom `includeFields`/`excludeFields` loaded via getter
+   * * Disable child configuration using `setConfigurableProductOptions`
    */
   async loadCategoryProducts ({ commit, getters, dispatch }, { route, category, pageSize = 50 } = {}) {
     const searchCategory = category || getters.getCategoryFrom(route.path) || {}
@@ -38,6 +40,7 @@ const actions: ActionTree<CategoryState, RootState> = {
 
     const { includeFields, excludeFields } = entities.productList
     const sort = searchQuery.sort || `${products.defaultSortBy.attribute}:${products.defaultSortBy.order}`
+    const setConfigurableProductOptions = icmaa_catalog.entities.category.configureChildProductsInCategoryList
 
     const { items, perPage, start, total, aggregations, attributeMetadata } = await dispatch('product/findProducts', {
       query: filterQr,
@@ -52,7 +55,8 @@ const actions: ActionTree<CategoryState, RootState> = {
         setProductErrors: false,
         fallbackToDefaultWhenNoAvailable: true,
         assignProductConfiguration: false,
-        separateSelectedVariant: false
+        separateSelectedVariant: false,
+        setConfigurableProductOptions
       }
     }, { root: true })
     await dispatch('loadAvailableFiltersFrom', {
@@ -68,7 +72,9 @@ const actions: ActionTree<CategoryState, RootState> = {
   },
   /**
    * Changes:
+   * * Add custom default sort and filter
    * * Add custom `includeFields`/`excludeFields` loaded via getter
+   * * Disable child configuration using `setConfigurableProductOptions`
    */
   async loadMoreCategoryProducts ({ commit, getters, rootState, dispatch }) {
     const { perPage, start, total } = getters.getCategorySearchProductsStats
@@ -87,6 +93,7 @@ const actions: ActionTree<CategoryState, RootState> = {
 
     const { includeFields, excludeFields } = entities.productList
     const sort = searchQuery.sort || `${products.defaultSortBy.attribute}:${products.defaultSortBy.order}`
+    const setConfigurableProductOptions = icmaa_catalog.entities.category.configureChildProductsInCategoryList
 
     const searchResult = await dispatch('product/findProducts', {
       query: filterQr,
@@ -102,7 +109,8 @@ const actions: ActionTree<CategoryState, RootState> = {
         setProductErrors: false,
         fallbackToDefaultWhenNoAvailable: true,
         assignProductConfiguration: false,
-        separateSelectedVariant: false
+        separateSelectedVariant: false,
+        setConfigurableProductOptions
       }
     }, { root: true })
     commit(types.CATEGORY_SET_SEARCH_PRODUCTS_STATS, {
@@ -114,24 +122,6 @@ const actions: ActionTree<CategoryState, RootState> = {
     commit(types.CATEGORY_ADD_PRODUCTS, searchResult.items)
 
     return searchResult.items
-  },
-  /**
-   * Changes:
-   * * Be able to don't configure the conf product and therefore:
-   *   * overwrite original image by selected variants one
-   *   * overwrite products who got the same children (unisex-products)
-   */
-  async processCategoryProducts ({ dispatch, rootState }, { products = [], filters = {}, configureChildProduct } = {}) {
-    let configureChild = true
-    if (configureChildProduct !== undefined) {
-      configureChild = configureChildProduct
-    } else if (icmaa_catalog.entities.category.configureChildProductsInCategoryList !== undefined) {
-      configureChild = icmaa_catalog.entities.category.configureChildProductsInCategoryList
-    }
-
-    const configuredProducts = configureChild ? await dispatch('configureProducts', { products, filters }) : products
-    dispatch('registerCategoryProductsMapping', products) // we don't need to wait for this
-    return dispatch('tax/calculateTaxes', { products: configuredProducts }, { root: true })
   },
   /**
    * Changes:
