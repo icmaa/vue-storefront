@@ -1,7 +1,7 @@
 import sample from 'lodash-es/sample'
 
 describe('Landingpage A to Z ', () => {
-  const urls = ['/merchandise', '/streetwear']
+  const urls = ['/merchandise', '/fashion']
   const url = sample(urls)
 
   it(`Teaser, Logoline and Productlistings should be visible on ${url}`, () => {
