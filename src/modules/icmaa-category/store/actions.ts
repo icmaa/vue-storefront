@@ -27,7 +27,14 @@ const actions: ActionTree<CategoryState, RootState> = {
         return
       }
 
-      let list: Category[] | void = await fetchChildCategories({ parentId, level: parent.level + crawlDepth })
+      let level: number[] = []
+      if (typeof crawlDepth === 'string' && crawlDepth.split(',').length > 1) {
+        level = crawlDepth.split(',').map(i => parseInt(parent.level) + parseInt(i))
+      } else {
+        level.push(parseInt(parent.level) + parseInt(crawlDepth))
+      }
+
+      let list: Category[] | void = await fetchChildCategories({ parentId, level })
         .then(resp => resp)
         .catch(error => {
           Logger.error('Error while fetching children of category: ' + parentId, 'icmaaCategoryList', error)()

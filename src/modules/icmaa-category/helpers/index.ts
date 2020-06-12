@@ -5,6 +5,16 @@ import { quickSearchByQuery } from '@vue-storefront/core/lib/search'
 import { entities } from 'config'
 import { getObjectHash } from 'icmaa-config/helpers/hash'
 
+interface FetchChildCategoriesOptions {
+  parentId: number | number[],
+  sort?: string,
+  level?: number[] | number,
+  onlyShowTargetLevelItems?: boolean,
+  onlyActive?: boolean,
+  includeFields?: any[],
+  collectedCategories?: any[]
+}
+
 export const fetchCategoryById = ({ parentId }): Promise<SearchResponse> => {
   let searchQuery = new SearchQuery()
   searchQuery.applyFilter({ key: 'id', value: { 'eq': parentId } })
@@ -12,7 +22,17 @@ export const fetchCategoryById = ({ parentId }): Promise<SearchResponse> => {
   return quickSearchByQuery({ entityType: 'category', query: searchQuery, size: 1, includeFields: entities.category.includeFields })
 }
 
-export const fetchChildCategories = async ({ parentId, sort = 'position:asc', level = 1, onlyShowTargetLevelItems = true, onlyActive = false, includeFields = entities.category.includeFields, collectedCategories = [] }): Promise<Category[]> => {
+export const fetchChildCategories = async (
+  {
+    parentId,
+    sort = 'position:asc',
+    level = 1,
+    onlyShowTargetLevelItems = true,
+    onlyActive = false,
+    includeFields = entities.category.includeFields,
+    collectedCategories = []
+  }: FetchChildCategoriesOptions
+): Promise<Category[]> => {
   let searchQuery = new SearchQuery()
   searchQuery.applyFilter({ key: 'path', value: { 'eq': parentId } })
 
@@ -21,11 +41,15 @@ export const fetchChildCategories = async ({ parentId, sort = 'position:asc', le
     searchQuery.applyFilter({ key: 'product_count', value: { 'gt': 0 } })
   }
 
+  if (!Array.isArray(level)) {
+    level = [level]
+  }
+
   return quickSearchByQuery({ entityType: 'category', query: searchQuery, sort, includeFields, size: 5000 })
     .then(resp => {
       if (resp.items.length > 0) {
         resp.items.forEach(item => {
-          if (!onlyShowTargetLevelItems || (onlyShowTargetLevelItems && item.level === level)) {
+          if (!onlyShowTargetLevelItems || (onlyShowTargetLevelItems && (level as number[]).includes(item.level))) {
             collectedCategories.push(item)
           }
         })
