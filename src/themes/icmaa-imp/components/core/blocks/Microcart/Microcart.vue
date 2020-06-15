@@ -16,14 +16,6 @@
         </ul>
         <div class="t-bg-white t-border-base-lighter t-border-t t-sticky t-bottom-0 t-p-4 t-pb-10 t--mb-4 t--mx-4">
           <div class="t-mb-4">
-            <div v-for="(segment, index) in filteredTotals" :key="`total-${index}`" class="t-flex t-items-center t-justify-between t-mb-2 t-text-sm">
-              <span>
-                {{ segment.title }}
-              </span>
-              <span v-if="segment.value !== null">
-                {{ segment.value | price }}
-              </span>
-            </div>
             <div class="t-flex t-items-center t-justify-between t-font-bold" v-for="(segment, index) in grandTotals" :key="`grand-total-${index}`">
               <span>
                 {{ segment.title }}
