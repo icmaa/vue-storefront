@@ -74,7 +74,7 @@ module.exports = {
       },
       height: {
         '50px': '50px',
-        '220px': '220px'
+        '60px': '60px'
       },
       flex: {
         'fix': '0 0 auto',
