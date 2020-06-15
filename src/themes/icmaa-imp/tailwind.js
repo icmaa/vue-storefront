@@ -45,11 +45,7 @@ module.exports = {
       },
       maxHeight: {
         '0': '0',
-        '60': '60px',
         'screen-100': '100vh'
-      },
-      top: {
-        '40': '40px'
       },
       maxWidth: {
         'screen-25': '25vw',
