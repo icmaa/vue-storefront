@@ -11,7 +11,7 @@
       </h4>
       <template v-if="productsInCart.length">
         <coupon />
-        <ul class="t-mb-4">
+        <ul>
           <product v-for="product in productsInCart" :key="product.checksum || product.sku" :product="product" />
         </ul>
         <div class="t-bg-white t-border-base-lighter t-border-t t-sticky t-bottom-0 t-p-4 t-pb-10 t--mb-4 t--mx-4">
