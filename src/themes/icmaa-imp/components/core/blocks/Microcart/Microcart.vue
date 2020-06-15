@@ -13,7 +13,7 @@
       <ul>
         <product v-for="product in productsInCart" :key="product.checksum || product.sku" :product="product" />
       </ul>
-      <div class="t-bg-white t-border-base-lighter t-border-t t-sticky t-bottom-0 t-p-4 t-pb-16 t--mb-4 t--mx-4">
+      <div class="t-bg-white t-border-base-lighter t-border-t t-sticky t-bottom-0 t-p-4 t-pb-20 t--mb-4 t--mx-4">
         <div class="t-mb-4">
           <div class="t-flex t-items-center t-justify-between t-font-bold" v-for="(segment, index) in grandTotals" :key="`grand-total-${index}`">
             <span>
