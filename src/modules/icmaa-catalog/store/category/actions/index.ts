@@ -19,7 +19,8 @@ const actions: ActionTree<CategoryState, RootState> = {
    * Changes:
    * * Add custom default sort and filter
    * * Add custom `includeFields`/`excludeFields` loaded via getter
-   * * Disable child configuration using `setConfigurableProductOptions`
+   * * Disable child configuration using `separateSelectedVariant` – product will still be configured
+   *   but won't overwrite original options like the product image in unisex products
    */
   async loadCategoryProducts ({ commit, getters, dispatch }, { route, category, pageSize = 50 } = {}) {
     const searchCategory = category || getters.getCategoryFrom(route.path) || {}
@@ -40,7 +41,7 @@ const actions: ActionTree<CategoryState, RootState> = {
 
     const { includeFields, excludeFields } = entities.productList
     const sort = searchQuery.sort || `${products.defaultSortBy.attribute}:${products.defaultSortBy.order}`
-    const setConfigurableProductOptions = icmaa_catalog.entities.category.configureChildProductsInCategoryList
+    const separateSelectedVariant = !icmaa_catalog.entities.category.configureChildProductsInCategoryList || false
 
     const { items, perPage, start, total, aggregations, attributeMetadata } = await dispatch('product/findProducts', {
       query: filterQr,
@@ -55,8 +56,7 @@ const actions: ActionTree<CategoryState, RootState> = {
         setProductErrors: false,
         fallbackToDefaultWhenNoAvailable: true,
         assignProductConfiguration: false,
-        separateSelectedVariant: false,
-        setConfigurableProductOptions
+        separateSelectedVariant
       }
     }, { root: true })
     await dispatch('loadAvailableFiltersFrom', {
@@ -74,7 +74,8 @@ const actions: ActionTree<CategoryState, RootState> = {
    * Changes:
    * * Add custom default sort and filter
    * * Add custom `includeFields`/`excludeFields` loaded via getter
-   * * Disable child configuration using `setConfigurableProductOptions`
+   * * Disable child configuration using `separateSelectedVariant` – product will still be configured
+   *   but won't overwrite original options like the product image in unisex products
    */
   async loadMoreCategoryProducts ({ commit, getters, rootState, dispatch }) {
     const { perPage, start, total } = getters.getCategorySearchProductsStats
@@ -93,7 +94,7 @@ const actions: ActionTree<CategoryState, RootState> = {
 
     const { includeFields, excludeFields } = entities.productList
     const sort = searchQuery.sort || `${products.defaultSortBy.attribute}:${products.defaultSortBy.order}`
-    const setConfigurableProductOptions = icmaa_catalog.entities.category.configureChildProductsInCategoryList
+    const separateSelectedVariant = !icmaa_catalog.entities.category.configureChildProductsInCategoryList || false
 
     const searchResult = await dispatch('product/findProducts', {
       query: filterQr,
@@ -109,8 +110,7 @@ const actions: ActionTree<CategoryState, RootState> = {
         setProductErrors: false,
         fallbackToDefaultWhenNoAvailable: true,
         assignProductConfiguration: false,
-        separateSelectedVariant: false,
-        setConfigurableProductOptions
+        separateSelectedVariant
       }
     }, { root: true })
     commit(types.CATEGORY_SET_SEARCH_PRODUCTS_STATS, {
