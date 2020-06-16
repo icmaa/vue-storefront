@@ -14,7 +14,9 @@ const i18n = new VueI18n({
   fallbackLocale: 'en-US',
   messages: config.i18n.bundleAllStoreviewLanguages ? require('./resource/i18n/multistoreLanguages.json') : {
     'en-US': require('./resource/i18n/en-US.json')
-  }
+  },
+  silentTranslationWarn: true,
+  silentFallbackWarn: true
 })
 
 function setI18nLanguage (lang: string): string {
