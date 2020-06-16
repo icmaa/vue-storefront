@@ -11,7 +11,7 @@
     <template v-if="productsInCart.length">
       <coupon />
       <ul>
-        <product v-for="product in productsInCart" :key="product.checksum || product.sku" :product="product" />
+        <product v-for="product in productsInCart" :key="product.checksum || product.sku" :product="product" :class="{ 't-border-0': i === (productsInCart.length - 1)}" />
       </ul>
       <div class="t-bg-white t-border-base-lighter t-border-t t-sticky t-bottom-0 t-p-4 t-pb-20 t--mb-4 t--mx-4">
         <div class="t-mb-4">
@@ -111,9 +111,3 @@ export default {
   }
 }
 </script>
-
-<style lang="scss" scoped>
-ul li:last-child {
-  border: none;
-}
-</style>
