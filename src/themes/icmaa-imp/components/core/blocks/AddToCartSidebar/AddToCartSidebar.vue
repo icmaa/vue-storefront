@@ -108,12 +108,18 @@ export default {
     },
     async onSelect (option) {
       if (option.available) {
-        const { selectedVariant, configuration } = await this.$store.dispatch('product/updateConfiguration', { option })
+        this.loading = true
+
+        // We need to set the new configuration here already to enable the loading state for the selected option
+        this.$store.dispatch('product/updateConfiguration', { option })
+        this.setSelectedOptionByCurrentConfiguration()
+
+        const configuration = Object.assign({ attribute_code: option.type }, option)
         await filterChangedProduct(configuration, this.$store, this.$router)
 
-        this.setSelectedOptionByCurrentConfiguration()
         this.$bus.$emit('user-has-selected-product-variant')
 
+        this.loading = false
         this.$store.dispatch('ui/closeAll')
       } else {
         this.selectedOption = option
@@ -127,7 +133,7 @@ export default {
       if (this.hasMultiplePrices) {
         const product = this.product.configurable_children.find(child => child[option.type] === option.id)
         if (product) {
-          return product.original_price_incl_tax
+          return product.price_incl_tax || product.original_price_incl_tax
         }
       }
 

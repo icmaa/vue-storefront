@@ -1,9 +1,11 @@
+import config from 'config'
 import Product from '@vue-storefront/core/modules/catalog/types/Product'
 import buildQuery from './buildQuery'
 import setProductLink from './setProductLink'
 import { isBundleProduct } from './..'
 import { ProductService } from '@vue-storefront/core/data-resolver/ProductService'
 import { catalogHooksExecutors } from './../../hooks'
+import getBundleProductPrice from './getBundleProductPrice'
 
 /**
  * This function prepare all product_links for bundle products.
@@ -37,6 +39,13 @@ export default async function setBundleProducts (product: Product, { includeFiel
         const associatedProduct = items.find((associatedProduct) => associatedProduct.sku === productLink.sku)
         setProductLink(productLink, associatedProduct)
       }
+    }
+
+    if (config.products.calculateBundlePriceByOptions) {
+      const { price, priceInclTax } = getBundleProductPrice(product)
+      product.price = price
+      product.priceInclTax = priceInclTax
+      product.price_incl_tax = priceInclTax
     }
   }
 }

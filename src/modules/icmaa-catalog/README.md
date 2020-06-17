@@ -61,6 +61,13 @@ There are some new filter options to setup our filter logic. To find out what th
   },
 ```
 
+## Core changes
+
+We try to overwrite everything needed by extending the Vuex store. But some methods are not highjackable like that – this is a list of core changes.
+
+* We uncommented the original lines in `core/modules/catalog/index.ts` to prevent original preloading and replace it by our, following routing. See comments in the `./index.ts` for more infos
+* We added a custom mutator-event called `afterSelectedVariant` in `core/modules/catalog/helpers/variant/getSelectedVariant.ts` to mutate the `selectedVariant` object. We do this to fix a bug which occurs if you switch between differen configurable options in PDP.
+
 ## Todo
 
 [ ] ...
