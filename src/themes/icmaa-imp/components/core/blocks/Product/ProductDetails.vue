@@ -45,19 +45,18 @@ export default {
     ...mapGetters({
       attributesByCode: 'attribute/getAttributeListByCode',
       getAttributeLabel: 'attribute/getAttributeLabel',
-      getOptionLabel: 'attribute/getOptionLabel',
-      original: 'product/getOriginalProduct'
+      getOptionLabel: 'attribute/getOptionLabel'
     }),
     attributes () {
       return Object.values(this.attributesByCode).filter(a => {
-        return a.is_visible && a.is_visible_on_front === true && this.original[a.attribute_code] && this.original[a.attribute_code][0] !== ''
+        return a.is_visible && a.is_visible_on_front === true && this.product[a.attribute_code] && this.product[a.attribute_code][0] !== ''
       })
     },
     blank () {
-      const blank = this.original.rohling
-      if (this.original.rohling) {
+      const blank = this.product.rohling
+      if (this.product.rohling) {
         const label = this.getAttributeLabel({ attributeKey: 'rohling' })
-        const optionLabel = this.getOptionLabel({ attributeKey: 'rohling', optionId: this.original.rohling })
+        const optionLabel = this.getOptionLabel({ attributeKey: 'rohling', optionId: this.product.rohling })
         const imagePath = '/assets/features/blanks/'
         const image = imagePath + optionLabel + '.png'
         const imageAt2x = imagePath + optionLabel + '@2x.png'
@@ -68,7 +67,7 @@ export default {
       return false
     },
     departmentAdvice () {
-      return this.original.department === 6
+      return this.product.department === 6
     }
   },
   methods: {

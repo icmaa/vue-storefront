@@ -16,6 +16,7 @@ import camelCase from 'lodash-es/camelCase'
 const AsyncLogoline = () => import(/* webpackPreload: true */ /* webpackChunkName: "vsf-content-block-logoline" */ 'theme/components/core/blocks/CategoryExtras/LogoLine')
 const AsyncTeaser = () => import(/* webpackPreload: true */ /* webpackChunkName: "vsf-content-block-teaser" */ 'theme/components/core/blocks/Teaser/Teaser')
 const AsyncText = () => import(/* webpackPreload: true */ /* webpackChunkName: "vsf-content-block-text" */ 'theme/components/core/blocks/RichText')
+const AsyncProductlisting = () => import(/* webpackPreload: true */ /* webpackChunkName: "vsf-content-block-productlisting" */ '../../icmaa-category/components/core/ProductListingWidget')
 
 export default {
   name: 'CmsBlockWrapper',
@@ -67,6 +68,20 @@ export default {
           propsDefaults: {},
           cssClass: 't-mb-8',
           padding: false
+        },
+        'component_productlisting': {
+          component: AsyncProductlisting,
+          propsTypes: {
+            limit: 'number',
+            categoryId: 'number',
+            sort: 'string',
+            filter: 'json'
+          },
+          propsDefaults: {
+            filter: {}
+          },
+          cssClass: 't-mb-8',
+          padding: false
         }
       }
     },
@@ -85,13 +100,18 @@ export default {
             (v, k) => camelCase(k)
           )
 
-          props = Object.assign(props, propsDefaults)
+          props = Object.assign(propsDefaults, props)
 
           props = mapValues(props, (p, k) => {
             if (Object.keys(propsTypes).includes(k)) {
               switch (propsTypes[k]) {
                 case 'number':
                   p = parseInt(p)
+                  break
+                case 'json':
+                  if (typeof p === 'string') {
+                    p = JSON.parse(p)
+                  }
                   break
                 default:
                   if (typeof propsTypes[k] === 'function') {

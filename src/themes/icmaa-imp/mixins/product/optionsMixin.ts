@@ -70,7 +70,7 @@ export default {
             ({ value_index, label }) => {
               let currentVariant = this.options[type] ? this.options[type].find(config => config.id === value_index) : false
               label = label || (currentVariant ? currentVariant.label : value_index)
-              return { id: value_index, label, type }
+              return { id: parseInt(value_index), label, type }
             }
           )
           filterVariants.map(option => Object.assign(option, { available: this.isOptionAvailable(option) }))
@@ -86,7 +86,7 @@ export default {
         Object.keys(this.configuration).map(filterType => {
           const filter = this.configuration[filterType]
           selectedFilters[filterType] = {
-            id: filter.id,
+            id: parseInt(filter.id),
             label: filter.label,
             type: filterType
           }

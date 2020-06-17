@@ -10,10 +10,10 @@
       </div>
     </lazy-hydrate>
     <lazy-hydrate when-visible>
-      <product-listing-widget :category-id="3278" :filter="{ department: 6 }" />
+      <product-listing-widget :category-id="3278" />
     </lazy-hydrate>
     <lazy-hydrate when-visible>
-      <product-listing-widget :category-id="3278" :filter="{ department: 5 }" />
+      <product-listing-widget :category-id="4251" />
     </lazy-hydrate>
     <cms-block identifier="home-seo" class="t-mb-8 t-px-4 t-text-sm" />
   </div>

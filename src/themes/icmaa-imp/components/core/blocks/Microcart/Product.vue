@@ -67,6 +67,8 @@ import Product from '@vue-storefront/core/compatibility/components/blocks/Microc
 import ButtonComponent from 'theme/components/core/blocks/Button'
 import ProductImage from 'theme/components/core/ProductImage'
 
+import last from 'lodash-es/last'
+
 export default {
   name: 'MicroCartProduct',
   props: {
@@ -149,7 +151,7 @@ export default {
               } else {
                 options.push({
                   label: option.title,
-                  value: productLink.product.name
+                  value: this.trimLongBundleName(productLink.product.name)
                 })
               }
             })
@@ -160,6 +162,12 @@ export default {
       }
 
       return []
+    },
+    trimLongBundleName (name) {
+      if (name.length > 45) {
+        name = last(name.split(' - '))
+      }
+      return name
     },
     removeFromCart () {
       this.$store.dispatch('cart/removeItem', { product: this.product })

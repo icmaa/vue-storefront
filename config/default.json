@@ -247,7 +247,6 @@
       "sort": "updated_at:desc",
       "includeFields": [
         "activity",
-        "attributes_metadata",
         "configurable_children.attributes",
         "configurable_children.id",
         "configurable_children.final_price",
@@ -317,7 +316,6 @@
     "productListWithChildren": {
       "includeFields": [
         "activity",
-        "attributes_metadata",
         "configurable_children.attributes",
         "configurable_children.image",
         "configurable_children.sku",
@@ -563,6 +561,7 @@
     "clearPricesBeforePlatformSync": false,
     "waitForPlatformSync": false,
     "setupVariantByAttributeCode": true,
+    "calculateBundlePriceByOptions": true,
     "endpoint": "/api/product",
     "defaultFilters": [
       "color",

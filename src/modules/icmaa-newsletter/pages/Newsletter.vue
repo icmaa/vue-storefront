@@ -2,7 +2,7 @@
   <layout id="newsletter-page" :headline="content.headline">
     <div class="newsletter t-p-4 lg:t-p-8 lg:t-w-1/2 t-bg-white t-m-4 lg:t-my-8 lg:t-container lg:t-mx-auto" data-test-id="Newsletter">
       <h1 class="t-text-2xl t-mb-3 t-text-primary">
-        {{ $t("Get the Impericon Newsletter & and get yourself a 5€ gift.") }}
+        {{ $t("Get the Impericon Newsletter & and get yourself a {voucher_value} gift.", { voucher_value }) }}
       </h1>
 
       <ul class="t-my-4 t-py-4 t-border-t t-border-base-lighter">
@@ -29,6 +29,8 @@
 import Page from 'icmaa-cms/mixins/Page'
 import SubscriptionStatus from '@vue-storefront/core/modules/newsletter/mixins/SubscriptionStatus'
 import MaterialIcon from 'theme/components/core/blocks/MaterialIcon'
+import { mapGetters } from 'vuex'
+import { price } from '@vue-storefront/core/filters/price'
 const NewsletterPopup = () => import(/* webpackChunkName: "vsf-newsletter-modal" */ 'theme/components/core/NewsletterPopup.vue')
 
 export default {
@@ -42,6 +44,18 @@ export default {
     return {
       loadNewsletterPopup: false,
       dataType: 'yaml'
+    }
+  },
+  computed: {
+    ...mapGetters({
+      storeConfig: 'icmaaConfig/getCurrentStoreConfig'
+    }),
+    voucher_value () {
+      const config = this.storeConfig
+      if (config.newsletter.voucher_value) {
+        return config.newsletter.voucher_value
+      }
+      return price(5)
     }
   },
   methods: {

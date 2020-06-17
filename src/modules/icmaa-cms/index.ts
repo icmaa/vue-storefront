@@ -21,7 +21,7 @@ export const IcmaaCmsModule: StorefrontModule = function ({ store, appConfig, ro
   // This might not be very clean but – here we can load all CMS content types
   // for a custom urls without creating repeating code for the storage if we don't need much logic behind.
   /** @todo Refactor into a better logic */
-  registerGenericCmsStateModule('langing-pages', 'langing-page')
+  registerGenericCmsStateModule('landing-pages', 'landing-page')
 
   setupMultistoreRoutes(appConfig, router, moduleRoutes, 10)
 }

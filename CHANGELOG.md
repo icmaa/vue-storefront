@@ -5,11 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.12.0-rc1] - UNRELEASED
+## [1.12.0] - 2020.06.01
 
 ### Added
 
 - Add `vsf-capybara` support as a dependency and extend CLI to support customization - @psmyrek (#4209)
+- Support theme configuration via CLI - @psmyrek (#4395)
 - Allow parent_ids field on product as an alternative to urlpath based breadcrumb navigation (#4219)
 - Pass the original item_id when updating/deleting a cart entry @carlokok (#4218)
 - Separating endpoints for CSR/SSR - @Fifciu (#2861)
@@ -35,6 +36,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Support `useSpecificImagePaths` with `useExactUrlsNoProxy` - @cewald (#4243)
 - Adds module which handles cache invalidation for Fastly. - @gibkigonzo (#4096)
 - Add vsf-cache-nginx and vsf-cache-varnish modules - @gibkigonzo (#4096)
+- Added meta info for CMS pages from Magento @mdanilowicz (#4392)
 - Add useful core events to server & logger - @cewald (#4419)
 
 ### Fixed
@@ -59,6 +61,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - removed possible memory leak in ssr - @resubaka (#4247)
 - Bugfix for reactivity of `current_configuration` in `populateProductConfigurationAsync` - @cewald (#4258)
 - Bugfix for build exception in Node v13.13+ - @cewald (#4249)
+- Convert option ids to string while comparing them in `getProductConfiguration` - @gibkigonzo (#4484)
+- change value to number in price filter - @gibkigonzo (#4478)
 
 ### Changed / Improved
 
@@ -75,6 +79,35 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Include token in pricing sync -  @carlokok (#4156)
 - Move 'graphql' search adapter from core to src (deprecated) - @gibkigonzo (#4214)
 - Homepage, new products query, uses now `new` attribute - @mdanilwoicz
+- Refactor product module, more info in upgrade notes- @gibkigonzo (#3952, #4459)
+- Move default theme to separate repository https://github.com/DivanteLtd/vsf-default - @gibkigonzo (#4255)
+- add two numbers after dot to price by default, calculate default price for bundle or grouped main product, update typing, add fallback to attribute options - @gibkigonzo (#4476)
+- udpate yarn and filter shipping methods for instant checkout - @gibkigonzo (#4480)
+- add attribute metadata search query, add parentId - @gibkigonzo (#4491)
+
+## [1.11.4] - 2020.05.26
+
+### Added
+
+
+### Changed / Improved
+
+- use yarn in cli installer - @gibkigonzo (#4292)
+- disable out of stock notification when config.stock.allowOutOfStockInCart is true - @gibigonzo (#4340)
+
+
+### Fixed
+
+- Use LRU as object contructor based on newest changes in module - @gibkigonzo (#4242)
+- Fixed ESC button action (minicart, wishlist) - @mdanilowicz (#4393)
+- Fixes problems related to tax calculation and price filter in multistore setup - @juho-jaakkola (#4376)
+- Blank order details page - @mdanilowicz (#4382)
+- upadate cart hash after sync with backend - @gibkigonzo (#4387)
+- exit from errorHandler after redirection - @gibkigonzo (#4246)
+- add redirection in component for simple product related to configurable product - @gibkigonzo (#4359)
+- disable sending carrier_code or method_code for virtual products,
+  adjust vue-carousel and vuelidate to newest versions api,
+  add aplha validators for register fields - @gibkigonzo (#4455, #4461)
 
 ## [1.11.3] - 2020.04.27
 

@@ -34,18 +34,19 @@ function convertToObject (payload: any) {
 
 export default ({ type, message, tag, context }) => {
   const { environment, mandant } = config.icmaa
+  const application_name = 'vue-storefront'
 
   if (isServer) {
     const logger = createLogger()
     logger.log(
-      type,
+      type || 'info',
       tag ? `[${tag}] ${convertToString(message)}` : convertToString(message),
-      Object.assign({ environment, mandant, vsf: true }, convertToObject(context))
+      Object.assign({ environment, mandant, application_name, vsf: true }, convertToObject(context))
     )
   } else {
     datadogLogs.logger.log(
       convertToString(message),
-      Object.assign({ environment, mandant, vsf: true }, convertToObject(context)),
+      Object.assign({ environment, mandant, application_name, vsf: true }, convertToObject(context)),
       type || 'info'
     )
   }
