@@ -74,9 +74,12 @@ export default {
           propsTypes: {
             limit: 'number',
             categoryId: 'number',
-            sort: 'string'
+            sort: 'string',
+            filter: 'json'
           },
-          propsDefaults: {},
+          propsDefaults: {
+            filter: {}
+          },
           cssClass: 't-mb-8',
           padding: false
         }
@@ -104,6 +107,11 @@ export default {
               switch (propsTypes[k]) {
                 case 'number':
                   p = parseInt(p)
+                  break
+                case 'json':
+                  if (typeof p === 'string') {
+                    p = JSON.parse(p)
+                  }
                   break
                 default:
                   if (typeof propsTypes[k] === 'function') {
