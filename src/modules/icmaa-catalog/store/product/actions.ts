@@ -69,16 +69,12 @@ const actions: ActionTree<ProductState, RootState> = {
       await dispatch('category-next/loadCategoryBreadcrumbs', { category: breadcrumbCategory, currentRouteName: product.name }, { root: true })
     }
   },
-  async updateConfiguration ({ dispatch, commit, getters }, { option }): Promise<{ selectedVariant: any, configuration: any }> {
+  /**
+   * Update configuration by mutation
+   */
+  updateConfiguration ({ commit, getters }, { option }): void {
     const configuration = Object.assign({}, getters.getCurrentProductConfiguration, { [option.type]: option })
-    const selectedVariant = await dispatch('getProductVariant', {
-      product: getters.getCurrentProduct,
-      configuration
-    })
-
-    commit(types.PRODUCT_SET_CURRENT_CONFIGURATION, selectedVariant ? configuration : {})
-
-    return { selectedVariant, configuration }
+    commit(types.PRODUCT_SET_CURRENT_CONFIGURATION, configuration)
   },
   async updateBundleOptions ({ commit, dispatch, getters }, option: { optionId: string, productLink: any, [key: string]: any }) {
     const { optionId, productLink } = option
