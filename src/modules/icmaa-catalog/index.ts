@@ -6,16 +6,33 @@ import { IcmaaExtendedAttributeStore } from './store/attribute'
 import { IcmaaExtendedCategoryStore } from './store/category'
 import { IcmaaExtendedProductStore } from './store/product'
 import { SearchAliasStore, stateKey } from './store/search-alias'
+import { icmaaCatalogHooks } from './hooks'
 
 import { products, entities } from 'config'
 import config from 'config'
 import uniq from 'lodash-es/uniq'
+import pick from 'lodash-es/pick'
 
 export const IcmaaExtendedCatalogModule: StorefrontModule = async ({ store }) => {
   extendStore('attribute', IcmaaExtendedAttributeStore)
   extendStore('category-next', IcmaaExtendedCategoryStore)
   extendStore('product', IcmaaExtendedProductStore)
   store.registerModule(stateKey, SearchAliasStore)
+
+  /**
+   * Bugfix for missing price if the selected variant don't have specific price attributes.
+   * This mutator event is added to core inside the `getSelectedVariant` method.
+   * ---
+   * If you switch between different configurable options, sometimes the options don't have a price value.
+   * The selected variant then won't overwrite the option you choose before and the price wont change back.
+   */
+  icmaaCatalogHooks.afterSelectedVariant(({ product, selectedVariant }) => {
+    if (!selectedVariant.price_incl_tax) {
+      const priceKeys = ['price', 'price_tax', 'price_incl_tax', 'original_price', 'original_price_tax', 'original_price_incl_tax']
+      selectedVariant = Object.assign(selectedVariant, pick(product, priceKeys))
+    }
+    return selectedVariant
+  })
 
   if (!isServer) {
     /**
