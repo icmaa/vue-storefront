@@ -92,7 +92,7 @@ jobs:
           yarn pm2 start ecosystem.ci.json
 
       - name: Cypress run
-        uses: cypress-io/github-action@v1
+        uses: cypress-io/github-action@v1.16.1
         timeout-minutes: 5
         with:
           working-directory: src/themes/icmaa-imp/test/e2e
@@ -105,7 +105,7 @@ jobs:
           record: true
           parallel: true
           group: ${{ runner.os }}
-          ci-build-id: '${{ github.workflow }}-${{ github.sha }}-${{ github.run_id }}-${{ github.run_number }}'
+          ci-build-id: 'continous-integration-${{ github.sha }}-${{ github.run_id }}-${{ github.run_number }}'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           CYPRESS_RECORD_KEY: ${{secrets.CYPRESS_RECORD_KEY}}
