@@ -18,7 +18,7 @@ export default {
   },
   computed: {
     ...mapGetters({
-      rawLandingPages: 'icmaaCmsLangingPages/getAll'
+      rawLandingPages: 'icmaaCmsLandingPages/getAll'
     }),
     identifier () {
       return this.$route.params.identifier
@@ -35,7 +35,7 @@ export default {
         .add('product')
     }
 
-    await store.dispatch('icmaaCmsLangingPages/single', { value: this.identifier })
+    await store.dispatch('icmaaCmsLandingPages/single', { value: this.identifier })
   }
 }
 </script>
