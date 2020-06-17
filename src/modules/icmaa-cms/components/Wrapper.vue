@@ -100,7 +100,7 @@ export default {
             (v, k) => camelCase(k)
           )
 
-          props = Object.assign(props, propsDefaults)
+          props = Object.assign(propsDefaults, props)
 
           props = mapValues(props, (p, k) => {
             if (Object.keys(propsTypes).includes(k)) {
