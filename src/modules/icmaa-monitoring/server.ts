@@ -27,10 +27,10 @@ if (icmaa_monitoring.datadog.enabled === true) {
   })
 
   // Log handled ssr exeptions using winston
-  serverHooks.ssrException(({ err }) => {
-    let payload = { payload: err as any }
-    if (err instanceof Error) {
-      payload = { payload: err.message + '\n' + err.stack }
+  serverHooks.ssrException(({ err, req }) => {
+    let payload = {
+      path: req.url,
+      payload: err.message + '\n' + err.stack
     }
 
     const logger = createLogger()
