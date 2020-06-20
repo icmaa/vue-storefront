@@ -5,8 +5,12 @@ import Hreflang from 'icmaa-meta/helper/head/hreflang'
 import { StoreView } from 'icmaa-config/types/ConfigState'
 
 const defaults: any = (store: StoreView) => {
+  if (!store) {
+    return {}
+  }
+
   const { storeCode, meta, facebook } = store
-  const storeLang = store.i18n.defaultLocale
+  const storeLang = store.i18n.defaultLocale || config.i18n.defaultLocale
 
   const hreflang = new Hreflang(store)
   const iconPath = `/assets/${config.icmaa.mandant}/meta`
