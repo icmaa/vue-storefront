@@ -34,6 +34,6 @@ if (icmaa_monitoring.datadog.enabled === true) {
     }
 
     const logger = createLogger()
-    logger.log('error', 'SSR Exception', payload)
+    logger.log('error', 'SSR Exception: ' + err.message, payload)
   })
 }

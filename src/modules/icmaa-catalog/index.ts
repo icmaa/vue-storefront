@@ -27,7 +27,7 @@ export const IcmaaExtendedCatalogModule: StorefrontModule = async ({ store }) =>
    * The selected variant then won't overwrite the option you choose before and the price wont change back.
    */
   icmaaCatalogHooks.afterSelectedVariant(({ product, selectedVariant }) => {
-    if (!selectedVariant.price_incl_tax) {
+    if (selectedVariant && !selectedVariant.price_incl_tax) {
       const priceKeys = ['price', 'price_tax', 'price_incl_tax', 'original_price', 'original_price_tax', 'original_price_incl_tax']
       selectedVariant = Object.assign(selectedVariant, pick(product, priceKeys))
     }
