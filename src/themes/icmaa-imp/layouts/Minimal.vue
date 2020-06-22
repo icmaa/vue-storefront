@@ -1,6 +1,6 @@
 <template>
   <div class="minimal-layout">
-    <div id="viewport" class="w-100 relative">
+    <div id="viewport" class="t-w-full">
       <minimal-header />
       <slot />
       <minimal-footer />
@@ -35,10 +35,6 @@ export default {
       this.fetchMetaData()
     ])
   },
-  beforeMount () {
-  },
-  beforeDestroy () {
-  },
   metaInfo () {
     return this.getMetaData()
   },
@@ -49,6 +45,4 @@ export default {
 }
 </script>
 
-<style lang="scss" src="theme/css/main.scss">
-
-</style>
+<style lang="scss" src="theme/css/main.scss" />
