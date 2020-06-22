@@ -35,10 +35,6 @@ export default {
       this.fetchMetaData()
     ])
   },
-  beforeMount () {
-  },
-  beforeDestroy () {
-  },
   metaInfo () {
     return this.getMetaData()
   },

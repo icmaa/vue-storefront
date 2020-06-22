@@ -1,6 +1,6 @@
 <template>
   <div id="page_not_found" class="t-container">
-    <div class="t-p-4 lg:t-py-8">
+    <div class="t-p-4 t-py-8">
       <h2 class="t-text-lg t-font-bold t-text-primary">
         {{ $t("Something went wrong ...") }}
       </h2>
@@ -12,10 +12,9 @@
 </template>
 
 <script>
-import Error from '@vue-storefront/core/pages/Error'
 
 export default {
-  name: 'Error',
-  mixins: [Error]
+  name: 'Error'
 }
+
 </script>
