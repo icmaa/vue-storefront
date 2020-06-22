@@ -32,6 +32,9 @@
         </ul>
       </li>
     </ul>
+    <lazy-hydrate>
+      <product-listing-widget class="productlistingwidget" :category-id="3278" :limit="8" :filter="{ department: department }" />
+    </lazy-hydrate>
   </div>
   <div v-else>
     No landing page found for ID {{ rootCategoryId }}
@@ -43,6 +46,7 @@ import LazyHydrate from 'vue-lazy-hydration'
 import List from 'icmaa-category/components/List'
 import LogoLine from 'theme/components/core/blocks/CategoryExtras/LogoLine'
 import Teaser from 'theme/components/core/blocks/Teaser/Teaser'
+import ProductListingWidget from 'icmaa-category/components/core/ProductListingWidget'
 import { formatCategoryLink } from '@vue-storefront/core/modules/url/helpers'
 
 export default {
@@ -50,7 +54,8 @@ export default {
   components: {
     LogoLine,
     Teaser,
-    LazyHydrate
+    LazyHydrate,
+    ProductListingWidget
   },
   methods: {
     getCategoryRoute (category) {
@@ -60,6 +65,9 @@ export default {
   computed: {
     teaserTag () {
       return String(this.$route.params.teaserTag)
+    },
+    department () {
+      return String(this.$route.params.department)
     }
   }
 }
@@ -75,6 +83,11 @@ export default {
       break-inside: avoid;
     }
   }
+}
+
+.productlistingwidget {
+  margin-top: 2rem;
+  padding: 0rem !important;
 }
 
 </style>
