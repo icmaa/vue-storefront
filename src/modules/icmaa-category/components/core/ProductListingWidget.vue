@@ -1,5 +1,5 @@
 <template>
-  <div data-test-id="ProductListingWidget" class="product-listing t-flex t-flex-wrap t-justify-start t-px-3 lg:t-px-4 lg:t--mx-2">
+  <div data-test-id="ProductListingWidget" class="product-listing t-flex t-flex-wrap t-justify-start lg:t--mx-2" :class="[ apperance ] ">
     <template v-for="(product, i) in products">
       <product-tile :product="product" :key="`product-${i}`" class="t-px-1 lg:t-px-2 t-mb-8" :class="['t-w-1/2 lg:t-w-1/' + columns]" />
     </template>
@@ -36,6 +36,10 @@ export default {
     sort: {
       type: String,
       default: 'online:desc'
+    },
+    apperance: {
+      type: String,
+      default: 't-px-3 lg:t-px-4'
     }
   },
   computed: {
@@ -47,6 +51,9 @@ export default {
         return []
       }
       return products.list.slice(0, this.limit)
+    },
+    isIcmaaCategoryList () {
+      return this.$route.path === '/de/merchandise'
     }
   },
   methods: {

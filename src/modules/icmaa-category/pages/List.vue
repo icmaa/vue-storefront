@@ -1,20 +1,22 @@
 <template>
-  <div id="category-list" class="t-container t-px-4 t-my-8" v-if="notEmpty">
-    <h1>{{ parent.name }}</h1>
-    <div class="t-flex t-flex-wrap t--mx-4">
+  <div id="category-list" class="t-container t-my-8" v-if="notEmpty">
+    <div class="t-flex t-flex-wrap t--mx-4 t-px-4">
+      <h1 class="t-px-4 t-mb-3 t-text-2xl t-font-medium t-leading-5">
+        {{ parent.name }}
+      </h1>
       <div class="t-w-full">
         <teaser :tags="teaserTag" :show-large="false" :show-small-in-row="true" />
       </div>
     </div>
     <lazy-hydrate when-idle>
-      <logo-line :parent-id="rootCategoryId" :limit="12" :placeholder="true" column-class="t-w-1/3 md:t-w-1/6 t-py-2" class="t-justify-between t-my-8" />
+      <logo-line :parent-id="rootCategoryId" :limit="12" :placeholder="true" column-class="t-w-1/3 md:t-w-1/6 t-py-2" class="t-justify-between t-my-8 t-px-4" />
     </lazy-hydrate>
-    <ul class="slingrope t-flex t-overflow-auto t-scrolling-touch">
+    <ul class="slingrope t-flex t-overflow-auto t-scrolling-touch t-mx-4">
       <li :key="letter.letter" v-for="letter in categoriesGroupedByFirstLetter">
         <a :href="`#${ letter.anchor }`" v-html="letter.letter" v-scroll-to="`#${ letter.anchor }`" class="t-flex t-px-4 t-py-2 t-bg-white t-border-r t-border-b t-border-base-lightest t-font-mono" />
       </li>
     </ul>
-    <ul class="letters t-px-2">
+    <ul class="letters t-px-6">
       <li :key="letter.letter" v-for="letter in categoriesGroupedByFirstLetter" :id="letter.anchor" class="t-p-4 t-py-8 t-bg-white t-my-4 t-flex t--mx-2">
         <h2 class="t-w-2/12 lg:t-w-1/12 t-px-2 t-pr-6 t-py-1 t-text-right t-text-3xl t-font-bold">
           {{ letter.letter }}
@@ -33,7 +35,7 @@
       </li>
     </ul>
     <lazy-hydrate>
-      <product-listing-widget class="productlistingwidget" :category-id="3278" :limit="8" :filter="{ department: department }" />
+      <product-listing-widget apperance="t-px-3 lg:t-px-4 t-mt-2" :category-id="3278" :limit="8" :filter="{ department: department }" />
     </lazy-hydrate>
   </div>
   <div v-else>
@@ -84,10 +86,4 @@ export default {
     }
   }
 }
-
-.productlistingwidget {
-  margin-top: 2rem;
-  padding: 0rem !important;
-}
-
 </style>
