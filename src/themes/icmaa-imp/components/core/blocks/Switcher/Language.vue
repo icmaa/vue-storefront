@@ -4,9 +4,13 @@
       {{ $t('Switch store') }}
     </div>
     <div class="t-flex t-flex-wrap t--mx-2 t--mb-4">
-      <div class="t-w-full t-px-2 t-pb-4 t-text-sm" v-if="changeStoreAdvice">
+      <div class="t-w-full t-px-2 t-pb-4 t-text-sm" v-if="storeRecommendationAdvice">
         <span>{{ $t('We detected a different language.') }}</span><br>
         <span class="t-font-bold">{{ $t('Are you in the right store?') }}</span>
+      </div>
+      <div class="t-w-full t-px-2 t-pb-4 t-text-sm" v-if="changeStoreAdvice">
+        <span>{{ $t('You\'re about to change to another language.') }}</span><br>
+        <span class="t-font-bold">{{ $t('Please be aware that you might need to login again or refill your cart if you switch to a new language.') }}</span>
       </div>
       <div class="t-w-1/2 t-px-2 t-pb-4" v-for="(storeView) in storeViews" :key="storeView.languageCode" @click="setLanguageAccepted(storeView.storeCode)">
         <language-button :store-view="storeView" :is-current="storeView.storeCode === currentStoreView.storeCode" />
@@ -28,6 +32,10 @@ export default {
     LanguageButton
   },
   props: {
+    storeRecommendationAdvice: {
+      type: Boolean,
+      default: false
+    },
     changeStoreAdvice: {
       type: Boolean,
       default: false
@@ -52,7 +60,7 @@ export default {
       this.$store.dispatch('claims/set', { claimCode: 'languageAccepted', value })
     },
     onClose () {
-      if (this.changeStoreAdvice) {
+      if (this.storeRecommendationAdvice) {
         this.setLanguageAccepted(this.currentStoreView.storeCode)
       }
     }

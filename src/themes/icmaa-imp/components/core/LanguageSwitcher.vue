@@ -1,6 +1,6 @@
 <template>
   <div class="">
-    <modal-switcher v-if="loadLanguagesModal" :change-store-advice="changeStoreAdvice" />
+    <modal-switcher v-if="loadLanguagesModal" :store-recommendation-advice="storeRecommendationAdvice" :change-store-advice="changeStoreAdvice" />
     <modal-advice v-if="loadLanguageAdviceModal" :current="claim.value" />
   </div>
 </template>
@@ -22,7 +22,7 @@ export default {
       claim: false,
       loadLanguagesModal: false,
       loadLanguageAdviceModal: false,
-      changeStoreAdvice: false,
+      storeRecommendationAdvice: false,
       languageAccepted: false
     }
   },
@@ -57,15 +57,18 @@ export default {
       }
 
       return found.length > 0 ? found : undefined;
+    },
+    changeStoreAdvice () {
+      return this.claim && this.languageAccepted
     }
   },
   methods: {
     async getClaim () {
       return this.$store.dispatch('claims/check', { claimCode: 'languageAccepted' })
     },
-    showLanguagesModal (changeStoreAdvice = false) {
+    showLanguagesModal (storeRecommendationAdvice = false) {
       this.loadLanguagesModal = true
-      this.changeStoreAdvice = changeStoreAdvice
+      this.storeRecommendationAdvice = storeRecommendationAdvice
 
       this.$bus.$emit('modal-show', 'modal-switcher')
     },
@@ -89,6 +92,8 @@ export default {
   async mounted () {
     this.claim = await this.getClaim()
     if (!this.claim) {
+      this.languageAccepted = this.isCorrectStoreviewLanguage
+
       const { storeCode } = this.storeView
       const value = { accepted: this.isCorrectStoreviewLanguage, storeCode }
 
