@@ -35,7 +35,7 @@
       </li>
     </ul>
     <lazy-hydrate>
-      <product-listing-widget apperance="t-px-3 lg:t-px-4 t-mt-2" :category-id="3278" :limit="8" :filter="{ department: department }" />
+      <product-listing-widget appearance="t-px-3 lg:t-px-4 t-mt-2" :category-id="3278" :limit="8" :filter="{ department }" />
     </lazy-hydrate>
   </div>
   <div v-else>
