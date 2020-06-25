@@ -6,6 +6,7 @@
 </template>
 
 <script>
+import { Logger } from '@vue-storefront/core/lib/logger'
 import { currentStoreView } from '@vue-storefront/core/lib/multistore'
 import { coreHooksExecutors } from '@vue-storefront/core/hooks'
 
@@ -82,6 +83,7 @@ export default {
         this.languageAccepted === true &&
         this.storeView.storeCode !== this.claim.value.storeCode
       ) {
+        Logger.log('Toggle store-view advice', 'icmaa-imp-theme', this.claim)()
         this.loadLanguageAdviceModal = true
       }
     }
@@ -95,7 +97,7 @@ export default {
       this.languageAccepted = this.isCorrectStoreviewLanguage
 
       const { storeCode } = this.storeView
-      const value = { accepted: this.isCorrectStoreviewLanguage, storeCode }
+      const value = { accepted: this.languageAccepted, storeCode }
 
       this.$store.dispatch(
         'claims/set',
