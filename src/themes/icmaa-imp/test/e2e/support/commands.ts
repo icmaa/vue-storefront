@@ -227,7 +227,7 @@ Cypress.Commands.add('acceptCookieNotice', () => {
 Cypress.Commands.add('hideLanguageModal', () => {
   localStorage.setItem(
     'shop/uniClaims/languageAccepted',
-    `{"code":"languageAccepted","created_at":"${new Date().toISOString()}","value":"de-DE"}`
+    `{"code":"languageAccepted","created_at":"${new Date().toISOString()}","value":{accepted: true,storeCode: "de"}}`
   )
 })
 

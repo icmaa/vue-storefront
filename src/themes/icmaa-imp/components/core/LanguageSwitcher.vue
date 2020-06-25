@@ -1,19 +1,26 @@
 <template>
-  <modal-switcher v-if="loadLanguagesModal" :change-store-advice="changeStoreAdvice" />
+  <div class="">
+    <modal-switcher v-if="loadLanguagesModal" :change-store-advice="changeStoreAdvice" />
+    <modal-advice v-if="loadLanguageAdviceModal" :current="claim.value" />
+  </div>
 </template>
 
 <script>
 import { currentStoreView } from '@vue-storefront/core/lib/multistore'
 
 const ModalSwitcher = () => import(/* webpackChunkName: "vsf-languages-modal" */ 'theme/components/core/blocks/Switcher/Language.vue')
+const ModalAdvice = () => import(/* webpackChunkName: "vsf-storeview-advice-modal" */ 'theme/components/core/blocks/Switcher/StoreViewAdvice.vue')
 
 export default {
   components: {
-    ModalSwitcher
+    ModalSwitcher,
+    ModalAdvice
   },
   data () {
     return {
+      claim: false,
       loadLanguagesModal: false,
+      loadLanguageAdviceModal: false,
       changeStoreAdvice: false,
       languageAccepted: false
     }
@@ -28,7 +35,7 @@ export default {
       }
 
       const { defaultLocale, defaultLanguage } = this.storeView.i18n
-      return this.browserLanguages.find(lang =>
+      return this.browserLanguages.some(lang =>
         [defaultLocale, defaultLanguage].includes(lang) ||
         defaultLocale.startsWith(lang) ||
         defaultLanguage.startsWith(lang)
@@ -63,14 +70,21 @@ export default {
     this.$bus.$on('modal-toggle-switcher', this.showLanguagesModal)
   },
   async mounted () {
-    const claim = await this.$store.dispatch('claims/check', { claimCode: 'languageAccepted' })
-    if (!claim) {
+    this.claim = await this.$store.dispatch('claims/check', { claimCode: 'languageAccepted' })
+    if (!this.claim) {
+      const { storeCode } = this.storeView
+      const value = { accepted: this.isCorrectStoreviewLanguage, storeCode }
+
       this.$store.dispatch(
         'claims/set',
-        { claimCode: 'languageAccepted', value: this.isCorrectStoreviewLanguage }
+        { claimCode: 'languageAccepted', value }
       )
     } else {
-      this.languageAccepted = claim.value
+      this.languageAccepted = this.claim.value.accepted
+
+      if (this.languageAccepted === true && this.storeView.storeCode !== this.claim.value.storeCode) {
+        this.loadLanguageAdviceModal = true
+      }
     }
 
     if (!this.isCorrectStoreviewLanguage) {

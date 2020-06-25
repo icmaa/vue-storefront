@@ -1,5 +1,5 @@
 <template>
-  <modal name="modal-switcher" :width="500" @close="setLanguageAccepted">
+  <modal name="modal-switcher" :width="500" @close="onClose">
     <div slot="header">
       {{ $t('Switch store') }}
     </div>
@@ -8,7 +8,7 @@
         <span>{{ $t('We detected a different language.') }}</span><br>
         <span class="t-font-bold">{{ $t('Are you in the right store?') }}</span>
       </div>
-      <div class="t-w-1/2 t-px-2 t-pb-4" v-for="(storeView) in storeViews" :key="storeView.languageCode" @click="setLanguageAccepted">
+      <div class="t-w-1/2 t-px-2 t-pb-4" v-for="(storeView) in storeViews" :key="storeView.languageCode" @click="setLanguageAccepted(storeView.storeCode)">
         <language-button :store-view="storeView" :is-current="storeView.storeCode === currentStoreView.storeCode" />
       </div>
     </div>
@@ -17,7 +17,6 @@
 
 <script>
 import config from 'config'
-import { mapGetters } from 'vuex'
 import { currentStoreView } from '@vue-storefront/core/lib/multistore'
 
 import Modal from 'theme/components/core/Modal.vue'
@@ -48,10 +47,13 @@ export default {
     }
   },
   methods: {
-
-    setLanguageAccepted () {
+    setLanguageAccepted (storeCode) {
+      const value = { accepted: true, storeCode }
+      this.$store.dispatch('claims/set', { claimCode: 'languageAccepted', value })
+    },
+    onClose () {
       if (this.changeStoreAdvice) {
-        this.$store.dispatch('claims/set', { claimCode: 'languageAccepted', value: true })
+        this.setLanguageAccepted(this.currentStoreView.storeCode)
       }
     }
   },
