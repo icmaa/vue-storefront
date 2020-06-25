@@ -7,6 +7,7 @@
 
 <script>
 import { currentStoreView } from '@vue-storefront/core/lib/multistore'
+import { coreHooksExecutors } from '@vue-storefront/core/hooks'
 
 const ModalSwitcher = () => import(/* webpackChunkName: "vsf-languages-modal" */ 'theme/components/core/blocks/Switcher/Language.vue')
 const ModalAdvice = () => import(/* webpackChunkName: "vsf-storeview-advice-modal" */ 'theme/components/core/blocks/Switcher/StoreViewAdvice.vue')
@@ -59,18 +60,34 @@ export default {
     }
   },
   methods: {
+    async getClaim () {
+      return this.$store.dispatch('claims/check', { claimCode: 'languageAccepted' })
+    },
     showLanguagesModal (changeStoreAdvice = false) {
       this.loadLanguagesModal = true
       this.changeStoreAdvice = changeStoreAdvice
 
       this.$bus.$emit('modal-show', 'modal-switcher')
+    },
+    async onStoreSwitch (fetchClaim = false) {
+      if (fetchClaim) {
+        await this.getClaim()
+      }
+
+      if (
+        this.claim &&
+        this.languageAccepted === true &&
+        this.storeView.storeCode !== this.claim.value.storeCode
+      ) {
+        this.loadLanguageAdviceModal = true
+      }
     }
   },
   beforeMount () {
     this.$bus.$on('modal-toggle-switcher', this.showLanguagesModal)
   },
   async mounted () {
-    this.claim = await this.$store.dispatch('claims/check', { claimCode: 'languageAccepted' })
+    this.claim = await this.getClaim()
     if (!this.claim) {
       const { storeCode } = this.storeView
       const value = { accepted: this.isCorrectStoreviewLanguage, storeCode }
@@ -81,11 +98,12 @@ export default {
       )
     } else {
       this.languageAccepted = this.claim.value.accepted
-
-      if (this.languageAccepted === true && this.storeView.storeCode !== this.claim.value.storeCode) {
-        this.loadLanguageAdviceModal = true
-      }
+      this.onStoreSwitch()
     }
+
+    coreHooksExecutors.afterStoreViewChanged(storeView => {
+      this.onStoreSwitch(true)
+    })
 
     if (!this.isCorrectStoreviewLanguage) {
       this.showLanguagesModal(true)

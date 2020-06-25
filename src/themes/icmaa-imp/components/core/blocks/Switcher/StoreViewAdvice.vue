@@ -65,7 +65,6 @@ export default {
     },
     goBack () {
       this.$router.push('/' + this.current.storeCode)
-      this.closeModal()
     },
     closeModal () {
       this.$bus.$emit('modal-hide', 'modal-storeview-advice')
