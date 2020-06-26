@@ -61,8 +61,7 @@ export default {
       return found.length > 0 ? found : undefined;
     },
     isStoreAdviceVisible () {
-      const { showAdvice, onlyLoggedIn, onlyWithCart } = config.icmaa.storeViewSwitch
-      if (!this.claim || !showAdvice) {
+      if (!this.claim || !config.icmaa.storeViewSwitch.showAdvice) {
         return false
       }
 
