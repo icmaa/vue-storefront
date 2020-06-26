@@ -214,6 +214,16 @@ declare namespace Cypress {
     isLoggedIn(status?: boolean): Chainable<Window>,
 
     /**
+     * Set specific or random store-code.
+     * Adds alias `storeCode` for further use.
+     *
+     * @example
+     * cy.setStoreCode()
+     * cy.setStoreCode('de')
+     */
+    setStoreCode(storeCode?: string): Chainable<Window>,
+
+    /**
      * Set local storage to mark cookie-notice as accepted.
      * Adds alias `customer` for further use of customer object.
      *
