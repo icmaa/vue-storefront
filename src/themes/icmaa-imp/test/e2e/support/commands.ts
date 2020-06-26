@@ -112,7 +112,7 @@ Cypress.Commands.overwrite('visit', (originalFn, url, options?) => {
       .acceptCookieNotice()
   }
 
-  cy.get<string>('@storeCode').then(storeCode => {
+  cy.getStoreCode().then(storeCode => {
     if (!url.startsWith('/')) {
       url = '/' + url
     }
@@ -162,6 +162,15 @@ Cypress.Commands.add('getCategoryEntryPointUrl', () => {
 
 Cypress.Commands.add('getStoreCode', () => {
   cy.get<string>('@storeCode')
+})
+
+Cypress.Commands.add('setStoreCode', (storeCode?) => {
+  const storeCodes: string[] = Settings.availableStoreViews
+  if (!storeCode || !storeCodes.includes(storeCode)) {
+    storeCode = storeCodes[Math.floor(Math.random() * (storeCodes.length - 1))]
+  }
+
+  cy.wrap(storeCode).as('storeCode')
 })
 
 Cypress.Commands.add('openSidebar', (trigger: string = '[data-test-id="HeaderButtonSidebar"]', overlaySelector: string = '[data-test-id="Sidebar"]') => {
@@ -223,15 +232,6 @@ Cypress.Commands.add('isLoggedIn', (status: boolean = true) => {
   cy.get('@accountButton').should('have.class', status ? 'logged-in' : 'logged-out')
 })
 
-Cypress.Commands.add('setStoreCode', (storeCode?) => {
-  const storeCodes: string[] = Settings.availableStoreViews
-  if (!storeCode || !storeCodes.includes(storeCode)) {
-    storeCode = storeCodes[Math.floor(Math.random() * (storeCodes.length - 1))]
-  }
-
-  cy.wrap(storeCode).as('storeCode')
-})
-
 Cypress.Commands.add('acceptCookieNotice', () => {
   localStorage.setItem(
     'shop/uniClaims/cookiesAccepted',
@@ -240,7 +240,7 @@ Cypress.Commands.add('acceptCookieNotice', () => {
 })
 
 Cypress.Commands.add('hideLanguageModal', () => {
-  cy.get<string>('@storeCode').then(storeCode => {
+  cy.getStoreCode().then(storeCode => {
     localStorage.setItem(
       'shop/uniClaims/languageAccepted',
       `{ "code": "languageAccepted", "created_at": "${new Date().toISOString()}", "value": { accepted: true, storeCode: "${storeCode}" } }`

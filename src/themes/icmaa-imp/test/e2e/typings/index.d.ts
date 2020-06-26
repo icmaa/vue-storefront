@@ -159,6 +159,16 @@ declare namespace Cypress {
     getStoreCode(): Chainable<string>,
 
     /**
+     * Set specific or random store-code.
+     * Adds alias `storeCode` for further use.
+     *
+     * @example
+     * cy.setStoreCode()
+     * cy.setStoreCode('de')
+     */
+    setStoreCode(storeCode?: string): Chainable<Window>,
+
+    /**
      * Open sidebar.
      * Adds alias `sidebar` for further use.
      *
@@ -212,16 +222,6 @@ declare namespace Cypress {
      * cy.isLoggedIn(false)
      */
     isLoggedIn(status?: boolean): Chainable<Window>,
-
-    /**
-     * Set specific or random store-code.
-     * Adds alias `storeCode` for further use.
-     *
-     * @example
-     * cy.setStoreCode()
-     * cy.setStoreCode('de')
-     */
-    setStoreCode(storeCode?: string): Chainable<Window>,
 
     /**
      * Set local storage to mark cookie-notice as accepted.
