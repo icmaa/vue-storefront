@@ -9,8 +9,12 @@ export default function buildQuery (skus: string[]): SearchQuery {
   productsQuery = productsQuery
     .applyFilter({ key: 'sku', value: { 'in': skus } })
     .applyFilter({ key: 'status', value: { 'in': [1] } })
-  if (config.products.listOutOfStockProducts === false) {
-    productsQuery = productsQuery.applyFilter({ key: 'stock.is_in_stock', value: { 'eq': true } })
-  }
+
+  // MOD < Don't filter for stock value to have all children
+  // if (config.products.listOutOfStockProducts === false) {
+  //   productsQuery = productsQuery.applyFilter({ key: 'stock.is_in_stock', value: { 'eq': true } })
+  // }
+  // MOD > Don't filter for stock value to have all children
+
   return productsQuery
 }

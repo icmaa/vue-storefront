@@ -2,7 +2,7 @@
   <div class="t-w-full">
     <div class="t-bg-alert t-p-4 t-mb-4 t-text-white t-text-sm t-flex" v-if="isChildOutOfStock">
       <material-icon icon="report_problem" class="t-mr-2" />
-      <div class="">
+      <div>
         {{ $t('Sorry, but some required bundle items are currently out-of-stock.') }}
       </div>
     </div>
