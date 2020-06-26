@@ -8,7 +8,7 @@
         <span>{{ $t('We detected a different language.') }}</span><br>
         <span class="t-font-bold">{{ $t('Are you in the right store?') }}</span>
       </div>
-      <div class="t-w-full t-px-2 t-pb-4 t-text-sm" v-if="changeStoreAdvice">
+      <div class="t--mt-4 t--mx-2 lg:t--mt-8 lg:t--mx-6 t-bg-alt-2 t-mb-4 t-p-4 t-text-sm t-text-white" v-if="changeStoreAdvice">
         <span>{{ $t('You\'re about to change to another language.') }}</span><br>
         <span class="t-font-bold">{{ $t('Please be aware that you might need to login again or refill your cart if you switch to a new language.') }}</span>
       </div>
