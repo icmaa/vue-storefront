@@ -1,12 +1,12 @@
 <template>
   <modal name="modal-storeview-advice" :width="500" @close="onClose">
     <div slot="header">
-      {{ $t('Change language?') }}
+      {{ $t('Switched store?') }}
     </div>
     <div class="t-flex t-flex-wrap t--mx-2 t--mb-4">
       <div class="t-w-full t-px-2 t-pb-4 t-text-sm">
         <div class="t-mb-2">
-          {{ $t('You apperantly switched to another language. Did you intend to do so?') }}
+          {{ $t('You apperantly switched to another store. Did you intend to do so?') }}
         </div>
         <div class="t-font-bold t-mb-4">
           {{ $t('Please be aware that you might need to login again or refill your cart if you switch to a new language.') }}

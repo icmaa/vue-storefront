@@ -1,11 +1,12 @@
 <template>
   <div class="">
-    <modal-switcher v-if="loadLanguagesModal" :store-recommendation-advice="storeRecommendationAdvice" :change-store-advice="changeStoreAdvice" />
+    <modal-switcher v-if="loadLanguagesModal" :store-recommendation-advice="storeRecommendationAdvice" :change-store-advice="isStoreAdviceVisible" />
     <modal-advice v-if="loadLanguageAdviceModal" :current="claim.value" />
   </div>
 </template>
 
 <script>
+import config from 'config'
 import { Logger } from '@vue-storefront/core/lib/logger'
 import { currentStoreView } from '@vue-storefront/core/lib/multistore'
 import { coreHooksExecutors } from '@vue-storefront/core/hooks'
@@ -59,8 +60,13 @@ export default {
 
       return found.length > 0 ? found : undefined;
     },
-    changeStoreAdvice () {
-      return this.claim && this.languageAccepted
+    isStoreAdviceVisible () {
+      const { showAdvice, onlyLoggedIn, onlyWithCart } = config.icmaa.storeViewSwitch
+      if (!this.claim || !showAdvice) {
+        return false
+      }
+
+      return this.languageAccepted
     }
   },
   methods: {
@@ -73,14 +79,13 @@ export default {
 
       this.$bus.$emit('modal-show', 'modal-switcher')
     },
-    async onStoreSwitch (fetchClaim = false) {
+    async onStoreViewChanged (fetchClaim = false) {
       if (fetchClaim) {
         await this.getClaim()
       }
 
       if (
-        this.claim &&
-        this.languageAccepted === true &&
+        this.isStoreAdviceVisible &&
         this.storeView.storeCode !== this.claim.value.storeCode
       ) {
         Logger.log('Toggle store-view advice', 'icmaa-imp-theme', this.claim)()
@@ -105,11 +110,11 @@ export default {
       )
     } else {
       this.languageAccepted = this.claim.value.accepted
-      this.onStoreSwitch()
+      this.onStoreViewChanged()
     }
 
     coreHooksExecutors.afterStoreViewChanged(storeView => {
-      this.onStoreSwitch(true)
+      this.onStoreViewChanged(true)
     })
 
     if (!this.isCorrectStoreviewLanguage) {
