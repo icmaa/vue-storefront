@@ -39,7 +39,7 @@ const actions: ActionTree<CategoryState, RootState> = {
       filterQr.applySort({ field: 'is_in_sale', options: { 'missing': '_first' } })
     }
 
-    const { includeFields, excludeFields } = entities.productList
+    const { includeFields, excludeFields } = getters.getIncludeExcludeFields(category)
     const sort = searchQuery.sort || `${products.defaultSortBy.attribute}:${products.defaultSortBy.order}`
     const separateSelectedVariant = !icmaa_catalog.entities.category.configureChildProductsInCategoryList || false
 
@@ -78,12 +78,13 @@ const actions: ActionTree<CategoryState, RootState> = {
    *   but won't overwrite original options like the product image in unisex products
    */
   async loadMoreCategoryProducts ({ commit, getters, rootState, dispatch }) {
+    const category = getters.getCurrentCategory
     const { perPage, start, total } = getters.getCategorySearchProductsStats
     const totalValue = typeof total === 'object' ? total.value : total
     if (start >= totalValue || totalValue < perPage) return
 
     const searchQuery = getters.getCurrentSearchQuery
-    let filterQr = buildFilterProductsQuery(getters.getCurrentCategory, searchQuery.filters)
+    let filterQr = buildFilterProductsQuery(category, searchQuery.filters)
 
     // Add our custom category filter
     // @see DivanteLtd/vue-storefront#4111
@@ -92,7 +93,7 @@ const actions: ActionTree<CategoryState, RootState> = {
       filterQr.applySort({ field: 'is_in_sale', options: { 'missing': '_first' } })
     }
 
-    const { includeFields, excludeFields } = entities.productList
+    const { includeFields, excludeFields } = getters.getIncludeExcludeFields(category)
     const sort = searchQuery.sort || `${products.defaultSortBy.attribute}:${products.defaultSortBy.order}`
     const separateSelectedVariant = !icmaa_catalog.entities.category.configureChildProductsInCategoryList || false
 
