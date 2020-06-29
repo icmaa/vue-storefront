@@ -64,7 +64,7 @@ function _internalExecute (resolve, reject, task: Task, currentToken, currentCar
     if (contentType && contentType.includes('application/json')) {
       return response.json()
     } else {
-      const msg = i18n.t('Error with response - bad content-type!')
+      const msg = i18n.t('Error with response - bad content-type!', { url, contentType, task })
       Logger.error(msg.toString(), 'sync')()
       reject(msg)
     }
@@ -155,7 +155,7 @@ function _internalExecute (resolve, reject, task: Task, currentToken, currentCar
       }
     } else {
       const msg = i18n.t('Unhandled error, wrong response format!')
-      Logger.error(msg.toString(), 'sync')()
+      Logger.error(msg.toString(), 'sync', { url, task, jsonResponse })()
       reject(msg)
     }
   }).catch((err) => {
