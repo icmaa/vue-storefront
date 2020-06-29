@@ -2,7 +2,6 @@
 "Product price is unknown, product cannot be added to the cart!",سعر المنتج غير معلوم، لايمكن إضافته للسلة.
 "Stock check in progress, please wait while available stock quantities are checked",جاري فحص المخزون، يرجى الانتظار حتى يتم التأكد من التوفر
 "The product, category or CMS page is not available in Offline mode. Redirecting to Home.",المنتج أو التصنيف أو الصفحة غير متوفرة بدون اتصال إنترنت. جاري التحويل للصفحة الرئيسية.
-"Unhandled error, wrong response format!","Unhandled error, wrong response format!"
 404 Page Not Found,404 الصفحة غير متوفرة
 Account data has successfully been updated,تم تحديث الحساب بنجاح
 Add review,أضف مراجعة
