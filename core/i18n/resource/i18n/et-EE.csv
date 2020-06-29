@@ -10,7 +10,6 @@
 "Compare products","Võrdle tooteid"
 "Confirm your order","Kinnitage oma tellimus"
 "Error refreshing user token. User is not authorized to access the resource","Kasutaja tokeni uuendamisel esineb probleeme. Kasutajal puuduvad õigused antud lehele sisenemiseks"
-"Error with response - bad content-type!","Viga sisu laadimisel"
 "Error: Error while adding products","Viga toote lisamisel."
 "Extension developers would like to thank you for placing an order!","Mooduli loojad tänavad tellimuse tegemise eest!"
 "Field is required",Kohustuslik
