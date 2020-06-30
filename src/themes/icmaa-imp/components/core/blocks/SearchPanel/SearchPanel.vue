@@ -9,7 +9,7 @@
     </template>
     <div class="t-pb-20">
       <div v-if="getNoResultsMessage" class="t-px-2 t-mt-2 t-text-sm">
-        {{ $t(getNoResultsMessage) }}
+        {{ getNoResultsMessage }}
       </div>
       <category-panel :categories="categories" title="Categories" :link="true" v-if="!emptyResults && filteredProducts.length && categories.length > 0" class="t-mb-4" />
       <category-panel :categories="categoryAggs" v-model="selectedCategoryIds" v-if="!emptyResults && filteredProducts.length && categoryAggs.length > 1" class="t-mb-4" />
@@ -108,9 +108,11 @@ export default {
       let msg = ''
       if (this.searchString !== '') {
         if (this.$v.searchString.$invalid) {
-          msg = 'Searched term should consist of at least 3 characters.'
+          msg = i18n.t('Searched term should consist of at least 3 characters.')
+        } else if (this.loadingProducts && this.emptyResults) {
+          msg = i18n.t('Please wait') + ' ...'
         } else if (this.emptyResults) {
-          msg = 'No results were found.'
+          msg = i18n.t('No results were found.')
         }
       }
 
@@ -148,7 +150,11 @@ export default {
 
       return searchString
     },
-    search: debounce(async function () {
+    search () {
+      this.loadingProducts = true
+      this.searchDebounced()
+    },
+    searchDebounced: debounce(async function () {
       if (!this.$v.searchString.$invalid) {
         this.searchAlias = await this.getAlias(this.searchString)
         let query = this.prepareQuickSearchQuery(this.searchAlias)
