@@ -8,15 +8,18 @@
       <input type="text" v-model="searchString" @input="search" @blur="$v.searchString.$touch()" :placeholder="$t('Type what you are looking for...')" autofocus="true" data-test-id="SearchInput" ref="searchString" class="t-flex-expand t-p-0 t-text-lg t-text-base-tone placeholder:t-text-base-lighter">
     </template>
     <div class="t-pb-20">
-      <div v-if="getNoResultsMessage" class="t-px-2 t-mt-2 t-text-sm">
-        {{ $t(getNoResultsMessage) }}
+      <div v-if="getNoResultsMessage" class="t-px-2 t-mt-2 t-mb-4 t-text-sm">
+        {{ getNoResultsMessage }}
       </div>
-      <category-panel :categories="categories" title="Categories" :link="true" v-if="!emptyResults && filteredProducts.length && categories.length > 0" class="t-mb-4" />
-      <category-panel :categories="categoryAggs" v-model="selectedCategoryIds" v-if="!emptyResults && filteredProducts.length && categoryAggs.length > 1" class="t-mb-4" />
-      <div class="product-listing t-flex t-flex-wrap t-bg-base-lightest t--mx-4 t-px-3 t-py-4" v-if="!emptyResults && filteredProducts.length > 0">
-        <product-tile v-for="product in filteredProducts" :key="product.id" :product="product" @click.native="closeSidebar" class="t-w-1/2 lg:t-w-1/3 t-px-1 t-mb-8" />
+      <div v-if="emptyResults && pleaseWait" class="t-px-2 t-pt-2 t-pb-4 t-text-sm">
+        {{ $t('Please wait') }} ...
       </div>
-      <div v-if="filteredProducts.length >= size && OnlineOnly" class="t-flex t-items-center t-justify-center t-mt-8">
+      <category-panel :categories="categories" title="Categories" :link="true" v-if="!emptyResults && filteredProducts.length && categories.length > 0" class="t-mb-4" :class="{ 't-opacity-25': pleaseWait }" />
+      <category-panel :categories="categoryAggs" v-model="selectedCategoryIds" v-if="!emptyResults && filteredProducts.length && categoryAggs.length > 1" class="t-mb-4" :class="{ 't-opacity-25': pleaseWait }" />
+      <div class="product-listing t-flex t-flex-wrap t-bg-base-lightest t--mx-4 t-px-3 t-py-4" v-if="!emptyResults && filteredProducts.length > 0" :class="{ 't-opacity-25': pleaseWait }">
+        <product-tile v-for="product in filteredProducts" :key="product.sku + '-' + (product.parentId || 'parent')" :product="product" @click.native="closeSidebar" class="t-w-1/2 lg:t-w-1/3 t-px-1 t-mb-8" />
+      </div>
+      <div v-if="filteredProducts.length >= size && OnlineOnly" class="t-flex t-items-center t-justify-center t-mt-8" :class="{ 't-opacity-25': pleaseWait }">
         <button-component type="ghost" @click="loadMoreProducts" v-if="moreProducts" class="t-w-2/3 lg:t-w-1/3" :class="{ 't-relative t-opacity-60': loadingProducts }">
           {{ $t('Load more') }}
           <loader-background v-if="loadingProducts" bar="t-bg-base-darkest" class="t-bottom-0" />
@@ -73,6 +76,7 @@ export default {
       emptyResults: true,
       moreProducts: true,
       loadingProducts: false,
+      showPleaseWait: false,
       selectedCategoryIds: []
     }
   },
@@ -108,13 +112,16 @@ export default {
       let msg = ''
       if (this.searchString !== '') {
         if (this.$v.searchString.$invalid) {
-          msg = 'Searched term should consist of at least 3 characters.'
-        } else if (this.emptyResults) {
-          msg = 'No results were found.'
+          msg = i18n.t('Searched term should consist of at least 3 characters.')
+        } else if (this.emptyResults && !this.showPleaseWait) {
+          msg = i18n.t('No results were found.')
         }
       }
 
       return msg
+    },
+    pleaseWait () {
+      return this.getNoResultsMessage.length === 0 && this.showPleaseWait
     }
   },
   watch: {
@@ -148,7 +155,11 @@ export default {
 
       return searchString
     },
-    search: debounce(async function () {
+    search () {
+      this.showPleaseWait = (!this.$v.searchString.$invalid)
+      this.searchDebounced()
+    },
+    searchDebounced: debounce(async function () {
       if (!this.$v.searchString.$invalid) {
         this.searchAlias = await this.getAlias(this.searchString)
         let query = this.prepareQuickSearchQuery(this.searchAlias)
@@ -162,6 +173,7 @@ export default {
           this.start += this.size
           this.emptyResults = items.length < 1
           this.loadingProducts = false
+          this.showPleaseWait = false
 
           this.populateCategoryAggregations(aggregations)
         }).catch((err) => {
