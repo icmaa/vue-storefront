@@ -46,12 +46,12 @@
 
               <div class="t-flex t-flex-wrap">
                 <div v-if="['configurable', 'bundle'].includes(product.type_id) && !isOnesizeProduct" class="t-flex t-flex-grow t-w-full t-mb-4 lg:t-w-3/6 lg:t-mr-4">
-                  <button-component type="select" icon="arrow_forward" data-test-id="AddToCartSize" class="t-w-full" :disabled="isSizeSelectDisabled" @click.native="openAddtocart">
+                  <button-component type="select" icon="arrow_forward" data-test-id="AddToCartSize" class="t-w-full" @click.native="openAddtocart">
                     {{ productOptionsLabel }}
                   </button-component>
                 </div>
-                <button-component :type="isAddToCartDisabled ? 'second' : 'primary'" data-test-id="AddToCart" class="t-flex-grow lg:t-w-2/6 disabled:t-opacity-50 t-relative t-mb-4 t-mr-4" :disabled="isAddToCartDisabled" @click.native="addToCartButtonClick">
-                  {{ isAddToCartDisabled ? $t('Out of stock') : $t('Add to cart') }}
+                <button-component :type="loading || !isAddToCartDisabled ? 'primary' : 'second'" data-test-id="AddToCart" class="t-flex-grow lg:t-w-2/6 disabled:t-opacity-50 t-relative t-mb-4 t-mr-4" :disabled="isAddToCartDisabled" @click.native="addToCartButtonClick">
+                  {{ userHasSelectedVariant && isAddToCartDisabled && !loading ? $t('Out of stock') : $t('Add to cart') }}
                   <loader-background v-if="loading" class="t-bottom-0" height="t-h-1" bar="t-bg-base-lightest t-opacity-25" />
                 </button-component>
                 <add-to-wishlist :product="product" class="t-flex-fix t-mb-4" />
@@ -240,9 +240,6 @@ export default {
       }
 
       return this.$v.$invalid || this.loading || !this.quantity
-    },
-    isSizeSelectDisabled () {
-      return false
     },
     isSingleOptionProduct () {
       return this.product.type_id === 'simple' || this.isOnesizeProduct
