@@ -29,6 +29,7 @@
 </template>
 
 <script>
+import { icmaa_catalog } from 'config'
 import { mapGetters } from 'vuex'
 import { stripHTML } from '@vue-storefront/core/filters/strip-html'
 import ProductAttributes from 'theme/components/core/blocks/Product/ProductAttributes'
@@ -84,7 +85,10 @@ export default {
         return false
       }
 
+      const importantPhrases = icmaa_catalog.entities.product.importantCommonphrases || []
+
       return this.product.commonphrases
+        .filter(id => importantPhrases.includes(id))
         .map(id => this.getOptionLabel({ attributeKey: 'commonphrases', optionId: this.product.commonphrases }))
     }
   },
