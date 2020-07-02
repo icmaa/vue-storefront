@@ -66,15 +66,15 @@ export default {
     return {
       title: htmlDecode(this.metaTitle),
       link: [
-        {
-          rel: 'amphtml',
-          href: this.$router.resolve(localizedRoute({
-            name: 'category-amp',
-            params: {
-              slug: this.getCurrentCategory.slug
-            }
-          }, storeView.storeCode)).href
-        }
+        // {
+        //   rel: 'amphtml',
+        //   href: this.$router.resolve(localizedRoute({
+        //     name: 'category-amp',
+        //     params: {
+        //       slug: this.getCurrentCategory.slug
+        //     }
+        //   }, storeView.storeCode)).href
+        // }
       ],
       meta
     }
