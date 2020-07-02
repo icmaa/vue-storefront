@@ -38,7 +38,6 @@ import { IcmaaProductAlertModule } from 'icmaa-product-alert'
 import { IcmaaGiftcertModule } from 'icmaa-giftcert'
 import { IcmaaTrackingModule } from 'icmaa-tracking'
 import { IcmaaExternalCheckoutModule } from 'icmaa-external-checkout'
-import { IcmaaAmpRendererModule } from './icmaa-amp-renderer'
 import { IcmaaMonitoringModule } from './icmaa-monitoring'
 
 // import { DeviceModule } from './device/index';
@@ -86,7 +85,6 @@ export function registerClientModules () {
   registerModule(IcmaaGiftcertModule)
   registerModule(IcmaaTrackingModule)
   registerModule(IcmaaExternalCheckoutModule)
-  registerModule(IcmaaAmpRendererModule)
   registerModule(IcmaaMonitoringModule)
 }
 
