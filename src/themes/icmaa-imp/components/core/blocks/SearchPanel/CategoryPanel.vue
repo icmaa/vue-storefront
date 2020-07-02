@@ -13,6 +13,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import { Logger } from '@vue-storefront/core/lib/logger'
 import i18n from '@vue-storefront/i18n'
 import ButtonComponent from 'theme/components/core/blocks/Button'
 
@@ -58,7 +59,7 @@ export default {
         return this.$store.dispatch('category-next/loadCategoryWithExtras', { filters }).then(category => {
           if (category) {
             this.$store.dispatch('ui/closeAll')
-            this.$router.replace(this.localizedRoute(category.url_path))
+            return this.$router.push(this.localizedRoute(category.url_path))
           } else {
             this.$Progress.finish()
             this.$store.dispatch('notification/spawnNotification', {
@@ -67,6 +68,15 @@ export default {
               action1: { label: i18n.t('OK') }
             })
           }
+        }).catch(error => {
+          Logger.error('Couldn\'t find clicked category: ', 'components-search', { error, filters })()
+
+          this.$Progress.finish()
+          this.$store.dispatch('notification/spawnNotification', {
+            type: 'error',
+            message: i18n.t('Sorry, but we couldn\'t find this category.'),
+            action1: { label: i18n.t('OK') }
+          })
         })
       }
 
