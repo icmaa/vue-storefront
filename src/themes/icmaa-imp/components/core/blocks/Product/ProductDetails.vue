@@ -1,6 +1,12 @@
 <template>
   <div class="t-text-sm">
     <div class="description t-whitespace-pre-line" v-text="stripHTML(product.description.trim())" />
+    <ul class="commonphrases" v-if="commonphrases">
+      <li v-for="(phrase, i) in commonphrases" :key="i" class="t-mt-2">
+        <span class="t-font-bold t-mr-1" v-if="i === 0">{{ $t('Notice:') }}</span>
+        {{ phrase }}
+      </li>
+    </ul>
     <no-ssr>
       <ul class="attributes t-mt-6" v-if="attributes.length > 0">
         <product-attributes
@@ -23,6 +29,7 @@
 </template>
 
 <script>
+import { icmaa_catalog } from 'config'
 import { mapGetters } from 'vuex'
 import { stripHTML } from '@vue-storefront/core/filters/strip-html'
 import ProductAttributes from 'theme/components/core/blocks/Product/ProductAttributes'
@@ -68,6 +75,21 @@ export default {
     },
     departmentAdvice () {
       return this.product.department === 6
+    },
+    commonphrases () {
+      if (
+        !this.product.commonphrases ||
+        this.product.commonphrases.length === 0 ||
+        this.product.commonphrases[0] === ''
+      ) {
+        return false
+      }
+
+      const importantPhrases = icmaa_catalog.entities.product.importantCommonphrases || []
+
+      return this.product.commonphrases
+        .filter(id => importantPhrases.includes(id))
+        .map(id => this.getOptionLabel({ attributeKey: 'commonphrases', optionId: this.product.commonphrases }))
     }
   },
   methods: {

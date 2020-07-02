@@ -1,5 +1,5 @@
 <template>
-  <amp-img v-lazy="lazyObj" layout="responsive" width="161" height="233" :src="`${sizes.src}`" :data-srcset="`${sizes.src} 1x, ${sizes.srcAt2x} 2x`" v-on="$listeners" class="product-image t-w-full t-w-auto" />
+  <amp-img layout="responsive" width="161" height="233" :src="`${sizes.src}`" :data-srcset="`${sizes.src} 1x, ${sizes.srcAt2x} 2x`" class="product-image t-w-full t-w-auto" />
 </template>
 
 <script>
@@ -49,9 +49,6 @@ export default {
         srcAt2x: this.getImageWithSize(width * 2, height * 2),
         original: this.getImageWithSize()
       }
-    },
-    lazyObj () {
-      return pick(this.sizes, ['loading', 'error', 'src'])
     }
   },
   methods: {
@@ -59,16 +56,7 @@ export default {
       const regex = /(\/img\/)(\d+\/\d+)(\/resize\/)/gm
       const src = this.image.src
       return src.replace(regex, `$1${width}/${height}$3`)
-    },
-    onLoaded ({ el, src }) {
-      if (this.loading === true) {
-        this.loading = !this.loading
-        this.$emit('load', this.image, !this.loading)
-      }
     }
-  },
-  mounted () {
-    this.$Lazyload.$once('loaded', this.onLoaded)
   }
 }
 </script>

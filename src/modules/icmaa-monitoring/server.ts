@@ -21,6 +21,12 @@ if (icmaa_monitoring.datadog.enabled === true) {
     }
   })
 
+  // Include this after feedback of DD support
+  tracer.use('express', {
+    analytics: true,
+    enabled: true
+  })
+
   // Enable exception-logging for unhandled ssr exceptions
   serverHooks.afterProcessStarted(() => {
     createExceptionLogger()
