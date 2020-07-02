@@ -1,7 +1,8 @@
 describe('Cookie-Notice', () => {
   it('should be visible for new user', () => {
-    cy.hideLanguageModal()
-      .visit('/')
+    cy.visit('/')
+      .hideLanguageModal()
+      .reload()
 
     cy.getByTestId('CookieNotification')
       .should('be.visible')
