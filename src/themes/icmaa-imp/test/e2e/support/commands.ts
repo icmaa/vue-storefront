@@ -241,9 +241,13 @@ Cypress.Commands.add('acceptCookieNotice', () => {
 
 Cypress.Commands.add('hideLanguageModal', () => {
   cy.getStoreCode().then(storeCode => {
+    /**
+     * It's very important to be aware to use valid JSON.
+     * Took me two hours to find out that I had missing quotes on two values.
+     */
     localStorage.setItem(
       'shop/uniClaims/languageAccepted',
-      `{ "code": "languageAccepted", "created_at": "${new Date().toISOString()}", "value": { accepted: true, storeCode: "${storeCode}" } }`
+      `{ "code": "languageAccepted", "created_at": "${new Date().toISOString()}", "value": { "accepted": true, "storeCode": "${storeCode}" } }`
     )
   })
 })
