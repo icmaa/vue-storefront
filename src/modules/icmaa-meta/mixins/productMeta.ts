@@ -53,17 +53,17 @@ export default {
 
     return {
       link: [
-        {
-          rel: 'amphtml',
-          href: this.$router.resolve(localizedRoute({
-            name: this.product.type_id + '-product-amp',
-            params: {
-              parentSku: this.product.parentSku ? this.product.parentSku : this.product.sku,
-              slug: this.product.slug,
-              childSku: this.product.sku
-            }
-          }, storeView.storeCode)).href
-        }
+        // {
+        //   rel: 'amphtml',
+        //   href: this.$router.resolve(localizedRoute({
+        //     name: this.product.type_id + '-product-amp',
+        //     params: {
+        //       parentSku: this.product.parentSku ? this.product.parentSku : this.product.sku,
+        //       slug: this.product.slug,
+        //       childSku: this.product.sku
+        //     }
+        //   }, storeView.storeCode)).href
+        // }
       ],
       title: this.translatedProductName,
       meta: [
