@@ -98,15 +98,26 @@ export default {
   methods: {
     /**
      * This is a copy of `@vue-storefront/core/modules/catalog/components/ProductOption.ts`
-     * The original function uses the `isOptionAvailableAsync` method which won't return false if the specific option isn't available.
-     * Thats because it uses `findConfigurableChildAsync` and just checks if it returns a variant, but the `findConfigurableChildAsync`
-     * method returns the default or selected variant if the specific one isn't found, so it's true as long as one item is available.
-     * That's why we make our own variant and check for the variant as well.
+     *
+     * Changes:
+     * * The original function uses the `isOptionAvailableAsync` method which won't return false if the specific
+     *   option isn't available. Thats because it uses `findConfigurableChildAsync` and just checks if it returns
+     *   a variant, but the `findConfigurableChildAsync` method returns the default or selected variant if the
+     *   specific one isn't found, so it's true as long as one item is available. That's why we make our own variant
+     *   and check for the variant as well.
+     * * We also modifcated the `findConfigurableChildAsync` method to be able to select only available methods
+     *   without need to enable the `config.products.listOutOfStockProducts` flag.
+     *
      * @param option
      */
     isOptionAvailable (option) {
       const currentConfig = Object.assign({}, this.configuration, { [option.type]: option })
-      const variant = findConfigurableChildAsync({ product: this.product, configuration: currentConfig, availabilityCheck: true })
+      const variant = findConfigurableChildAsync({
+        product: this.product,
+        configuration: currentConfig,
+        availabilityCheck: true
+      })
+
       return typeof variant !== 'undefined' && variant !== null && variant[option.type] === option.id
     }
   }

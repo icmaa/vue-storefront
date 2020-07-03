@@ -5,10 +5,16 @@ import config from 'config'
 /**
  * This function responsiblity is to find best matching variant for configurable product based on configuration object or stock availability.
  */
-export default function findConfigurableVariant ({ product, configuration = null, selectDefaultChildren = false, availabilityCheck = true }) {
+export default function findConfigurableVariant ({
+  product,
+  configuration = null,
+  selectDefaultChildren = false,
+  availabilityCheck = true,
+  selectOutOfStockVariants = config.products.selectOutOfStockVariants
+}) {
   const selectedVariant = product.configurable_children.reduce((prevVariant, nextVariant) => {
     if (availabilityCheck) {
-      if (nextVariant.stock && !config.products.listOutOfStockProducts) {
+      if (nextVariant.stock && !selectOutOfStockVariants) {
         if (!nextVariant.stock.is_in_stock) {
           return prevVariant
         }
