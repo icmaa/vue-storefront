@@ -100,27 +100,33 @@ Cypress.Commands.add('findByTestId', { prevSubject: 'element' }, (subject, id) =
 })
 
 Cypress.Commands.overwrite('visit', (originalFn, url, options?) => {
-  const storeCodes: string[] = Settings.availableStoreViews
-
-  let storeCode: string = storeCodes[Math.floor(Math.random() * (storeCodes.length - 1))]
-  if (options && options.hasOwnProperty('storeCode') && storeCodes.includes(options.storeCode)) {
+  let storeCode: string
+  if (options && options.hasOwnProperty('storeCode')) {
     storeCode = options.storeCode
   }
 
-  if (!url.startsWith('/')) {
-    url = '/' + url
+  cy.setStoreCode(storeCode)
+
+  if (options && options.hasOwnProperty('returningVisitor')) {
+    cy.hideLanguageModal()
+      .acceptCookieNotice()
   }
 
-  url = `${storeCode}${url}`
+  cy.getStoreCode().then(storeCode => {
+    if (!url.startsWith('/')) {
+      url = '/' + url
+    }
 
-  cy.wrap(storeCode).as('storeCode')
-    .then(() => originalFn(url, _.omit(options, ['storeCode'])))
+    url = `${storeCode}${url}`
+
+    options = _.omit(options, ['storeCode', 'returningVisitor'])
+    cy.then(() => originalFn(url, options))
+  })
 })
 
 Cypress.Commands.add('visitAsRecurringUser', (url, options?) => {
-  cy.hideLanguageModal()
-    .acceptCookieNotice()
-    .visit(url, options)
+  options = Object.assign({ returningVisitor: true }, options)
+  cy.visit(url, options)
 })
 
 Cypress.Commands.add('visitCategoryPage', (options?) => {
@@ -156,6 +162,15 @@ Cypress.Commands.add('getCategoryEntryPointUrl', () => {
 
 Cypress.Commands.add('getStoreCode', () => {
   cy.get<string>('@storeCode')
+})
+
+Cypress.Commands.add('setStoreCode', (storeCode?) => {
+  const storeCodes: string[] = Settings.availableStoreViews
+  if (!storeCode || !storeCodes.includes(storeCode)) {
+    storeCode = storeCodes[Math.floor(Math.random() * (storeCodes.length - 1))]
+  }
+
+  cy.wrap(storeCode).as('storeCode')
 })
 
 Cypress.Commands.add('openSidebar', (trigger: string = '[data-test-id="HeaderButtonSidebar"]', overlaySelector: string = '[data-test-id="Sidebar"]') => {
@@ -220,15 +235,21 @@ Cypress.Commands.add('isLoggedIn', (status: boolean = true) => {
 Cypress.Commands.add('acceptCookieNotice', () => {
   localStorage.setItem(
     'shop/uniClaims/cookiesAccepted',
-    `{"code":"cookiesAccepted","created_at":"${new Date().toISOString()}","value":true}`
+    `{ "code": "cookiesAccepted", "created_at": "${new Date().toISOString()}", "value": true }`
   )
 })
 
 Cypress.Commands.add('hideLanguageModal', () => {
-  localStorage.setItem(
-    'shop/uniClaims/languageAccepted',
-    `{"code":"languageAccepted","created_at":"${new Date().toISOString()}","value":"de-DE"}`
-  )
+  cy.getStoreCode().then(storeCode => {
+    /**
+     * It's very important to be aware to use valid JSON.
+     * Took me two hours to find out that I had missing quotes on two values.
+     */
+    localStorage.setItem(
+      'shop/uniClaims/languageAccepted',
+      `{ "code": "languageAccepted", "created_at": "${new Date().toISOString()}", "value": { "accepted": true, "storeCode": "${storeCode}" } }`
+    )
+  })
 })
 
 Cypress.Commands.add('waitForLoader', () => {
