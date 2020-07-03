@@ -14,11 +14,13 @@ export default {
             return false
           }
 
+          const cPrice = c.price_incl_tax || c.original_price_incl_tax
           if (price === 0) {
-            price = c.price_incl_tax
+            price = cPrice
             return false
           }
-          return c.price_incl_tax !== price
+
+          return cPrice !== price
         })
       }
       return false
