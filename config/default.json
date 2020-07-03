@@ -555,6 +555,7 @@
     "configurableChildrenStockPrefetchStaticPrefetchCount": 8,
     "filterUnavailableVariants": false,
     "listOutOfStockProducts": true,
+    "selectOutOfStockVariants": true,
     "preventConfigurableChildrenDirectAccess": true,
     "alwaysSyncPlatformPricesOver": false,
     "alwaysSyncPricesClientSide": false,
