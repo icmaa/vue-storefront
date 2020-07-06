@@ -1,17 +1,59 @@
 <template>
   <transition name="fade" appear>
-    <div class="cookie t-fixed t-bottom-0 t-z-1 t-w-full t-bg-base-tone" v-if="isOpen" data-test-id="CookieNotification">
-      <div class="t-container">
-        <div class="t-flex t-flex-wrap t-justify-start lg:t-justify-center t-items-center t-px-4 t-py-4 t-text-sm t-text-white">
-          <div class="t-w-full t-mb-2 lg:t-w-auto lg:t-mb-0 t-mr-4 t-leading-tight">
-            {{ message }}<br>
-            <span class="t-hidden lg:t-inline t-text-xs t-text-base-lighter t-font-thin">{{ messageSub }}</span>
+    <div class="cookie t-absolute t-bottom-0 t-z-10 t-w-full t-h-full" v-if="isOpen" data-test-id="CookieNotification">
+      <div class="t-container t-bg-white t-w-10/12 t-my-10">
+        <div class="t-flex t-flex-col t-items-center t-p-8 t-text-sm">
+          <div class="t-w-full t-text-lg t-leading-tight t-text-black t-font-bold t-py-4">
+            Cookie-Einstellungen
           </div>
-          <button-component size="sm" type="alt-3" icon="check" @click="accept">
+          <p class="t-px-2">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Modi ad exercitationem minus, odit blanditiis, ipsum distinctio asperiores quod dolorum voluptate natus ipsa ex porro suscipit nemo reiciendis, dolor odio. Aperiam?
+          </p>
+          <div class="t-self-start t-flex t-items-center t-mb-4 t-px-2">
+            <material-icon icon="arrow_forward" />
+            <a class="t-text-black t-text-sm t-font-bold">Datenschutzerklärung</a>
+          </div>
+
+          <!-- Checkboxes -->
+          <div class="t-flex t-text-lg t-items-center t-justify-center t-mb-4">
+            <input type="checkbox" class="t-mr-2" disabled checked><label class="t-mr-2">Notwendig</label>
+            <input type="checkbox" class="t-mr-2"><label class="t-mr-2">Marketing</label>
+          </div>
+
+          <div class="t-self-start t-flex t-items-center">
+            <material-icon icon="arrow_forward" />
+            <a class="t-text-black t-font-bold">Impressum</a>
+          </div>
+
+          <!-- Details -->
+          <div class="t-self-end t-flex t-items-center t-mb-4" @click="showDetails = !showDetails">
+            <a class="t-text-black t-font-bold">Details</a>
+            <material-icon :icon="showDetails ? 'expand_less' : 'expand_more'" />
+          </div>
+
+          <div v-show="showDetails" class="t-mb-4">
+            <h2 class="t-font-bold">
+              Notwendig
+            </h2>
+            <p class="t-mb-4">
+              Lorem, ipsum dolor sit amet consectetur adipisicing elit. Numquam temporibus porro, voluptatem fugit, minus tempora quaerat dolor alias ab reprehenderit laboriosam ut cupiditate omnis. Quidem mollitia vitae voluptatum aut culpa!
+            </p>
+            <h2 class="t-font-bold">
+              Marketing und Statistik-Cookies
+            </h2>
+            <p>
+              Lorem, ipsum dolor sit amet consectetur adipisicing elit. Numquam temporibus porro, voluptatem fugit, minus tempora quaerat dolor alias ab
+              reprehenderit laboriosam ut cupiditate omnis. Quidem mollitia vitae voluptatum aut culpa! Lorem, ipsum dolor sit amet consectetur adipisicing elit. Numquam
+              temporibus porro, voluptatem fugit, minus tempora quaerat dolor alias ab reprehenderit laboriosam ut cupiditate omnis. Quidem mollitia vitae voluptatum aut culpa!
+            </p>
+          </div>
+
+          <!-- Buttons -->
+          <button-component size="md" type="alt-3" class="t-w-full t-mb-4" @click="accept">
             {{ $t('Accept') }}
           </button-component>
-          <button-component size="sm" type="transparent-white" icon="info" :icon-only="true" @click="$router.push(localizedRoute(detailsLink))">
-            {{ detailsLinkText }}
+          <button-component size="md" type="ghost" class="t-w-full" @click="$router.push(localizedRoute(detailsLink))">
+            Auswahl bestätigen
           </button-component>
         </div>
       </div>
@@ -23,11 +65,13 @@
 import i18n from '@vue-storefront/i18n'
 import ButtonComponent from 'theme/components/core/blocks/Button'
 import EventBus from '@vue-storefront/core/compatibility/plugins/event-bus'
+import MaterialIcon from 'theme/components/core/blocks/MaterialIcon'
 
 export default {
   name: 'CookieNotification',
   components: {
-    ButtonComponent
+    ButtonComponent,
+    MaterialIcon
   },
   props: {
     detailsLinkText: {
@@ -49,7 +93,8 @@ export default {
   },
   data () {
     return {
-      isOpen: false
+      isOpen: false,
+      showDetails: false
     }
   },
   methods: {
@@ -74,3 +119,14 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.cookie {
+  background-color: rgba(0,0,0,.4);
+  top: 0;
+  left: 0;
+}
+.t-container {
+  width: 80%;
+}
+</style>
