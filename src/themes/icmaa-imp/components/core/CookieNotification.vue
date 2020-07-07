@@ -1,65 +1,65 @@
 <template>
-  <transition name="fade" appear>
+  <transition name="fade">
     <div class="cookie t-absolute t-bottom-0 t-z-10 t-w-full t-h-full" v-if="isOpen" data-test-id="CookieNotification">
-      <div class="t-container t-bg-white t-w-10/12 lg:t-w-3/5 t-my-10 lg:t-mt-20">
+      <div class="t-container t-bg-white t-w-11/12 lg:t-w-3/5 xl:t-w-1/2 t-my-6 lg:t-mt-20">
         <div class="t-flex t-flex-col t-items-center t-p-8 t-text-sm">
-          <div class="t-w-full t-text-1xl t-text-base-dark t-font-medium t-py-4 t-mb-4">
-            Cookie-Einstellungen
+          <div class="t-w-full t-text-1xl t-text-base-dark t-font-medium t-mb-4">
+            {{ $t('Cookie settings') }}
           </div>
-          <p class="t-px-2 t-text-base-tone">
-            {{ $t('We use cookies on our website. Some of them are required to operate the website (e.g. for the use of your shopping basket or for security features). Others help us to improve our online services and to remain profitable. You have the power to accept non essential or only essential cookies. Please note that you may not be able to access all of our website settings if you have opted for certain criteria. You can view and adjust your settings at any time and deselect cookies later (e.g. in the footer of our website). For more information please read our privacy statements.') }}
-          </p>
-          <router-link :to="localizedRoute('service-privacy')" class="t-self-start t-flex t-text-base-darkest t-items-center t-mb-4 t-px-2">
-            <material-icon icon="arrow_forward" size="xs" />
-            <div class="t-text-black t-text-sm t-font-bold">
-              Datenschutzerklärungen
-            </div>
-          </router-link>
+          <div class="t-px-2 t-text-base-tone t-text-xs t-mb-4">
+            {{ $t('We use cookies on our website. Some of them are required to operate the website (e.g. for the use of your shopping basket or for security features). Others help us to improve our online services and to remain profitable. You have the power to accept non essential or only essential cookies. Please note that you may not be able to access all of our website settings if you have opted for certain criteria. You can view and adjust your settings at any time and deselect cookies later (e.g. in the footer of our website). For more information please read our') }}
+            <router-link :to="localizedRoute('service-privacy')" class="t-inline-block t-text-base-darkest t-text-sm" @click.native="accept">
+              <material-icon icon="arrow_forward" size="xs" />
+              <span class="t-text-black t-text-xs t-font-bold">
+                {{ $t('Privacy statements') }}
+              </span>
+            </router-link>
+          </div>
 
           <!-- Checkboxes -->
-          <div class="t-flex t-text-lg t-items-center t-justify-center t-mb-4">
-            <input type="checkbox" class="t-mr-2" disabled checked><label class="t-mr-2">{{ $t('Essential') }}</label>
-            <input type="checkbox" v-model="accepted" class="t-mr-2 t-cursor-pointer"><label class="t-mr-2 t-cursor-pointer t-select-none" @click="accepted = !accepted">Marketing</label>
+          <div class="t-flex t-text-lg t-items-center t-justify-center t-mb-4 t-z-1">
+            <input type="checkbox" class="t-mr-2" disabled checked><label class="t-mr-4 t-text-sm">{{ $t('Essential') }}</label>
+            <input type="checkbox" v-model="accepted" class="t-mr-2 t-cursor-pointer"><label class="t-mr-2 t-cursor-pointer t-select-none t-text-sm" @click="accepted = !accepted">{{ $t('Marketing') }}</label>
           </div>
 
-          <div class="t-flex t-items-center t-w-full t-mb-4 t-justify-between">
-            <router-link :to="localizedRoute('service-imprint')" class="t-flex t-items-center t-text-base-darkest" @click="isOpen=false">
+          <div class="t-flex t-items-center t-w-full t-mb-4 t-justify-between lg:t--mt-12 lg:t-mb-8">
+            <router-link :to="localizedRoute('service-imprint')" class="t-flex t-items-center t-text-base-darkest" @click.native="accept">
               <material-icon icon="arrow_forward" size="xs" />
-              <div class="t-font-bold">
-                Impressum
+              <div class="t-font-bold t-text-xs">
+                {{ $t('Legal notice') }}
               </div>
             </router-link>
 
             <!-- Details -->
             <div class="t-flex t-items-center t-text-base-darkest t-cursor-pointer" @click="showDetails = !showDetails">
-              <div class="t-text-black t-font-bold t-select-none" size="sm">
-                Details
+              <div class="t-text-black t-font-bold t-select-none t-text-xs" size="sm">
+                {{ $t('Details') }}
               </div>
               <material-icon :icon="showDetails ? 'expand_less' : 'expand_more'" />
             </div>
           </div>
 
           <div v-show="showDetails" class="t-mb-4">
-            <h2 class="t-font-bold">
+            <h2 class="t-font-bold t-text-xs">
               {{ $t('Essential') }}
             </h2>
-            <p class="t-mb-4">
+            <p class="t-mb-4 t-text-xs">
               {{ $t('These cookies are indispensable to operate the website and enable security relevant functionalities. With these kind of cookies we can identify whether or not you want to stay logged in. Therefore we can offer you our services faster the next time you visit our website.') }}
             </p>
-            <h2 class="t-font-bold">
+            <h2 class="t-font-bold t-text-xs">
               {{ $t('Marketing and Statistics') }}
             </h2>
-            <p>
+            <p class="t-text-xs">
               {{ $t('We collect anonymised data for statistical analysis and to further improve our offering across our website. With these cookies, we can for instance, analyse the number of visitors and the effectiveness of single sites. This helps us to optimize our content. We also use marketing cookies to show you personalized content which fits your interests. Thus we can present you offerings, which are highly relevant for you. Furthermore we use cookies that make it easier for you to use our website.') }}
             </p>
           </div>
 
           <!-- Buttons -->
           <div class="t-flex t-w-full t-flex-col lg:t-flex-row lg:t-justify-center">
-            <button-component size="md" type="alt-3" class="t-w-full lg:t-w-1/2 t-mb-4 lg:t-mr-4" @click="accepted=true">
+            <button-component size="md" type="alt-3" class="t-w-full lg:t-w-1/2 xl:t-w-1/3 t-mb-4 lg:t-mr-4" @click="accepted=true">
               {{ $t('Select all') }}
             </button-component>
-            <button-component size="md" type="ghost" class="t-w-full lg:t-w-1/2" @click="accept">
+            <button-component size="md" type="ghost" class="t-w-full lg:t-w-1/2 xl:t-w-1/3" @click="accept">
               {{ $t('Confirm') }}
             </button-component>
           </div>
@@ -137,5 +137,11 @@ export default {
 }
 input[type="checkbox"]:checked {
   mix-blend-mode: luminosity;
+}
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .5s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0;
 }
 </style>
