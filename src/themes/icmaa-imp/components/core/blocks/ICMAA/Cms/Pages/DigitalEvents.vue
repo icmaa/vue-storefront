@@ -57,7 +57,7 @@
               <input type="text" name="b_d902fecd4afbea6dda59c4601_805d00eda1" tabindex="-1" value="">
             </div>
             <div class="clear">
-              <input type="submit" value="Anmelden" name="anmelden" id="mc-embedded-subscribe" class="btn btn-primary t-flex t-items-center t-webkit-tap-transparent t-w-full t-mt-4 t-block t-text-white t-uppercase t-text-xs t-bg-primary t-text-white t-justify-center">
+              <input type="submit" value="Anmelden" name="anmelden" id="mc-embedded-subscribe" class="btn btn-primary t-flex t-items-center t-webkit-tap-transparent t-w-full t-mt-4 t-text-white t-uppercase t-text-xs t-bg-primary t-justify-center">
             </div>
           </div>
         </form>
