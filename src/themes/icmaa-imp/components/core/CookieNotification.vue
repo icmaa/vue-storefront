@@ -6,10 +6,12 @@
           <div class="t-w-full t-text-1xl t-text-base-dark t-font-medium t-mb-4">
             {{ $t('Cookie settings') }}
           </div>
-          <div class="t-px-2 t-text-base-tone t-text-xs t-mb-4">
+
+          <!-- Info text -->
+          <div class="t-text-base-tone t-text-xs t-mb-4">
             {{ $t('We use cookies on our website. Some of them are required to operate the website (e.g. for the use of your shopping basket or for security features). Others help us to improve our online services and to remain profitable. You have the power to accept non essential or only essential cookies. Please note that you may not be able to access all of our website settings if you have opted for certain criteria. You can view and adjust your settings at any time and deselect cookies later (e.g. in the footer of our website). For more information please read our') }}
-            <router-link :to="localizedRoute('service-privacy')" class="t-inline-block t-text-base-darkest t-text-sm" @click.native="accept">
-              <material-icon icon="arrow_forward" size="xs" />
+            <router-link :to="localizedRoute('service-privacy')" class="t-inline-block t-text-base-darkest t-text-sm">
+              <material-icon id="icon" icon="arrow_forward" size="xs" />
               <span class="t-text-black t-text-xs t-font-bold">
                 {{ $t('Privacy statements') }}
               </span>
@@ -18,19 +20,23 @@
 
           <!-- Checkboxes -->
           <div class="t-flex t-text-lg t-items-center t-justify-center t-mb-4 t-z-1">
-            <input type="checkbox" class="t-mr-2" disabled checked><label class="t-mr-4 t-text-sm">{{ $t('Essential') }}</label>
-            <input type="checkbox" v-model="accepted" class="t-mr-2 t-cursor-pointer"><label class="t-mr-2 t-cursor-pointer t-select-none t-text-sm" @click="accepted = !accepted">{{ $t('Marketing') }}</label>
+            <base-checkbox class="t-mr-4" name="essential" id="essential" :value="true">
+              {{ $t('Essential') }}
+            </base-checkbox>
+            <base-checkbox class="" name="marketing" id="marketing" v-model="accepted">
+              {{ $t('Marketing') }}
+            </base-checkbox>
           </div>
 
+          <!-- Disclaimer -->
           <div class="t-flex t-items-center t-w-full t-mb-4 t-justify-between lg:t--mt-12 lg:t-mb-8">
-            <router-link :to="localizedRoute('service-imprint')" class="t-flex t-items-center t-text-base-darkest" @click.native="accept">
+            <router-link :to="localizedRoute('service-imprint')" class="t-flex t-items-center t-text-base-darkest">
               <material-icon icon="arrow_forward" size="xs" />
               <div class="t-font-bold t-text-xs">
                 {{ $t('Legal notice') }}
               </div>
             </router-link>
 
-            <!-- Details -->
             <div class="t-flex t-items-center t-text-base-darkest t-cursor-pointer" @click="showDetails = !showDetails">
               <div class="t-text-black t-font-bold t-select-none t-text-xs" size="sm">
                 {{ $t('Details') }}
@@ -39,7 +45,8 @@
             </div>
           </div>
 
-          <div v-show="showDetails" class="t-mb-4">
+          <!-- Details section -->
+          <div v-show="showDetails" class="t-mb-6">
             <h2 class="t-font-bold t-text-xs">
               {{ $t('Essential') }}
             </h2>
@@ -74,12 +81,14 @@ import i18n from '@vue-storefront/i18n'
 import ButtonComponent from 'theme/components/core/blocks/Button'
 import EventBus from '@vue-storefront/core/compatibility/plugins/event-bus'
 import MaterialIcon from 'theme/components/core/blocks/MaterialIcon'
+import BaseCheckbox from 'theme/components/core/blocks/Form/BaseCheckbox'
 
 export default {
   name: 'CookieNotification',
   components: {
     ButtonComponent,
-    MaterialIcon
+    MaterialIcon,
+    BaseCheckbox
   },
   props: {
     detailsLinkText: {
@@ -125,6 +134,11 @@ export default {
         this.isOpen = !cookieClaim.value
       }
     })
+  },
+  watch: {
+    $route (to, from) {
+      (to.params.identifier === 'service-imprint' || to.params.identifier === 'service-privacy') ? this.isOpen = false : this.isOpen = true
+    }
   }
 }
 </script>
@@ -143,5 +157,8 @@ input[type="checkbox"]:checked {
 }
 .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
   opacity: 0;
+}
+#icon {
+  vertical-align: middle;
 }
 </style>
