@@ -80,7 +80,7 @@
         <h2 v-html="content.partnerheadline" />
         <div class="t-flex t-flex-wrap t-justify-center">
           <div v-for="partner in content.partners" :key="partner.name" class="t-block t-m-6 t-w-1/12">
-            <a :href="partner.url">
+            <a :href="partner.url" rel="nofollow">
               <img :src="getMediaThumbnail(partner.img, 0, 0)" :alt="partner.name" :title="partner.name">
             </a>
           </div>
