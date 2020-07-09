@@ -82,6 +82,7 @@ import ButtonComponent from 'theme/components/core/blocks/Button'
 import EventBus from '@vue-storefront/core/compatibility/plugins/event-bus'
 import MaterialIcon from 'theme/components/core/blocks/MaterialIcon'
 import BaseCheckbox from 'theme/components/core/blocks/Form/BaseCheckbox'
+import { claimCollection } from 'theme/store/claims'
 
 export default {
   name: 'CookieNotification',
@@ -89,24 +90,6 @@ export default {
     ButtonComponent,
     MaterialIcon,
     BaseCheckbox
-  },
-  props: {
-    detailsLinkText: {
-      type: String,
-      default: i18n.t('See details')
-    },
-    detailsLink: {
-      type: String,
-      default: '/service-imprint'
-    },
-    message: {
-      type: String,
-      default: i18n.t('We are using cookies to give you the best experience on our site.')
-    },
-    messageSub: {
-      type: String,
-      default: i18n.t('By continuing to use our website without changing the settings, you are agreeing to our use of cookies.')
-    }
   },
   data () {
     return {
@@ -125,19 +108,15 @@ export default {
       this.$bus.$emit('cookiesAccepted', this.accepted)
     }
   },
-  created () {
+  async created () {
     this.$store.dispatch('claims/check', { claimCode: 'cookiesAccepted' }).then((cookieClaim) => {
-      if (!cookieClaim) {
-        this.isOpen = true
-        this.$store.dispatch('claims/set', { claimCode: 'cookiesAccepted', value: false })
-      } else {
-        this.isOpen = !cookieClaim.value
-      }
+      if (cookieClaim === null) this.isOpen = true
     })
   },
   watch: {
-    $route (to, from) {
-      (to.params.identifier === 'service-imprint' || to.params.identifier === 'service-privacy') ? this.isOpen = false : this.isOpen = true
+    async $route (to, from) {
+      const cookie = await claimCollection(false).getItem('cookiesAccepted');
+      (cookie !== null || to.params.identifier === 'service-imprint' || to.params.identifier === 'service-privacy') ? this.isOpen = false : this.isOpen = true
     }
   }
 }
