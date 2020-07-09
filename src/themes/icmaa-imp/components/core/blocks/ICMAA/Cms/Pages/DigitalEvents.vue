@@ -3,7 +3,7 @@
     <div class="t-flex t-flex-wrap t-px-4 t-mb-8">
       <!-- Header -->
       <div>
-        <img :src="getMediaThumbnail(content.header.img, 0, 0)" :alt="content.header.alt" :title="content.header.alt">
+        <img :src="getMediaThumbnail(imageUrlHeader, 0, 0)" :alt="content.header.alt" :title="content.header.alt">
       </div>
 
       <!-- Video -->
@@ -30,7 +30,7 @@
 
       <!-- Tombola -->
       <div>
-        <img :src="getMediaThumbnail(content.tombola.img, 0, 0)" :alt="content.tombola.alt" :title="content.tombola.alt">
+        <img :src="getMediaThumbnail(imageUrlTombola, 0, 0)" :alt="content.tombola.alt" :title="content.tombola.alt">
       </div>
 
       <!-- Begin Mailchimp Signup Form -->
@@ -67,12 +67,12 @@
 
       <!-- Tombola hint-->
       <div class="t-flex t-flex-auto t-justify-center t-bg-white">
-        <img :src="getMediaThumbnail(content.tombolahint.img, 0, 0)" :alt="content.tombolahint.alt" :title="content.tombolahint.alt">
+        <img :src="getMediaThumbnail(imageUrlTombolaHint, 0, 0)" :alt="content.tombolahint.alt" :title="content.tombolahint.alt">
       </div>
 
       <!-- Power Hour -->
       <div class="t-mb-4">
-        <img :src="getMediaThumbnail(content.powerhour.img, 0, 0)" :alt="content.powerhour.alt" :title="content.powerhour.alt">
+        <img :src="getMediaThumbnail(imageUrlPowerHour, 0, 0)" :alt="content.powerhour.alt" :title="content.powerhour.alt">
       </div>
 
       <!-- Partner -->
@@ -119,6 +119,7 @@ import ProductListingWidget from 'icmaa-category/components/core/ProductListingW
 import Teaser from 'theme/components/core/blocks/Teaser/Teaser'
 
 import { mapGetters } from 'vuex'
+import RetinaImage from 'theme/components/core/blocks/RetinaImage'
 
 export default {
   name: 'DigitalEvent',
@@ -135,6 +136,9 @@ export default {
     }
   },
   computed: {
+    ...mapGetters({
+      viewport: 'ui/getViewport'
+    }),
     videoLink () {
       return this.content.video.link
     },
@@ -146,6 +150,21 @@ export default {
     },
     buttonLink () {
       return this.content.button.link || ''
+    },
+    isMobile () {
+      return ['xs', 'sm'].includes(this.viewport)
+    },
+    imageUrlHeader () {
+      return this.isMobile ? this.content.header.img_mob : this.content.header.img
+    },
+    imageUrlPowerHour () {
+      return this.isMobile ? this.content.powerhour.img_mob : this.content.powerhour.img
+    },
+    imageUrlTombola () {
+      return this.isMobile ? this.content.tombola.img_mob : this.content.tombola.img
+    },
+    imageUrlTombolaHint () {
+      return this.isMobile ? this.content.tombolahint.img_mob : this.content.tombolahint.img
     }
   }
 }
