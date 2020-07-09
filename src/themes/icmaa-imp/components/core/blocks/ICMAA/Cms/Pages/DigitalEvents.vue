@@ -23,6 +23,7 @@
 
         <!-- SEO text-->
         <div class="t-p-4">
+          <h1 v-html="content.seo_text.headline" />
           <p>{{ seoText }}</p>
         </div>
       </div>
@@ -75,10 +76,10 @@
       </div>
 
       <!-- Partner -->
-      <div class="t-mb-4">
+      <div class="t-mb-4 t-w-full">
         <h2 v-html="content.partnerheadline" />
         <div class="t-flex t-flex-wrap t-justify-center">
-          <div v-for="partner in content.partners" :key="partner.name" class="t-block t-my-6">
+          <div v-for="partner in content.partners" :key="partner.name" class="t-block t-m-6 t-w-1/12">
             <a :href="partner.url">
               <img :src="getMediaThumbnail(partner.img, 0, 0)" :alt="partner.name" :title="partner.name">
             </a>
@@ -89,6 +90,10 @@
       <!-- Teaser -->
       <div>
         <h2 v-html="content.teaserheadline" />
+        <!-- Productlistbanner -->
+        <router-link :to="content.productlistbanner.url">
+          <img :src="getMediaThumbnail(content.productlistbanner.img, 0, 0)" :alt="content.productlistbanner.alt" :title="content.productlistbanner.alt" class="t-mb-4">
+        </router-link>
         <div class="t-flex t-flex-wrap t--mx-4 t-flex-full">
           <teaser :tags="content.teaser.tag" :show-large="false" :show-small-in-row="true" />
         </div>
@@ -96,6 +101,9 @@
 
       <!-- Products -->
       <h2 v-html="content.productsheadline" />
+      <div class="t-flex t-flex-wrap t--mx-4 t-mb-4 t-flex-full">
+        <teaser :tags="content.products.teasertag" :show-large="false" :show-small-in-row="true" />
+      </div>
       <lazy-hydrate when-visible>
         <product-listing-widget appearance="lg:t-p-0 t-p-0" :category-id="content.products.category_id" :limit="content.products.limit" />
       </lazy-hydrate>
@@ -131,7 +139,7 @@ export default {
       return this.content.video.link
     },
     seoText () {
-      return this.content.seo_text || ''
+      return this.content.seo_text.text || ''
     },
     buttonText () {
       return this.content.button.text || ''
