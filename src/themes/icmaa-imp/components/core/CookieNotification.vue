@@ -19,25 +19,24 @@
           </div>
 
           <!-- Checkboxes -->
-          <div class="t-flex t-text-lg t-items-center t-justify-center t-mb-4 t-z-1">
-            <base-checkbox class="t-mr-4" name="essential" id="essential" :value="true">
-              {{ $t('Essential') }}
-            </base-checkbox>
-            <base-checkbox class="" name="marketing" id="marketing" v-model="accepted">
-              {{ $t('Marketing') }}
-            </base-checkbox>
-          </div>
-
-          <!-- Links -->
-          <div class="t-flex t-items-center t-w-full t-mb-4 t-justify-between lg:t--mt-12 lg:t-mb-8">
-            <router-link :to="localizedRoute('service-imprint')" class="t-flex t-items-center t-text-base-darkest">
+          <div class="t-grid t-w-full t-grid-rows-2 lg:t-grid-rows-1 t-grid-cols-4 t-mb-4">
+            <router-link :to="localizedRoute('service-imprint')" class="t-flex t-items-center t-text-base-darkest t-row-start-2 lg:t-row-start-1 t-col-span-2 lg:t-col-span-1">
               <material-icon icon="arrow_forward" size="xs" />
               <div class="t-font-bold t-text-xs">
                 {{ $t('Legal notice') }}
               </div>
             </router-link>
 
-            <div class="t-flex t-items-center t-text-base-darkest t-cursor-pointer" @click="showDetails = !showDetails">
+            <div class="t-row-start-1 t-col-span-4 lg:t-col-span-2 t-flex t-items-center t-justify-center">
+              <base-checkbox class="t-mr-4" name="essential" id="essential" :value="true">
+                {{ $t('Essential') }}
+              </base-checkbox>
+              <base-checkbox class="" name="marketing" id="marketing" v-model="accepted">
+                {{ $t('Marketing') }}
+              </base-checkbox>
+            </div>
+
+            <div class="t-row-start-2 lg:t-row-start-1 t-col-span-2 lg:t-col-span-1 t-flex t-justify-end t-items-center t-text-base-darkest t-cursor-pointer" @click="showDetails = !showDetails">
               <div class="t-text-black t-font-bold t-select-none t-text-xs" size="sm">
                 {{ $t('Details') }}
               </div>
