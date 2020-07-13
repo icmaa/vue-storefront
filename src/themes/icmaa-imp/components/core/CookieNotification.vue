@@ -11,7 +11,7 @@
           <div class="t-text-base-tone t-text-xs t-mb-4">
             {{ $t('We use cookies on our website. Some of them are required to operate the website (e.g. for the use of your shopping basket or for security features). Others help us to improve our online services and to remain profitable. You have the power to accept non essential or only essential cookies. Please note that you may not be able to access all of our website settings if you have opted for certain criteria. You can view and adjust your settings at any time and deselect cookies later (e.g. in the footer of our website). For more information please read our') }}
             <router-link :to="localizedRoute('service-privacy')" class="t-inline-block t-text-base-darkest t-text-sm">
-              <material-icon id="icon" icon="arrow_forward" size="xs" />
+              <material-icon id="cookie-arrow-forward" icon="arrow_forward" size="xs" />
               <span class="t-text-black t-text-xs t-font-bold">
                 {{ $t('Privacy statements') }}
               </span>
@@ -28,7 +28,7 @@
             </base-checkbox>
           </div>
 
-          <!-- Disclaimer -->
+          <!-- Links -->
           <div class="t-flex t-items-center t-w-full t-mb-4 t-justify-between lg:t--mt-12 lg:t-mb-8">
             <router-link :to="localizedRoute('service-imprint')" class="t-flex t-items-center t-text-base-darkest">
               <material-icon icon="arrow_forward" size="xs" />
@@ -127,17 +127,15 @@ export default {
   background-color: rgba(0,0,0,.4);
   top: 0;
   left: 0;
-}
-input[type="checkbox"]:checked {
-  mix-blend-mode: luminosity;
+
+  #cookie-arrow-forward {
+    vertical-align: middle;
+  }
 }
 .fade-enter-active, .fade-leave-active {
   transition: opacity .5s;
 }
 .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
   opacity: 0;
-}
-#icon {
-  vertical-align: middle;
 }
 </style>
