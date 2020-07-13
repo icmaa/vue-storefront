@@ -19,7 +19,7 @@
           </div>
 
           <!-- Checkboxes -->
-          <div class="t-grid t-w-full t-grid-rows-2 lg:t-grid-rows-1 t-grid-cols-4 t-mb-4">
+          <div class="t-grid t-w-full t-grid-rows-2 lg:t-grid-rows-1 t-grid-cols-4 t-mb-4 lg:t-mb-8">
             <router-link :to="localizedRoute('service-imprint')" class="t-flex t-items-center t-text-base-darkest t-row-start-2 lg:t-row-start-1 t-col-span-2 lg:t-col-span-1">
               <material-icon icon="arrow_forward" size="xs" />
               <div class="t-font-bold t-text-xs">
