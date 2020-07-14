@@ -1,6 +1,6 @@
 <template>
   <transition name="fade-in-down">
-    <div class="modal" v-if="isVisible" data-test-id="Modal">
+    <div class="modal" v-if="visible" data-test-id="Modal">
       <div class="modal-backdrop" @click="close" />
       <div class="modal-container t-bg-white t-scrolling-touch t-pb-20 sm:t-pb-0" ref="modal-container" :style="style">
         <div class="t-h-60px t-flex-fix t-px-4 t-bg-white t-border-b t-border-base-lighter t-flex t-items-center">
@@ -8,7 +8,7 @@
           <h2 class="t-text-lg t-text-base-dark" v-if="title" v-text="title" />
           <slot name="header" />
           <div class="t-flex-expand" />
-          <top-button icon="close" text="Close" :tab-index="1" @click.native="close" data-test-id="ModalClose" class="t--mr-2 t-text-base" />
+          <top-button icon="close" text="Close" :tab-index="1" @click.native="close" data-test-id="ModalClose" class="t--mr-2 t-text-base" v-if="showCloseButton" />
         </div>
         <div class="modal-content" :class="[ padding ]">
           <slot />
@@ -19,8 +19,8 @@
 </template>
 
 <script>
-import { mapMutations } from 'vuex'
 import onEscapePress from '@vue-storefront/core/mixins/onEscapePress'
+import { mapMutations, mapGetters } from 'vuex'
 import { disableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock'
 
 import TopButton from 'theme/components/core/blocks/AsyncSidebar/TopButton'
@@ -31,11 +31,6 @@ export default {
   components: {
     TopButton
   },
-  data () {
-    return {
-      isVisible: false
-    }
-  },
   props: {
     name: {
       required: true,
@@ -45,11 +40,6 @@ export default {
       type: [Boolean, String],
       default: false
     },
-    delay: {
-      required: false,
-      type: Number,
-      default: 300
-    },
     width: {
       type: Number,
       default: 0
@@ -57,15 +47,26 @@ export default {
     padding: {
       type: String,
       default: 't-p-4 lg:t-p-8'
+    },
+    showCloseButton: {
+      type: Boolean,
+      default: true
     }
   },
   computed: {
+    ...mapGetters({
+      isModalVisible: 'ui/isModalVisible'
+    }),
+    visible () {
+      const visible = this.isModalVisible(this.name)
+      return visible
+    },
     style () {
       return this.width ? `width: ${this.width}px` : false
     }
   },
   watch: {
-    isVisible (state) {
+    visible (state) {
       if (state) {
         this.$nextTick(() => {
           disableBodyScroll(this.$refs['modal-container']);
@@ -77,34 +78,12 @@ export default {
   },
   methods: {
     ...mapMutations('ui', ['setOverlay']),
-    onHide (name, state, params) {
-      if (name === this.name) {
-        this.toggle(false)
-      }
-    },
-    onShow (name, state, params) {
-      if (name === this.name) {
-        this.toggle(true)
-      }
-    },
-    onToggle (name, state, params) {
-      if (name === this.name) {
-        state = typeof state === 'undefined' ? !this.isVisible : state
-        this.toggle(state)
-      }
+    close () {
+      this.$store.dispatch('ui/hideModal', this.name)
+      this.$emit('close', this)
     },
     onEscapePress () {
       this.close()
-    },
-    toggle (state) {
-      this.$store.dispatch('ui/closeAll')
-
-      this.isVisible = state
-      state ? this.setOverlay(state) : setTimeout(() => this.setOverlay(state), this.delay)
-      this.$emit(state ? 'show' : 'close', this)
-    },
-    close () {
-      this.toggle(false)
     },
     onHistoryBack () {
       this.close()
@@ -114,16 +93,7 @@ export default {
     // Close this if browser-back button is called
     window.addEventListener('popstate', this.onHistoryBack)
   },
-  beforeMount () {
-    this.$bus.$on('modal-toggle', this.onToggle)
-    this.$bus.$on('modal-show', this.onShow)
-    this.$bus.$on('modal-hide', this.onHide)
-  },
   beforeDestroy () {
-    this.$bus.$off('modal-toggle', this.onToggle)
-    this.$bus.$off('modal-show', this.onShow)
-    this.$bus.$off('modal-hide', this.onHide)
-
     window.removeEventListener('popstate', this.onHistoryBack)
   }
 }

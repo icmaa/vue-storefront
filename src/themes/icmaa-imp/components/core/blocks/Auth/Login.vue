@@ -141,7 +141,7 @@ export default {
       })
     },
     close () {
-      this.$bus.$emit('modal-hide', 'modal-signup')
+      this.$store.dispatch('ui/hideModal', 'modal-signup')
     }
   }
 }
