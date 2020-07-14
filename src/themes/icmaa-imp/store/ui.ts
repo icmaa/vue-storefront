@@ -69,8 +69,19 @@ export const uiStore = {
     setAuthElem (state, action: boolean) {
       state.authElem = action
     },
-    setModal (state, item: { name: string, visible: boolean }) {
-      Vue.set(state.modals, item.name, item.visible)
+    setModal (state, item: { name: string, visible: boolean, priority?: number }) {
+      let { name, priority, visible } = item
+      if (!priority) {
+        priority = (state.modals[name] && state.modals[name].priority)
+          ? state.modals[name].priority
+          : Object.keys(state.modals).length * 10 + 10
+      }
+
+      Vue.set(state.modals, item.name, { visible, priority })
+    },
+    setModalPriority (state, { name, priority }) {
+      const modal = Object.assign({}, state.modals[name], { priority })
+      Vue.set(state.modals, name, modal)
     }
   },
   actions: {
@@ -141,7 +152,7 @@ export const uiStore = {
 
       if (item.visible === true) {
         commit('setOverlay', item.visible)
-      } else if (item.visible === false) {
+      } else if (item.visible === false && getters.getVisibleModals.length <= 1) {
         setTimeout(() => commit('setOverlay', false), 300)
       }
 
@@ -152,11 +163,32 @@ export const uiStore = {
     },
     hideModal ({ dispatch }, name: string) {
       dispatch('toggleModal', { name, visible: false })
+    },
+    setModalPriority ({ commit }, { name, priority }) {
+      commit('setModalPriority', { name, priority })
     }
   },
   getters: {
     getViewport: state => state.viewport,
     getSidebarPath: state => state.sidebarPath,
-    isModalVisible: state => name => state.modals[name] || false
+    getVisibleModals: state => {
+      return Object.entries(state.modals)
+        .map((m: any) => ({ ...m[1], name: m[0] }))
+        .filter(m => m.visible === true)
+    },
+    getHighestVisibleModal: (state, getters) => {
+      return getters.getVisibleModals.reduce((prev, next) => prev && prev.priority < next.priority ? next : prev)
+    },
+    isModalVisible: (state, getters) => name => {
+      if (
+        getters.getVisibleModals.find(m => m.name === name) &&
+        getters.getHighestVisibleModal &&
+        getters.getHighestVisibleModal.name === name
+      ) {
+        return state.modals[name].visible
+      }
+
+      return false
+    }
   }
 }

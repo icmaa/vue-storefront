@@ -40,6 +40,11 @@ export default {
     }
   },
   async created () {
+    this.$store.dispatch(
+      'ui/setModalPriority',
+      { name: 'modal-cookie-notification', priority: 100 }
+    )
+
     this.loadModal()
   },
   watch: {
