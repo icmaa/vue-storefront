@@ -73,10 +73,10 @@ export default {
     visible (state) {
       if (state) {
         this.$nextTick(() => {
-          disableBodyScroll(this.$refs['modal-container']);
+          disableBodyScroll(this.$refs['modal-container'])
         })
       } else {
-        clearAllBodyScrollLocks();
+        clearAllBodyScrollLocks()
       }
     }
   },

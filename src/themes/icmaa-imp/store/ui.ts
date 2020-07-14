@@ -154,6 +154,7 @@ export const uiStore = {
         commit('setOverlay', item.visible)
       } else if (item.visible === false && getters.getVisibleModals.length <= 1) {
         setTimeout(() => commit('setOverlay', false), 300)
+        clearAllBodyScrollLocks()
       }
 
       commit('setModal', item)
