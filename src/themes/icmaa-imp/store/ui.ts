@@ -138,6 +138,13 @@ export const uiStore = {
       if (item.visible === undefined) {
         item.visible = !getters.isModalVisible(item.name)
       }
+
+      if (item.visible === true) {
+        commit('setOverlay', item.visible)
+      } else if (item.visible === false) {
+        setTimeout(() => commit('setOverlay', false), 300)
+      }
+
       commit('setModal', item)
     },
     showModal ({ dispatch }, name: string) {

@@ -32,8 +32,8 @@ export const claimsStore = {
         created_at: new Date(),
         value,
         description
-      }).then(() => {
-        commit('updateClaim', { name: claimCode, value })
+      }).then(claim => {
+        commit('updateClaim', { name: claimCode, value: claim })
       }).catch((reason) => {
         Logger.error(reason)
       })
@@ -48,7 +48,7 @@ export const claimsStore = {
         })
     },
     check ({ getters, commit }, { claimCode, localized }) {
-      if (getters.getClaim(claimCode) !== undefined) {
+      if (getters.getClaim(claimCode)) {
         return getters.getClaim(claimCode)
       }
 

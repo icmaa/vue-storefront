@@ -40,11 +40,6 @@ export default {
       type: [Boolean, String],
       default: false
     },
-    delay: {
-      required: false,
-      type: Number,
-      default: 300
-    },
     width: {
       type: Number,
       default: 0
@@ -83,20 +78,9 @@ export default {
   },
   methods: {
     ...mapMutations('ui', ['setOverlay']),
-    toggle (state) {
-      this.$store.dispatch('ui/closeAll')
-      this.$store.dispatch('ui/toggleModal', { name: this.name, visible: state })
-
-      if (state) {
-        this.setOverlay(state)
-      } else {
-        setTimeout(() => this.setOverlay(state), this.delay)
-      }
-
-      this.$emit(state ? 'show' : 'close', this)
-    },
     close () {
-      this.toggle(false)
+      this.$store.dispatch('ui/hideModal', this.name)
+      this.$emit('close', this)
     },
     onEscapePress () {
       this.close()
