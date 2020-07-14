@@ -93,7 +93,7 @@ export default {
     onOrderConfirmation (payload) {
       this.loadOrderConfirmation = true
       this.ordersData = payload
-      this.$bus.$emit('modal-show', 'modal-order-confirmation')
+      this.$store.dispatch('ui/showModal', 'modal-order-confirmation')
     },
     fetchMetaData () {
       return this.$store.dispatch('icmaaMeta/load')

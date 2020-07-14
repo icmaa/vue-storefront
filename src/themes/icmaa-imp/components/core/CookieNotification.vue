@@ -31,7 +31,7 @@ export default {
         .then(cookie => {
           this.loadCookieNotificationModal = (cookie === null && !pageAllowList.includes(urlPath))
           if (!this.loadCookieNotificationModal) {
-            this.$bus.$emit('modal-hide', 'modal-cookie-notification')
+            this.$store.dispatch('ui/hideModal', 'modal-cookie-notification')
           }
         })
     },

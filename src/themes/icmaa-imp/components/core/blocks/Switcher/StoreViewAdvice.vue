@@ -67,13 +67,12 @@ export default {
       this.$router.push('/' + this.current.storeCode)
     },
     closeModal () {
-      this.$bus.$emit('modal-hide', 'modal-storeview-advice')
+      this.$store.dispatch('ui/hideModal', 'modal-storeview-advice')
     }
   },
   mounted () {
     this.$nextTick(() => {
-      this.componentLoaded = true
-      this.$bus.$emit('modal-show', 'modal-storeview-advice')
+      this.$store.dispatch('ui/showModal', 'modal-storeview-advice')
     })
   }
 }

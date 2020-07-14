@@ -1,3 +1,4 @@
+import Vue from 'vue'
 import { StorageManager } from '@vue-storefront/core/lib/storage-manager'
 import UniversalStorage from '@vue-storefront/core/lib/store/storage'
 import { Logger } from '@vue-storefront/core/lib/logger'
@@ -12,28 +13,62 @@ export const claimCollection = (localized = false): UniversalStorage => {
 
 export const claimsStore = {
   namespaced: true,
+  state: {
+    items: {}
+  },
+  mutations: {
+    updateClaim (state, { name, value }) {
+      Object.assign(state.items, { [name]: value })
+    },
+    removeClaim (state, { name }) {
+      delete state.items[name]
+      Vue.set(state, 'items', state.items)
+    }
+  },
   actions: {
-    set (context, { claimCode, value, description, localized }) {
+    set ({ commit }, { claimCode, value, description, localized }) {
       claimCollection(localized).setItem(claimCode, {
         code: claimCode,
         created_at: new Date(),
-        value: value,
-        description: description
+        value,
+        description
+      }).then(() => {
+        commit('updateClaim', { name: claimCode, value })
       }).catch((reason) => {
         Logger.error(reason)
       })
     },
-    unset (context, { claimCode, localized }) {
+    unset ({ commit }, { claimCode, localized }) {
       claimCollection(localized).removeItem(claimCode)
+        .then(() => {
+          commit('removeClaim', { name: claimCode })
+        })
         .catch((reason) => {
           Logger.error(reason)
         })
     },
-    check (context, { claimCode, localized }) {
+    check ({ getters, commit }, { claimCode, localized }) {
+      if (getters.getClaim(claimCode) !== undefined) {
+        return getters.getClaim(claimCode)
+      }
+
       return claimCollection(localized).getItem(claimCode)
+        .then(claim => {
+          commit('updateClaim', { name: claimCode, value: claim })
+          return claim
+        })
         .catch((reason) => {
           Logger.error(reason)
         })
+    }
+  },
+  getters: {
+    getClaim: state => claimCode => {
+      if (state.items.hasOwnProperty(claimCode)) {
+        return state.items[claimCode]
+      }
+
+      return undefined
     }
   }
 }

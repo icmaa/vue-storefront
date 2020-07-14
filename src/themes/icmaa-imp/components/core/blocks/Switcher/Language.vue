@@ -67,7 +67,7 @@ export default {
   },
   mounted () {
     this.$nextTick(() => {
-      this.$bus.$emit('modal-show', 'modal-switcher')
+      this.$store.dispatch('ui/showModal', 'modal-switcher')
     })
   }
 }

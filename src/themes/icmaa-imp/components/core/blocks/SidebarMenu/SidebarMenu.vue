@@ -77,7 +77,7 @@ export default {
     login () {
       this.closeMenu()
       if (!this.isLoggedIn) {
-        this.$bus.$emit('modal-toggle', 'modal-signup')
+        this.$store.dispatch('ui/showModal', 'modal-signup')
       } else {
         this.$store.dispatch('ui/setUserSidebar', { active: true })
       }

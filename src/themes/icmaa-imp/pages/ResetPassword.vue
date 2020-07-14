@@ -87,7 +87,7 @@ export default {
   },
   mounted () {
     if (!this.$route.query.email || !this.$route.query.token) {
-      this.$bus.$emit('modal-toggle', 'modal-signup')
+      this.$store.dispatch('ui/showModal', 'modal-signup')
       this.$store.commit('ui/setAuthElem', 'forgot-pass')
       this.$router.push(localizedRoute('/'))
     }

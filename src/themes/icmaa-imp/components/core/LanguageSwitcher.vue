@@ -76,7 +76,7 @@ export default {
       this.loadLanguagesModal = true
       this.storeRecommendationAdvice = storeRecommendationAdvice
 
-      this.$bus.$emit('modal-show', 'modal-switcher')
+      this.$store.dispatch('ui/showModal', 'modal-switcher')
     },
     async onStoreViewChanged (fetchClaim = false) {
       if (fetchClaim) {

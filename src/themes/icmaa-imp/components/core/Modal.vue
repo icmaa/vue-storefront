@@ -1,6 +1,6 @@
 <template>
   <transition name="fade-in-down">
-    <div class="modal" v-if="isVisible" data-test-id="Modal">
+    <div class="modal" v-if="visible" data-test-id="Modal">
       <div class="modal-backdrop" @click="close" />
       <div class="modal-container t-bg-white t-scrolling-touch t-pb-20 sm:t-pb-0" ref="modal-container" :style="style">
         <div class="t-h-60px t-flex-fix t-px-4 t-bg-white t-border-b t-border-base-lighter t-flex t-items-center">
@@ -20,7 +20,7 @@
 
 <script>
 import onEscapePress from '@vue-storefront/core/mixins/onEscapePress'
-import { mapMutations } from 'vuex'
+import { mapMutations, mapGetters } from 'vuex'
 import { disableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock'
 
 import TopButton from 'theme/components/core/blocks/AsyncSidebar/TopButton'
@@ -30,11 +30,6 @@ export default {
   mixins: [onEscapePress],
   components: {
     TopButton
-  },
-  data () {
-    return {
-      isVisible: false
-    }
   },
   props: {
     name: {
@@ -64,12 +59,19 @@ export default {
     }
   },
   computed: {
+    ...mapGetters({
+      isModalVisible: 'ui/isModalVisible'
+    }),
+    visible () {
+      const visible = this.isModalVisible(this.name)
+      return visible
+    },
     style () {
       return this.width ? `width: ${this.width}px` : false
     }
   },
   watch: {
-    isVisible (state) {
+    visible (state) {
       if (state) {
         this.$nextTick(() => {
           disableBodyScroll(this.$refs['modal-container']);
@@ -81,34 +83,23 @@ export default {
   },
   methods: {
     ...mapMutations('ui', ['setOverlay']),
-    onHide (name, state, params) {
-      if (name === this.name) {
-        this.toggle(false)
-      }
-    },
-    onShow (name, state, params) {
-      if (name === this.name) {
-        this.toggle(true)
-      }
-    },
-    onToggle (name, state, params) {
-      if (name === this.name) {
-        state = typeof state === 'undefined' ? !this.isVisible : state
-        this.toggle(state)
-      }
-    },
-    onEscapePress () {
-      this.close()
-    },
     toggle (state) {
       this.$store.dispatch('ui/closeAll')
+      this.$store.dispatch('ui/toggleModal', { name: this.name, visible: state })
 
-      this.isVisible = state
-      state ? this.setOverlay(state) : setTimeout(() => this.setOverlay(state), this.delay)
+      if (state) {
+        this.setOverlay(state)
+      } else {
+        setTimeout(() => this.setOverlay(state), this.delay)
+      }
+
       this.$emit(state ? 'show' : 'close', this)
     },
     close () {
       this.toggle(false)
+    },
+    onEscapePress () {
+      this.close()
     },
     onHistoryBack () {
       this.close()
@@ -118,16 +109,7 @@ export default {
     // Close this if browser-back button is called
     window.addEventListener('popstate', this.onHistoryBack)
   },
-  beforeMount () {
-    this.$bus.$on('modal-toggle', this.onToggle)
-    this.$bus.$on('modal-show', this.onShow)
-    this.$bus.$on('modal-hide', this.onHide)
-  },
   beforeDestroy () {
-    this.$bus.$off('modal-toggle', this.onToggle)
-    this.$bus.$off('modal-show', this.onShow)
-    this.$bus.$off('modal-hide', this.onHide)
-
     window.removeEventListener('popstate', this.onHistoryBack)
   }
 }

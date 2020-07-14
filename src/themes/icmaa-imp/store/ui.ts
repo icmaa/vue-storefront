@@ -21,7 +21,8 @@ export const uiStore = {
     searchpanel: false,
     addtocart: false,
     categoryfilter: false,
-    newsletterPopup: false
+    newsletterPopup: false,
+    modals: {}
   },
   mutations: {
     setViewport (state, viewport: string) {
@@ -67,6 +68,9 @@ export const uiStore = {
     },
     setAuthElem (state, action: boolean) {
       state.authElem = action
+    },
+    setModal (state, item: { name: string, visible: boolean }) {
+      Vue.set(state.modals, item.name, item.visible)
     }
   },
   actions: {
@@ -129,10 +133,23 @@ export const uiStore = {
     },
     removeLastSidebarPath ({ commit }) {
       commit('removeSidebarPath')
+    },
+    toggleModal ({ commit, getters }, item: { name: string, visible?: boolean }) {
+      if (item.visible === undefined) {
+        item.visible = !getters.isModalVisible(item.name)
+      }
+      commit('setModal', item)
+    },
+    showModal ({ dispatch }, name: string) {
+      dispatch('toggleModal', { name, visible: true })
+    },
+    hideModal ({ dispatch }, name: string) {
+      dispatch('toggleModal', { name, visible: false })
     }
   },
   getters: {
     getViewport: state => state.viewport,
-    getSidebarPath: state => state.sidebarPath
+    getSidebarPath: state => state.sidebarPath,
+    isModalVisible: state => name => state.modals[name] || false
   }
 }

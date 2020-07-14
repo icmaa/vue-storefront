@@ -227,7 +227,7 @@ export default {
       this.$store.commit('ui/setAuthElem', 'login')
     },
     close () {
-      this.$bus.$emit('modal-hide', 'modal-signup')
+      this.$store.dispatch('ui/hideModal', 'modal-signup')
     },
     callRegister () {
       this.$bus.$emit('notification-progress-start', i18n.t('Registering the account ...'))

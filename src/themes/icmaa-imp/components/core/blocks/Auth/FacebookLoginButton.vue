@@ -74,7 +74,7 @@ export default {
   methods: {
     onSuccess () {
       this.$store.dispatch('ui/closeAll')
-      this.$bus.$emit('modal-hide', 'modal-signup')
+      this.$store.dispatch('ui/hideModal', 'modal-signup')
 
       this.$store.dispatch('notification/spawnNotification', {
         type: 'success',

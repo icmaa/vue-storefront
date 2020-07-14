@@ -39,7 +39,7 @@ export default {
   },
   mounted () {
     if (!this.isLoggedIn && localStorage.getItem('redirect')) {
-      this.$bus.$emit('modal-show', 'modal-signup')
+      this.$store.dispatch('ui/showModal', 'modal-signup')
     }
   },
   async asyncData ({ context }) {

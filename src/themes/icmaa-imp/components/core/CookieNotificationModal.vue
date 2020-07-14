@@ -101,13 +101,13 @@ export default {
   },
   mounted () {
     if (this.visible === true) {
-      this.$bus.$emit('modal-show', 'modal-cookie-notification')
+      this.$store.dispatch('ui/showModal', 'modal-cookie-notification')
     }
   },
   watch: {
     visible (value) {
       if (value === true) {
-        this.$bus.$emit('modal-show', 'modal-cookie-notification')
+        this.$store.dispatch('ui/showModal', 'modal-cookie-notification')
       }
     }
   },
@@ -122,7 +122,7 @@ export default {
     async setVisited () {
       await this.$store.dispatch('claims/set', { claimCode: 'cookiesAccepted', value: this.accepted })
       this.$bus.$emit('cookiesAccepted', this.accepted)
-      this.$bus.$emit('modal-hide', 'modal-cookie-notification')
+      this.$store.dispatch('ui/hideModal', 'modal-cookie-notification')
     },
     close () {
       this.$emit('close')
