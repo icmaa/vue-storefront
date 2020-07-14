@@ -8,7 +8,7 @@
           <h2 class="t-text-lg t-text-base-dark" v-if="title" v-text="title" />
           <slot name="header" />
           <div class="t-flex-expand" />
-          <top-button icon="close" text="Close" :tab-index="1" @click.native="close" data-test-id="ModalClose" class="t--mr-2 t-text-base" />
+          <top-button icon="close" text="Close" :tab-index="1" @click.native="close" data-test-id="ModalClose" class="t--mr-2 t-text-base" v-if="showCloseButton" />
         </div>
         <div class="modal-content" :class="[ padding ]">
           <slot />
@@ -19,8 +19,8 @@
 </template>
 
 <script>
-import { mapMutations } from 'vuex'
 import onEscapePress from '@vue-storefront/core/mixins/onEscapePress'
+import { mapMutations } from 'vuex'
 import { disableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock'
 
 import TopButton from 'theme/components/core/blocks/AsyncSidebar/TopButton'
@@ -57,6 +57,10 @@ export default {
     padding: {
       type: String,
       default: 't-p-4 lg:t-p-8'
+    },
+    showCloseButton: {
+      type: Boolean,
+      default: true
     }
   },
   computed: {

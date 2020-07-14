@@ -1,5 +1,5 @@
 <template>
-  <div class="">
+  <div>
     <modal-switcher v-if="loadLanguagesModal" :store-recommendation-advice="storeRecommendationAdvice" :change-store-advice="isStoreAdviceVisible" />
     <modal-advice v-if="loadLanguageAdviceModal" :current="claim.value" />
   </div>
