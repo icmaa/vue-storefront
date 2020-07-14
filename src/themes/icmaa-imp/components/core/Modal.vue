@@ -2,7 +2,7 @@
   <transition name="fade-in-down">
     <div class="modal" v-if="visible" data-test-id="Modal">
       <div class="modal-backdrop" @click="close" />
-      <div class="modal-container t-bg-white t-scrolling-touch t-pb-20 sm:t-pb-0" ref="modal-container" :style="style">
+      <div class="modal-container t-bg-white t-scrolling-touch sm:t-pb-0" :class="[ compact ? 'compact' : 't-pb-20' ]" ref="modal-container" :style="style">
         <div class="t-h-60px t-flex-fix t-px-4 t-bg-white t-border-b t-border-base-lighter t-flex t-items-center">
           <slot name="header-before" />
           <h2 class="t-text-lg t-text-base-dark" v-if="title" v-text="title" />
@@ -47,6 +47,10 @@ export default {
     padding: {
       type: String,
       default: 't-p-4 lg:t-p-8'
+    },
+    compact: {
+      type: Boolean,
+      default: false
     },
     showCloseButton: {
       type: Boolean,
@@ -137,6 +141,13 @@ $z-index-modal: map-get($z-index, modal);
       max-height: calc(var(--vh, 1vh) * 100);
       min-width: 100vw;
       margin: 0;
+
+      &.compact {
+        min-height: auto;
+        max-height: calc(var(--vh, 1vh) * 95);
+        min-width: 90vw;
+        max-width: 90vw;
+      }
     }
   }
 

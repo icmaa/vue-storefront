@@ -1,5 +1,5 @@
 <template>
-  <modal name="modal-cookie-notification" :width="600" :show-close-button="false" @close="close" data-test-id="CookieNotification">
+  <modal name="modal-cookie-notification" :width="600" :compact="true" :show-close-button="false" @close="close" data-test-id="CookieNotification">
     <div slot="header">
       {{ $t('Cookie settings') }}
     </div>
