@@ -1,5 +1,5 @@
 <template>
-  <modal name="modal-switcher" :width="500" @close="onClose">
+  <modal name="modal-switcher" :width="500" :compact="true" @close="onClose">
     <div slot="header">
       {{ $t('Switch store') }}
     </div>
