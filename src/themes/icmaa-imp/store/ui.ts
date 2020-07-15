@@ -178,7 +178,8 @@ export const uiStore = {
         .filter(m => m.visible === true)
     },
     getHighestVisibleModal: (state, getters) => {
-      return getters.getVisibleModals.reduce((prev, next) => prev && prev.priority < next.priority ? next : prev)
+      return getters.getVisibleModals.length > 0
+        ? getters.getVisibleModals.reduce((prev, next) => prev && prev.priority < next.priority ? next : prev) : false
     },
     isModalVisible: (state, getters) => name => {
       if (
