@@ -27,16 +27,20 @@ export const claimsStore = {
   },
   actions: {
     set ({ commit }, { claimCode, value, description, localized }) {
-      claimCollection(localized).setItem(claimCode, {
+      const claimItem = {
         code: claimCode,
         created_at: new Date(),
         value,
         description
-      }).then(claim => {
-        commit('updateClaim', { name: claimCode, value: claim })
-      }).catch((reason) => {
-        Logger.error(reason)
-      })
+      }
+
+      claimCollection(localized).setItem(claimCode, claimItem)
+        .then(claim => {
+          commit('updateClaim', { name: claimCode, value: claim || claimItem })
+        })
+        .catch((reason) => {
+          Logger.error(reason)
+        })
     },
     unset ({ commit }, { claimCode, localized }) {
       claimCollection(localized).removeItem(claimCode)

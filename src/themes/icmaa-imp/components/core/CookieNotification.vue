@@ -4,6 +4,8 @@
 
 <script>
 
+import { mapGetters } from 'vuex'
+
 const CookieNotificationModal = () => import(/* webpackChunkName: "vsf-cookie-modification-modal" */ 'theme/components/core/CookieNotificationModal.vue')
 
 export default {
@@ -15,6 +17,11 @@ export default {
     return {
       loadCookieNotificationModal: false
     }
+  },
+  computed: {
+    ...mapGetters({
+      isModalVisible: 'ui/isModalVisible'
+    })
   },
   methods: {
     loadModal (urlPath) {
@@ -30,7 +37,7 @@ export default {
       this.$store.dispatch('claims/check', { claimCode: 'cookiesAccepted' })
         .then(cookie => {
           this.loadCookieNotificationModal = (cookie === null && !pageAllowList.includes(urlPath))
-          if (!this.loadCookieNotificationModal) {
+          if (!this.loadCookieNotificationModal && this.isModalVisible('modal-cookie-notification')) {
             this.$store.dispatch('ui/hideModal', 'modal-cookie-notification')
           }
         })

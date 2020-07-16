@@ -154,6 +154,7 @@ export const uiStore = {
         commit('setOverlay', item.visible)
       } else if (item.visible === false && getters.getVisibleModals.length <= 1) {
         setTimeout(() => commit('setOverlay', false), 300)
+        clearAllBodyScrollLocks()
       }
 
       commit('setModal', item)
@@ -177,7 +178,8 @@ export const uiStore = {
         .filter(m => m.visible === true)
     },
     getHighestVisibleModal: (state, getters) => {
-      return getters.getVisibleModals.reduce((prev, next) => prev && prev.priority < next.priority ? next : prev)
+      return getters.getVisibleModals.length > 0
+        ? getters.getVisibleModals.reduce((prev, next) => prev && prev.priority < next.priority ? next : prev) : false
     },
     isModalVisible: (state, getters) => name => {
       if (
