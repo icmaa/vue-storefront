@@ -17,7 +17,7 @@
 import './commands'
 
 before(() => {
-  return window.caches.keys().then((cacheNames) => {
+  return window.caches && window.caches.keys().then((cacheNames) => {
     return Promise.all(
       cacheNames.map((cacheName) => {
         return window.caches.delete(cacheName);

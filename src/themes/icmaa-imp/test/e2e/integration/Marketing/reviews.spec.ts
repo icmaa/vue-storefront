@@ -1,14 +1,12 @@
 describe('Reviews', () => {
   it('Select random product and create review', () => {
-    cy.visitCategoryPage()
-      .getByTestId('ProductTile')
-      .random()
-      .findByTestId('productLink')
-      .click()
+    cy.visitAsRecurringUser('')
+      .visitProductDetailPage()
 
     cy.getByTestId('Reviews')
       .find('button')
-      .click()
+      .scrollIntoView({ offset: { top: -200, left: 0 }, duration: 1000 })
+      .click({ force: true })
 
     cy.get('#reviews-form').should('be.visible')
 
@@ -23,5 +21,20 @@ describe('Reviews', () => {
 
     cy.waitForLoader()
       .checkNotification('success')
+  })
+
+  it('See review claim and click it away', () => {
+    cy.visitAsRecurringUser('')
+      .visitProductDetailPage()
+
+    cy.getByTestId('ReviewsClaim').should('be.visible')
+    cy.getByTestId('ReviewsClaimAccept').click()
+    cy.getByTestId('ReviewsClaim').should('not.be.visible')
+    cy.get('#reviews-form').should('be.visible')
+
+    cy.getFromLocalStorage('shop/uniClaims/reviewsClaimAccepted')
+      .then(claim => {
+        expect(claim).to.contain('"value":true', 'Cookie for Review-Claim is true')
+      })
   })
 })

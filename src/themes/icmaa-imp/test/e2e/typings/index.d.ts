@@ -85,6 +85,14 @@ declare namespace Cypress {
     findByTestId(selector: string): Chainable<JQuery<any>>,
 
     /**
+     * Return item from localstorage
+     *
+     * @example
+     * cy.getFromLocalStorage('shop/uniClaims/reviewsClaimAccepted')
+     */
+    getFromLocalStorage(key: string): Chainable<string>,
+
+    /**
      * Check image for visibility and dimensions.
      *
      * @example
