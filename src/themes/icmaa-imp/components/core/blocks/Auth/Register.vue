@@ -227,6 +227,7 @@ export default {
       this.$store.commit('ui/setAuthElem', 'login')
     },
     close () {
+      this.$store.commit('ui/setAuthElem', 'login')
       this.$store.dispatch('ui/hideModal', 'modal-signup')
     },
     callRegister () {
