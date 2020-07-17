@@ -5,7 +5,8 @@ describe('Reviews', () => {
 
     cy.getByTestId('Reviews')
       .find('button')
-      .click()
+      .scrollIntoView({ offset: { top: -200, left: 0 }, duration: 1000 })
+      .click({ force: true })
 
     cy.get('#reviews-form').should('be.visible')
 
