@@ -45,7 +45,7 @@
     <no-ssr>
       <facebook-login-button class="t-w-full t-mb-2" />
     </no-ssr>
-    <button-component type="transparent" class="t-w-full t--mb-2" @click="callRegister" data-test-id="registerLink">
+    <button-component type="transparent" class="t-w-full t--mb-2 t-flex-wrap" @click="callRegister" data-test-id="registerLink">
       {{ $t('Not yet an account?') }} <span class="t-ml-1">{{ $t('Register now') }}</span>
     </button-component>
   </form>
@@ -141,7 +141,7 @@ export default {
       })
     },
     close () {
-      this.$bus.$emit('modal-hide', 'modal-signup')
+      this.$store.dispatch('ui/hideModal', 'modal-signup')
     }
   }
 }

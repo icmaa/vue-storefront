@@ -61,7 +61,7 @@ export default {
   methods: {
     showNewsletterPopup () {
       this.loadNewsletterPopup = true
-      this.$bus.$emit('modal-show', 'modal-newsletter')
+      this.$store.dispatch('ui/showModal', 'modal-newsletter')
     }
   }
 }

@@ -99,6 +99,12 @@ Cypress.Commands.add('findByTestId', { prevSubject: 'element' }, (subject, id) =
     .find(`[data-test-id="${id}"]`)
 })
 
+Cypress.Commands.add('getFromLocalStorage', (key) => {
+  cy.window().then(window => {
+    cy.wrap(window.localStorage.getItem(key))
+  })
+})
+
 Cypress.Commands.overwrite('visit', (originalFn, url, options?) => {
   let storeCode: string
   if (options && options.hasOwnProperty('storeCode')) {

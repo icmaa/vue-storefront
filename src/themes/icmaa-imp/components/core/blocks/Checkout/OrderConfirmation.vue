@@ -76,17 +76,17 @@ export default {
   },
   mounted () {
     this.$nextTick(() => {
-      this.$bus.$emit('modal-show', 'modal-order-confirmation')
+      this.$store.dispatch('ui/showModal', 'modal-order-confirmation')
     })
   },
   methods: {
     confirmOrders () {
       ConfirmOrders.methods.confirmOrders.call(this)
-      this.$bus.$emit('modal-hide', 'modal-order-confirmation')
+      this.$store.dispatch('ui/hideModal', 'modal-order-confirmation')
     },
     cancelOrders () {
       CancelOrders.methods.cancelOrders.call(this)
-      this.$bus.$emit('modal-hide', 'modal-order-confirmation')
+      this.$store.dispatch('ui/hideModal', 'modal-order-confirmation')
     }
   },
   components: {

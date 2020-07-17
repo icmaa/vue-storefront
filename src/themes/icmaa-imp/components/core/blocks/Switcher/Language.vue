@@ -1,5 +1,5 @@
 <template>
-  <modal name="modal-switcher" :width="500" @close="onClose">
+  <modal name="modal-switcher" :width="500" :compact="true" @close="onClose">
     <div slot="header">
       {{ $t('Switch store') }}
     </div>
@@ -67,8 +67,7 @@ export default {
   },
   mounted () {
     this.$nextTick(() => {
-      this.componentLoaded = true
-      this.$bus.$emit('modal-show', 'modal-switcher')
+      this.$store.dispatch('ui/showModal', 'modal-switcher')
     })
   }
 }

@@ -2,10 +2,10 @@ import config from 'config'
 import Product from '@vue-storefront/core/modules/catalog/types/Product'
 import buildQuery from './buildQuery'
 import setProductLink from './setProductLink'
+import getBundleProductPrice from './getBundleProductPrice'
 import { isBundleProduct } from './..'
 import { ProductService } from '@vue-storefront/core/data-resolver/ProductService'
 import { catalogHooksExecutors } from './../../hooks'
-import getBundleProductPrice from './getBundleProductPrice'
 
 /**
  * This function prepare all product_links for bundle products.

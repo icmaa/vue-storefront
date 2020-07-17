@@ -12,7 +12,7 @@ export default {
   methods: {
     async addProductStockAlert (option, force = false): Promise<boolean> {
       if (!this.isLoggedIn && !force) {
-        this.$bus.$emit('modal-toggle', 'modal-signup')
+        this.$store.dispatch('ui/showModal', 'modal-signup')
         EventBus.$once('user-after-loggedin', async () => {
           /** Somehow the isLoggedIn property is still false directly after login
            * so we use this `force` prop because we know that we are logged in */

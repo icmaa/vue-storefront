@@ -1,5 +1,5 @@
 <template>
-  <div class="">
+  <div>
     <modal-switcher v-if="loadLanguagesModal" :store-recommendation-advice="storeRecommendationAdvice" :change-store-advice="isStoreAdviceVisible" />
     <modal-advice v-if="loadLanguageAdviceModal" :current="claim.value" />
   </div>
@@ -76,7 +76,7 @@ export default {
       this.loadLanguagesModal = true
       this.storeRecommendationAdvice = storeRecommendationAdvice
 
-      this.$bus.$emit('modal-show', 'modal-switcher')
+      this.$store.dispatch('ui/showModal', 'modal-switcher')
     },
     async onStoreViewChanged (fetchClaim = false) {
       if (fetchClaim) {

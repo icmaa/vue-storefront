@@ -88,7 +88,7 @@ export default {
   },
   mounted () {
     this.$nextTick(() => {
-      this.$bus.$emit('modal-show', 'modal-newsletter')
+      this.$store.dispatch('ui/showModal', 'modal-newsletter')
     })
   },
   beforeDestroy () {
@@ -118,7 +118,7 @@ export default {
           action1: { label: i18n.t('OK') }
         })
 
-        this.$bus.$emit('modal-hide', 'modal-newsletter')
+        this.$store.dispatch('ui/hideModal', 'modal-newsletter')
       }
     }
   }

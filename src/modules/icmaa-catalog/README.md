@@ -13,7 +13,10 @@ Add our custom functionality for the original `catalog` and `catalog-next` modul
       "customSortByAttributes": []
     },
     "product": {
-      "calculateBundledPriceByChildren": false
+      "importantCommonphrases": [
+          "3578",
+          ...
+        ]
     },
     "productListTicket": {
       "parentCategoryWhitelist": [],
