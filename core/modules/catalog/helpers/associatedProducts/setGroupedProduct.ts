@@ -1,10 +1,10 @@
 import Product from '@vue-storefront/core/modules/catalog/types/Product'
 import buildQuery from './buildQuery'
 import setProductLink from './setProductLink'
+import getGroupedProductPrice from './getGroupedProductPrice'
 import { isGroupedProduct } from './..'
 import { ProductService } from '@vue-storefront/core/data-resolver/ProductService'
 import { catalogHooksExecutors } from './../../hooks'
-import getGroupedProductPrice from './getGroupedProductPrice'
 
 /**
  * This function prepare all product_links for grouped products.
