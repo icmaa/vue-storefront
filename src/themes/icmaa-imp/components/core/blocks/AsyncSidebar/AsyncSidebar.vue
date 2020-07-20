@@ -8,7 +8,7 @@
       v-if="isOpen"
     >
       <div class="submenu-wrapper t-relative">
-        <component :is="component" @close="$emit('close')" @reload="getComponent" v-show="!hasSubmenu" :key="'sidebar-home'" />
+        <component :is="component" @close="$emit('close')" v-bind="asyncComponentProps" @reload="getComponent" v-show="!hasSubmenu" :key="'sidebar-home'" />
         <template v-for="(item, i) in sidebarPath">
           <submenu :key="'submenu-' + i" :index="i" :async-component="item.component" v-show="i === sidebarLastIndex" />
         </template>
@@ -34,6 +34,10 @@ export default {
     asyncComponent: {
       type: Function,
       required: true
+    },
+    asyncComponentProps: {
+      type: Object,
+      default: () => {}
     },
     isOpen: {
       type: Boolean,

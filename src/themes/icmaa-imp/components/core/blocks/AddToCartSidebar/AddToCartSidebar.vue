@@ -31,6 +31,9 @@
           <material-icon icon="call_made" size="md" class="t-float-right t-align-middle" />
         </router-link>
       </div>
+      <div class="t-flex t-flex-wrap t-mt-6 t-w-full" v-if="showAddToCartButton">
+        ADD-TO-CART
+      </div>
     </div>
   </sidebar>
 </template>
@@ -60,6 +63,12 @@ export default {
     BundleSelector,
     Model,
     MaterialIcon
+  },
+  props: {
+    showAddToCartButton: {
+      type: Boolean,
+      default: false
+    }
   },
   data () {
     return {
