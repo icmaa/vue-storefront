@@ -331,24 +331,6 @@ export default {
 
         this.openAddtocart()
       }
-    },
-    notifyOutStock () {
-      this.$store.dispatch('notification/spawnNotification', {
-        type: 'error',
-        message: this.$t(
-          'The product is out of stock and cannot be added to the cart!'
-        ),
-        action1: { label: this.$t('OK') }
-      })
-    },
-    notifyWrongAttributes () {
-      this.$store.dispatch('notification/spawnNotification', {
-        type: 'warning',
-        message: this.$t(
-          'No such configuration for the product. Please do choose another combination of attributes.'
-        ),
-        action1: { label: this.$t('OK') }
-      })
     }
   },
   async asyncData ({ store, route }) {

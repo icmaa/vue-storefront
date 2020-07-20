@@ -28,6 +28,9 @@
         </span>
       </p>
     </router-link>
+    <div class="" v-if="showAddToCart" @click="openAddToCartSidebar">
+      ADD TO CART
+    </div>
   </div>
 </template>
 
@@ -69,6 +72,10 @@ export default {
     showPrice: {
       type: Boolean,
       default: true
+    },
+    showAddToCart: {
+      type: Boolean,
+      default: false
     }
   },
   computed: {
@@ -84,6 +91,12 @@ export default {
     },
     favoriteIcon () {
       return this.isOnWishlist ? 'favorite' : 'favorite_border'
+    }
+  },
+  methods: {
+    async openAddToCartSidebar () {
+      await this.$store.dispatch('product/loadProduct', { parentSku: this.product.parentSku, childSku: null })
+      this.$store.dispatch('ui/setAddtocart')
     }
   }
 }

@@ -43,7 +43,7 @@
     <div class="t-container">
       <lazy-hydrate :trigger-hydration="!loading" v-if="isLazyHydrateEnabled">
         <component v-if="isInTicketWhitelist" :is="ProductListingTicket" :products="getCategoryProducts" />
-        <product-listing v-else :products="getCategoryProducts" />
+        <product-listing v-else :products="getCategoryProducts" :show-add-to-cart="true" />
       </lazy-hydrate>
       <div v-else>
         <component v-if="isInTicketWhitelist" :is="ProductListingTicket" :products="getCategoryProducts" />
@@ -72,9 +72,13 @@
 
     <async-sidebar
       :async-component="FilterSidebar"
-      :is-open="isSidebarOpen"
-      @close="$store.commit('ui/setCategoryfilter')"
+      :is-open="isFilterSidebarOpen"
       direction="left"
+    />
+    <async-sidebar
+      :async-component="AddToCartSidebar"
+      :is-open="isAddToCartOpen"
+      direction="right"
     />
   </div>
 </template>
@@ -111,6 +115,7 @@ import CategoryGtmMixin from 'icmaa-google-tag-manager/mixins/categoryGtm'
 import ClusterMixin from 'icmaa-user/mixins/cluster'
 
 const FilterSidebar = () => import(/* webpackPreload: true */ /* webpackChunkName: "vsf-sidebar-categoryfilter" */ 'theme/components/core/blocks/Category/Sidebar')
+const AddToCartSidebar = () => import(/* webpackPreload: true */ /* webpackChunkName: "vsf-addtocart-sidebar" */ 'theme/components/core/blocks/AddToCartSidebar/AddToCartSidebar')
 const ProductListingTicket = () => import(/* webpackPreload: true */ /* webpackChunkName: "vsf-product-listing-ticket" */ 'theme/components/core/ProductListingTicket')
 
 const composeInitialPageState = async (store, route, forceLoad = false, pageSize) => {
@@ -162,12 +167,14 @@ export default {
       loadingProducts: false,
       loading: true,
       FilterSidebar,
+      AddToCartSidebar,
       ProductListingTicket
     }
   },
   computed: {
     ...mapState({
-      isSidebarOpen: state => state.ui.categoryfilter
+      isFilterSidebarOpen: state => state.ui.categoryfilter,
+      isAddToCartOpen: state => state.ui.addtocart
     }),
     ...mapGetters({
       getCurrentSearchQuery: 'category-next/getCurrentSearchQuery',
