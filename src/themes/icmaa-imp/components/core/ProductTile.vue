@@ -37,6 +37,7 @@
 
 <script>
 import config from 'config'
+import i18n from '@vue-storefront/i18n'
 import MaterialIcon from 'theme/components/core/blocks/MaterialIcon'
 import Placeholder from 'theme/components/core/blocks/Placeholder'
 import ProductImage from 'theme/components/core/ProductImage'
@@ -45,12 +46,14 @@ import PromoBanner from 'theme/components/core/blocks/Category/PromoBanner'
 import ProductTileMixin from 'theme/mixins/product/tileMixin'
 import ProductNameMixin from 'icmaa-catalog/mixins/ProductNameMixin'
 import ProductPriceMixin from 'theme/mixins/product/priceMixin'
+import ProductOptionsMixin from 'theme/mixins/product/optionsMixin'
+import ProductAddToCartMixin from 'theme/mixins/product/addtocartMixin'
 import { IsOnWishlist } from '@vue-storefront/core/modules/wishlist/components/IsOnWishlist'
 import { productThumbnailPath } from '@vue-storefront/core/helpers'
 
 export default {
   name: 'ProductTile',
-  mixins: [ProductTileMixin, IsOnWishlist, ProductNameMixin, ProductPriceMixin],
+  mixins: [ProductTileMixin, IsOnWishlist, ProductNameMixin, ProductPriceMixin, ProductOptionsMixin, ProductAddToCartMixin],
   components: {
     MaterialIcon,
     Placeholder,
@@ -98,6 +101,19 @@ export default {
   },
   methods: {
     async openAddToCartSidebar () {
+      if (this.isSingleOptionProduct) {
+        this.$bus.$emit('notification-progress-start', i18n.t('Please wait'))
+        this.addToCart(this.product)
+          .then(() => {
+            this.$bus.$emit('notification-progress-stop')
+          })
+          .catch(() => {
+            this.$bus.$emit('notification-progress-stop')
+          })
+
+        return
+      }
+
       await this.$store.dispatch('product/loadProduct', { parentSku: this.product.parentSku, childSku: null })
       this.$store.dispatch('ui/setAddtocart')
     }

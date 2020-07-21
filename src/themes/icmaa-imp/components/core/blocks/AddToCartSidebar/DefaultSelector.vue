@@ -58,6 +58,10 @@ export default {
       type: Boolean,
       default: false
     },
+    isDisabled: {
+      type: Boolean,
+      default: false
+    },
     productAlert: {
       type: Boolean,
       default: true
@@ -83,7 +87,7 @@ export default {
   },
   methods: {
     selectVariant () {
-      if (!this.isLoading && !this.isStockAlertSubscrided) {
+      if (!this.isDisabled && !this.isLoading && !this.isStockAlertSubscrided) {
         this.$emit('change', this.option)
       }
     }

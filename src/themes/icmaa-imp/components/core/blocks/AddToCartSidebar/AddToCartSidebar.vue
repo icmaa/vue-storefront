@@ -13,26 +13,28 @@
             @change="onSelect"
             :price="getOptionPrice(filter)"
             :is-last="key === Object.keys(availableFilters[option.attribute_code]).length - 1"
-            :is-loading="isLoading"
+            :is-loading="loading"
             :is-active="selectedOption && selectedOption.id === filter.id"
-            :ticked="!closeOnSelect && !isLoading && userSelection && selectedOption && selectedOption.id === filter.id"
+            :is-disabled="disableSelection"
+            :ticked="!closeOnSelect && !loading && userSelection && selectedOption && selectedOption.id === filter.id"
           />
         </div>
       </template>
       <template v-if="product.type_id === 'bundle'">
         <bundle-selector
           :product="product"
+          :disable-selection="disableSelection"
           @change="onBundleSelect"
         />
       </template>
-      <div class="t-flex t-flex-wrap t-mt-6 t-w-full">
+      <div class="t-flex t-flex-wrap t-mt-4 t-w-full">
         <model :product="product" class="t-w-full t-p-4 t-mb-px t-bg-base-lightest t-text-sm t-text-base-tone" />
         <router-link :to="localizedRoute('/service-size')" class="t-w-full t-p-4 t-bg-base-lightest t-text-sm t-text-primary" @click.native="$emit('close')">
           {{ $t('Which size fits me?') }}
           <material-icon icon="call_made" size="md" class="t-float-right t-align-middle" />
         </router-link>
       </div>
-      <div class="t-flex t-flex-wrap t-mt-6 t-w-full" v-if="showAddToCartButton">
+      <div class="t-flex t-flex-wrap t-mt-4 t-w-full" v-if="showAddToCartButton">
         <button-component :type="!selectedOption || !isAddToCartDisabled ? 'primary' : 'second'" data-test-id="AddToCart" class="t-flex-grow disabled:t-opacity-50 t-relative" :disabled="isAddToCartDisabled" @click.native="addToCartButtonClick">
           {{ userSelection && isAddToCartDisabled && !loading ? $t('Out of stock') : $t('Add to cart') }}
           <loader-background v-if="isAddingToCart" class="t-bottom-0" height="t-h-1" bar="t-bg-base-lightest t-opacity-25" />
@@ -88,6 +90,7 @@ export default {
       selectedOption: undefined,
       loading: false,
       userSelection: false,
+      disableSelection: false,
       quantity: 0
     }
   },
@@ -102,14 +105,14 @@ export default {
       options: 'product/getCurrentProductOptions',
       isAddingToCart: 'cart/getIsAdding'
     }),
-    isLoading () {
-      return this.loading || this.isAddingToCart
-    },
     isAddToCartDisabled () {
       if (this.isBundle) {
         return this.$v.$invalid || this.loading || !this.isCurrentBundleOptionsSelection
       }
       return !this.userSelection || this.$v.$invalid || this.loading || !this.quantity
+    },
+    hasConfiguration () {
+      return this.configuration && Object.keys(this.configuration).length > 0 && this.userSelection
     }
   },
   methods: {
@@ -178,6 +181,16 @@ export default {
       }
 
       return false
+    },
+    addToCartButtonClick () {
+      if (this.showAddToCartButton && !this.loading && !this.isAddingToCart) {
+        if (this.hasConfiguration || (this.isBundle && this.isCurrentBundleOptionsSelection)) {
+          this.disableSelection = true
+          this.addToCart(this.product)
+            .then(() => { this.disableSelection = false })
+            .catch(() => { this.disableSelection = false })
+        }
+      }
     },
     close () {
       this.$emit('close')

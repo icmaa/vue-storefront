@@ -18,6 +18,7 @@
         :ticked="selectorOption.ticked"
         :product-alert="selectorOption.productAlert"
         :is-last="(j + 1) === option.selectorOptions.length"
+        :is-disabled="disableSelection"
         @change="optionChanged"
       />
     </div>
@@ -40,6 +41,10 @@ export default {
     product: {
       type: Object,
       required: true
+    },
+    disableSelection: {
+      type: Boolean,
+      default: false
     }
   },
   computed: {
