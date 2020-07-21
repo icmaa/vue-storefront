@@ -1,5 +1,5 @@
 <template>
-  <sidebar :title="productOptionsLabelPlaceholder" :close-on-click="false">
+  <sidebar :title="productOptionsLabelPlaceholder" :close-on-click="false" @close="$emit('close')">
     <div class="t-flex t-flex-wrap t-pb-20">
       <template v-if="product.type_id === 'configurable'">
         <div class="error t-w-full " v-if="product.errors && Object.keys(product.errors).length > 0">
@@ -33,9 +33,9 @@
         </router-link>
       </div>
       <div class="t-flex t-flex-wrap t-mt-6 t-w-full" v-if="showAddToCartButton">
-        <button-component :type="!selectedOption || loading || !isAddToCartDisabled ? 'primary' : 'second'" data-test-id="AddToCart" class="t-flex-grow disabled:t-opacity-50 t-relative" :disabled="isAddToCartDisabled" @click.native="addToCartButtonClick">
+        <button-component :type="!selectedOption || !isAddToCartDisabled ? 'primary' : 'second'" data-test-id="AddToCart" class="t-flex-grow disabled:t-opacity-50 t-relative" :disabled="isAddToCartDisabled" @click.native="addToCartButtonClick">
           {{ userSelection && isAddToCartDisabled && !loading ? $t('Out of stock') : $t('Add to cart') }}
-          <loader-background v-if="loading" class="t-bottom-0" height="t-h-1" bar="t-bg-base-lightest t-opacity-25" />
+          <loader-background v-if="isAddingToCart" class="t-bottom-0" height="t-h-1" bar="t-bg-base-lightest t-opacity-25" />
         </button-component>
       </div>
     </div>
@@ -98,6 +98,7 @@ export default {
     ...mapGetters({
       product: 'product/getCurrentProduct',
       configuration: 'product/getCurrentProductConfiguration',
+      isCurrentBundleOptionsSelection: 'product/isCurrentBundleOptionsSelection',
       options: 'product/getCurrentProductOptions',
       isAddingToCart: 'cart/getIsAdding'
     }),
@@ -106,9 +107,9 @@ export default {
     },
     isAddToCartDisabled () {
       if (this.isBundle) {
-        return this.$v.$invalid || this.loading
+        return this.$v.$invalid || this.loading || !this.isCurrentBundleOptionsSelection
       }
-      return this.$v.$invalid || this.loading || !this.quantity
+      return !this.userSelection || this.$v.$invalid || this.loading || !this.quantity
     }
   },
   methods: {
@@ -151,7 +152,7 @@ export default {
 
         if (this.closeOnSelect) {
           this.loading = false
-          this.$store.dispatch('ui/closeAll')
+          this.close()
         } else {
           await this.getQuantity()
           this.loading = false
@@ -161,7 +162,11 @@ export default {
         this.addProductStockAlert(option)
       }
     },
-    async onBundleSelect (option) {
+    onBundleSelect (option) {
+      if (this.closeOnSelect) {
+        this.close()
+      }
+
       this.$bus.$emit('user-has-selected-product-variant')
     },
     getOptionPrice (option) {
@@ -173,6 +178,9 @@ export default {
       }
 
       return false
+    },
+    close () {
+      this.$emit('close')
     }
   }
 }

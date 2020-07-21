@@ -124,6 +124,7 @@ import { registerModule } from '@vue-storefront/core/lib/modules'
 import { onlineHelper, isServer } from '@vue-storefront/core/helpers'
 import { catalogHooksExecutors } from '@vue-storefront/core/modules/catalog-next/hooks'
 import { currentStoreView } from '@vue-storefront/core/lib/multistore'
+import * as productMutationTypes from '@vue-storefront/core/modules/catalog/store/product/mutation-types'
 
 import { ReviewModule } from '@vue-storefront/core/modules/review'
 import { IcmaaExtendedReviewModule } from 'icmaa-review'
@@ -252,7 +253,8 @@ export default {
       } else if (this.isBundle && this.isCurrentBundleOptionsSelection) {
         const labels = []
         this.product.bundle_options.forEach(option => {
-          this.currentBundleOptions[option.option_id].option_selections.forEach(id => {
+          const currentBundleOption = this.currentBundleOptions[option.option_id] || { option_selections: [] }
+          currentBundleOption.option_selections.forEach(id => {
             const productLink = option.product_links.find(productLink => productLink.id === id)
             if (option.configurable_options && option.configurable_options.length > 0) {
               const attributeKey = option.configurable_options[0]['attribute_code']
@@ -318,6 +320,7 @@ export default {
     }
   },
   async asyncData ({ store, route }) {
+    store.commit('product/' + productMutationTypes.PRODUCT_RESET_CURRENT, {})
     const product = await store.dispatch('product/loadProduct', { parentSku: route.params.parentSku, childSku: route && route.params && route.params.childSku ? route.params.childSku : null })
     const loadBreadcrumbsPromise = store.dispatch('product/loadProductBreadcrumbs', { product })
     if (isServer) {

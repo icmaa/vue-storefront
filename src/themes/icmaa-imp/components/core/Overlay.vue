@@ -4,6 +4,7 @@
 
 <script>
 import Overlay from '@vue-storefront/core/compatibility/components/Overlay'
+import { uiHooksExecutors } from 'theme/hooks/ui'
 
 export default {
   computed: {
@@ -14,6 +15,7 @@ export default {
   methods: {
     close () {
       this.$store.dispatch('ui/closeAll')
+      uiHooksExecutors.overlayClosed()
     }
   }
 }

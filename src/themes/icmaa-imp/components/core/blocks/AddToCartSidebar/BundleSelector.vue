@@ -48,9 +48,9 @@ export default {
       isCurrentBundleOptionsSelection: 'product/isCurrentBundleOptionsSelection'
     }),
     isChildOutOfStock () {
-      return this.bundleOptions
-        .filter(o => o.selectorOptions.some(o => o.available === true))
-        .length !== this.bundleOptions.length
+      const options = this.bundleOptions
+      const availableOptions = this.bundleOptions.filter(o => o.selectorOptions.some(o => o.available === true))
+      return availableOptions.length !== options.length
     },
     bundleOptions () {
       return this.product.bundle_options.map(option => {
@@ -100,8 +100,7 @@ export default {
 
       this.$store.dispatch('product/updateBundleOptions', option)
       if (this.isCurrentBundleOptionsSelection && !this.isChildOutOfStock) {
-        this.$store.dispatch('ui/closeAll')
-        this.$bus.$emit('change')
+        this.$emit('change', option)
       }
     }
   },

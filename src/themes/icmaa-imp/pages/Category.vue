@@ -80,6 +80,7 @@
       :async-component-props="{ showAddToCartButton: true, closeOnSelect: false }"
       :is-open="isAddToCartOpen"
       direction="right"
+      @close="onAddToCartSidebarClose"
     />
   </div>
 </template>
@@ -89,11 +90,12 @@ import LazyHydrate from 'vue-lazy-hydration'
 
 import config from 'config'
 import rootStore from '@vue-storefront/core/store'
-import { mapGetters, mapState } from 'vuex'
+import { mapGetters, mapState, mapMutations } from 'vuex'
 import { isServer } from '@vue-storefront/core/helpers'
 import { catalogHooksExecutors } from '@vue-storefront/core/modules/catalog-next/hooks'
 import { Logger } from '@vue-storefront/core/lib/logger'
 import { getSearchOptionsFromRouteParams } from '@vue-storefront/core/modules/catalog-next/helpers/categoryHelpers'
+import * as productMutationTypes from '@vue-storefront/core/modules/catalog/store/product/mutation-types'
 
 import AsyncSidebar from 'theme/components/core/blocks/AsyncSidebar/AsyncSidebar.vue'
 import Sidebar from 'theme/components/core/blocks/Category/Sidebar'
@@ -226,6 +228,9 @@ export default {
     }
   },
   methods: {
+    ...mapMutations('product', {
+      resetCurrentProduct: productMutationTypes.PRODUCT_RESET_CURRENT
+    }),
     async changeFilter (filterVariants) {
       if (!Array.isArray(filterVariants)) {
         filterVariants = [filterVariants]
@@ -235,6 +240,9 @@ export default {
     },
     openFilters () {
       this.$store.dispatch('ui/setCategoryfilter')
+    },
+    onAddToCartSidebarClose () {
+      this.resetCurrentProduct({})
     },
     changePageSize (size) {
       this.pageSize = size
