@@ -15,6 +15,7 @@
             :is-last="key === Object.keys(availableFilters[option.attribute_code]).length - 1"
             :is-loading="isLoading"
             :is-active="selectedOption && selectedOption.id === filter.id"
+            :ticked="!closeOnSelect && !isLoading && userSelection && selectedOption && selectedOption.id === filter.id"
           />
         </div>
       </template>
@@ -32,7 +33,10 @@
         </router-link>
       </div>
       <div class="t-flex t-flex-wrap t-mt-6 t-w-full" v-if="showAddToCartButton">
-        ADD-TO-CART
+        <button-component :type="!selectedOption || loading || !isAddToCartDisabled ? 'primary' : 'second'" data-test-id="AddToCart" class="t-flex-grow disabled:t-opacity-50 t-relative" :disabled="isAddToCartDisabled" @click.native="addToCartButtonClick">
+          {{ userSelection && isAddToCartDisabled && !loading ? $t('Out of stock') : $t('Add to cart') }}
+          <loader-background v-if="loading" class="t-bottom-0" height="t-h-1" bar="t-bg-base-lightest t-opacity-25" />
+        </button-component>
       </div>
     </div>
   </sidebar>
@@ -46,6 +50,7 @@ import { filterChangedProduct } from '@vue-storefront/core/modules/catalog/event
 import Composite from '@vue-storefront/core/mixins/composite'
 import ProductPriceMixin from 'theme/mixins/product/priceMixin'
 import ProductOptionsMixin from 'theme/mixins/product/optionsMixin'
+import ProductAddToCartMixin from 'theme/mixins/product/addtocartMixin'
 import ProductStockAlertMixin from 'icmaa-product-alert/mixins/productStockAlertMixin'
 
 import Sidebar from 'theme/components/core/blocks/AsyncSidebar/Sidebar'
@@ -53,31 +58,40 @@ import DefaultSelector from 'theme/components/core/blocks/AddToCartSidebar/Defau
 import BundleSelector from 'theme/components/core/blocks/AddToCartSidebar/BundleSelector'
 import Model from 'theme/components/core/blocks/AddToCartSidebar/Model'
 import MaterialIcon from 'theme/components/core/blocks/MaterialIcon'
+import ButtonComponent from 'theme/components/core/blocks/Button'
+import LoaderBackground from 'theme/components/core/LoaderBackground'
 
 export default {
   name: 'AddToCartSidebar',
-  mixins: [ Composite, ProductOptionsMixin, ProductPriceMixin, ProductStockAlertMixin ],
+  mixins: [ Composite, ProductOptionsMixin, ProductAddToCartMixin, ProductPriceMixin, ProductStockAlertMixin ],
   components: {
     Sidebar,
     DefaultSelector,
     BundleSelector,
     Model,
-    MaterialIcon
+    MaterialIcon,
+    ButtonComponent,
+    LoaderBackground
   },
   props: {
     showAddToCartButton: {
       type: Boolean,
       default: false
+    },
+    closeOnSelect: {
+      type: Boolean,
+      default: true
     }
   },
   data () {
     return {
       selectedOption: undefined,
       loading: false,
+      userSelection: false,
       quantity: 0
     }
   },
-  mounted () {
+  async mounted () {
     this.setSelectedOptionByCurrentConfiguration()
   },
   computed: {
@@ -89,6 +103,12 @@ export default {
     }),
     isLoading () {
       return this.loading || this.isAddingToCart
+    },
+    isAddToCartDisabled () {
+      if (this.isBundle) {
+        return this.$v.$invalid || this.loading
+      }
+      return this.$v.$invalid || this.loading || !this.quantity
     }
   },
   methods: {
@@ -118,6 +138,7 @@ export default {
     async onSelect (option) {
       if (option.available) {
         this.loading = true
+        this.userSelection = true
 
         // We need to set the new configuration here already to enable the loading state for the selected option
         this.$store.dispatch('product/updateConfiguration', { option })
@@ -128,8 +149,13 @@ export default {
 
         this.$bus.$emit('user-has-selected-product-variant')
 
-        this.loading = false
-        this.$store.dispatch('ui/closeAll')
+        if (this.closeOnSelect) {
+          this.loading = false
+          this.$store.dispatch('ui/closeAll')
+        } else {
+          await this.getQuantity()
+          this.loading = false
+        }
       } else {
         this.selectedOption = option
         this.addProductStockAlert(option)

@@ -77,7 +77,7 @@
     />
     <async-sidebar
       :async-component="AddToCartSidebar"
-      :async-component-props="{ showAddToCartButton: true }"
+      :async-component-props="{ showAddToCartButton: true, closeOnSelect: false }"
       :is-open="isAddToCartOpen"
       direction="right"
     />
