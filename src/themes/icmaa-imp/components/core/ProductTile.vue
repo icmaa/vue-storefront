@@ -3,7 +3,7 @@
     <div class="product-cover t-relative t-bg-white" :class="{ 't-mb-4': !onlyImage }">
       <slot name="imageOverlay">
         <AddToWishlist class="t-absolute t-bottom-0 t-left-0 t-z-1" :is-overlay="true" :product="product" />
-        <div class="t-absolute t-bottom-0 t-right-0 t-z-1 t-w-10 t-h-10 lg:t-w-12 lg:t-h-12 t-bg-base-lighter t-flex t-items-center t-justify-center t-cursor-pointer" v-if="showAddToCart" @click="openAddToCartSidebar">
+        <div class="t-absolute t-bottom-0 t-right-0 t-z-1 t-w-10 t-h-10 lg:t-w-12 lg:t-h-12 t-bg-base-lighter t-flex t-items-center t-justify-center t-cursor-pointer" v-if="showAddToCart" @click="openAddToCartSidebar" data-test-id="QuickAddToCart">
           <material-icon icon="shopping_cart" class="t-text-white" />
           <span class="t-sr-only">{{ $t('Add to cart') }}</span>
         </div>
@@ -15,7 +15,7 @@
       </router-link>
     </div>
     <router-link :to="productLink" tag="div" class="t-text-sm" v-if="!onlyImage">
-      <p class="t-text-primary t-leading-tight" :class="{ 't-mb-1': showPrice }">
+      <p class="t-text-primary t-leading-tight" :class="{ 't-mb-1': showPrice }" data-test-id="ProductName">
         {{ translatedProductName | htmlDecode }}
       </p>
       <p v-if="showPrice">
