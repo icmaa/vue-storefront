@@ -299,9 +299,9 @@ export default {
     }
   },
   methods: {
-    ...mapActions({
-      openAddtocart: 'ui/setAddtocart'
-    }),
+    openAddtocart () {
+      this.$store.dispatch('ui/setSidebar', { key: 'addtocart' })
+    },
     addToCartButtonClick () {
       if (!this.loading) {
         if (this.isSingleOptionProduct || this.hasConfiguration || (this.isBundle && this.isCurrentBundleOptionsSelection)) {

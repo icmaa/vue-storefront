@@ -17,7 +17,6 @@
 
 <script>
 import { currentStoreView } from '@vue-storefront/core/lib/multistore'
-import { uiHooks } from 'theme/hooks/ui'
 import onEscapePress from '@vue-storefront/core/mixins/onEscapePress'
 
 import TopButton from 'theme/components/core/blocks/AsyncSidebar/TopButton'

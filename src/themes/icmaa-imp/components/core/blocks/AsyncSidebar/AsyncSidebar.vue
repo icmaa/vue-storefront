@@ -23,6 +23,7 @@ import { mapGetters } from 'vuex'
 import Submenu from 'theme/components/core/blocks/AsyncSidebar/Submenu'
 import LoadingSpinner from 'theme/components/core/blocks/AsyncSidebar/LoadingSpinner'
 import LoadingError from 'theme/components/core/blocks/AsyncSidebar/LoadingError'
+import { uiHooksExecutors } from 'theme/hooks/ui'
 import { disableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock'
 
 export default {
@@ -57,6 +58,7 @@ export default {
     isOpen (status) {
       if (status === false) {
         this.$emit('close')
+        uiHooksExecutors.sidebarClosed(this.stateKey)
       }
 
       this.$nextTick(() => {
