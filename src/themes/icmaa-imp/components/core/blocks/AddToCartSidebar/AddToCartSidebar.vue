@@ -189,6 +189,8 @@ export default {
           this.addToCart(this.product)
             .then(() => { this.disableSelection = false })
             .catch(() => { this.disableSelection = false })
+
+          this.close()
         }
       }
     },

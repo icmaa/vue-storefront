@@ -104,12 +104,8 @@ export default {
       if (this.isSingleOptionProduct) {
         this.$bus.$emit('notification-progress-start', i18n.t('Please wait'))
         this.addToCart(this.product)
-          .then(() => {
-            this.$bus.$emit('notification-progress-stop')
-          })
-          .catch(() => {
-            this.$bus.$emit('notification-progress-stop')
-          })
+          .then(() => { this.$bus.$emit('notification-progress-stop') })
+          .catch(() => { this.$bus.$emit('notification-progress-stop') })
 
         return
       }
