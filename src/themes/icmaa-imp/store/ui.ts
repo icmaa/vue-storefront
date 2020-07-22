@@ -29,12 +29,12 @@ export const uiStore = {
       state.overlay = false
       state.sidebarPath = []
     },
-    toggleSidebar (state, key: string, action: boolean) {
+    toggleSidebar (state, { key, action }) {
       if (!state.sidebars.hasOwnProperty(key)) {
         Vue.set(state.sidebars, key, false)
       }
 
-      const status = action || !state.sidebars[key]
+      const status = action !== undefined ? action : !state.sidebars[key]
       Vue.set(state.sidebars, key, status)
       state.sidebarPath = []
       state.overlay = status
@@ -100,14 +100,14 @@ export const uiStore = {
       clearAllBodyScrollLocks()
     },
     setSidebar ({ commit }, { key, status }) {
-      commit('toggleSidebar', key, status)
+      commit('toggleSidebar', { key, action: status })
     },
     setUserSidebar ({ commit, dispatch, rootGetters }, { active }) {
       if (!rootGetters['user/isLoggedIn']) {
         return
       }
 
-      commit('toggleSidebar', 'sidebar', active)
+      commit('toggleSidebar', { key: 'sidebar', action: active })
       if (active === true) {
         const sidebar = { component: AsyncUserNavigation, title: i18n.t('My account') }
         dispatch('addSidebarPath', { sidebar })

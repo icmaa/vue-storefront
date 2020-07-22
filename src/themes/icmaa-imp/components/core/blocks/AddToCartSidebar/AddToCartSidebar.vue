@@ -194,9 +194,12 @@ export default {
     },
     afterAddToCart () {
       this.disableSelection = false
-      this.close()
+      this.close(false)
     },
-    close () {
+    close (dispatchSidebarClose = true) {
+      if (dispatchSidebarClose) {
+        this.$store.dispatch('ui/setSidebar', { key: 'addtocart', status: false })
+      }
       this.$emit('close')
     }
   }
