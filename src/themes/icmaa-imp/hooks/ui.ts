@@ -5,16 +5,20 @@ const {
   executor: overlayClosedExecutor
 } = createListenerHook<void>()
 
+const {
+  hook: sidebarClosedHook,
+  executor: sidebarClosedExecutor
+} = createListenerHook<void>()
+
 /** Only for internal usage */
 const uiHooksExecutors = {
-  overlayClosed: overlayClosedExecutor
+  overlayClosed: overlayClosedExecutor,
+  sidebarClosed: sidebarClosedExecutor
 }
 
 const uiHooks = {
-  /**
-   * Hook is fired when the overlay is clicked
-   */
-  overlayClosed: overlayClosedHook
+  overlayClosed: overlayClosedHook,
+  sidebarClosed: sidebarClosedHook
 }
 
 export {

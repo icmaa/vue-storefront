@@ -8,43 +8,35 @@ export const uiStore = {
   namespaced: true,
   state: {
     viewport: false,
-    sidebarPath: [],
-    overlay: false,
     loader: false,
     authElem: 'login',
-    checkoutMode: false,
-    openMyAccount: false,
-    /** Sidebar and popup type states: */
-    sidebar: false,
-    microcart: false,
-    wishlist: false,
-    searchpanel: false,
-    addtocart: false,
-    categoryfilter: false,
-    newsletterPopup: false,
-    modals: {}
+    /** Sidebar and modal type states: */
+    modals: {},
+    sidebars: {},
+    sidebarPath: [],
+    overlay: false
   },
   mutations: {
     setViewport (state, viewport: string) {
       state.viewport = viewport
     },
     setCloseAll (state) {
-      state.microcart = false
-      state.sidebar = false
-      state.searchpanel = false
-      state.wishlist = false
-      state.addtocart = false
-      state.categoryfilter = false
+      Object.keys(state.sidebars).forEach(k => {
+        if (state.sidebars[k] && state.sidebars[k] === true) {
+          Vue.set(state.sidebars, k, false)
+        }
+      })
       state.overlay = false
       state.sidebarPath = []
     },
-    setCheckoutMode (state, action: boolean) {
-      state.checkoutMode = action === true
-    },
-    toggleSidebar (state, property: string, action: boolean) {
-      const status = action || !state[property]
+    toggleSidebar (state, key: string, action: boolean) {
+      if (!state.sidebars.hasOwnProperty(key)) {
+        Vue.set(state.sidebars, key, false)
+      }
+
+      const status = action || !state.sidebars[key]
+      Vue.set(state.sidebars, key, status)
       state.sidebarPath = []
-      state[property] = status
       state.overlay = status
     },
     addSidebarPath (state, { sidebar, index }) {
@@ -107,8 +99,8 @@ export const uiStore = {
       commit('setCloseAll')
       clearAllBodyScrollLocks()
     },
-    setSidebar ({ commit }, active: boolean) {
-      commit('toggleSidebar', 'sidebar', active)
+    setSidebar ({ commit }, { key, status }) {
+      commit('toggleSidebar', key, status)
     },
     setUserSidebar ({ commit, dispatch, rootGetters }, { active }) {
       if (!rootGetters['user/isLoggedIn']) {
@@ -120,21 +112,6 @@ export const uiStore = {
         const sidebar = { component: AsyncUserNavigation, title: i18n.t('My account') }
         dispatch('addSidebarPath', { sidebar })
       }
-    },
-    setSearchpanel ({ commit }, active: boolean) {
-      commit('toggleSidebar', 'searchpanel', active)
-    },
-    setMicrocart ({ commit }, active: boolean) {
-      commit('toggleSidebar', 'microcart', active)
-    },
-    setWishlist ({ commit }, active: boolean) {
-      commit('toggleSidebar', 'wishlist', active)
-    },
-    setAddtocart ({ commit }, active: boolean) {
-      commit('toggleSidebar', 'addtocart', active)
-    },
-    setCategoryfilter ({ commit }, active: boolean) {
-      commit('toggleSidebar', 'categoryfilter', active)
     },
     addSidebarPath ({ commit }, { sidebar, index }) {
       commit('addSidebarPath', { sidebar, index })
@@ -172,6 +149,7 @@ export const uiStore = {
   getters: {
     getViewport: state => state.viewport,
     getSidebarPath: state => state.sidebarPath,
+    getSidebarStatus: (state) => (key: string) => state.sidebars.hasOwnProperty(key) ? state.sidebars[key] : false,
     getVisibleModals: state => {
       return Object.entries(state.modals)
         .map((m: any) => ({ ...m[1], name: m[0] }))

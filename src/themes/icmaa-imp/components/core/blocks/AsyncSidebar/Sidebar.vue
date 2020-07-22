@@ -47,21 +47,18 @@ export default {
   },
   mixins: [ onEscapePress ],
   methods: {
+    closeMenu () {
+      this.$store.dispatch('ui/closeAll')
+      this.$emit('close')
+    },
     closeAfterClick () {
       if (this.closeOnClick) {
         this.closeMenu()
       }
     },
-    closeMenu () {
-      this.$store.dispatch('ui/closeAll')
-    },
     onEscapePress () {
       this.closeMenu()
     }
-  },
-  mounted () {
-    this.$on('close', this.closeMenu)
-    uiHooks.overlayClosed(() => this.$emit('close'))
   }
 }
 </script>

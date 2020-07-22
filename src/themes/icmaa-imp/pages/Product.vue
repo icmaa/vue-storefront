@@ -108,15 +108,14 @@
     </lazy-hydrate>
 
     <async-sidebar
+      :state-key="'addtocart'"
       :async-component="AddToCartSidebar"
-      :is-open="isAddToCartSidebarOpen"
-      @close="$store.dispatch('ui/setAddtocart')"
     />
   </div>
 </template>
 
 <script>
-import { mapGetters, mapState, mapActions } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import i18n from '@vue-storefront/i18n'
 import config from 'config'
 
@@ -223,7 +222,6 @@ export default {
       currentBundleOptions: 'product/getCurrentBundleOptions',
       viewport: 'ui/getViewport'
     }),
-    ...mapState({ isAddToCartSidebarOpen: state => state.ui.addtocart }),
     image () {
       return this.gallery.length ? this.gallery[0] : false
     },

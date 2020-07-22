@@ -1,14 +1,14 @@
 <template>
   <li class="t-flex t-py-2 t-border-b t-border-base-lightest" data-test-id="MicroCartProduct">
     <div class="t-w-1/3 t-mr-4">
-      <router-link :to="productLink" @click.native="$store.dispatch('ui/setMicrocart', false)">
+      <router-link :to="productLink" @click.native="$store.dispatch('ui/setSidebar', { key: 'microcart', status: false })">
         <product-image :image="image" :alt="product.name | htmlDecode" />
       </router-link>
     </div>
 
     <div class="t-w-2/3 t-flex t-flex-col t-py-2">
       <div class="t-mb-4 t-leading-tight">
-        <router-link class="t-text-primary t-text-sm" :to="productLink" data-test-id="productLink" @click.native="$store.dispatch('ui/setMicrocart', false)">
+        <router-link class="t-text-primary t-text-sm" :to="productLink" data-test-id="productLink" @click.native="$store.dispatch('ui/setSidebar', { key: 'microcart', status: false })">
           {{ productQty }} x {{ product.name | htmlDecode }}
         </router-link>
       </div>

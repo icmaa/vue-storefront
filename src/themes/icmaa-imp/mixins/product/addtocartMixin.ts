@@ -29,7 +29,7 @@ export default {
         this.$store.dispatch('ui/closeAll')
 
         if (diffLog.clientNotifications.some(n => n.type === 'success')) {
-          this.$store.dispatch('ui/setMicrocart', true)
+          this.$store.dispatch('ui/setSidebar', { key: 'microcart' })
         }
 
         diffLog.clientNotifications.forEach(notificationData => {

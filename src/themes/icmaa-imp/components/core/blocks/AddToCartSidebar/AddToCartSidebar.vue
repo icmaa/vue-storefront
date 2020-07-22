@@ -1,5 +1,5 @@
 <template>
-  <sidebar :title="productOptionsLabelPlaceholder" :close-on-click="false" @close="$emit('close')">
+  <sidebar :title="productOptionsLabelPlaceholder" :close-on-click="false">
     <div class="t-flex t-flex-wrap t-pb-20">
       <template v-if="product.type_id === 'configurable'">
         <div class="error t-w-full " v-if="product.errors && Object.keys(product.errors).length > 0">
@@ -187,12 +187,14 @@ export default {
         if (this.hasConfiguration || (this.isBundle && this.isCurrentBundleOptionsSelection)) {
           this.disableSelection = true
           this.addToCart(this.product)
-            .then(() => { this.disableSelection = false })
-            .catch(() => { this.disableSelection = false })
-
-          this.close()
+            .then(() => { this.afterAddToCart() })
+            .catch(() => { this.afterAddToCart() })
         }
       }
+    },
+    afterAddToCart () {
+      this.disableSelection = false
+      this.close()
     },
     close () {
       this.$emit('close')

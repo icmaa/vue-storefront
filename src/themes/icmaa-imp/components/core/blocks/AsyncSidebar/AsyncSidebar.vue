@@ -26,11 +26,15 @@ import LoadingError from 'theme/components/core/blocks/AsyncSidebar/LoadingError
 import { disableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock'
 
 export default {
-  name: 'Sidebar',
+  name: 'AsyncSidebar',
   components: {
     Submenu
   },
   props: {
+    stateKey: {
+      type: String,
+      required: true
+    },
     asyncComponent: {
       type: Function,
       required: true
@@ -38,10 +42,6 @@ export default {
     asyncComponentProps: {
       type: Object,
       default: () => {}
-    },
-    isOpen: {
-      type: Boolean,
-      default: false
     },
     /** "right" or "left"  */
     direction: {
@@ -54,9 +54,13 @@ export default {
     }
   },
   watch: {
-    isOpen (state) {
+    isOpen (status) {
+      if (status === false) {
+        this.$emit('close')
+      }
+
       this.$nextTick(() => {
-        if (state) {
+        if (status) {
           disableBodyScroll(this.$refs.sidebar)
         } else {
           clearAllBodyScrollLocks()
@@ -94,8 +98,12 @@ export default {
   },
   computed: {
     ...mapGetters({
+      getSidebarStatus: 'ui/getSidebarStatus',
       sidebarPath: 'ui/getSidebarPath'
     }),
+    isOpen () {
+      return this.getSidebarStatus(this.stateKey)
+    },
     hasSubmenu () {
       return this.sidebarPath.length > 0
     },

@@ -71,15 +71,14 @@
     </div>
 
     <async-sidebar
+      :state-key="'categoryfilter'"
       :async-component="FilterSidebar"
-      :is-open="isFilterSidebarOpen"
       direction="left"
     />
     <async-sidebar
+      :state-key="'addtocart'"
       :async-component="AddToCartSidebar"
       :async-component-props="{ showAddToCartButton: true, closeOnSelect: false }"
-      :is-open="isAddToCartOpen"
-      direction="right"
       @close="onAddToCartSidebarClose"
     />
   </div>
@@ -90,7 +89,7 @@ import LazyHydrate from 'vue-lazy-hydration'
 
 import config from 'config'
 import rootStore from '@vue-storefront/core/store'
-import { mapGetters, mapState, mapMutations } from 'vuex'
+import { mapGetters, mapMutations } from 'vuex'
 import { isServer } from '@vue-storefront/core/helpers'
 import { catalogHooksExecutors } from '@vue-storefront/core/modules/catalog-next/hooks'
 import { Logger } from '@vue-storefront/core/lib/logger'
@@ -175,10 +174,6 @@ export default {
     }
   },
   computed: {
-    ...mapState({
-      isFilterSidebarOpen: state => state.ui.categoryfilter,
-      isAddToCartOpen: state => state.ui.addtocart
-    }),
     ...mapGetters({
       getCurrentSearchQuery: 'category-next/getCurrentSearchQuery',
       getCategoryProducts: 'category-next/getCategoryProducts',
@@ -239,7 +234,7 @@ export default {
       this.$store.dispatch('category-next/switchSearchFilters', filterVariants)
     },
     openFilters () {
-      this.$store.dispatch('ui/setCategoryfilter')
+      this.$store.dispatch('ui/setSidebar', { key: 'categoryfilter' })
     },
     onAddToCartSidebarClose () {
       this.resetCurrentProduct({})

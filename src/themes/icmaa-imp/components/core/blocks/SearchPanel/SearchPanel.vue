@@ -233,7 +233,7 @@ export default {
       }
     },
     closeSidebar () {
-      this.$store.dispatch('ui/setSearchpanel', false)
+      this.$store.dispatch('ui/setSidebar', { key: 'searchpanel', status: false })
     }
   },
   async mounted () {
