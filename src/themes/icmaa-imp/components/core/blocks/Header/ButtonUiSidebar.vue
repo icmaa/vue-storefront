@@ -24,10 +24,6 @@ export default {
       type: String,
       required: true
     },
-    uiAction: {
-      type: String,
-      required: true
-    },
     qtyGetter: {
       type: [String, Boolean],
       default: false
@@ -47,7 +43,7 @@ export default {
   },
   methods: {
     openSidebarMenu () {
-      this.$store.dispatch('ui/' + this.uiAction, !this.isOpen)
+      this.$store.dispatch('ui/setSidebar', { key: this.uiState, status: !this.isOpen })
     }
   }
 }

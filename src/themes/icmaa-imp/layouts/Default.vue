@@ -8,26 +8,22 @@
         <advice tags="2" />
       </no-ssr>
       <async-sidebar
+        :state-key="'searchpanel'"
         :async-component="SearchPanel"
-        :is-open="isSearchPanelOpen"
         :wide="true"
-        @close="$store.dispatch('ui/setSearchpanel')"
       />
       <async-sidebar
+        :state-key="'microcart'"
         :async-component="Microcart"
-        :is-open="isMicrocartOpen"
-        @close="$store.dispatch('ui/setMicrocart')"
       />
       <async-sidebar
+        :state-key="'sidebar'"
         :async-component="SidebarMenu"
-        :is-open="isSidebarOpen"
-        @close="$store.dispatch('ui/setSidebar')"
         direction="left"
       />
       <async-sidebar
+        :state-key="'wishlist'"
         :async-component="Wishlist"
-        :is-open="isWishlistOpen"
-        @close="$store.dispatch('ui/setWishlist')"
       />
       <main class="t-bg-base-lightest">
         <div class="t-clearfix" />
@@ -81,11 +77,7 @@ export default {
   mixins: [viewportMixin],
   computed: {
     ...mapState({
-      overlayActive: state => state.ui.overlay,
-      isSearchPanelOpen: state => state.ui.searchpanel,
-      isSidebarOpen: state => state.ui.sidebar,
-      isMicrocartOpen: state => state.ui.microcart,
-      isWishlistOpen: state => state.ui.wishlist
+      overlayActive: state => state.ui.overlay
     })
   },
   methods: {

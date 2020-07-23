@@ -13,6 +13,21 @@ export default {
       getOptionLabel: 'attribute/getOptionLabel',
       configuration: 'product/getCurrentProductConfiguration'
     }),
+    isSingleOptionProduct () {
+      return this.product.type_id === 'simple' || this.isOnesizeProduct
+    },
+    isOnesizeProduct () {
+      const sizeFilter = (o) => o.attribute_code.includes('size')
+      if (this.productOptions.length === 1 && this.productOptions.some(sizeFilter)) {
+        return this.productOptions.filter(sizeFilter).map(p => p.values)
+          .some(c => c.find(o => ['Onesize', i18n.t('Onesize')].includes(o.label)))
+      }
+
+      return false
+    },
+    isBundle () {
+      return this.product.type_id === 'bundle'
+    },
     productOptions (): any[] {
       if (this.product.errors &&
           Object.keys(this.product.errors).length &&

@@ -8,7 +8,7 @@
       v-if="isOpen"
     >
       <div class="submenu-wrapper t-relative">
-        <component :is="component" @close="$emit('close')" @reload="getComponent" v-show="!hasSubmenu" :key="'sidebar-home'" />
+        <component :is="component" @close="$emit('close')" v-bind="asyncComponentProps" @reload="getComponent" v-show="!hasSubmenu" :key="'sidebar-home'" />
         <template v-for="(item, i) in sidebarPath">
           <submenu :key="'submenu-' + i" :index="i" :async-component="item.component" v-show="i === sidebarLastIndex" />
         </template>
@@ -23,21 +23,26 @@ import { mapGetters } from 'vuex'
 import Submenu from 'theme/components/core/blocks/AsyncSidebar/Submenu'
 import LoadingSpinner from 'theme/components/core/blocks/AsyncSidebar/LoadingSpinner'
 import LoadingError from 'theme/components/core/blocks/AsyncSidebar/LoadingError'
+import { uiHooksExecutors } from 'theme/hooks/ui'
 import { disableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock'
 
 export default {
-  name: 'Sidebar',
+  name: 'AsyncSidebar',
   components: {
     Submenu
   },
   props: {
+    stateKey: {
+      type: String,
+      required: true
+    },
     asyncComponent: {
       type: Function,
       required: true
     },
-    isOpen: {
-      type: Boolean,
-      default: false
+    asyncComponentProps: {
+      type: Object,
+      default: () => {}
     },
     /** "right" or "left"  */
     direction: {
@@ -50,9 +55,14 @@ export default {
     }
   },
   watch: {
-    isOpen (state) {
+    isOpen (status) {
+      if (status === false) {
+        this.$emit('close')
+        uiHooksExecutors.sidebarClosed(this.stateKey)
+      }
+
       this.$nextTick(() => {
-        if (state) {
+        if (status) {
           disableBodyScroll(this.$refs.sidebar)
         } else {
           clearAllBodyScrollLocks()
@@ -90,8 +100,12 @@ export default {
   },
   computed: {
     ...mapGetters({
+      getSidebarStatus: 'ui/getSidebarStatus',
       sidebarPath: 'ui/getSidebarPath'
     }),
+    isOpen () {
+      return this.getSidebarStatus(this.stateKey)
+    },
     hasSubmenu () {
       return this.sidebarPath.length > 0
     },

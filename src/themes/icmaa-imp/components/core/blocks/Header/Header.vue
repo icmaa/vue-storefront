@@ -3,10 +3,10 @@
     <header class="t-fixed t-w-full t-bg-white" :class="{ 'is-visible': navVisible }">
       <div class="t-h-50px t-flex t-bg-black">
         <div class="t-container t-px-2 t-flex-initial t-flex t-justify-between">
-          <button-ui-sidebar icon="dehaze" title="Menu" ui-state="sidebar" ui-action="setSidebar" data-test-id="HeaderButtonSidebar" />
+          <button-ui-sidebar icon="dehaze" title="Menu" ui-state="sidebar" data-test-id="HeaderButtonSidebar" />
           <div class="t-flex-auto sm:t-border-r t-border-base-tone " />
           <button-account data-test-id="HeaderButtonAccount" />
-          <button-ui-sidebar icon="favorite_border" title="Wishlist" ui-state="wishlist" ui-action="setWishlist" qty-getter="wishlist/getWishlistItemsCount" data-test-id="HeaderButtonWishlist" />
+          <button-ui-sidebar icon="favorite_border" title="Wishlist" ui-state="wishlist" qty-getter="wishlist/getWishlistItemsCount" data-test-id="HeaderButtonWishlist" />
           <button-cart :last="true" data-test-id="HeaderButtonCart" />
           <language-switcher />
         </div>
