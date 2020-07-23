@@ -1,12 +1,10 @@
 describe('Add to Cart', () => {
-  // it('is possible to add a product to the cart.', () => {
-  //   cy.addRandomProductToCart()
-  // })
+  it('is working for random product on PDP.', () => {
+    cy.addRandomProductToCart()
+  })
 
-  it('is it possible to add a product to the cart from PLP.', () => {
+  it('is working for random product on PLP.', () => {
     cy.visitCategoryPage({ url: '/girls.html?type_top=99' })
-
-    // PAGE IS RELOADED HERE
 
     cy.getByTestId('ProductTile')
       .random()
