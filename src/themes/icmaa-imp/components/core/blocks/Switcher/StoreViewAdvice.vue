@@ -1,5 +1,5 @@
 <template>
-  <modal name="modal-storeview-advice" :width="500" :compact="true" @close="onClose">
+  <modal name="modal-storeview-advice" :width="500" :compact="true" @close="onClose" data-test-id="ModalStoreViewAdvice">
     <div slot="header">
       {{ $t('Switched store?') }}
     </div>
