@@ -6,6 +6,13 @@ describe('Add to Cart', () => {
   it('is working for random product on PLP.', () => {
     cy.visitCategoryPage({ url: '/girls.html?type_top=99' })
 
+    /**
+     * @todo The page gets rerendered after initial load.
+     * Thats why we need to wait a bit until this happens.
+     * I'll search the cause and remove this workaround.
+     */
+    cy.wait(1000)
+
     cy.getByTestId('ProductTile')
       .random()
       .as('Product')
