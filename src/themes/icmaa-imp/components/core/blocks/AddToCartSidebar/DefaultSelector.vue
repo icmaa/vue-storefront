@@ -9,8 +9,8 @@
     <span class="t-flex-auto">
       {{ optionLabel }}
     </span>
-    <material-icon icon="done" class="t-flex-fix t-ml-2 t-text-alt-1" v-if="ticked" />
     <template v-if="option.available">
+      <material-icon icon="done" class="t-flex-fix t-ml-2 t-text-alt-1" :class="{ 't-mr-2': price }" v-if="ticked" />
       <span v-if="price" class="t-flex-fix t-text-base-light">{{ price | price }}</span>
     </template>
     <template v-else-if="productAlert">
@@ -58,6 +58,10 @@ export default {
       type: Boolean,
       default: false
     },
+    isDisabled: {
+      type: Boolean,
+      default: false
+    },
     productAlert: {
       type: Boolean,
       default: true
@@ -83,7 +87,7 @@ export default {
   },
   methods: {
     selectVariant () {
-      if (!this.isLoading && !this.isStockAlertSubscrided) {
+      if (!this.isDisabled && !this.isLoading && !this.isStockAlertSubscrided) {
         this.$emit('change', this.option)
       }
     }

@@ -108,23 +108,22 @@
     </lazy-hydrate>
 
     <async-sidebar
+      :state-key="'addtocart'"
       :async-component="AddToCartSidebar"
-      :is-open="isAddToCartSidebarOpen"
-      @close="$store.dispatch('ui/setAddtocart')"
     />
   </div>
 </template>
 
 <script>
-import { mapGetters, mapState, mapActions } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import i18n from '@vue-storefront/i18n'
 import config from 'config'
 
-import { minValue } from 'vuelidate/lib/validators'
 import { registerModule } from '@vue-storefront/core/lib/modules'
 import { onlineHelper, isServer } from '@vue-storefront/core/helpers'
 import { catalogHooksExecutors } from '@vue-storefront/core/modules/catalog-next/hooks'
 import { currentStoreView } from '@vue-storefront/core/lib/multistore'
+import * as productMutationTypes from '@vue-storefront/core/modules/catalog/store/product/mutation-types'
 
 import { ReviewModule } from '@vue-storefront/core/modules/review'
 import { IcmaaExtendedReviewModule } from 'icmaa-review'
@@ -223,7 +222,6 @@ export default {
       currentBundleOptions: 'product/getCurrentBundleOptions',
       viewport: 'ui/getViewport'
     }),
-    ...mapState({ isAddToCartSidebarOpen: state => state.ui.addtocart }),
     image () {
       return this.gallery.length ? this.gallery[0] : false
     },
@@ -241,21 +239,6 @@ export default {
 
       return this.$v.$invalid || this.loading || !this.quantity
     },
-    isSingleOptionProduct () {
-      return this.product.type_id === 'simple' || this.isOnesizeProduct
-    },
-    isOnesizeProduct () {
-      const sizeFilter = (o) => o.attribute_code.includes('size')
-      if (this.productOptions.length === 1 && this.productOptions.some(sizeFilter)) {
-        return this.productOptions.filter(sizeFilter).map(p => p.values)
-          .some(c => c.find(o => ['Onesize', i18n.t('Onesize')].includes(o.label)))
-      }
-
-      return false
-    },
-    isBundle () {
-      return this.product.type_id === 'bundle'
-    },
     isPreorder () {
       return this.product.promo_id === '5'
     },
@@ -268,7 +251,8 @@ export default {
       } else if (this.isBundle && this.isCurrentBundleOptionsSelection) {
         const labels = []
         this.product.bundle_options.forEach(option => {
-          this.currentBundleOptions[option.option_id].option_selections.forEach(id => {
+          const currentBundleOption = this.currentBundleOptions[option.option_id] || { option_selections: [] }
+          currentBundleOption.option_selections.forEach(id => {
             const productLink = option.product_links.find(productLink => productLink.id === id)
             if (option.configurable_options && option.configurable_options.length > 0) {
               const attributeKey = option.configurable_options[0]['attribute_code']
@@ -315,9 +299,9 @@ export default {
     }
   },
   methods: {
-    ...mapActions({
-      openAddtocart: 'ui/setAddtocart'
-    }),
+    openAddtocart () {
+      this.$store.dispatch('ui/setSidebar', { key: 'addtocart' })
+    },
     addToCartButtonClick () {
       if (!this.loading) {
         if (this.isSingleOptionProduct || this.hasConfiguration || (this.isBundle && this.isCurrentBundleOptionsSelection)) {
@@ -331,27 +315,10 @@ export default {
 
         this.openAddtocart()
       }
-    },
-    notifyOutStock () {
-      this.$store.dispatch('notification/spawnNotification', {
-        type: 'error',
-        message: this.$t(
-          'The product is out of stock and cannot be added to the cart!'
-        ),
-        action1: { label: this.$t('OK') }
-      })
-    },
-    notifyWrongAttributes () {
-      this.$store.dispatch('notification/spawnNotification', {
-        type: 'warning',
-        message: this.$t(
-          'No such configuration for the product. Please do choose another combination of attributes.'
-        ),
-        action1: { label: this.$t('OK') }
-      })
     }
   },
   async asyncData ({ store, route }) {
+    store.commit('product/' + productMutationTypes.PRODUCT_RESET_CURRENT, {})
     const product = await store.dispatch('product/loadProduct', { parentSku: route.params.parentSku, childSku: route && route.params && route.params.childSku ? route.params.childSku : null })
     const loadBreadcrumbsPromise = store.dispatch('product/loadProductBreadcrumbs', { product })
     if (isServer) {

@@ -43,7 +43,7 @@
     <div class="t-container">
       <lazy-hydrate :trigger-hydration="!loading" v-if="isLazyHydrateEnabled">
         <component v-if="isInTicketWhitelist" :is="ProductListingTicket" :products="getCategoryProducts" />
-        <product-listing v-else :products="getCategoryProducts" />
+        <product-listing v-else :products="getCategoryProducts" :show-add-to-cart="true" />
       </lazy-hydrate>
       <div v-else>
         <component v-if="isInTicketWhitelist" :is="ProductListingTicket" :products="getCategoryProducts" />
@@ -71,10 +71,15 @@
     </div>
 
     <async-sidebar
+      :state-key="'categoryfilter'"
       :async-component="FilterSidebar"
-      :is-open="isSidebarOpen"
-      @close="$store.commit('ui/setCategoryfilter')"
       direction="left"
+    />
+    <async-sidebar
+      :state-key="'addtocart'"
+      :async-component="AddToCartSidebar"
+      :async-component-props="{ showAddToCartButton: true, closeOnSelect: false }"
+      @close="onAddToCartSidebarClose"
     />
   </div>
 </template>
@@ -84,11 +89,12 @@ import LazyHydrate from 'vue-lazy-hydration'
 
 import config from 'config'
 import rootStore from '@vue-storefront/core/store'
-import { mapGetters, mapState } from 'vuex'
+import { mapGetters, mapMutations } from 'vuex'
 import { isServer } from '@vue-storefront/core/helpers'
 import { catalogHooksExecutors } from '@vue-storefront/core/modules/catalog-next/hooks'
 import { Logger } from '@vue-storefront/core/lib/logger'
 import { getSearchOptionsFromRouteParams } from '@vue-storefront/core/modules/catalog-next/helpers/categoryHelpers'
+import * as productMutationTypes from '@vue-storefront/core/modules/catalog/store/product/mutation-types'
 
 import AsyncSidebar from 'theme/components/core/blocks/AsyncSidebar/AsyncSidebar.vue'
 import Sidebar from 'theme/components/core/blocks/Category/Sidebar'
@@ -111,6 +117,7 @@ import CategoryGtmMixin from 'icmaa-google-tag-manager/mixins/categoryGtm'
 import ClusterMixin from 'icmaa-user/mixins/cluster'
 
 const FilterSidebar = () => import(/* webpackPreload: true */ /* webpackChunkName: "vsf-sidebar-categoryfilter" */ 'theme/components/core/blocks/Category/Sidebar')
+const AddToCartSidebar = () => import(/* webpackPreload: true */ /* webpackChunkName: "vsf-addtocart-sidebar" */ 'theme/components/core/blocks/AddToCartSidebar/AddToCartSidebar')
 const ProductListingTicket = () => import(/* webpackPreload: true */ /* webpackChunkName: "vsf-product-listing-ticket" */ 'theme/components/core/ProductListingTicket')
 
 const composeInitialPageState = async (store, route, forceLoad = false, pageSize) => {
@@ -162,13 +169,11 @@ export default {
       loadingProducts: false,
       loading: true,
       FilterSidebar,
+      AddToCartSidebar,
       ProductListingTicket
     }
   },
   computed: {
-    ...mapState({
-      isSidebarOpen: state => state.ui.categoryfilter
-    }),
     ...mapGetters({
       getCurrentSearchQuery: 'category-next/getCurrentSearchQuery',
       getCategoryProducts: 'category-next/getCategoryProducts',
@@ -218,6 +223,9 @@ export default {
     }
   },
   methods: {
+    ...mapMutations('product', {
+      resetCurrentProduct: productMutationTypes.PRODUCT_RESET_CURRENT
+    }),
     async changeFilter (filterVariants) {
       if (!Array.isArray(filterVariants)) {
         filterVariants = [filterVariants]
@@ -226,7 +234,10 @@ export default {
       this.$store.dispatch('category-next/switchSearchFilters', filterVariants)
     },
     openFilters () {
-      this.$store.dispatch('ui/setCategoryfilter')
+      this.$store.dispatch('ui/setSidebar', { key: 'categoryfilter' })
+    },
+    onAddToCartSidebarClose () {
+      this.resetCurrentProduct({})
     },
     changePageSize (size) {
       this.pageSize = size

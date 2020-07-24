@@ -16,7 +16,7 @@
             </button-component>
           </div>
           <div class="t-w-full lg:t-w-1/2 t-px-2">
-            <button-component type="transparent" class="t-w-full" @click="$store.dispatch('ui/setMicrocart')">
+            <button-component type="transparent" class="t-w-full" @click="$store.dispatch('ui/setSidebar', { key: 'microcart' })">
               {{ $t('Edit your cart') }}
             </button-component>
           </div>

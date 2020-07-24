@@ -1,6 +1,6 @@
 <template>
   <div class="t-text-sm">
-    <div class="description t-whitespace-pre-line" v-text="stripHTML(product.description.trim())" />
+    <div class="description t-whitespace-pre-line" v-text="stripHTML(description)" />
     <ul class="commonphrases" v-if="commonphrases">
       <li v-for="(phrase, i) in commonphrases" :key="i" class="t-mt-2">
         <span class="t-font-bold t-mr-1" v-if="i === 0">{{ $t('Notice:') }}</span>
@@ -58,6 +58,9 @@ export default {
       return Object.values(this.attributesByCode).filter(a => {
         return a.is_visible && a.is_visible_on_front === true && this.product[a.attribute_code] && this.product[a.attribute_code][0] !== ''
       })
+    },
+    description () {
+      return (this.product.description || '').trim()
     },
     blank () {
       const blank = this.product.rohling

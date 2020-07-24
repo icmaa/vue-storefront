@@ -10,6 +10,11 @@ describe('Cookie-Notice', () => {
 
     cy.getByTestId('CookieNotification')
       .should('not.be.visible')
+
+    cy.getFromLocalStorage('shop/uniClaims/cookiesAccepted')
+      .then(claim => {
+        expect(claim).to.contain('"value":false', 'Cookie for Cookies-Accept-Claim is false')
+      })
   })
 
   it('accept all cookies', () => {
@@ -19,10 +24,15 @@ describe('Cookie-Notice', () => {
 
     cy.getByTestId('CookieNotification')
       .should('be.visible')
-      .find('button').each(el => el.click())
+      .find('button').first().click()
 
     cy.getByTestId('CookieNotification')
       .should('not.be.visible')
+
+    cy.getFromLocalStorage('shop/uniClaims/cookiesAccepted')
+      .then(claim => {
+        expect(claim).to.contain('"value":true', 'Cookie for Cookies-Accept-Claim is false')
+      })
   })
 
   it('hide cookie notification on service page', () => {

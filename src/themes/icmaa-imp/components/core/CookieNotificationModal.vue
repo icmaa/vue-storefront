@@ -6,11 +6,11 @@
     <div class="t-flex t-flex-col t-items-center">
       <!-- Info text -->
       <div class="t-text-base-tone t-text-sm t-leading-5 t-mb-6">
-        {{ $t('We use cookies on our website. Some of them are required to operate the website (e.g. for the use of your shopping basket or for security features). Others help us to improve our online services and to remain profitable. You have the power to accept non essential or only essential cookies. Please note that you may not be able to access all of our website settings if you have opted for certain criteria. You can view and adjust your settings at any time and deselect cookies later (e.g. in the footer of our website). For more information please read our') }}
+        {{ $t('We use cookies on our website. Some of them are required to operate the website (e.g. for the use of your shopping basket or login). Others help us to improve our online services and to remain profitable. You have the power to accept non essential or only essential cookies. Please note that you may not be able to access all of our website settings if you have opted for certain criteria. For more information please read our') }}
         <router-link :to="localizedRoute('service-privacy')" class="t-inline-block t-text-base-darkest">
           <material-icon icon="arrow_forward" size="xs" class="t-align-middle" />
           <span class="t-text-black t-text-xs t-font-bold">
-            {{ $t('Privacy statements') }}
+            {{ $t('Privacy statement') }}
           </span>
         </router-link>
       </div>

@@ -1,15 +1,15 @@
 <template>
   <li class="t-flex t-py-2 t-border-b t-border-base-lightest" data-test-id="MicroCartProduct">
     <div class="t-w-1/3 t-mr-4">
-      <router-link :to="productLink" @click.native="$store.dispatch('ui/setMicrocart', false)">
+      <router-link :to="productLink" @click.native="$store.dispatch('ui/setSidebar', { key: 'microcart', status: false })">
         <product-image :image="image" :alt="product.name | htmlDecode" />
       </router-link>
     </div>
 
     <div class="t-w-2/3 t-flex t-flex-col t-py-2">
       <div class="t-mb-4 t-leading-tight">
-        <router-link class="t-text-primary t-text-sm" :to="productLink" data-test-id="productLink" @click.native="$store.dispatch('ui/setMicrocart', false)">
-          {{ productQty }} x {{ product.name | htmlDecode }}
+        <router-link class="t-text-primary t-text-sm" :to="productLink" data-test-id="productLink" @click.native="$store.dispatch('ui/setSidebar', { key: 'microcart', status: false })">
+          {{ productQty }} x {{ translatedProductName | htmlDecode }}
         </router-link>
       </div>
 
@@ -64,6 +64,7 @@ import { currentStoreView } from '@vue-storefront/core/lib/multistore'
 import { getThumbnailForProduct } from '@vue-storefront/core/modules/cart/helpers'
 import { formatProductLink } from 'icmaa-url/helpers'
 import Product from '@vue-storefront/core/compatibility/components/blocks/Microcart/Product'
+import ProductNameMixin from 'icmaa-catalog/mixins/ProductNameMixin'
 import ButtonComponent from 'theme/components/core/blocks/Button'
 import ProductImage from 'theme/components/core/ProductImage'
 
@@ -81,7 +82,7 @@ export default {
     ButtonComponent,
     ProductImage
   },
-  mixins: [Product],
+  mixins: [Product, ProductNameMixin],
   computed: {
     ...mapGetters({
       freeCartItems: 'cart/getFreeCartItems',

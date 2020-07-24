@@ -19,7 +19,7 @@ export default {
   },
   methods: {
     toggleMicrocart () {
-      this.$store.dispatch('ui/setMicrocart')
+      this.$store.dispatch('ui/setSidebar', { key: 'microcart' })
     }
   },
   computed: {

@@ -74,7 +74,7 @@ export default {
         { name: 'product.final_price', content: this.productFinalPrice },
         { name: 'product.price', content: this.productPrice },
         { name: 'product:condition', content: 'new' },
-        { name: 'product:availability', content: this.product.stock.is_in_stock }, // TODO mapping values - available for order, in stock, out fo stock, preorder
+        { name: 'product:availability', content: this.product.stock ? this.product.stock.is_in_stock : false },
         { name: 'product:price:currency', content: store.i18n.currencyCode },
         { name: 'product:price:amount', content: this.productFinalPrice },
         { name: 'product:brand', content: this.getOptionLabel({ attributeKey: this.productBandOrBrandCode, optionId: this.productBandOrBrand }) },

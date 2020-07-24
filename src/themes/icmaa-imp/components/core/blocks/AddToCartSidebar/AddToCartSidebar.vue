@@ -13,23 +13,32 @@
             @change="onSelect"
             :price="getOptionPrice(filter)"
             :is-last="key === Object.keys(availableFilters[option.attribute_code]).length - 1"
-            :is-loading="isLoading"
+            :is-loading="loading"
             :is-active="selectedOption && selectedOption.id === filter.id"
+            :is-disabled="disableSelection"
+            :ticked="!closeOnSelect && !loading && userSelection && selectedOption && selectedOption.id === filter.id"
           />
         </div>
       </template>
       <template v-if="product.type_id === 'bundle'">
         <bundle-selector
           :product="product"
+          :disable-selection="disableSelection"
           @change="onBundleSelect"
         />
       </template>
-      <div class="t-flex t-flex-wrap t-mt-6 t-w-full">
+      <div class="t-flex t-flex-wrap t-mt-4 t-w-full">
         <model :product="product" class="t-w-full t-p-4 t-mb-px t-bg-base-lightest t-text-sm t-text-base-tone" />
         <router-link :to="localizedRoute('/service-size')" class="t-w-full t-p-4 t-bg-base-lightest t-text-sm t-text-primary" @click.native="$emit('close')">
           {{ $t('Which size fits me?') }}
           <material-icon icon="call_made" size="md" class="t-float-right t-align-middle" />
         </router-link>
+      </div>
+      <div class="t-flex t-flex-wrap t-mt-4 t-w-full" v-if="showAddToCartButton">
+        <button-component :type="!selectedOption || !isAddToCartDisabled ? 'primary' : 'second'" data-test-id="AddToCart" class="t-flex-grow disabled:t-opacity-50 t-relative" :disabled="isAddToCartDisabled" @click.native="addToCartButtonClick">
+          {{ userSelection && isAddToCartDisabled && !loading ? $t('Out of stock') : $t('Add to cart') }}
+          <loader-background v-if="isAddingToCart" class="t-bottom-0" height="t-h-1" bar="t-bg-base-lightest t-opacity-25" />
+        </button-component>
       </div>
     </div>
   </sidebar>
@@ -43,6 +52,7 @@ import { filterChangedProduct } from '@vue-storefront/core/modules/catalog/event
 import Composite from '@vue-storefront/core/mixins/composite'
 import ProductPriceMixin from 'theme/mixins/product/priceMixin'
 import ProductOptionsMixin from 'theme/mixins/product/optionsMixin'
+import ProductAddToCartMixin from 'theme/mixins/product/addtocartMixin'
 import ProductStockAlertMixin from 'icmaa-product-alert/mixins/productStockAlertMixin'
 
 import Sidebar from 'theme/components/core/blocks/AsyncSidebar/Sidebar'
@@ -50,36 +60,59 @@ import DefaultSelector from 'theme/components/core/blocks/AddToCartSidebar/Defau
 import BundleSelector from 'theme/components/core/blocks/AddToCartSidebar/BundleSelector'
 import Model from 'theme/components/core/blocks/AddToCartSidebar/Model'
 import MaterialIcon from 'theme/components/core/blocks/MaterialIcon'
+import ButtonComponent from 'theme/components/core/blocks/Button'
+import LoaderBackground from 'theme/components/core/LoaderBackground'
 
 export default {
   name: 'AddToCartSidebar',
-  mixins: [ Composite, ProductOptionsMixin, ProductPriceMixin, ProductStockAlertMixin ],
+  mixins: [ Composite, ProductOptionsMixin, ProductAddToCartMixin, ProductPriceMixin, ProductStockAlertMixin ],
   components: {
     Sidebar,
     DefaultSelector,
     BundleSelector,
     Model,
-    MaterialIcon
+    MaterialIcon,
+    ButtonComponent,
+    LoaderBackground
+  },
+  props: {
+    showAddToCartButton: {
+      type: Boolean,
+      default: false
+    },
+    closeOnSelect: {
+      type: Boolean,
+      default: true
+    }
   },
   data () {
     return {
       selectedOption: undefined,
       loading: false,
+      userSelection: false,
+      disableSelection: false,
       quantity: 0
     }
   },
-  mounted () {
+  async mounted () {
     this.setSelectedOptionByCurrentConfiguration()
   },
   computed: {
     ...mapGetters({
       product: 'product/getCurrentProduct',
       configuration: 'product/getCurrentProductConfiguration',
+      isCurrentBundleOptionsSelection: 'product/isCurrentBundleOptionsSelection',
       options: 'product/getCurrentProductOptions',
       isAddingToCart: 'cart/getIsAdding'
     }),
-    isLoading () {
-      return this.loading || this.isAddingToCart
+    isAddToCartDisabled () {
+      if (this.isBundle) {
+        return this.$v.$invalid || this.loading || !this.isCurrentBundleOptionsSelection
+      }
+      return !this.userSelection || this.$v.$invalid || this.loading || !this.quantity
+    },
+    hasConfiguration () {
+      return this.configuration && Object.keys(this.configuration).length > 0 && this.userSelection
     }
   },
   methods: {
@@ -109,6 +142,7 @@ export default {
     async onSelect (option) {
       if (option.available) {
         this.loading = true
+        this.userSelection = true
 
         // We need to set the new configuration here already to enable the loading state for the selected option
         this.$store.dispatch('product/updateConfiguration', { option })
@@ -119,14 +153,23 @@ export default {
 
         this.$bus.$emit('user-has-selected-product-variant')
 
-        this.loading = false
-        this.$store.dispatch('ui/closeAll')
+        if (this.closeOnSelect) {
+          this.loading = false
+          this.close()
+        } else {
+          await this.getQuantity()
+          this.loading = false
+        }
       } else {
         this.selectedOption = option
         this.addProductStockAlert(option)
       }
     },
-    async onBundleSelect (option) {
+    onBundleSelect (option) {
+      if (this.closeOnSelect) {
+        this.close()
+      }
+
       this.$bus.$emit('user-has-selected-product-variant')
     },
     getOptionPrice (option) {
@@ -138,6 +181,26 @@ export default {
       }
 
       return false
+    },
+    addToCartButtonClick () {
+      if (this.showAddToCartButton && !this.loading && !this.isAddingToCart) {
+        if (this.hasConfiguration || (this.isBundle && this.isCurrentBundleOptionsSelection)) {
+          this.disableSelection = true
+          this.addToCart(this.product)
+            .then(() => { this.afterAddToCart() })
+            .catch(() => { this.afterAddToCart() })
+        }
+      }
+    },
+    afterAddToCart () {
+      this.disableSelection = false
+      this.close(false)
+    },
+    close (dispatchSidebarClose = true) {
+      if (dispatchSidebarClose) {
+        this.$store.dispatch('ui/setSidebar', { key: 'addtocart', status: false })
+      }
+      this.$emit('close')
     }
   }
 }

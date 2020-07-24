@@ -29,7 +29,7 @@ export default {
   },
   methods: {
     toggleSearchpanel () {
-      this.$store.dispatch('ui/setSearchpanel', !this.isOpen)
+      this.$store.dispatch('ui/setSidebar', { key: 'searchpanel' })
     }
   }
 }
