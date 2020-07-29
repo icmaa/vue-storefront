@@ -29,19 +29,16 @@ const RouterManager = {
     }
   },
   addRoutesByPriority: function (routesData) {
-    const routesToAdd = []
-    for (const routeData of routesData) {
-      let exisitingIndex = routesToAdd.findIndex(r => r.route.name === routeData.route.name && r.route.path === routeData.route.path)
-      if ((exisitingIndex >= 0) && (routesToAdd[exisitingIndex].priority < routeData.priority)) { // same priority doesn't override exisiting
-        routesToAdd.splice(exisitingIndex, 1)
-        exisitingIndex = -1
-      }
-      if (exisitingIndex < 0) {
-        routesToAdd.push(routeData)
-      }
-    }
-    this._registeredRoutes.push(...routesToAdd)
-    baseRouter.addRoutes(routesToAdd.map(r => r.route))
+    // MOD < Bugfix for sorting by routes priority
+    // This is commented more detailed in README of `icmaa-url`.
+    routesData.sort((a, b) => {
+      const aPriority = a.priority || 0
+      const bPriority = b.priority || 0
+      return aPriority - bPriority
+    })
+    this._registeredRoutes.push(...routesData)
+    baseRouter.addRoutes(routesData.map(r => r.route))
+    // MOD > Bugfix for sorting by routes priority
   },
   isRouteAdded: function (addedRoutes: any[], route: RouteConfig) {
     return addedRoutes.findIndex((addedRoute) => addedRoute.route.name === route.name && addedRoute.route.path === route.path) >= 0
