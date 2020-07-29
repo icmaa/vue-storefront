@@ -35,6 +35,12 @@ You can add your mappings to the `config/local.json`:
   ],
 ```
 
+## Core changes
+
+We try to overwrite everything needed by extending the Vuex store. But some methods are not highjackable like that – this is a list of core changes.
+
+* The `RouterManager` has a priority option which won't work properly. Thats why we needed to overwrite the `addRoutesByPriority` method of `core/lib/router-manager.ts` to have a correct order of the routes depending on their priority.
+
 ## Todo
 
 [ ] Make config via `icmaa-cms` available

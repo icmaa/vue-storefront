@@ -37,6 +37,6 @@ let routes = [
 ]
 
 /** ICMAA / Custom cms routes */
-routes = routes.concat(icmaaCmsRoutes)
+routes = icmaaCmsRoutes.concat(routes)
 
 export default routes

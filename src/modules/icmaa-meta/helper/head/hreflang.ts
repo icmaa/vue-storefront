@@ -24,10 +24,6 @@ class Hreflang {
     if (this.hasConfigs()) {
       path = removeStoreCodeFromRoute(router.currentRoute.path) as string
 
-      if (path === '/' + this._currentStore.storeCode) {
-        path = '/'
-      }
-
       path = (!store.url.startsWith('/'))
         ? store.url.replace(/\/$/, '') + router.currentRoute.path
         : icmaa_meta.base_url + store.url + path
@@ -36,7 +32,7 @@ class Hreflang {
     return path
   }
 
-  public getHreflanFromConfigs: Function = (store: StoreView): HreflangInterface | boolean => {
+  public getHreflangFromConfigs: Function = (store: StoreView): HreflangInterface | boolean => {
     const hreflangConfig = icmaa_meta && icmaa_meta.hreflang && icmaa_meta.hreflang.find(m => m.storeCode === store.storeCode)
     if (this.hasConfigs()) {
       return {
@@ -62,7 +58,7 @@ class Hreflang {
         storeViews.mapStoreUrlsFor.forEach(c => {
           let storeview = storeViews[c]
           if (storeview && (!storeview.disabled || storeview.disabled === false)) {
-            const hreflang = this.getHreflanFromConfigs(storeview)
+            const hreflang = this.getHreflangFromConfigs(storeview)
             if (hreflang) {
               this._hreflang.push(hreflang)
             }
