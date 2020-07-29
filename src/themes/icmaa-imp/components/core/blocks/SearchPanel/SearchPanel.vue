@@ -42,6 +42,7 @@ import i18n from '@vue-storefront/i18n'
 import { mapGetters } from 'vuex'
 import { required, minLength } from 'vuelidate/lib/validators'
 import { disableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock'
+import { IcmaaGoogleTagManagerExecutors } from 'icmaa-google-tag-manager/hooks'
 import { SearchQuery } from 'storefront-query-builder'
 import { Logger } from '@vue-storefront/core/lib/logger'
 import debounce from 'lodash-es/debounce'
@@ -176,6 +177,8 @@ export default {
           this.showPleaseWait = false
 
           this.populateCategoryAggregations(aggregations)
+
+          IcmaaGoogleTagManagerExecutors.onSearchResult({ term: this.searchString, results: this.products })
         }).catch((err) => {
           Logger.error(err, 'components-search')()
         })
