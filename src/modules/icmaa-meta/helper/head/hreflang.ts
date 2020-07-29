@@ -24,6 +24,10 @@ class Hreflang {
     if (this.hasConfigs()) {
       path = removeStoreCodeFromRoute(router.currentRoute.path) as string
 
+      if (path === '/' + this._currentStore.storeCode) {
+        path = ''
+      }
+
       path = (!store.url.startsWith('/'))
         ? store.url.replace(/\/$/, '') + router.currentRoute.path
         : icmaa_meta.base_url + store.url + path
