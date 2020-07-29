@@ -4,6 +4,7 @@ import { Store } from 'vuex'
 import { currentStoreView } from '@vue-storefront/core/lib/multistore'
 import { isServer } from '@vue-storefront/core/helpers'
 
+import { IcmaaGoogleTagManager as EventHooks } from './'
 import { claimCollection } from 'theme/store/claims'
 
 export const isEnabled = async (config: any): Promise<boolean> => {
@@ -55,5 +56,12 @@ export async function afterRegistration (config, store: Store<any>) {
         }
       })
     }
+  })
+
+  EventHooks.onSearchResult(({ term: searchTerm }) => {
+    GTM.trackEvent({
+      event: 'icmaa-search',
+      searchTerm
+    })
   })
 }
