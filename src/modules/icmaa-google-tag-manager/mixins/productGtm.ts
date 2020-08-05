@@ -1,40 +1,36 @@
-import Vue from 'vue'
-import VueGtm from 'vue-gtm'
-import { mapGetters } from 'vuex'
 import { currentStoreView } from '@vue-storefront/core/lib/multistore'
-import AbstractMixin from './abstractMixin'
+import DefaultMixin from './defaultMixin'
 
 export default {
-  mixins: [ AbstractMixin ],
-  methods: {
-    productGtm () {
-      if (!this.enabled) {
-        return
+  mixins: [ DefaultMixin ],
+  computed: {
+    gtmEventPayload () {
+      if (!this.isGtmEnabled) {
+        return false
       }
 
-      const GTM: VueGtm = (Vue as any).gtm
+      const currentProduct = this.getGTMProductDTO(this.product)
+      if (!currentProduct) {
+        return false
+      }
 
       const storeView = currentStoreView()
       const { currencyCode } = storeView.i18n
 
-      GTM.trackEvent({
+      return {
         event: 'icmaa-product-view',
         ecommerce: {
           currencyCode,
           detail: {
-            actionField: { list: '' },
-            products: [this.getGTMProductDTO(this.product)]
+            products: [currentProduct]
           }
         }
-      })
+      }
     }
   },
   watch: {
-    product (data) {
-      this.productGtm()
+    product () {
+      this.triggerGtmPageViewEvent()
     }
-  },
-  mounted () {
-    this.productGtm()
   }
 }

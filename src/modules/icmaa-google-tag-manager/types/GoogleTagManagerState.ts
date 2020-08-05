@@ -1,7 +1,6 @@
 export default interface GoogleTagManagerState {
   key?: null|string,
   enabled: boolean,
-  initiated: boolean,
   lastOrderId: string
 }
 

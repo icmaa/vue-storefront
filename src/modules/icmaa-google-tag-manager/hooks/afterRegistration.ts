@@ -59,6 +59,18 @@ export async function afterRegistration (config, store: Store<any>) {
     }
   })
 
+  EventHooks.onGtmPageView(({ event }) => {
+    let dataLayer = (window['dataLayer'] = window['dataLayer'] || [])
+    dataLayer.push(event)
+  })
+
+  EventHooks.onSearchResult(({ term: searchTerm }) => {
+    GTM.trackEvent({
+      event: 'icmaa-search',
+      searchTerm
+    })
+  })
+
   EventHooks.onSearchResult(({ term: searchTerm }) => {
     GTM.trackEvent({
       event: 'icmaa-search',

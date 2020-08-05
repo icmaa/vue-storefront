@@ -1,16 +1,17 @@
 import { Module } from 'vuex'
+import Product from '@vue-storefront/core/modules/catalog/types/Product'
 import GoogleTagManagerState, { AttributeMapItem } from '../types/GoogleTagManagerState'
 
 import { googleTagManager } from 'config'
 import { formatValue } from 'icmaa-config/helpers/price'
 import pick from 'lodash-es/pick'
+import isEmpty from 'lodash-es/isEmpty'
 
 export const icmaaGoogleTagManagerModule: Module<GoogleTagManagerState, any> = {
   namespaced: true,
   state: {
     key: null,
     enabled: false,
-    initiated: false,
     lastOrderId: ''
   },
   mutations: {
@@ -21,18 +22,11 @@ export const icmaaGoogleTagManagerModule: Module<GoogleTagManagerState, any> = {
     // eslint-disable-next-line no-useless-computed-key
     ['ICMAA_GTM/SET_LAST_ORDER_ID'] (state, payload) {
       state.lastOrderId = payload
-    },
-    // eslint-disable-next-line no-useless-computed-key
-    ['ICMAA_GTM/INIT'] (state) {
-      state.initiated = true
     }
   },
   actions: {
     enable ({ commit }, payload: boolean = true) {
       commit('ICMAA_GTM/ENABLE', payload)
-    },
-    init ({ commit }) {
-      commit('ICMAA_GTM/INIT')
     },
     setLastOrderId ({ commit }, payload: boolean = true) {
       commit('ICMAA_GTM/SET_LAST_ORDER_ID', payload)
@@ -40,10 +34,9 @@ export const icmaaGoogleTagManagerModule: Module<GoogleTagManagerState, any> = {
   },
   getters: {
     enabled: (state): boolean => state.enabled,
-    initiated: (state): boolean => state.initiated,
     getLastOrderId: (state): string => state.lastOrderId,
-    getGTMProductDTO: (state, getters, rootState, rootGetters) => (item, attributeMap?: string[] | AttributeMapItem[]) => {
-      let product = {}
+    getGTMProductDTO: (state, getters, rootState, rootGetters) => (item, attributeMap?: string[] | AttributeMapItem[]): Product | boolean => {
+      let product: any = {}
 
       if (!attributeMap) {
         attributeMap = googleTagManager.productAttributes
@@ -81,7 +74,7 @@ export const icmaaGoogleTagManagerModule: Module<GoogleTagManagerState, any> = {
         }
       })
 
-      return product
+      return !isEmpty(product) ? product : false
     }
   }
 }
