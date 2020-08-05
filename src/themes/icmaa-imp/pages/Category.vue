@@ -145,6 +145,7 @@ const composeInitialPageState = async (store, route, forceLoad = false, pageSize
 }
 
 export default {
+  name: 'Category',
   components: {
     AsyncSidebar,
     LazyHydrate,

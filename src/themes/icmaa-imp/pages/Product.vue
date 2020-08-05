@@ -162,6 +162,7 @@ import ClusterMixin from 'icmaa-user/mixins/cluster'
 const AddToCartSidebar = () => import(/* webpackPreload: true */ /* webpackChunkName: "vsf-addtocart-sidebar" */ 'theme/components/core/blocks/AddToCartSidebar/AddToCartSidebar')
 
 export default {
+  name: 'Product',
   components: {
     AsyncSidebar,
     AddToWishlist,
