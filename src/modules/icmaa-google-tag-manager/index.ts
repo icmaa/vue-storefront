@@ -7,7 +7,7 @@ import { StorefrontModule } from '@vue-storefront/core/lib/modules'
 import { Logger } from '@vue-storefront/core/lib/logger'
 
 import { icmaaGoogleTagManagerModule } from './store'
-import { afterRegistration, isEnabled } from './hooks/afterRegistration'
+import { afterRegistration, registerCustomPageEvents, isEnabled } from './hooks/afterRegistration'
 import triggerPageView from './helpers/pageView'
 
 const initGTM = async ({ store, router, appConfig }) => {
@@ -25,7 +25,7 @@ const initGTM = async ({ store, router, appConfig }) => {
   }
 }
 
-export const IcmaaGoogleTagManagerModule: StorefrontModule = async ({ app, store, router, appConfig }) => {
+export const IcmaaGoogleTagManagerModule: StorefrontModule = async ({ store, router, appConfig }) => {
   store.registerModule('icmaaGoogleTagManager', icmaaGoogleTagManagerModule)
 
   await initGTM({ appConfig, router, store })
@@ -36,5 +36,6 @@ export const IcmaaGoogleTagManagerModule: StorefrontModule = async ({ app, store
     }
   })
 
+  registerCustomPageEvents(appConfig, store)
   afterRegistration(appConfig, store)
 }

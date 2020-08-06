@@ -20,6 +20,22 @@ export const isEnabled = async (config: any): Promise<boolean> => {
   return typeof id === 'string' && id.length > 0 && !isServer && accepted
 }
 
+export const registerCustomPageEvents = (config, store: Store<any>) => {
+  if (typeof config.googleTagManager.id !== 'string') {
+    return
+  }
+
+  catalogHooks.productPageVisited(() => {
+    const eventPayload = store.getters['icmaaGoogleTagManager/gtmEventPayload']('product')
+    store.dispatch('icmaaGoogleTagManager/updateEvent', eventPayload)
+  })
+
+  catalogHooks.categoryPageVisited(() => {
+    const eventPayload = store.getters['icmaaGoogleTagManager/gtmEventPayload']('category')
+    store.dispatch('icmaaGoogleTagManager/updateEvent', eventPayload)
+  })
+}
+
 export async function afterRegistration (config, store: Store<any>) {
   const enabled = await isEnabled(config.googleTagManager)
   if (!enabled) {
@@ -58,16 +74,6 @@ export async function afterRegistration (config, store: Store<any>) {
         }
       })
     }
-  })
-
-  catalogHooks.productPageVisited(() => {
-    const eventPayload = store.getters['icmaaGoogleTagManager/gtmEventPayload']('product')
-    store.dispatch('icmaaGoogleTagManager/updateEvent', eventPayload)
-  })
-
-  catalogHooks.categoryPageVisited(() => {
-    const eventPayload = store.getters['icmaaGoogleTagManager/gtmEventPayload']('category')
-    store.dispatch('icmaaGoogleTagManager/updateEvent', eventPayload)
   })
 
   EventHooks.onGtmPageView(({ event }) => {
