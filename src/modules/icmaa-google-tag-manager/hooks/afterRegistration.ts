@@ -4,6 +4,7 @@ import { Store } from 'vuex'
 import { currentStoreView } from '@vue-storefront/core/lib/multistore'
 import { isServer } from '@vue-storefront/core/helpers'
 import { userHooks } from '@vue-storefront/core/modules/user/hooks'
+import { catalogHooks } from '@vue-storefront/core/modules/catalog-next/hooks'
 
 import { IcmaaGoogleTagManager as EventHooks } from './'
 import { claimCollection } from 'theme/store/claims'
@@ -19,6 +20,22 @@ export const isEnabled = async (config: any): Promise<boolean> => {
   return typeof id === 'string' && id.length > 0 && !isServer && accepted
 }
 
+export const registerCustomPageEvents = (config, store: Store<any>) => {
+  if (typeof config.googleTagManager.id !== 'string') {
+    return
+  }
+
+  catalogHooks.productPageVisited(() => {
+    const eventPayload = store.getters['icmaaGoogleTagManager/gtmEventPayload']('product')
+    store.dispatch('icmaaGoogleTagManager/updateEvent', eventPayload)
+  })
+
+  catalogHooks.categoryPageVisited(() => {
+    const eventPayload = store.getters['icmaaGoogleTagManager/gtmEventPayload']('category')
+    store.dispatch('icmaaGoogleTagManager/updateEvent', eventPayload)
+  })
+}
+
 export async function afterRegistration (config, store: Store<any>) {
   const enabled = await isEnabled(config.googleTagManager)
   if (!enabled) {
@@ -30,7 +47,7 @@ export async function afterRegistration (config, store: Store<any>) {
   const storeView = currentStoreView()
   const currencyCode = storeView.i18n.currencyCode
 
-  const getProduct = item => store.getters['icmaaGoogleTagManager/getGTMProductDTO'](item)
+  const getProduct = item => store.getters['icmaaGoogleTagManager/getProductDTO'](item)
 
   store.subscribe(({ type, payload }, state) => {
     // Adding a Product to a Shopping Cart
@@ -57,6 +74,11 @@ export async function afterRegistration (config, store: Store<any>) {
         }
       })
     }
+  })
+
+  EventHooks.onGtmPageView(({ event }) => {
+    GTM.trackEvent(event)
+    store.dispatch('icmaaGoogleTagManager/resetEvent')
   })
 
   EventHooks.onSearchResult(({ term: searchTerm }) => {

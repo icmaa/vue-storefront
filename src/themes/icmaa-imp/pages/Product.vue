@@ -152,7 +152,6 @@ import LazyHydrate from 'vue-lazy-hydration'
 
 import VueOfflineMixin from 'vue-offline/mixin'
 import ProductMetaMixin from 'icmaa-meta/mixins/productMeta'
-import ProductGtmMixin from 'icmaa-google-tag-manager/mixins/productGtm'
 import ProductPriceMixin from 'theme/mixins/product/priceMixin'
 import ProductOptionsMixin from 'theme/mixins/product/optionsMixin'
 import ProductAddToCartMixin from 'theme/mixins/product/addtocartMixin'
@@ -162,6 +161,7 @@ import ClusterMixin from 'icmaa-user/mixins/cluster'
 const AddToCartSidebar = () => import(/* webpackPreload: true */ /* webpackChunkName: "vsf-addtocart-sidebar" */ 'theme/components/core/blocks/AddToCartSidebar/AddToCartSidebar')
 
 export default {
+  name: 'Product',
   components: {
     AsyncSidebar,
     AddToWishlist,
@@ -183,7 +183,7 @@ export default {
     WebShare,
     LazyHydrate
   },
-  mixins: [IcmaaProduct, ProductMetaMixin, ProductPriceMixin, ProductOptionsMixin, ProductAddToCartMixin, FeaturesMixin, ClusterMixin, ProductGtmMixin],
+  mixins: [IcmaaProduct, ProductMetaMixin, ProductPriceMixin, ProductOptionsMixin, ProductAddToCartMixin, FeaturesMixin, ClusterMixin],
   beforeCreate () {
     registerModule(ReviewModule)
     registerModule(IcmaaExtendedReviewModule)
