@@ -7,13 +7,13 @@ import { formatValue } from 'icmaa-config/helpers/price'
 import { toDate } from 'icmaa-config/helpers/datetime'
 import omit from 'lodash-es/omit'
 import round from 'lodash-es/round'
-import AbstractMixin from './abstractMixin'
 
 export default {
-  mixins: [ AbstractMixin ],
   computed: {
     ...mapGetters({
       ordersHistory: 'user/getOrdersHistory',
+      isGtmEnabled: 'icmaaGoogleTagManager/enabled',
+      getGTMProductDTO: 'icmaaGoogleTagManager/getProductDTO',
       gtmLastOrderId: 'icmaaGoogleTagManager/getLastOrderId'
     }),
     order () {
@@ -65,7 +65,7 @@ export default {
   },
   methods: {
     checkoutSuccessGtm () {
-      if (!this.enabled || !this.order || this.gtmLastOrderId === this.orderId) {
+      if (!this.isGtmEnabled || !this.order || this.gtmLastOrderId === this.orderId) {
         return
       }
 
