@@ -4,9 +4,6 @@ import { RouteEvent } from '../types/GoogleTagManagerState'
 import { IcmaaGoogleTagManagerExecutors } from '../hooks'
 
 export default (route: any, store: Store<any>) => {
-  const eventPayload = store.getters['icmaaGoogleTagManager/gtmEventPayload']()
-  store.dispatch('icmaaGoogleTagManager/updateEvent', eventPayload)
-
   const eventRouteData = {
     'content-name': route.fullPath,
     'content-view-name': route.meta.gtm || route.name,
@@ -14,6 +11,7 @@ export default (route: any, store: Store<any>) => {
   }
 
   const event: RouteEvent = Object.assign(
+    store.getters['icmaaGoogleTagManager/gtmEventPayload'](),
     eventRouteData,
     store.getters['icmaaGoogleTagManager/getQueuedRouteEvent']
   )

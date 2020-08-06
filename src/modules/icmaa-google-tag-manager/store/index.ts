@@ -23,7 +23,6 @@ export const icmaaGoogleTagManagerModule: Module<GoogleTagManagerState, any> = {
     },
     'ICMAA_GTM/UPDATE_EVENT': (state, event: RouteEvent | boolean) => {
       state.queuedRouteEvent = Object.assign({}, state.queuedRouteEvent, event)
-      console.error('ICMAA_GTM/UPDATE_EVENT', state.queuedRouteEvent)
     },
     'ICMAA_GTM/RESET_EVENT': (state) => {
       state.queuedRouteEvent = false

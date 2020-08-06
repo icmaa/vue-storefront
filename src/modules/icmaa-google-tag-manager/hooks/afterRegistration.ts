@@ -82,13 +82,6 @@ export async function afterRegistration (config, store: Store<any>) {
     })
   })
 
-  EventHooks.onSearchResult(({ term: searchTerm }) => {
-    GTM.trackEvent({
-      event: 'icmaa-search',
-      searchTerm
-    })
-  })
-
   userHooks.afterUserAuthorize(() => {
     GTM.trackEvent({
       event: 'icmaa-login'
