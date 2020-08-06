@@ -7,13 +7,13 @@ import { formatValue } from 'icmaa-config/helpers/price'
 import { toDate } from 'icmaa-config/helpers/datetime'
 import omit from 'lodash-es/omit'
 import round from 'lodash-es/round'
-import { mixinFactory } from './defaultMixin'
 
 export default {
-  mixins: [ mixinFactory('icmaa-checkout-success') ],
   computed: {
     ...mapGetters({
       ordersHistory: 'user/getOrdersHistory',
+      isGtmEnabled: 'icmaaGoogleTagManager/enabled',
+      getGTMProductDTO: 'icmaaGoogleTagManager/getProductDTO',
       gtmLastOrderId: 'icmaaGoogleTagManager/getLastOrderId'
     }),
     order () {

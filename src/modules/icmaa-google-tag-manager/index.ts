@@ -8,6 +8,7 @@ import { Logger } from '@vue-storefront/core/lib/logger'
 
 import { icmaaGoogleTagManagerModule } from './store'
 import { afterRegistration, isEnabled } from './hooks/afterRegistration'
+import triggerPageView from './helpers/pageView'
 
 const initGTM = async ({ store, router, appConfig }) => {
   const { id, debug } = appConfig.googleTagManager
@@ -15,7 +16,9 @@ const initGTM = async ({ store, router, appConfig }) => {
   if (enabled) {
     once('__VUE_EXTEND_GTM__', () => {
       Vue.use(VueGtm, { enabled, id, debug })
+
       store.dispatch('icmaaGoogleTagManager/enable', true)
+      router.afterEach((to: any) => triggerPageView(to, store))
     })
   } else {
     Logger.log('Google Tag Manager extensions is not enabled', 'icmaa-gtm')()

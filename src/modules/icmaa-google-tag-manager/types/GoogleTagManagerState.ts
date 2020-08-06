@@ -1,7 +1,15 @@
 export default interface GoogleTagManagerState {
   key?: null|string,
   enabled: boolean,
+  queuedRouteEvent: RouteEvent | boolean,
   lastOrderId: string
+}
+
+export interface RouteEvent {
+  event: string,
+  'content-name': string,
+  'content-view-name': string,
+  [key: string]: any
 }
 
 export interface AttributeMapItem {

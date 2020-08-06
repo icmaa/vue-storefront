@@ -4,6 +4,7 @@ import { Store } from 'vuex'
 import { currentStoreView } from '@vue-storefront/core/lib/multistore'
 import { isServer } from '@vue-storefront/core/helpers'
 import { userHooks } from '@vue-storefront/core/modules/user/hooks'
+import { catalogHooks } from '@vue-storefront/core/modules/catalog-next/hooks'
 
 import { IcmaaGoogleTagManager as EventHooks } from './'
 import { claimCollection } from 'theme/store/claims'
@@ -30,7 +31,7 @@ export async function afterRegistration (config, store: Store<any>) {
   const storeView = currentStoreView()
   const currencyCode = storeView.i18n.currencyCode
 
-  const getProduct = item => store.getters['icmaaGoogleTagManager/getGTMProductDTO'](item)
+  const getProduct = item => store.getters['icmaaGoogleTagManager/getProductDTO'](item)
 
   store.subscribe(({ type, payload }, state) => {
     // Adding a Product to a Shopping Cart
@@ -59,9 +60,19 @@ export async function afterRegistration (config, store: Store<any>) {
     }
   })
 
+  catalogHooks.productPageVisited(() => {
+    const eventPayload = store.getters['icmaaGoogleTagManager/gtmEventPayload']('product')
+    store.dispatch('icmaaGoogleTagManager/updateEvent', eventPayload)
+  })
+
+  catalogHooks.categoryPageVisited(() => {
+    const eventPayload = store.getters['icmaaGoogleTagManager/gtmEventPayload']('category')
+    store.dispatch('icmaaGoogleTagManager/updateEvent', eventPayload)
+  })
+
   EventHooks.onGtmPageView(({ event }) => {
-    let dataLayer = (window['dataLayer'] = window['dataLayer'] || [])
-    dataLayer.push(event)
+    GTM.trackEvent(event)
+    store.dispatch('icmaaGoogleTagManager/resetEvent')
   })
 
   EventHooks.onSearchResult(({ term: searchTerm }) => {
