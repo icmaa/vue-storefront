@@ -23,6 +23,7 @@ import onEscapePress from '@vue-storefront/core/mixins/onEscapePress'
 import { mapMutations, mapGetters } from 'vuex'
 import { disableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock'
 
+import { uiHooksExecutors } from 'theme/hooks/ui'
 import TopButton from 'theme/components/core/blocks/AsyncSidebar/TopButton'
 
 export default {
@@ -85,6 +86,7 @@ export default {
     close () {
       this.$store.dispatch('ui/hideModal', this.name)
       this.$emit('close', this)
+      uiHooksExecutors.modalClosed(this.name)
     },
     onEscapePress () {
       this.close()
