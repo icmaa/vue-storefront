@@ -1,7 +1,7 @@
 import config from 'config'
 
 import { getCurrentStoreCode } from '../helpers'
-import IcmaaTaskQueue from '../data-resolver/Task'
+import IcmaaTaskQueue from './Task'
 
 import { processURLAddress } from '@vue-storefront/core/helpers'
 import Task from '@vue-storefront/core/lib/sync/types/Task'
