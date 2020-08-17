@@ -1,6 +1,4 @@
-import config from 'config'
 import { StorefrontModule } from '@vue-storefront/core/lib/modules'
-import { StorageManager } from '@vue-storefront/core/lib/storage-manager'
 import { setupMultistoreRoutes } from '@vue-storefront/core/lib/multistore'
 
 import registerGenericCmsStateModule from './helpers/genericStateModule'
@@ -11,7 +9,6 @@ import { PageStore, cmsPageStateKey } from './store/page'
 import moduleRoutes from './routes'
 
 export const KEY = 'icmaa-cms'
-export const cacheStorage = StorageManager.init(KEY, undefined, config.server.elasticCacheQuota)
 
 export const IcmaaCmsModule: StorefrontModule = function ({ store, appConfig, router }) {
   store.registerModule(defaultStateKey, DefaultStore)
