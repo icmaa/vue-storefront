@@ -1,7 +1,9 @@
+const vsfConfig = require('config')
 const merge = require('webpack-merge')
 const path = require('path')
 
 const SpritesmithPlugin = require('webpack-spritesmith')
+const ManifestPlugin = require('./build/ManifestPlugin')
 
 /**
  * You can extend default webpack build here.
@@ -22,6 +24,19 @@ module.exports = function (config, { isClient, isDev }) {
     }
 
     config = merge(config, addCompiler)
+  }
+
+  /**
+   * Create storeView based `manifest.json` files using `lodash.template`
+   */
+  if (isClient) {
+    config = merge(config, {
+      plugins: [
+        new ManifestPlugin({
+          storeCodes: vsfConfig.storeViews.mapStoreUrlsFor
+        })
+      ]
+    })
   }
 
   /**
