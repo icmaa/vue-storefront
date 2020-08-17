@@ -14,8 +14,6 @@ Add your own Service worker code here - for example using Google's workbox libra
 import { registerRoute } from 'workbox-routing'
 import { CacheFirst } from 'workbox-strategies'
 
-precacheAndRoute(self.__precacheManifest || self.__WB_MANIFEST || [])
-
 registerRoute(
   ({ request }) => request.destination === 'image',
   new CacheFirst({
@@ -32,7 +30,7 @@ registerRoute(
 */
 
 const apiCache = new CacheFirst({
-  cacheName: 'vue-sfr-api',
+  cacheName: 'vsf-api',
   plugins: [
     new ExpirationPlugin({
       maxEntries: 50,
@@ -43,7 +41,7 @@ const apiCache = new CacheFirst({
 })
 
 const outputCache = new NetworkFirst({
-  cacheName: 'vue-sfr-output',
+  cacheName: 'vsf-output',
   plugins: [
     new ExpirationPlugin({
       maxEntries: 50,
@@ -54,7 +52,7 @@ const outputCache = new NetworkFirst({
 })
 
 const imgCache = new CacheFirst({
-  cacheName: 'vue-sfr-img',
+  cacheName: 'vsf-img',
   plugins: [
     new ExpirationPlugin({
       maxEntries: 50,
@@ -66,20 +64,16 @@ const imgCache = new CacheFirst({
 
 if (storeViews.multistore && storeViews.mapStoreUrlsFor.length > 0) {
   storeViews.mapStoreUrlsFor.forEach(storeCode => {
-    registerRoute(
-      new RegExp(`^/${storeCode}`),
-      outputCache
-    )
+    registerRoute(`/${storeCode}`, outputCache)
+    registerRoute(`/${storeCode}/`, outputCache)
   })
+
+  const storeCodesString = storeViews.mapStoreUrlsFor.join('|')
+  registerRoute(new RegExp(`/(${storeCodesString})/[\\w-_]+/*$`), outputCache)
 }
 
 registerRoute(
   /.+\.html$/,
-  outputCache
-)
-
-registerRoute(
-  /^[\w-]+\/*$/,
   outputCache
 )
 
