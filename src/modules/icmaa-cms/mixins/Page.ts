@@ -2,8 +2,6 @@ import { mapGetters } from 'vuex'
 import { PageStateItem } from '../types/PageState'
 import { stringToComponent } from '../helpers'
 
-import YAML from 'yaml'
-
 import CmsMetaMixin from 'icmaa-meta/mixins/cmsMeta'
 
 export default {
@@ -22,17 +20,13 @@ export default {
     content (): any|string {
       switch (this.dataType) {
         case 'yaml':
-          return YAML.parse(this.pageData)
         case 'json':
           return JSON.parse(this.pageData)
         case 'markdown':
-          return this.page.rte
+          return stringToComponent(this.page.rte)
         default:
           return stringToComponent(this.pageData)
       }
-    },
-    isComponent (): boolean {
-      return this.content.hasOwnProperty('template')
     }
   },
   async asyncData ({ store, route }) {

@@ -1,20 +1,18 @@
 <template>
   <layout id="cms-page-rte" :headline="content.headline">
-    <vue-markdown :source="content" />
+    <component :is="content" />
   </layout>
 </template>
 
 <script>
 import Page from 'icmaa-cms/mixins/Page'
 import Layout from 'theme/components/core/blocks/ICMAA/Cms/Pages/Service/Layout'
-import VueMarkdown from 'vue-markdown'
 
 export default {
   name: 'ServiceRTE',
   mixins: [ Page ],
   components: {
-    Layout,
-    VueMarkdown
+    Layout
   },
   data () {
     return {

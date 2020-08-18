@@ -5,10 +5,6 @@
   "main": "index.js",
   "license": "MIT",
   "private": true,
-  "dependencies": {
-    "vue-markdown": "^2.2.4",
-    "yaml": "^1.6.0"
-  },
   "devDependencies": {
     "@vue-storefront/core": "^1.11.1"
   },
