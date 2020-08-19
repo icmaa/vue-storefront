@@ -48,7 +48,7 @@ import ButtonComponent from 'theme/components/core/blocks/Button'
 import MaterialIcon from 'theme/components/core/blocks/MaterialIcon'
 import sortBy from 'lodash-es/sortBy'
 
-const AsyncFilter = () => import(/* webpackPreload: true */ /* webpackChunkName: "vsf-category-filter" */ 'theme/components/core/blocks/Category/Filter')
+const AsyncFilter = () => import(/* webpackChunkName: "vsf-category-filter" */ 'theme/components/core/blocks/Category/Filter')
 
 export default {
   name: 'CategorySidebar',

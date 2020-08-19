@@ -169,6 +169,31 @@ module.exports = function (config, { isClient, isDev }) {
   })
 
   /**
+   * Add chunk groups for better caching
+   */
+  if (isClient) {
+    config = merge(config, {
+      optimization: {
+        splitChunks: {
+          /**
+           * I'm not sure if splitting the chunks into smaller portions
+           * is useful or just causing more requests.
+           */
+          // maxSize: 250000,
+          cacheGroups: {
+            modules_icmaa: {
+              test: /src\/modules\/icmaa-/,
+              name: 'modules-icmaa',
+              chunks: 'initial',
+              priority: 2
+            }
+          }
+        }
+      }
+    })
+  }
+
+  /**
    * As we include `winston` as ssr logging library and this is a universal app, we need to tell
    * webpack that it should ignore this dependency for the client version to prevent an error while compilation.
    * @see https://github.com/webpack-contrib/css-loader/issues/447

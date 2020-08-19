@@ -2,7 +2,7 @@ import Vue from 'vue'
 import i18n from '@vue-storefront/i18n'
 import { clearAllBodyScrollLocks } from 'body-scroll-lock'
 
-const AsyncUserNavigation = () => import(/* webpackPreload: true */ /* webpackChunkName: "vsf-sidebar-user" */ '../components/core/blocks/MyAccount/NavigationSidebar.vue')
+const AsyncUserNavigation = () => import(/* webpackChunkName: "vsf-sidebar-user" */ '../components/core/blocks/MyAccount/NavigationSidebar.vue')
 
 export const uiStore = {
   namespaced: true,
