@@ -116,7 +116,7 @@ const defaults: any = (store: StoreView) => {
       },
       { // iPhone 5, SE
         rel: 'manifest',
-        href: `${iconPath}/android/manifest.json`
+        href: `/dist/manifest.${storeCode}.json`
       }
     ],
     script: [

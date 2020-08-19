@@ -4,7 +4,6 @@ import { Category } from '@vue-storefront/core/modules/catalog-next/types/Catego
 import { DataResolver } from '@vue-storefront/core/data-resolver/types/DataResolver'
 import SpotifyState from '../types/SpotifyState'
 import * as mutationTypes from './mutation-types'
-import { cacheStorage as cache, storageKey } from '../'
 import { isCategoryInWhitelist } from '../helpers'
 
 import Axios from 'axios'
@@ -30,28 +29,17 @@ const actions: ActionTree<SpotifyState, RootState> = {
     const { id, name } = category
     const state = context.state
 
-    const cacheKey = storageKey + '/' + id
-
     if (!state.relatedArtists || Object.keys(state.relatedArtists).length === 0 || !state.relatedArtists[id]) {
-      if (await cache.getItem(cacheKey).then(item => item !== null)) {
-        return cache.getItem(cacheKey).then(result => {
-          context.commit(mutationTypes.ICMAA_SPOTIFY_RELATEDARTIST_ADD, result)
-          return result
-        })
-      }
-
       const relatedArtists = await context.dispatch('fetchRelatedArtistsByName', name)
 
       const result = { categoryId: id, relatedArtists }
       context.commit(mutationTypes.ICMAA_SPOTIFY_RELATEDARTIST_ADD, result)
-      return cache.setItem(cacheKey, result)
-        .catch(error => Logger.error(error, 'icmaa-spotify'))
+
+      return result
     } else {
       return new Promise((resolve, reject) => {
         let result = state.relatedArtists[id]
         if (result) {
-          cache.setItem(cacheKey, { categoryId: id, relatedArtists: result })
-            .catch(error => Logger.error(error, 'icmaa-spotify'))
           resolve(result)
         } else {
           reject('Error while fetching state for ' + name)

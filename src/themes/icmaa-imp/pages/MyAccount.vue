@@ -15,21 +15,22 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import i18n from '@vue-storefront/i18n'
-import Composite from '@vue-storefront/core/mixins/composite'
 import { currentStoreView, localizedRoute } from '@vue-storefront/core/lib/multistore'
 import { Logger } from '@vue-storefront/core/lib/logger'
 
-import Navigation from '../components/core/blocks/MyAccount/Navigation'
-import MyProfile from '../components/core/blocks/MyAccount/MyProfile'
-import MyAddresses from '../components/core/blocks/MyAccount/MyAddresses'
-import MyNewsletter from '../components/core/blocks/MyAccount/MyNewsletter'
-import MyGiftcert from '../components/core/blocks/MyAccount/MyGiftcert'
-import MyOrders from '../components/core/blocks/MyAccount/MyOrders'
-import MyOrder from '../components/core/blocks/MyAccount/MyOrder'
-import MyProductAlerts from '../components/core/blocks/MyAccount/MyProductAlerts'
-import MyOrderReview from 'icmaa-review/components/MyAccount/MyOrderReview'
+import i18n from '@vue-storefront/i18n'
+import Composite from '@vue-storefront/core/mixins/composite'
 import NoSSR from 'vue-no-ssr'
+
+const Navigation = () => import(/* webpackChunkName: "vsf-myaccount-navigation" */'../components/core/blocks/MyAccount/Navigation')
+const MyProfile = () => import(/* webpackChunkName: "vsf-myaccount-myprofile" */'../components/core/blocks/MyAccount/MyProfile')
+const MyAddresses = () => import(/* webpackChunkName: "vsf-myaccount-myaddresses" */'../components/core/blocks/MyAccount/MyAddresses')
+const MyNewsletter = () => import(/* webpackChunkName: "vsf-myaccount-mynewsletter" */'../components/core/blocks/MyAccount/MyNewsletter')
+const MyGiftcert = () => import(/* webpackChunkName: "vsf-myaccount-mygiftcert" */'../components/core/blocks/MyAccount/MyGiftcert')
+const MyOrders = () => import(/* webpackChunkName: "vsf-myaccount-myorders" */'../components/core/blocks/MyAccount/MyOrders')
+const MyOrder = () => import(/* webpackChunkName: "vsf-myaccount-myorder" */'../components/core/blocks/MyAccount/MyOrder')
+const MyProductAlerts = () => import(/* webpackChunkName: "vsf-myaccount-myproductalerts" */'../components/core/blocks/MyAccount/MyProductAlerts')
+const MyOrderReview = () => import(/* webpackChunkName: "vsf-myaccount-myorderreview" */'icmaa-review/components/MyAccount/MyOrderReview')
 
 export default {
   name: 'MyAccount',
