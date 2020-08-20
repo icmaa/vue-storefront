@@ -15,6 +15,16 @@ export const localizeRouterLink = (text: string): string => {
     [g1, localizedRoute(g2, currentStoreView().storeCode), g3].join(''))
 }
 
+/**
+ * @todo
+ * This method to load a component by string requires the much bigger `vue.esm` bundle which includes the compiler
+ * to render a component on runtime – we don't really need this as we mostly just return HTML including links,
+ * but this links again contain links we want to treat as `<router-link>` to have client-side router navigation.
+ *
+ * @param {string} text
+ * @param {string} wrapper
+ * @return {object}
+ */
 export const stringToComponent = (text: string, wrapper: string = 'div'): object => {
   if (!text || typeof text !== 'string') {
     return {}

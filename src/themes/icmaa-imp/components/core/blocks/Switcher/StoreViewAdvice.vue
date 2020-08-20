@@ -68,6 +68,7 @@ export default {
     },
     closeModal () {
       this.$store.dispatch('ui/hideModal', 'modal-storeview-advice')
+      this.setLanguageAccepted(this.currentStoreView.storeCode)
     }
   },
   mounted () {

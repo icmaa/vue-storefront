@@ -115,9 +115,9 @@ import CategoryExtrasMixin from 'icmaa-category-extras/mixins/categoryExtras'
 import CategoryMetaMixin from 'icmaa-meta/mixins/categoryMeta'
 import ClusterMixin from 'icmaa-user/mixins/cluster'
 
-const FilterSidebar = () => import(/* webpackPreload: true */ /* webpackChunkName: "vsf-sidebar-categoryfilter" */ 'theme/components/core/blocks/Category/Sidebar')
-const AddToCartSidebar = () => import(/* webpackPreload: true */ /* webpackChunkName: "vsf-addtocart-sidebar" */ 'theme/components/core/blocks/AddToCartSidebar/AddToCartSidebar')
-const ProductListingTicket = () => import(/* webpackPreload: true */ /* webpackChunkName: "vsf-product-listing-ticket" */ 'theme/components/core/ProductListingTicket')
+const FilterSidebar = () => import(/* webpackChunkName: "vsf-sidebar-categoryfilter" */ 'theme/components/core/blocks/Category/Sidebar')
+const AddToCartSidebar = () => import(/* webpackChunkName: "vsf-addtocart-sidebar" */ 'theme/components/core/blocks/AddToCartSidebar/AddToCartSidebar')
+const ProductListingTicket = () => import(/* webpackChunkName: "vsf-product-listing-ticket" */ 'theme/components/core/ProductListingTicket')
 
 const composeInitialPageState = async (store, route, forceLoad = false, pageSize) => {
   try {

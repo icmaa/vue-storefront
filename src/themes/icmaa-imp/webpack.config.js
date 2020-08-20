@@ -1,7 +1,12 @@
+const webpack = require('webpack')
+const vsfConfig = require('config')
 const merge = require('webpack-merge')
 const path = require('path')
 
+const i18nHelpers = require('@vue-storefront/i18n/helpers')
+
 const SpritesmithPlugin = require('webpack-spritesmith')
+const ManifestPlugin = require('./build/ManifestPlugin')
 
 /**
  * You can extend default webpack build here.
@@ -22,6 +27,19 @@ module.exports = function (config, { isClient, isDev }) {
     }
 
     config = merge(config, addCompiler)
+  }
+
+  /**
+   * Create storeView based `manifest.json` files using `lodash.template`
+   */
+  if (isClient) {
+    config = merge(config, {
+      plugins: [
+        new ManifestPlugin({
+          storeCodes: vsfConfig.storeViews.mapStoreUrlsFor
+        })
+      ]
+    })
   }
 
   /**
@@ -134,6 +152,46 @@ module.exports = function (config, { isClient, isDev }) {
   }
 
   config = merge(config, sprites)
+
+  /**
+   * Remove unecessary languages from `i18n-iso-countries` library
+   */
+  const locales = i18nHelpers.transformToShortLocales(i18nHelpers.currentBuildLocales())
+  const localesRegex = locales.map(locale => `${locale}`).join('|')
+
+  config = merge(config, {
+    plugins: [
+      new webpack.ContextReplacementPlugin(
+        /i18n-iso-countries[/\\]langs$/,
+        new RegExp(localesRegex)
+      )
+    ]
+  })
+
+  /**
+   * Add chunk groups for better caching
+   */
+  if (isClient) {
+    config = merge(config, {
+      optimization: {
+        splitChunks: {
+          /**
+           * I'm not sure if splitting the chunks into smaller portions
+           * is useful or just causing more requests.
+           */
+          // maxSize: 250000,
+          cacheGroups: {
+            modules_icmaa: {
+              test: /src\/modules\/icmaa-/,
+              name: 'modules-icmaa',
+              chunks: 'initial',
+              priority: 2
+            }
+          }
+        }
+      }
+    })
+  }
 
   /**
    * As we include `winston` as ssr logging library and this is a universal app, we need to tell

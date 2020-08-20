@@ -9,11 +9,13 @@ import { NotificationModule } from '@vue-storefront/core/modules/notification'
 import { UrlModule } from '@vue-storefront/core/modules/url'
 import { BreadcrumbsModule } from '@vue-storefront/core/modules/breadcrumbs'
 import { UserModule } from '@vue-storefront/core/modules/user'
-import { CmsModule } from '@vue-storefront/core/modules/cms'
 import { PaymentBackendMethodsModule } from './payment-backend-methods'
 import { PaymentCashOnDeliveryModule } from './payment-cash-on-delivery'
 import { NewsletterModule } from '@vue-storefront/core/modules/newsletter'
 import { InitialResourcesModule } from '@vue-storefront/core/modules/initial-resources'
+// import { DeviceModule } from './device/index'
+import { registerModule } from '@vue-storefront/core/lib/modules'
+
 // ICMAA Modules
 import { IcmaaExtendedConfigModule } from 'icmaa-config'
 import { IcmaaExtendedUrlModule } from 'icmaa-url'
@@ -24,24 +26,21 @@ import { IcmaaExtendedNewsletterModule } from 'icmaa-newsletter'
 import { IcmaaExtendedReviewRoutes } from 'icmaa-review'
 import { IcmaaCategoryModule } from 'icmaa-category'
 import { IcmaaCategoryExtrasModule } from 'icmaa-category-extras'
+import { IcmaaExternalCheckoutModule } from 'icmaa-external-checkout'
 import { IcmaaCdnModule } from 'icmaa-cdn'
 import { IcmaaCmsModule } from 'icmaa-cms'
 import { IcmaaFormsModule } from 'icmaa-forms'
 import { IcmaaTeaserModule } from 'icmaa-teaser'
 import { IcmaaAdviceModule } from 'icmaa-advice'
 import { IcmaaMetaModule } from 'icmaa-meta'
-import { IcmaaGoogleTagManagerModule } from './icmaa-google-tag-manager';
 import { IcmaaRecommendationsModule } from 'icmaa-recommendations'
 import { IcmaaCompetitionsModule } from 'icmaa-competitions'
 import { IcmaaSpotifyModule } from 'icmaa-spotify'
 import { IcmaaProductAlertModule } from 'icmaa-product-alert'
 import { IcmaaGiftcertModule } from 'icmaa-giftcert'
 import { IcmaaTrackingModule } from 'icmaa-tracking'
-import { IcmaaExternalCheckoutModule } from 'icmaa-external-checkout'
+import { IcmaaGoogleTagManagerModule } from './icmaa-google-tag-manager'
 import { IcmaaMonitoringModule } from './icmaa-monitoring'
-
-// import { DeviceModule } from './device/index';
-import { registerModule } from '@vue-storefront/core/lib/modules'
 
 // TODO:distributed across proper pages BEFORE 1.11
 export function registerClientModules () {
@@ -57,7 +56,6 @@ export function registerClientModules () {
   registerModule(CatalogNextModule)
   registerModule(CompareModule)
   registerModule(BreadcrumbsModule)
-  registerModule(CmsModule)
   registerModule(NewsletterModule)
   registerModule(InitialResourcesModule)
   // registerModule(DeviceModule)

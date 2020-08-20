@@ -4,7 +4,7 @@
     "background_color": "#ffffff",
     "display": "standalone",
     "theme_color": "#ffffff",
-    "start_url": "/pwa.html",
+    "start_url": "/${ storeCode }",
     "icons": [
       {
         "src": "/assets/imp/meta/android/android-icon-48x48.png",

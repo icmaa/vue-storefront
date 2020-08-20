@@ -2,8 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-@import 'vendor/flexboxgrid2';
-
 @import 'variables/variables';
 @import 'helpers/mixins';
 @import 'helpers/functions';
@@ -14,16 +12,7 @@
 @import 'base/text';
 @import 'base/color';
 
-@import 'layout/layout';
-@import 'layout/border';
-@import 'layout/margin';
-@import 'layout/padding';
-
-@import 'components/buttons';
-@import 'components/forms';
-
 @import 'utilities/utilities';
-@import 'utilities/visibility';
 
 @import 'animations/animations';
 @import 'animations/transitions';
