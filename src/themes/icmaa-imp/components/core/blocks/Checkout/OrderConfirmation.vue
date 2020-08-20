@@ -98,11 +98,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '~theme/css/variables/colors';
-@import '~theme/css/helpers/functions/color';
-$color-tertiary: color(tertiary);
-$color-white-smoke: color(white-smoke);
-
 .modal {
   font-size: 18px;
 }
@@ -146,13 +141,6 @@ table {
       @media (max-width: 767px) {
         display: block
       }
-
-      &:nth-child(even) {
-        td {
-          background-color: $color-white-smoke;
-        }
-      }
-
     }
 
     td {

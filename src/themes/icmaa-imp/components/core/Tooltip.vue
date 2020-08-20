@@ -8,9 +8,7 @@
 </template>
 
 <style lang="scss" scoped>
-@import '~theme/css/variables/colors';
-@import '~theme/css/helpers/functions/color';
-$color-border: color(accent);
+@import '~theme/css/base/global_vars';
 
 .tooltip {
   cursor: default;
@@ -40,7 +38,7 @@ $color-border: color(accent);
     height: 0;
     position: absolute;
     border: 10px solid transparent;
-    border-top: 10px solid $color-border;
+    border-top: 10px solid $color-basetone;
     left: 50%;
     transform: translateX(-50%);
     bottom: -20px;

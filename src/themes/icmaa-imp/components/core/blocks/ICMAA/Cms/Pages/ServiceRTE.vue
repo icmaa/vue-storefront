@@ -26,11 +26,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import '~theme/css/variables/colors';
-@import '~theme/css/helpers/functions/color';
-
-$color-primary: color(primary);
-$color-matterhorn: color(matterhorn);
+@import '~theme/css/base/global_vars';
 
 #cms-page-rte {
 
@@ -88,7 +84,7 @@ $color-matterhorn: color(matterhorn);
     hr {
       margin-top: 2rem;
       margin-bottom: 2rem;
-      border-color: $color-matterhorn;
+      border-color: $color-baselight;
     }
   }
 }

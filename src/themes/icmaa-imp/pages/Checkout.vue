@@ -93,15 +93,7 @@ export default {
 </script>
 
 <style lang="scss">
-  @import '~theme/css/base/text';
-  @import '~theme/css/variables/colors';
-  @import '~theme/css/helpers/functions/color';
-  $bg-secondary: color(secondary, $colors-background);
-  $color-tertiary: color(tertiary);
-  $color-secondary: color(secondary);
-  $color-error: color(error);
-  $color-white: color(white);
-  $color-black: color(black);
+  @import '~theme/css/base/global_vars';
 
   #checkout {
     .number-circle {
@@ -140,7 +132,7 @@ export default {
         height: 25px;
         width: 25px;
         border-radius: 50%;
-        border: 1px solid $bg-secondary;
+        border: 1px solid $color-basetone;
 
         &:after {
           content: "";
@@ -151,7 +143,7 @@ export default {
           width: 19px;
           height: 19px;
           border-radius: 50%;
-          background: $color-secondary;
+          background: $color-basetone;
         }
       }
 
@@ -171,7 +163,7 @@ export default {
       z-index: -1;
       width: 1px;
       height: 100%;
-      background-color: $bg-secondary;
+      background-color: $color-basetone;
 
       @media (max-width: 768px) {
         display: none;
@@ -181,7 +173,6 @@ export default {
 
   .checkout-title {
     @media (max-width: 767px) {
-      background-color: $bg-secondary;
       margin-bottom: 25px;
 
       h1 {
