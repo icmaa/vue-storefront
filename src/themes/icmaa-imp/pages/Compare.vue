@@ -102,12 +102,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '~theme/css/variables/colors';
-@import '~theme/css/helpers/functions/color';
-
-$color-white: color(white);
+$color-white: white;
 $border: mix(#000, $color-white, 10%);
-$color-product-bg: color(secondary, $colors-background);
+$color-product-bg: #666;
 
 $products-column-width-mobile: 140px;
 $products-column-width: 280px;

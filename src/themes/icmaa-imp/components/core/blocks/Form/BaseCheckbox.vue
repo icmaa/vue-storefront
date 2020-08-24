@@ -78,9 +78,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '~theme/css/variables/colors';
-@import '~theme/css/helpers/functions/color';
-$color-primary: color(base-dark);
+@import '~theme/css/base/global_vars';
 
 .checkbox-label {
   >>> a {

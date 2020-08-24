@@ -158,10 +158,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import '~theme/css/variables/colors';
-@import '~theme/css/helpers/functions/color';
-
-$color-primary: color(primary);
+@import '~theme/css/base/global_vars';
 
 .competition {
 
