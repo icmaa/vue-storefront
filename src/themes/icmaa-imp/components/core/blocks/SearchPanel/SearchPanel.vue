@@ -136,8 +136,8 @@ export default {
       let wordResult = ''
       let replaces = []
 
-      const allWords = searchString.match(wordsRegexp)
-      await this.$store.dispatch('icmaaSearchAlias/list', allWords)
+      const words = searchString.match(wordsRegexp)
+      await this.$store.dispatch('icmaaSearchAlias/list', { words, translate: true })
 
       while ((wordResult = wordsRegexp.exec(searchString)) !== null) {
         const word = wordResult[0]
