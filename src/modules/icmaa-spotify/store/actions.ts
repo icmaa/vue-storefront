@@ -6,7 +6,7 @@ import SpotifyState from '../types/SpotifyState'
 import * as mutationTypes from './mutation-types'
 import { isCategoryInWhitelist } from '../helpers'
 
-import Axios from 'axios'
+import fetch from 'isomorphic-fetch'
 import config from 'config'
 import { processURLAddress } from '@vue-storefront/core/helpers'
 
@@ -16,8 +16,14 @@ const actions: ActionTree<SpotifyState, RootState> = {
   async fetchRelatedArtistsByName (context, name: string) {
     const { endpoint } = config.icmaa_spotify
     const apiUrl = endpoint + '/related-artists/' + encodeURIComponent(name)
-    return Axios.get(processURLAddress(apiUrl))
-      .then(resp => resp.data.result)
+    const fetchOptions = {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' }
+    }
+
+    return fetch(processURLAddress(apiUrl), fetchOptions)
+      .then(resp => resp.json())
+      .then(resp => resp.result)
       .catch(() => [])
   },
   async fetchRelatedArtistsByCategory (context, category: Category): Promise<any> {

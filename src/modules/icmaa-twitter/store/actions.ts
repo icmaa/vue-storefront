@@ -3,7 +3,7 @@ import RootState from '@vue-storefront/core/types/RootState'
 import TwitterState from '../types/TwitterState'
 import * as mutationTypes from './mutation-types'
 
-import Axios from 'axios'
+import fetch from 'isomorphic-fetch'
 import config from 'config'
 import { processURLAddress } from '@vue-storefront/core/helpers'
 
@@ -11,8 +11,14 @@ const actions: ActionTree<TwitterState, RootState> = {
   async fetchStatusFeed (context, screenName: string) {
     const { endpoint } = config.icmaa_twitter
     const apiUrl = endpoint + '/feed/' + encodeURIComponent(screenName) + '/3'
-    return Axios.get(processURLAddress(apiUrl))
-      .then(resp => resp.data.result && resp.data.result.items ? resp.data.result.items : [])
+    const fetchOptions = {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' }
+    }
+
+    return fetch(processURLAddress(apiUrl), fetchOptions)
+      .then(resp => resp.json())
+      .then(resp => resp.result && resp.result.items ? resp.result.items : [])
       .catch(() => [])
   },
   async loadStatusFeed ({ dispatch, state, commit }, screenName: string): Promise<any> {

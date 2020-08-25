@@ -1,6 +1,6 @@
 <template>
   <div class="twitter-feed">
-    <div class="placeholder" v-if="loading">
+    <div class="placeholder" v-if="loading || status.length === 0">
       <div v-for="(s, i) in limit" :key="i" class="t-bg-white t-mb-2 t-p-4 t-flex t-flex-col">
         <div class="t-h-4 t-bg-base-lightest t-mb-2" v-for="(l, j) in 3" :key="j" />
         <div class="t-flex t-items-center t-justify-between t-text-xs t-text-base-lighter">
