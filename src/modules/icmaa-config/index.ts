@@ -29,9 +29,9 @@ export const IcmaaExtendedConfigModule: StorefrontModule = function ({ store }) 
         const envBuildtime = process.env.__BUILDTIME__
 
         if (!storageBuildtime || storageBuildtime !== envBuildtime) {
-          const whitelist = config.icmaa_config.localStorageBuildFlushWhitelist
+          const allowList = config.icmaa_config.localStorageBuildFlushAllowList || []
           Object.keys(StorageManager.storageMap).forEach(async key => {
-            if (whitelist.some(regexString => new RegExp(regexString).test(key))) {
+            if (!allowList.some(regexString => new RegExp(regexString).test(key))) {
               Logger.log('Flush localforage:', 'icmaa-config', key)()
               await StorageManager.get(key).clear()
             }
