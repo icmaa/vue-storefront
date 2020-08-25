@@ -98,8 +98,8 @@ export default {
         const { accessToken } = response.authResponse
 
         await this.process(this.$store.dispatch('user/facebookLogin', { accessToken, version }))
-          .catch(e => this.onFailure(e))
           .then(() => this.onSuccess())
+          .catch(e => this.onFailure(e))
       }
     },
     toggleLogin () {

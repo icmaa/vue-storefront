@@ -4,6 +4,7 @@ import TwitterState from '../types/TwitterState'
 import * as mutationTypes from './mutation-types'
 
 import fetch from 'isomorphic-fetch'
+import fetchErrorHandler from 'icmaa-config/helpers/fetchResponseHandler'
 import config from 'config'
 import { processURLAddress } from '@vue-storefront/core/helpers'
 
@@ -17,6 +18,7 @@ const actions: ActionTree<TwitterState, RootState> = {
     }
 
     return fetch(processURLAddress(apiUrl), fetchOptions)
+      .then(fetchErrorHandler)
       .then(resp => resp.json())
       .then(resp => resp.result && resp.result.items ? resp.result.items : [])
       .catch(() => [])
