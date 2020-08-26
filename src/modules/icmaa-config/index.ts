@@ -21,7 +21,7 @@ export const IcmaaExtendedConfigModule: StorefrontModule = function ({ store }) 
       store.dispatch('icmaaConfig/setMap')
     })
 
-    if (!isServer) {
+    if (!isServer && !(window as any).Cypress) {
       coreHooks.afterAppInit(async () => {
         const configStorage = StorageManager.get(cacheStorageKey)
 
