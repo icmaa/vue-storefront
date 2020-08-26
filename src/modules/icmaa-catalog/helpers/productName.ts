@@ -4,6 +4,7 @@ export default class ProductName {
   protected _name: string
   protected _type: string = ''
   protected _translatedType: string
+  protected _translationPrefix: string = 'PT: '
 
   public constructor (name) {
     this.name = name
@@ -48,11 +49,13 @@ export default class ProductName {
 
   protected setTranslatedType () {
     if (this.typeString !== '') {
-      this._translatedType = i18n.t('Product-Title: ' + this.typeString as string) as string
+      this._translatedType = i18n.t(this._translationPrefix + this.typeString as string) as string
     }
   }
 
   protected typeTranslationFound (): boolean {
-    return this.typeString && this.translatedType && !(this.translatedType as string).startsWith('Product-Title: ')
+    return this.typeString &&
+      this.translatedType &&
+      !(this.translatedType as string).startsWith(this._translationPrefix)
   }
 }

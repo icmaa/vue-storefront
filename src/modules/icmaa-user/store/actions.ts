@@ -20,8 +20,9 @@ import getApiEndpointUrl from '@vue-storefront/core/helpers/getApiEndpointUrl'
 import { processLocalizedURLAddress } from '@vue-storefront/core/helpers'
 
 import config, { entities } from 'config'
-import Axios from 'axios'
+import fetch from 'isomorphic-fetch'
 import isEmpty from 'lodash-es/isEmpty'
+import fetchErrorHandler from 'icmaa-config/helpers/fetchResponseHandler'
 
 const actions: ActionTree<UserState, RootState> = {
   async startSessionWithToken ({ commit, dispatch }, token) {
@@ -156,18 +157,23 @@ const actions: ActionTree<UserState, RootState> = {
     const { endpoint } = config.icmaa_facebook
     const { accessToken, version } = params
     const apiUrl = processLocalizedURLAddress(endpoint + '/login')
+    const fetchOptions = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ 'access_token': accessToken, version })
+    }
 
-    const resp = await Axios
-      .post(apiUrl, { 'access_token': accessToken, version })
-      .then(resp => resp)
-      .catch(e => { throw new Error(e.response.data.result) })
+    const resp = await fetch(apiUrl, fetchOptions)
+      .then(fetchErrorHandler)
+      .then(r => r.json())
+      .catch(e => { throw new Error(e.response.result) })
 
-    userHooksExecutors.afterUserAuthorize(resp.data)
+    userHooksExecutors.afterUserAuthorize(resp)
 
     if (resp.status === 200) {
       try {
         await dispatch('resetUserInvalidateLock', {}, { root: true })
-        commit(userTypes.USER_TOKEN_CHANGED, { newToken: resp.data.result }) // TODO: handle the "Refresh-token" header
+        commit(userTypes.USER_TOKEN_CHANGED, { newToken: resp.result }) // TODO: handle the "Refresh-token" header
         await dispatch('sessionAfterAuthorized', { refresh: true, useCache: false })
       } catch (err) {
         await dispatch('clearCurrentUser')

@@ -14,16 +14,20 @@ const mutationTypes: MutationTypesInterface = {
 }
 
 const actions: ActionTree<SearchAliasState, RootState> = {
-  list: async (context, words: string[]): Promise<SearchAliasStateItem[]> => {
-    const options = words.join(',').toLowerCase()
+  list: async (context, params: { words: string[], translate: boolean }): Promise<SearchAliasStateItem[]> => {
+    let options: string | object = params.words.join(',').toLowerCase()
+    if (params.translate === true) {
+      options = {
+        'i18n_identifier': { 'in': params.words.join(',').toLowerCase() }
+      }
+    }
 
     return listAbstract<SearchAliasStateItem>({
       documentType,
       mutationTypes,
       stateKey,
       context,
-      options,
-      identifier: 'identifier'
+      options
     })
   }
 }

@@ -91,9 +91,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '~theme/css/variables/colors';
-@import '~theme/css/helpers/functions/color';
-$color-icon-hover: color(secondary, $colors-background);
 
 header, .header-placeholder {
   height: 110px;

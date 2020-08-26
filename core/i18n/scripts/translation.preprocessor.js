@@ -41,6 +41,27 @@ module.exports = function (csvDirectories, config = null) {
     })
   })
 
+  // remove duplicate items and items without an actual translation to reduce bundle-size
+  for (let storeCode in messages) {
+    if (storeCode === fallbackLocale) {
+      continue
+    }
+
+    for (let key in messages[storeCode]) {
+      if (key.startsWith('PT: ')) {
+        if (key.substr(4) === messages[storeCode][key]) {
+          delete messages[storeCode][key]
+        }
+
+        continue
+      }
+
+      if (key === messages[storeCode][key]) {
+        delete messages[storeCode][key]
+      }
+    }
+  }
+
   // create fallback
   console.debug(`Writing JSON file fallback: ${fallbackLocale}.json`)
   fs.writeFileSync(path.join(__dirname, '../resource/i18n', `${fallbackLocale}.json`), JSON.stringify(messages[fallbackLocale] || {}))
