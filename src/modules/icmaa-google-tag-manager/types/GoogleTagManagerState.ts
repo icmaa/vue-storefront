@@ -1,5 +1,5 @@
 export default interface GoogleTagManagerState {
-  key?: null|string,
+  initiated: boolean,
   enabled: boolean,
   queuedRouteEvent: RouteEvent | boolean,
   lastOrderId: string

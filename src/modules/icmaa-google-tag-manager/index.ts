@@ -1,24 +1,26 @@
 import Vue from 'vue'
 import VueGtm from 'vue-gtm'
 
-import EventBus from '@vue-storefront/core/compatibility/plugins/event-bus'
+import rootStore from '@vue-storefront/core/store'
 import { once } from '@vue-storefront/core/helpers'
 import { StorefrontModule } from '@vue-storefront/core/lib/modules'
 import { Logger } from '@vue-storefront/core/lib/logger'
 
 import { icmaaGoogleTagManagerModule } from './store'
-import { afterRegistration, registerCustomPageEvents, isEnabled } from './hooks/afterRegistration'
-import triggerPageView from './helpers/pageView'
+import { isEnabled } from './helpers'
+import { IcmaaGoogleTagManagerExecutors } from './hooks'
+import { afterRegistration } from './hooks/afterRegistration'
 
-const initGTM = async ({ store, router, appConfig }) => {
-  const { id, debug } = appConfig.googleTagManager
-  const enabled = await isEnabled(appConfig.googleTagManager)
+const initGTM = ({ appConfig }) => {
+  const enabled = isEnabled(appConfig.googleTagManager)
   if (enabled) {
     once('__VUE_EXTEND_GTM__', () => {
+      const { id, debug } = appConfig.googleTagManager
       Vue.use(VueGtm, { enabled, id, debug })
 
-      store.dispatch('icmaaGoogleTagManager/enable', true)
-      router.afterEach((to: any) => triggerPageView(to, store))
+      rootStore.dispatch('icmaaGoogleTagManager/enable')
+      afterRegistration()
+      rootStore.dispatch('icmaaGoogleTagManager/init')
     })
   } else {
     Logger.log('Google Tag Manager extensions is not enabled', 'icmaa-gtm')()
@@ -27,15 +29,6 @@ const initGTM = async ({ store, router, appConfig }) => {
 
 export const IcmaaGoogleTagManagerModule: StorefrontModule = async ({ store, router, appConfig }) => {
   store.registerModule('icmaaGoogleTagManager', icmaaGoogleTagManagerModule)
-
-  await initGTM({ appConfig, router, store })
-  EventBus.$on('cookiesAccepted', async (enabled: boolean) => {
-    if (enabled) {
-      Logger.log('Google Tag Manager extensions has been enabled', 'icmaa-gtm')()
-      await initGTM({ appConfig, router, store })
-    }
-  })
-
-  registerCustomPageEvents(appConfig, store)
-  afterRegistration(appConfig, store)
+  router.afterEach((to, from) => IcmaaGoogleTagManagerExecutors.afterEach({ to, from }))
+  initGTM({ appConfig })
 }

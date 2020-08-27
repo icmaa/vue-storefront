@@ -324,7 +324,11 @@ export default {
     if (isServer) {
       await loadBreadcrumbsPromise
     }
+
     catalogHooksExecutors.productPageVisited(product)
+  },
+  mounted () {
+    catalogHooksExecutors.productPageVisited(this.product)
   }
 }
 </script>

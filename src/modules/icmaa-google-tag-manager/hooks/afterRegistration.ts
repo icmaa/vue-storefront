@@ -1,55 +1,34 @@
 import Vue from 'vue'
 import VueGtm from 'vue-gtm'
-import { Store } from 'vuex'
+import rootStore from '@vue-storefront/core/store'
 import { currentStoreView } from '@vue-storefront/core/lib/multistore'
-import { isServer } from '@vue-storefront/core/helpers'
 import { userHooks } from '@vue-storefront/core/modules/user/hooks'
 import { catalogHooks } from '@vue-storefront/core/modules/catalog-next/hooks'
 
 import { IcmaaGoogleTagManager as EventHooks } from './'
-import { claimCollection } from 'theme/store/claims'
+import triggerPageView from '../helpers/pageView'
 
-export const isEnabled = async (config: any): Promise<boolean> => {
-  if (isServer) {
-    return false
-  }
-
-  const { id, forceCookieAccept } = config
-  const cookie = await claimCollection(false).getItem('cookiesAccepted')
-  const accepted = (!forceCookieAccept || (cookie && cookie.value === true))
-  return typeof id === 'string' && id.length > 0 && !isServer && accepted
-}
-
-export const registerCustomPageEvents = (config, store: Store<any>) => {
-  if (typeof config.googleTagManager.id !== 'string') {
-    return
-  }
-
+export const registerCustomPageEvents = () => {
   catalogHooks.productPageVisited(() => {
-    const eventPayload = store.getters['icmaaGoogleTagManager/gtmEventPayload']('product')
-    store.dispatch('icmaaGoogleTagManager/updateEvent', eventPayload)
+    const eventPayload = rootStore.getters['icmaaGoogleTagManager/gtmEventPayload']('product')
+    rootStore.dispatch('icmaaGoogleTagManager/updateEvent', eventPayload)
   })
 
   catalogHooks.categoryPageVisited(() => {
-    const eventPayload = store.getters['icmaaGoogleTagManager/gtmEventPayload']('category')
-    store.dispatch('icmaaGoogleTagManager/updateEvent', eventPayload)
+    const eventPayload = rootStore.getters['icmaaGoogleTagManager/gtmEventPayload']('category')
+    rootStore.dispatch('icmaaGoogleTagManager/updateEvent', eventPayload)
   })
 }
 
-export async function afterRegistration (config, store: Store<any>) {
-  const enabled = await isEnabled(config.googleTagManager)
-  if (!enabled) {
-    return
-  }
-
+export function afterRegistration () {
   const GTM: VueGtm = (Vue as any).gtm
 
   const storeView = currentStoreView()
   const currencyCode = storeView.i18n.currencyCode
 
-  const getProduct = item => store.getters['icmaaGoogleTagManager/getProductDTO'](item)
+  const getProduct = item => rootStore.getters['icmaaGoogleTagManager/getProductDTO'](item)
 
-  store.subscribe(({ type, payload }, state) => {
+  rootStore.subscribe(({ type, payload }, state) => {
     // Adding a Product to a Shopping Cart
     if (type === 'cart/cart/ADD') {
       GTM.trackEvent({
@@ -76,10 +55,14 @@ export async function afterRegistration (config, store: Store<any>) {
     }
   })
 
+  EventHooks.afterEach(({ to }) => triggerPageView(to))
+
   EventHooks.onGtmPageView(({ event }) => {
     GTM.trackEvent(event)
-    store.dispatch('icmaaGoogleTagManager/resetEvent')
+    rootStore.dispatch('icmaaGoogleTagManager/resetEvent')
   })
+
+  registerCustomPageEvents()
 
   EventHooks.onSearchResult(({ term: searchTerm }) => {
     GTM.trackEvent({
