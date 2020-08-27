@@ -202,9 +202,6 @@ export default {
   async asyncData ({ store, route, context }) { // this is for SSR purposes to prefetch data - and it's always executed before parent component methods
     const { pageSize } = this.data()
     await composeInitialPageState(store, route, false, route.params.pagesize || pageSize)
-
-    const currentCategory = store.getters['category-next/currentCategory']
-    catalogHooksExecutors.categoryPageVisited(currentCategory)
   },
   mounted () {
     catalogHooksExecutors.categoryPageVisited(this.getCurrentCategory)
