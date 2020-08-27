@@ -8,6 +8,9 @@ export const transformProductUrl = (product, urlParams = {}) => {
       slug: product.slug,
       parentSku: product.parentSku || product.sku,
       childSku: urlParams['childSku'] ? urlParams['childSku'] : product.sku
+    },
+    meta: {
+      gtm: 'product'
     }
   }
 }
@@ -16,6 +19,9 @@ export const transformCategoryUrl = (category) => {
   const { storeCode, appendStoreCode } = currentStoreView()
   return {
     name: localizedDispatcherRouteName('category', storeCode, appendStoreCode),
+    meta: {
+      gtm: 'category'
+    },
     params: {
       slug: category.slug
     }

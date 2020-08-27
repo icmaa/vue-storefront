@@ -14,7 +14,6 @@ export const icmaaGoogleTagManagerModule: Module<GoogleTagManagerState, any> = {
   state: {
     initiated: false,
     enabled: false,
-    queuedRouteEvent: false,
     lastOrderId: ''
   },
   mutations: {
@@ -23,12 +22,6 @@ export const icmaaGoogleTagManagerModule: Module<GoogleTagManagerState, any> = {
     },
     'ICMAA_GTM/ENABLE': (state) => {
       state.enabled = true
-    },
-    'ICMAA_GTM/UPDATE_EVENT': (state, event: RouteEvent | boolean) => {
-      state.queuedRouteEvent = Object.assign({}, state.queuedRouteEvent, event)
-    },
-    'ICMAA_GTM/RESET_EVENT': (state) => {
-      state.queuedRouteEvent = false
     },
     'ICMAA_GTM/SET_LAST_ORDER_ID': (state, orderId) => {
       state.lastOrderId = orderId
@@ -41,12 +34,6 @@ export const icmaaGoogleTagManagerModule: Module<GoogleTagManagerState, any> = {
     enable ({ commit }) {
       commit('ICMAA_GTM/ENABLE')
     },
-    updateEvent ({ commit }, event: RouteEvent) {
-      commit('ICMAA_GTM/UPDATE_EVENT', event)
-    },
-    resetEvent ({ commit }) {
-      commit('ICMAA_GTM/RESET_EVENT')
-    },
     setLastOrderId ({ commit }, orderId: string) {
       commit('ICMAA_GTM/SET_LAST_ORDER_ID', orderId)
     }
@@ -54,7 +41,6 @@ export const icmaaGoogleTagManagerModule: Module<GoogleTagManagerState, any> = {
   getters: {
     initiated: (state): boolean => state.initiated,
     enabled: (state): boolean => state.enabled,
-    getQueuedRouteEvent: (state): RouteEvent | boolean => state.queuedRouteEvent,
     getProductDTO: (state, getters, rootState, rootGetters) => (item, attributeMap?: string[] | AttributeMapItem[]): Product | boolean => {
       let product: any = {}
 
