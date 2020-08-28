@@ -3,7 +3,7 @@ import { currentStoreView } from '@vue-storefront/core/lib/multistore'
 import { formatValue } from 'icmaa-config/helpers/price'
 import Product from '@vue-storefront/core/modules/catalog/types/Product'
 
-import GoogleTagManagerState, { RouteEvent, AttributeMapItem } from '../types/GoogleTagManagerState'
+import GoogleTagManagerState, { AttributeMapItem } from '../types/GoogleTagManagerState'
 import { googleTagManager } from 'config'
 
 import pick from 'lodash-es/pick'
