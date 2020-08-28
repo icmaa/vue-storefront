@@ -107,7 +107,7 @@ export default {
     }
   },
   async mounted () {
-    if (this.enabled) {
+    if (!isServer && this.enabled) {
       switch (this.type) {
         case 'batch':
           await this.loadScript()
