@@ -170,7 +170,7 @@ const actions: ActionTree<UserState, RootState> = {
 
     userHooksExecutors.afterUserAuthorize(resp)
 
-    if (resp.status === 200) {
+    if (resp.code === 200) {
       try {
         await dispatch('resetUserInvalidateLock', {}, { root: true })
         commit(userTypes.USER_TOKEN_CHANGED, { newToken: resp.result }) // TODO: handle the "Refresh-token" header
