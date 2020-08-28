@@ -3,7 +3,7 @@ import { currentStoreView } from '@vue-storefront/core/lib/multistore'
 import { formatValue } from 'icmaa-config/helpers/price'
 import Product from '@vue-storefront/core/modules/catalog/types/Product'
 
-import GoogleTagManagerState, { RouteEvent, AttributeMapItem } from '../types/GoogleTagManagerState'
+import GoogleTagManagerState, { AttributeMapItem } from '../types/GoogleTagManagerState'
 import { googleTagManager } from 'config'
 
 import pick from 'lodash-es/pick'
@@ -12,34 +12,20 @@ import isEmpty from 'lodash-es/isEmpty'
 export const icmaaGoogleTagManagerModule: Module<GoogleTagManagerState, any> = {
   namespaced: true,
   state: {
-    key: null,
     enabled: false,
-    queuedRouteEvent: false,
     lastOrderId: ''
   },
   mutations: {
-    'ICMAA_GTM/ENABLE': (state, enabled: boolean) => {
-      state.enabled = enabled
-    },
-    'ICMAA_GTM/UPDATE_EVENT': (state, event: RouteEvent | boolean) => {
-      state.queuedRouteEvent = Object.assign({}, state.queuedRouteEvent, event)
-    },
-    'ICMAA_GTM/RESET_EVENT': (state) => {
-      state.queuedRouteEvent = false
+    'ICMAA_GTM/ENABLE': (state) => {
+      state.enabled = true
     },
     'ICMAA_GTM/SET_LAST_ORDER_ID': (state, orderId) => {
       state.lastOrderId = orderId
     }
   },
   actions: {
-    enable ({ commit }, enable: boolean = true) {
-      commit('ICMAA_GTM/ENABLE', enable)
-    },
-    updateEvent ({ commit }, event: RouteEvent) {
-      commit('ICMAA_GTM/UPDATE_EVENT', event)
-    },
-    resetEvent ({ commit }) {
-      commit('ICMAA_GTM/RESET_EVENT')
+    enable ({ commit }) {
+      commit('ICMAA_GTM/ENABLE')
     },
     setLastOrderId ({ commit }, orderId: string) {
       commit('ICMAA_GTM/SET_LAST_ORDER_ID', orderId)
@@ -47,7 +33,6 @@ export const icmaaGoogleTagManagerModule: Module<GoogleTagManagerState, any> = {
   },
   getters: {
     enabled: (state): boolean => state.enabled,
-    getQueuedRouteEvent: (state): RouteEvent | boolean => state.queuedRouteEvent,
     getProductDTO: (state, getters, rootState, rootGetters) => (item, attributeMap?: string[] | AttributeMapItem[]): Product | boolean => {
       let product: any = {}
 

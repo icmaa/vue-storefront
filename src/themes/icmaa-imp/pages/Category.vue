@@ -136,8 +136,6 @@ const composeInitialPageState = async (store, route, forceLoad = false, pageSize
     if (isServer) {
       await breadCrumbsLoader
     }
-
-    catalogHooksExecutors.categoryPageVisited(currentCategory)
   } catch (e) {
     Logger.error('Problem with setting Category initial data!', 'category', e)()
   }
@@ -204,6 +202,9 @@ export default {
   async asyncData ({ store, route, context }) { // this is for SSR purposes to prefetch data - and it's always executed before parent component methods
     const { pageSize } = this.data()
     await composeInitialPageState(store, route, false, route.params.pagesize || pageSize)
+  },
+  mounted () {
+    catalogHooksExecutors.categoryPageVisited(this.getCurrentCategory)
   },
   async beforeRouteEnter (to, from, next) {
     if (isServer) next() // SSR no need to invoke SW caching here

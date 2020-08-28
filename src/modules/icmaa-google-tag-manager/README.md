@@ -9,7 +9,15 @@ This can be disabled by the config value: `forceCookieAccept`.
 
 Follow these steps to add a custom page-view type:
 
-1. Add a new event-hook to `hooks/index.ts` like :
+1. Add the custom page-type as parameter to the routers `meta.gtm` field:
+   ```js
+   { name: 'service-site', path: '/service-site', component: ServiceSFC, meta: { gtm: 'service-site' } }
+   ```
+2. Add the page-type to the disallow list in the modules `index.ts`:
+   ```js
+   export const disallowList = [ 'product', 'category', 'service-site' ]
+   ```
+4. Add a new event-hook to `hooks/index.ts` like :
    ```js
    const {
      hook: serviceSiteVisitedHook,
@@ -30,7 +38,7 @@ Follow these steps to add a custom page-view type:
    
    ...
    ```
-2. Next, call the executor of this hook inside the `asyncData` method of your router component:
+5. Next, call the executor of this hook inside the `asyncData` method of your router component:
    ```js
    import { IcmaaGoogleTagManagerExecutors } from 'icmaa-google-tag-manager/hooks'
 
@@ -38,7 +46,7 @@ Follow these steps to add a custom page-view type:
      IcmaaGoogleTagManagerExecutors.serviceSiteVisited(data)
    }
    ```
-3. Add a new `switch-case` clause to the `gtmEventPayload` getter of the Vuex store:
+6. Add a new `switch-case` clause to the `gtmEventPayload` getter of the Vuex store:
    ```js
    case 'service':
      DTO = {
@@ -50,18 +58,24 @@ Follow these steps to add a custom page-view type:
 
      break
    ```
-4. Now you need to add a hook into the `registerCustomPageEvents` method of `hooks/afterRegistration.ts`
+7. Now you need to add a hook into the `registerCustomPageEvents` method of `hooks/afterRegistration.ts`
    ```js
    import { IcmaaGoogleTagManager } from 'icmaa-google-tag-manager/hooks'
 
    export const registerCustomPageEvents = (config, store: Store<any>) => {
      //...
      IcmaaGoogleTagManager.serviceSiteVisited(() => {
-       const eventPayload = store.getters['icmaaGoogleTagManager/gtmEventPayload']('service')
-        store.dispatch('icmaaGoogleTagManager/updateEvent', eventPayload)
+       const event = store.getters['icmaaGoogleTagManager/gtmEventPayload']('service')
+       IcmaaGoogleTagManagerExecutors.onGtmPageView({ type: event.event, event })
      })
    }
    ```
+
+## Core changes
+
+We try to overwrite everything needed by extending the Vuex store. But some methods are not highjackable like that – this is a list of core changes.
+
+* We need specific page routes to contain meta fields to recognize the page-type by this field. We need this to deliver different data-layer objects for the GTM page-view event. Thats why we added these fields to the URL objects of `core/modules/url/helpers/transformUrl.ts`.
 
 ## Config
 

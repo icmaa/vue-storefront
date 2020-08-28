@@ -31,12 +31,10 @@ const getLocalizedDispatcherRouteName = (name) => {
  */
 const forCustomUrls = async ({ dispatch }, { urlPath }: UrlMapperOptions) => {
   if (config.hasOwnProperty('icmaa_url')) {
-    const urlFromConfig = config.icmaa_url.find((item) => item.request_path === urlPath)
+    let urlFromConfig = config.icmaa_url.find((item) => item.request_path === urlPath)
     if (urlFromConfig) {
-      return {
-        name: urlFromConfig.name,
-        params: urlFromConfig.params
-      }
+      delete urlFromConfig.request_path
+      return urlFromConfig
     }
   }
 

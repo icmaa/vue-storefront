@@ -2,40 +2,55 @@ import Vue from 'vue'
 import VueGtm from 'vue-gtm'
 
 import EventBus from '@vue-storefront/core/compatibility/plugins/event-bus'
-import { once } from '@vue-storefront/core/helpers'
 import { StorefrontModule } from '@vue-storefront/core/lib/modules'
-import { Logger } from '@vue-storefront/core/lib/logger'
+import { coreHooks } from '@vue-storefront/core/hooks'
 
 import { icmaaGoogleTagManagerModule } from './store'
-import { afterRegistration, registerCustomPageEvents, isEnabled } from './hooks/afterRegistration'
-import triggerPageView from './helpers/pageView'
+import { IcmaaGoogleTagManagerExecutors } from './hooks'
+import { isEnabled, isAccepted } from './helpers'
+import { afterRegistration } from './hooks/afterRegistration'
 
-const initGTM = async ({ store, router, appConfig }) => {
-  const { id, debug } = appConfig.googleTagManager
-  const enabled = await isEnabled(appConfig.googleTagManager)
-  if (enabled) {
-    once('__VUE_EXTEND_GTM__', () => {
-      Vue.use(VueGtm, { enabled, id, debug })
+import { isServer } from '@vue-storefront/core/helpers'
 
-      store.dispatch('icmaaGoogleTagManager/enable', true)
-      router.afterEach((to: any) => triggerPageView(to, store))
-    })
-  } else {
-    Logger.log('Google Tag Manager extensions is not enabled', 'icmaa-gtm')()
-  }
-}
+export const disallowList = [ 'product', 'category' ]
 
-export const IcmaaGoogleTagManagerModule: StorefrontModule = async ({ store, router, appConfig }) => {
+export const IcmaaGoogleTagManagerModule: StorefrontModule = function ({ store, router, appConfig }) {
   store.registerModule('icmaaGoogleTagManager', icmaaGoogleTagManagerModule)
-
-  await initGTM({ appConfig, router, store })
-  EventBus.$on('cookiesAccepted', async (enabled: boolean) => {
-    if (enabled) {
-      Logger.log('Google Tag Manager extensions has been enabled', 'icmaa-gtm')()
-      await initGTM({ appConfig, router, store })
-    }
+  router.afterEach((to, from) => {
+    IcmaaGoogleTagManagerExecutors.afterEach({ to, from })
   })
 
-  registerCustomPageEvents(appConfig, store)
-  afterRegistration(appConfig, store)
+  coreHooks.afterAppInit(() => {
+    const config = appConfig.googleTagManager
+    const { id, debug, forceCookieAccept } = config
+    const enabled = isEnabled(id)
+
+    if (!enabled) {
+      return
+    }
+
+    const initGTM = () => {
+      store.dispatch('icmaaGoogleTagManager/enable')
+      if (!isServer) {
+        Vue.use(VueGtm, { enabled, id, debug })
+        afterRegistration()
+      }
+    }
+
+    if (forceCookieAccept) {
+      isAccepted(forceCookieAccept).then(accepted => {
+        if (accepted) {
+          initGTM()
+        } else {
+          EventBus.$on('cookiesAccepted', async (enabled: boolean) => {
+            if (enabled) {
+              initGTM()
+            }
+          })
+        }
+      })
+    } else {
+      initGTM()
+    }
+  })
 }
