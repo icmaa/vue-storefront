@@ -12,14 +12,10 @@ import isEmpty from 'lodash-es/isEmpty'
 export const icmaaGoogleTagManagerModule: Module<GoogleTagManagerState, any> = {
   namespaced: true,
   state: {
-    initiated: false,
     enabled: false,
     lastOrderId: ''
   },
   mutations: {
-    'ICMAA_GTM/INIT': (state) => {
-      state.initiated = true
-    },
     'ICMAA_GTM/ENABLE': (state) => {
       state.enabled = true
     },
@@ -28,9 +24,6 @@ export const icmaaGoogleTagManagerModule: Module<GoogleTagManagerState, any> = {
     }
   },
   actions: {
-    init ({ commit }) {
-      commit('ICMAA_GTM/INIT')
-    },
     enable ({ commit }) {
       commit('ICMAA_GTM/ENABLE')
     },
@@ -39,7 +32,6 @@ export const icmaaGoogleTagManagerModule: Module<GoogleTagManagerState, any> = {
     }
   },
   getters: {
-    initiated: (state): boolean => state.initiated,
     enabled: (state): boolean => state.enabled,
     getProductDTO: (state, getters, rootState, rootGetters) => (item, attributeMap?: string[] | AttributeMapItem[]): Product | boolean => {
       let product: any = {}
