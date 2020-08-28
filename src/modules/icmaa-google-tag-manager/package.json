@@ -1,7 +1,7 @@
 {
   "name": "icmaa-google-tag-manager",
   "version": "1.0.0",
-  "author": "dlandmann <d.landmann@impericon.com> and contributors",
+  "author": "cewald <c.ewald@impericon.com> and contributors",
   "license": "MIT",
   "private": true,
   "devDependencies": {
