@@ -132,7 +132,7 @@ export default {
   },
   methods: {
     async getAlias (searchString) {
-      const wordsRegexp = /(\w+)/giu
+      const wordsRegexp = /([^\s_\-."']+)/giu
       let wordResult = ''
       let replaces = []
 
