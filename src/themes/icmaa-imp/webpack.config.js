@@ -6,7 +6,6 @@ const path = require('path')
 const i18nHelpers = require('@vue-storefront/i18n/helpers')
 
 const SpritesmithPlugin = require('webpack-spritesmith')
-const ManifestPlugin = require('./build/ManifestPlugin')
 
 /**
  * You can extend default webpack build here.
@@ -30,19 +29,6 @@ module.exports = function (config, { isClient, isDev }) {
   }
 
   /**
-   * Create storeView based `manifest.json` files using `lodash.template`
-   */
-  if (isClient) {
-    config = merge(config, {
-      plugins: [
-        new ManifestPlugin({
-          storeCodes: vsfConfig.storeViews.mapStoreUrlsFor
-        })
-      ]
-    })
-  }
-
-  /**
    * Inject postcss plugin for Tailwind.css to original webpack config.
    * Change the postcssConfig of the postcss-loader and add our loader plugin.
    *
@@ -53,7 +39,7 @@ module.exports = function (config, { isClient, isDev }) {
     loader: 'postcss-loader',
     options: {
       ident: 'postcss',
-      plugins: (loader) => [
+      plugins: () => [
         require('tailwindcss')(path.join(__dirname, 'tailwind.js')),
         require('postcss-flexbugs-fixes'),
         /**
@@ -168,10 +154,26 @@ module.exports = function (config, { isClient, isDev }) {
     ]
   })
 
-  /**
-   * Add chunk groups for better caching
-   */
   if (isClient) {
+    /**
+     * Create storeView based `manifest.json` files using `lodash.template`
+     * (This is about PWA-/browser-manifests not webpack manifests)
+     */
+    const ManifestPlugin = require('./build/ManifestPlugin')
+    config = merge(config, {
+      plugins: [
+        new ManifestPlugin({
+          storeCodes: vsfConfig.storeViews.mapStoreUrlsFor
+        })
+      ]
+    })
+
+    /**
+     * Add custom chunk groups for better caching
+     *
+     * ! We need to use `enforce: true` because of:
+     * @see https://stackoverflow.com/a/61963152
+     */
     config = merge(config, {
       optimization: {
         splitChunks: {
@@ -185,20 +187,52 @@ module.exports = function (config, { isClient, isDev }) {
               test: /src\/modules\/icmaa-/,
               name: 'modules-icmaa',
               chunks: 'initial',
+              enforce: true,
               priority: 2
             }
           }
         }
       }
     })
-  }
 
-  /**
-   * As we include `winston` as ssr logging library and this is a universal app, we need to tell
-   * webpack that it should ignore this dependency for the client version to prevent an error while compilation.
-   * @see https://github.com/webpack-contrib/css-loader/issues/447
-   */
-  if (isClient) {
+    /**
+     * Add a chunk for each language-package to decrease `app.js`.
+     */
+    let localesCacheGroups = {}
+    i18nHelpers.currentBuildLocales().forEach(code => {
+      const name = 'i18n-' + code
+      localesCacheGroups[name] = {
+        name,
+        test: new RegExp(`core/i18n/resource/i18n/${code}\\.json`),
+        chunks: 'initial',
+        enforce: true,
+        priority: 3
+      }
+    })
+
+    config = merge(config, {
+      /**
+       * [WIP] This was just an idea to improve the bundle-size by not needing to import the whole translations into
+       * the package by copying all translation JSON files to build folder and then load them via `fetch` instead of `import`.
+       * @see https://github.com/DivanteLtd/vue-storefront/issues/4813
+       */
+      // plugins: [
+      //   new CopyPlugin([
+      //     { from: 'core/i18n/resource/i18n/*.json' }
+      //   ])
+      // ],
+      optimization: {
+        splitChunks: {
+          cacheGroups: localesCacheGroups
+        }
+      }
+    })
+
+    /**
+     * As we include `winston` as ssr logging library and this is a universal app, we need to tell
+     * webpack that it should ignore this dependency for the client version to prevent an error while compilation.
+     * @see https://github.com/webpack-contrib/css-loader/issues/447
+     */
     config = merge(config, {
       node: {
         fs: 'empty'
