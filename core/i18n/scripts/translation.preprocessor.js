@@ -48,7 +48,7 @@ module.exports = function (csvDirectories, config = null) {
     }
 
     for (let key in messages[storeCode]) {
-      if (key.startsWith('PT: ')) {
+      if (key.startsWith('PT: ') || key.startsWith('TS: ')) {
         if (key.substr(4) === messages[storeCode][key]) {
           delete messages[storeCode][key]
         }
