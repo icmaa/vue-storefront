@@ -14,7 +14,7 @@ const i18n = new VueI18n({
   locale: defaultLocale, // set locale
   fallbackLocale: defaultLocale,
   messages: config.i18n.bundleAllStoreviewLanguages ? require('./resource/i18n/multistoreLanguages.json') : {
-    [defaultLocale]: require(`./resource/i18n/${defaultLocale}.json`)
+    [defaultLocale]: require(`./resource/i18n/default.json`)
   },
   silentTranslationWarn: true,
   silentFallbackWarn: true
@@ -55,8 +55,8 @@ export async function loadLanguageAsync (lang: string): Promise<string> {
           i18n.setLocaleMessage(lang, msgs.default)
           loadedLanguages.push(lang)
           return setI18nLanguage(lang)
-        } catch (e) { // eslint-disable-line handle-callback-err
-          Logger.debug('Unable to load translation')()
+        } catch (e) {
+          Logger.debug('Unable to load translation', e.message)()
           return ''
         }
       }
