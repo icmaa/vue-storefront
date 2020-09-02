@@ -173,7 +173,13 @@ module.exports = function (config, { isClient, isDev }) {
      *
      * ! We need to use `enforce: true` because of:
      * @see https://stackoverflow.com/a/61963152
+     *
+     * We also made some optimization to not load all languages into `app.js`. By default there is an dynamic-expression-require
+     * inside `core/i18n/index.ts` which causes that all translations are loaded initially and bundled into the `app.js`. To
+     * decrase the bundle-size, we changed this line into a static import (and use `en-US` as default) and chunk the default language.
+     * @see https://github.com/DivanteLtd/vue-storefront/issues/4813
      */
+    const defaultLocale = vsfConfig.i18n.defaultLocale || 'en-US'
     config = merge(config, {
       optimization: {
         splitChunks: {
@@ -184,11 +190,18 @@ module.exports = function (config, { isClient, isDev }) {
           // maxSize: 250000,
           cacheGroups: {
             modules_icmaa: {
-              test: /src\/modules\/icmaa-/,
+              test: new RegExp(`/src/modules/icmaa-/`),
               name: 'modules-icmaa',
               chunks: 'initial',
               enforce: true,
               priority: 2
+            },
+            default_lang: {
+              test: new RegExp(`core/i18n/resource/i18n/default.json`),
+              name: `lang-${defaultLocale}-json`,
+              chunks: 'initial',
+              enforce: true,
+              priority: 3
             }
           }
         }
@@ -196,37 +209,17 @@ module.exports = function (config, { isClient, isDev }) {
     })
 
     /**
-     * Add a chunk for each language-package to decrease `app.js`.
+     * [WIP] This was just an idea to improve the bundle-size by not needing to import the whole translations into
+     * the package by copying all translation JSON files to build folder and then load them via `fetch` instead of `import`.
+     * @see https://github.com/DivanteLtd/vue-storefront/issues/4813
      */
-    let localesCacheGroups = {}
-    i18nHelpers.currentBuildLocales().forEach(code => {
-      const name = 'i18n-' + code
-      localesCacheGroups[name] = {
-        name,
-        test: new RegExp(`core/i18n/resource/i18n/${code}\\.json`),
-        chunks: 'initial',
-        enforce: true,
-        priority: 3
-      }
-    })
-
-    config = merge(config, {
-      /**
-       * [WIP] This was just an idea to improve the bundle-size by not needing to import the whole translations into
-       * the package by copying all translation JSON files to build folder and then load them via `fetch` instead of `import`.
-       * @see https://github.com/DivanteLtd/vue-storefront/issues/4813
-       */
-      // plugins: [
-      //   new CopyPlugin([
-      //     { from: 'core/i18n/resource/i18n/*.json' }
-      //   ])
-      // ],
-      optimization: {
-        splitChunks: {
-          cacheGroups: localesCacheGroups
-        }
-      }
-    })
+    // config = merge(config, {
+    //   plugins: [
+    //     new CopyPlugin([
+    //       { from: 'core/i18n/resource/i18n/*.json' }
+    //     ])
+    //   ],
+    // })
 
     /**
      * As we include `winston` as ssr logging library and this is a universal app, we need to tell
