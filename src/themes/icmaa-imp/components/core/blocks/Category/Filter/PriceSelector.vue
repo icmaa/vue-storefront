@@ -9,7 +9,7 @@ import filterMixin from 'theme/mixins/filterMixin'
 
 import NoSSR from 'vue-no-ssr'
 import 'vue-slider-component/theme/default.css'
-const VueSlider = () => import('vue-slider-component')
+const VueSlider = () => import(/* webpackChunkName: "vue-slider" */ 'vue-slider-component')
 
 export default {
   name: 'PriceSelector',
