@@ -1,5 +1,4 @@
 import config from 'config'
-import createLogger from 'icmaa-monitoring/lib/winston/logger'
 import { isServer } from '@vue-storefront/core/helpers'
 import { datadogLogs } from '@datadog/browser-logs'
 
@@ -37,12 +36,16 @@ export default ({ type, message, tag, context }) => {
   const application_name = 'vue-storefront'
 
   if (isServer) {
-    const logger = createLogger()
-    logger.log(
-      type || 'info',
-      tag ? `[${tag}] ${convertToString(message)}` : convertToString(message),
-      Object.assign({ environment, mandant, application_name, vsf: true }, convertToObject(context))
-    )
+    import(/* webpackChunkName: "icmaa-monitoring-winston-logger" */ 'icmaa-monitoring/lib/winston/logger')
+      .then(({ default: createLogger }) => {
+        console.log(createLogger)
+        const logger = createLogger()
+        logger.log(
+          type || 'info',
+          tag ? `[${tag}] ${convertToString(message)}` : convertToString(message),
+          Object.assign({ environment, mandant, application_name, vsf: true }, convertToObject(context))
+        )
+      })
   } else {
     datadogLogs.logger.log(
       convertToString(message),

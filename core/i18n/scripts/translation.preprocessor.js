@@ -48,7 +48,7 @@ module.exports = function (csvDirectories, config = null) {
     }
 
     for (let key in messages[storeCode]) {
-      if (key.startsWith('PT: ')) {
+      if (key.startsWith('PT: ') || key.startsWith('TS: ')) {
         if (key.substr(4) === messages[storeCode][key]) {
           delete messages[storeCode][key]
         }
@@ -63,8 +63,8 @@ module.exports = function (csvDirectories, config = null) {
   }
 
   // create fallback
-  console.debug(`Writing JSON file fallback: ${fallbackLocale}.json`)
-  fs.writeFileSync(path.join(__dirname, '../resource/i18n', `${fallbackLocale}.json`), JSON.stringify(messages[fallbackLocale] || {}))
+  console.debug(`Writing fallback JSON file (${fallbackLocale}): default.json`)
+  fs.writeFileSync(path.join(__dirname, '../resource/i18n', `default.json`), JSON.stringify(messages[fallbackLocale] || {}))
 
   // bundle all messages in one file
   if (config && config.i18n.bundleAllStoreviewLanguages) {
