@@ -63,7 +63,7 @@ module.exports = function (csvDirectories, config = null) {
   }
 
   // create fallback
-  console.debug(`Writing JSON file fallback (${fallbackLocale}): default.json`)
+  console.debug(`Writing fallback JSON file (${fallbackLocale}): default.json`)
   fs.writeFileSync(path.join(__dirname, '../resource/i18n', `default.json`), JSON.stringify(messages[fallbackLocale] || {}))
 
   // bundle all messages in one file
@@ -78,6 +78,7 @@ module.exports = function (csvDirectories, config = null) {
     fs.writeFileSync(path.join(__dirname, '../resource/i18n', `multistoreLanguages.json`), JSON.stringify(bundledLanguages))
   } else {
     currentLocales.forEach((language) => {
+      if (language === fallbackLocale) return // it's already loaded
       const filePath = path.join(__dirname, '../resource/i18n', `${language}.json`)
       console.debug(`Writing JSON file: ${language}.json`)
       fs.writeFileSync(filePath, JSON.stringify(messages[language]))
