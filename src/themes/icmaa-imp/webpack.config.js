@@ -179,7 +179,6 @@ module.exports = function (config, { isClient, isDev }) {
      * decrase the bundle-size, we changed this line into a static import (and use `en-US` as default) and chunk the default language.
      * @see https://github.com/DivanteLtd/vue-storefront/issues/4813
      */
-    const defaultLocale = vsfConfig.i18n.defaultLocale || 'en-US'
     config = merge(config, {
       optimization: {
         splitChunks: {
@@ -189,16 +188,18 @@ module.exports = function (config, { isClient, isDev }) {
            */
           // maxSize: 250000,
           cacheGroups: {
-            modules_icmaa: {
-              test: new RegExp(`/src/modules/icmaa-/`),
+            'commons': {
+              enforce: true
+            },
+            'modules-icmaa': {
+              test: new RegExp(`src/modules/icmaa-`),
               name: 'modules-icmaa',
               chunks: 'initial',
               enforce: true,
               priority: 2
             },
-            default_lang: {
-              test: new RegExp(`core/i18n/resource/i18n/default.json`),
-              name: `lang-${defaultLocale}-json`,
+            'lang-default-json': {
+              test: new RegExp(`core/i18n/resource/i18n/default\\.json`),
               chunks: 'initial',
               enforce: true,
               priority: 3
