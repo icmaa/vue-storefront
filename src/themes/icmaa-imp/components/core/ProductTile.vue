@@ -86,8 +86,7 @@ export default {
   },
   computed: {
     thumbnail () {
-      let thumbnail = this.product.image
-      return thumbnail ? this.getThumbnail(thumbnail, config.products.thumbnails.width, config.products.thumbnails.height) : undefined
+      return this.product.image
     },
     thumbnailObj () {
       return {
