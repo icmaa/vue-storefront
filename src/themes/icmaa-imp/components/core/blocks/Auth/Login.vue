@@ -115,7 +115,7 @@ export default {
           this.close()
         }
       }).catch(err => {
-        Logger.error('Error whole login:', 'user', err)()
+        Logger.error('Error while login:', 'user', err)()
         this.onFailure({ result: 'Unexpected authorization error. Check your Network connection.' })
         this.$bus.$emit('notification-progress-stop')
       })

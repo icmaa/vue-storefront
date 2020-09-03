@@ -27,7 +27,7 @@ const actions: ActionTree<ProductState, RootState> = {
         gallery = uniqBy(configurableChildrenImages(product).concat(getMediaGallery(product)), 'src')
       }
     } else {
-      gallery = uniqBy(configurableChildrenImages(product).concat(getMediaGallery(product)), 'src')
+      gallery = uniqBy(getMediaGallery(product), 'src')
     }
 
     commit(
