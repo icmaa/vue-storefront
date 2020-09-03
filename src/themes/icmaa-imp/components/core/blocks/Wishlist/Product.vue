@@ -47,6 +47,9 @@ export default {
     productLink () {
       return formatProductLink(this.product, currentStoreView().storeCode)
     },
+    thumbnail () {
+      return this.product.image
+    },
     image () {
       return {
         loading: this.thumbnail,

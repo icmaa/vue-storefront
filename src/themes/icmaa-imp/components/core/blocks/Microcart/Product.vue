@@ -61,7 +61,7 @@
 import config from 'config'
 import { mapGetters } from 'vuex'
 import { currentStoreView } from '@vue-storefront/core/lib/multistore'
-import { getThumbnailForProduct } from '@vue-storefront/core/modules/cart/helpers'
+import { productThumbnailPath } from '@vue-storefront/core/helpers'
 import { formatProductLink } from 'icmaa-url/helpers'
 import Product from '@vue-storefront/core/compatibility/components/blocks/Microcart/Product'
 import ProductNameMixin from 'icmaa-catalog/mixins/ProductNameMixin'
@@ -105,7 +105,7 @@ export default {
       }
     },
     thumbnail () {
-      return getThumbnailForProduct(this.product)
+      return productThumbnailPath(this.product)
     },
     productLink () {
       return formatProductLink(this.product, currentStoreView().storeCode)

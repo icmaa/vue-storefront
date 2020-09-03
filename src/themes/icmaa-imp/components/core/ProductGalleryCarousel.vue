@@ -14,8 +14,8 @@
     ref="carousel"
     @pageChange="pageChange"
   >
-    <slide v-for="(images, index) in galleryFiltered" :key="index" ref="thumbs">
-      <product-image class="t-cursor-pointer" :image="images" type="gallery" :alt="productName | htmlDecode" @load="imageLoaded" />
+    <slide v-for="(image, index) in galleryFiltered" :key="index" ref="thumbs">
+      <product-image class="t-cursor-pointer" :image="image" type="gallery" :alt="productName | htmlDecode" @load="imageLoaded" />
     </slide>
   </carousel>
 </template>

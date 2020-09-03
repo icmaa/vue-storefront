@@ -2,13 +2,13 @@ import { ActionTree } from 'vuex'
 import RootState from '@vue-storefront/core/types/RootState'
 import ProductState from '@vue-storefront/core/modules/catalog/types/ProductState'
 import * as types from '@vue-storefront/core/modules/catalog/store/product/mutation-types'
+import { configurableChildrenImages } from '@vue-storefront/core/modules/catalog/helpers'
 import config, { icmaa } from 'config'
-import { Logger } from '@vue-storefront/core/lib/logger'
+
+import { getMediaGallery } from 'icmaa-catalog/helpers'
 
 import cloneDeep from 'lodash-es/cloneDeep'
 import uniqBy from 'lodash-es/uniqBy'
-
-import { getMediaGallery, configurableChildrenImages } from '@vue-storefront/core/modules/catalog/helpers'
 
 const actions: ActionTree<ProductState, RootState> = {
   /**
