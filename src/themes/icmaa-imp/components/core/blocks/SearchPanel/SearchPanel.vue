@@ -106,8 +106,6 @@ export default {
 
         const searchRegex = new RegExp(`(${searchStrings.join('|')})`, 'i')
 
-        console.error('CHECK', category)
-
         return searchStrings.length > 0 && searchRegex.test(category.name)
       })
     },
