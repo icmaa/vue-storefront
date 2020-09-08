@@ -26,13 +26,16 @@ export function afterRegistration () {
   const storeView = currentStoreView()
   const currencyCode = storeView.i18n.currencyCode
 
-  const getProduct = item => rootStore.getters['icmaaGoogleTagManager/getProductDTO'](item)
+  const getProduct = item => {
+    const { qty: quantity } = item
+    return Object.assign({ quantity }, rootStore.getters['icmaaGoogleTagManager/getProductDTO'](item))
+  }
 
   rootStore.subscribe(({ type, payload }, state) => {
     // Adding a Product to a Shopping Cart
     if (type === 'cart/cart/ADD') {
       GTM.trackEvent({
-        event: 'addToCart',
+        event: 'icmaa-add-to-cart',
         ecommerce: {
           currencyCode: currencyCode,
           add: {
@@ -45,7 +48,7 @@ export function afterRegistration () {
     // Removing a Product from a Shopping Cart
     if (type === 'cart/cart/DEL') {
       GTM.trackEvent({
-        event: 'removeFromCart',
+        event: 'icmaa-remove-from-cart',
         ecommerce: {
           remove: {
             products: [getProduct(payload.product)]
