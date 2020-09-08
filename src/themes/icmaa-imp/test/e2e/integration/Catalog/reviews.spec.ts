@@ -3,9 +3,10 @@ describe('Reviews', () => {
     cy.visitAsRecurringUser('')
       .visitProductDetailPage()
 
+    cy.wait(1000)
     cy.getByTestId('Reviews')
-      .find('button')
       .scrollIntoView({ offset: { top: -200, left: 0 }, duration: 1000 })
+      .find('button')
       .click({ force: true })
 
     cy.get('#reviews-form').should('be.visible')
@@ -26,6 +27,8 @@ describe('Reviews', () => {
   it('See review claim and click it away', () => {
     cy.visitAsRecurringUser('')
       .visitProductDetailPage()
+
+    cy.wait(1000)
 
     cy.getByTestId('ReviewsClaim').should('be.visible')
     cy.getByTestId('ReviewsClaimAccept').click()

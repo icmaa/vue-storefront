@@ -8,12 +8,12 @@ const providers: { [provider: string]: () => Promise<ImakeHook> } = {
   scalecommerce: () => import(/* webpackChunkName: "vsf-icmaa-cdn-scalecommerce" */ './provider/ScaleCommerce')
 }
 
-export const IcmaaCdnModule: StorefrontModule = function ({ store, appConfig, router }) {
+export const IcmaaCdnModule: StorefrontModule = ({ appConfig }) => {
   const cdn = appConfig.icmaa_cdn && appConfig.icmaa_cdn.provider && appConfig.icmaa_cdn.provider !== '' ? appConfig.icmaa_cdn.provider : false
   if (cdn && appConfig.images.useExactUrlsNoProxy && providers.hasOwnProperty(cdn)) {
     const provider = providers[cdn]()
-    provider.then(c => {
-      coreHooks.afterProductThumbnailPathGenerate(c.default)
+    provider.then(({ default: hook }) => {
+      coreHooks.afterProductThumbnailPathGenerate(hook.afterProductThumbnailPathGenerate)
     }).catch(e => {
       Logger.error('Could not load provider:', 'icmaa-cdn', cdn)()
     })

@@ -91,8 +91,8 @@ export default {
       const importantPhrases = icmaa_catalog.entities.product.importantCommonphrases || []
 
       return this.product.commonphrases
-        .filter(id => importantPhrases.includes(id))
-        .map(id => this.getOptionLabel({ attributeKey: 'commonphrases', optionId: this.product.commonphrases }))
+        .filter(optionId => importantPhrases.includes(optionId))
+        .map(optionId => this.getOptionLabel({ attributeKey: 'commonphrases', optionId }))
     }
   },
   methods: {

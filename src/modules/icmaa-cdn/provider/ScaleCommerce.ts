@@ -16,4 +16,4 @@ const afterProductThumbnailPathGenerate = ({ path, sizeX, sizeY }: ImageHookProp
   return { path }
 }
 
-export default afterProductThumbnailPathGenerate
+export default { afterProductThumbnailPathGenerate }

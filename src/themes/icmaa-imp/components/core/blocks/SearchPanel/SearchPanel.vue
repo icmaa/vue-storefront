@@ -231,7 +231,12 @@ export default {
         const { categories_found } = aggr
         const categories = categories_found.categories.buckets
         categories.forEach(bucket => {
-          this.categoryAggs.push(bucket.hits.hits.hits[0]._source.category)
+          // In ES7 the aggregations result isn't wrapped in a extra category object.
+          let cat = bucket.hits.hits.hits[0]._source
+          if (cat.category) {
+            cat = cat.category
+          }
+          this.categoryAggs.push(cat)
         })
       }
     },

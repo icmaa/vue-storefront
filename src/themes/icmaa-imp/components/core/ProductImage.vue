@@ -6,15 +6,11 @@
 <script>
 import config from 'config'
 import pick from 'lodash-es/pick'
-import { onlineHelper } from '@vue-storefront/core/helpers'
+import { onlineHelper, getThumbnailPath } from '@vue-storefront/core/helpers'
 
 export default {
   name: 'ProductImage',
   props: {
-    calcRatio: {
-      type: Boolean,
-      default: true
-    },
     image: {
       type: Object,
       default: () => ({
@@ -57,9 +53,8 @@ export default {
   },
   methods: {
     getImageWithSize (width = 0, height = 0) {
-      const regex = /(\/img\/)(\d+\/\d+)(\/resize\/)/gm
       const src = this.image.src || ''
-      return src.replace(regex, `$1${width}/${height}$3`)
+      return getThumbnailPath(src, width, height)
     },
     onLoaded ({ el, src }) {
       if (this.loading === true) {
