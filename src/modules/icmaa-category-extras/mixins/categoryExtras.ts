@@ -1,4 +1,5 @@
 import { isServer } from '@vue-storefront/core/helpers'
+import isEmpty from 'lodash-es/isEmpty'
 
 export default {
   async asyncData ({ store, route }) {
@@ -24,8 +25,10 @@ export default {
     this.fetchAsyncData()
   },
   watch: {
-    getCurrentCategory: function () {
-      this.fetchAsyncData()
+    getCurrentCategory: function (category, lastCategory) {
+      if (category && !isEmpty(category) && category.url_key !== lastCategory.url_key) {
+        this.fetchAsyncData()
+      }
     }
   },
   methods: {
@@ -35,7 +38,7 @@ export default {
     },
     async fetchAsyncData () {
       const category = this.$store.getters['category-next/getCurrentCategory']
-      if (category) {
+      if (category && !isEmpty(category)) {
         await Promise.all([
           this.$store.dispatch('icmaaSpotify/fetchRelatedArtists', category),
           this.fetchContentHeader(category.url_key)

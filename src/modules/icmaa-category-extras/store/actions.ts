@@ -56,6 +56,10 @@ const actions: ActionTree<CategoryExtrasState, RootState> = {
     context.commit(types.ICMAA_CATEGORY_EXTRAS_CHILDCATEGORIES_ADD, childrenArray)
   },
   loadContentHeader: async ({ commit, getters }, identifier: string): Promise<CategoryExtrasContentHeader|any[]> => {
+    if (!identifier) {
+      return
+    }
+
     const existingContentHeader = getters.getContentHeaderByUrlKey(identifier)
     if (existingContentHeader) {
       return existingContentHeader
