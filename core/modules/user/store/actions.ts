@@ -60,7 +60,7 @@ const actions: ActionTree<UserState, RootState> = {
     const resp = await UserService.login(username, password)
     userHooksExecutors.afterUserAuthorize(resp)
 
-    if (resp && resp.code === 200) {
+    if (resp.code === 200) {
       try {
         await dispatch('resetUserInvalidateLock', {}, { root: true })
         commit(types.USER_TOKEN_CHANGED, { newToken: resp.result, meta: resp.meta }) // TODO: handle the "Refresh-token" header
@@ -69,9 +69,6 @@ const actions: ActionTree<UserState, RootState> = {
         await dispatch('clearCurrentUser')
         throw new Error(err)
       }
-    } else {
-      Logger.error('Login response error:', 'user', resp)()
-      throw new Error('Server response is invalid')
     }
 
     return resp
