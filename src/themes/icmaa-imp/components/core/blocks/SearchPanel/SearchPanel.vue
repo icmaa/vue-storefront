@@ -95,14 +95,7 @@ export default {
       return this.$store.state.search
     },
     filteredProducts () {
-      const productList = this.products || []
-      if (this.selectedCategoryIds.length) {
-        return productList.filter(product => product.category_ids.some(categoryId => {
-          const catId = parseInt(categoryId)
-          return this.selectedCategoryIds.includes(catId)
-        }))
-      }
-      return productList
+      return this.products || []
     },
     categories () {
       const splitChars = [' ', '-', ',']
@@ -134,8 +127,8 @@ export default {
     }
   },
   watch: {
-    categoryAggs () {
-      this.selectedCategoryIds = []
+    selectedCategoryIds () {
+      this.search()
     }
   },
   methods: {
@@ -228,6 +221,12 @@ export default {
         .applyFilter({ key: 'stock', value: '' })
         .applyFilter({ key: 'visibility', value: { 'in': [3, 4] } })
         .applyFilter({ key: 'status', value: { 'in': [0, 1] } })
+
+      if (this.selectedCategoryIds.length > 0) {
+        this.selectedCategoryIds.forEach(cid => {
+          searchQuery.applyFilter({ key: 'category_ids', value: { 'in': [cid] } })
+        })
+      }
 
       return searchQuery
     },
