@@ -1,12 +1,14 @@
 <template>
   <sidebar :close-on-click="false" :use-expander-in-title="false" ref="searchSidebar" data-test-id="SearchPanel">
     <template v-slot:top>
-      <material-icon icon="keyboard_arrow_left" class="t-mx-2 t-cursor-pointer" @click.native="closeSidebar" />
-      <label for="search" class="t-flex">
+      <div class="t-flex t-self-stretch t-items-center t-px-2 t-cursor-pointer" data-test-id="closeButton" @click="closeSidebar">
+        <material-icon icon="keyboard_arrow_left" />
+      </div>
+      <label for="search" class="t-flex t-self-stretch t-items-center">
         <span class="t-sr-only">{{ $t('Search') }}</span>
-        <material-icon icon="search" size="sm" class="t-text-base-light t-ml-2 t-mr-1" />
+        <material-icon icon="search" size="sm" class="t-text-base-light t-pl-2 t-pr-1" />
       </label>
-      <input type="text" v-model="searchString" @input="search" @blur="$v.searchString.$touch()" :placeholder="$t('Type what you are looking for...')" autofocus="true" data-test-id="SearchInput" ref="searchString" class="t-flex-expand t-p-0 t-text-lg t-text-base-tone placeholder:t-text-base-lighter">
+      <input type="text" v-model="searchString" @input="search" @blur="$v.searchString.$touch()" id="search" :placeholder="$t('Type what you are looking for...')" autofocus="true" data-test-id="SearchInput" ref="searchString" class="t-self-stretch t-flex-expand t-p-0 t-text-lg t-text-base-tone placeholder:t-text-base-lighter">
     </template>
     <template v-slot:top-right>
       <top-button icon="close" text="Close" @click.native="emptySearchInput" v-show="searchString.length > 0" />
