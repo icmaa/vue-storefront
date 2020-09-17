@@ -4,8 +4,8 @@ import { StorageManager } from '@vue-storefront/core/lib/storage-manager'
 import { FormsStore, formsStateKey, formsStorageKey } from './store'
 
 export const KEY = formsStorageKey
-export const cacheStorage = StorageManager.init(formsStorageKey, undefined, 128)
 
 export const IcmaaFormsModule: StorefrontModule = function ({ store }) {
+  StorageManager.init(formsStorageKey, undefined, 128)
   store.registerModule(formsStateKey, FormsStore)
 }
