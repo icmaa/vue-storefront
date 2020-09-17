@@ -12,9 +12,10 @@ import { isServer } from '@vue-storefront/core/helpers'
 import { Logger } from '@vue-storefront/core/lib/logger'
 
 export const cacheStorageKey = 'icmaa-config'
-export const cacheStorage = StorageManager.init(cacheStorageKey, false, config.server.elasticCacheQuota)
 
 export const IcmaaExtendedConfigModule: StorefrontModule = function ({ store }) {
+  StorageManager.init(cacheStorageKey, undefined, config.server.elasticCacheQuota)
+
   if (config.storeViews.multistore === true) {
     store.registerModule('icmaaConfig', ExtendedConfigStore)
     coreHooks.afterAppInit(() => {
