@@ -1,7 +1,7 @@
 <template>
-  <picture v-on="$listeners">
+  <picture>
     <source v-for="sImage in sourceImages" :key="sImage.srcset" :media="sImage.media" :srcset="sImage.srcset" :alt="alt + sImage.media">
-    <img :src="defaultImage" ref="image" class="product-image t-w-full t-w-auto" v-bind="$attrs">
+    <img :src="defaultImage.src" :srcset="`${defaultImage.src} 1x, ${defaultImage.srcAt2x} 2x`" class="product-image t-w-full t-w-auto" v-bind="$attrs" v-on="$listeners" ref="image">
   </picture>
 </template>
 
@@ -11,17 +11,19 @@ import { getThumbnailPath } from '@vue-storefront/core/helpers'
 
 export default {
   name: 'ProductImage',
+  inheritAttrs: false,
   props: {
     image: {
-      type: Object,
-      default: () => ({
-        src: '',
-        loading: ''
-      })
+      type: String,
+      required: true
     },
     alt: {
       type: String,
       default: ''
+    },
+    sizes: {
+      type: [Array, Boolean],
+      default: false
     },
     type: {
       type: String,
@@ -36,7 +38,7 @@ export default {
   },
   computed: {
     sizeMap () {
-      return [
+      return this.sizes || [
         // Order high-to-low is important
         { media: '(min-width: 1280px)', width: 300 },
         { media: '(min-width: 1024px)', width: 236 },
@@ -59,7 +61,10 @@ export default {
     },
     defaultImage () {
       const { width, height } = this.typeSize
-      return this.getImageWithSize(width, height)
+      return {
+        src: this.getImageWithSize(width, height),
+        srcAt2x: this.getImageWithSize(width * 2, height * 2)
+      }
     },
     typeSize () {
       return config.products[this.type]
@@ -70,11 +75,11 @@ export default {
   },
   methods: {
     getImageWithSize (width = 0, height = 0) {
-      const src = this.image.src || ''
+      const src = this.image || ''
       return getThumbnailPath(src, width, height)
     },
-    onLoaded ({ el, src }) {
-      console.error('LOADED', this.$refs.image.currentSrc)
+    onLoaded () {
+      console.error('LOADED:', this.$refs.image.currentSrc)
       if (this.loading === true) {
         this.loading = !this.loading
         this.$emit('load', this.image, !this.loading)

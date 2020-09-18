@@ -7,7 +7,7 @@
         <product-gallery
           class="product-gallery t-w-full t-border-base-lightest t-border-b t-bg-white lg:t-w-1/2 lg:t-border-b-0"
           :offline="offlineImage"
-          :gallery="gallery"
+          :gallery="gallery.map(i => i.src)"
           :configuration="configuration"
           :product="product"
         />

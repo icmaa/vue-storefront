@@ -11,7 +11,7 @@
       <router-link :to="productLink" data-test-id="productLink" class="product-link t-block t-z-0">
         <promo-banner :product="product" class="t-absolute t-top-0 t-right-0" />
         <placeholder ratio="161:233" v-if="imageLoading" />
-        <product-image :image="thumbnailObj" :alt="product.name | htmlDecode" data-test-id="productImage" @load="imageLoading = false" />
+        <product-image :image="thumbnail" :alt="product.name | htmlDecode" data-test-id="productImage" @load="imageLoading = false" />
       </router-link>
     </div>
     <router-link :to="productLink" tag="div" class="t-text-sm" v-if="!onlyImage">
@@ -87,12 +87,6 @@ export default {
   computed: {
     thumbnail () {
       return this.product.image
-    },
-    thumbnailObj () {
-      return {
-        src: this.thumbnail,
-        loading: this.thumbnail
-      }
     },
     favoriteIcon () {
       return this.isOnWishlist ? 'favorite' : 'favorite_border'

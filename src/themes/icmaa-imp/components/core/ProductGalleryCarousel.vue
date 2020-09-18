@@ -15,7 +15,7 @@
     @pageChange="pageChange"
   >
     <slide v-for="(image, index) in galleryFiltered" :key="index" ref="thumbs">
-      <product-image class="t-cursor-pointer" :image="image" type="gallery" :alt="productName | htmlDecode" @load="imageLoaded" />
+      <product-image class="t-cursor-pointer" :image="image" :sizes="sizes" type="gallery" :alt="productName | htmlDecode" @load="imageLoaded" />
     </slide>
   </carousel>
 </template>
@@ -60,6 +60,15 @@ export default {
     }
   },
   computed: {
+    sizes () {
+      return [
+        // Order high-to-low is important
+        { media: '(min-width: 1024px)', width: 330 },
+        { media: '(max-width: 768px)', width: 768 },
+        { media: '(max-width: 500px)', width: 500 },
+        { media: '(max-width: 414px)', width: 414 }
+      ]
+    },
     galleryFiltered () {
       return this.gallery.filter(image => {
         /** Filter out old _sm files, they are duplicates of large ones */
