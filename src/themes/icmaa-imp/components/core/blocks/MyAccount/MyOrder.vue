@@ -198,7 +198,10 @@ export default {
         return false
       }
 
-      return this.order.products.find(p => p.id.toString() === orderItem.product_id.toString()) || false
+      return this.order.products.find(p => {
+        const idKey = p.type_id === 'simple' ? 'id' : 'parentId'
+        return p[idKey].toString() === orderItem.product_id.toString()
+      }) || false
     },
     getProductOptions (orderItem) {
       if (!this.order || !this.order.products) {
