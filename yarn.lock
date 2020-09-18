@@ -12684,6 +12684,11 @@ lowercase-keys@^2.0.0:
   resolved "https://registry.yarnpkg.com/lowercase-keys/-/lowercase-keys-2.0.0.tgz#2603e78b7b4b0006cbca2fbcc8a3202558ac9479"
   integrity sha512-tqNXrS78oMOE73NMxK4EMLQsQowWf8jKooH9g7xPavRT706R6bkQJ6DY2Te7QukaZsulxa30wQ7bk0pm4XiHmA==
 
+lozad@^1.16.0:
+  version "1.16.0"
+  resolved "https://registry.yarnpkg.com/lozad/-/lozad-1.16.0.tgz#86ce732c64c69926ccdebb81c8c90bb3735948b4"
+  integrity sha512-JBr9WjvEFeKoyim3svo/gsQPTkgG/mOHJmDctZ/+U9H3ymUuvEkqpn8bdQMFsvTMcyRJrdJkLv0bXqGm0sP72w==
+
 lru-cache@^4.0.1, lru-cache@^4.1.2, lru-cache@^4.1.5:
   version "4.1.5"
   resolved "https://registry.yarnpkg.com/lru-cache/-/lru-cache-4.1.5.tgz#8bbe50ea85bed59bc9e33dcab8235ee9bcf443cd"
@@ -18717,11 +18722,6 @@ vue-lazy-hydration@^1.0.0-beta.9:
   version "1.0.0-beta.12"
   resolved "https://registry.yarnpkg.com/vue-lazy-hydration/-/vue-lazy-hydration-1.0.0-beta.12.tgz#d578dc86059eb0a147e6e553585dd22c41dfbae2"
   integrity sha512-0innXtjaqNodh0aw1/3dgGdEfL76eqDzo3CETSKolyjm3Z++hqBS7GQkrAAfp4JYBE12mb5yP2YnJxK6tJSGIA==
-
-vue-lazyload@^1.2.6, vue-lazyload@^1.3.3:
-  version "1.3.3"
-  resolved "https://registry.yarnpkg.com/vue-lazyload/-/vue-lazyload-1.3.3.tgz#4df50a271bde9b74c3caf7a228d6e0af50d5682f"
-  integrity sha512-uHnq0FTEeNmqnbBC2aRKlmtd9LofMZ6Q3mWvgfLa+i9vhxU8fDK+nGs9c1iVT85axSua/AUnMttIq3xPaU9G3A==
 
 vue-loader@^15.4.2, vue-loader@^15.5.1, vue-loader@^15.7.1:
   version "15.9.0"
