@@ -4,6 +4,8 @@ import rootStore from '@vue-storefront/core/store'
 import { currentStoreView } from '@vue-storefront/core/lib/multistore'
 import { userHooks } from '@vue-storefront/core/modules/user/hooks'
 import { catalogHooks } from '@vue-storefront/core/modules/catalog-next/hooks'
+import * as cartMutations from '@vue-storefront/core/modules/cart/store/mutation-types'
+import * as wishlistMutations from '@vue-storefront/core/modules/wishlist/store/mutation-types'
 
 import { IcmaaGoogleTagManager as EventHooks, IcmaaGoogleTagManagerExecutors } from './'
 import triggerPageView from '../helpers/pageView'
@@ -31,27 +33,54 @@ export function afterRegistration () {
     return Object.assign({ quantity }, rootStore.getters['icmaaGoogleTagManager/getProductDTO'](item))
   }
 
-  rootStore.subscribe(({ type, payload }, state) => {
-    // Adding a Product to a Shopping Cart
-    if (type === 'cart/cart/ADD') {
+  rootStore.subscribe(({ type, payload }) => {
+    // Adding a product to a Shopping Cart
+    if (type === 'cart/' + cartMutations.CART_ADD_ITEM) {
       GTM.trackEvent({
         event: 'icmaa-add-to-cart',
         ecommerce: {
           currencyCode: currencyCode,
           add: {
-            products: [getProduct(payload.product)]
+            products: [ getProduct(payload.product) ]
           }
         }
       })
     }
 
-    // Removing a Product from a Shopping Cart
-    if (type === 'cart/cart/DEL') {
+    // Removing a product from a Shopping Cart
+    if (type === 'cart/' + cartMutations.CART_DEL_ITEM) {
       GTM.trackEvent({
         event: 'icmaa-remove-from-cart',
         ecommerce: {
+          currencyCode: currencyCode,
           remove: {
-            products: [getProduct(payload.product)]
+            products: [ getProduct(payload.product) ]
+          }
+        }
+      })
+    }
+
+    // Adding a product to wishlist
+    if (type === 'wishlist/' + wishlistMutations.WISH_ADD_ITEM) {
+      GTM.trackEvent({
+        event: 'icmaa-add-to-wishlist',
+        ecommerce: {
+          currencyCode: currencyCode,
+          wishlist_add: {
+            products: [ getProduct(payload.product) ]
+          }
+        }
+      })
+    }
+
+    // Remove a product from wishlist
+    if (type === 'wishlist' + wishlistMutations.WISH_DEL_ITEM) {
+      GTM.trackEvent({
+        event: 'icmaa-remove-from-wishlist',
+        ecommerce: {
+          currencyCode: currencyCode,
+          wishlist_remove: {
+            products: payload.product ? [ getProduct(payload.product) ] : [ ]
           }
         }
       })
@@ -70,6 +99,19 @@ export function afterRegistration () {
     GTM.trackEvent({
       event: 'icmaa-search',
       searchTerm
+    })
+  })
+
+  EventHooks.openProductListFilterSidebar(() => {
+    GTM.trackEvent({
+      event: 'icmaa-open-product-list-filter-sidebar'
+    })
+  })
+
+  EventHooks.onProductListFilter(({ filter }) => {
+    GTM.trackEvent({
+      event: 'icmaa-on-product-list-filter',
+      filter
     })
   })
 

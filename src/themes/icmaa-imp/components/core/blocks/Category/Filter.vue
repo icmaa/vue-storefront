@@ -23,6 +23,8 @@
 
 <script>
 import config from 'config'
+import { IcmaaGoogleTagManagerExecutors } from 'icmaa-google-tag-manager/hooks'
+
 import GenericSelector from 'theme/components/core/blocks/Category/Filter/GenericSelector'
 import ListSelector from 'theme/components/core/blocks/Category/Filter/ListSelector'
 import PriceSelector from 'theme/components/core/blocks/Category/Filter/PriceSelector'
@@ -57,6 +59,7 @@ export default {
   methods: {
     async changeFilter (filterVariant) {
       this.$store.dispatch('category-next/switchSearchFilters', [ filterVariant ])
+      IcmaaGoogleTagManagerExecutors.onProductListFilter({ filter: filterVariant })
     },
     getType (attributeKey) {
       const map = Object.entries(config.products.filterTypeMapping).find(f => f[1].includes(attributeKey))

@@ -94,6 +94,7 @@ import { isServer } from '@vue-storefront/core/helpers'
 import { catalogHooksExecutors } from '@vue-storefront/core/modules/catalog-next/hooks'
 import { Logger } from '@vue-storefront/core/lib/logger'
 import { getSearchOptionsFromRouteParams } from '@vue-storefront/core/modules/catalog-next/helpers/categoryHelpers'
+import { IcmaaGoogleTagManagerExecutors } from 'icmaa-google-tag-manager/hooks'
 import * as productMutationTypes from '@vue-storefront/core/modules/catalog/store/product/mutation-types'
 
 import AsyncSidebar from 'theme/components/core/blocks/AsyncSidebar/AsyncSidebar.vue'
@@ -236,6 +237,7 @@ export default {
     },
     openFilters () {
       this.$store.dispatch('ui/setSidebar', { key: 'categoryfilter' })
+      IcmaaGoogleTagManagerExecutors.openProductListFilterSidebar()
     },
     onAddToCartSidebarClose () {
       this.resetCurrentProduct({})
