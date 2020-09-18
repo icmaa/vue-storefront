@@ -1,12 +1,13 @@
 <template>
-  <img v-lazy="lazyObj" :data-srcset="`${sizes.src} 1x, ${sizes.srcAt2x} 2x`" v-on="$listeners" :alt="alt" class="product-image t-w-full t-w-auto" v-if="image.src">
-  <img :src="sizes.error" :alt="alt" class="product-image t-w-full t-w-auto" v-else>
+  <picture v-on="$listeners">
+    <source v-for="sImage in sourceImages" :key="sImage.srcset" :media="sImage.media" :srcset="sImage.srcset" :alt="alt + sImage.media">
+    <img :src="defaultImage" ref="image" class="product-image t-w-full t-w-auto" v-bind="$attrs">
+  </picture>
 </template>
 
 <script>
 import config from 'config'
-import pick from 'lodash-es/pick'
-import { onlineHelper, getThumbnailPath } from '@vue-storefront/core/helpers'
+import { getThumbnailPath } from '@vue-storefront/core/helpers'
 
 export default {
   name: 'ProductImage',
@@ -34,21 +35,37 @@ export default {
     }
   },
   computed: {
-    isOnline (value) {
-      return onlineHelper.isOnline
+    sizeMap () {
+      return [
+        // Order high-to-low is important
+        { media: '(min-width: 1280px)', width: 300 },
+        { media: '(min-width: 1024px)', width: 236 },
+        { media: '(min-width: 415px)', width: 364 },
+        { media: '(max-width: 414px)', width: 188 }
+      ]
     },
-    sizes () {
-      const { width, height } = config.products[this.type]
-      return {
-        loading: require('theme/assets/product-placeholder-loading.svg'),
-        error: require(`theme/assets/product-placeholder-${!this.isOnline ? 'loading' : 'error'}.svg`),
-        src: this.getImageWithSize(width, height),
-        srcAt2x: this.getImageWithSize(width * 2, height * 2),
-        original: this.getImageWithSize()
-      }
+    sourceImages () {
+      const { width, height } = this.typeSize
+      return this.sizeMap.map(image => {
+        image.height = Math.ceil((height / width) * image.width)
+
+        const image1x = this.getImageWithSize(image.width, image.height)
+        const image2x = this.getImageWithSize(image.width * 2, image.height * 2)
+        const image3x = this.getImageWithSize(image.width * 3, image.height * 3)
+        image.srcset = `${image1x} 1x, ${image2x} 2x, ${image3x} 3x`
+
+        return image
+      })
     },
-    lazyObj () {
-      return pick(this.sizes, ['loading', 'error', 'src'])
+    defaultImage () {
+      const { width, height } = this.typeSize
+      return this.getImageWithSize(width, height)
+    },
+    typeSize () {
+      return config.products[this.type]
+    },
+    placeholder () {
+      return require('theme/assets/product-placeholder-loading.svg')
     }
   },
   methods: {
@@ -57,6 +74,7 @@ export default {
       return getThumbnailPath(src, width, height)
     },
     onLoaded ({ el, src }) {
+      console.error('LOADED', this.$refs.image.currentSrc)
       if (this.loading === true) {
         this.loading = !this.loading
         this.$emit('load', this.image, !this.loading)
@@ -64,7 +82,10 @@ export default {
     }
   },
   mounted () {
-    this.$Lazyload.$once('loaded', this.onLoaded)
+    this.$refs.image.addEventListener('load', this.onLoaded)
+    this.$once('hook:destroyed', () => {
+      this.$refs.image.removeEventListener('load', this.onLoaded)
+    })
   }
 }
 </script>
