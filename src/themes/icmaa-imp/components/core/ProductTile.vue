@@ -10,8 +10,7 @@
       </slot>
       <router-link :to="productLink" data-test-id="productLink" class="product-link t-block t-z-0">
         <promo-banner :product="product" class="t-absolute t-top-0 t-right-0" />
-        <placeholder ratio="161:233" v-if="imageLoading" />
-        <product-image :image="thumbnail" :alt="product.name | htmlDecode" data-test-id="productImage" @load="imageLoading = false" />
+        <product-image :image="thumbnail" :alt="product.name | htmlDecode" data-test-id="productImage" />
       </router-link>
     </div>
     <router-link :to="productLink" tag="div" class="t-text-sm" v-if="!onlyImage">
@@ -39,7 +38,6 @@
 import config from 'config'
 import i18n from '@vue-storefront/i18n'
 import MaterialIcon from 'theme/components/core/blocks/MaterialIcon'
-import Placeholder from 'theme/components/core/blocks/Placeholder'
 import ProductImage from 'theme/components/core/ProductImage'
 import AddToWishlist from 'theme/components/core/blocks/Wishlist/AddToWishlist'
 import PromoBanner from 'theme/components/core/blocks/Category/PromoBanner'
@@ -56,15 +54,9 @@ export default {
   mixins: [ProductTileMixin, IsOnWishlist, ProductNameMixin, ProductPriceMixin, ProductOptionsMixin, ProductAddToCartMixin],
   components: {
     MaterialIcon,
-    Placeholder,
     ProductImage,
     PromoBanner,
     AddToWishlist
-  },
-  data () {
-    return {
-      imageLoading: true
-    }
   },
   props: {
     labelsActive: {

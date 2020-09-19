@@ -1,12 +1,13 @@
 <template>
   <picture>
-    <source v-for="sImage in sourceImages" :key="sImage.srcset" :media="sImage.media" :srcset="sImage.srcset" :alt="alt + sImage.media">
-    <img :src="defaultImage.src" :srcset="`${defaultImage.src} 1x, ${defaultImage.srcAt2x} 2x`" class="product-image t-w-full t-w-auto" v-bind="$attrs" v-on="$listeners" ref="image">
+    <source v-for="sImage in sourceImages" :key="sImage.srcset" :media="sImage.media" :data-srcset="sImage.srcset" :alt="alt + sImage.media">
+    <img :src="placeholder" :data-src="defaultImage.src" :data-srcset="`${defaultImage.src} 1x, ${defaultImage.srcAt2x} 2x`" class="product-image t-w-full t-w-auto" v-bind="$attrs" v-on="$listeners" ref="image">
   </picture>
 </template>
 
 <script>
 import config from 'config'
+import Lozad from 'icmaa-config/helpers/lozad'
 import { getThumbnailPath } from '@vue-storefront/core/helpers'
 
 export default {
@@ -79,17 +80,21 @@ export default {
       return getThumbnailPath(src, width, height)
     },
     onLoaded () {
-      console.error('LOADED:', this.$refs.image.currentSrc)
       if (this.loading === true) {
         this.loading = !this.loading
-        this.$emit('load', this.image, !this.loading)
+        this.$emit(
+          'load',
+          { original: this.image, current: this.$refs.image.currentSrc }
+        )
       }
     }
   },
   mounted () {
-    this.$refs.image.addEventListener('load', this.onLoaded)
-    this.$once('hook:destroyed', () => {
-      this.$refs.image.removeEventListener('load', this.onLoaded)
+    const imageLazyLoader = new Lozad(this.$el, {
+      rootMargin: '50px 0px 0px 0px',
+      loaded: () => {
+        this.$refs.image.addEventListener('load', this.onLoaded)
+      }
     })
   }
 }

@@ -73,7 +73,7 @@ export default {
       return this.gallery.filter(image => {
         /** Filter out old _sm files, they are duplicates of large ones */
         const regex = /(_sm)(_\w*)*(\.[a-zA-Z]{3,4})$/gm
-        return regex.exec(image.src) === null
+        return regex.exec(image) === null
       })
     }
   },
