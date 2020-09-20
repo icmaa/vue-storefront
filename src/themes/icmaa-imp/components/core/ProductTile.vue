@@ -10,7 +10,7 @@
       </slot>
       <router-link :to="productLink" data-test-id="productLink" class="product-link t-block t-z-0">
         <promo-banner :product="product" class="t-absolute t-top-0 t-right-0" />
-        <product-image :image="thumbnail" :alt="product.name | htmlDecode" :placeholder="true" data-test-id="productImage" />
+        <product-image :image="thumbnail" :alt="product.name | htmlDecode" data-test-id="productImage" />
       </router-link>
     </div>
     <router-link :to="productLink" tag="div" class="t-text-sm" v-if="!onlyImage">

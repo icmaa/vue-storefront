@@ -1,18 +1,19 @@
 <template>
   <picture>
     <source v-for="sImage in sourceImages" :key="sImage.srcset" :media="sImage.media" :data-srcset="sImage.srcset" :alt="alt + sImage.media">
-    <img :src="placeholder" :data-src="defaultImage.src" :data-srcset="`${defaultImage.src} 1x, ${defaultImage.srcAt2x} 2x`" class="product-image t-w-full t-w-auto" v-bind="$attrs" v-on="$listeners" ref="image">
+    <img :src="placeholder" width="100%" height="144%" :data-src="defaultImage.src" :data-srcset="`${defaultImage.src} 1x, ${defaultImage.srcAt2x} 2x`" class="product-image t-w-full t-w-auto" v-bind="$attrs" v-on="$listeners" ref="image">
   </picture>
 </template>
 
 <script>
 import config from 'config'
-import Lozad from 'icmaa-config/helpers/lozad'
 import cloneDeep from 'lodash-es/cloneDeep'
+import LozadMixin from 'theme/mixins/lozadMixin'
 import { getThumbnailPath } from '@vue-storefront/core/helpers'
 
 export default {
   name: 'ProductImage',
+  mixins: [ LozadMixin ],
   inheritAttrs: false,
   props: {
     image: {
@@ -95,12 +96,14 @@ export default {
     }
   },
   mounted () {
-    const imageLazyLoader = new Lozad(this.$el, {
-      rootMargin: '50px 0px 0px 0px',
-      loaded: () => {
-        this.$refs.image.addEventListener('load', this.onLoaded)
+    this.lazyload(
+      this.$el,
+      {
+        loaded: () => {
+          this.$refs.image.addEventListener('load', this.onLoaded)
+        }
       }
-    })
+    )
   }
 }
 </script>
