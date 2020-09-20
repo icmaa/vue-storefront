@@ -8,10 +8,12 @@ export default {
     lazyload ($el: any, options = {}) {
       const defaults = {
         load: (element: HTMLElement) => {
+          var isIE = typeof document !== 'undefined' && document['documentMode']
           if (element.nodeName.toLowerCase() === 'picture') {
             if (element.children) {
               var sources = element.children
               Object.values(sources).forEach(source => {
+                if (!isIE && source.nodeName.toLowerCase() !== 'source') return
                 const sourceSrc = source.getAttribute('data-src')
                 const sourceSrcSet = source.getAttribute('data-srcset')
                 if (sourceSrc) source.setAttribute('src', sourceSrc)
