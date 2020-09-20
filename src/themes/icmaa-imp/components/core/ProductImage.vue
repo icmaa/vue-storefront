@@ -8,6 +8,7 @@
 <script>
 import config from 'config'
 import Lozad from 'icmaa-config/helpers/lozad'
+import cloneDeep from 'lodash-es/cloneDeep'
 import { getThumbnailPath } from '@vue-storefront/core/helpers'
 
 export default {
@@ -49,7 +50,11 @@ export default {
     },
     sourceImages () {
       const { width, height } = this.typeSize
-      return this.sizeMap.map(image => {
+      /**
+       * We need to use cloneDeep to not mutate the parent property or original computed item using `map`.
+       * @see https://medium.com/@gamshan001/javascript-deep-copy-for-array-and-object-97e3d4bc401a
+       */
+      return cloneDeep(this.sizeMap).map(image => {
         image.height = Math.ceil((height / width) * image.width)
 
         const image1x = this.getImageWithSize(image.width, image.height)
