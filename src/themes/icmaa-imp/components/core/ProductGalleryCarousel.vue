@@ -64,7 +64,7 @@ export default {
       return [
         // Order high-to-low is important
         { media: '(min-width: 1024px)', width: 330 },
-        { media: '(max-width: 768px)', width: 768 },
+        { media: '(max-width: 1024px)', width: 768 },
         { media: '(max-width: 500px)', width: 500 },
         { media: '(max-width: 414px)', width: 414 }
       ]
