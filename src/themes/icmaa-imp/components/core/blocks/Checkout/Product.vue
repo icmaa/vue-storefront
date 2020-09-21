@@ -1,7 +1,7 @@
 <template>
   <div class="row p25 between-xs">
     <div class="blend">
-      <product-image :image="image" :alt="product.name | htmlDecode" />
+      <product-image :image="thumbnail" :alt="product.name | htmlDecode" />
     </div>
     <div class="col-xs">
       <div class="row">
@@ -66,12 +66,6 @@ export default {
   computed: {
     isOnline () {
       return onlineHelper.isOnline
-    },
-    image () {
-      return {
-        loading: this.thumbnail,
-        src: this.thumbnail
-      }
     }
   },
   mixins: [Product],

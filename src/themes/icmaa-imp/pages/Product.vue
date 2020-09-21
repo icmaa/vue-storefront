@@ -6,8 +6,7 @@
         <category-extras-header class="t-bg-white t-border-b t-border-base-lightest" v-if="['xs', 'sm', 'md'].includes(viewport)" :spotify-logo-limit="spotifyLogoLimit" />
         <product-gallery
           class="product-gallery t-w-full t-border-base-lightest t-border-b t-bg-white lg:t-w-1/2 lg:t-border-b-0"
-          :offline="offlineImage"
-          :gallery="gallery"
+          :gallery="gallery.map(i => i.src)"
           :configuration="configuration"
           :product="product"
         />
@@ -224,13 +223,6 @@ export default {
     }),
     image () {
       return this.gallery.length ? this.gallery[0] : false
-    },
-    offlineImage () {
-      return {
-        src: this.getThumbnail(this.product.image, config.products.thumbnails.width, config.products.thumbnails.height),
-        error: this.getThumbnail(this.product.image, config.products.thumbnails.width, config.products.thumbnails.height),
-        loading: this.getThumbnail(this.product.image, config.products.thumbnails.width, config.products.thumbnails.height)
-      }
     },
     isAddToCartDisabled () {
       if (this.isBundle) {

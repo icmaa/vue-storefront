@@ -2,7 +2,7 @@
   <li class="t-flex t-py-2 t-border-b t-border-base-lightest" data-test-id="MicroCartProduct">
     <div class="t-w-1/3 t-mr-4">
       <router-link :to="productLink" @click.native="$store.dispatch('ui/setSidebar', { key: 'microcart', status: false })">
-        <product-image :image="image" :alt="product.name | htmlDecode" />
+        <product-image :image="thumbnail" :alt="product.name | htmlDecode" />
       </router-link>
     </div>
 
@@ -97,12 +97,6 @@ export default {
     },
     isTotalsActive () {
       return this.isOnline && !this.editMode && this.product.totals && this.product.totals.options
-    },
-    image () {
-      return {
-        loading: this.thumbnail,
-        src: this.thumbnail
-      }
     },
     thumbnail () {
       return productThumbnailPath(this.product)

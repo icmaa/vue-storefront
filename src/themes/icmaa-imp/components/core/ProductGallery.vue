@@ -1,6 +1,6 @@
 <template>
   <div>
-    <img src="/assets/product-spacer.png" class="t-block t-w-full lg:t-w-2/3" v-if="!carouselLoaded">
+    <img src="/assets/product-placeholder.svg" class="t-block t-w-full lg:t-w-2/3" v-if="!carouselLoaded">
     <div class="media-gallery">
       <div v-if="isOnline" class="t-relative t-w-full">
         <no-ssr>
@@ -13,7 +13,7 @@
           />
         </no-ssr>
       </div>
-      <product-image v-else :image="offline" />
+      <product-image v-else image="theme/assets/product-placeholder-loading.svg" />
     </div>
   </div>
 </template>
