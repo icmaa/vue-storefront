@@ -58,7 +58,7 @@ import ProductStockAlertMixin from 'icmaa-product-alert/mixins/productStockAlert
 import Sidebar from 'theme/components/core/blocks/AsyncSidebar/Sidebar'
 import DefaultSelector from 'theme/components/core/blocks/AddToCartSidebar/DefaultSelector'
 import BundleSelector from 'theme/components/core/blocks/AddToCartSidebar/BundleSelector'
-import Model from 'theme/components/core/blocks/AddToCartSidebar/Model'
+import Model from 'theme/components/core/blocks/Product/Model'
 import MaterialIcon from 'theme/components/core/blocks/MaterialIcon'
 import ButtonComponent from 'theme/components/core/blocks/Button'
 import LoaderBackground from 'theme/components/core/LoaderBackground'
