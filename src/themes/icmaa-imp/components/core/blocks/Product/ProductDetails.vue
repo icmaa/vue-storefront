@@ -7,6 +7,7 @@
         {{ phrase }}
       </li>
     </ul>
+    <model :product="product" class="t-mt-2" />
     <no-ssr>
       <ul class="attributes t-mt-6" v-if="attributes.length > 0">
         <product-attributes
@@ -32,6 +33,7 @@
 import { icmaa_catalog } from 'config'
 import { mapGetters } from 'vuex'
 import { stripHTML } from '@vue-storefront/core/filters/strip-html'
+import Model from 'theme/components/core/blocks/Product/Model'
 import ProductAttributes from 'theme/components/core/blocks/Product/ProductAttributes'
 import MaterialIcon from 'theme/components/core/blocks/MaterialIcon'
 import NoSSR from 'vue-no-ssr'
@@ -44,6 +46,7 @@ export default {
     }
   },
   components: {
+    Model,
     ProductAttributes,
     MaterialIcon,
     'no-ssr': NoSSR
