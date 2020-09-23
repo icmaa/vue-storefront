@@ -2,14 +2,12 @@ import { Module } from 'vuex'
 import getters from './getters'
 import mutations from './mutations'
 import actions from './actions'
+import CartState from '../types/CartState'
 
-import CartState from '@vue-storefront/core/modules/cart//types/CartState'
-import { cartStore } from '@vue-storefront/core/modules/cart/store/index'
+let extendState = { freeCartItems: [] }
 
 export const IcmaaExtendedCartStore: Module<CartState, any> = {
-  state: Object.assign(cartStore.state, {
-    freeCartItems: []
-  }),
+  state: extendState as CartState,
   actions,
   getters,
   mutations
