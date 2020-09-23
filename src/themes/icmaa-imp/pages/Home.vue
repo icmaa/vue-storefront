@@ -22,6 +22,7 @@
 <script>
 import config from 'config'
 import { onlineHelper } from '@vue-storefront/core/helpers'
+import { currentStoreView, localizedRoute } from '@vue-storefront/core/lib/multistore'
 
 import LazyHydrate from 'vue-lazy-hydration'
 import Teaser from 'theme/components/core/blocks/Teaser/Teaser'
@@ -40,6 +41,21 @@ export default {
   mounted () {
     if (!this.isLoggedIn && localStorage.getItem('redirect')) {
       this.$store.dispatch('ui/showModal', 'modal-signup')
+    }
+
+    const { open } = this.$route.query
+    if (open) {
+      if (open === 'login') {
+        this.$store.commit('ui/setAuthElem', 'login')
+        this.$store.dispatch('ui/showModal', 'modal-signup')
+      } else if (open === 'create' || open === 'register') {
+        this.$store.commit('ui/setAuthElem', 'register')
+        this.$store.dispatch('ui/showModal', 'modal-signup')
+      } else if (open === 'cart') {
+        this.$store.dispatch('ui/setSidebar', { key: 'microcart' })
+      }
+
+      this.$router.push(localizedRoute('/', currentStoreView().storeCode))
     }
   },
   async asyncData ({ context }) {
