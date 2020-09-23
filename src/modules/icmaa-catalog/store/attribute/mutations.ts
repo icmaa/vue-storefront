@@ -9,7 +9,7 @@ const mutations: MutationTree<AttributeState> = {
    * @param {} state
    * @param {Array} attributes
    */
-  async [types.ATTRIBUTE_UPD_ATTRIBUTES] (state, { attrHashByCode, attrHashById }) {
+  [types.ATTRIBUTE_UPD_ATTRIBUTES] (state, { attrHashByCode, attrHashById }) {
     /**
      * Use `Object.assign()` because `Vue.set()` seems not to update the state if content changes.
      * Otherwise the attributes won't be updated after load.

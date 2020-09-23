@@ -1,16 +1,31 @@
 <template>
-  <li class="t-flex t-py-2 t-border-b t-border-base-lightest" data-test-id="MicroCartProduct">
+  <li class="t-flex t-py-2 t-border-b t-border-base-lightest" :class="{ 't-opacity-75': loading }" data-test-id="MicroCartProduct">
     <div class="t-w-1/3 t-mr-4">
       <router-link :to="productLink" @click.native="$store.dispatch('ui/setSidebar', { key: 'microcart', status: false })">
-        <product-image :image="image" :alt="product.name | htmlDecode" />
+        <product-image :image="thumbnail" :alt="product.name | htmlDecode" />
       </router-link>
     </div>
 
     <div class="t-w-2/3 t-flex t-flex-col t-py-2">
       <div class="t-mb-4 t-leading-tight">
         <router-link class="t-text-primary t-text-sm" :to="productLink" data-test-id="productLink" @click.native="$store.dispatch('ui/setSidebar', { key: 'microcart', status: false })">
-          {{ productQty }} x {{ translatedProductName | htmlDecode }}
+          {{ translatedProductName | htmlDecode }}
         </router-link>
+      </div>
+
+      <div class="t-flex-grow">
+        <div class="t-flex t-w-full t-flex-wrap t-items-center t-mb-2" v-if="totals.length > 0 || isFree">
+          <button-component class="t-mr-2 t-mb-2" type="tag" size="xs" :cursor-pointer="false" v-for="opt in totals" :key="opt.label">
+            {{ opt.value }}
+          </button-component>
+          <div class="t-text-xs t-text-sale t-font-bold t-uppercase" v-if="isFree">
+            {{ $t('Free') }}
+          </div>
+        </div>
+
+        <div class="t-text-sm" v-if="hasProductErrors">
+          {{ product.errors | formatProductMessages }}
+        </div>
       </div>
 
       <div class="t-w-full t-text-sm t-mb-4" v-if="product.totals">
@@ -35,23 +50,25 @@
         </template>
       </div>
 
-      <div class="t-flex-grow">
-        <div class="t-flex t-w-full t-flex-wrap t-items-center t-mb-2" v-if="totals.length > 0 || isFree">
-          <button-component class="t-mr-2 t-mb-2" type="tag" size="xs" :cursor-pointer="false" v-for="opt in totals" :key="opt.label">
-            {{ opt.value }}
-          </button-component>
-          <div class="t-text-xs t-text-sale t-font-bold t-uppercase" v-if="isFree">
-            {{ $t('Free') }}
-          </div>
+      <div class="t-flex t-items-center t-flex-wrap t-justify-between t-text-base-light" v-if="!isFree">
+        <div class="t-flex t-items-center">
+          <base-select
+            class="t-w-16 t-text-base-tone"
+            size="sm"
+            name="qty"
+            :id="`qty-${product.id}`"
+            :options="qtyOptions"
+            :value="productQty"
+            :disabled="loading || isAddingToCart"
+            :loading="loading || isAddingToCart"
+            @change="updateQty"
+            v-if="!isFree"
+          />
+          <label :for="`#qty-${product.id}`" class="t-ml-2 t-text-sm t-text-base-tone">{{ $t('Pcs.') }}</label>
         </div>
-
-        <div class="t-text-sm" v-if="hasProductErrors">
-          {{ product.errors | formatProductMessages }}
-        </div>
-      </div>
-
-      <div class="t-flex t-items-center t-flex-wrap t-justify-end t-text-base-light" v-if="!isFree">
-        <button-component type="transparent" :size="'sm'" :icon="'remove_shopping_cart'" :icon-only="true" @click="removeItem" />
+        <button-component type="transparent" :size="'sm'" :icon="'remove_shopping_cart'" :icon-only="true" @click="removeItem">
+          {{ $t('Delete') }}
+        </button-component>
       </div>
     </div>
   </li>
@@ -59,14 +76,16 @@
 
 <script>
 import config from 'config'
+import i18n from '@vue-storefront/i18n'
 import { mapGetters } from 'vuex'
 import { currentStoreView } from '@vue-storefront/core/lib/multistore'
 import { productThumbnailPath } from '@vue-storefront/core/helpers'
 import { formatProductLink } from 'icmaa-url/helpers'
 import Product from '@vue-storefront/core/compatibility/components/blocks/Microcart/Product'
 import ProductNameMixin from 'icmaa-catalog/mixins/ProductNameMixin'
-import ButtonComponent from 'theme/components/core/blocks/Button'
 import ProductImage from 'theme/components/core/ProductImage'
+import BaseSelect from 'theme/components/core/blocks/Form/BaseSelect'
+import ButtonComponent from 'theme/components/core/blocks/Button'
 
 import last from 'lodash-es/last'
 
@@ -80,14 +99,21 @@ export default {
   },
   components: {
     ButtonComponent,
+    BaseSelect,
     ProductImage
   },
   mixins: [Product, ProductNameMixin],
+  data () {
+    return {
+      loading: false
+    }
+  },
   computed: {
     ...mapGetters({
       freeCartItems: 'cart/getFreeCartItems',
       getOptionLabel: 'attribute/getOptionLabel',
-      getAttributeLabel: 'attribute/getAttributeLabel'
+      getAttributeLabel: 'attribute/getAttributeLabel',
+      isAddingToCart: 'cart/getIsAdding'
     }),
     hasProductInfo () {
       return this.product.info && Object.keys(this.product.info).length > 0
@@ -98,12 +124,6 @@ export default {
     isTotalsActive () {
       return this.isOnline && !this.editMode && this.product.totals && this.product.totals.options
     },
-    image () {
-      return {
-        loading: this.thumbnail,
-        src: this.thumbnail
-      }
-    },
     thumbnail () {
       return productThumbnailPath(this.product)
     },
@@ -112,6 +132,14 @@ export default {
     },
     productQty () {
       return this.product.qty
+    },
+    qtyOptions () {
+      const limit = (this.productQty >= 5 ? this.productQty + 5 : 5)
+      let options = []
+      for (let value = 1; value <= limit; value++) {
+        options.push({ label: value, value, selected: this.productQty === value })
+      }
+      return options
     },
     totals () {
       if (this.isTotalsActive) {
@@ -170,7 +198,12 @@ export default {
       }
       return name
     },
-    removeFromCart () {
+    async updateQty (qty) {
+      this.loading = true
+      return this.$store.dispatch('cart/updateQuantity', { product: this.product, qty })
+        .then(() => { this.loading = false })
+    },
+    async removeFromCart () {
       this.$store.dispatch('cart/removeItem', { product: this.product })
     }
   }

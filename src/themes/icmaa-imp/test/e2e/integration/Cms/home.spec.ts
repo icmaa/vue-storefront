@@ -4,11 +4,11 @@ describe('Homepage', () => {
   it('Check HomePage with all Elements (Fullsize-Teaser, Split-Teaser und Teaser, LogoLines, ProductListings', () => {
     cy.visitAsRecurringUser('/')
     // Fullsize-Teaser is a Image with "teaser" in img src
-    cy.getByTestId('TeaserFullsize').findImageWithPlaceholder('div > img').checkImage()
+    cy.getByTestId('TeaserFullsize').scrollIntoView().findImageWithPlaceholder('div > picture > img').checkImage()
     // Split-Teaser is a Image with "teaser" in img src
-    cy.getByTestId('TeaserSplit').findImageWithPlaceholder().checkImage()
+    cy.getByTestId('TeaserSplit').first().scrollIntoView().findImageWithPlaceholder().checkImage()
     // Teaser is a Image with "teaser" in img src
-    cy.getByTestId('TeaserSmall').findImageWithPlaceholder().checkImage()
+    cy.getByTestId('TeaserSmall').first().scrollIntoView().findImageWithPlaceholder().checkImage()
     // 2 LogoLineBlocks
     cy.getByTestId('LogoLineBlock').should('have.length', 2)
     // 2 LogoLines
