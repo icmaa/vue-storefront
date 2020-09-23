@@ -7,10 +7,11 @@
     </label>
     <div class="t-relative">
       <select
-        class="t-w-full t-h-10 t-pl-3 t-pr-12 t-border t-rounded-sm t-text-sm t-leading-tight t-bg-white t-appearance-none focus:outline-none focus:shadow-outline"
-        :class="[ invalid ? 't-border-alert' : 't-border-base-light', { 't-text-base-light': !value || value === selected }, { [selectClass]: selectClass !== false } ]"
+        class="t-w-full t-border t-rounded-sm t-text-sm t-leading-tight t-bg-white t-appearance-none t-cursor-pointer focus:outline-none focus:shadow-outline"
+        :class="[ sizeClasses, invalid ? 't-border-alert' : 't-border-base-light', { 't-text-base-light': !value || value === selected }, { [selectClass]: selectClass !== false } ]"
         :name="name"
         :id="id"
+        :disabled="disabled"
         @focus="$emit('focus')"
         @blur="$emit('blur')"
         @change="$emit('change', $event.target.value)"
@@ -26,9 +27,10 @@
           {{ option.label }}
         </option>
       </select>
-      <div class="t-pointer-events-none t-absolute t-inset-y-0 t-right-0 t-flex t-items-center t-px-2">
+      <div class="t-pointer-events-none t-absolute t-inset-y-0 t-right-0 t-flex t-items-center" :class="[ size === 'sm' ? 't-px-1' : 't-px-2' ]">
         <material-icon icon="keyboard_arrow_down" />
       </div>
+      <loader-background v-if="loading" class="t-bottom-0" />
     </div>
     <ValidationMessages v-if="invalid" :validations="validations" />
   </div>
@@ -38,11 +40,13 @@
 import i18n from '@vue-storefront/i18n'
 import ValidationMessages from './ValidationMessages'
 import MaterialIcon from 'theme/components/core/blocks/MaterialIcon'
+import LoaderBackground from 'theme/components/core/LoaderBackground'
 
 export default {
   name: 'BaseSelect',
   components: {
     MaterialIcon,
+    LoaderBackground,
     ValidationMessages
   },
   props: {
@@ -83,6 +87,10 @@ export default {
       required: false,
       default: ''
     },
+    disabled: {
+      type: Boolean,
+      default: false
+    },
     validations: {
       type: Array,
       default: () => []
@@ -94,6 +102,15 @@ export default {
     selectClass: {
       type: [Boolean, String],
       default: false
+    },
+    size: {
+      type: String,
+      default: 'default',
+      validator: (value) => ['default', 'sm'].includes(value)
+    },
+    loading: {
+      type: Boolean,
+      default: false
     }
   },
   computed: {
@@ -102,6 +119,18 @@ export default {
     },
     hasLabel () {
       return this.$slots.default || this.label
+    },
+    sizeClasses () {
+      let classes = ''
+      switch (this.size) {
+        case 'sm':
+          classes = 't-h-8 t-pl-2 t-pr-10'
+          break
+        default:
+          classes = 't-h-10 t-pl-3 t-pr-12'
+      }
+
+      return classes
     }
   }
 }
