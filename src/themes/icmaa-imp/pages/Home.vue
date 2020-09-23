@@ -43,15 +43,15 @@ export default {
       this.$store.dispatch('ui/showModal', 'modal-signup')
     }
 
-    const { open } = this.$route.query
-    if (open) {
-      if (open === 'login') {
+    const { fwd } = this.$route.query
+    if (fwd) {
+      if (fwd === 'login') {
         this.$store.commit('ui/setAuthElem', 'login')
         this.$store.dispatch('ui/showModal', 'modal-signup')
-      } else if (open === 'create' || open === 'register') {
+      } else if (fwd === 'create' || fwd === 'register') {
         this.$store.commit('ui/setAuthElem', 'register')
         this.$store.dispatch('ui/showModal', 'modal-signup')
-      } else if (open === 'cart') {
+      } else if (fwd === 'cart') {
         this.$store.dispatch('ui/setSidebar', { key: 'microcart' })
       }
 
