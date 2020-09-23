@@ -22,7 +22,7 @@
             </template>
           </div>
           <div class="t-flex-expand t-border-base-lighter t-border-r t-h-8 t-mx-4" />
-          <flag-icon :iso="country" width="20" height="20" class="t-flex-initial t-w-5 t-h-5 t-cursor-pointer" @click.native="showLanguageSwitcher" />
+          <flag-icon :iso="languageCode" width="20" height="20" class="t-flex-initial t-w-5 t-h-5 t-cursor-pointer" @click.native="showLanguageSwitcher" />
         </div>
       </div>
     </template>
@@ -36,9 +36,11 @@ import Sidebar from 'theme/components/core/blocks/AsyncSidebar/Sidebar'
 import TopButton from 'theme/components/core/blocks/AsyncSidebar/TopButton'
 import NavigationItem from 'theme/components/core/blocks/SidebarMenu/NavigationItem'
 import FlagIcon from 'theme/components/core/blocks/FlagIcon'
+import FlagMixin from 'theme/mixins/flagMixin'
 
 export default {
   name: 'SidebarMenu',
+  mixins: [ FlagMixin ],
   components: {
     Sidebar,
     TopButton,
@@ -65,7 +67,6 @@ export default {
         Object.assign(link, { isRoute: (typeof link.route === 'object' || link.route.startsWith('/')) })
       ).slice(0, 3)
     },
-    country: () => currentStoreView().i18n.defaultCountry,
     loginButtonText () {
       return this.isLoggedIn ? 'My Account' : 'Login'
     }
