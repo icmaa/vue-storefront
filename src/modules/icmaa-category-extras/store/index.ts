@@ -11,7 +11,6 @@ export const categoryExtrasStorageKey = 'icmaa-category-extras'
 export const CategoryExtrasStore: Module<CategoryExtrasState, RootState> = {
   namespaced: true,
   state: {
-    childCategoryIdMap: [],
     categoryContentHeader: {}
   },
   getters,
