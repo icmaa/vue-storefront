@@ -17,7 +17,6 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import sampleSize from 'lodash-es/sampleSize'
 import { getCategoryExtrasKeyByAttribute } from 'icmaa-category-extras/helpers'
 
 import DepartmentLogo from 'theme/components/core/blocks/CategoryExtras/DepartmentLogo'
@@ -62,25 +61,16 @@ export default {
   },
   data () {
     return {
+      categoryIds: [],
       categories: []
     }
   },
   computed: {
-    ...mapGetters('icmaaCategoryExtras', [ 'getCategoryChildrenMap', 'getLogolineItems' ]),
     ...mapGetters({
+      getLogolineItems: 'icmaaCategoryExtras/getLogolineItems',
       allCategories: 'category-next/getCategories',
       cluster: 'user/getCluster'
     }),
-    categoryChildrenMap () {
-      return this.getCategoryChildrenMap(this.parentId)
-    },
-    childCategoryIds () {
-      if (!this.categoryChildrenMap) {
-        return []
-      }
-
-      return this.categoryChildrenMap.children.map(c => c.id)
-    },
     logoLineItems () {
       return this.getLogolineItems(this.categories, this.type)
     },
@@ -99,10 +89,8 @@ export default {
   },
   methods: {
     async fetchData () {
-      await this.$store.dispatch('icmaaCategoryExtras/loadChildCategoryIdMap', [ this.parentId ])
-
       const filters = {
-        'id': this.childCategoryIds,
+        'path': this.parentId,
         'ceHasLogo': true,
         [this.catTypeKey]: true
       }
@@ -111,25 +99,29 @@ export default {
         filters['ceCluster'] = [this.cluster, '']
       }
 
-      await this.$store.dispatch(
+      // Add custom random sort, rather then build in as the results are not the same
+      const sort = {
+        field: '_script',
+        options: {
+          script: 'Math.random()',
+          type: 'number',
+          order: 'asc'
+        }
+      }
+
+      const fetchedCategories = await this.$store.dispatch(
         'category-next/findCategoriesWithoutBlacklisting',
-        { filters, size: this.limit, onlyActive: true }
+        { filters, size: this.limit, onlyActive: true, sort }
       )
+
+      this.categoryIds = fetchedCategories.map(c => c.id)
 
       // Prevent flickering logoline when clicked
       // because of changing `categories` state property
       this.setCategories()
     },
     setCategories () {
-      const cluster = this.cluster ? [this.cluster, ''] : false
-      const categories = this.allCategories.filter(c => {
-        return this.childCategoryIds.includes(c.id) &&
-          c.ceHasLogo === true &&
-          c[this.catTypeKey] === true &&
-          (!cluster || cluster.includes(c.ceCluster))
-      })
-
-      this.categories = sampleSize(categories, this.limit)
+      this.categories = this.allCategories.filter(c => this.categoryIds.includes(c.id))
     }
   },
   async mounted () {

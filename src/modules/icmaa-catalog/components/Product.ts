@@ -12,11 +12,11 @@ export default {
       context.output.cacheTags.add(`product`)
     }
 
-    await store.dispatch('icmaaCategoryExtras/loadDepartmentChildCategoryIdMap')
+    const product = store.getters['product/getCurrentProduct']
+    const account = product.band || product.brand
 
-    const departmentCategoryId = store.getters['icmaaCategoryExtras/getCurrentProductDepartmentCategoryId']
-    if (departmentCategoryId) {
-      await store.dispatch('category-next/loadCategoryWithExtras', { filters: { 'id': departmentCategoryId } })
+    if (account) {
+      await store.dispatch('category-next/loadCategoryWithExtras', { filters: { 'ceAccount': account } })
 
       const category = store.getters['icmaaCategoryExtras/getCurrentProductDepartmentCategory']
       if (category) {
