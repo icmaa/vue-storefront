@@ -129,7 +129,7 @@ const actions: ActionTree<CategoryState, RootState> = {
    * * Add category allowlist support to hide unimportant categories
    * * Don't load it using `loadCategories` because the result might overwrite the current category in state
    */
-  async loadCategoryBreadcrumbs ({ dispatch, getters }, { category, currentRouteName, omitCurrent = false }) {
+  async loadCategoryBreadcrumbs ({ dispatch }, { category, currentRouteName }) {
     if (!category) {
       return dispatch('breadcrumbs/set', { current: currentRouteName, routes: [] }, { root: true })
     }
