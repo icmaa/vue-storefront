@@ -126,7 +126,7 @@ const actions: ActionTree<CategoryState, RootState> = {
   },
   /**
    * Changes:
-   * * Add category whitelist support to hide unimportant categories
+   * * Add category allowlist support to hide unimportant categories
    * * Don't load it using `loadCategories` because the result might overwrite the current category in state
    */
   async loadCategoryBreadcrumbs ({ dispatch, getters }, { category, currentRouteName, omitCurrent = false }) {
@@ -135,11 +135,11 @@ const actions: ActionTree<CategoryState, RootState> = {
     }
 
     let categoryHierarchyIds = _prepareCategoryPathIds(category).map(id => Number(id))
-    let whitelistCategoryHierarchyIds = intersection(categoryHierarchyIds, icmaa.breadcrumbs.whitelist)
-    if (whitelistCategoryHierarchyIds.length > 0) {
-      categoryHierarchyIds = union(whitelistCategoryHierarchyIds, categoryHierarchyIds.slice(-1))
+    let allowlistCategoryHierarchyIds = intersection(categoryHierarchyIds, icmaa.breadcrumbs.allowlist)
+    if (allowlistCategoryHierarchyIds.length > 0) {
+      categoryHierarchyIds = union(allowlistCategoryHierarchyIds, categoryHierarchyIds.slice(-1))
     } else {
-      categoryHierarchyIds = whitelistCategoryHierarchyIds
+      categoryHierarchyIds = allowlistCategoryHierarchyIds
     }
 
     const filters = { 'id': categoryHierarchyIds }

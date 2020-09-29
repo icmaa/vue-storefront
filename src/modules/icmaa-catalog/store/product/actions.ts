@@ -48,10 +48,13 @@ const actions: ActionTree<ProductState, RootState> = {
     if (product && product.category_ids) {
       const currentCategory = rootGetters['icmaaCategoryExtras/getCurrentCategory']
 
+      const existingCategories = rootGetters['category-next/getCategories'].map(c => c.id)
+      const fetchCategories = product.category_ids.filter(id => !existingCategories.includes(id))
+
       let breadcrumbCategory
       const { path } = icmaa.breadcrumbs
       const filters = Object.assign(
-        { 'id': [...product.category_ids], path },
+        { id: fetchCategories, path },
         cloneDeep(config.entities.category.breadcrumbFilterFields)
       )
 
