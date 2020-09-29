@@ -48,21 +48,21 @@ const actions: ActionTree<ProductState, RootState> = {
     if (product && product.category_ids) {
       const currentCategory = rootGetters['icmaaCategoryExtras/getCurrentCategory']
 
-      const existingCategories = rootGetters['category-next/getCategories'].map(c => c.id)
-      const fetchCategories = product.category_ids.filter(id => !existingCategories.includes(id))
-
       let breadcrumbCategory
-      const { path } = icmaa.breadcrumbs
-      const filters = Object.assign(
-        { id: fetchCategories, path },
-        cloneDeep(config.entities.category.breadcrumbFilterFields)
-      )
-
-      const categories = await dispatch('category-next/findCategories', { filters }, { root: true })
-
-      if (currentCategory && currentCategory.id && (categories.findIndex(category => category.id === currentCategory.id) >= 0)) {
+      if (currentCategory && currentCategory.id) {
         breadcrumbCategory = currentCategory // use current category if set and included in the filtered list
       } else {
+        const existingCategories = rootGetters['category-next/getCategories'].map(c => c.id)
+        const fetchCategories = product.category_ids.filter(id => !existingCategories.includes(id))
+
+        const { path } = icmaa.breadcrumbs
+        const filters = Object.assign(
+          { id: fetchCategories, path },
+          cloneDeep(config.entities.category.breadcrumbFilterFields)
+        )
+
+        const categories = await dispatch('category-next/findCategories', { filters }, { root: true })
+
         breadcrumbCategory = categories.sort((a, b) => (a.level > b.level) ? -1 : 1)[0] // sort starting by deepest level
       }
 
