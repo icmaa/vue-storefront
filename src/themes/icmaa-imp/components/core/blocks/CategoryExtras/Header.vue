@@ -84,6 +84,11 @@ export default {
         banner = this.categoryExtras.bannerImage.replace('_mobile', '')
       }
 
+      // Always use @2x image
+      if (!/(@2x)(\.\w{3,})$/.test(banner)) {
+        return banner.replace(/(\.\w{3,})$/, `@2x$1`);
+      }
+
       return banner
     },
     bannerWidth () {
