@@ -15,7 +15,7 @@ const actions: ActionTree<CategoryExtrasState, RootState> = {
     categorySearchOptions.includeFields = config.entities.category.includeFields.concat(config.icmaa_cms.categoryExtras.categoryAttributes)
     return dispatch('category-next/loadCategory', categorySearchOptions, { root: true })
   },
-  loadContentHeader: async ({ commit, getters }, identifier: string): Promise<CategoryExtrasContentHeader|any[]> => {
+  loadContentHeader: async ({ getters }, identifier: string): Promise<CategoryExtrasContentHeader|any[]> => {
     if (!identifier) {
       return
     }

@@ -58,7 +58,8 @@ const getters: GetterTree<CategoryExtrasState, RootState> = {
     const product = rootGetters['product/getCurrentProduct']
     if (product && product.category) {
       const { band, brand } = product
-      return getters.getCategoryBy('ceAccount', band || brand)
+      const account = band || brand
+      return account ? getters.getCategoryBy('ceAccount', account.toString()) : false
     }
 
     return false
