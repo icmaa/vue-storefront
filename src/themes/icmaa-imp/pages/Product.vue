@@ -3,7 +3,7 @@
     <div class="t-container t-px-4">
       <div class="t--mx-4 lg:t-px-4 t-flex t-flex-wrap">
         <breadcrumbs class="breadcrumbs t-w-full t-my-8 t-hidden lg:t-flex" />
-        <category-extras-header class="t-bg-white t-border-b t-border-base-lightest" v-if="['xs', 'sm', 'md'].includes(viewport)" :spotify-logo-limit="spotifyLogoLimit" />
+        <category-extras-header class="t-bg-white t-border-b t-border-base-lightest" v-if="['xs', 'sm', 'md'].includes(viewport)" :banner-sizes="categoryHeaderBannerSizes" :spotify-logo-limit="spotifyLogoLimit" />
         <product-gallery
           class="product-gallery t-w-full t-border-base-lightest t-border-b t-bg-white lg:t-w-1/2 lg:t-border-b-0"
           :gallery="gallery.map(i => i.src)"
@@ -11,7 +11,7 @@
           :product="product"
         />
         <div class="t-w-full t-p-8 t-bg-white lg:t-w-1/2" :class="{ 'lg:t-flex lg:t-flex-col lg:t-justify-between': isPreorder }">
-          <category-extras-header class="t--mx-8 t--mt-8 t-mb-8 lg:t-pl-px t-border-b t-border-base-lightest" v-if="!['xs', 'sm', 'md'].includes(viewport)" :spotify-logo-limit="spotifyLogoLimit" />
+          <category-extras-header class="t--mx-8 t--mt-8 t-mb-8 lg:t-pl-px t-border-b t-border-base-lightest" v-if="!['xs', 'sm', 'md'].includes(viewport)" :banner-sizes="categoryHeaderBannerSizes" :spotify-logo-limit="spotifyLogoLimit" />
           <div class="t-flex t-flex-wrap">
             <h1 data-test-id="productName" class="t-flex-grow t-w-1/2 t-mb-0 t-leading-snug">
               <template v-if="typeof productName === 'object'">
@@ -288,6 +288,16 @@ export default {
     },
     spotifyLogoLimit () {
       return this.viewport === 'sm' ? 4 : 5
+    },
+    categoryHeaderBannerSizes () {
+      return [
+        // Order high-to-low is important
+        { media: '(min-width: 1280px)', width: 624 },
+        { media: '(min-width: 1024px)', width: 496 },
+        { media: '(min-width: 640px)', width: 768 },
+        { media: '(min-width: 415px)', width: 640 },
+        { media: '(max-width: 415px)', width: 415 }
+      ]
     }
   },
   methods: {
