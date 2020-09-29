@@ -32,7 +32,8 @@ const getters: GetterTree<CategoryExtrasState, RootState> = {
     return category
   },
   getCategoryBy: (state, getters, rootState, rootGetters) => (key: string, value: any): Category|boolean => {
-    return rootGetters['category-next/getCategories'].find(c => c[key] === value)
+    /* eslint-disable eqeqeq */
+    return rootGetters['category-next/getCategories'].find(c => c[key] == value)
   },
   getLogolineItems: () => (categories: Category[], type: string|boolean = false): Logo[] => {
     let logos: Logo[] = []
@@ -58,7 +59,8 @@ const getters: GetterTree<CategoryExtrasState, RootState> = {
     const product = rootGetters['product/getCurrentProduct']
     if (product && product.category) {
       const { band, brand } = product
-      return getters.getCategoryBy('ceAccount', band || brand)
+      const account = band || brand
+      return account ? getters.getCategoryBy('ceAccount', account) : false
     }
 
     return false

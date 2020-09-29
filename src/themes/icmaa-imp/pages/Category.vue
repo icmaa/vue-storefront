@@ -108,9 +108,9 @@ import ButtonComponent from 'theme/components/core/blocks/Button'
 import MaterialIcon from 'theme/components/core/blocks/MaterialIcon'
 import LoaderBackground from 'theme/components/core/LoaderBackground'
 import BlockWrapper from 'icmaa-cms/components/Wrapper'
-
 import CategoryExtrasHeader from 'theme/components/core/blocks/CategoryExtras/Header'
 import CategoryExtrasFooter from 'theme/components/core/blocks/CategoryExtras/Footer'
+
 import CategoryMixin from 'icmaa-catalog/components/Category'
 import CategoryExtrasMixin from 'icmaa-category-extras/mixins/categoryExtras'
 import CategoryMetaMixin from 'icmaa-meta/mixins/categoryMeta'
@@ -268,11 +268,11 @@ export default {
 
 /** Only show cropped header on desktop */
 @media (min-width: 1024px) {
-  header .category-header {
+  header .category-header.loaded {
     padding-top: calc(4%*100/19);
     overflow: hidden;
 
-    & > img {
+    & picture > img {
       position: absolute;
       top: 50%;
       left: 0;

@@ -1,8 +1,8 @@
 <template>
   <picture>
-    <source v-for="(sImage, i) in sourceImages" :key="sImage.srcset + '-' + i" :media="sImage.media" :data-srcset="sImage.srcset" :alt="alt + sImage.media">
-    <img :src="defaultImage.src" :data-src="defaultImage.src" :data-srcset="`${defaultImage.src} 1x, ${defaultImage.srcAt2x} 2x`" class="t-w-full" :class="{ 't-hidden': (placeholder && loading) }" v-bind="$attrs" v-on="$listeners" ref="image">
-    <placeholder :ratio="ratio" v-if="placeholder && loading" />
+    <source v-for="(sImage, i) in sourceImages" :key="sImage.srcset + '-' + i" :media="sImage.media" :data-srcset="sImage.srcset" :alt="alt + (sImage.alt || '')">
+    <img :src="defaultImage.src" :data-src="defaultImage.src" :data-srcset="`${defaultImage.src} 1x, ${defaultImage.srcAt2x} 2x`" class="t-w-full" :class="[{ 't-hidden': (placeholder && loading) }, ...imgClassTransformed]" v-bind="$attrs" v-on="$listeners" @error="loading = true" ref="image">
+    <placeholder :ratio="ratio" v-if="placeholder && loading" :class="placeholderClassTransformed" />
   </picture>
 </template>
 
@@ -28,6 +28,14 @@ export default {
       type: String,
       default: ''
     },
+    imgClass: {
+      type: [Array, Object, String],
+      default: () => ({})
+    },
+    placeholderClass: {
+      type: [Array, Object, String],
+      default: () => ({})
+    },
     sizes: {
       type: [Array, Boolean],
       default: false
@@ -47,6 +55,10 @@ export default {
     ratio: {
       type: String,
       default: '3:4'
+    },
+    autoReload: {
+      type: Boolean,
+      default: false
     }
   },
   data () {
@@ -57,6 +69,12 @@ export default {
   computed: {
     image () {
       return this.preparePath(this.src)
+    },
+    imgClassTransformed () {
+      return this.prepareClassProp(this.imgClass)
+    },
+    placeholderClassTransformed () {
+      return this.prepareClassProp(this.placeholderClass)
     },
     sizeMap () {
       return this.sizes || []
@@ -96,6 +114,17 @@ export default {
     getImageWithSize (src, width = 0, height = 0) {
       return getThumbnailPath(src, width, height, 'media')
     },
+    prepareClassProp (value) {
+      if (typeof value === 'string') {
+        return { [value]: true }
+      } else if (Array.isArray(value)) {
+        return value
+      } else if (typeof value === 'object') {
+        return [value]
+      }
+
+      return {}
+    },
     loaded () {
       if (this.loading) {
         this.loading = false
@@ -107,6 +136,7 @@ export default {
     this.lazyload(
       this.$el,
       {
+        enableAutoReload: this.autoReload,
         loaded: () => {
           this.$refs.image.addEventListener('load', this.loaded)
         }
