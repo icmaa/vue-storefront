@@ -8,7 +8,6 @@ Load and show category-extras from cms
   ```
   "icmaa_categoryextras": {
     "logoFilePath": "impericon/department-logos"
-    "parentDepartmentCategoryIds": [ 14, 16 ]
   }
   ```
   

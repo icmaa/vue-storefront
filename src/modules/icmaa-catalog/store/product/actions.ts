@@ -41,28 +41,28 @@ const actions: ActionTree<ProductState, RootState> = {
    * Changes:
    * * Load only parent categories containing `icmaa.breadcrumbs.path` items in path
    * * This way we can prior categories of products to be used as parent category
+   * * Don't load categories using `loadingCategories` action as it will overwrite existing ones and
+   *   the category-extras will diappear
    */
   async loadProductBreadcrumbs ({ dispatch, rootGetters }, { product } = {}) {
     if (product && product.category_ids) {
-      const currentCategory = rootGetters['category-next/getCurrentCategory']
+      const currentCategory = rootGetters['icmaaCategoryExtras/getCurrentCategory']
 
       let breadcrumbCategory
-      const onlyActive = false
-      const { path } = icmaa.breadcrumbs
-      const categoryFilters = Object.assign(
-        { 'id': [...product.category_ids], path },
-        cloneDeep(config.entities.category.breadcrumbFilterFields)
-      )
-
-      const categories = await dispatch(
-        'category-next/loadCategories',
-        { filters: categoryFilters, onlyActive, reloadAll: true },
-        { root: true }
-      )
-
-      if (currentCategory && currentCategory.id && (categories.findIndex(category => category.id === currentCategory.id) >= 0)) {
+      if (currentCategory && currentCategory.id) {
         breadcrumbCategory = currentCategory // use current category if set and included in the filtered list
       } else {
+        const existingCategories = rootGetters['category-next/getCategories'].map(c => c.id)
+        const fetchCategories = product.category_ids.filter(id => !existingCategories.includes(id))
+
+        const { path } = icmaa.breadcrumbs
+        const filters = Object.assign(
+          { id: fetchCategories, path },
+          cloneDeep(config.entities.category.breadcrumbFilterFields)
+        )
+
+        const categories = await dispatch('category-next/findCategories', { filters }, { root: true })
+
         breadcrumbCategory = categories.sort((a, b) => (a.level > b.level) ? -1 : 1)[0] // sort starting by deepest level
       }
 

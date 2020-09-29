@@ -1,19 +1,10 @@
-import config from 'config'
 import { GetterTree } from 'vuex'
-import CategoryExtrasState, { CategoryExtras, CategoryExtrasCategoryIdMapStateItem, CategoryExtrasContentHeaderContent } from '../types/CategoryExtrasState'
 import { Category } from '@vue-storefront/core/modules/catalog-next/types/Category'
+import CategoryExtrasState, { CategoryExtras, CategoryExtrasContentHeaderContent } from '../types/CategoryExtrasState'
 import RootState from '@vue-storefront/core/types/RootState'
 import { Logo } from '../helpers/categoryExtras/logo'
-import { getCategoryExtrasKeyByAttribute } from '../helpers/'
+import { getCategoryExtrasKeyByAttribute, mapCategoryExtrasAttributes } from '../helpers/'
 import isEmpty from 'lodash-es/isEmpty'
-import mapKeys from 'lodash-es/mapKeys'
-import pick from 'lodash-es/pick'
-
-const mapCategoryExtrasAttributes = (category: Category) => {
-  const ceKeys = Object.keys(category).filter(k => /^ce[A-Z]/.test(k))
-  category = pick(category, ceKeys)
-  return mapKeys(category, (v, key) => key.charAt(2).toLowerCase() + key.slice(3))
-}
 
 const getters: GetterTree<CategoryExtrasState, RootState> = {
   getCategoryExtrasByUrlKey: (state, getters, rootState, rootGetters) => (url_key: string): CategoryExtras => {
@@ -41,7 +32,8 @@ const getters: GetterTree<CategoryExtrasState, RootState> = {
     return category
   },
   getCategoryBy: (state, getters, rootState, rootGetters) => (key: string, value: any): Category|boolean => {
-    return rootGetters['category-next/getCategories'].find(c => c[key] === value)
+    /* eslint-disable eqeqeq */
+    return rootGetters['category-next/getCategories'].find(c => c[key] == value)
   },
   getLogolineItems: () => (categories: Category[], type: string|boolean = false): Logo[] => {
     let logos: Logo[] = []
@@ -63,31 +55,15 @@ const getters: GetterTree<CategoryExtrasState, RootState> = {
 
     return false
   },
-  getChildCategoryIdMap: (state): CategoryExtrasCategoryIdMapStateItem[] => {
-    return state.childCategoryIdMap
-  },
-  getCategoryChildrenMap: (state, getters) => (parentId: number): CategoryExtrasCategoryIdMapStateItem => {
-    return getters.getChildCategoryIdMap.find(c => c.parentId === parentId)
-  },
-  getDepartmentChildCategoryIdMap: (state): CategoryExtrasCategoryIdMapStateItem[] => {
-    const { parentDepartmentCategoryIds } = config.icmaa_categoryextras
-    return state.childCategoryIdMap.filter(c => parentDepartmentCategoryIds.includes(c.parentId))
-  },
-  isDepartmentChildCategory: (state, getters) => (categoryId: number): boolean => {
-    return getters.getDepartmentChildCategoryIdMap
-      .filter(c => c.children.filter(c => c.id === categoryId).length > 0)
-      .length > 0
-  },
-  getCurrentProductDepartmentCategoryId: (state, getters, rootState, rootGetters): number|false => {
+  getCurrentProductDepartmentCategory: (state, getters, rootState, rootGetters): Category|boolean => {
     const product = rootGetters['product/getCurrentProduct']
     if (product && product.category) {
-      return product.category.map(c => c.category_id).find(id => getters.isDepartmentChildCategory(id))
+      const { band, brand } = product
+      const account = band || brand
+      return account ? getters.getCategoryBy('ceAccount', account) : false
     }
 
     return false
-  },
-  getCurrentProductDepartmentCategory: (state, getters): Category => {
-    return getters.getCategoryBy('id', getters.getCurrentProductDepartmentCategoryId)
   },
   getContentHeaderByUrlKey: (state) => (url_key: string): CategoryExtrasContentHeaderContent[] | boolean => {
     return state.categoryContentHeader[url_key] || false

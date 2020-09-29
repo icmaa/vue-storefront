@@ -88,9 +88,15 @@ export default {
     onLoaded () {
       if (this.loading === true) {
         this.loading = !this.loading
+
+        let current = false
+        if (this.$refs.image) {
+          current = this.$refs.image.currentSrc
+        }
+
         this.$emit(
           'load',
-          { original: this.image, current: this.$refs.image.currentSrc }
+          { original: this.image, current }
         )
       }
     }

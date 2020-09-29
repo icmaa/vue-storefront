@@ -2,17 +2,8 @@ export interface CategoryExtras {
   hasLogo: boolean,
   logoline: boolean,
   product_logoline: boolean,
+  account?: string|boolean|null,
   [key: string]: any
-}
-
-export interface CategoryExtrasCategoryIdMapChildStateItem {
-  id: number,
-  url_key: string
-}
-
-export interface CategoryExtrasCategoryIdMapStateItem {
-  parentId: number,
-  children: CategoryExtrasCategoryIdMapChildStateItem[]
 }
 
 export interface CategoryExtrasContentHeader {
@@ -26,6 +17,5 @@ export interface CategoryExtrasContentHeaderContent {
 }
 
 export default interface CategoryExtrasState {
-  childCategoryIdMap: CategoryExtrasCategoryIdMapStateItem[],
   categoryContentHeader: CategoryExtrasContentHeader
 }

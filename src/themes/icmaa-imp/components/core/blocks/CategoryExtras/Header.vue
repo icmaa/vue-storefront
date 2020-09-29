@@ -1,7 +1,7 @@
 <template>
   <div v-if="isVisible">
-    <div class="category-header t-relative">
-      <retina-image :image="banner" @error="onBannerError" :alt="category.name" v-if="banner" class="t-w-screen" />
+    <div class="category-header t-relative" :class="{ 'loaded': !bannerLoading }">
+      <picture-component :src="banner" :width="bannerWidth" :height="bannerHeight" :sizes="bannerSizes" :placeholder="true" :ratio="`${bannerWidth}:${bannerHeight}`" :auto-reload="true" @load="onBannerLoad" @error="onBannerError" :alt="category.name" v-if="banner" img-class="t-w-screen" placeholder-class="t-w-screen lg:t-w-auto" />
       <div class="t-flex t-items-center t-justify-end t-absolute t-bottom-0 t-left-0 t-pb-6 t-px-6 t-w-full">
         <slot />
       </div>
@@ -17,7 +17,7 @@
 import { mapGetters } from 'vuex'
 import { getThumbnailPath } from '@vue-storefront/core/helpers'
 import DepartmentLogo from 'theme/components/core/blocks/CategoryExtras/DepartmentLogo'
-import RetinaImage from 'theme/components/core/blocks/RetinaImage'
+import PictureComponent from 'theme/components/core/blocks/Picture'
 
 import { isDatetimeInBetween } from 'icmaa-config/helpers/datetime'
 import sampleSize from 'lodash-es/sampleSize'
@@ -26,9 +26,27 @@ export default {
   name: 'CategoryExtrasHeader',
   components: {
     DepartmentLogo,
-    RetinaImage
+    PictureComponent
   },
   props: {
+    bannerDimensions: {
+      type: [Object],
+      default: () => ({
+        default: { width: 780, height: 240 },
+        fallback: { width: 1140, height: 240 }
+      })
+    },
+    bannerSizes: {
+      type: [Array],
+      default: () => [
+        // Order high-to-low is important
+        { media: '(min-width: 1280px)', width: 1280 },
+        { media: '(min-width: 1024px)', width: 992 },
+        { media: '(min-width: 640px)', width: 736 },
+        { media: '(min-width: 415px)', width: 640 },
+        { media: '(max-width: 415px)', width: 415 }
+      ]
+    },
     spotifyLogoLimit: {
       type: [Boolean, Number],
       default: false
@@ -36,6 +54,7 @@ export default {
   },
   data () {
     return {
+      bannerLoading: true,
       bannerExists: true
     }
   },
@@ -65,7 +84,18 @@ export default {
         banner = this.categoryExtras.bannerImage.replace('_mobile', '')
       }
 
-      return getThumbnailPath('/' + banner, 0, 0, 'media')
+      // Always use @2x image
+      if (!/(@2x)(\.\w{3,})$/.test(banner)) {
+        return banner.replace(/(\.\w{3,})$/, `@2x$1`);
+      }
+
+      return banner
+    },
+    bannerWidth () {
+      return this.bannerExists ? this.bannerDimensions.default.width : this.bannerDimensions.fallback.width
+    },
+    bannerHeight () {
+      return this.bannerExists ? this.bannerDimensions.default.height : this.bannerDimensions.fallback.height
     },
     spotifyLogoItems () {
       return Object.values(this.getSpotifyLogoItems).slice(0, this.spotifyLogoLimit || this.logoLimitByViewport())
@@ -75,7 +105,11 @@ export default {
     isLast (index, array) {
       return index !== (array.length - 1)
     },
+    onBannerLoad () {
+      this.bannerLoading = false
+    },
     onBannerError () {
+      this.bannerLoading = true
       this.bannerExists = false
     },
     logoLimitByViewport () {
