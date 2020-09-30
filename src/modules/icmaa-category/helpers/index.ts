@@ -59,12 +59,19 @@ export const fetchChildCategories = async (
     })
 }
 
-const SORT_PREFIX_REGEXP = /^(the\s)/gmi
+const SORT_PREFIX_REGEXP = /^(the|der|die|das)\s/gmi
+const SORT_REPLACE_REGEXP = /[^0-9a-zA-Z]/gm
 export const extractPrefix = (name) => name.replace(SORT_PREFIX_REGEXP, '')
+export const filterAlphanum = (name) => name
+  .replace(/[äÄ]/gmi, 'ae')
+  .replace(/[öÖ]/gmi, 'oe')
+  .replace(/[üÜ]/gmi, 'ue')
+  .replace(SORT_REPLACE_REGEXP, ' ')
+  .toLowerCase()
 
 export const sortByLetter = (a: Category, b: Category) => {
   const [aName, bName] = [extractPrefix(a.name), extractPrefix(b.name)]
-  return aName === bName ? 0 : aName < bName ? -1 : 1
+  return aName === bName ? 0 : filterAlphanum(aName) < filterAlphanum(bName) ? -1 : 1
 }
 
 export const getFilterHash = (filter: Record<string, any>|boolean) => {
