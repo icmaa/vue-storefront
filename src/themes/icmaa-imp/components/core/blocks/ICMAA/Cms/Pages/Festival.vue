@@ -58,7 +58,9 @@
 
     <!-- Gallery-->
     <div class="t-flex t-flex-wrap">
-      <img v-for="galleryitem in content.gallery" :key="galleryitem.img" :src="getMediaThumbnail(galleryitem.img, 0, 0)" :alt="galleryitem.name" :title="galleryitem.name" class="t-w-1/2 md:t-w-1/3 lg:t-w-1/6">
+      <div v-for="galleryitem in content.gallery" :key="galleryitem.img" class="t-w-1/2 md:t-w-1/3 lg:t-w-1/6">
+        <picture-component :src="galleryitem.img" :width="600" :height="400" :sizes="galleryImgSizes" :placeholder="true" ratio="3:2" :alt="galleryitem.name" :title="galleryitem.name" />
+      </div>
     </div>
   </div>
 </template>
@@ -66,15 +68,28 @@
 <script>
 import Page from 'icmaa-cms/mixins/Page'
 import ButtonComponent from 'theme/components/core/blocks/Button'
+import PictureComponent from 'theme/components/core/blocks/Picture'
 
 export default {
   name: 'Festival',
   mixins: [ Page ],
-  components: { ButtonComponent },
+  components: {
+    ButtonComponent,
+    PictureComponent
+  },
   data () {
     return {
       dataType: 'yaml',
       currentTab: 0
+    }
+  },
+  computed: {
+    galleryImgSizes () {
+      return [
+        { media: '(min-width: 1024px)', width: 240 },
+        { media: '(min-width: 768px)', width: 300 },
+        { media: '(max-width: 414px)', width: 220 }
+      ]
     }
   }
 }
