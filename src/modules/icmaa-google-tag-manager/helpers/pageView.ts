@@ -12,9 +12,9 @@ export default (to: Route) => {
   }
 
   const eventRouteData = {
-    'content-name': to.fullPath,
-    'content-view-name': to.meta.gtm || to.name,
-    'store_code': currentStoreView().storeCode
+    contentName: to.fullPath,
+    contentViewName: to.meta.gtm || to.name,
+    storeCode: currentStoreView().storeCode
   }
 
   const event: RouteEvent = Object.assign(

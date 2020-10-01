@@ -76,9 +76,11 @@ import rootStore from '@vue-storefront/core/store'
 import { mapGetters, mapMutations } from 'vuex'
 import { isServer } from '@vue-storefront/core/helpers'
 import { Logger } from '@vue-storefront/core/lib/logger'
+import { htmlDecode } from '@vue-storefront/core/filters'
 import { getSearchOptionsFromRouteParams } from '@vue-storefront/core/modules/catalog-next/helpers/categoryHelpers'
 import { IcmaaGoogleTagManagerExecutors } from 'icmaa-google-tag-manager/hooks'
 import * as productMutationTypes from '@vue-storefront/core/modules/catalog/store/product/mutation-types'
+import i18n from '@vue-storefront/i18n'
 
 import AsyncSidebar from 'theme/components/core/blocks/AsyncSidebar/AsyncSidebar.vue'
 import Sidebar from 'theme/components/core/blocks/Category/Sidebar'
@@ -196,8 +198,6 @@ export default {
         this.$store.dispatch('category-next/loadSearchBreadcrumbs')
 
         this.loading = false
-
-        IcmaaGoogleTagManagerExecutors.searchResultVisited({ term: this.term, products: this.getCategoryProducts })
       } catch (e) {
         Logger.error('Problem with setting SearchResult initial data!', 'search', e)()
       }
@@ -208,8 +208,9 @@ export default {
       context.output.cacheTags.add(`search`)
     }
   },
-  mounted () {
-    this.fetchAsyncData()
+  async mounted () {
+    await this.fetchAsyncData()
+    IcmaaGoogleTagManagerExecutors.searchResultVisited({ term: this.term, products: this.getCategoryProducts })
   },
   serverPrefetch () {
     return this.fetchAsyncData()

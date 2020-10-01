@@ -68,6 +68,8 @@ const actions: ActionTree<CategoryState, RootState> = {
     const searchQuery = getters.getCurrentSearchQuery
     let filterQr = buildFilterProductsQuery({}, searchQuery.filters)
 
+    filterQr.applyFilter({ key: 'search-text-plain', value: category.term })
+
     // Add our custom category filter
     // @see DivanteLtd/vue-storefront#4111
     filterQr.applyFilter({ key: 'stock', value: '' })

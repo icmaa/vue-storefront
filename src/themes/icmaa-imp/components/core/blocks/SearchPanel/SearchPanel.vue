@@ -22,15 +22,20 @@
       </div>
       <category-panel :categories="categories" title="Categories" :link="true" v-if="!emptyResults && filteredProducts.length && categories.length > 0" class="t-mb-4" :class="{ 't-opacity-25': pleaseWait }" />
       <div class="product-listing t-flex t-flex-wrap t-bg-base-lightest t--mx-4 t-px-3 t-py-4" v-if="!emptyResults && filteredProducts.length > 0" :class="{ 't-opacity-25': pleaseWait }">
-        <button-component type="white" @click="goToResults()" class="t-w-full t-mb-8">
-          {{ $t('View all results ...') }}
-        </button-component>
+        <div class="t-flex t-items-center t-justify-center t-w-full t-mx-1">
+          <button-component type="second" @click="goToResults()" class="t-w-full md:t-w-2/3 t-mb-4">
+            {{ $t('View all results') }}
+          </button-component>
+        </div>
         <product-tile v-for="product in filteredProducts" :key="product.sku + '-' + (product.parentId || 'parent')" :product="product" @click.native="closeSidebar" class="t-w-1/2 lg:t-w-1/3 t-px-1 t-mb-8" />
       </div>
-      <div v-if="filteredProducts.length >= size && OnlineOnly" class="t-flex t-items-center t-justify-center t-mt-8" :class="{ 't-opacity-25': pleaseWait }">
-        <button-component type="ghost" @click="loadMoreProducts" v-if="moreProducts" class="t-w-2/3 lg:t-w-1/3" :class="{ 't-relative t-opacity-60': loadingProducts }">
+      <div v-if="filteredProducts.length >= size && OnlineOnly" class="t-flex t-items-center t-flex-wrap t-justify-center t-mt-4" :class="{ 't-opacity-25': pleaseWait }">
+        <button-component type="ghost" @click="loadMoreProducts" v-if="moreProducts" class="t-w-full md:t-w-2/3 t-mb-2" :class="{ 't-relative t-opacity-60': loadingProducts }">
           {{ $t('Load more') }}
           <loader-background v-if="loadingProducts" bar="t-bg-base-darkest" class="t-bottom-0" />
+        </button-component>
+        <button-component type="second" @click="goToResults()" class="t-w-full md:t-w-2/3">
+          {{ $t('View all results') }}
         </button-component>
       </div>
     </div>
@@ -250,6 +255,7 @@ export default {
       }
     },
     emptySearchInput () {
+      this.$store.dispatch('icmaaSearchAlias/setCurrentTerm', '')
       Object.assign(this.$data, this.$options.data.apply(this))
       this.$refs.searchString.focus()
     },
