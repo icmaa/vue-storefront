@@ -7,5 +7,6 @@ export interface SearchAliasStateItem extends AbstractStateItem {
 
 export default interface SearchAliasState {
   items: SearchAliasStateItem[],
-  currentTerm: string
+  currentTerm: string,
+  currentResultAlias: string
 }

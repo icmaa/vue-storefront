@@ -13,7 +13,8 @@ const getters: GetterTree<SearchAliasState, RootState> = {
   getCurrentTerm: (state): string => state.currentTerm,
   isSearchResultPage: (state, getters, rootState): boolean => rootState.route.name.endsWith('search'),
   getCurrentResultsPageTerm: (state, getters, rootState): string => rootState.route.params.term || '',
-  getCurrentResultsPageTermHash: (state, getters): string => 'search-' + getHash(getters.getCurrentResultsPageTerm)
+  getCurrentResultsPageTermHash: (state, getters): string => 'search-' + getHash(getters.getCurrentResultsPageTerm),
+  getCurrentResultsPageAlias: (state): string => state.currentResultAlias
 }
 
 export default getters

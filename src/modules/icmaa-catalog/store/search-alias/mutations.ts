@@ -11,6 +11,9 @@ const mutations: MutationTree<SearchAliasState> = {
   }, 'uuid'),
   [types.ICMAA_SEARCHALIAS_SET_CURRENT_TERM]: (state, term: string) => {
     state.currentTerm = term
+  },
+  [types.ICMAA_SEARCHALIAS_SET_CURRENT_RESULT_ALIAS]: (state, alias: string) => {
+    state.currentResultAlias = alias
   }
 }
 

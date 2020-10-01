@@ -133,7 +133,8 @@ export default {
       getProductsStats: 'category-next/getCategorySearchProductsStats',
       contentHeader: 'icmaaCategoryExtras/getContentHeaderByCurrentCategory',
       term: 'icmaaSearchAlias/getCurrentResultsPageTerm',
-      termHash: 'icmaaSearchAlias/getCurrentResultsPageTermHash'
+      termHash: 'icmaaSearchAlias/getCurrentResultsPageTermHash',
+      searchAlias: 'icmaaSearchAlias/getCurrentResultsPageAlias'
     }),
     isLazyHydrateEnabled () {
       return config.ssr.lazyHydrateFor.includes('category-next.products')
@@ -190,9 +191,11 @@ export default {
     },
     async fetchAsyncData () {
       try {
+        await this.$store.dispatch('icmaaSearchAlias/setCurrentResultAlias', this.term)
+
         const route = this.$route
         const pageSize = route.params.pagesize || this.pageSize
-        const category = { id: this.termHash, term: this.term }
+        const category = { id: this.termHash, term: this.searchAlias }
 
         await this.$store.dispatch('category-next/loadSearchProducts', { route, category, pageSize })
         this.$store.dispatch('category-next/loadSearchBreadcrumbs')

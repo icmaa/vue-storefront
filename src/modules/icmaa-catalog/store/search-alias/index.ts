@@ -12,7 +12,8 @@ export const SearchAliasStore: Module<SearchAliasState, RootState> = {
   namespaced: true,
   state: {
     items: [],
-    currentTerm: ''
+    currentTerm: '',
+    currentResultAlias: ''
   },
   getters,
   actions,

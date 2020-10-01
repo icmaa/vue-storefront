@@ -98,7 +98,6 @@ export default {
   },
   computed: {
     ...mapGetters({
-      alias: 'icmaaSearchAlias/getMap',
       currentTerm: 'icmaaSearchAlias/getCurrentTerm'
     }),
     searchString: {
@@ -146,29 +145,7 @@ export default {
   },
   methods: {
     async getAlias (searchString) {
-      const wordsRegexp = /([^\s_\-."']+)/giu
-      let wordResult = ''
-      let replaces = []
-
-      const words = searchString.match(wordsRegexp)
-      await this.$store.dispatch('icmaaSearchAlias/list', { words, translate: true })
-
-      while ((wordResult = wordsRegexp.exec(searchString)) !== null) {
-        const word = wordResult[0]
-        const aliasKey = Object.keys(this.alias).find(k => RegExp(`^${word}$`, 'giu').test(k))
-        if (aliasKey) {
-          const replace = this.alias[aliasKey]
-          replaces.push({ word, replace })
-        }
-      }
-
-      replaces.forEach(r => {
-        searchString = searchString.replace(RegExp(r.word, 'i'), r.replace)
-      })
-
-      Logger.debug('Search for:', 'DEBUG', searchString)()
-
-      return searchString
+      return this.$store.dispatch('icmaaSearchAlias/getAliasesBySearchString', { searchString })
     },
     search () {
       this.showPleaseWait = (!this.$v.searchString.$invalid)
@@ -260,7 +237,7 @@ export default {
       this.$refs.searchString.focus()
     },
     goToResults () {
-      this.$router.push(localizedRoute({ name: 'search', params: { term: this.searchAlias } }))
+      this.$router.push(localizedRoute({ name: 'search', params: { term: this.searchString } }))
       this.closeSidebar()
     },
     closeSidebar () {
