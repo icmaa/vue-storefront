@@ -59,12 +59,14 @@ const actions: ActionTree<CategoryState, RootState> = {
         separateSelectedVariant
       }
     }, { root: true })
+
     await dispatch('loadAvailableFiltersFrom', {
       aggregations,
       attributeMetadata,
       category: searchCategory,
       filters: searchQuery.filters
     })
+
     commit(types.CATEGORY_SET_SEARCH_PRODUCTS_STATS, { perPage, start, total })
     commit(types.CATEGORY_SET_PRODUCTS, items)
 
@@ -77,7 +79,7 @@ const actions: ActionTree<CategoryState, RootState> = {
    * * Disable child configuration using `separateSelectedVariant` – product will still be configured
    *   but won't overwrite original options like the product image in unisex products
    */
-  async loadMoreCategoryProducts ({ commit, getters, rootState, dispatch }) {
+  async loadMoreCategoryProducts ({ commit, getters, dispatch }) {
     const category = getters.getCurrentCategory
     const { perPage, start, total } = getters.getCategorySearchProductsStats
     const totalValue = typeof total === 'object' ? total.value : total
@@ -114,12 +116,12 @@ const actions: ActionTree<CategoryState, RootState> = {
         separateSelectedVariant
       }
     }, { root: true })
+
     commit(types.CATEGORY_SET_SEARCH_PRODUCTS_STATS, {
       perPage: searchResult.perPage,
       start: searchResult.start,
       total: searchResult.total
     })
-
     commit(types.CATEGORY_ADD_PRODUCTS, searchResult.items)
 
     return searchResult.items

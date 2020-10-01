@@ -5,8 +5,20 @@ import CategoryState from '@vue-storefront/core/modules/catalog-next/store/categ
 import { Category } from '@vue-storefront/core/modules/catalog-next/types/Category'
 import intersection from 'lodash-es/intersection'
 import union from 'lodash-es/union'
+import get from 'lodash-es/get'
 
 const getters: GetterTree<CategoryState, RootState> = {
+  /**
+   * Overwrite parent to be able to search for search-filters of search-result page.
+   */
+  getAvailableFilters: (state, getters, rootState, rootGetters) => {
+    if (rootGetters['icmaaSearchAlias/isSearchResultPage']) {
+      return state.filtersMap[rootGetters['icmaaSearchAlias/getCurrentResultsPageTermHash']] || {}
+    }
+
+    const categoryId = get(getters.getCurrentCategory, 'id', null)
+    return state.filtersMap[categoryId] || {}
+  },
   isActiveFilterAttribute: (state, getters) => (attributeKey: string) => {
     return (getters.getCurrentFilters[attributeKey])
   },

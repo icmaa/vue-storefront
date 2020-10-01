@@ -21,8 +21,10 @@
         {{ $t('Please wait') }} ...
       </div>
       <category-panel :categories="categories" title="Categories" :link="true" v-if="!emptyResults && filteredProducts.length && categories.length > 0" class="t-mb-4" :class="{ 't-opacity-25': pleaseWait }" />
-      <category-panel :categories="categoryAggs" v-model="selectedCategoryIds" v-if="!emptyResults && filteredProducts.length && categoryAggs.length > 1" class="t-mb-4" :class="{ 't-opacity-25': pleaseWait }" />
       <div class="product-listing t-flex t-flex-wrap t-bg-base-lightest t--mx-4 t-px-3 t-py-4" v-if="!emptyResults && filteredProducts.length > 0" :class="{ 't-opacity-25': pleaseWait }">
+        <button-component type="white" @click="goToResults()" class="t-w-full t-mb-8">
+          {{ $t('View all results ...') }}
+        </button-component>
         <product-tile v-for="product in filteredProducts" :key="product.sku + '-' + (product.parentId || 'parent')" :product="product" @click.native="closeSidebar" class="t-w-1/2 lg:t-w-1/3 t-px-1 t-mb-8" />
       </div>
       <div v-if="filteredProducts.length >= size && OnlineOnly" class="t-flex t-items-center t-justify-center t-mt-8" :class="{ 't-opacity-25': pleaseWait }">
@@ -45,12 +47,14 @@ import ButtonComponent from 'theme/components/core/blocks/Button'
 import LoaderBackground from 'theme/components/core/LoaderBackground'
 import VueOfflineMixin from 'vue-offline/mixin'
 
+import config from 'config'
 import i18n from '@vue-storefront/i18n'
 import { mapGetters } from 'vuex'
 import { required, minLength } from 'vuelidate/lib/validators'
 import { disableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock'
 import { IcmaaGoogleTagManagerExecutors } from 'icmaa-google-tag-manager/hooks'
 import { SearchQuery } from 'storefront-query-builder'
+import { localizedRoute } from '@vue-storefront/core/lib/multistore'
 import { Logger } from '@vue-storefront/core/lib/logger'
 import debounce from 'lodash-es/debounce'
 import uniq from 'lodash-es/uniq'
@@ -75,7 +79,6 @@ export default {
   },
   data () {
     return {
-      searchString: '',
       searchAlias: '',
       products: [],
       categoryAggs: [],
@@ -85,12 +88,22 @@ export default {
       emptyResults: true,
       moreProducts: true,
       loadingProducts: false,
-      showPleaseWait: false,
-      selectedCategoryIds: []
+      showPleaseWait: false
     }
   },
   computed: {
-    ...mapGetters({ alias: 'icmaaSearchAlias/getMap' }),
+    ...mapGetters({
+      alias: 'icmaaSearchAlias/getMap',
+      currentTerm: 'icmaaSearchAlias/getCurrentTerm'
+    }),
+    searchString: {
+      get () {
+        return this.currentTerm
+      },
+      set (value) {
+        this.$store.dispatch('icmaaSearchAlias/setCurrentTerm', value)
+      }
+    },
     items () {
       return this.$store.state.search
     },
@@ -124,11 +137,6 @@ export default {
     },
     pleaseWait () {
       return this.getNoResultsMessage.length === 0 && this.showPleaseWait
-    }
-  },
-  watch: {
-    selectedCategoryIds () {
-      this.search()
     }
   },
   methods: {
@@ -219,14 +227,8 @@ export default {
       searchQuery = searchQuery
         .applyFilter({ key: searchFilterKey, value })
         .applyFilter({ key: 'stock', value: '' })
-        .applyFilter({ key: 'visibility', value: { 'in': [3, 4] } })
+        .applyFilter({ key: 'visibility', value: { 'in': [2, 3, 4] } })
         .applyFilter({ key: 'status', value: { 'in': [0, 1] } })
-
-      if (this.selectedCategoryIds.length > 0) {
-        this.selectedCategoryIds.forEach(cid => {
-          searchQuery.applyFilter({ key: 'category_ids', value: { 'in': [cid] } })
-        })
-      }
 
       return searchQuery
     },
@@ -250,6 +252,10 @@ export default {
     emptySearchInput () {
       Object.assign(this.$data, this.$options.data.apply(this))
       this.$refs.searchString.focus()
+    },
+    goToResults () {
+      this.$router.push(localizedRoute({ name: 'search', params: { term: this.searchAlias } }))
+      this.closeSidebar()
     },
     closeSidebar () {
       this.$store.dispatch('ui/setSidebar', { key: 'searchpanel', status: false })

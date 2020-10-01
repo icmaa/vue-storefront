@@ -26,7 +26,8 @@ export default {
   computed: {
     ...mapGetters({
       query: 'category-next/getCurrentSearchQuery',
-      category: 'category-next/getCurrentCategory'
+      category: 'category-next/getCurrentCategory',
+      isSearchResultPage: 'icmaaSearchAlias/isSearchResultPage'
     }),
     sortingOptions () {
       let variants = []
@@ -53,10 +54,11 @@ export default {
        * But as we need this feature for only 3 categories yet we do it using a configuration array.
        * This way we save space in our category payload and state which we would only use in 3 categories.
        */
+      const isSearch = this.isSearchResultPage ? 'search' : false
       const customSortAttr = icmaa_catalog.entities.category.customSortByAttributes
-      const customCategory = customSortAttr.find(c => c.id === this.category.id)
+      const customCategory = customSortAttr.find(c => c.id === this.category.id || c.id === isSearch)
       if (customCategory) {
-        return { [customCategory.label]: customCategory.sort }
+        return { [customCategory.label]: customCategory.sort || 'reset' }
       }
 
       return {}
@@ -91,7 +93,12 @@ export default {
       }
     },
     sort (value) {
-      this.$emit('change', this.currentOption)
+      let currentOption = this.currentOption
+      if (currentOption.id === 'reset') {
+        currentOption.id = ''
+      }
+
+      this.$emit('change', currentOption)
     }
   }
 }

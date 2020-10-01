@@ -11,7 +11,8 @@ export const storageKey = 'search-alias'
 export const SearchAliasStore: Module<SearchAliasState, RootState> = {
   namespaced: true,
   state: {
-    items: []
+    items: [],
+    currentTerm: ''
   },
   getters,
   actions,

@@ -29,6 +29,9 @@ const actions: ActionTree<SearchAliasState, RootState> = {
       context,
       options
     })
+  },
+  setCurrentTerm: ({ commit }, term: string) => {
+    commit(types.ICMAA_SEARCHALIAS_SET_CURRENT_TERM, term)
   }
 }
 
