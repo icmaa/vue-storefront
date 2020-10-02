@@ -54,7 +54,7 @@ const actions: ActionTree<SearchAliasState, RootState> = {
       searchString = searchString.replace(RegExp(r.word, 'i'), r.replace)
     })
 
-    Logger.error('Search for:', 'search', searchString)()
+    Logger.debug('Search for:', 'search', searchString)()
 
     return searchString
   },
