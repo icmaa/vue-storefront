@@ -2,21 +2,10 @@
   <div id="category">
     <header class="t-container">
       <div class="t-flex t-flex-wrap t-px-4 t-mb-8">
-        <category-extras-header class="t-bg-white t--mx-4 md:t-mx-0 md:t-mt-4 lg:t-w-full">
-          <div class="t-hidden lg:t-flex" v-if="['xs', 'sm'].includes(viewport)">
-            <button-component type="primary" icon="directions_bus" class="t-mr-2 t-font-bold" v-scroll-to="'#category-info-footer'">
-              {{ $t('ON TOUR') }}
-            </button-component>
-            <button-component v-scroll-to="'#category-info-footer'">
-              {{ $t('More info\'s') }}
-            </button-component>
-          </div>
-        </category-extras-header>
-        <breadcrumbs :active-route="getCurrentCategory.name" class="t-w-full t-my-8" />
-        <block-wrapper :components="contentHeader" v-if="contentHeader" />
+        <breadcrumbs class="t-w-full t-my-8" />
         <div class="t-w-full">
           <div class="t-flex t-flex-wrap t-items-center t--mx-1 lg:t--mx-2">
-            <h1 class="category-title t-hidden lg:t-block t-w-3/4 t-px-1 lg:t-px-2 t-mb-4 t-font-light t-text-2xl t-text-base-dark" v-text="title" />
+            <h1 class="category-title t-hidden lg:t-block t-w-3/4 t-px-1 lg:t-px-2 t-mb-4 t-font-light t-text-2xl t-text-base-dark" v-text="$t('Search results for: {term}', { term })" />
             <div class="t-hidden lg:t-block t-w-1/4 t-px-1 lg:t-px-2 t-text-sm t-text-base-dark t-text-right">
               <span class="t-font-bold" data-test-id="productsTotal">{{ getCategoryProductsTotal }}</span> {{ $t('items') }}
               <span class="t-mx-2 t-text-base-lighter">|</span>
@@ -42,12 +31,10 @@
 
     <div class="t-container">
       <lazy-hydrate :trigger-hydration="!loading" v-if="isLazyHydrateEnabled">
-        <component v-if="isInTicketWhitelist" :is="ProductListingTicket" :products="getCategoryProducts" />
-        <product-listing v-else :products="getCategoryProducts" :show-add-to-cart="true" />
+        <product-listing :products="getCategoryProducts" :show-add-to-cart="true" />
       </lazy-hydrate>
       <div v-else>
-        <component v-if="isInTicketWhitelist" :is="ProductListingTicket" :products="getCategoryProducts" />
-        <product-listing v-else :products="getCategoryProducts" />
+        <product-listing :products="getCategoryProducts" />
       </div>
       <div class="t-flex t-items-center t-justify-center t-mb-8" v-if="moreProductsInSearchResults">
         <button-component type="ghost" @click.native="loadMoreProducts" :disabled="loadingProducts" class="t-w-2/3 lg:t-w-1/4" :class="{ 't-relative t-opacity-60': loadingProducts }">
@@ -65,9 +52,6 @@
           </p>
         </div>
       </div>
-      <lazy-hydrate when-idle>
-        <category-extras-footer id="category-info-footer" class="t-mb-8" />
-      </lazy-hydrate>
     </div>
 
     <async-sidebar
@@ -91,11 +75,12 @@ import config from 'config'
 import rootStore from '@vue-storefront/core/store'
 import { mapGetters, mapMutations } from 'vuex'
 import { isServer } from '@vue-storefront/core/helpers'
-import { catalogHooksExecutors } from '@vue-storefront/core/modules/catalog-next/hooks'
 import { Logger } from '@vue-storefront/core/lib/logger'
+import { htmlDecode } from '@vue-storefront/core/filters'
 import { getSearchOptionsFromRouteParams } from '@vue-storefront/core/modules/catalog-next/helpers/categoryHelpers'
 import { IcmaaGoogleTagManagerExecutors } from 'icmaa-google-tag-manager/hooks'
 import * as productMutationTypes from '@vue-storefront/core/modules/catalog/store/product/mutation-types'
+import i18n from '@vue-storefront/i18n'
 
 import AsyncSidebar from 'theme/components/core/blocks/AsyncSidebar/AsyncSidebar.vue'
 import Sidebar from 'theme/components/core/blocks/Category/Sidebar'
@@ -107,43 +92,13 @@ import Dropdown from 'theme/components/core/blocks/Dropdown'
 import ButtonComponent from 'theme/components/core/blocks/Button'
 import MaterialIcon from 'theme/components/core/blocks/MaterialIcon'
 import LoaderBackground from 'theme/components/core/LoaderBackground'
-import BlockWrapper from 'icmaa-cms/components/Wrapper'
-import CategoryExtrasHeader from 'theme/components/core/blocks/CategoryExtras/Header'
-import CategoryExtrasFooter from 'theme/components/core/blocks/CategoryExtras/Footer'
-
-import CategoryMixin from 'icmaa-catalog/components/Category'
-import CategoryExtrasMixin from 'icmaa-category-extras/mixins/categoryExtras'
-import CategoryMetaMixin from 'icmaa-meta/mixins/categoryMeta'
-import ClusterMixin from 'icmaa-user/mixins/cluster'
 
 const FilterSidebar = () => import(/* webpackChunkName: "vsf-sidebar-categoryfilter" */ 'theme/components/core/blocks/Category/Sidebar')
 const AddToCartSidebar = () => import(/* webpackChunkName: "vsf-addtocart-sidebar" */ 'theme/components/core/blocks/AddToCartSidebar/AddToCartSidebar')
 const ProductListingTicket = () => import(/* webpackChunkName: "vsf-product-listing-ticket" */ 'theme/components/core/ProductListingTicket')
 
-const composeInitialPageState = async (store, route, forceLoad = false, pageSize) => {
-  try {
-    const filters = getSearchOptionsFromRouteParams(route.params)
-    const cachedCategory = store.getters['category-next/getCategoryFrom'](route.path)
-    const hasCategoryExtras = store.getters['icmaaCategoryExtras/getCategoryExtrasByUrlKey'](route.path)
-    const currentCategory = cachedCategory && !forceLoad && hasCategoryExtras ? cachedCategory : await store.dispatch('category-next/loadCategoryWithExtras', { filters })
-    if (!store.getters['url/isBackRoute']) {
-      await store.dispatch('category-next/loadCategoryProducts', { route, category: currentCategory, pageSize })
-    }
-
-    const breadCrumbsLoader = store.dispatch(
-      'category-next/loadCategoryBreadcrumbs',
-      { category: currentCategory, currentRouteName: currentCategory.name, omitCurrent: true }
-    )
-    if (isServer) {
-      await breadCrumbsLoader
-    }
-  } catch (e) {
-    Logger.error('Problem with setting Category initial data!', 'category', e)()
-  }
-}
-
 export default {
-  name: 'Category',
+  name: 'SearchResult',
   components: {
     AsyncSidebar,
     LazyHydrate,
@@ -154,12 +109,8 @@ export default {
     Presets,
     ProductListing,
     Breadcrumbs,
-    SortBy,
-    CategoryExtrasHeader,
-    CategoryExtrasFooter,
-    BlockWrapper
+    SortBy
   },
-  mixins: [ CategoryMixin, CategoryExtrasMixin, CategoryMetaMixin, ClusterMixin ],
   data () {
     return {
       pageSizes: [24, 48, 60, 100],
@@ -173,14 +124,17 @@ export default {
   },
   computed: {
     ...mapGetters({
+      viewport: 'ui/getViewport',
       getCurrentSearchQuery: 'category-next/getCurrentSearchQuery',
       getCategoryProducts: 'category-next/getCategoryProducts',
       getCurrentCategory: 'category-next/getCurrentCategory',
       getCategoryProductsTotal: 'category-next/getCategoryProductsTotal',
       getCurrentFilters: 'category-next/getCurrentFilters',
       getProductsStats: 'category-next/getCategorySearchProductsStats',
-      isInTicketWhitelist: 'category-next/isCurrentCategoryInTicketWhitelist',
-      contentHeader: 'icmaaCategoryExtras/getContentHeaderByCurrentCategory'
+      contentHeader: 'icmaaCategoryExtras/getContentHeaderByCurrentCategory',
+      term: 'icmaaSearchAlias/getCurrentResultsPageTerm',
+      termHash: 'icmaaSearchAlias/getCurrentResultsPageTermHash',
+      searchAlias: 'icmaaSearchAlias/getCurrentResultsPageAlias'
     }),
     isLazyHydrateEnabled () {
       return config.ssr.lazyHydrateFor.includes('category-next.products')
@@ -197,30 +151,6 @@ export default {
     },
     activeFilterCount () {
       return Object.keys(this.getCurrentFilters).length
-    }
-  },
-  async asyncData ({ store, route, context }) { // this is for SSR purposes to prefetch data - and it's always executed before parent component methods
-    const { pageSize } = this.data()
-    await composeInitialPageState(store, route, false, route.params.pagesize || pageSize)
-  },
-  mounted () {
-    catalogHooksExecutors.categoryPageVisited(this.getCurrentCategory)
-  },
-  async beforeRouteEnter (to, from, next) {
-    if (isServer) next() // SSR no need to invoke SW caching here
-    else if (!from.name) { // SSR but client side invocation, we need to cache products and invoke requests from asyncData for offline support
-      next(async vm => {
-        vm.loading = true
-        await composeInitialPageState(vm.$store, to, true, vm.pageSize)
-        await vm.$store.dispatch('category-next/cacheProducts', { route: to }) // await here is because we must wait for the hydration
-        vm.loading = false
-      })
-    } else { // Pure CSR, with no initial category state
-      next(async vm => {
-        vm.loading = true
-        vm.$store.dispatch('category-next/cacheProducts', { route: to })
-        vm.loading = false
-      })
     }
   },
   methods: {
@@ -252,32 +182,41 @@ export default {
 
       try {
         this.loadingProducts = true
-        await this.$store.dispatch('category-next/loadMoreCategoryProducts')
+        await this.$store.dispatch('category-next/loadMoreSearchProducts')
       } catch (e) {
-        Logger.error('Problem with fetching more products', 'category', e)()
+        Logger.error('Problem with fetching more products', 'search', e)()
       } finally {
         this.loadingProducts = false
       }
+    },
+    async fetchAsyncData () {
+      try {
+        await this.$store.dispatch('icmaaSearchAlias/setCurrentResultAlias', this.term)
+
+        const route = this.$route
+        const pageSize = route.params.pagesize || this.pageSize
+        const category = { id: this.termHash, term: this.searchAlias }
+
+        await this.$store.dispatch('category-next/loadSearchProducts', { route, category, pageSize })
+        this.$store.dispatch('category-next/loadSearchBreadcrumbs')
+
+        this.loading = false
+      } catch (e) {
+        Logger.error('Problem with setting SearchResult initial data!', 'search', e)()
+      }
     }
+  },
+  async asyncData ({ store, route, context }) {
+    if (context) {
+      context.output.cacheTags.add(`search`)
+    }
+  },
+  async mounted () {
+    await this.fetchAsyncData()
+    IcmaaGoogleTagManagerExecutors.searchResultVisited({ term: this.term, products: this.getCategoryProducts })
+  },
+  serverPrefetch () {
+    return this.fetchAsyncData()
   }
 }
 </script>
-
-<style lang="scss">
-
-/** Only show cropped header on desktop */
-@media (min-width: 1024px) {
-  header .category-header.loaded {
-    padding-top: calc(4%*100/19);
-    overflow: hidden;
-
-    & picture > img {
-      position: absolute;
-      top: 50%;
-      left: 0;
-      transform: translateY(-50%);
-    }
-  }
-}
-
-</style>

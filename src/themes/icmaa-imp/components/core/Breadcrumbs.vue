@@ -1,7 +1,7 @@
 <template>
   <div class="t-flex t-items-center t-text-sm t-text-base-tone">
     <template v-for="(link, index) in paths">
-      <router-link :to="link.route_link" :key="index" class="t-text-base-tone hover:t-text-base-dark">
+      <router-link :to="link.route_link" :key="index" class="t-text-base-tone hover:t-text-base-dark" v-if="link.route_link">
         <template v-if="index === 0">
           <material-icon icon="home" size="xs" class="t-align-middle" />
           <span class="t-sr-only">{{ link.name | htmlDecode }}</span>
@@ -10,6 +10,7 @@
           {{ link.name | htmlDecode }}
         </template>
       </router-link>
+      <span v-else :key="index" class="t-text-base-tone" v-text="link.name || htmlDecode" />
       <span class="t-mx-3 lg:t-mx-4 t-text-xs t-font-thin" :key="'bullet-' + index" v-text="spacerCharacter" />
     </template>
     <span class="t-text-base-tone" v-text="current || htmlDecode" />

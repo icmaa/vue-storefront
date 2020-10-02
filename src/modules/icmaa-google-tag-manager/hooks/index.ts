@@ -18,6 +18,11 @@ const {
 } = createListenerHook<{ term: string, results: Product[] }>()
 
 const {
+  hook: searchResultVisitedHook,
+  executor: searchResultVisitedExecutor
+} = createListenerHook<{ term: string, results: Product[] }>()
+
+const {
   hook: openProductListFilterSidebarHook,
   executor: openProductListFilterSidebarExecutor
 } = createListenerHook()
@@ -31,6 +36,7 @@ const IcmaaGoogleTagManagerExecutors = {
   afterEach: afterEachExecutor,
   onGtmPageView: onGtmPageViewExecutor,
   onSearchResult: onSearchResultExecutor,
+  searchResultVisited: searchResultVisitedExecutor,
   openProductListFilterSidebar: openProductListFilterSidebarExecutor,
   onProductListFilter: onProductListFilterExecutor
 }
@@ -39,6 +45,7 @@ const IcmaaGoogleTagManager = {
   afterEach: afterEachHook,
   onGtmPageView: onGtmPageViewHook,
   onSearchResult: onSearchResultHook,
+  searchResultVisited: searchResultVisitedHook,
   openProductListFilterSidebar: openProductListFilterSidebarHook,
   onProductListFilter: onProductListFilterHook
 }
