@@ -1,7 +1,7 @@
 <template>
   <div v-if="isVisible">
     <div class="category-header t-relative" :class="{ 'loaded': !bannerLoading }">
-      <picture-component :src="banner" :width="bannerWidth" :height="bannerHeight" :sizes="bannerSizes" :placeholder="true" :ratio="`${bannerWidth}:${bannerHeight}`" :auto-reload="true" @load="onBannerLoad" @error="onBannerError" :alt="category.name" v-if="banner" img-class="t-w-screen" placeholder-class="t-w-screen lg:t-w-auto" />
+      <picture-component :src="banner" :width="bannerWidth" :height="bannerHeight" :sizes="bannerSizes" :placeholder="true" :ratio="`${bannerWidth}:${bannerHeight}`" :auto-reload="true" @load="onBannerLoad" @error="onBannerError" @click="goToCategory()" :alt="category.name" v-if="banner" img-class="t-w-screen" placeholder-class="t-w-screen lg:t-w-auto" :class="{ 't-cursor-pointer': linkedBanner }" />
       <div class="t-flex t-items-center t-justify-end t-absolute t-bottom-0 t-left-0 t-pb-6 t-px-6 t-w-full">
         <slot />
       </div>
@@ -16,6 +16,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import { getThumbnailPath } from '@vue-storefront/core/helpers'
+import { formatCategoryLink } from '@vue-storefront/core/modules/url/helpers'
 import DepartmentLogo from 'theme/components/core/blocks/CategoryExtras/DepartmentLogo'
 import PictureComponent from 'theme/components/core/blocks/Picture'
 
@@ -29,6 +30,10 @@ export default {
     PictureComponent
   },
   props: {
+    linkedBanner: {
+      type: Boolean,
+      default: false
+    },
     bannerDimensions: {
       type: [Object],
       default: () => ({
@@ -115,6 +120,11 @@ export default {
     logoLimitByViewport () {
       const viewportLimits = { xs: 4, sm: 4, md: 7, lg: 7, xl: 10 }
       return viewportLimits[this.viewport] || 4;
+    },
+    goToCategory () {
+      if (this.linkedBanner) {
+        this.$router.push(formatCategoryLink(this.category))
+      }
     }
   }
 }

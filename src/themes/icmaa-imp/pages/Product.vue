@@ -11,7 +11,7 @@
           :product="product"
         />
         <div class="t-w-full t-p-8 t-bg-white lg:t-w-1/2" :class="{ 'lg:t-flex lg:t-flex-col lg:t-justify-between': isPreorder }">
-          <category-extras-header class="t--mx-8 t--mt-8 t-mb-8 lg:t-pl-px t-border-b t-border-base-lightest" v-if="!['xs', 'sm', 'md'].includes(viewport)" :banner-sizes="categoryHeaderBannerSizes" :spotify-logo-limit="spotifyLogoLimit" />
+          <category-extras-header class="t--mx-8 t--mt-8 t-mb-8 lg:t-pl-px t-border-b t-border-base-lightest" v-if="!['xs', 'sm', 'md'].includes(viewport)" :linked-banner="true" :banner-sizes="categoryHeaderBannerSizes" :spotify-logo-limit="spotifyLogoLimit" />
           <div class="t-flex t-flex-wrap">
             <h1 data-test-id="productName" class="t-flex-grow t-w-1/2 t-mb-0 t-leading-snug">
               <template v-if="typeof productName === 'object'">
@@ -44,12 +44,12 @@
               </div>
 
               <div class="t-flex t-flex-wrap">
-                <div v-if="['configurable', 'bundle'].includes(product.type_id) && !isOnesizeProduct" class="t-flex t-flex-grow t-w-full t-mb-4 lg:t-w-3/6 lg:t-mr-4">
+                <div v-if="['configurable', 'bundle'].includes(product.type_id) && !isOnesizeProduct" class="t-flex t-flex-grow t-w-full t-mb-4 xl:t-w-3/6 xl:t-mr-4">
                   <button-component type="select" icon="arrow_forward" data-test-id="AddToCartSize" class="t-w-full" @click.native="openAddtocart">
                     {{ productOptionsLabel }}
                   </button-component>
                 </div>
-                <button-component :type="loading || !isAddToCartDisabled ? 'primary' : 'second'" data-test-id="AddToCart" class="t-flex-grow lg:t-w-2/6 disabled:t-opacity-50 t-relative t-mb-4 t-mr-4" :disabled="isAddToCartDisabled" @click.native="addToCartButtonClick">
+                <button-component :type="loading || !isAddToCartDisabled ? 'primary' : 'second'" data-test-id="AddToCart" class="t-flex-grow xl:t-w-2/6 disabled:t-opacity-50 t-relative t-mb-4 t-mr-4" :disabled="isAddToCartDisabled" @click.native="addToCartButtonClick">
                   {{ userHasSelectedVariant && isAddToCartDisabled && !loading ? $t('Out of stock') : $t('Add to cart') }}
                   <loader-background v-if="loading" class="t-bottom-0" height="t-h-1" bar="t-bg-base-lightest t-opacity-25" />
                 </button-component>
