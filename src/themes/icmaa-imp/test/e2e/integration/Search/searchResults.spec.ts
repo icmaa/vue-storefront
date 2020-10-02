@@ -1,9 +1,9 @@
 describe('Search', () => {
-  it('for "Heaven Shall Burn" and its alias "HSB" in search sidebar', () => {
+  it('and go to result-page', () => {
     cy.visitAsRecurringUser('/', { storeCode: 'de' })
 
     cy.openSidebar('[data-test-id="SearchInput"]')
-    cy.get('@sidebar').find('input').as('searchInput')
+    cy.get('@sidebar').findByTestId('SearchInput').as('searchInput')
       .type('HSB')
 
     cy.get('@sidebar')
@@ -15,18 +15,15 @@ describe('Search', () => {
       .then(listing => {
         const countTarget = Cypress.$(listing).length
 
-        cy.get('@searchInput').clear().type('Heaven Shall Burn')
-        cy.get('@sidebar').findByTestId('ProductTile').as('alias')
+        cy.get('@sidebar')
+          .findByTestId('ShowAllButton')
+          .click()
 
-        cy.get('@alias')
+        cy.getByTestId('ProductListing').findByTestId('ProductTile')
           .then(listing => {
             const countAlias = Cypress.$(listing).length
-            expect(countAlias).to.eql(countTarget)
+            expect(countAlias).to.gte(countTarget)
           })
       })
-
-    cy.get('@searchInput').type(' Endzeit')
-    cy.get('@sidebar')
-      .findByTestId('ProductTile')
   })
 })

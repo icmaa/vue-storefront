@@ -74,8 +74,8 @@ export const icmaaGoogleTagManagerModule: Module<GoogleTagManagerState, any> = {
 
       return !isEmpty(product) ? product : false
     },
-    gtmEventPayload: (state, getters, rootState, rootGetters) => (type?: 'product' | 'category') => {
-      let DTO = {}
+    gtmEventPayload: (state, getters, rootState, rootGetters) => (type?: 'product' | 'category' | 'search') => {
+      let DTO: Record<string, any> = {}
 
       const storeView = currentStoreView()
       const { currencyCode } = storeView.i18n
@@ -116,12 +116,24 @@ export const icmaaGoogleTagManagerModule: Module<GoogleTagManagerState, any> = {
           }
 
           break
+
+        case 'search':
+          DTO = {
+            event: 'icmaa-search-results',
+            searchTerm: rootGetters['icmaaSearchAlias/getCurrentResultsPageTerm'],
+            ecommerce: {
+              currencyCode
+            }
+          }
+
+          break
       }
 
       const defaultDTO = {
-        'event': 'icmaa-page-view',
-        'customerLoggedIn': rootGetters['user/isLoggedIn'],
-        'customerEmail': rootGetters['user/getUserEmail']
+        event: 'icmaa-page-view',
+        customerLoggedIn: rootGetters['user/isLoggedIn'],
+        customerEmail: rootGetters['user/getUserEmail'],
+        storeCode: storeView.storeCode
       }
 
       return Object.assign(defaultDTO, DTO)

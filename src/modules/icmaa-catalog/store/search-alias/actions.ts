@@ -1,5 +1,6 @@
 import { ActionTree } from 'vuex'
 import { list as listAbstract, MutationTypesInterface } from 'icmaa-cms/store/abstract/actions'
+import { Logger } from '@vue-storefront/core/lib/logger'
 
 import { stateKey } from './'
 import * as types from './mutation-types'
@@ -29,6 +30,40 @@ const actions: ActionTree<SearchAliasState, RootState> = {
       context,
       options
     })
+  },
+  getAliasesBySearchString: async ({ dispatch, getters }, { searchString }): Promise<string> => {
+    let wordResult
+    let replaces: any = []
+
+    const wordsRegexp = /([^\s_\-."']+)/giu
+    const words = searchString.match(wordsRegexp)
+
+    await dispatch('list', { words, translate: true })
+    let alias: any = getters.getMap
+
+    while ((wordResult = wordsRegexp.exec(searchString)) !== null) {
+      const word = wordResult[0]
+      const aliasKey = Object.keys(alias).find(k => RegExp(`^${word}$`, 'giu').test(k))
+      if (aliasKey) {
+        const replace = alias[aliasKey]
+        replaces.push({ word, replace })
+      }
+    }
+
+    replaces.forEach(r => {
+      searchString = searchString.replace(RegExp(r.word, 'i'), r.replace)
+    })
+
+    Logger.debug('Search for:', 'search', searchString)()
+
+    return searchString
+  },
+  setCurrentTerm: ({ commit }, term: string) => {
+    commit(types.ICMAA_SEARCHALIAS_SET_CURRENT_TERM, term)
+  },
+  setCurrentResultAlias: async ({ dispatch, commit }, searchString: string) => {
+    const alias = await dispatch('getAliasesBySearchString', { searchString })
+    commit(types.ICMAA_SEARCHALIAS_SET_CURRENT_RESULT_ALIAS, alias)
   }
 }
 

@@ -11,9 +11,11 @@ import { changeFilterQuery } from '@vue-storefront/core/modules/catalog-next/hel
 import * as orgTypes from '@vue-storefront/core/modules/catalog-next/store/category/mutation-types'
 
 import extendedCoreActions from './actions/index'
+import searchActions from './actions/search'
 
 const actions: ActionTree<CategoryState, RootState> = {
   ...extendedCoreActions,
+  ...searchActions,
   async loadCategoryWithExtras ({ dispatch }, categorySearchOptions: DataResolver.CategorySearchOptions): Promise<Category> {
     return dispatch('icmaaCategoryExtras/loadCategoryWithExtras', categorySearchOptions, { root: true })
   },

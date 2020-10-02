@@ -20,6 +20,11 @@ export const registerCustomPageEvents = () => {
     const event = rootStore.getters['icmaaGoogleTagManager/gtmEventPayload']('category')
     IcmaaGoogleTagManagerExecutors.onGtmPageView({ type: event.event, event })
   })
+
+  EventHooks.searchResultVisited(() => {
+    const event = rootStore.getters['icmaaGoogleTagManager/gtmEventPayload']('search')
+    IcmaaGoogleTagManagerExecutors.onGtmPageView({ type: event.event, event })
+  })
 }
 
 export function afterRegistration () {
