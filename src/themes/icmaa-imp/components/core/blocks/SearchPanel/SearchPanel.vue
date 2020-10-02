@@ -30,11 +30,11 @@
         <product-tile v-for="product in filteredProducts" :key="product.sku + '-' + (product.parentId || 'parent')" :product="product" @click.native="closeSidebar" class="t-w-1/2 lg:t-w-1/3 t-px-1 t-mb-8" />
       </div>
       <div v-if="filteredProducts.length >= size && OnlineOnly" class="t-flex t-items-center t-flex-wrap t-justify-center t-mt-4" :class="{ 't-opacity-25': pleaseWait }">
-        <button-component type="ghost" @click="loadMoreProducts" v-if="moreProducts" class="t-w-full md:t-w-2/3 t-mb-2" :class="{ 't-relative t-opacity-60': loadingProducts }">
+        <button-component type="ghost" @click="loadMoreProducts" v-if="moreProducts" class="t-w-full md:t-w-2/3 t-mb-2" :class="{ 't-relative t-opacity-60': loadingProducts }" data-test-id="LoadMoreButton">
           {{ $t('Load more') }}
           <loader-background v-if="loadingProducts" bar="t-bg-base-darkest" class="t-bottom-0" />
         </button-component>
-        <button-component type="second" @click="goToResults()" class="t-w-full md:t-w-2/3">
+        <button-component type="second" @click="goToResults()" class="t-w-full md:t-w-2/3" data-test-id="ShowAllButton">
           {{ $t('View all results') }}
         </button-component>
       </div>
