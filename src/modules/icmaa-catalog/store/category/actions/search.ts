@@ -3,6 +3,7 @@ import * as types from '@vue-storefront/core/modules/catalog-next/store/category
 import RootState from '@vue-storefront/core/types/RootState'
 import CategoryState from '@vue-storefront/core/modules/catalog-next/store/category/CategoryState'
 import i18n from '@vue-storefront/i18n'
+import addDefaultProductFilter from 'icmaa-catalog/helpers/defaultProductFilter'
 import { products } from 'config'
 import { buildFilterProductsQuery } from '@vue-storefront/core/helpers'
 import { _prepareCategoryPathIds } from '@vue-storefront/core/modules/catalog-next/helpers/categoryHelpers'
@@ -17,10 +18,7 @@ const actions: ActionTree<CategoryState, RootState> = {
     let filterQr = buildFilterProductsQuery({}, searchQuery.filters)
 
     filterQr.applyFilter({ key: 'search-text', value: category.term })
-
-    // Add our custom category filter
-    // @see DivanteLtd/vue-storefront#4111
-    filterQr.applyFilter({ key: 'stock', value: '' })
+    addDefaultProductFilter(filterQr)
 
     const { includeFields, excludeFields } = getters.getIncludeExcludeFields(category)
     const sort = searchQuery.sort
@@ -69,10 +67,7 @@ const actions: ActionTree<CategoryState, RootState> = {
     let filterQr = buildFilterProductsQuery({}, searchQuery.filters)
 
     filterQr.applyFilter({ key: 'search-text-plain', value: category.term })
-
-    // Add our custom category filter
-    // @see DivanteLtd/vue-storefront#4111
-    filterQr.applyFilter({ key: 'stock', value: '' })
+    addDefaultProductFilter(filterQr)
 
     const { includeFields, excludeFields } = getters.getIncludeExcludeFields(category)
     const sort = searchQuery.sort

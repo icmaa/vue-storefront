@@ -54,6 +54,7 @@ import VueOfflineMixin from 'vue-offline/mixin'
 
 import config from 'config'
 import i18n from '@vue-storefront/i18n'
+import addDefaultProductFilter from 'icmaa-catalog/helpers/defaultProductFilter'
 import { mapGetters } from 'vuex'
 import { required, minLength } from 'vuelidate/lib/validators'
 import { disableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock'
@@ -208,9 +209,8 @@ export default {
       const searchFilterKey = plain ? 'search-text-plain' : 'search-text'
       searchQuery = searchQuery
         .applyFilter({ key: searchFilterKey, value })
-        .applyFilter({ key: 'stock', value: '' })
-        .applyFilter({ key: 'visibility', value: { 'in': [2, 3, 4] } })
-        .applyFilter({ key: 'status', value: { 'in': [0, 1] } })
+
+      addDefaultProductFilter(searchQuery, true)
 
       return searchQuery
     },

@@ -4,6 +4,7 @@ import { Category } from '@vue-storefront/core/modules/catalog-next/types/Catego
 import CategoryState, { CategoryStateListItemHydrated, ProductListingWidgetState } from '../types/CategoryState'
 import * as types from './mutation-types'
 import * as catTypes from '@vue-storefront/core/modules/catalog-next/store/category/mutation-types'
+import addDefaultProductFilter from 'icmaa-catalog/helpers/defaultProductFilter'
 import { fetchCategoryById, fetchChildCategories } from '../helpers'
 import { SearchQuery } from 'storefront-query-builder'
 import { getFilterHash } from '../helpers'
@@ -53,12 +54,8 @@ const actions: ActionTree<CategoryState, RootState> = {
       return
     }
 
-    let query = new SearchQuery()
-    query
-      .applyFilter({ key: 'stock', value: '' })
-      .applyFilter({ key: 'visibility', value: { in: [2, 3, 4] } })
-      .applyFilter({ key: 'status', value: { in: [0, 1] } })
-      .applyFilter({ key: 'category_ids', value: { in: [categoryId] } })
+    let query = addDefaultProductFilter(new SearchQuery(), true)
+    query.applyFilter({ key: 'category_ids', value: { in: [categoryId] } })
 
     let filterHash = getFilterHash(filter)
     if (filter !== false) {
