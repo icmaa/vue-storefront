@@ -2,6 +2,7 @@ import { ActionTree } from 'vuex'
 import * as types from '@vue-storefront/core/modules/catalog-next/store/category/mutation-types'
 import RootState from '@vue-storefront/core/types/RootState'
 import CategoryState from '@vue-storefront/core/modules/catalog-next/store/category/CategoryState'
+import addDefaultProductFilter from 'icmaa-catalog/helpers/defaultProductFilter'
 import { products } from 'config'
 import { buildFilterProductsQuery } from '@vue-storefront/core/helpers'
 import { _prepareCategoryPathIds } from '@vue-storefront/core/modules/catalog-next/helpers/categoryHelpers'
@@ -32,9 +33,7 @@ const actions: ActionTree<CategoryState, RootState> = {
     const searchQuery = getters.getCurrentFiltersFrom(route[products.routerFiltersSource], categoryMappedFilters)
     let filterQr = buildFilterProductsQuery(searchCategory, searchQuery.filters)
 
-    // Add our custom category filter
-    // @see DivanteLtd/vue-storefront#4111
-    filterQr.applyFilter({ key: 'stock', value: '' })
+    addDefaultProductFilter(filterQr)
     if (!searchQuery.sort) {
       filterQr.applySort({ field: 'is_in_sale', options: { 'missing': '_first' } })
     }
@@ -88,9 +87,7 @@ const actions: ActionTree<CategoryState, RootState> = {
     const searchQuery = getters.getCurrentSearchQuery
     let filterQr = buildFilterProductsQuery(category, searchQuery.filters)
 
-    // Add our custom category filter
-    // @see DivanteLtd/vue-storefront#4111
-    filterQr.applyFilter({ key: 'stock', value: '' })
+    addDefaultProductFilter(filterQr)
     if (!searchQuery.sort) {
       filterQr.applySort({ field: 'is_in_sale', options: { 'missing': '_first' } })
     }

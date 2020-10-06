@@ -2,6 +2,7 @@ import { SearchQuery } from 'storefront-query-builder'
 import { Logger } from '@vue-storefront/core/lib/logger'
 import forEach from 'lodash-es/forEach'
 import Product from '@vue-storefront/core/modules/catalog/types/Product'
+import addDefaultProductFilter from 'icmaa-catalog/helpers/defaultProductFilter'
 
 export interface RuleSets {
   [ruleSetKey: string]: {
@@ -179,11 +180,7 @@ class Rules {
    * @returns {this}
    */
   protected addDefaultFilter (): this {
-    this.query
-      .applyFilter({ key: 'stock', value: '' })
-      .applyFilter({ key: 'visibility', value: { in: [2, 3, 4] } })
-      .applyFilter({ key: 'status', value: { in: [0, 1] } })
-
+    addDefaultProductFilter(this.query, true)
     return this
   }
 
