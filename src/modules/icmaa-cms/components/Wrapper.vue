@@ -14,6 +14,7 @@ import mapValues from 'lodash-es/mapValues'
 import camelCase from 'lodash-es/camelCase'
 
 const AsyncLogoline = () => import(/* webpackChunkName: "vsf-content-block-logoline" */ 'theme/components/core/blocks/CategoryExtras/LogoLine')
+const AsyncLogolineself = () => import(/* webpackChunkName: "vsf-content-block-logolineself" */ 'theme/components/core/blocks/CategoryExtras/LogoLineSelf')
 const AsyncTeaser = () => import(/* webpackChunkName: "vsf-content-block-teaser" */ 'theme/components/core/blocks/Teaser/Teaser')
 const AsyncText = () => import(/* webpackChunkName: "vsf-content-block-text" */ 'theme/components/core/blocks/RichText')
 const AsyncProductlisting = () => import(/* webpackChunkName: "vsf-content-block-productlisting" */ '../../icmaa-category/components/core/ProductListingWidget')
@@ -59,6 +60,13 @@ export default {
           },
           cssClass: 't-mb-4 lg:t-mb-6',
           padding: true
+        },
+        'component_logolineself': {
+          component: AsyncLogolineself,
+          propsTypes: {
+            content: 'json'
+          },
+          propsDefaults: {}
         },
         'component_text': {
           component: AsyncText,
