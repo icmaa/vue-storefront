@@ -18,6 +18,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import { getCategoryExtrasKeyByAttribute } from 'icmaa-category-extras/helpers'
+import { Logo } from 'icmaa-category-extras/helpers/categoryExtras/logo'
 
 import DepartmentLogo from 'theme/components/core/blocks/CategoryExtras/DepartmentLogo'
 import Placeholder from 'theme/components/core/blocks/Placeholder'
@@ -32,6 +33,10 @@ export default {
     parentId: {
       type: Number,
       required: true
+    },
+    staticItems: {
+      type: Array,
+      default: () => []
     },
     limit: {
       type: Number,
@@ -72,7 +77,7 @@ export default {
       cluster: 'user/getCluster'
     }),
     logoLineItems () {
-      return this.getLogolineItems(this.categories, this.type)
+      return this.hasStaticItems ? this.staticLogoLineItems : this.getLogolineItems(this.categories, this.type)
     },
     placeholderCount () {
       return this.limit > this.logoLineItems.length && this.placeholder ? this.limit - this.logoLineItems.length : 0
@@ -85,10 +90,20 @@ export default {
     },
     catTypeKey () {
       return getCategoryExtrasKeyByAttribute(this.type)
+    },
+    hasStaticItems () {
+      return this.parentId === 0 && this.staticItems.length > 0
+    },
+    staticLogoLineItems () {
+      return this.staticItems.map(c => new Logo({ category: c.name, link: c.link }))
     }
   },
   methods: {
     async fetchData () {
+      if (this.hasStaticItems) {
+        return
+      }
+
       const filters = {
         'path': this.parentId,
         'ceHasLogo': true,

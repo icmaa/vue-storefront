@@ -53,7 +53,7 @@ export default {
       })
     },
     departmentLogo () {
-      return (this.categoryExtras && this.categoryExtras.hasLogo) ? new Logo(this.departmentCategory) : false
+      return (this.categoryExtras && this.categoryExtras.hasLogo) ? new Logo({ category: this.departmentCategory }) : false
     },
     hasDepartmentBrandOptionLabel () {
       return this.departmentBrandOptionLabel !== this.departmentBrandValue
