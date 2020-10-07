@@ -3,7 +3,7 @@
     <div class="t-container t-px-4">
       <div class="t--mx-4 lg:t-px-4 t-flex t-flex-wrap">
         <breadcrumbs class="breadcrumbs t-w-full t-my-8 t-hidden lg:t-flex" />
-        <category-extras-header class="t-bg-white t-border-b t-border-base-lightest" v-if="['xs', 'sm', 'md'].includes(viewport)" :banner-sizes="categoryHeaderBannerSizes" :spotify-logo-limit="spotifyLogoLimit" />
+        <category-extras-header class="t-bg-white t-border-b t-border-base-lightest" v-if="['xs', 'sm', 'md'].includes(viewport)" :linked-banner="true" :banner-sizes="categoryHeaderBannerSizes" :spotify-logo-limit="spotifyLogoLimit" />
         <product-gallery
           class="product-gallery t-w-full t-border-base-lightest t-border-b t-bg-white lg:t-w-1/2 lg:t-border-b-0"
           :gallery="gallery.map(i => i.src)"
@@ -11,7 +11,13 @@
           :product="product"
         />
         <div class="t-w-full t-p-8 t-bg-white lg:t-w-1/2" :class="{ 'lg:t-flex lg:t-flex-col lg:t-justify-between': isPreorder }">
-          <category-extras-header class="t--mx-8 t--mt-8 t-mb-8 lg:t-pl-px t-border-b t-border-base-lightest" v-if="!['xs', 'sm', 'md'].includes(viewport)" :linked-banner="true" :banner-sizes="categoryHeaderBannerSizes" :spotify-logo-limit="spotifyLogoLimit" />
+          <category-extras-header class="t--mx-8 t--mt-8 t-mb-8 lg:t-pl-px t-border-b t-border-base-lightest" v-if="!['xs', 'sm', 'md'].includes(viewport)" :linked-banner="true" :banner-sizes="categoryHeaderBannerSizes" :spotify-logo-limit="spotifyLogoLimit">
+            <div class="t-flex" v-if="category">
+              <button-component size="sm" @click="goToDepartmentCategory()">
+                {{ $t('More product\'s') }}
+              </button-component>
+            </div>
+          </category-extras-header>
           <div class="t-flex t-flex-wrap">
             <h1 data-test-id="productName" class="t-flex-grow t-w-1/2 t-mb-0 t-leading-snug">
               <template v-if="typeof productName === 'object'">
@@ -122,6 +128,7 @@ import { registerModule } from '@vue-storefront/core/lib/modules'
 import { onlineHelper, isServer } from '@vue-storefront/core/helpers'
 import { catalogHooksExecutors } from '@vue-storefront/core/modules/catalog-next/hooks'
 import { currentStoreView } from '@vue-storefront/core/lib/multistore'
+import { formatCategoryLink } from '@vue-storefront/core/modules/url/helpers'
 import * as productMutationTypes from '@vue-storefront/core/modules/catalog/store/product/mutation-types'
 
 import { ReviewModule } from '@vue-storefront/core/modules/review'
@@ -317,6 +324,9 @@ export default {
 
         this.openAddtocart()
       }
+    },
+    goToDepartmentCategory () {
+      this.$router.push(formatCategoryLink(this.departmentCategory))
     }
   },
   async asyncData ({ store, route }) {
