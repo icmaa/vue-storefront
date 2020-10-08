@@ -3,26 +3,14 @@ import { mapGetters } from 'vuex'
 import config from 'config'
 import { getThumbnailPath } from '@vue-storefront/core/helpers'
 import { htmlDecode } from '@vue-storefront/core/filters'
-import { currentStoreView, localizedRoute } from '@vue-storefront/core/lib/multistore'
 
 export default {
-  methods: {
-    getCategoryExtrasValueOrCategoryValue (key: string, catKey: string = 'name'): any {
-      return this.categoryExtras && this.categoryExtras[key]
-        ? this.categoryExtras[key] : this.getCurrentCategory[catKey]
-    }
-  },
   computed: {
     ...mapGetters('category-next', ['getCurrentCategory']),
     ...mapGetters({ categoryExtras: 'icmaaCategoryExtras/getCategoryExtrasByCurrentCategory' }),
-    title (): string {
-      return this.getCategoryExtrasValueOrCategoryValue('title')
-    },
-    description (): string {
-      return this.getCategoryExtrasValueOrCategoryValue('description')
-    },
     metaTitle (): string {
-      return this.getCategoryExtrasValueOrCategoryValue('metaTitle')
+      return this.categoryExtras && this.categoryExtras['metaTitle']
+        ? this.categoryExtras['metaTitle'] : this.getCurrentCategory['name']
     },
     metaDescription (): string | boolean {
       return this.categoryExtras && this.categoryExtras.metaDescription
@@ -47,8 +35,6 @@ export default {
     }
   },
   metaInfo () {
-    const storeView = currentStoreView()
-
     let meta = [
       {
         vmid: 'og:title',
@@ -65,17 +51,6 @@ export default {
 
     return {
       title: htmlDecode(this.metaTitle),
-      link: [
-        // {
-        //   rel: 'amphtml',
-        //   href: this.$router.resolve(localizedRoute({
-        //     name: 'category-amp',
-        //     params: {
-        //       slug: this.getCurrentCategory.slug
-        //     }
-        //   }, storeView.storeCode)).href
-        // }
-      ],
       meta
     }
   }
