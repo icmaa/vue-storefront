@@ -7,7 +7,7 @@
         <block-wrapper :components="contentHeader" v-if="contentHeader" />
         <div class="t-w-full">
           <div class="t-flex t-flex-wrap t-items-center t--mx-1 lg:t--mx-2">
-            <h1 class="category-title t-hidden lg:t-block t-w-3/4 t-px-1 lg:t-px-2 t-mb-4 t-font-light t-text-2xl t-text-base-dark" v-text="title" />
+            <h1 class="category-title t-hidden lg:t-block t-w-3/4 t-px-1 lg:t-px-2 t-mb-4 t-font-light t-text-2xl t-text-base-dark" v-text="category.name" />
             <div class="t-hidden lg:t-block t-w-1/4 t-px-1 lg:t-px-2 t-text-sm t-text-base-dark t-text-right">
               <span class="t-font-bold" data-test-id="productsTotal">{{ getCategoryProductsTotal }}</span> {{ $t('items') }}
               <span class="t-mx-2 t-text-base-lighter">|</span>
