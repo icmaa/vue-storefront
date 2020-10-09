@@ -78,6 +78,7 @@ export default {
       return (stripHTML(this.description).length > 500)
     },
     footerDescription () {
+      // This is the disclaimer text below the footer / weird attribute title
       return this.categoryExtras.descriptionFooter || false
     },
     hasVideo () {

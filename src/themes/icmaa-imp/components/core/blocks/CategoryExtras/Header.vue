@@ -2,7 +2,7 @@
   <div v-if="isVisible">
     <div class="category-header t-relative" :class="{ 'loaded': !bannerLoading }">
       <picture-component :src="banner" :width="bannerWidth" :height="bannerHeight" :sizes="bannerSizes" :placeholder="true" :ratio="`${bannerWidth}:${bannerHeight}`" :auto-reload="true" @load="onBannerLoad" @error="onBannerError" @click="goToCategory()" :alt="category.name" v-if="banner" img-class="t-w-screen" placeholder-class="t-w-screen lg:t-w-auto" :class="{ 't-cursor-pointer': linkedBanner }" />
-      <div class="t-flex t-items-center t-justify-end t-absolute t-bottom-0 t-left-0 t-pb-6 t-px-6 t-w-full">
+      <div class="t-flex t-items-center t-justify-end t-absolute t-bottom-0 t-left-0 t-pb-6 t-px-6 t-w-full" v-if="!!$slots.default">
         <slot />
       </div>
     </div>

@@ -51,6 +51,7 @@ export default {
           component: AsyncLogoline,
           propsTypes: {
             parentId: 'number',
+            staticItems: 'json',
             limit: 'number'
           },
           propsDefaults: {

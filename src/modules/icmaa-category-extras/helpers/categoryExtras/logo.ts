@@ -2,18 +2,27 @@ import { icmaa_categoryextras } from 'config'
 import { Category } from '@vue-storefront/core/modules/catalog-next/types/Category'
 import { getThumbnailPath } from '@vue-storefront/core/helpers'
 import { formatCategoryLink } from '@vue-storefront/core/modules/url/helpers'
+import { localizedRoute } from '@vue-storefront/core/lib/multistore'
+
+interface LogoOptions {
+  category: Category | string,
+  link?: string,
+  cluster?: string
+}
 
 export class Logo {
   protected _name: string
+  protected _link: string | boolean
   protected _category: Category | boolean = false
   protected _logoFileName: string
   protected _height: undefined | number
   protected _width: undefined | number
   protected _cluster: undefined | string
 
-  public constructor (category: Category | string, cluster?: string) {
+  public constructor ({ category, link, cluster }: LogoOptions) {
     if (typeof category === 'string') {
       this._name = category
+      this._link = link || false
     } else {
       this._category = category
       this._name = category.name
@@ -57,8 +66,8 @@ export class Logo {
   }
 
   public get link (): string {
-    if (!this.category) {
-      return ''
+    if (!this.category && this._link) {
+      return localizedRoute(this._link as string)
     }
 
     return formatCategoryLink(this.category as Category)

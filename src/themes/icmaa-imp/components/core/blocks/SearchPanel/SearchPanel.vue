@@ -8,7 +8,7 @@
         <span class="t-sr-only">{{ $t('Search') }}</span>
         <material-icon icon="search" size="sm" class="t-text-base-light t-pl-2 t-pr-1" />
       </label>
-      <input type="text" v-model="searchString" @input="search" @blur="$v.searchString.$touch()" id="search" :placeholder="$t('Type what you are looking for...')" autofocus="true" data-test-id="SearchInput" ref="searchString" class="t-self-stretch t-flex-expand t-p-0 t-text-lg t-text-base-tone placeholder:t-text-base-lighter">
+      <input type="text" v-model="searchString" @input="onInput" @blur="$v.searchString.$touch()" id="search" :placeholder="$t('Type what you are looking for...')" autocorrect="off" autocomplete="off" autofocus="true" data-test-id="SearchInput" ref="searchString" class="t-self-stretch t-flex-expand t-p-0 t-text-lg t-text-base-tone placeholder:t-text-base-lighter">
     </template>
     <template v-slot:top-right>
       <top-button icon="close" text="Close" @click.native="emptySearchInput" v-show="searchString.length > 0" />
@@ -54,6 +54,7 @@ import VueOfflineMixin from 'vue-offline/mixin'
 
 import config from 'config'
 import i18n from '@vue-storefront/i18n'
+import addDefaultProductFilter from 'icmaa-catalog/helpers/defaultProductFilter'
 import { mapGetters } from 'vuex'
 import { required, minLength } from 'vuelidate/lib/validators'
 import { disableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock'
@@ -94,6 +95,11 @@ export default {
       moreProducts: true,
       loadingProducts: false,
       showPleaseWait: false
+    }
+  },
+  watch: {
+    searchString () {
+      this.search()
     }
   },
   computed: {
@@ -144,8 +150,17 @@ export default {
     }
   },
   methods: {
-    async getAlias (searchString) {
-      return this.$store.dispatch('icmaaSearchAlias/getAliasesBySearchString', { searchString })
+    onInput (e) {
+      /**
+       * This is a workaround as Android-Chrome won't recognize changes on inputs v-model until space or enter is pressed.
+       * It's connected to the used keyboard (Gboard and others) which uses composition (e.g. underlining and autocomplete).
+       * It is considered incomplete until you either hit space (indicating ending the word) or explicitly selecting a suggestion.
+       * @see https://github.com/vuejs/vue/issues/9777#issuecomment-478831263
+       * @see https://forum.vuejs.org/t/v-model-not-working-on-chrome-browser-on-android-device/36364
+       */
+      if (window && /android/i.test(window.navigator.userAgent)) {
+        this.searchString = e.target.value
+      }
     },
     search () {
       this.showPleaseWait = (!this.$v.searchString.$invalid)
@@ -178,6 +193,9 @@ export default {
         this.emptyResults = true
       }
     }, 350),
+    async getAlias (searchString) {
+      return this.$store.dispatch('icmaaSearchAlias/getAliasesBySearchString', { searchString })
+    },
     async loadMoreProducts () {
       if (!this.$v.searchString.$invalid) {
         let query = this.prepareQuickSearchQuery(await this.getAlias(this.searchString), true)
@@ -208,9 +226,8 @@ export default {
       const searchFilterKey = plain ? 'search-text-plain' : 'search-text'
       searchQuery = searchQuery
         .applyFilter({ key: searchFilterKey, value })
-        .applyFilter({ key: 'stock', value: '' })
-        .applyFilter({ key: 'visibility', value: { 'in': [2, 3, 4] } })
-        .applyFilter({ key: 'status', value: { 'in': [0, 1] } })
+
+      addDefaultProductFilter(searchQuery, true)
 
       return searchQuery
     },

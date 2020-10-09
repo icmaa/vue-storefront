@@ -41,7 +41,7 @@ const getters: GetterTree<CategoryExtrasState, RootState> = {
 
     categories.forEach(c => {
       if (c['ceHasLogo'] === true && (!type || (c[typeKey] && c[typeKey] === true))) {
-        logos.push(new Logo(c, c['ceCluster']))
+        logos.push(new Logo({ category: c, cluster: c['ceCluster'] }))
       }
     })
 

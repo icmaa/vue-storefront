@@ -2,24 +2,17 @@
   <div id="category">
     <header class="t-container">
       <div class="t-flex t-flex-wrap t-px-4 t-mb-8">
-        <category-extras-header class="t-bg-white t--mx-4 md:t-mx-0 md:t-mt-4 lg:t-w-full">
-          <div class="t-hidden lg:t-flex" v-if="['xs', 'sm'].includes(viewport)">
-            <button-component type="primary" icon="directions_bus" class="t-mr-2 t-font-bold" v-scroll-to="'#category-info-footer'">
-              {{ $t('ON TOUR') }}
-            </button-component>
-            <button-component v-scroll-to="'#category-info-footer'">
-              {{ $t('More info\'s') }}
-            </button-component>
-          </div>
-        </category-extras-header>
+        <category-extras-header class="t-bg-white t--mx-4 md:t-mx-0 md:t-mt-4 lg:t-w-full" />
         <breadcrumbs :active-route="getCurrentCategory.name" class="t-w-full t-my-8" />
         <block-wrapper :components="contentHeader" v-if="contentHeader" />
         <div class="t-w-full">
           <div class="t-flex t-flex-wrap t-items-center t--mx-1 lg:t--mx-2">
-            <h1 class="category-title t-hidden lg:t-block t-w-3/4 t-px-1 lg:t-px-2 t-mb-4 t-font-light t-text-2xl t-text-base-dark" v-text="title" />
+            <h1 class="category-title t-hidden lg:t-block t-w-3/4 t-px-1 lg:t-px-2 t-mb-4 t-font-light t-text-2xl t-text-base-dark" v-text="category.name" />
             <div class="t-hidden lg:t-block t-w-1/4 t-px-1 lg:t-px-2 t-text-sm t-text-base-dark t-text-right">
-              <span class="t-font-bold" data-test-id="productsTotal">{{ getCategoryProductsTotal }}</span> {{ $t('items') }}
-              <span class="t-mx-2 t-text-base-lighter">|</span>
+              <span class="t-hidden xl:t-inline">
+                <span class="t-font-bold" data-test-id="productsTotal">{{ getCategoryProductsTotal }}</span> {{ $t('items') }}
+              </span>
+              <span class="t-mx-2 t-text-base-lighter t-hidden xl:t-inline">|</span>
               <dropdown @change="changePageSize" :options="pageSizeOptions" :current="parseInt(pageSize)" position="right" name="pagesize" class="t-inline-block" :dropdown-class="{ 't-w-32 t-mt-2': true }">
                 {{ pageSize }} {{ $t('items per page') }}
                 <material-icon icon="keyboard_arrow_down" size="xs" class="t-align-middle t-text-primary" />
