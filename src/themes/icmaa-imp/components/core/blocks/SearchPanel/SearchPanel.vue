@@ -8,7 +8,7 @@
         <span class="t-sr-only">{{ $t('Search') }}</span>
         <material-icon icon="search" size="sm" class="t-text-base-light t-pl-2 t-pr-1" />
       </label>
-      <input type="text" v-model="searchString" @input="onInput" @blur="$v.searchString.$touch()" id="search" :placeholder="$t('Type what you are looking for...')" autofocus="true" data-test-id="SearchInput" ref="searchString" class="t-self-stretch t-flex-expand t-p-0 t-text-lg t-text-base-tone placeholder:t-text-base-lighter">
+      <input type="text" v-model="searchString" @input="onInput" @blur="$v.searchString.$touch()" id="search" :placeholder="$t('Type what you are looking for...')" autocorrect="off" autocomplete="off" autofocus="true" data-test-id="SearchInput" ref="searchString" class="t-self-stretch t-flex-expand t-p-0 t-text-lg t-text-base-tone placeholder:t-text-base-lighter">
     </template>
     <template v-slot:top-right>
       <top-button icon="close" text="Close" @click.native="emptySearchInput" v-show="searchString.length > 0" />
