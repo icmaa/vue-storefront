@@ -61,6 +61,7 @@
                 </button-component>
                 <add-to-wishlist :product="product" class="t-flex-fix t-mb-4" />
               </div>
+              <product-trust-signals />
             </div>
           </div>
           <product-preorder v-if="isPreorder" :product="product" />
@@ -146,6 +147,7 @@ import AddToWishlist from 'theme/components/core/blocks/Wishlist/AddToWishlist'
 import CategoryExtrasHeader from 'theme/components/core/blocks/CategoryExtras/Header'
 import DepartmentLogo from 'theme/components/core/blocks/CategoryExtras/DepartmentLogo'
 import DetailsTabs from 'theme/components/core/blocks/Product/Tabs'
+import ProductTrustSignals from 'theme/components/core/blocks/Product/ProductTrustSignals'
 import ProductPreorder from 'theme/components/core/blocks/Product/ProductPreorder'
 import ProductDetails from 'theme/components/core/blocks/Product/ProductDetails'
 import ProductFeatures from 'theme/components/core/blocks/Product/ProductFeatures'
@@ -178,6 +180,7 @@ export default {
     LoaderBackground,
     ProductGallery,
     DetailsTabs,
+    ProductTrustSignals,
     ProductPreorder,
     ProductDetails,
     ProductFeatures,
