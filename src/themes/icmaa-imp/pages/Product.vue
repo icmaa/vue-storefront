@@ -20,6 +20,7 @@
           </category-extras-header>
           <div class="t-flex t-flex-wrap">
             <h1 data-test-id="productName" class="t-flex-grow t-w-1/2 t-mb-0 t-leading-snug">
+              <department-logo v-bind="departmentLogo.data()" v-if="departmentLogo" class="t-float-right t-pl-4" />
               <template v-if="typeof productName === 'object'">
                 <span class="t-block t-text-2xl t-font-thin t-leading-relaxed t-mb-2">{{ productName.mandant | htmlDecode }}</span>
                 <span class="t-block t-text-lg t-font-bold">{{ productName.product | htmlDecode }}</span>
@@ -28,7 +29,6 @@
                 <span class="t-block t-text-2xl t-font-thin t-mb-2">{{ productName | htmlDecode }}</span>
               </template>
             </h1>
-            <department-logo v-bind="departmentLogo.data()" v-if="departmentLogo" class="t-flex-fix t-self-start" />
             <reviews-short :rating="reviewsTotalRating" :count="reviewsCount" class="t-flex-fix t-w-full t-mt-4 lg:t-flex-expand lg:t-w-2/3" />
             <web-share :webshare-text="webshareText" :webshare-image="image.src" class="t-flex-fix t-w-full t-mt-4 t-text-base-light lg:t-w-auto" />
 
@@ -61,6 +61,7 @@
                 </button-component>
                 <add-to-wishlist :product="product" class="t-flex-fix t-mb-4" />
               </div>
+              <product-trust-signals />
             </div>
           </div>
           <product-preorder v-if="isPreorder" :product="product" />
@@ -146,6 +147,7 @@ import AddToWishlist from 'theme/components/core/blocks/Wishlist/AddToWishlist'
 import CategoryExtrasHeader from 'theme/components/core/blocks/CategoryExtras/Header'
 import DepartmentLogo from 'theme/components/core/blocks/CategoryExtras/DepartmentLogo'
 import DetailsTabs from 'theme/components/core/blocks/Product/Tabs'
+import ProductTrustSignals from 'theme/components/core/blocks/Product/ProductTrustSignals'
 import ProductPreorder from 'theme/components/core/blocks/Product/ProductPreorder'
 import ProductDetails from 'theme/components/core/blocks/Product/ProductDetails'
 import ProductFeatures from 'theme/components/core/blocks/Product/ProductFeatures'
@@ -178,6 +180,7 @@ export default {
     LoaderBackground,
     ProductGallery,
     DetailsTabs,
+    ProductTrustSignals,
     ProductPreorder,
     ProductDetails,
     ProductFeatures,
