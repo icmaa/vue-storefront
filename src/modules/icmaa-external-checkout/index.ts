@@ -13,6 +13,7 @@ import { setupMultistoreRoutes } from '@vue-storefront/core/lib/multistore'
 
 import { getCookieHostname } from './helper'
 import { beforeEachGuard } from './router/beforeEach'
+import fetchErrorHandler from 'icmaa-config/helpers/fetchResponseHandler'
 import moduleRoutes from './routes'
 
 export const KEY = 'external-checkout'
@@ -71,12 +72,21 @@ export const IcmaaExternalCheckoutModule: StorefrontModule = function ({ router,
 
     userHooks.afterUserUnauthorize(async () => {
       if (checkoutConfig.httpOnlySupport) {
-        // As Magento sets HTTP-Only cookies to prevent XSS attacks,
-        // it is only possible to delete the session cookie using a non-client-/SSR-request.
-        // So there is a special route for it to call using a server-side request.
-        // The `{ credentials: 'include' }` is an important part to transfer cookies to SSR.
-        await fetch('/vsf/external-checkout-cookie-logout/', { credentials: 'include' })
+        /**
+         * As Magento sets HTTP-Only cookies to prevent XSS attacks,
+         * it is only possible to delete the session cookie using a non-client-/SSR-request.
+         * So there is a special route for it to call using a server-side request.
+         * The `{ credentials: 'include' }` is an important part to transfer cookies to SSR.
+         *
+         * It's also important to use an url without trailing slash in production to prevent
+         * an exception like: `TypeError: Failed to fetch`. This sure also could be configured server-side.
+         */
+        await fetch('/vsf/external-checkout-cookie-logout', { credentials: 'include' })
+          .then(fetchErrorHandler)
           .then(r => r.json())
+          .catch(e => {
+            Logger.error('Error while trying to delete Magento session-cookie:', 'external-checkout', e)()
+          })
           .then(json => {
             Logger.info('Remove Magento session-cookie', 'external-checkout', json)()
           })
