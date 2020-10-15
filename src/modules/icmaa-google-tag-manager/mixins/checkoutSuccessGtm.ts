@@ -90,7 +90,7 @@ export default {
       // }
 
       GTM.trackEvent({
-        event: 'icmaa-checkout-success-view',
+        event: 'icmaa-checkout-success',
         // ...dataLayer,
         ecommerce: {
           currencyCode: currencyCode,
