@@ -32,13 +32,19 @@ const {
   executor: onProductListFilterExecutor
 } = createListenerHook<{ filter: any }>()
 
+const {
+  hook: facebookLoginClickedHook,
+  executor: facebookLoginClickedExecutor
+} = createListenerHook<{ status: string }>()
+
 const IcmaaGoogleTagManagerExecutors = {
   afterEach: afterEachExecutor,
   onGtmPageView: onGtmPageViewExecutor,
   onSearchResult: onSearchResultExecutor,
   searchResultVisited: searchResultVisitedExecutor,
   openProductListFilterSidebar: openProductListFilterSidebarExecutor,
-  onProductListFilter: onProductListFilterExecutor
+  onProductListFilter: onProductListFilterExecutor,
+  facebookLoginClicked: facebookLoginClickedExecutor
 }
 
 const IcmaaGoogleTagManager = {
@@ -47,7 +53,8 @@ const IcmaaGoogleTagManager = {
   onSearchResult: onSearchResultHook,
   searchResultVisited: searchResultVisitedHook,
   openProductListFilterSidebar: openProductListFilterSidebarHook,
-  onProductListFilter: onProductListFilterHook
+  onProductListFilter: onProductListFilterHook,
+  facebookLoginClicked: facebookLoginClickedHook
 }
 
 export {
