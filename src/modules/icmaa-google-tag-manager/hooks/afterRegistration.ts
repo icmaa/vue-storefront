@@ -120,6 +120,13 @@ export function afterRegistration () {
     })
   })
 
+  EventHooks.facebookLoginClicked(({ status }) => {
+    GTM.trackEvent({
+      event: 'icmaa-facebook-login',
+      facebookLoginAction: status
+    })
+  })
+
   userHooks.afterUserAuthorize(() => {
     GTM.trackEvent({
       event: 'icmaa-login'

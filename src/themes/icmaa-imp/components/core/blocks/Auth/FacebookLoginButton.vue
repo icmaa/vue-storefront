@@ -18,6 +18,7 @@ import { mapGetters } from 'vuex'
 import config from 'config'
 import ButtonComponent from 'theme/components/core/blocks/Button'
 import LoaderBackground from 'theme/components/core/LoaderBackground'
+import { IcmaaGoogleTagManagerExecutors } from 'icmaa-google-tag-manager/hooks'
 
 /**
  * We use the FB auth-token based login method usind their JS SDK.
@@ -104,6 +105,10 @@ export default {
     },
     toggleLogin () {
       this.$emit('click')
+      IcmaaGoogleTagManagerExecutors.facebookLoginClicked(
+        { status: this.connected ? 'logout' : 'login' }
+      )
+
       if (this.connected) {
         this.logout()
       } else {
