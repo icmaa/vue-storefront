@@ -10,7 +10,6 @@ const {
   executor: sidebarClosedExecutor
 } = createListenerHook<string>()
 
-/** Only for internal usage */
 const uiHooksExecutors = {
   sidebarClosed: sidebarClosedExecutor,
   modalClosed: modalClosedExecutor
