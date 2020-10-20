@@ -6,7 +6,7 @@
     <lazy-hydrate when-idle>
       <div class="t-flex t-flex-wrap t-px-4 t--mx-4 t-pb-4">
         <logo-line :parent-id="16" path="/merchandise" :title="'Bands'" class="t-mb-4 lg:t-mb-0" />
-        <logo-line :parent-id="14" path="/streetwear" :title="'Brands'" />
+        <logo-line :parent-id="4681" path="/fashion" :title="'Brands'" />
       </div>
     </lazy-hydrate>
     <lazy-hydrate when-visible>
