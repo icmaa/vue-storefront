@@ -45,8 +45,8 @@ export default {
     }
   },
   async beforeMount () {
-    await this.onLogin()
     this.clearCart()
+    await this.onLogin()
   },
   watch: {
     /**
