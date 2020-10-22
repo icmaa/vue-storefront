@@ -71,7 +71,8 @@ const itemActions = {
 
         if (status === 'ok' || status === 'volatile') {
           commit(types.CART_ADD_ITEM, {
-            product: { ...product, onlineStockCheckid: onlineCheckTaskId }
+            product: { ...product, onlineStockCheckid: onlineCheckTaskId },
+            forceServerSilence
           })
         }
         if (productIndex === (productsToAdd.length - 1) && (!getters.isCartSyncEnabled || forceServerSilence)) {

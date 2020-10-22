@@ -39,6 +39,12 @@ export function afterRegistration () {
   }
 
   rootStore.subscribe(({ type, payload }) => {
+    if (payload.hasOwnProperty('forceServerSilence') &&
+      payload.forceServerSilence === true
+    ) {
+      return
+    }
+
     // Adding a product to a Shopping Cart
     if (type === 'cart/' + cartMutations.CART_ADD_ITEM) {
       GTM.trackEvent({
