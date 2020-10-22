@@ -76,7 +76,7 @@ Follow these steps to add a custom page-view type:
 We try to overwrite everything needed by extending the Vuex store. But some methods are not highjackable like that – this is a list of core changes.
 
 * We need specific page routes to contain meta fields to recognize the page-type by this field. We need this to deliver different data-layer objects for the GTM page-view event. Thats why we added these fields to the URL objects of `core/modules/url/helpers/transformUrl.ts`.
-* We added the `forceServerSilence` parameter to the `CART_ADD_ITEM` mutation and `cart/addItems` action to know when the commit is an user-interaction and when not. This is necessary to not trigger the `icmaa-add-to-cart` GTM event each time a item is added to cart by server (e.g. after login).
+* We added the `forceServerSilence` parameter to the `CART_ADD_ITEM`/`CART_DEL_ITEM` mutations and `cart/addItems`/`cart/removeItem` actions to know when the commit is an user-interaction and when not. This is necessary to not trigger the `icmaa-add-to-cart` GTM event each time a item is added to cart by server (e.g. after login).
 
 ## Config
 

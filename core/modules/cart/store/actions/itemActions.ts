@@ -102,7 +102,7 @@ const itemActions = {
     const product = payload.product || payload
     const { cartItem } = cartHooksExecutors.beforeRemoveFromCart({ cartItem: product })
 
-    commit(types.CART_DEL_ITEM, { product: cartItem, removeByParentSku })
+    commit(types.CART_DEL_ITEM, { product: cartItem, removeByParentSku, forceServerSilence: false })
 
     if (getters.isCartSyncEnabled && cartItem.server_item_id) {
       const diffLog = await dispatch('sync', { forceClientState: true })

@@ -167,6 +167,7 @@ describe('Cart itemActions', () => {
 
   it('removes item from the cart', async () => {
     const product = { sku: 1, name: 'product1', server_item_id: 1, qty: 1 }
+    const forceServerSilence = false
 
     const contextMock = createContextMock({
       getters: {
@@ -175,7 +176,7 @@ describe('Cart itemActions', () => {
     })
 
     await (cartActions as any).removeItem(contextMock, { product })
-    expect(contextMock.commit).toBeCalledWith(types.CART_DEL_ITEM, { product, removeByParentSku: false })
+    expect(contextMock.commit).toBeCalledWith(types.CART_DEL_ITEM, { product, removeByParentSku: false, forceServerSilence })
     expect(contextMock.dispatch).toBeCalledWith('sync', { forceClientState: true })
   })
 })
