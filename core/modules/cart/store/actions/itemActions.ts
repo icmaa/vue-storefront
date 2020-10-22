@@ -71,7 +71,8 @@ const itemActions = {
 
         if (status === 'ok' || status === 'volatile') {
           commit(types.CART_ADD_ITEM, {
-            product: { ...product, onlineStockCheckid: onlineCheckTaskId }
+            product: { ...product, onlineStockCheckid: onlineCheckTaskId },
+            forceServerSilence
           })
         }
         if (productIndex === (productsToAdd.length - 1) && (!getters.isCartSyncEnabled || forceServerSilence)) {
@@ -101,7 +102,7 @@ const itemActions = {
     const product = payload.product || payload
     const { cartItem } = cartHooksExecutors.beforeRemoveFromCart({ cartItem: product })
 
-    commit(types.CART_DEL_ITEM, { product: cartItem, removeByParentSku })
+    commit(types.CART_DEL_ITEM, { product: cartItem, removeByParentSku, forceServerSilence: false })
 
     if (getters.isCartSyncEnabled && cartItem.server_item_id) {
       const diffLog = await dispatch('sync', { forceClientState: true })

@@ -11,7 +11,7 @@ const mutations: MutationTree<CartState> = {
    * Add product to cart
    * @param {Object} product data format for products is described in /doc/ElasticSearch data formats.md
    */
-  [types.CART_ADD_ITEM] (state, { product }) {
+  [types.CART_ADD_ITEM] (state, { product, forceServerSilence }) {
     const record = state.cartItems.find(p => productsEquals(p, product))
     if (!record) {
       let item = {
@@ -34,7 +34,7 @@ const mutations: MutationTree<CartState> = {
   [types.CART_SET_TOTALS_SYNC] (state) {
     state.cartServerLastTotalsSyncDate = new Date().getTime()
   },
-  [types.CART_DEL_ITEM] (state, { product, removeByParentSku = true }) {
+  [types.CART_DEL_ITEM] (state, { product, removeByParentSku = true, forceServerSilence = true }) {
     EventBus.$emit('cart-before-delete', { items: state.cartItems })
     state.cartItems = state.cartItems.filter(p => !productsEquals(p, product) && (p.parentSku !== product.sku || removeByParentSku === false))
     EventBus.$emit('cart-after-delete', { items: state.cartItems })
