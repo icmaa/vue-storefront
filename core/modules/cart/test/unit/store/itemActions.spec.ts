@@ -142,6 +142,7 @@ describe('Cart itemActions', () => {
   it('adds items to the cart', async () => {
     (validateProduct as jest.Mock).mockImplementation(() => [])
     const product = { sku: 1, name: 'product1', server_item_id: 1, qty: 1 }
+    const forceServerSilence = false
 
     const contextMock = createContextMock({
       getters: {
@@ -158,7 +159,7 @@ describe('Cart itemActions', () => {
       .mockImplementationOnce(() => Promise.resolve({ isEmpty: () => { return true } }))
 
     await (cartActions as any).addItems(contextMock, { productsToAdd: [product] })
-    expect(contextMock.commit).toBeCalledWith(types.CART_ADD_ITEM, { product: { ...product, onlineStockCheckid: 1 } })
+    expect(contextMock.commit).toBeCalledWith(types.CART_ADD_ITEM, { product: { ...product, onlineStockCheckid: 1 }, forceServerSilence })
     expect(contextMock.dispatch).toHaveBeenNthCalledWith(1, 'checkProductStatus', { product })
     expect(contextMock.dispatch).toHaveBeenNthCalledWith(2, 'create')
     expect(contextMock.dispatch).toHaveBeenNthCalledWith(3, 'sync', { forceClientState: true })
