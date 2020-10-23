@@ -63,12 +63,8 @@
           <div class="t-font-bold t-mb-1 t-text-base-lighter t-text-xxs t-uppercase">
             {{ $t('Shipping method') }}
           </div>
-          <p v-if="order.shipping_description">
-            {{ order.shipping_description }}
-          </p>
-          <p v-else>
-            {{ $t('No informations') }}
-          </p>
+          <p v-text="order.shipping_description || $t('No informations')" />
+          <p v-if="hasPriorityHandling" v-text="order.priority_handling_fee_description || $t('Priority Service')" />
           <tracking-link :order-id="order.id" :status="order.status" class="t-mt-2">
             <button-component type="ghost" icon="local_shipping">
               {{ $t('Shipment tracking') }}
@@ -136,7 +132,7 @@
             {{ parseFloat(order.base_cod_fee) + parseFloat(order.base_cod_tax_amount) | round | price }}
           </div>
         </template>
-        <template v-if="order.priority_handling_fee && order.priority_handling_fee > 0">
+        <template v-if="hasPriorityHandling">
           <div class="t-w-2/3 lg:t-w-3/4 t-px-2 t-text-right" v-text="order.priority_handling_fee_description || $t('Priority Service')" />
           <div class="t-w-1/3 lg:t-w-1/4 t-px-2 t-text-right">
             {{ order.priority_handling_fee | round | price }}
@@ -204,6 +200,9 @@ export default {
         })
 
       return attributeCodes
+    },
+    hasPriorityHandling () {
+      return this.order && this.order.priority_handling_fee && this.order.priority_handling_fee > 0
     }
   },
   methods: {
