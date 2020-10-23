@@ -136,10 +136,10 @@
             {{ parseFloat(order.base_cod_fee) + parseFloat(order.base_cod_tax_amount) | round | price }}
           </div>
         </template>
-        <template v-if="order.priorityservice_fee && order.priorityservice_fee > 0">
-          <div class="t-w-2/3 lg:t-w-3/4 t-px-2 t-text-right" v-text="$t('Priority Service')" />
+        <template v-if="order.priority_handling_fee && order.priority_handling_fee > 0">
+          <div class="t-w-2/3 lg:t-w-3/4 t-px-2 t-text-right" v-text="order.priority_handling_fee_description || $t('Priority Service')" />
           <div class="t-w-1/3 lg:t-w-1/4 t-px-2 t-text-right">
-            {{ order.priorityservice_fee | round | price }}
+            {{ order.priority_handling_fee | round | price }}
           </div>
         </template>
         <div class="t-w-2/3 lg:t-w-3/4 t-px-2 t-text-right" v-text="$t('Tax')" />
