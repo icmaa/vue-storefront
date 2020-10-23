@@ -56,7 +56,7 @@ const actions: ActionTree<CategoryState, RootState> = {
   async loadMoreSearchProducts ({ commit, getters, dispatch, rootGetters }) {
     const category = {
       id: rootGetters['icmaaSearchAlias/getCurrentResultsPageTermHash'],
-      term: rootGetters['icmaaSearchAlias/getCurrentResultsPageTerm']
+      term: rootGetters['icmaaSearchAlias/getCurrentResultsPageAlias']
     }
 
     const { perPage, start, total } = getters.getCategorySearchProductsStats
