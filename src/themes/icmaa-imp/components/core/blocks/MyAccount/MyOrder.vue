@@ -53,7 +53,7 @@
             {{ $t('Payment method') }}
           </div>
           <p v-if="paymentMethod">
-            {{ paymentMethod }}
+            {{ $t(paymentMethod) }}
           </p>
           <p v-else>
             {{ $t('No informations') }}
@@ -63,12 +63,8 @@
           <div class="t-font-bold t-mb-1 t-text-base-lighter t-text-xxs t-uppercase">
             {{ $t('Shipping method') }}
           </div>
-          <p v-if="order.shipping_description">
-            {{ order.shipping_description }}
-          </p>
-          <p v-else>
-            {{ $t('No informations') }}
-          </p>
+          <p v-text="order.shipping_description || $t('No informations')" />
+          <p v-if="hasPriorityHandling" v-text="order.priority_handling_fee_description || $t('Priority Service')" />
           <tracking-link :order-id="order.id" :status="order.status" class="t-mt-2">
             <button-component type="ghost" icon="local_shipping">
               {{ $t('Shipment tracking') }}
@@ -118,19 +114,33 @@
       <div class="t-flex t-flex-wrap t--mx-2 t-text-sm t-text-base-tone">
         <div class="t-w-2/3 lg:t-w-3/4 t-px-2 t-text-right" v-text="$t('Subtotal')" />
         <div class="t-w-1/3 lg:t-w-1/4 t-px-2 t-text-right">
-          {{ order.subtotal | round | price }}
+          {{ order.subtotal_incl_tax | round | price }}
         </div>
         <div class="t-w-2/3 lg:t-w-3/4 t-px-2 t-text-right" v-text="$t('Shipping')" />
         <div class="t-w-1/3 lg:t-w-1/4 t-px-2 t-text-right">
-          {{ order.shipping_amount | round | price }}
+          {{ order.shipping_incl_tax | round | price }}
         </div>
+        <template v-if="order.discount_amount < 0">
+          <div class="t-w-2/3 lg:t-w-3/4 t-px-2 t-text-right" v-text="$t('Discount')" />
+          <div class="t-w-1/3 lg:t-w-1/4 t-px-2 t-text-right">
+            {{ order.discount_amount | round | price }}
+          </div>
+        </template>
+        <template v-if="order.payment.method === 'cashondelivery'">
+          <div class="t-w-2/3 lg:t-w-3/4 t-px-2 t-text-right" v-text="$t('Cash on delivery')" />
+          <div class="t-w-1/3 lg:t-w-1/4 t-px-2 t-text-right">
+            {{ parseFloat(order.base_cod_fee) + parseFloat(order.base_cod_tax_amount) | round | price }}
+          </div>
+        </template>
+        <template v-if="hasPriorityHandling">
+          <div class="t-w-2/3 lg:t-w-3/4 t-px-2 t-text-right" v-text="order.priority_handling_fee_description || $t('Priority Service')" />
+          <div class="t-w-1/3 lg:t-w-1/4 t-px-2 t-text-right">
+            {{ order.priority_handling_fee | round | price }}
+          </div>
+        </template>
         <div class="t-w-2/3 lg:t-w-3/4 t-px-2 t-text-right" v-text="$t('Tax')" />
         <div class="t-w-1/3 lg:t-w-1/4 t-px-2 t-text-right">
           {{ (parseFloat(order.tax_amount) + parseFloat(order.discount_tax_compensation_amount)) | round | price }}
-        </div>
-        <div class="t-w-2/3 lg:t-w-3/4 t-px-2 t-text-right" v-text="$t('Discount')" />
-        <div class="t-w-1/3 lg:t-w-1/4 t-px-2 t-text-right">
-          {{ order.discount_amount | round | price }}
         </div>
         <div class="t-w-2/3 lg:t-w-3/4 t-px-2 t-text-right t-text-lg t-font-bold t-text-base-darkest t-mt-2" v-text="$t('Grand total')" />
         <div class="t-w-1/3 lg:t-w-1/4 t-px-2 t-text-right t-text-lg t-font-bold t-text-base-darkest t-mt-2">
@@ -190,6 +200,9 @@ export default {
         })
 
       return attributeCodes
+    },
+    hasPriorityHandling () {
+      return this.order && this.order.priority_handling_fee && this.order.priority_handling_fee > 0
     }
   },
   methods: {
