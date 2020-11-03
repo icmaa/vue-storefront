@@ -1,13 +1,13 @@
 <template>
   <div class="t-container">
     <div class="t-p-4">
-      {{ currentDate.format('DD.MM.YYYY') }} || {{ startDate.format('DD.MM.YYYY') }} - {{ endDate.format('DD.MM.YYYY') }}
-      <div class="t-grid t-grid-cols-2 sm:t-grid-cols-4 lg:t-grid-cols-6 t-gap-2">
+      <div class="t-grid t-grid-cols-2 sm:t-grid-cols-4 lg:t-grid-cols-6 t-gap-2" style="grid-template-rows: repeat(100, 100px);">
         <div v-for="(day, i) in days"
              :key="day.int + '-' + i"
+             class="t-flex t-items-center t-justify-center"
              :class="{
-               't-row-span-2': isBigDay(day.int),
-               't-bg-alt-3': day.status === 'open',
+               't-row-span-2 t-text-xl': isBigDay(day.int),
+               't-bg-alt-3 t-cursor-pointer': day.status === 'open',
                't-bg-alt-2': day.status === 'closed',
                't-bg-white': day.status === 'done'
              }"
