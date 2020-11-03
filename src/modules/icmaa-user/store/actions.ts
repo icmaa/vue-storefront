@@ -27,6 +27,7 @@ import fetchErrorHandler from 'icmaa-config/helpers/fetchResponseHandler'
 const actions: ActionTree<UserState, RootState> = {
   async startSessionWithToken ({ commit, dispatch }, token) {
     await dispatch('clearCurrentUser')
+    await dispatch('cart/clear', { }, { root: true })
     if (isServer) {
       return
     }
