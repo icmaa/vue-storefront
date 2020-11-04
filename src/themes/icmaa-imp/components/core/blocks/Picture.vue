@@ -24,6 +24,10 @@ export default {
       type: String,
       required: true
     },
+    pathType: {
+      type: String,
+      default: 'media'
+    },
     alt: {
       type: String,
       default: ''
@@ -112,7 +116,7 @@ export default {
       return `${path}`
     },
     getImageWithSize (src, width = 0, height = 0) {
-      return getThumbnailPath(src, width, height, 'media')
+      return getThumbnailPath(src, width, height, this.pathType || 'media')
     },
     prepareClassProp (value) {
       if (typeof value === 'string') {
