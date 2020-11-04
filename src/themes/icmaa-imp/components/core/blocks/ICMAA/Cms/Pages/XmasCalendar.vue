@@ -4,7 +4,6 @@
       <div class="t-grid t-grid-cols-2 sm:t-grid-cols-4 lg:t-grid-cols-6 t-gap-2" style="grid-template-rows: repeat(100, 100px);">
         <div v-for="(day, i) in days"
              :key="day.int + '-' + i"
-             class="t-flex t-items-center t-justify-center"
              :class="{
                't-row-span-2 t-text-xl': isBigDay(day.int),
                't-bg-alt-3 t-cursor-pointer': day.status === 'open',
@@ -12,12 +11,12 @@
                't-bg-white': day.status === 'done'
              }"
         >
-          <router-link :to="localizedRoute(day.link)" v-if="day.status === 'open'">
+          <router-link :to="localizedRoute(day.link)" v-if="day.status === 'open'" class="t-h-full t-flex t-items-center t-justify-center">
             {{ day.int }}
           </router-link>
-          <template v-else>
+          <div v-else class="t-h-full t-flex t-items-center t-justify-center">
             {{ day.int }}
-          </template>
+          </div>
         </div>
       </div>
     </div>
