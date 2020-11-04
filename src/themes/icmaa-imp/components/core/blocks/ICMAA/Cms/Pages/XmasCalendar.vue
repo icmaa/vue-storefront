@@ -1,21 +1,30 @@
 <template>
   <div class="t-container">
     <div class="t-p-4">
-      <div class="t-grid t-grid-cols-2 sm:t-grid-cols-4 lg:t-grid-cols-6 t-gap-2" style="grid-template-rows: repeat(100, 100px);">
+      <div class="t-grid t-grid-cols-2 sm:t-grid-cols-4 lg:t-grid-cols-6 t-gap-2">
         <div v-for="(day, i) in days"
              :key="day.int + '-' + i"
              :class="{
-               't-row-span-2 t-text-xl': isBigDay(day.int),
+               't-row-span-2 t-col-span-2 t-text-xl': isBigDay(day.int),
                't-bg-alt-3 t-cursor-pointer': day.status === 'open',
                't-bg-alt-2': day.status === 'closed',
                't-bg-white': day.status === 'done'
              }"
         >
-          <router-link :to="localizedRoute(day.link)" v-if="day.status === 'open'" class="t-h-full t-flex t-items-center t-justify-center">
+          <router-link :to="localizedRoute(day.link)" v-if="day.status === 'open'" class="t-flex t-items-center t-justify-center">
             {{ day.int }}
           </router-link>
-          <div v-else class="t-h-full t-flex t-items-center t-justify-center">
-            {{ day.int }}
+          <div v-else class="t-flex t-items-center t-justify-center">
+            <picture-component
+              class="t-w-full"
+              path-type="skin"
+              :src="`frontend/icmaa-responsive/impericon/images/holidaycompetitions/xmascalendar/doors/${day.prefixInt}.png`"
+              :placeholder="true"
+              ratio="1:1"
+              width="190"
+              height="190"
+              :sizes="[ { media: '(min-width: 0px)', width: 200 } ]"
+            />
           </div>
         </div>
       </div>
@@ -26,11 +35,16 @@
 <script>
 
 import Page from 'icmaa-cms/mixins/Page'
+import PictureComponent from 'theme/components/core/blocks/Picture'
+
 import { toDayjsDate, getCurrentStoreviewDayjsDatetime } from 'icmaa-config/helpers/datetime'
 
 export default {
   name: 'XmasCalendar',
   mixins: [ Page ],
+  components: {
+    PictureComponent
+  },
   data () {
     return {
       dataType: 'yaml'
@@ -53,8 +67,9 @@ export default {
 
       return this.content.days
         .map((d, i) => {
-          const dayDate = startDate.add(i, 'day')
           const { int, link, imagePath } = d
+          const dayDate = startDate.add(i, 'day')
+          const prefixInt = String(int).padStart(2, '0')
 
           let status = 'closed'
           if ((currDate.isSame(dayDate, 'day') || this.content.daysToStay.includes(int)) &&
@@ -65,7 +80,7 @@ export default {
             status = 'done'
           }
 
-          return { int, status, link, imagePath }
+          return { int, prefixInt, status, link, imagePath }
         })
     }
   },
