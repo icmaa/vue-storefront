@@ -56,7 +56,7 @@ export default {
       return this.order.items
         .map(i => {
           const product = this.order.products.find(p => p.sku === i.sku || (p.configurable_children && p.configurable_children.some(c => c.sku === i.sku))) || {}
-          const productDTO = this.getGTMProductDTO(product, googleTagManager.categoryAttributes)
+          const productDTO = this.getGTMProductDTO(product)
           const additionalData = { sku: i.sku, quantity: round(i.qty_ordered), id: String(productDTO.id).toString() }
           return Object.assign(productDTO, additionalData)
         })
@@ -114,6 +114,12 @@ export default {
 
       this.$store.dispatch('icmaaGoogleTagManager/setLastOrderId', this.orderId)
     }
+  },
+  async mounted () {
+    const filterValues = googleTagManager.productAttributes
+      .filter(a => a.type && a.type === 'attribute')
+      .map(a => a.field)
+    await this.$store.dispatch('attribute/list', { filterValues })
   },
   beforeMount () {
     this.$bus.$on('checkout-success-last-order-loaded', this.checkoutSuccessGtm)
