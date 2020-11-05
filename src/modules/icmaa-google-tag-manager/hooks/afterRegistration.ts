@@ -92,6 +92,17 @@ export function afterRegistration () {
         }
       })
     }
+
+    // Spawn notification
+    if (type === 'notification/add') {
+      GTM.trackEvent({
+        event: 'icmaa-notification-' + payload.type,
+        notification: {
+          message: payload.message,
+          type: payload.type
+        }
+      })
+    }
   })
 
   EventHooks.afterEach(({ to }) => triggerPageView(to))
