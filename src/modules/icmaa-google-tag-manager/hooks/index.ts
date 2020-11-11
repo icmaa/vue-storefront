@@ -33,6 +33,11 @@ const {
 } = createListenerHook<{ filter: any }>()
 
 const {
+  hook: removeProductFromCartHook,
+  executor: removeProductFromCartExecutor
+} = createListenerHook<{ product: Product }>()
+
+const {
   hook: facebookLoginClickedHook,
   executor: facebookLoginClickedExecutor
 } = createListenerHook<{ status: string }>()
@@ -44,6 +49,7 @@ const IcmaaGoogleTagManagerExecutors = {
   searchResultVisited: searchResultVisitedExecutor,
   openProductListFilterSidebar: openProductListFilterSidebarExecutor,
   onProductListFilter: onProductListFilterExecutor,
+  removeProductFromCart: removeProductFromCartExecutor,
   facebookLoginClicked: facebookLoginClickedExecutor
 }
 
@@ -54,6 +60,7 @@ const IcmaaGoogleTagManager = {
   searchResultVisited: searchResultVisitedHook,
   openProductListFilterSidebar: openProductListFilterSidebarHook,
   onProductListFilter: onProductListFilterHook,
+  removeProductFromCart: removeProductFromCartHook,
   facebookLoginClicked: facebookLoginClickedHook
 }
 

@@ -8,9 +8,12 @@
       </div>
       <div v-if="lastOrder">
         {{ $t('Your order-number is:') }}
-        <router-link class="t-font-mono t-text-base-tone lg:t-pl-2" :to="localizedRoute(`/my-account/orders/${lastOrder.id}`)">
+        <router-link class="t-font-mono t-text-base-tone lg:t-pl-2" :to="localizedRoute(`/my-account/orders/${lastOrder.id}`)" v-if="isLoggedIn">
           #{{ lastOrder.increment_id }}
         </router-link>
+        <span class="t-font-mono t-text-base-tone lg:t-pl-2" v-else>
+          #{{ lastOrder.increment_id }}
+        </span>
       </div>
       <google-customer-review type="batch" />
       <google-customer-review type="popup" />

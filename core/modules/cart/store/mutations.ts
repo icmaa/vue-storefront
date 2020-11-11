@@ -34,7 +34,7 @@ const mutations: MutationTree<CartState> = {
   [types.CART_SET_TOTALS_SYNC] (state) {
     state.cartServerLastTotalsSyncDate = new Date().getTime()
   },
-  [types.CART_DEL_ITEM] (state, { product, removeByParentSku = true, forceServerSilence = true }) {
+  [types.CART_DEL_ITEM] (state, { product, removeByParentSku = true }) {
     EventBus.$emit('cart-before-delete', { items: state.cartItems })
     state.cartItems = state.cartItems.filter(p => !productsEquals(p, product) && (p.parentSku !== product.sku || removeByParentSku === false))
     EventBus.$emit('cart-after-delete', { items: state.cartItems })
