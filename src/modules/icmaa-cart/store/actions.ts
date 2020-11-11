@@ -33,7 +33,7 @@ const actions: ActionTree<CartState, RootState> = {
     commit(orgTypes.CART_LOAD_CART_SERVER_TOKEN, token)
     return dispatch('sync', { forceClientState, dryRun: !config.serverMergeByDefault, mergeQty: true })
   },
-  async removeCoupon ({ getters, dispatch, commit }, { sync = true }) {
+  async removeCoupon ({ getters, dispatch, commit }, { sync = true } = {}) {
     if (getters.canSyncTotals) {
       const { result } = await CartService.removeCoupon()
       if (result && sync) {
