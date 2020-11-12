@@ -16,7 +16,7 @@
       <!-- Navigation -->
       <ul class="t-flex t-justify-center t-bg-insd">
         <li v-for="navitem in content.navigation" :key="navitem.name">
-          <router-link :to="'#' + navitem.link" class="t-text-white t-block t-p-2 md:t-p-5 t-uppercase t-text-sm md:t-text-xl">
+          <router-link :to="'#' + navitem.link" class="t-text-black t-block t-p-2 md:t-p-5 t-uppercase t-text-sm md:t-text-xl">
             {{ navitem.name }}
           </router-link>
         </li>
@@ -41,7 +41,7 @@
 
       <!-- Info Video -->
       <div class="t-w-full t-bg-insd t-mt-8">
-        <h2 class="t-text-white t-p-5 t-uppercase t-text-xl" v-html="content.infovideo.headline" />
+        <h2 class="t-text-black t-p-5 t-uppercase t-text-xl" v-html="content.infovideo.headline" />
         <div class="t-relative t-w-full t-bg-white" style="padding-top: 56.25%">
           <iframe class="t-absolute t-top-0" width="100%" height="100%" :src="content.infovideo.link" title="YouTube Video" frameborder="0" allowfullscreen />
         </div>
@@ -49,7 +49,7 @@
 
       <!-- Bands Headliner -->
       <div id="bands" class="t-w-full t-flex t-bg-insd t-mt-8">
-        <h2 class="t-text-white t-block t-m-5 t-uppercase t-text-xl" v-html="content.band_headline" />
+        <h2 class="t-text-black t-block t-m-5 t-uppercase t-text-xl" v-html="content.band_headline" />
       </div>
 
       <div class="t-bg-insd-container t-text-white">
@@ -97,7 +97,7 @@
 
       <!-- Tickets -->
       <div id="tickets" class="t-w-full t-flex t-bg-insd t-mt-8">
-        <h2 class="t-text-white t-block t-m-5 t-uppercase t-text-xl" v-html="content.tickets_headline" />
+        <h2 class="t-text-back t-block t-m-5 t-uppercase t-text-xl" v-html="content.tickets_headline" />
       </div>
 
       <div v-for="ticket in content.tickets" :key="ticket.date" class="t-flex-none md:t-flex t-mb-1 t-p-5 t-bg-insd-box t-text-white">
@@ -117,7 +117,7 @@
 
       <!-- Kontakt -->
       <div id="contact" class="t-w-full t-flex t-bg-insd t-mt-8">
-        <h2 class="t-text-white t-block t-m-5 t-uppercase t-text-xl" v-html="content.contact.headline" />
+        <h2 class="t-text-black t-block t-m-5 t-uppercase t-text-xl" v-html="content.contact.headline" />
       </div>
 
       <div class="t-mb-1 t-p-5 t-bg-insd-box t-text-white">
@@ -156,15 +156,15 @@ export default {
 
 <style lang="scss" scoped>
 .t-bg-insd-container {
-  background-color: #09131f
+  background-color: #181415
 }
 
 .t-bg-insd-box {
-  background-color: #59564d
+  background-color: #2e1a1c
 }
 
 .t-bg-insd {
-  background-color: #cfc8b6
+  background-color: #e8ddbf
 }
 
 .t-text-insd {
