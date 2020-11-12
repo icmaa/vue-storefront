@@ -24,40 +24,31 @@ export const IcmaaExternalCheckoutModule: StorefrontModule = function ({ router,
       Vue.use(VueCookies)
     })
 
-    const getCookies = (): { customerToken: string, quoteToken: string, lastOrderToken: string } => {
+    const getCookies = (): { customerToken: string, lastOrderToken: string } => {
       return {
         customerToken: Vue.$cookies.get('vsf_token_customer'),
-        quoteToken: Vue.$cookies.get('vsf_token_quote'),
         lastOrderToken: Vue.$cookies.get('vsf_token_lastorder')
       }
     }
 
     EventBus.$on('session-after-started', async () => {
-      const { customerToken, quoteToken, lastOrderToken } = getCookies()
+      const { customerToken, lastOrderToken } = getCookies()
 
-      if (store.getters['user/isLoggedIn'] && (customerToken || quoteToken || lastOrderToken)) {
+      if (store.getters['user/isLoggedIn'] && (customerToken || lastOrderToken)) {
         Vue.$cookies.remove('vsf_token_customer', undefined, getCookieHostname())
-        Vue.$cookies.remove('vsf_token_quote', undefined, getCookieHostname())
         Vue.$cookies.remove('vsf_token_lastorder', undefined, getCookieHostname())
       }
     })
 
     EventBus.$on('session-after-nonauthorized', async () => {
-      const { customerToken, quoteToken, lastOrderToken } = getCookies()
+      const { customerToken, lastOrderToken } = getCookies()
 
-      if (!store.getters['user/isLoggedIn'] && (customerToken || quoteToken || lastOrderToken)) {
+      if (!store.getters['user/isLoggedIn'] && (customerToken || lastOrderToken)) {
         if (customerToken) {
           Logger.info('Customer token found in cookie – try to login:', 'external-checkout', customerToken)()
-          store.dispatch('user/startSessionWithToken', customerToken).then(() => {
+          store.dispatch('user/startSessionWithToken', { token: customerToken }).then(() => {
             Vue.$cookies.remove('vsf_token_customer', undefined, getCookieHostname())
             Vue.$cookies.remove('vsf_token_lastorder', undefined, getCookieHostname())
-          })
-        }
-
-        if (quoteToken) {
-          Logger.info('Quote token found in cookie – try to reconnect with:', 'external-checkout', quoteToken)()
-          store.dispatch('cart/reconnect', { token: quoteToken }).then(() => {
-            Vue.$cookies.remove('vsf_token_quote', undefined, getCookieHostname())
           })
         }
 
@@ -97,7 +88,6 @@ export const IcmaaExternalCheckoutModule: StorefrontModule = function ({ router,
       }
 
       Vue.$cookies.remove('vsf_token_customer', undefined, getCookieHostname())
-      Vue.$cookies.remove('vsf_token_quote', undefined, getCookieHostname())
       Vue.$cookies.remove('vsf_token_lastorder', undefined, getCookieHostname())
     })
   }
