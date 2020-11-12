@@ -1,19 +1,18 @@
 import { ActionTree } from 'vuex'
-import { cart as config } from 'config'
 import RootState from '@vue-storefront/core/types/RootState'
 import CartState from '@vue-storefront/core/modules/cart/types/CartState'
 import { CartService } from '@vue-storefront/core/data-resolver'
 import { cartHooksExecutors } from '@vue-storefront/core/modules/cart/hooks'
 import { productsEquals } from '@vue-storefront/core/modules/cart/helpers'
-import { Logger } from '@vue-storefront/core/lib/logger'
 import * as types from '../store/mutation-types'
 import * as orgTypes from '@vue-storefront/core/modules/cart/store/mutation-types'
 
 const actions: ActionTree<CartState, RootState> = {
   /**
-   * There is a bug in the original method where the method assumes that `getCoupon` always returns an object.
-   * This sometimes leads to an exception during the login if a cart exists and the user wants to login into
-   * a customer account with a exsisting quote.
+   * Things we changed:
+   * * There is a bug in the original method where the method assumes that `getCoupon` always returns an object.
+   *   This sometimes leads to an exception during the login if a cart exists and the user wants to login into
+   *   a customer account with a exsisting quote.
    */
   async authorize ({ dispatch, getters }) {
     const coupon = getters.getCoupon ? getters.getCoupon.code : false
@@ -85,6 +84,14 @@ const actions: ActionTree<CartState, RootState> = {
     }
   },
   updateFreeCartItems ({ commit, getters }, result): number[] {
+    /**
+     * This otherwise would block any reasonable error output on server errors that are returned to the client.
+     * This caused the `TypeError: result.forEach is not a function` notifcation on add-to-cart.
+     * */
+    if (!Array.isArray(result)) {
+      return result
+    }
+
     commit(types.CART_DEL_FREE_ITEM)
     result.forEach(cartItem => {
       const { fooman_auto_added_qty, sku } = cartItem
