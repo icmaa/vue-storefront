@@ -73,7 +73,7 @@ const synchronizeActions = {
       await dispatch('connect', { guestCart: true })
     }
 
-    Logger.error(result, 'cart')
+    Logger.error('Error while `cart/sync` action:', 'cart', result)()
     cartHooksExecutors.afterSync(result)
     commit(types.CART_SET_ITEMS_HASH, getters.getCurrentCartHash)
     return createDiffLog()
