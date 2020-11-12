@@ -30,6 +30,7 @@ const actions: ActionTree<UserState, RootState> = {
       return
     }
 
+    await dispatch('cart/clear', { sync: false }, { root: true })
     await dispatch('clearCurrentUser')
 
     commit(userTypes.USER_START_SESSION)
