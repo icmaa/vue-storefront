@@ -27,12 +27,6 @@ const actions: ActionTree<CartState, RootState> = {
       await dispatch('applyCoupon', coupon)
     }
   },
-  async reconnect ({ dispatch, commit }, { token, forceClientState = false }) {
-    Logger.info('Reconnect quote with:', 'cart', token)()
-
-    commit(orgTypes.CART_LOAD_CART_SERVER_TOKEN, token)
-    return dispatch('sync', { forceClientState, dryRun: !config.serverMergeByDefault, mergeQty: true })
-  },
   async removeCoupon ({ getters, dispatch, commit }, { sync = true } = {}) {
     if (getters.canSyncTotals) {
       const { result } = await CartService.removeCoupon()
