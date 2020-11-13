@@ -54,19 +54,6 @@ export function afterRegistration () {
       })
     }
 
-    // Removing a product from a Shopping Cart
-    if (type === 'cart/' + cartMutations.CART_DEL_ITEM) {
-      GTM.trackEvent({
-        event: 'icmaa-remove-from-cart',
-        ecommerce: {
-          currencyCode: currencyCode,
-          remove: {
-            products: [ getProduct(payload.product) ]
-          }
-        }
-      })
-    }
-
     // Adding a product to wishlist
     if (type === 'wishlist/' + wishlistMutations.WISH_ADD_ITEM) {
       GTM.trackEvent({
@@ -89,6 +76,17 @@ export function afterRegistration () {
           wishlist_remove: {
             products: payload.product ? [ getProduct(payload.product) ] : [ ]
           }
+        }
+      })
+    }
+
+    // Spawn notification
+    if (type === 'notification/add') {
+      GTM.trackEvent({
+        event: 'icmaa-notification-' + payload.type,
+        notification: {
+          message: payload.message,
+          type: payload.type
         }
       })
     }
@@ -119,6 +117,18 @@ export function afterRegistration () {
     GTM.trackEvent({
       event: 'icmaa-on-product-list-filter',
       filter
+    })
+  })
+
+  EventHooks.removeProductFromCart(({ product }) => {
+    GTM.trackEvent({
+      event: 'icmaa-remove-from-cart',
+      ecommerce: {
+        currencyCode: currencyCode,
+        remove: {
+          products: [ getProduct(product) ]
+        }
+      }
     })
   })
 

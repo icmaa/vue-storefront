@@ -81,6 +81,7 @@ import { mapGetters } from 'vuex'
 import { currentStoreView } from '@vue-storefront/core/lib/multistore'
 import { productThumbnailPath } from '@vue-storefront/core/helpers'
 import { formatProductLink } from 'icmaa-url/helpers'
+import { IcmaaGoogleTagManagerExecutors } from 'icmaa-google-tag-manager/hooks'
 import Product from '@vue-storefront/core/compatibility/components/blocks/Microcart/Product'
 import ProductNameMixin from 'icmaa-catalog/mixins/ProductNameMixin'
 import ProductImage from 'theme/components/core/ProductImage'
@@ -204,7 +205,8 @@ export default {
         .then(() => { this.loading = false })
     },
     async removeFromCart () {
-      this.$store.dispatch('cart/removeItem', { product: this.product })
+      await this.$store.dispatch('cart/removeItem', { product: this.product })
+      IcmaaGoogleTagManagerExecutors.removeProductFromCart({ product: this.product })
     }
   }
 }
