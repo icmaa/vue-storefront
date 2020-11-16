@@ -1,43 +1,62 @@
 <template>
-  <div class="t-container">
-    <div class="t-p-4 t-grid t-grid-cols-2 sm:t-grid-cols-6 t-gap-4">
-      <template v-for="(day, i) in daysOrdered">
-        <div v-if="day === 'title'" :key="'title-' + i" class="t-col-span-2 t-order-first sm:t-order-none t-bg-white t-flex t-items-center t-justify-center t-p-8">
-          TITLE
-        </div>
-        <div v-else-if="day === 'ad'" :key="'ad-' + i" class="t-col-span-2 t-row-span-2 t-bg-white t-flex t-items-center t-justify-center t-p-8">
-          AD
-        </div>
-        <div
-          v-else
-          :key="day.int + '-' + i"
-          :class="{
-            [`t-col-span-${day.colSpan}`]: day.colSpan > 1,
-            [`t-row-span-${day.rowSpan}`]: day.rowSpan > 1,
-            't-bg-alt-3 t-cursor-pointer': day.status === 'open',
-            't-bg-alt-2': day.status === 'closed',
-            't-bg-white': day.status === 'done'
-          }"
-          class="t-flex t-items-center t-justify-center"
-        >
-          <router-link :to="localizedRoute(day.link)" v-if="day.status === 'open'" class="t-p-8">
-            {{ day.int }}
-          </router-link>
-          <div v-else class="t-p-8">
-            {{ day.int }}
-            <!-- <picture-component
+  <div class="xmas-calendar t-container">
+    <div class="lg:t-p-4">
+      <div class="wrapper t-p-4 t-grid t-grid-cols-2 sm:t-grid-cols-6 t-gap-4">
+        <template v-for="(day, i) in daysOrdered">
+          <div v-if="day === 'title'" :key="'title-' + i" class="t-col-span-2 t-order-first sm:t-order-none t-flex t-items-center t-justify-center">
+            <picture-component
               class="t-w-full"
-              path-type="skin"
-              :src="`frontend/icmaa-responsive/impericon/images/holidaycompetitions/xmascalendar/doors/${day.prefixInt}.png`"
+              src="impericon/xmas/calendar/doors/2020/closed/headline@2x.png"
+              alt="Title"
               :placeholder="true"
-              :width="190"
-              :height="190"
-              :sizes="[ { media: '(min-width: 0px)', width: 200 } ]"
-              ratio="1:1"
-            /> -->
+              :width="400"
+              :height="200"
+              :sizes="[ { media: '(min-width: 0px)', width: 400 } ]"
+              ratio="2:1"
+            />
           </div>
-        </div>
-      </template>
+          <div v-else-if="day === 'ad'" :key="'ad-' + i" class="t-col-span-2 t-row-span-2 t-flex t-items-center t-justify-center t-p-8">
+            <picture-component
+              class="t-w-full"
+              :src="ad.imagePath"
+              :alt="ad.title"
+              :placeholder="true"
+              :width="400"
+              :height="400"
+              :sizes="[ { media: '(min-width: 0px)', width: 400 } ]"
+              ratio="1:1"
+            />
+          </div>
+          <div
+            v-else
+            :key="day.int + '-' + i"
+            :class="{
+              [`t-col-span-${day.colSpan}`]: day.colSpan > 1,
+              [`t-row-span-${day.rowSpan}`]: day.rowSpan > 1,
+              't-cursor-pointer': day.status === 'open',
+              '': day.status === 'closed',
+              '': day.status === 'done'
+            }"
+            class="t-flex t-items-center t-justify-center"
+          >
+            <router-link :to="localizedRoute(day.link)" v-if="day.status === 'open'">
+              {{ day.int }}
+            </router-link>
+            <div v-else>
+              <picture-component
+                class="t-w-full"
+                :src="`impericon/xmas/calendar/doors/2020/closed/${day.prefixInt}@2x.png`"
+                :alt="`Door # ${day.int}`"
+                :placeholder="true"
+                :width="200 * day.colSpan"
+                :height="200 * day.rowSpan"
+                :sizes="[ { media: '(min-width: 0px)', width: (200 * day.colSpan) } ]"
+                :ratio="`${day.colSpan}:${day.rowSpan}`"
+              />
+            </div>
+          </div>
+        </template>
+      </div>
     </div>
   </div>
 </template>
@@ -114,7 +133,23 @@ export default {
 
           return { int, prefixInt, status, link, imagePath, colSpan, rowSpan }
         })
+    },
+    imgPath () {
+      return this.content.imgPath
+    },
+    ad () {
+      return this.content.ad
     }
   }
 }
 </script>
+
+<style lang="scss">
+
+$alt-xmas-color: #073630;
+
+.xmas-calendar .wrapper {
+  background-color: $alt-xmas-color;
+}
+
+</style>
