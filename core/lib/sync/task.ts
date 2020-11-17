@@ -162,7 +162,7 @@ function _internalExecute (resolve, reject, task: Task, currentToken, currentCar
         }
       }
 
-      Logger.debug('Response for: ' + task.task_id + ' = ' + JSON.stringify(jsonResponse.result), 'sync')()
+      Logger.debug('Response for: ' + task.task_id, 'sync', JSON.stringify(jsonResponse.result))()
       task.transmited = true
       task.transmited_at = new Date()
       task.result = jsonResponse.result
@@ -217,8 +217,8 @@ export function registerSyncTaskProcessor () {
       const currentCartToken = rootStore.getters['cart/getCartToken']
 
       const fetchQueue = []
-      Logger.debug('Current User token = ' + currentUserToken)()
-      Logger.debug('Current Cart token = ' + currentCartToken)()
+      Logger.debug('Current User token:', 'sync', currentUserToken)()
+      Logger.debug('Current Cart token:', 'sync', currentCartToken)()
       syncTaskCollection.iterate((task, id) => {
         if (task && !task.transmited && !mutex[id]) { // not sent to the server yet
           mutex[id] = true // mark this task as being processed
