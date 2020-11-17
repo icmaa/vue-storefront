@@ -65,7 +65,10 @@ const actions: ActionTree<CartState, RootState> = {
 
     Logger.error('Error while `cart/sync` action:', 'cart', result)()
     cartHooksExecutors.afterSync(result)
-    commit(orgTypes.CART_SET_ITEMS_HASH, getters.getCurrentCartHash)
+
+    await dispatch('clear', { sync: false })
+      .then(() => { Logger.log('Cart has been cleared.', 'cart')() })
+
     return createDiffLog()
   },
   async removeCoupon ({ getters, dispatch, commit }, { sync = true } = {}) {

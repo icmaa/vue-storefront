@@ -34,7 +34,7 @@ const connectActions = {
       await dispatch('removeCoupon', { sync: false })
     }
 
-    await dispatch('connect', { guestCart: false, mergeQty: true })
+    await dispatch('connect', { guestCart: false, mergeQty: false })
 
     if (coupon) {
       await dispatch('applyCoupon', coupon)
