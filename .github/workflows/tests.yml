@@ -92,7 +92,7 @@ jobs:
           yarn pm2 start ecosystem.ci.json
 
       - name: Cypress run
-        uses: cypress-io/github-action@v1.16.1
+        uses: cypress-io/github-action@v2
         timeout-minutes: 5
         with:
           working-directory: src/themes/icmaa-imp/test/e2e
