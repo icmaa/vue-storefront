@@ -64,7 +64,6 @@ const actions: ActionTree<CartState, RootState> = {
       await dispatch('connect', { guestCart: true })
     }
 
-    Logger.error('Error while `cart/sync` action:', 'cart', result)()
     cartHooksExecutors.afterSync(result)
 
     await dispatch('clear', { sync: false })
@@ -74,6 +73,9 @@ const actions: ActionTree<CartState, RootState> = {
 
     const errorMessage = notifications.getNotificationByResponse(result)
     errorDiffLog.pushNotification(errorMessage)
+
+    const logMessageType = notifications.isKnownError(result) ? 'warn' : 'error'
+    Logger[logMessageType]('Error while `cart/sync` action:', 'cart', result)()
 
     return errorDiffLog
   },

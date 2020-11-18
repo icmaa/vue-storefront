@@ -11,6 +11,11 @@ const errorMsgMap = {
   'No quote found for token:': createNotification('Sorry, but there was an error with your cart. Please try again.')
 }
 
+const isKnownError = (message: string): boolean => {
+  const errorMsgs = Object.keys(errorMsgMap)
+  return (errorMsgs.includes(message) || !!errorMsgs.find(m => m.startsWith(message)))
+}
+
 const getNotificationByResponse = (message: string) => {
   const errorMsgs = Object.keys(errorMsgMap)
   if (errorMsgs.includes(message)) {
@@ -23,5 +28,6 @@ const getNotificationByResponse = (message: string) => {
 }
 
 export default {
-  getNotificationByResponse
+  getNotificationByResponse,
+  isKnownError
 }
