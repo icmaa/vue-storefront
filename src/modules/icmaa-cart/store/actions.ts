@@ -113,11 +113,15 @@ const actions: ActionTree<CartState, RootState> = {
    */
   async couponCallback ({ getters, dispatch, commit }) {
     const { getCartItems, isTotalsSyncRequired } = getters
+
     const { result, resultCode } = await CartService.getItems()
-    const { serverItems, clientItems } = cartHooksExecutors.beforeSync({ clientItems: getCartItems, serverItems: result })
+    const { serverItems, clientItems } = cartHooksExecutors.beforeSync({
+      clientItems: getCartItems,
+      serverItems: result.items
+    })
 
     if (resultCode === 200) {
-      dispatch('updateFreeCartItems', result)
+      dispatch('updateFreeCartItems', result.items)
 
       const diffLog = await dispatch('merge', {
         dryRun: false,
