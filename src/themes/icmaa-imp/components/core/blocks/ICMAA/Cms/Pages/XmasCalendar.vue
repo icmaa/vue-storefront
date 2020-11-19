@@ -1,85 +1,104 @@
 <template>
   <div class="xmas-calendar t-container">
     <div class="lg:t-p-4">
-      <div class="wrapper t-p-4 t-grid t-grid-cols-2 sm:t-grid-cols-6 t-gap-4">
-        <template v-for="(day, i) in daysOrdered">
-          <div v-if="day === 'title'" :key="'title-' + i" class="t-col-span-2 t-order-first sm:t-order-none t-flex t-items-center t-justify-center">
-            <picture-component
-              class="t-w-full"
-              :src="`${imgPath}/closed/headline.jpg`"
-              alt="Title"
-              :placeholder="true"
-              :width="getSizeBySpan(2)"
-              :height="getSizeBySpan(1)"
-              :sizes="getSizes(2)"
-              ratio="2:1"
-            />
-          </div>
-          <div v-else-if="day === 'ad'" :key="'ad-' + i" class="t-col-span-2 t-row-span-2 t-flex t-items-center t-justify-center">
-            <router-link :to="localizedRoute(ad.link)" :title="ad.title" class="t-w-full">
+      <div class="wrapper t-p-4">
+        <div class="t-grid t-grid-cols-2 sm:t-grid-cols-6 t-gap-4">
+          <template v-for="(day, i) in daysOrdered">
+            <div v-if="day === 'title'" :key="'title-' + i" class="t-col-span-2 t-order-first sm:t-order-none t-flex t-items-center t-justify-center">
               <picture-component
                 class="t-w-full"
-                :src="ad.imagePath"
-                :alt="ad.title"
+                :src="`${imgPath}/closed/headline.jpg`"
+                alt="Title"
                 :placeholder="true"
                 :width="getSizeBySpan(2)"
-                :height="getSizeBySpan(2)"
+                :height="getSizeBySpan(1)"
                 :sizes="getSizes(2)"
-                ratio="1:1"
+                ratio="2:1"
               />
-            </router-link>
+            </div>
+            <div v-else-if="day === 'ad'" :key="'ad-' + i" class="t-col-span-2 t-row-span-2 t-flex t-items-center t-justify-center">
+              <router-link :to="localizedRoute(ad.link)" :title="ad.title" class="t-w-full">
+                <picture-component
+                  class="t-w-full"
+                  :src="ad.imagePath"
+                  :alt="ad.title"
+                  :placeholder="true"
+                  :width="getSizeBySpan(2)"
+                  :height="getSizeBySpan(2)"
+                  :sizes="getSizes(2)"
+                  ratio="1:1"
+                />
+              </router-link>
+            </div>
+            <div
+              v-else
+              :key="day.int + '-' + i"
+              :class="{
+                [`t-col-span-${day.colSpan}`]: day.colSpan > 1,
+                [`t-row-span-${day.rowSpan}`]: day.rowSpan > 1,
+                't-cursor-pointer': day.status === 'open',
+                '': day.status === 'closed',
+                '': day.status === 'done'
+              }"
+              class="t-flex t-items-center t-justify-center"
+            >
+              <router-link :to="localizedRoute(day.link)" class="t-w-full" v-if="day.status === 'open'">
+                <picture-component
+                  class="t-w-full"
+                  :src="`${imgPath}/opened/${day.imagePath}`"
+                  :alt="`Door # ${day.int}`"
+                  :placeholder="true"
+                  :width="day.width"
+                  :height="day.height"
+                  :sizes="day.sizes"
+                  :ratio="`${day.colSpan}:${day.rowSpan}`"
+                />
+              </router-link>
+              <template v-else-if="day.status === 'done'">
+                <picture-component
+                  class="t-w-full t-opacity-75"
+                  style="filter: grayscale(1)"
+                  :src="`${imgPath}/opened/${day.imagePath}`"
+                  :alt="`Door # ${day.int}`"
+                  :placeholder="true"
+                  :width="day.width"
+                  :height="day.height"
+                  :sizes="day.sizes"
+                  :ratio="`${day.colSpan}:${day.rowSpan}`"
+                />
+              </template>
+              <template v-else>
+                <picture-component
+                  class="t-w-full"
+                  :src="`${imgPath}/closed/${day.prefixInt}.jpg`"
+                  :alt="`Door # ${day.int}`"
+                  :placeholder="true"
+                  :width="day.width"
+                  :height="day.height"
+                  :sizes="day.sizes"
+                  :ratio="`${day.colSpan}:${day.rowSpan}`"
+                />
+              </template>
+            </div>
+          </template>
+        </div>
+        <div class="t-mt-4 t-grid t-grid-cols-4 sm:t-grid-cols-8 t-gap-4" v-if="sponsoreLogos && sponsoreLogos.length > 0">
+          <div class="t-col-span-3 t-flex t-font-bold t-italic t-items-center t-text-white">
+            Sponsored by
           </div>
-          <div
-            v-else
-            :key="day.int + '-' + i"
-            :class="{
-              [`t-col-span-${day.colSpan}`]: day.colSpan > 1,
-              [`t-row-span-${day.rowSpan}`]: day.rowSpan > 1,
-              't-cursor-pointer': day.status === 'open',
-              '': day.status === 'closed',
-              '': day.status === 'done'
-            }"
-            class="t-flex t-items-center t-justify-center"
-          >
-            <router-link :to="localizedRoute(day.link)" class="t-w-full" v-if="day.status === 'open'">
-              <picture-component
-                class="t-w-full"
-                :src="`${imgPath}/opened/${day.imagePath}`"
-                :alt="`Door # ${day.int}`"
-                :placeholder="true"
-                :width="day.width"
-                :height="day.height"
-                :sizes="day.sizes"
-                :ratio="`${day.colSpan}:${day.rowSpan}`"
-              />
-            </router-link>
-            <template v-else-if="day.status === 'done'">
-              <picture-component
-                class="t-w-full t-opacity-75"
-                style="filter: grayscale(1)"
-                :src="`${imgPath}/opened/${day.imagePath}`"
-                :alt="`Door # ${day.int}`"
-                :placeholder="true"
-                :width="day.width"
-                :height="day.height"
-                :sizes="day.sizes"
-                :ratio="`${day.colSpan}:${day.rowSpan}`"
-              />
-            </template>
-            <template v-else>
-              <picture-component
-                class="t-w-full"
-                :src="`${imgPath}/closed/${day.prefixInt}.jpg`"
-                :alt="`Door # ${day.int}`"
-                :placeholder="true"
-                :width="day.width"
-                :height="day.height"
-                :sizes="day.sizes"
-                :ratio="`${day.colSpan}:${day.rowSpan}`"
-              />
-            </template>
+          <div v-for="(logo, i) in sponsoreLogos" :key="`logo-${i}`" class="t-flex t-items-center t-justify-center">
+            <picture-component
+              :img-full-size="false"
+              :src="`${imgPath}/logos/${logo.imagePath}`"
+              :alt="logo.title"
+              :placeholder="true"
+              :width="80"
+              :height="50"
+              :sizes="[ { media: '(min-width: 0px)', width: 80 } ]"
+              ratio="8:5"
+            />
           </div>
-        </template>
+        </div>
       </div>
     </div>
   </div>
@@ -167,6 +186,9 @@ export default {
     },
     ad () {
       return this.content.ad
+    },
+    sponsoreLogos () {
+      return this.content.sponsorLogos || []
     }
   },
   methods: {
