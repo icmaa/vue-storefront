@@ -66,9 +66,10 @@ const updateProfile = async (userProfile: UserProfile, actionName: string): Prom
     callback_event: `store:${actionName}`
   })
 
-const getProfile = async () =>
+const getProfile = async (silent: boolean = false) =>
   TaskQueue.execute({
     url: processLocalizedURLAddress(getApiEndpointUrl(config.users, 'me_endpoint')),
+    silent,
     payload: {
       method: 'GET',
       mode: 'cors',

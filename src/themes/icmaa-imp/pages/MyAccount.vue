@@ -109,7 +109,7 @@ export default {
         }
 
         // Set defaults to fulfill JSON scheme of API
-        const defaults = { dob: null, gender: '', cluster: '' }
+        const defaults = { dob: null, gender: '', cluster: null }
         const customer = Object.assign(defaults, updatedData)
 
         await this.$store.dispatch('user/update', { customer })
