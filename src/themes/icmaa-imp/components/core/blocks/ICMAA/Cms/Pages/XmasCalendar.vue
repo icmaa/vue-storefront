@@ -6,26 +6,28 @@
           <div v-if="day === 'title'" :key="'title-' + i" class="t-col-span-2 t-order-first sm:t-order-none t-flex t-items-center t-justify-center">
             <picture-component
               class="t-w-full"
-              src="impericon/xmas/calendar/doors/2020/closed/headline@2x.png"
+              :src="`${imgPath}/closed/headline.jpg`"
               alt="Title"
               :placeholder="true"
-              :width="400"
-              :height="200"
-              :sizes="[ { media: '(min-width: 0px)', width: 400 } ]"
+              :width="getSizeBySpan(2)"
+              :height="getSizeBySpan(1)"
+              :sizes="getSizes(2)"
               ratio="2:1"
             />
           </div>
-          <div v-else-if="day === 'ad'" :key="'ad-' + i" class="t-col-span-2 t-row-span-2 t-flex t-items-center t-justify-center t-p-8">
-            <picture-component
-              class="t-w-full"
-              :src="ad.imagePath"
-              :alt="ad.title"
-              :placeholder="true"
-              :width="400"
-              :height="400"
-              :sizes="[ { media: '(min-width: 0px)', width: 400 } ]"
-              ratio="1:1"
-            />
+          <div v-else-if="day === 'ad'" :key="'ad-' + i" class="t-col-span-2 t-row-span-2 t-flex t-items-center t-justify-center">
+            <router-link :to="localizedRoute(ad.link)" :title="ad.title" class="t-w-full">
+              <picture-component
+                class="t-w-full"
+                :src="ad.imagePath"
+                :alt="ad.title"
+                :placeholder="true"
+                :width="getSizeBySpan(2)"
+                :height="getSizeBySpan(2)"
+                :sizes="getSizes(2)"
+                ratio="1:1"
+              />
+            </router-link>
           </div>
           <div
             v-else
@@ -39,21 +41,43 @@
             }"
             class="t-flex t-items-center t-justify-center"
           >
-            <router-link :to="localizedRoute(day.link)" v-if="day.status === 'open'">
-              {{ day.int }}
-            </router-link>
-            <div v-else>
+            <router-link :to="localizedRoute(day.link)" class="t-w-full" v-if="day.status === 'open'">
               <picture-component
                 class="t-w-full"
-                :src="`impericon/xmas/calendar/doors/2020/closed/${day.prefixInt}@2x.png`"
+                :src="`${imgPath}/opened/${day.imagePath}`"
                 :alt="`Door # ${day.int}`"
                 :placeholder="true"
-                :width="200 * day.colSpan"
-                :height="200 * day.rowSpan"
-                :sizes="[ { media: '(min-width: 0px)', width: (200 * day.colSpan) } ]"
+                :width="day.width"
+                :height="day.height"
+                :sizes="day.sizes"
                 :ratio="`${day.colSpan}:${day.rowSpan}`"
               />
-            </div>
+            </router-link>
+            <template v-else-if="day.status === 'done'">
+              <picture-component
+                class="t-w-full t-opacity-75"
+                style="filter: grayscale(1)"
+                :src="`${imgPath}/opened/${day.imagePath}`"
+                :alt="`Door # ${day.int}`"
+                :placeholder="true"
+                :width="day.width"
+                :height="day.height"
+                :sizes="day.sizes"
+                :ratio="`${day.colSpan}:${day.rowSpan}`"
+              />
+            </template>
+            <template v-else>
+              <picture-component
+                class="t-w-full"
+                :src="`${imgPath}/closed/${day.prefixInt}.jpg`"
+                :alt="`Door # ${day.int}`"
+                :placeholder="true"
+                :width="day.width"
+                :height="day.height"
+                :sizes="day.sizes"
+                :ratio="`${day.colSpan}:${day.rowSpan}`"
+              />
+            </template>
           </div>
         </template>
       </div>
@@ -122,6 +146,10 @@ export default {
           const dayDate = startDate.add(i, 'day')
           const prefixInt = String(int).padStart(2, '0')
 
+          const sizes = this.getSizes(colSpan)
+          const width = this.getSizeBySpan(colSpan)
+          const height = this.getSizeBySpan(rowSpan)
+
           let status = 'closed'
           if ((currDate.isSame(dayDate, 'day') || stay === true) &&
             !currDate.isAfter(endDate, 'day')
@@ -131,7 +159,7 @@ export default {
             status = 'done'
           }
 
-          return { int, prefixInt, status, link, imagePath, colSpan, rowSpan }
+          return { int, prefixInt, status, link, imagePath, colSpan, rowSpan, width, height, sizes }
         })
     },
     imgPath () {
@@ -139,6 +167,16 @@ export default {
     },
     ad () {
       return this.content.ad
+    }
+  },
+  methods: {
+    getSizeBySpan (colSpan) {
+      return (200 * colSpan) + ((colSpan - 1) * 16)
+    },
+    getSizes (colSpan) {
+      return [
+        { media: '(min-width: 0px)', width: this.getSizeBySpan(colSpan) }
+      ]
     }
   }
 }
