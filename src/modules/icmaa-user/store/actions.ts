@@ -18,6 +18,7 @@ import asyncForEach from 'icmaa-config/helpers/asyncForEach'
 
 import getApiEndpointUrl from '@vue-storefront/core/helpers/getApiEndpointUrl'
 import { processLocalizedURLAddress } from '@vue-storefront/core/helpers'
+import { notifications } from 'icmaa-cart/helpers'
 
 import config, { entities } from 'config'
 import fetch from 'isomorphic-fetch'
@@ -70,6 +71,10 @@ const actions: ActionTree<UserState, RootState> = {
         return resp
       }
     } else {
+      if (!notifications.isKnownError(resp.result)) {
+        Logger.error('Error while refreshing user:', 'user', resp.result)()
+      }
+
       await dispatch('logout', { silent: true })
     }
   },

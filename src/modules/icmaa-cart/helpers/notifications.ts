@@ -8,7 +8,8 @@ const errorMsgMap = {
   'Your cart has been expired.': createNotification('Sorry, but your cart has been expired. Please try again.'),
   'Your session has been expired.': createNotification('Sorry, but your login has been expired. Please try to login again.'),
   'User is not authroized to access quote:': createNotification('Sorry, but your login has been expired. Please try to login again.'),
-  'No quote found for token:': createNotification('Sorry, but there was an error with your cart. Please try again.')
+  'No quote found for token:': createNotification('Sorry, but there was an error with your cart. Please try again.'),
+  'User is not authroized to access': createNotification('Sorry, your session is not authorized – maybe it has been expired. Please try to login again.')
 }
 
 const isKnownError = (message: string): boolean => {
