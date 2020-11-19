@@ -53,18 +53,19 @@ const actions: ActionTree<UserState, RootState> = {
    * @param any param1
    */
   async refreshUserProfile ({ commit, dispatch }, { resolvedFromCache }) {
-    const resp = await UserService.getProfile()
+    const resp = await UserService.getProfile(true)
+
+    console.error(resp)
 
     if (resp.resultCode === 200) {
       commit(userTypes.USER_INFO_LOADED, resp.result) // this also stores the current user to localForage
       await dispatch('setUserGroup', resp.result)
-    }
 
-    if (resp.resultCode === 200) {
       if (resp.result.token) {
         Logger.log('User token was updated.', 'user', resp.result.token)()
         commit(userTypes.USER_TOKEN_CHANGED, { newToken: resp.result.token })
       }
+
       if (!resolvedFromCache) {
         EventBus.$emit('user-after-loggedin', resp.result)
         await dispatch('cart/authorize', {}, { root: true })
