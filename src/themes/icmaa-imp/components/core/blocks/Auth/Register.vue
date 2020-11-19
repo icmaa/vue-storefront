@@ -240,7 +240,7 @@ export default {
         lastname: this.lastName,
         dob: this.dob,
         gender: this.gender,
-        cluster: this.cluster || '',
+        cluster: this.cluster || null,
         newsletter: this.newsletter
       }
 

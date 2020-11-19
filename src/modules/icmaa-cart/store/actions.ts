@@ -3,7 +3,10 @@ import RootState from '@vue-storefront/core/types/RootState'
 import CartState from '@vue-storefront/core/modules/cart/types/CartState'
 import { CartService } from '@vue-storefront/core/data-resolver'
 import { cartHooksExecutors } from '@vue-storefront/core/modules/cart/hooks'
-import { productsEquals } from '@vue-storefront/core/modules/cart/helpers'
+import { createDiffLog, productsEquals } from '@vue-storefront/core/modules/cart/helpers'
+import { Logger } from '@vue-storefront/core/lib/logger'
+import { notifications } from '../helpers'
+import config from 'config'
 import * as types from '../store/mutation-types'
 import * as orgTypes from '@vue-storefront/core/modules/cart/store/mutation-types'
 
@@ -25,6 +28,56 @@ const actions: ActionTree<CartState, RootState> = {
     if (coupon) {
       await dispatch('applyCoupon', coupon)
     }
+  },
+  /**
+   * Things we changed:
+   * * Update the cart-token after `CartService.getItems()` to extend JWT lifetime on each pull.
+   */
+  async sync ({ getters, rootGetters, commit, dispatch }, { forceClientState = false, dryRun = false, mergeQty = false, forceSync = false }) {
+    const shouldUpdateClientState = rootGetters['checkout/isUserInCheckout'] || forceClientState
+    const { getCartItems, canUpdateMethods, isSyncRequired, bypassCounter } = getters
+    if ((!canUpdateMethods || !isSyncRequired) && !forceSync) return createDiffLog()
+    commit(orgTypes.CART_SET_SYNC)
+    const { result, resultCode } = await CartService.getItems()
+    const { serverItems, clientItems } = cartHooksExecutors.beforeSync({ clientItems: getCartItems, serverItems: result.items })
+
+    if (resultCode === 200) {
+      if (result.token) {
+        Logger.log('Server cart token updated.', 'cart', result.token)()
+        commit(orgTypes.CART_LOAD_CART_SERVER_TOKEN, result.token)
+      }
+
+      const diffLog = await dispatch('merge', {
+        dryRun,
+        serverItems,
+        clientItems,
+        forceClientState: shouldUpdateClientState,
+        mergeQty
+      })
+      cartHooksExecutors.afterSync(diffLog)
+      return diffLog
+    }
+
+    if (bypassCounter < config.queues.maxCartBypassAttempts) {
+      Logger.log('Bypassing with guest cart' + bypassCounter, 'cart')()
+      commit(orgTypes.CART_UPDATE_BYPASS_COUNTER, { counter: 1 })
+      await dispatch('connect', { guestCart: true })
+    }
+
+    cartHooksExecutors.afterSync(result)
+
+    await dispatch('clear', { sync: false })
+      .then(() => { Logger.log('Cart has been cleared.', 'cart')() })
+
+    const errorDiffLog = createDiffLog()
+
+    const errorMessage = notifications.getNotificationByResponse(result)
+    errorDiffLog.pushNotification(errorMessage)
+
+    const logMessageType = notifications.isKnownError(result) ? 'warn' : 'error'
+    Logger[logMessageType]('Error while `cart/sync` action:', 'cart', result)()
+
+    return errorDiffLog
   },
   async removeCoupon ({ getters, dispatch, commit }, { sync = true } = {}) {
     if (getters.canSyncTotals) {

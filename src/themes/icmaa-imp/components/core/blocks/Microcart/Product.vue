@@ -202,11 +202,22 @@ export default {
     async updateQty (qty) {
       this.loading = true
       return this.$store.dispatch('cart/updateQuantity', { product: this.product, qty })
-        .then(() => { this.loading = false })
+        .then((diffLog) => {
+          diffLog.clientNotifications.forEach(notification => {
+            if (notification.type === 'error') {
+              this.notifyUser(notification)
+            }
+          })
+
+          this.loading = false
+        })
     },
     async removeFromCart () {
       await this.$store.dispatch('cart/removeItem', { product: this.product })
       IcmaaGoogleTagManagerExecutors.removeProductFromCart({ product: this.product })
+    },
+    notifyUser (notificationData) {
+      this.$store.dispatch('notification/spawnNotification', notificationData)
     }
   }
 }
