@@ -55,8 +55,6 @@ const actions: ActionTree<UserState, RootState> = {
   async refreshUserProfile ({ commit, dispatch }, { resolvedFromCache }) {
     const resp = await UserService.getProfile(true)
 
-    console.error(resp)
-
     if (resp.resultCode === 200) {
       commit(userTypes.USER_INFO_LOADED, resp.result) // this also stores the current user to localForage
       await dispatch('setUserGroup', resp.result)
