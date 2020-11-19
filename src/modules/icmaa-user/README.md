@@ -3,6 +3,7 @@
 * Extend the `user` module and add `customercluster` store.
 * Add Facebook login action to store and configs to `local.json`.
 * Add debug toolbar to quickly switch the cluster for debugging.
+* Add functionallity for JWT expiration.
 
 ## Configs
 
@@ -25,31 +26,11 @@ You need to add the following config to the `config/local.json`:
   ...
 ```
 
-## Debugging toolbar
+## Core changes
 
-To include the toolbar on a page you need it, just include it as a component like:
+We try to overwrite everything needed by extending the Vuex store. But some methods are not highjackable like that – this is a list of core changes.
 
-```
-<template>
-  <div>
-    ...
-    <cluster-debug />
-  </div>
-</template>
-
-<script>
-...
-import ClusterDebug from 'icmaa-user/components/Cluster/Debug'
-
-export default {
-  ...
-  components: {
-    ClusterDebug
-  },
-  ...
-}
-</script>
-```
+* We added an `await` to the `cart/authorize` action inside the `restoreCurrentUserFromCache` action in `core/modules/user/store/actions.ts` to be sure to wait for a valid cart.
 
 ## Todo
 

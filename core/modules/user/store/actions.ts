@@ -116,7 +116,7 @@ const actions: ActionTree<UserState, RootState> = {
       commit(types.USER_INFO_LOADED, currentUser)
       await dispatch('setUserGroup', currentUser)
       EventBus.$emit('user-after-loggedin', currentUser)
-      dispatch('cart/authorize', {}, { root: true })
+      await dispatch('cart/authorize', {}, { root: true })
 
       return currentUser
     }

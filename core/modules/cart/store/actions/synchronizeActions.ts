@@ -16,7 +16,7 @@ const synchronizeActions = {
     dispatch('setDefaultCheckoutMethods')
     const storedItems = await StorageManager.get('cart').getItem('current-cart')
     commit(types.CART_LOAD_CART, storedItems)
-    dispatch('synchronizeCart', { forceClientState })
+    await dispatch('synchronizeCart', { forceClientState })
 
     cartHooksExecutors.afterLoad(storedItems)
   },
@@ -38,9 +38,9 @@ const synchronizeActions = {
       commit(types.CART_LOAD_CART_SERVER_TOKEN, token)
       Logger.info('Cart token received from cache.', 'cache', token)()
       Logger.info('Syncing cart with the server.', 'cart')()
-      dispatch('sync', { forceClientState, dryRun: !serverMergeByDefault })
+      return dispatch('sync', { forceClientState, dryRun: !serverMergeByDefault })
     }
-    await dispatch('create')
+    return dispatch('create')
   },
   /** @deprecated backward compatibility only */
   async serverPull ({ dispatch }, { forceClientState = false, dryRun = false }) {

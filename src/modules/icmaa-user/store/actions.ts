@@ -18,6 +18,7 @@ import asyncForEach from 'icmaa-config/helpers/asyncForEach'
 
 import getApiEndpointUrl from '@vue-storefront/core/helpers/getApiEndpointUrl'
 import { processLocalizedURLAddress } from '@vue-storefront/core/helpers'
+import { notifications } from 'icmaa-cart/helpers'
 
 import config, { entities } from 'config'
 import fetch from 'isomorphic-fetch'
@@ -44,12 +45,46 @@ const actions: ActionTree<UserState, RootState> = {
 
     EventBus.$emit('session-after-started')
   },
+  /**
+   * Copy of original – changes:
+   * * Write updated user-token to store after profile is refreshed to extend JWT lifetime on each pull.
+   * * Logout if 500er response is returned from '/me' request.
+   *
+   * @param any param0
+   * @param any param1
+   */
+  async refreshUserProfile ({ commit, dispatch }, { resolvedFromCache }) {
+    const resp = await UserService.getProfile(true)
+
+    if (resp.resultCode === 200) {
+      commit(userTypes.USER_INFO_LOADED, resp.result) // this also stores the current user to localForage
+      await dispatch('setUserGroup', resp.result)
+
+      if (resp.result.token) {
+        Logger.log('User token was updated.', 'user', resp.result.token)()
+        commit(userTypes.USER_TOKEN_CHANGED, { newToken: resp.result.token })
+      }
+
+      if (!resolvedFromCache) {
+        EventBus.$emit('user-after-loggedin', resp.result)
+        await dispatch('cart/authorize', {}, { root: true })
+        return resp
+      }
+    } else {
+      if (!notifications.isKnownError(resp.result)) {
+        Logger.error('Error while refreshing user:', 'user', resp.result)()
+      }
+
+      await dispatch('logout', { silent: true })
+    }
+  },
+  /**
+   * Copy of original – changes:
+   * * The original method now uses the `queue` (instead `execute`) to update the profile.
+   *   This leads to the problem that we can't trigger the user interaction as we want using a promise chain.
+   *   I rebuild the `UserService.updateProfile` method using `execute` to make it work again.
+   */
   async update ({ dispatch }, profile: UserProfile): Promise<Task> {
-    /**
-     * The original method now uses the `queue` (instead `execute`) to update the profile.
-     * This leads to the problem that we can't trigger the user interaction as we want using a promise chain.
-     * I rebuild the `UserService.updateProfile` method using `execute` to make it work again.
-     */
     return TaskQueue.execute({
       url: processLocalizedURLAddress(getApiEndpointUrl(config.users, 'me_endpoint')),
       payload: {

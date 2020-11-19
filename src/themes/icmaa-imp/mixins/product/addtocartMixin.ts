@@ -57,7 +57,7 @@ export default {
       }
     },
     notifyUser (notificationData) {
-      this.$store.dispatch('notification/spawnNotification', notificationData, { root: true })
+      this.$store.dispatch('notification/spawnNotification', notificationData)
     },
     continueShopping (toCheckout = false) {
       this.$store.dispatch('ui/closeAll')
