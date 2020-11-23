@@ -4,7 +4,7 @@
       <div class="wrapper t-p-4">
         <div class="t-grid t-grid-cols-2 sm:t-grid-cols-6 t-gap-4">
           <template v-for="(day, i) in daysOrdered">
-            <div v-if="day === 'title'" :key="'title-' + i" class="t-col-span-2 t-order-first sm:t-order-none t-flex t-items-center t-justify-center">
+            <div v-if="day === 'title'" :key="'title-' + i" class="t-col-span-2 sm:t-order-none t-flex t-items-center t-justify-center">
               <picture-component
                 class="t-w-full"
                 :src="`${imgPath}/closed/headline.jpg`"
