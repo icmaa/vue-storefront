@@ -7,8 +7,8 @@
             <div v-if="day === 'title'" :key="'title-' + i" class="t-col-span-2 sm:t-order-none t-flex t-items-center t-justify-center">
               <picture-component
                 class="t-w-full"
-                :src="`${imgPath}/closed/headline.jpg`"
-                alt="Title"
+                :src="`${imgPath}/${title.imagePath}`"
+                :title="title.title"
                 :placeholder="true"
                 :width="getSizeBySpan(2)"
                 :height="getSizeBySpan(1)"
@@ -183,6 +183,9 @@ export default {
     },
     imgPath () {
       return this.content.imgPath
+    },
+    title () {
+      return this.content.title
     },
     ad () {
       return this.content.ad
