@@ -1,7 +1,7 @@
 <template>
   <picture>
     <source v-for="(sImage, i) in sourceImages" :key="sImage.srcset + '-' + i" :media="sImage.media" :data-srcset="sImage.srcset" :alt="alt + (sImage.alt || '')">
-    <img :src="defaultImage.src" :data-src="defaultImage.src" :data-srcset="`${defaultImage.src} 1x, ${defaultImage.srcAt2x} 2x`" class="t-w-full" :class="[{ 't-hidden': (placeholder && loading) }, ...imgClassTransformed]" v-bind="$attrs" v-on="$listeners" @error="loading = true" ref="image">
+    <img :src="defaultImage.src" :data-src="defaultImage.src" :data-srcset="`${defaultImage.src} 1x, ${defaultImage.srcAt2x} 2x`" :class="[{ 't-hidden': (placeholder && loading), 't-w-full': imgFullSize }, ...imgClassTransformed]" v-bind="$attrs" v-on="$listeners" @error="loading = true" ref="image">
     <placeholder :ratio="ratio" v-if="placeholder && loading" :class="placeholderClassTransformed" />
   </picture>
 </template>
@@ -24,6 +24,10 @@ export default {
       type: String,
       required: true
     },
+    pathType: {
+      type: String,
+      default: 'media'
+    },
     alt: {
       type: String,
       default: ''
@@ -31,6 +35,10 @@ export default {
     imgClass: {
       type: [Array, Object, String],
       default: () => ({})
+    },
+    imgFullSize: {
+      type: [Boolean],
+      default: true
     },
     placeholderClass: {
       type: [Array, Object, String],
@@ -112,7 +120,7 @@ export default {
       return `${path}`
     },
     getImageWithSize (src, width = 0, height = 0) {
-      return getThumbnailPath(src, width, height, 'media')
+      return getThumbnailPath(src, width, height, this.pathType || 'media')
     },
     prepareClassProp (value) {
       if (typeof value === 'string') {

@@ -62,8 +62,7 @@ export default {
   computed: {
     ...mapGetters({
       category: 'icmaaCategoryExtras/getCurrentCategory',
-      categoryExtras: 'icmaaCategoryExtras/getCategoryExtrasByCurrentCategory',
-      viewport: 'ui/getViewport'
+      categoryExtras: 'icmaaCategoryExtras/getCategoryExtrasByCurrentCategory'
     }),
     isVisible () {
       return this.categoryExtras && this.categoryExtras.active

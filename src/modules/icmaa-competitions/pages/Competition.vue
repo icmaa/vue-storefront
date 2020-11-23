@@ -59,7 +59,7 @@
 import i18n from '@vue-storefront/i18n'
 import { mapGetters } from 'vuex'
 import { getThumbnailPath } from '@vue-storefront/core/helpers'
-import { toDate, isDatetimeInBetween } from 'icmaa-config/helpers/datetime'
+import { toDate, isDateInBetween } from 'icmaa-config/helpers/datetime'
 import { stringToComponent } from 'icmaa-cms/helpers'
 
 import FormComponent from 'theme/components/core/blocks/Form/Form'
@@ -93,7 +93,7 @@ export default {
     },
     isActive () {
       const { showFrom, showTo, enabled } = this.competition
-      return enabled && isDatetimeInBetween(showFrom, showTo)
+      return enabled && isDateInBetween(showFrom, showTo)
     },
     description () {
       return stringToComponent(this.competition.description)

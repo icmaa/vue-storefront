@@ -8,6 +8,8 @@ once('__VUE_EXTEND_DAYJS_CUSTOM_PARSE_FORMAT', () => {
 })
 
 export const storeDateFormat = (): string => currentStoreView().i18n.dateFormat
+export const intDateFormat = 'YYYY-MM-DD'
+export const intDateTimeFormat = 'YYYY-MM-DD HH:mm'
 
 export const getCurrentStoreviewDayjsDatetime = (): Dayjs => {
   let storeLocale = currentStoreView().i18n.defaultLocale.toLocaleLowerCase()
@@ -17,11 +19,20 @@ export const getCurrentStoreviewDayjsDatetime = (): Dayjs => {
 }
 
 export const getCurrentStoreviewDatetime = (): string => {
-  return getCurrentStoreviewDayjsDatetime().format('YYYY-MM-DD HH:mm')
+  return getCurrentStoreviewDayjsDatetime().format(intDateTimeFormat)
+}
+
+export const getCurrentStoreviewDate = (): string => {
+  return getCurrentStoreviewDayjsDatetime().format(intDateFormat)
 }
 
 export const isDatetimeInBetween = (from: string, to: string, current = getCurrentStoreviewDatetime()): boolean => {
-  return (!from || from === '' || dayjs(current).isAfter(from)) && (!to || to === '' || dayjs(current).isBefore(to))
+  return (!from || from === '' || dayjs(current).isSame(from) || dayjs(current).isAfter(from)) &&
+    (!to || to === '' || dayjs(current).isSame(to) || dayjs(current).isBefore(to))
+}
+
+export const isDateInBetween = (from: string, to: string, current = getCurrentStoreviewDate()): boolean => {
+  return isDatetimeInBetween(from, to, current)
 }
 
 export const isValid = (date: string, format?: string): boolean => {
@@ -30,12 +41,11 @@ export const isValid = (date: string, format?: string): boolean => {
   return jsDate.isValid() && jsDate.format(format) === date
 }
 
-export const toDayjsDate = (date: string, format?: string, inputFormat: string = 'YYYY-MM-DD H:i'): Dayjs => {
-  format = format || storeDateFormat()
-  return dayjs(date, inputFormat || format)
+export const toDayjsDate = (date: string, inputFormat: string = intDateTimeFormat): Dayjs => {
+  return dayjs(date, inputFormat)
 }
 
-export const toDate = (date: string, format?: string, inputFormat: string = 'YYYY-MM-DD H:i'): string => {
+export const toDate = (date: string, format?: string, inputFormat: string = intDateTimeFormat): string => {
   format = format || storeDateFormat()
-  return toDayjsDate(date, format, inputFormat).format(format)
+  return toDayjsDate(date, inputFormat).format(format)
 }
