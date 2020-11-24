@@ -1,7 +1,7 @@
 <template>
   <div data-test-id="TeaserFullsize" class="teaser-fullsize t-mx-0 sm:t-mx-4 t-cursor-pointer t-webkit-tap-transparent" @click="redirect" @mouseover="onHover" @mouseleave="onHover">
     <div class="t-relative">
-      <picture-component :alt="teaser.text1 | translate | htmlDecode" :src="imageUrl" :width="size.width" :height="size.height" :placeholder="true" :sizes="sizes" :ratio="ratio" class="t-w-full" />
+      <picture-component :alt="teaser.text1 | translate | htmlDecode" :title="teaser.text1 | translate | htmlDecode" :src="imageUrl" :width="size.width" :height="size.height" :placeholder="true" :sizes="sizes" :ratio="ratio" class="t-w-full" />
       <h2 class="t-absolute t-bottom-0 t-inset-x-0 t-mb-6 t-text-sm t-text-small t-uppercase">
         <router-link :to="link" :title="teaser.text1 | translate | htmlDecode" class="t-flex t-justify-center t-items-center" :class="{ 't-text-white': !textColor }" :style="{ color: textColor }">
           {{ teaser.text1 | translate }}

@@ -1,6 +1,6 @@
 <template>
   <div data-test-id="TeaserSplit" class="teaser-split t-relative t-flex t-flex-col md:t-flex-row t-mx-4 t-cursor-pointer t-webkit-tap-transparent" :class="{ 't-bg-white': !backgroundColor }" :style="{ 'background-color': backgroundColor }" @click="redirect" @mouseover="onHover" @mouseleave="onHover">
-    <picture-component :src="imageUrl" :width="624" :height="624" :placeholder="true" :sizes="sizes" ratio="1:1" class="t-w-full md:t-w-1/2 md:t-h-full" :alt="teaser.text1 | translate | htmlDecode" v-if="showLeft" />
+    <picture-component :src="imageUrl" :width="624" :height="624" :placeholder="true" :sizes="sizes" ratio="1:1" class="t-w-full md:t-w-1/2 md:t-h-full" :alt="teaser.text1 | translate | htmlDecode" :title="teaser.text1 | translate | htmlDecode" v-if="showLeft" />
     <div class="t-w-full md:t-w-1/2 t-flex t-items-center">
       <div class="t-w-full t-p-8">
         <h2 class="t-w-full t-leading-tight t-font-bold t-text-2-1/2xl t-mb-5">
@@ -21,7 +21,7 @@
         </div>
       </div>
     </div>
-    <picture-component :src="imageUrl" :width="624" :height="624" :placeholder="true" :sizes="sizes" ratio="1:1" class="t-w-full md:t-w-1/2 md:t-h-full" :alt="teaser.text1 | translate | htmlDecode" v-if="!showLeft" />
+    <picture-component :src="imageUrl" :width="624" :height="624" :placeholder="true" :sizes="sizes" ratio="1:1" class="t-w-full md:t-w-1/2 md:t-h-full" :alt="teaser.text1 | translate | htmlDecode" :title="teaser.text1 | translate | htmlDecode" v-if="!showLeft" />
     <edit-button :edit-url="editUrl" :class="[ showLeft ? 't-left-0 t--ml-2 t--mt-2' : 't-right-0 t--mr-2 t--mt-2', { 't-hidden': !hover }]" />
   </div>
 </template>
