@@ -10,6 +10,7 @@ const TicketsComponent = () => import(/* webpackChunkName: "vsf-icmaa-cms-page-c
 const FestivalComponent = () => import(/* webpackChunkName: "vsf-icmaa-cms-page-custom-festival" */ 'theme/components/core/blocks/ICMAA/Cms/Pages/Festival.vue')
 const INSDComponent = () => import(/* webpackChunkName: "vsf-icmaa-cms-page-custom-impericon-never-say-die" */ 'theme/components/core/blocks/ICMAA/Cms/Pages/ImpericonNeverSayDie.vue')
 const DigitalEventsComponent = () => import(/* webpackChunkName: "vsf-icmaa-cms-page-custom-digital-events" */ 'theme/components/core/blocks/ICMAA/Cms/Pages/DigitalEvents.vue')
+const XmasCalendar = () => import(/* webpackChunkName: "vsf-icmaa-cms-page-custom-xmas-calendar" */ 'theme/components/core/blocks/ICMAA/Cms/Pages/XmasCalendar.vue')
 
 export const routes: any = [
   // Custom cms routes, like /service or /festivals
@@ -22,6 +23,7 @@ export const routes: any = [
   { name: 'affiliate', path: '/:identifier', component: AffiliateComponent },
   { name: 'tickets', path: '/:identifier', component: TicketsComponent },
   { name: 'festival', path: '/:identifier', component: FestivalComponent },
+  { name: 'impericon-never-say-die', path: '/:identifier', component: INSDComponent },
   { name: 'digital-events', path: '/:identifier', component: DigitalEventsComponent },
-  { name: 'impericon-never-say-die', path: '/:identifier', component: INSDComponent }
+  { name: 'xmas-calendar', path: '/:identifier', component: XmasCalendar }
 ]

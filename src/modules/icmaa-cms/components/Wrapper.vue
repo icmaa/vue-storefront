@@ -1,7 +1,10 @@
 <template>
   <div class="t-flex t-flex-wrap t--mx-4 t-flex-full">
-    <div v-for="(c, i) in componentsReady" :key="`${c.name}-${i}`" class="t-flex-auto" :class="[{ 't-px-4': c.padding, 'lg:t-w-1/2': (c.size === 'half') }, c.cssClass]">
-      <component :is="c.component" v-bind="c.props" :name="c.name" />
+    <div v-for="(c, i) in componentsReady" :key="`${c.name}-${i}`" class="t-flex-auto" :class="[{ 't-px-4': c.padding, 't-w-full': (c.size === 'full'), 'lg:t-w-1/2': (c.size === 'half') }, c.cssClass]">
+      <router-link v-if="c.hasLink" :to="localizedRoute(c.props.componentLink)">
+        <component :is="c.component" v-bind="c.props" :name="c.type" />
+      </router-link>
+      <component :is="c.component" v-bind="c.props" :name="c.type" v-else />
     </div>
   </div>
 </template>
@@ -9,6 +12,7 @@
 <script>
 import config from 'config'
 import omit from 'lodash-es/omit'
+import pickBy from 'lodash-es/pickBy'
 import mapKeys from 'lodash-es/mapKeys'
 import mapValues from 'lodash-es/mapValues'
 import camelCase from 'lodash-es/camelCase'
@@ -16,6 +20,7 @@ import camelCase from 'lodash-es/camelCase'
 const AsyncLogoline = () => import(/* webpackChunkName: "vsf-content-block-logoline" */ 'theme/components/core/blocks/CategoryExtras/LogoLine')
 const AsyncTeaser = () => import(/* webpackChunkName: "vsf-content-block-teaser" */ 'theme/components/core/blocks/Teaser/Teaser')
 const AsyncText = () => import(/* webpackChunkName: "vsf-content-block-text" */ 'theme/components/core/blocks/RichText')
+const AsyncPicture = () => import(/* webpackChunkName: "vsf-content-block-picture" */ 'theme/components/core/blocks/Picture')
 const AsyncProductlisting = () => import(/* webpackChunkName: "vsf-content-block-productlisting" */ '../../icmaa-category/components/core/ProductListingWidget')
 
 export default {
@@ -63,19 +68,25 @@ export default {
         },
         'component_text': {
           component: AsyncText,
-          propsTypes: {
-            content: 'string'
-          },
+          propsTypes: {},
           propsDefaults: {},
           cssClass: 't-mb-8',
           padding: false
+        },
+        'component_image': {
+          component: AsyncPicture,
+          propsTypes: {
+            sizes: 'json'
+          },
+          propsDefaults: {},
+          cssClass: 't-mb-8',
+          padding: true
         },
         'component_productlisting': {
           component: AsyncProductlisting,
           propsTypes: {
             limit: 'number',
             categoryId: 'number',
-            sort: 'string',
             filter: 'json'
           },
           propsDefaults: {
@@ -101,6 +112,10 @@ export default {
             (v, k) => camelCase(k)
           )
 
+          props = pickBy(props, (p, k) => {
+            return p !== '' || (propsTypes[k] && propsTypes[k] === 'number' && p === 0)
+          })
+
           props = Object.assign(propsDefaults, props)
 
           props = mapValues(props, (p, k) => {
@@ -124,7 +139,10 @@ export default {
             return p
           })
 
-          return { component, props, cssClass, padding, size }
+          const type = c.component.replace('component_', '')
+          const hasLink = Object.keys(props).includes('componentLink')
+
+          return { type, component, props, cssClass, padding, size, hasLink }
         })
     }
   }
