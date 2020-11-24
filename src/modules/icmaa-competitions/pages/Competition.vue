@@ -1,5 +1,5 @@
 <template>
-  <div class="competition t-container" v-if="competition">
+  <div class="competition t-container" v-if="competition && hasStarted">
     <div class="t-px-4 t-pt-4 lg:t-pt-8 t-mb-8">
       <div class="t-flex t-flex-wrap t-items-start lg:t-items-stretch t-mb-8">
         <retina-image :image="image" :alt="competition.headline | stripHTML" class="t-w-full lg:t-w-1/2" />
@@ -53,13 +53,18 @@
       </div>
     </div>
   </div>
+  <div v-else class="t-container">
+    <div class="t-p-4 lg:t-py-8">
+      {{ $t('Sorry, but this competition has not yet started.') }}
+    </div>
+  </div>
 </template>
 
 <script>
 import i18n from '@vue-storefront/i18n'
 import { mapGetters } from 'vuex'
 import { getThumbnailPath } from '@vue-storefront/core/helpers'
-import { toDate, isDateInBetween } from 'icmaa-config/helpers/datetime'
+import { toDate, isDatetimeSameOrAfter, isDateInBetween } from 'icmaa-config/helpers/datetime'
 import { stringToComponent } from 'icmaa-cms/helpers'
 
 import FormComponent from 'theme/components/core/blocks/Form/Form'
@@ -90,6 +95,10 @@ export default {
     },
     sheetId () {
       return this.competition.googleSheetId
+    },
+    hasStarted () {
+      const { showFrom, enabled } = this.competition
+      return enabled && isDatetimeSameOrAfter(showFrom)
     },
     isActive () {
       const { showFrom, showTo, enabled } = this.competition

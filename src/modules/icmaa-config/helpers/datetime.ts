@@ -26,9 +26,16 @@ export const getCurrentStoreviewDate = (): string => {
   return getCurrentStoreviewDayjsDatetime().format(intDateFormat)
 }
 
+export const isDatetimeSameOrAfter = (from: string, current = getCurrentStoreviewDatetime()): boolean => {
+  return (!from || from === '' || dayjs(current).isSame(from) || dayjs(current).isAfter(from))
+}
+
+export const isDatetimeSameOrBefore = (to: string, current = getCurrentStoreviewDatetime()): boolean => {
+  return (!to || to === '' || dayjs(current).isSame(to) || dayjs(current).isBefore(to))
+}
+
 export const isDatetimeInBetween = (from: string, to: string, current = getCurrentStoreviewDatetime()): boolean => {
-  return (!from || from === '' || dayjs(current).isSame(from) || dayjs(current).isAfter(from)) &&
-    (!to || to === '' || dayjs(current).isSame(to) || dayjs(current).isBefore(to))
+  return isDatetimeSameOrAfter(from, current) && isDatetimeSameOrBefore(to, current)
 }
 
 export const isDateInBetween = (from: string, to: string, current = getCurrentStoreviewDate()): boolean => {
