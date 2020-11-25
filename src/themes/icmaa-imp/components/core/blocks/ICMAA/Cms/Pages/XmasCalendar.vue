@@ -170,9 +170,7 @@ export default {
           const height = this.getSizeBySpan(rowSpan)
 
           let status = 'closed'
-          if ((currDate.isSame(dayDate, 'day') || stay === true) &&
-            !currDate.isAfter(endDate, 'day')
-          ) {
+          if ((currDate.isSame(dayDate, 'day') || ((stay === true) && currDate.isAfter(dayDate, 'day'))) && currDate.isBefore(endDate, 'day')) {
             status = 'open'
           } else if (currDate.isAfter(dayDate, 'day') || currDate.isAfter(endDate, 'day')) {
             status = 'done'

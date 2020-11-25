@@ -71,7 +71,6 @@
 </template>
 
 <script>
-import i18n from '@vue-storefront/i18n'
 import Modal from 'theme/components/core/Modal.vue'
 import ButtonComponent from 'theme/components/core/blocks/Button'
 import EventBus from '@vue-storefront/core/compatibility/plugins/event-bus'

@@ -1,5 +1,5 @@
 <template>
-  <ul class="">
+  <ul>
     <li v-if="searchable">
       <base-input v-model="filterString" :placeholder="$t('Filter {label}', { label: attributeLabel }) + ' ...'" icon="search" />
     </li>
