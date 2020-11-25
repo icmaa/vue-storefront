@@ -6,8 +6,8 @@
     <div class="t-flex t-flex-wrap t-mb-4 t--mx-1" v-else-if="getType(attributeKey) === 'gender'">
       <gender-selector v-for="(option, index) in options" :key="index" :option="option" @change="changeFilter" />
     </div>
-    <div class="t-mb-12 t-px-2" v-else-if="getType(attributeKey) === 'price'">
-      <price-selector v-bind="$props" @change="changeFilter" class="t-cursor-pointer" />
+    <div v-else-if="getType(attributeKey) === 'price'">
+      <price-selector v-bind="$props" @change="changeFilter" />
     </div>
     <div class="t-flex t-flex-wrap t-mb-4" v-else-if="getType(attributeKey) === 'sale'">
       <sale-selector v-for="(option, index) in options" :key="index" :option="option" @change="changeFilter" class="t-mb-2" />
