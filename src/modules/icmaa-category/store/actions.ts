@@ -1,4 +1,5 @@
 import { ActionTree } from 'vuex'
+import config, { icmaa_catalog } from 'config'
 import RootState from '@vue-storefront/core/types/RootState'
 import { Category } from '@vue-storefront/core/modules/catalog-next/types/Category'
 import CategoryState, { CategoryStateListItemHydrated, ProductListingWidgetState } from '../types/CategoryState'
@@ -79,7 +80,10 @@ const actions: ActionTree<CategoryState, RootState> = {
       query.applySort({ field, options })
     })
 
-    return dispatch('product/findProducts', { query, size }, { root: true }).then(products => {
+    const separateSelectedVariant = !icmaa_catalog.entities.category.configureChildProductsInCategoryList || false
+    const options = { separateSelectedVariant }
+
+    return dispatch('product/findProducts', { query, size, options }, { root: true }).then(products => {
       const payload = { parent: categoryId, list: products.items, cluster, filterHash }
       commit(types.ICMAA_CATEGORY_LIST_ADD_PRODUCT, payload)
       return payload

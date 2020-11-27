@@ -1,3 +1,4 @@
+import config, { icmaa_catalog } from 'config'
 import { ActionTree } from 'vuex'
 import { entities } from 'config'
 import RootState from '@vue-storefront/core/types/RootState'
@@ -15,8 +16,11 @@ const actions: ActionTree<RecommendationsState, RootState> = {
     const query = rules.getSearchQuery()
     query.applySort({ field: 'random', options: {} })
 
+    const separateSelectedVariant = !icmaa_catalog.entities.category.configureChildProductsInCategoryList || false
+    const options = { separateSelectedVariant }
     const { includeFields, excludeFields } = entities.productList
-    const result = await dispatch('product/findProducts', { query, size, includeFields, excludeFields }, { root: true })
+
+    const result = await dispatch('product/findProducts', { query, size, includeFields, excludeFields, options }, { root: true })
     const products: Product[] = result.items
 
     const productId: string = product.id
