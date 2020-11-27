@@ -120,13 +120,13 @@ export default {
   },
   computed: {
     sizeClass () {
-      let size = 't-h-10 t-px-4 t-text-xs'
+      let size = 't-min-h-10 t-px-4 t-text-xs'
       switch (this.size) {
         case 'xs':
-          size = 't-h-6 t-px-2 t-text-xxs'
+          size = 't-min-h-6 t-px-2 t-text-xxs'
           break
         case 'sm':
-          size = 't-h-8 t-px-4 t-text-xs'
+          size = 't-min-h-8 t-px-4 t-text-xs'
       }
 
       if (this.paddingX) {

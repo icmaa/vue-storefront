@@ -20,7 +20,7 @@
               {{ segment.title }}
             </span>
             <span v-if="segment.value !== null">
-              {{ segment.value | price }}
+              {{ segment.value_incl_tax || segment.value | price }}
             </span>
           </div>
           <div class="t-flex t-items-center t-justify-between t-font-bold" v-for="(segment, index) in grandTotals" :key="`grand-total-${index}`">

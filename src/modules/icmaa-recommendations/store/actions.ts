@@ -8,15 +8,17 @@ import * as types from './mutation-types'
 import Rules from '../helpers/Rules'
 
 const actions: ActionTree<RecommendationsState, RootState> = {
-  async single ({ commit, dispatch }, { product, type, size }): Promise<Recommendations|boolean> {
+  async single ({ commit, dispatch, rootGetters }, { product, type, size }): Promise<Recommendations|boolean> {
     const rulesDTO = await dispatch('getRulesFromCms')
     const rules = new Rules(product, type, rulesDTO)
 
     const query = rules.getSearchQuery()
     query.applySort({ field: 'random', options: {} })
 
+    const options = { separateSelectedVariant: rootGetters['category-next/separateSelectedVariantInProductList'] }
     const { includeFields, excludeFields } = entities.productList
-    const result = await dispatch('product/findProducts', { query, size, includeFields, excludeFields }, { root: true })
+
+    const result = await dispatch('product/findProducts', { query, size, includeFields, excludeFields, options }, { root: true })
     const products: Product[] = result.items
 
     const productId: string = product.id
@@ -25,7 +27,7 @@ const actions: ActionTree<RecommendationsState, RootState> = {
 
     return payload
   },
-  async getRulesFromCms ({ state, dispatch, commit }, identifier: string = 'recommendations'): Promise<Record<string, any>> {
+  async getRulesFromCms ({ dispatch }, identifier: string = 'recommendations'): Promise<Record<string, any>> {
     const block: Promise<BlockStateItem> = dispatch(
       'icmaaCmsBlock/single',
       { value: identifier },
