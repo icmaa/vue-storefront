@@ -104,7 +104,8 @@ export default {
   },
   computed: {
     ...mapGetters({
-      currentTerm: 'icmaaSearchAlias/getCurrentTerm'
+      currentTerm: 'icmaaSearchAlias/getCurrentTerm',
+      separateSelectedVariant: 'category-next/separateSelectedVariantInProductList'
     }),
     searchString: {
       get () {
@@ -176,8 +177,7 @@ export default {
         this.loadingProducts = true
 
         /** Enable `separateSelectedVariant` to not overwrite parent variables by selected variant ones. */
-        const separateSelectedVariant = !config.icmaa_catalog.entities.category.configureChildProductsInCategoryList || false
-        const options = { separateSelectedVariant }
+        const options = { separateSelectedVariant: this.separateSelectedVariant }
 
         this.$store.dispatch('product/findProducts', { query, start: this.start, configuration: {}, size: this.size, options }).then(resp => {
           const { items, aggregations } = resp
@@ -207,8 +207,7 @@ export default {
         this.loadingProducts = true
 
         /** Enable `separateSelectedVariant` to not overwrite parent variables by selected variant ones. */
-        const separateSelectedVariant = !config.icmaa_catalog.entities.category.configureChildProductsInCategoryList || false
-        const options = { separateSelectedVariant }
+        const options = { separateSelectedVariant: this.separateSelectedVariant }
 
         this.$store.dispatch('product/findProducts', { query, start: this.start, size: this.size, options }).then((resp) => {
           const { items, aggregations, total, start } = resp

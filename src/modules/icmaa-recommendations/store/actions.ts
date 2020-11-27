@@ -1,4 +1,3 @@
-import config, { icmaa_catalog } from 'config'
 import { ActionTree } from 'vuex'
 import { entities } from 'config'
 import RootState from '@vue-storefront/core/types/RootState'
@@ -9,15 +8,14 @@ import * as types from './mutation-types'
 import Rules from '../helpers/Rules'
 
 const actions: ActionTree<RecommendationsState, RootState> = {
-  async single ({ commit, dispatch }, { product, type, size }): Promise<Recommendations|boolean> {
+  async single ({ commit, dispatch, rootGetters }, { product, type, size }): Promise<Recommendations|boolean> {
     const rulesDTO = await dispatch('getRulesFromCms')
     const rules = new Rules(product, type, rulesDTO)
 
     const query = rules.getSearchQuery()
     query.applySort({ field: 'random', options: {} })
 
-    const separateSelectedVariant = !icmaa_catalog.entities.category.configureChildProductsInCategoryList || false
-    const options = { separateSelectedVariant }
+    const options = { separateSelectedVariant: rootGetters['category-next/separateSelectedVariantInProductList'] }
     const { includeFields, excludeFields } = entities.productList
 
     const result = await dispatch('product/findProducts', { query, size, includeFields, excludeFields, options }, { root: true })
@@ -29,7 +27,7 @@ const actions: ActionTree<RecommendationsState, RootState> = {
 
     return payload
   },
-  async getRulesFromCms ({ state, dispatch, commit }, identifier: string = 'recommendations'): Promise<Record<string, any>> {
+  async getRulesFromCms ({ dispatch }, identifier: string = 'recommendations'): Promise<Record<string, any>> {
     const block: Promise<BlockStateItem> = dispatch(
       'icmaaCmsBlock/single',
       { value: identifier },

@@ -1,5 +1,4 @@
 import { ActionTree } from 'vuex'
-import config, { icmaa_catalog } from 'config'
 import RootState from '@vue-storefront/core/types/RootState'
 import { Category } from '@vue-storefront/core/modules/catalog-next/types/Category'
 import CategoryState, { CategoryStateListItemHydrated, ProductListingWidgetState } from '../types/CategoryState'
@@ -48,7 +47,7 @@ const actions: ActionTree<CategoryState, RootState> = {
       return { parent, list: list as Category[] }
     }
   },
-  async loadProductListingWidgetProducts ({ state, commit, dispatch }, params: { categoryId: number, filter: any, cluster: any, size: number, sort: string|string[] }): Promise<ProductListingWidgetState> {
+  async loadProductListingWidgetProducts ({ state, commit, dispatch, rootGetters }, params: { categoryId: number, filter: any, cluster: any, size: number, sort: string|string[] }): Promise<ProductListingWidgetState> {
     let { categoryId, filter, cluster, size, sort } = params
 
     if (state.productListingWidget.find(i => i.parent === categoryId && i.cluster === cluster && i.list.length >= size)) {
@@ -80,8 +79,7 @@ const actions: ActionTree<CategoryState, RootState> = {
       query.applySort({ field, options })
     })
 
-    const separateSelectedVariant = !icmaa_catalog.entities.category.configureChildProductsInCategoryList || false
-    const options = { separateSelectedVariant }
+    const options = { separateSelectedVariant: rootGetters['category-next/separateSelectedVariantInProductList'] }
 
     return dispatch('product/findProducts', { query, size, options }, { root: true }).then(products => {
       const payload = { parent: categoryId, list: products.items, cluster, filterHash }
