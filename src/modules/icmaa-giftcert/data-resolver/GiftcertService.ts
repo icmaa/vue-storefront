@@ -8,8 +8,6 @@ const loadGiftcert = (number: string): Promise<GiftcertResult> =>
     url: processURLAddress(config.icmaa_giftcert.endpoint) + '/index?token={{token}}',
     payload: {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      mode: 'cors',
       body: JSON.stringify({ number: number })
     }
   }).then(resp => resp.result)

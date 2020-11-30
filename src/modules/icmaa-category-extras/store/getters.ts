@@ -69,6 +69,12 @@ const getters: GetterTree<CategoryExtrasState, RootState> = {
     return state.categoryContentHeader[url_key] || false
   },
   getContentHeaderByCurrentCategory: (state, getters, rootState, rootGetters): CategoryExtrasContentHeaderContent[] | boolean => {
+    // Hide content if filter is selected
+    const currentFilters = rootGetters['category-next/getCurrentFilters']
+    if (currentFilters && Object.keys(currentFilters).length > 0) {
+      return false
+    }
+
     const currentCategory: Category = rootGetters['category-next/getCurrentCategory']
     return getters.getContentHeaderByUrlKey(currentCategory.url_key)
   }

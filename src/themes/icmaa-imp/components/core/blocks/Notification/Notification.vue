@@ -11,10 +11,10 @@
     >
       {{ message }}
     </div>
-    <div class="actions t-flex t-px-4 t-pt-2" :class="[ isLast ? 't-pb-10 lg:t-pb-4' : 't-pb-4' ]">
+    <div class="actions t-flex t-flex-wrap t-px-4 t-pt-2" :class="[ isLast ? 't-pb-8 lg:t-pb-2' : 't-pb-2' ]">
       <button-component
         type="white-custom"
-        :class="[ 't-text-' + colorCode ]"
+        :class="[ 't-mb-2', 't-text-' + colorCode, { 't-mr-2': action2 } ]"
         size="sm"
         id="notificationAction1"
         data-test-id="NotificationItemAction1"
@@ -24,9 +24,8 @@
       </button-component>
       <button-component
         type="white-custom"
-        :class="[ 't-text-' + colorCode ]"
+        :class="[ 't-mb-2', 't-text-' + colorCode ]"
         size="sm"
-        class="t-ml-2"
         id="notificationAction2"
         data-test-id="NotificationItemAction2"
         @click="execAction(action2, index)"

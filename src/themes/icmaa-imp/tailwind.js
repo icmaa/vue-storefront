@@ -41,7 +41,11 @@ module.exports = {
         'screen-50': '50vh',
         'screen-75': '75vh',
         'screen-100': '100vh',
-        '1/2': '50%'
+        '1/2': '50%',
+        /** These are special classes for the buttons */
+        '6': '1.5rem',
+        '8': '2rem',
+        '10': '2.5rem'
       },
       maxHeight: {
         '0': '0',

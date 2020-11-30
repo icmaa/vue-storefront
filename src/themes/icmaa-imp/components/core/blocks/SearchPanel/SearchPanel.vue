@@ -104,7 +104,8 @@ export default {
   },
   computed: {
     ...mapGetters({
-      currentTerm: 'icmaaSearchAlias/getCurrentTerm'
+      currentTerm: 'icmaaSearchAlias/getCurrentTerm',
+      separateSelectedVariant: 'category-next/separateSelectedVariantInProductList'
     }),
     searchString: {
       get () {
@@ -174,7 +175,11 @@ export default {
         this.start = 0
         this.moreProducts = true
         this.loadingProducts = true
-        this.$store.dispatch('product/findProducts', { query, start: this.start, configuration: {}, size: this.size, updateState: false }).then(resp => {
+
+        /** Enable `separateSelectedVariant` to not overwrite parent variables by selected variant ones. */
+        const options = { separateSelectedVariant: this.separateSelectedVariant }
+
+        this.$store.dispatch('product/findProducts', { query, start: this.start, configuration: {}, size: this.size, options }).then(resp => {
           const { items, aggregations } = resp
           this.products = items
           this.start += this.size
@@ -200,7 +205,11 @@ export default {
       if (!this.$v.searchString.$invalid) {
         let query = this.prepareQuickSearchQuery(await this.getAlias(this.searchString), true)
         this.loadingProducts = true
-        this.$store.dispatch('product/findProducts', { query, start: this.start, size: this.size, updateState: false }).then((resp) => {
+
+        /** Enable `separateSelectedVariant` to not overwrite parent variables by selected variant ones. */
+        const options = { separateSelectedVariant: this.separateSelectedVariant }
+
+        this.$store.dispatch('product/findProducts', { query, start: this.start, size: this.size, options }).then((resp) => {
           const { items, aggregations, total, start } = resp
           let page = Math.floor(total / this.size)
           let exceeed = total - this.size * page

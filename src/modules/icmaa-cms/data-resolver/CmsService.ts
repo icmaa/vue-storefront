@@ -15,11 +15,6 @@ const single = <T>(options: { documentType: string, uid: string, storeCode?: str
 
   return IcmaaTaskQueue.execute({
     url: processURLAddress(config.icmaa_cms.endpoint) + `/by-uid?${queryString}`,
-    payload: {
-      method: 'GET',
-      headers: { 'Content-Type': 'application/json' },
-      mode: 'cors'
-    },
     is_result_cacheable: true,
     silent: true
   }).then(resp => resp.resultCode === 200 ? resp.result : false)
@@ -34,11 +29,6 @@ const singleQueue = (options: { documentType: string, uid: string, storeCode?: s
 
   return IcmaaTaskQueue.queue({
     url: processURLAddress(config.icmaa_cms.endpoint) + `/by-uid?${queryString}`,
-    payload: {
-      method: 'GET',
-      headers: { 'Content-Type': 'application/json' },
-      mode: 'cors'
-    },
     is_result_cacheable: true,
     silent: true,
     callback_event: options.actionName ? options.actionName : undefined
@@ -54,11 +44,6 @@ const list = <T>(options: { documentType: string, query: Record<string, any>, st
 
   return IcmaaTaskQueue.execute({
     url: processURLAddress(config.icmaa_cms.endpoint) + `/search?${queryString}`,
-    payload: {
-      method: 'GET',
-      headers: { 'Content-Type': 'application/json' },
-      mode: 'cors'
-    },
     is_result_cacheable: true,
     silent: true
   }).then(resp => resp.resultCode === 200 ? resp.result : false)
@@ -73,11 +58,6 @@ const listQueue = (options: { documentType: string, query: Record<string, any>, 
 
   return IcmaaTaskQueue.queue({
     url: processURLAddress(config.icmaa_cms.endpoint) + `/search?${queryString}`,
-    payload: {
-      method: 'GET',
-      headers: { 'Content-Type': 'application/json' },
-      mode: 'cors'
-    },
     is_result_cacheable: true,
     silent: true,
     callback_event: options.actionName ? options.actionName : undefined
@@ -87,11 +67,6 @@ const listQueue = (options: { documentType: string, query: Record<string, any>, 
 const datasource = <T>(options: { code: string }): Promise<T | boolean> => {
   return IcmaaTaskQueue.execute({
     url: processURLAddress(config.icmaa_cms.endpoint) + `/datasource/${options.code}`,
-    payload: {
-      method: 'GET',
-      headers: { 'Content-Type': 'application/json' },
-      mode: 'cors'
-    },
     is_result_cacheable: true,
     silent: true
   }).then(resp => resp.resultCode === 200 ? resp.result : false)

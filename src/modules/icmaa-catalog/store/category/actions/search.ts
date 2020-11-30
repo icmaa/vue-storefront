@@ -22,7 +22,7 @@ const actions: ActionTree<CategoryState, RootState> = {
 
     const { includeFields, excludeFields } = getters.getIncludeExcludeFields(category)
     const sort = searchQuery.sort
-    const separateSelectedVariant = !icmaa_catalog.entities.category.configureChildProductsInCategoryList || false
+    const separateSelectedVariant = getters.separateSelectedVariantInProductList
 
     const { items, perPage, start, total, aggregations, attributeMetadata } = await dispatch('product/findProducts', {
       query: filterQr,
@@ -71,7 +71,7 @@ const actions: ActionTree<CategoryState, RootState> = {
 
     const { includeFields, excludeFields } = getters.getIncludeExcludeFields(category)
     const sort = searchQuery.sort
-    const separateSelectedVariant = !icmaa_catalog.entities.category.configureChildProductsInCategoryList || false
+    const separateSelectedVariant = getters.separateSelectedVariantInProductList
 
     const searchResult = await dispatch('product/findProducts', {
       query: filterQr,

@@ -20,7 +20,7 @@ const actions: ActionTree<CategoryState, RootState> = {
    * Changes:
    * * Add custom default sort and filter
    * * Add custom `includeFields`/`excludeFields` loaded via getter
-   * * Disable child configuration using `separateSelectedVariant` – product will still be configured
+   * * Enable child configuration using `separateSelectedVariant` – product will still be configured
    *   but won't overwrite original options like the product image in unisex products
    */
   async loadCategoryProducts ({ commit, getters, dispatch }, { route, category, pageSize = 50 } = {}) {
@@ -40,7 +40,7 @@ const actions: ActionTree<CategoryState, RootState> = {
 
     const { includeFields, excludeFields } = getters.getIncludeExcludeFields(category)
     const sort = searchQuery.sort || `${products.defaultSortBy.attribute}:${products.defaultSortBy.order}`
-    const separateSelectedVariant = !icmaa_catalog.entities.category.configureChildProductsInCategoryList || false
+    const separateSelectedVariant = getters.separateSelectedVariantInProductList
 
     const { items, perPage, start, total, aggregations, attributeMetadata } = await dispatch('product/findProducts', {
       query: filterQr,
@@ -75,7 +75,7 @@ const actions: ActionTree<CategoryState, RootState> = {
    * Changes:
    * * Add custom default sort and filter
    * * Add custom `includeFields`/`excludeFields` loaded via getter
-   * * Disable child configuration using `separateSelectedVariant` – product will still be configured
+   * * Enable child configuration using `separateSelectedVariant` – product will still be configured
    *   but won't overwrite original options like the product image in unisex products
    */
   async loadMoreCategoryProducts ({ commit, getters, dispatch }) {
@@ -94,7 +94,7 @@ const actions: ActionTree<CategoryState, RootState> = {
 
     const { includeFields, excludeFields } = getters.getIncludeExcludeFields(category)
     const sort = searchQuery.sort || `${products.defaultSortBy.attribute}:${products.defaultSortBy.order}`
-    const separateSelectedVariant = !icmaa_catalog.entities.category.configureChildProductsInCategoryList || false
+    const separateSelectedVariant = getters.separateSelectedVariantInProductList
 
     const searchResult = await dispatch('product/findProducts', {
       query: filterQr,

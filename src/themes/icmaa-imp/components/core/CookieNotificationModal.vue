@@ -58,7 +58,7 @@
       </div>
 
       <!-- Buttons -->
-      <div class="t-flex t-w-full t-flex-col lg:t-flex-row lg:t-justify-center">
+      <div class="t-w-full t-flex t-items-start t-flex-col lg:t-flex-row lg:t-justify-center">
         <button-component size="md" type="alt-3" class="t-w-full lg:t-w-1/2 xl:t-w-1/3 t-mb-4 lg:t-mr-4" @click="acceptAll">
           {{ $t('Select all') }}
         </button-component>

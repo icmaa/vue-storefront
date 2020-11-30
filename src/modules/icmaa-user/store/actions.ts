@@ -89,8 +89,6 @@ const actions: ActionTree<UserState, RootState> = {
       url: processLocalizedURLAddress(getApiEndpointUrl(config.users, 'me_endpoint')),
       payload: {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        mode: 'cors',
         body: JSON.stringify(profile)
       }
     }).then(resp => {
@@ -196,7 +194,6 @@ const actions: ActionTree<UserState, RootState> = {
     const apiUrl = processLocalizedURLAddress(endpoint + '/login')
     const fetchOptions = {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ 'access_token': accessToken, version })
     }
 

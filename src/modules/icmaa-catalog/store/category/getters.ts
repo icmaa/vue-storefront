@@ -60,7 +60,13 @@ const getters: GetterTree<CategoryState, RootState> = {
     }
 
     return { includeFields, excludeFields }
-  }
+  },
+  /**
+   * Enable child configuration using `separateSelectedVariant` by config – if `configureChildProductsInCategoryList` is false
+   * product will still be configured but won't overwrite original options like the product image in unisex products.
+   * @return boolean
+   */
+  separateSelectedVariantInProductList: () => !icmaa_catalog.entities.category.configureChildProductsInCategoryList || false
 }
 
 export default getters
