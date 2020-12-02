@@ -194,7 +194,12 @@ const actions: ActionTree<UserState, RootState> = {
     const apiUrl = processLocalizedURLAddress(endpoint + '/login')
     const fetchOptions = {
       method: 'POST',
-      body: JSON.stringify({ 'access_token': accessToken, version })
+      body: JSON.stringify({ 'access_token': accessToken, version }),
+      headers: {
+        'Accept': 'application/json, text/plain, */*',
+        'Content-Type': 'application/json'
+      },
+      mode: 'cors' as RequestMode
     }
 
     const resp = await fetch(apiUrl, fetchOptions)
