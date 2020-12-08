@@ -65,7 +65,7 @@ export default {
 
       features.forEach(f => {
         const value = this.product[f]
-        if (value && typeof value === 'object' && value.join('') !== '') {
+        if (value && ((typeof value === 'object' && value.join('') !== '') || (typeof value === 'string' && value !== ''))) {
           values += 1
         }
       })
