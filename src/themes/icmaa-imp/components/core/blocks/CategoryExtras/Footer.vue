@@ -71,7 +71,7 @@ export default {
       return this.categoryExtras.description
     },
     descriptionShort () {
-      return stripHTML(this.trimText(this.categoryExtras.description, 500))
+      return this.trimText(stripHTML(this.categoryExtras.description, 500))
     },
     isLongDescription () {
       return (stripHTML(this.description).length > 500)
