@@ -15,8 +15,6 @@ describe('Homepage', () => {
     cy.getByTestId('LogoLine').should('have.length', 2)
     // 24 LogoItems
     cy.getByTestId('DepartmentLogo').should('have.length', 24)
-    // LogoItems is a Image with "department-logos" in img src
-    cy.getByTestId('DepartmentLogo').findImageWithPlaceholder().each(e => cy.wrap(e).checkImage())
     // 2 ProductListings
     cy.getByTestId('ProductListingWidget').should('have.length', 2)
     // 2x4 ProductTiles
