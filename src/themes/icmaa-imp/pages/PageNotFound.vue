@@ -52,9 +52,13 @@ export default {
     }
   },
   metaInfo () {
+    const description = this.$route.meta.description ? [{ vmid: 'description', name: 'description', content: this.$route.meta.description }] : []
     return {
       title: this.$route.meta.title || i18n.t('404 Page Not Found'),
-      meta: this.$route.meta.description ? [{ vmid: 'description', name: 'description', content: this.$route.meta.description }] : []
+      meta: [
+        ...description,
+        { vmid: 'robots', name: 'robots', content: 'noindex, nofollow' }
+      ]
     }
   }
 }
