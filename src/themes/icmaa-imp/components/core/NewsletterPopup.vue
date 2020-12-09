@@ -106,8 +106,7 @@ export default {
           if (success) success(res)
         }).catch(err => {
           if (failure) failure(err)
-        }
-        )
+        })
       }
     },
     onSuccesfulSubmission (isSubscribed) {
