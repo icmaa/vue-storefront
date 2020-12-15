@@ -4,7 +4,7 @@
       <div class="t-flex t-flex-wrap t-items-start lg:t-items-stretch t-mb-8">
         <retina-image :image="image" :alt="competition.headline | stripHTML" class="t-w-full lg:t-w-1/2" />
         <div class="t-w-full lg:t-w-1/2 t-bg-white t-p-8 t-flex t-flex-col t-justify-center">
-          <h1 class="t-font-light t-leading-tight t-mb-1 t-mb-8 t-text-3xl t-text-primary lg:t-whitespace-pre-line" v-html="competition.headline" />
+          <h1 class="t-font-light t-leading-tight t-mb-8 t-text-3xl t-text-primary lg:t-whitespace-pre-line" v-html="competition.headline" />
           <component :is="description" class="description t-text-sm t-leading-relaxed t-text-base-tone" />
           <div class="t-mt-8">
             <button-component type="ghost" v-scroll-to="'#competition-form'" v-text="competition.buttonText || $t('Participate now!')" />
@@ -66,6 +66,7 @@ import { mapGetters } from 'vuex'
 import { getThumbnailPath } from '@vue-storefront/core/helpers'
 import { toDate, isDatetimeSameOrAfter, isDateInBetween } from 'icmaa-config/helpers/datetime'
 import { stringToComponent } from 'icmaa-cms/helpers'
+import { Logger } from '@vue-storefront/core/lib/logger'
 
 import FormComponent from 'theme/components/core/blocks/Form/Form'
 import RetinaImage from 'theme/components/core/blocks/RetinaImage'
@@ -137,11 +138,14 @@ export default {
       if (success) {
         this.isSend = true
         this.$bus.$emit('notification-progress-stop')
+
         this.$store.dispatch('notification/spawnNotification', {
           type: 'success',
           message: i18n.t('Thank you. We successfully received your data and will inform you about further steps.'),
           action1: { label: i18n.t('OK') }
         })
+
+        this.subscribeToNewsletter()
       } else {
         this.onError()
       }
@@ -151,6 +155,15 @@ export default {
         type: 'error',
         message: i18n.t('There was an unexpected error. Please check your entered data and try again.'),
         action1: { label: i18n.t('OK') }
+      })
+    },
+    subscribeToNewsletter () {
+      if (!this.form.newsletter || this.form.newsletter === false || !this.form.email) {
+        return
+      }
+
+      return this.$store.dispatch('newsletter/subscribe', this.form.email).catch(err => {
+        Logger.error('Error during newsletter-subscription after submit in: ' + this.competition.identifier, 'icmaa-competitions', err)()
       })
     }
   },

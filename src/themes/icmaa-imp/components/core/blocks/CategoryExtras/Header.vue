@@ -86,12 +86,7 @@ export default {
 
       let banner = this.categoryExtras.bannerImage
       if (!this.bannerExists) {
-        banner = this.categoryExtras.bannerImage.replace('_mobile', '')
-      }
-
-      // Always use @2x image
-      if (!/(@2x)(\.\w{3,})$/.test(banner)) {
-        return banner.replace(/(\.\w{3,})$/, `@2x$1`);
+        banner = this.categoryExtras.bannerImage.replace('_mobile', '_desktop')
       }
 
       return banner

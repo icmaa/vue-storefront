@@ -253,22 +253,3 @@ export default {
   }
 }
 </script>
-
-<style lang="scss">
-
-/** Only show cropped header on desktop */
-@media (min-width: 1024px) {
-  header .category-header.loaded {
-    padding-top: calc(4%*100/19);
-    overflow: hidden;
-
-    & picture > img {
-      position: absolute;
-      top: 50%;
-      left: 0;
-      transform: translateY(-50%);
-    }
-  }
-}
-
-</style>
