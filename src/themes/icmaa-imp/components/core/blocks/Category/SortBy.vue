@@ -56,7 +56,7 @@ export default {
        */
       const isSearch = this.isSearchResultPage ? 'search' : false
       const customSortAttr = icmaa_catalog.entities.category.customSortByAttributes
-      const customCategory = customSortAttr.find(c => c.id === this.category.id || c.id === isSearch)
+      const customCategory = customSortAttr.find(c => [this.category.id, this.category.parent_id].includes(c.id) || c.id === isSearch)
       if (customCategory) {
         return { [customCategory.label]: customCategory.sort || 'reset' }
       }
