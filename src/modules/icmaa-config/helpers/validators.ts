@@ -3,10 +3,10 @@ import { isValid } from './datetime'
 
 import { unicodeAlpha as orgUnicodeAlpha, unicodeAlphaNum as orgUnicodeAlphaNum } from '@vue-storefront/core/helpers/validators'
 
-export const date = (v) => !helpers.req(v) || isValid(v)
+export const date = (v: string): boolean => !helpers.req(v) || isValid(v)
 
-export const unicodeAlpha = (v) => !helpers.req(v) || orgUnicodeAlpha(v)
-export const unicodeAlphaNum = (v) => !helpers.req(v) || orgUnicodeAlphaNum(v)
+export const unicodeAlpha = (v: string): boolean => !helpers.req(v) || orgUnicodeAlpha(v)
+export const unicodeAlphaNum = (v: string): boolean => !helpers.req(v) || orgUnicodeAlphaNum(v)
 
 /**
  * #161201 Check for latin-characters or spaces only in this field
@@ -14,19 +14,28 @@ export const unicodeAlphaNum = (v) => !helpers.req(v) || orgUnicodeAlphaNum(v)
  * We use the unicode ranges of the different latin character sets
  * http://jrgraphix.net/research/unicode_blocks.php
  */
-export const latin = (v) => {
+export const latin = (v: string): boolean => {
   return !helpers.req(v) || !/([^\u0020-\u007F\u00A0-\u00FF\u0100-\u017F\u0180-\u024F\s]+)/g.test(v)
 }
 
 /**
- * #73223 Check that address is not Email
+ * #73223 Check that address is not an email
  */
-export const streetname = (v) => {
+export const streetname = (v: string): boolean => {
   return !helpers.req(v) || !/^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/.test(v)
 }
 
+/**
+ * #212674 Check that address has a valid housenumber
+ */
+export const housenumber = (v: string): boolean => {
+  const leadingNumber = /([0-9]+)(\.*)([a-zA-Z]{2,})/;
+  const tailingNumber = /([a-zA-Z]{2,})(\.*)([0-9]+)/;
+  return !helpers.req(v) || !v.split(' ').some(w => (leadingNumber.test(v) || tailingNumber.test(v)))
+}
+
 export const getPostcodeRegex = (code: string = 'XX') => {
-  var regex = {
+  const regex = {
     'DE': [/(^\d{5}$)/, '12345'],
     'GB': [/(^[A-Za-z]{1,2}\d{1,2}[A-Za-z]? \d[A-Za-z]{2}$)/, 'AA12 1AA'],
     'CH': [/(^\d{4}$)/, '1234'],
@@ -97,6 +106,6 @@ export const postcode = (code: string = 'XX') => (v) => {
   return !helpers.req(v) || getPostcodeRegex(code)[0].test(v)
 }
 
-export const isTrue = (v) => v === true
+export const isTrue = (v: any): boolean => v === true
 
 export const regex = (regex: string) => helpers.regex('regex', new RegExp(regex))

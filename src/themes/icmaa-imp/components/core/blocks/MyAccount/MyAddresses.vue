@@ -109,6 +109,10 @@
                 text: $t('Field is required.')
               },
               {
+                condition: !validation.street.$each[i].housenumber && validation.street.$error,
+                text: $t('Please leave a space between your address and your housenumber.')
+              },
+              {
                 condition: (!validation.street.$each[i].latin || !validation.street.$each[i].streetname) && validation.street.$error,
                 text: $t('Invalid characters.')
               }
@@ -243,7 +247,7 @@ import pick from 'lodash-es/pick'
 import invert from 'lodash-es/invert'
 
 import { required, minLength, email, sameAs } from 'vuelidate/lib/validators'
-import { latin, unicodeAlphaNum, streetname, postcode, getPostcodeRegex } from 'icmaa-config/helpers/validators'
+import { latin, unicodeAlphaNum, streetname, housenumber, postcode, getPostcodeRegex } from 'icmaa-config/helpers/validators'
 import { date } from 'icmaa-config/helpers/validators'
 import { toDate } from 'icmaa-config/helpers/datetime'
 
@@ -461,6 +465,7 @@ export default {
           $each: {
             required,
             streetname,
+            housenumber,
             latin
           }
         },
