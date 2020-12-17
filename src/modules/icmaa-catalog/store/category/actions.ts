@@ -2,7 +2,6 @@ import Vue from 'vue'
 import { ActionTree } from 'vuex'
 import RootState from '@vue-storefront/core/types/RootState'
 import CategoryState from '@vue-storefront/core/modules/catalog-next/store/category/CategoryState'
-import FilterVariant from '@vue-storefront/core/modules/catalog-next/types/FilterVariant'
 import { Category } from '@vue-storefront/core/modules/catalog-next/types/Category'
 import { DataResolver } from '@vue-storefront/core/data-resolver/types/DataResolver'
 import { router } from '@vue-storefront/core/app'
@@ -32,13 +31,6 @@ const actions: ActionTree<CategoryState, RootState> = {
       })
       await dispatch('changeRouterFilterParameters', currentQuery)
     }
-  },
-  async setSearchFilters ({ dispatch }, filterVariants: FilterVariant[] = []) {
-    let currentQuery = {}
-    filterVariants.forEach(filterVariant => {
-      currentQuery = changeFilterQuery({ currentQuery, filterVariant })
-    })
-    await dispatch('changeRouterFilterParameters', currentQuery)
   },
   async findCategoriesWithoutBlacklisting ({ dispatch, commit }, categorySearchOptions: DataResolver.CategorySearchOptions): Promise<Category[]> {
     const categories = await dispatch('findCategories', categorySearchOptions)

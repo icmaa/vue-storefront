@@ -7,6 +7,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import { products, icmaa_catalog } from 'config'
+import { getCustomCategorySort } from 'icmaa-catalog/helpers/defaultCategorySort'
 import i18n from '@vue-storefront/i18n'
 import isEmpty from 'lodash-es/isEmpty'
 
@@ -49,19 +50,9 @@ export default {
       return Object.assign(products.sortByAttributes, this.customConfigOptions)
     },
     customConfigOptions () {
-      /**
-       * We could do this the clean way by importing the values of `available_sort_by` and `default_sort_by` of the ES.
-       * But as we need this feature for only 3 categories yet we do it using a configuration array.
-       * This way we save space in our category payload and state which we would only use in 3 categories.
-       */
-      const isSearch = this.isSearchResultPage ? 'search' : false
-      const customSortAttr = icmaa_catalog.entities.category.customSortByAttributes
-      const customCategory = customSortAttr.find(c => [this.category.id, this.category.parent_id].includes(c.id) || c.id === isSearch)
-      if (customCategory) {
-        return { [customCategory.label]: customCategory.sort || 'reset' }
-      }
-
-      return {}
+      /** Simulate category if we are on search-page to make use of universal `getCustomCategorySort` method. */
+      const category = this.isSearchResultPage ? { id: 'search', parent_id: 'search' } : this.category
+      return getCustomCategorySort(category) || {}
     },
     hasCustomConfigOptions () {
       return !isEmpty(this.customConfigOptions)

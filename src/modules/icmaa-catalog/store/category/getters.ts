@@ -3,11 +3,15 @@ import { GetterTree } from 'vuex'
 import RootState from '@vue-storefront/core/types/RootState'
 import CategoryState from '@vue-storefront/core/modules/catalog-next/store/category/CategoryState'
 import { Category } from '@vue-storefront/core/modules/catalog-next/types/Category'
+import getDefaultCategorySort from 'icmaa-catalog/helpers/defaultCategorySort'
 import intersection from 'lodash-es/intersection'
 import union from 'lodash-es/union'
 import get from 'lodash-es/get'
 
 const getters: GetterTree<CategoryState, RootState> = {
+  getDefaultCategorySort: (state, getters, rootState, rootGetters) => {
+    return getDefaultCategorySort(getters.getCurrentCategory as Category)
+  },
   /**
    * Overwrite parent to be able to search for search-filters of search-result page.
    */
