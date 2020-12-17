@@ -31,7 +31,7 @@ export const getCustomCategorySort = (category: Category): Record<string, string
  */
 export const getCategorySort = (category: Category): string => {
   const sort = getCustomCategorySort(category)
-  return sort ? Object.values(sort)[0] : `${defaultCategorySort.attribute}:${defaultCategorySort.order}}`
+  return sort ? Object.values(sort)[0] : `${defaultCategorySort.attribute}:${defaultCategorySort.order}`
 }
 
 export default getCategorySort
