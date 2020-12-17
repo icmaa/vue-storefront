@@ -1,14 +1,16 @@
 import { ActionTree } from 'vuex'
 import * as types from '@vue-storefront/core/modules/catalog-next/store/category/mutation-types'
+import FilterVariant from '@vue-storefront/core/modules/catalog-next/types/FilterVariant'
 import RootState from '@vue-storefront/core/types/RootState'
 import CategoryState from '@vue-storefront/core/modules/catalog-next/store/category/CategoryState'
 import addDefaultProductFilter from 'icmaa-catalog/helpers/defaultProductFilter'
 import { products } from 'config'
 import { buildFilterProductsQuery } from '@vue-storefront/core/helpers'
 import { _prepareCategoryPathIds } from '@vue-storefront/core/modules/catalog-next/helpers/categoryHelpers'
+import { changeFilterQuery } from '@vue-storefront/core/modules/catalog-next/helpers/filterHelpers'
 import { formatCategoryLink } from '@vue-storefront/core/modules/url/helpers'
 
-import { icmaa, icmaa_catalog } from 'config'
+import { icmaa } from 'config'
 import intersection from 'lodash-es/intersection'
 import union from 'lodash-es/union'
 
@@ -39,7 +41,7 @@ const actions: ActionTree<CategoryState, RootState> = {
     }
 
     const { includeFields, excludeFields } = getters.getIncludeExcludeFields(category)
-    const sort = searchQuery.sort || `${products.defaultSortBy.attribute}:${products.defaultSortBy.order}`
+    const sort = searchQuery.sort || getters.getDefaultCategorySort
     const separateSelectedVariant = getters.separateSelectedVariantInProductList
 
     const { items, perPage, start, total, aggregations, attributeMetadata } = await dispatch('product/findProducts', {
@@ -93,7 +95,7 @@ const actions: ActionTree<CategoryState, RootState> = {
     }
 
     const { includeFields, excludeFields } = getters.getIncludeExcludeFields(category)
-    const sort = searchQuery.sort || `${products.defaultSortBy.attribute}:${products.defaultSortBy.order}`
+    const sort = searchQuery.sort || getters.getDefaultCategorySort
     const separateSelectedVariant = getters.separateSelectedVariantInProductList
 
     const searchResult = await dispatch('product/findProducts', {
@@ -122,6 +124,13 @@ const actions: ActionTree<CategoryState, RootState> = {
     commit(types.CATEGORY_ADD_PRODUCTS, searchResult.items)
 
     return searchResult.items
+  },
+  async setSearchFilters ({ dispatch }, filterVariants: FilterVariant[] = []) {
+    let currentQuery = {}
+    filterVariants.forEach(filterVariant => {
+      currentQuery = changeFilterQuery({ currentQuery, filterVariant })
+    })
+    await dispatch('changeRouterFilterParameters', currentQuery)
   },
   /**
    * Changes:
