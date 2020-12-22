@@ -1,17 +1,27 @@
 <template>
-  <div class="t-flex t-wrap t-align-top t-bg-white">
-    <div class="t-flex-fix">
-      <picture-component :src="look.image" :width="imageWidth" :height="imageHeight" :sizes="imageSizes" :placeholder="true" :ratio="`${imageWidth}:${imageHeight}`" :alt="look.title | htmlDecode" />
+  <div class="t-flex t-flex-wrap t-items-start t--mx-2">
+    <div class="t-w-full md:t-w-1/3 t-px-2 t-mb-4">
+      <div class="t-bg-white">
+        <div class="t-p-4">
+          <div class="t-font-light t-text-base-light t-text-xs t-mt-2 t-mb-3">
+            {{ look.created | date }}
+          </div>
+          <h3 class="t-leading-tight t-text-2xl t-font-semibold">
+            {{ look.title }}
+          </h3>
+          <div class="t-text-sm t-font-thin">
+            by {{ look.modelName }}
+          </div>
+          <div v-if="look.description" class="t-text-sm t-mt-2">
+            {{ look.description }}
+          </div>
+        </div>
+        <picture-component :src="look.image" :width="imageWidth" :height="imageHeight" :sizes="imageSizes" :placeholder="true" :ratio="`${imageWidth}:${imageHeight}`" :alt="look.title | htmlDecode" />
+      </div>
     </div>
-    <div class="t-flex-1 t-p-4 lg:t-p-8">
-      <h2 class="t-text-2xl t-font-semibold">
-        {{ look.title }}
-        <span class="t-text-sm t-font-thin">by {{ look.modelName }}</span>
-      </h2>
-      <div>{{ look.created | date }}</div>
-      <div>{{ look.description }}</div>
+    <div class="t-w-full md:t-w-2/3 t-px-2">
       <div class="t-flex t-flex-wrap t--mx-2">
-        <product-tile v-for="(p, i) in products" :key="i" :product="p" class="product t-cursor-pointer t-px-1 lg:t-px-2 t-mb-8 t-w-1/2 lg:t-w-1/4 lg:t-mb-0" />
+        <product-tile v-for="(p, i) in products" :key="i" :product="p" class="product t-cursor-pointer t-px-2 t-mb-8 t-w-1/2 md:t-w-1/3" />
       </div>
     </div>
   </div>
@@ -56,12 +66,15 @@ export default {
     }
   },
   methods: {
-    async loadProducts (identifier) {
-      return this.$store.dispatch('icmaaLooks/getLookProducts', identifier)
+    async loadProducts (skus) {
+      return this.$store.dispatch('icmaaLooks/getLookProducts', this.look.products)
     }
   },
-  created () {
-    this.$store.dispatch('icmaaLooks/getLookProducts', this.look.products)
+  async serverPrefetch () {
+    return this.loadProducts()
+  },
+  async mounted () {
+    return this.loadProducts()
   }
 }
 </script>
