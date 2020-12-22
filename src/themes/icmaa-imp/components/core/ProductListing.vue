@@ -19,7 +19,7 @@ export default {
   },
   props: {
     products: {
-      type: null,
+      type: [Array, null],
       required: true
     },
     columns: {

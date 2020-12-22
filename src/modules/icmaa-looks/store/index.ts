@@ -11,7 +11,8 @@ export const storageKey = 'icmaa-looks'
 export const LooksStore: Module<LooksState, RootState> = {
   namespaced: true,
   state: {
-    items: []
+    items: [],
+    products: {}
   },
   actions,
   getters,

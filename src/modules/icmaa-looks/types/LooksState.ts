@@ -1,4 +1,5 @@
 import { AbstractStateItem } from 'icmaa-cms/types/AbstractState'
+import Product from 'core/modules/catalog/types/Product'
 
 export interface Look extends AbstractStateItem {
   [id: string]: any,
@@ -11,5 +12,8 @@ export interface Look extends AbstractStateItem {
 }
 
 export default interface LookState {
-  items: Look[]
+  items: Look[],
+  products: {
+    [sku: string]: Product
+  }
 }

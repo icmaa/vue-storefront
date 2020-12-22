@@ -1,14 +1,7 @@
 <template>
-  <div>
-    <div v-for="look in looks" :key="look.uid">
-      <h1>{{ look.title }}</h1>
-      <div>{{ look.created | date }}</div>
-      <div>{{ look.description }}</div>
-      <div>{{ look.modelName }}</div>
-      <div>
-        <picture-component :src="look.image" :width="imageWidth" :height="imageHeight" :sizes="imageSizes" :placeholder="true" :ratio="`${imageWidth}:${imageHeight}`" :alt="look.title | htmlDecode" />
-      </div>
-      <div>{{ look.products }}</div>
+  <div class="t-container t-p-4">
+    <div class="t--mx-2">
+      <look v-for="look in looks" :key="look.uid" :look="look" class="t-mx-2" />
     </div>
   </div>
 </template>
@@ -16,27 +9,18 @@
 <script>
 import { mapGetters } from 'vuex'
 
-import PictureComponent from 'theme/components/core/blocks/Picture'
+import Look from 'icmaa-looks/components/Look'
 
 export default {
   name: 'Looks',
   components: {
-    PictureComponent
+    Look
   },
   computed: {
-    ...mapGetters({ looks: 'icmaaLooks/getLooks' }),
-    imageWidth () {
-      return 200
-    },
-    imageHeight () {
-      return 400
-    },
-    imageSizes () {
-      return []
-    }
+    ...mapGetters({ looks: 'icmaaLooks/getLooks' })
   },
-  created () {
-    this.$store.dispatch('icmaaLooks/list', {})
+  async created () {
+    await this.$store.dispatch('icmaaLooks/list', {})
   }
 }
 </script>
