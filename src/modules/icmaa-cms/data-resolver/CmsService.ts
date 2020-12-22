@@ -7,8 +7,8 @@ import IcmaaTaskQueue from './Task'
 import { processURLAddress } from '@vue-storefront/core/helpers'
 import Task from '@vue-storefront/core/lib/sync/types/Task'
 
-const getSortOptionsByOptions = (options: any): { sort?: string, limit?: number, size?: number, page?: number } => {
-  return pick(options, ['sort', 'limit', 'size', 'page'])
+const getSortOptionsByOptions = (options: any): { sort?: string, size?: number, page?: number } => {
+  return pick(options, ['sort', 'size', 'page'])
 }
 
 const single = <T>(options: { documentType: string, uid: string, storeCode?: string }): Promise<T | boolean> => {
@@ -40,7 +40,7 @@ const singleQueue = (options: { documentType: string, uid: string, storeCode?: s
   })
 }
 
-const list = <T>(options: { documentType: string, query: Record<string, any> | string, sort?: string, limit?: number, size?: number, page?: number, storeCode?: string }): Promise<T[]> => {
+const list = <T>(options: { documentType: string, query: Record<string, any> | string, sort?: string, size?: number, page?: number, storeCode?: string }): Promise<T[]> => {
   const queryString = IcmaaTaskQueue.createQueryString({
     'type': options.documentType,
     'q': typeof options.query === 'object' ? JSON.stringify(options.query) : options.query,
@@ -55,7 +55,7 @@ const list = <T>(options: { documentType: string, query: Record<string, any> | s
   }).then(resp => resp.resultCode === 200 ? resp.result : false)
 }
 
-const listQueue = (options: { documentType: string, query: Record<string, any> | string, sort?: string, limit?: number, size?: number, page?: number, storeCode?: string, actionName?: string }): Promise<Task|any> => {
+const listQueue = (options: { documentType: string, query: Record<string, any> | string, sort?: string, size?: number, page?: number, storeCode?: string, actionName?: string }): Promise<Task|any> => {
   const queryString = IcmaaTaskQueue.createQueryString({
     'type': options.documentType,
     'q': typeof options.query === 'object' ? JSON.stringify(options.query) : options.query,

@@ -26,12 +26,11 @@ export interface ListOptionsInterface {
   [key: string]: any,
   identifier?: string,
   sort?: string,
-  limit?: number,
   size?: number,
   page?: number
 }
 
-const listSortOptionsParamKeys = [ 'sort', 'limit', 'size', 'page' ]
+const listSortOptionsParamKeys = [ 'sort', 'size', 'page' ]
 
 const listMethod = async <T>(options: OptionsInterface): Promise<T[]|Task> => {
   let query = options.options as ListOptionsInterface | string
