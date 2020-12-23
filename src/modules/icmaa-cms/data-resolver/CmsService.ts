@@ -1,10 +1,15 @@
 import config from 'config'
+import pick from 'lodash-es/pick'
 
 import { getCurrentStoreCode } from '../helpers'
 import IcmaaTaskQueue from './Task'
 
 import { processURLAddress } from '@vue-storefront/core/helpers'
 import Task from '@vue-storefront/core/lib/sync/types/Task'
+
+const getSortOptionsByOptions = (options: any): { sort?: string, size?: number, page?: number } => {
+  return pick(options, ['sort', 'size', 'page'])
+}
 
 const single = <T>(options: { documentType: string, uid: string, storeCode?: string }): Promise<T | boolean> => {
   const queryString = IcmaaTaskQueue.createQueryString({
@@ -35,11 +40,12 @@ const singleQueue = (options: { documentType: string, uid: string, storeCode?: s
   })
 }
 
-const list = <T>(options: { documentType: string, query: Record<string, any>, storeCode?: string }): Promise<T[]> => {
+const list = <T>(options: { documentType: string, query: Record<string, any> | string, sort?: string, size?: number, page?: number, storeCode?: string }): Promise<T[]> => {
   const queryString = IcmaaTaskQueue.createQueryString({
     'type': options.documentType,
     'q': typeof options.query === 'object' ? JSON.stringify(options.query) : options.query,
-    'lang': options.storeCode || getCurrentStoreCode()
+    'lang': options.storeCode || getCurrentStoreCode(),
+    ...getSortOptionsByOptions(options)
   })
 
   return IcmaaTaskQueue.execute({
@@ -49,11 +55,12 @@ const list = <T>(options: { documentType: string, query: Record<string, any>, st
   }).then(resp => resp.resultCode === 200 ? resp.result : false)
 }
 
-const listQueue = (options: { documentType: string, query: Record<string, any>, storeCode?: string, actionName?: string }): Promise<Task|any> => {
+const listQueue = (options: { documentType: string, query: Record<string, any> | string, sort?: string, size?: number, page?: number, storeCode?: string, actionName?: string }): Promise<Task|any> => {
   const queryString = IcmaaTaskQueue.createQueryString({
     'type': options.documentType,
     'q': typeof options.query === 'object' ? JSON.stringify(options.query) : options.query,
-    'lang': options.storeCode || getCurrentStoreCode()
+    'lang': options.storeCode || getCurrentStoreCode(),
+    ...getSortOptionsByOptions(options)
   })
 
   return IcmaaTaskQueue.queue({
