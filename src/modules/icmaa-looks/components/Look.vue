@@ -21,7 +21,7 @@
     </div>
     <div class="t-w-full md:t-w-2/3 t-px-2">
       <div class="t-flex t-flex-wrap t--mx-2">
-        <product-tile v-for="(p, i) in products" :key="i" :product="p" class="product t-cursor-pointer t-px-2 t-mb-8 t-w-1/2 md:t-w-1/3" />
+        <product-tile v-for="(p, i) in products" :key="`look-product-${look.uid}-${i}`" :product="p" class="product t-cursor-pointer t-px-2 t-mb-8 t-w-1/2 md:t-w-1/3" />
       </div>
     </div>
   </div>
@@ -67,7 +67,7 @@ export default {
   },
   methods: {
     async loadProducts (skus) {
-      return this.$store.dispatch('icmaaLooks/getLookProducts', this.look.products)
+      return this.$store.dispatch('icmaaLooks/getLookProducts', this.look.products || [])
     }
   },
   async serverPrefetch () {

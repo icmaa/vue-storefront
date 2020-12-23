@@ -7,7 +7,7 @@
     <h2 class="t-mb-4 t-text-1xl t-font-normal">
       {{ $t('More looks') }}
     </h2>
-    <look-list :looks="looks" />
+    <look-list :looks="looks" :per-page="perPage" />
   </div>
 </template>
 
@@ -22,6 +22,11 @@ export default {
   components: {
     Look,
     LookList
+  },
+  data () {
+    return {
+      perPage: 8
+    }
   },
   computed: {
     ...mapGetters({
@@ -40,8 +45,16 @@ export default {
       return this.looks[0]
     }
   },
-  async asyncData ({ store }) {
-    await store.dispatch('icmaaLooks/list', {})
+  async asyncData ({ store, route, context }) {
+    const identifier = route.params.identifier
+    if (identifier && !store.getters['icmaaLooks/getByIdentifier']('identifier')) {
+      await store.dispatch('icmaaLooks/single', { value: identifier })
+    }
+
+    const { perPage } = this.data()
+    if (store.getters['icmaaLooks/getLooks'].length < perPage) {
+      await store.dispatch('icmaaLooks/list', { size: perPage })
+    }
   }
 }
 </script>

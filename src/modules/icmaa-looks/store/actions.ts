@@ -21,8 +21,10 @@ const mutationTypes: MutationTypesInterface = {
 const actions: ActionTree<LooksState, RootState> = {
   single: async (context, options: SingleOptionsInterface): Promise<Look> =>
     singleAbstract<Look>({ documentType, mutationTypes, stateKey, context, options }),
-  list: async (context, options: ListOptionsInterface): Promise<Look[]> =>
-    listAbstract<Look>({ documentType, mutationTypes, stateKey, context, options }),
+  list: async (context, { page = 1, size = 8 }): Promise<Look[]> => {
+    const options: ListOptionsInterface = { page, size, sort: 'created:desc' }
+    return listAbstract<Look>({ documentType, mutationTypes, stateKey, context, options })
+  },
   getLookProducts: async ({ dispatch, commit, getters, rootGetters }, skus: string[]): Promise<Product[]> => {
     const query = new SearchQuery()
     const options = { separateSelectedVariant: rootGetters['category-next/separateSelectedVariantInProductList'] }

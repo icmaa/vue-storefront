@@ -3,8 +3,10 @@ import RootState from '@vue-storefront/core/types/RootState'
 import LooksState, { Look } from '../types/LooksState'
 import Product from 'core/modules/catalog/types/Product'
 
+import orderBy from 'lodash-es/orderBy'
+
 const getters: GetterTree<LooksState, RootState> = {
-  getLooks: (state): Look[] => state.items,
+  getLooks: (state): Look[] => orderBy(state.items, ['created', 'name'], ['desc', 'asc']),
   getByIdentifier: (state, getters) =>
     (identifier: string): Look|boolean => getters.getLooks.find(c => c.identifier === identifier),
   getExistingProducts: (state) => Object.keys(state.products),

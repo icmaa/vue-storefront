@@ -4,6 +4,7 @@ import Task from '@vue-storefront/core/lib/sync/types/Task'
 
 import pick from 'lodash-es/pick'
 import omit from 'lodash-es/omit'
+import isEmpty from 'lodash-es/isEmpty'
 
 export { MutationTypesInterface }
 
@@ -98,7 +99,9 @@ export const single = async <T>(options: OptionsInterface): Promise<T> => {
 
   const promise = CmsService.single({ documentType, uid: value })
   return promise.then<T>((data: any): T => {
-    commit(mutationTypes.add, data)
+    if (!isEmpty(data)) {
+      commit(mutationTypes.add, data)
+    }
     return data
   })
 }
