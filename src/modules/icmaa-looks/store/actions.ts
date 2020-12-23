@@ -25,13 +25,17 @@ const actions: ActionTree<LooksState, RootState> = {
     const options: ListOptionsInterface = { page, size, sort: 'created:desc' }
     return listAbstract<Look>({ documentType, mutationTypes, stateKey, context, options })
   },
-  getLookProducts: async ({ dispatch, commit, getters, rootGetters }, skus: string[]): Promise<Product[]> => {
+  getLookProducts: async ({ dispatch, commit, getters, rootGetters }, skus: string[]): Promise<void> => {
     const query = new SearchQuery()
     const options = { separateSelectedVariant: rootGetters['category-next/separateSelectedVariantInProductList'] }
     const { includeFields, excludeFields } = entities.productList
 
     const existingProducts: string[] = getters.getExistingProducts
     skus = skus.filter(sku => !existingProducts.includes(sku))
+
+    if (skus.length === 0) {
+      return
+    }
 
     addDefaultProductFilter(query, true)
     query.applyFilter({ key: 'sku', value: { 'in': skus } })
@@ -40,8 +44,6 @@ const actions: ActionTree<LooksState, RootState> = {
     const products: Product[] = result.items
 
     commit(types.ICMAA_LOOKS_PRODUCTS_ADD, { products })
-
-    return products
   }
 }
 
