@@ -6,8 +6,8 @@ export interface Look extends AbstractStateItem {
   enabled: boolean,
   created: string,
   title: string,
-  description: string,
-  model_name: string,
+  description?: string,
+  modelInstagram: string,
   products: string[]
 }
 

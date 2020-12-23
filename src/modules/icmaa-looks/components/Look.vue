@@ -10,7 +10,10 @@
             {{ look.title }}
           </h3>
           <div class="t-text-sm t-font-thin">
-            by {{ look.modelName }}
+            <a :href="`https://www.instagram.com/${look.modelInstagram}`" target="_blank" :title="`@${look.modelInstagram}` | htmlDecode">
+              <material-icon icon="instagram" icon-set="icmaa" size="xs" class="t-align-text-bottom" />
+              {{ look.modelInstagram }}
+            </a>
           </div>
           <div v-if="look.description" class="t-text-sm t-mt-2">
             {{ look.description }}
@@ -31,6 +34,7 @@
 import { mapGetters } from 'vuex'
 
 import PictureComponent from 'theme/components/core/blocks/Picture'
+import MaterialIcon from 'theme/components/core/blocks/MaterialIcon'
 import ProductTile from 'theme/components/core/ProductTile'
 
 export default {
@@ -43,6 +47,7 @@ export default {
   },
   components: {
     PictureComponent,
+    MaterialIcon,
     ProductTile
   },
   computed: {
