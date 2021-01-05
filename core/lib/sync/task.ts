@@ -33,11 +33,11 @@ function _sleep (time) {
 function getUrl (task, currentToken, currentCartId) {
   const parsedUrl = queryString.parseUrl(task.url)
 
-  if (parsedUrl.query.token && parsedUrl.query.token === '{{token}}') {
+  if (parsedUrl?.query?.token === '{{token}}') {
     parsedUrl.query.token = (currentToken == null) ? '' : currentToken
   }
 
-  if (parsedUrl.query.cartId && parsedUrl.query.cartId === '{{cartId}}') {
+  if (parsedUrl?.query?.cartId === '{{cartId}}') {
     parsedUrl.query.cartId = (currentCartId == null) ? '' : currentCartId
   }
 
@@ -102,7 +102,7 @@ function _internalExecute (resolve, reject, task: Task, currentToken, currentCar
     if (contentType && contentType.includes('application/json')) {
       return response.json()
     } else {
-      const msg = i18n.t('Error with response - bad content-type!', { url, contentType, task })
+      const msg = i18n.t('Error with response - bad content-type!')
       Logger.error(msg.toString(), 'sync')()
       reject(msg)
     }
@@ -172,7 +172,7 @@ function _internalExecute (resolve, reject, task: Task, currentToken, currentCar
         }
       }
 
-      Logger.debug('Response for: ' + task.task_id, 'sync', JSON.stringify(jsonResponse.result))()
+      Logger.debug('Response for: ' + task.task_id + ' = ' + JSON.stringify(jsonResponse.result), 'sync')()
       task.transmited = true
       task.transmited_at = new Date()
       task.result = jsonResponse.result
@@ -193,7 +193,7 @@ function _internalExecute (resolve, reject, task: Task, currentToken, currentCar
       }
     } else {
       const msg = i18n.t('Unhandled error, wrong response format!')
-      Logger.error(msg.toString(), 'sync', { url, task, jsonResponse })()
+      Logger.error(msg.toString(), 'sync')()
       reject(msg)
     }
   }).catch((err) => {
@@ -214,7 +214,7 @@ export function initializeSyncTaskStorage () {
   const storeView = currentStoreView()
   const dbNamePrefix = storeView.storeCode ? storeView.storeCode + '-' : ''
 
-  StorageManager.init('syncTasks', undefined, config.server.elasticCacheQuota)
+  StorageManager.init('syncTasks')
 }
 
 export function registerSyncTaskProcessor () {
@@ -227,8 +227,8 @@ export function registerSyncTaskProcessor () {
       const currentCartToken = rootStore.getters['cart/getCartToken']
 
       const fetchQueue = []
-      Logger.debug('Current User token:', 'sync', currentUserToken)()
-      Logger.debug('Current Cart token:', 'sync', currentCartToken)()
+      Logger.debug('Current User token = ' + currentUserToken)()
+      Logger.debug('Current Cart token = ' + currentCartToken)()
       syncTaskCollection.iterate((task, id) => {
         if (task && !task.transmited && !mutex[id]) { // not sent to the server yet
           mutex[id] = true // mark this task as being processed

@@ -2,6 +2,10 @@ import CmsService from 'icmaa-cms/data-resolver/CmsService'
 import { MutationTypesInterface } from '../abstract/mutation-types'
 import Task from '@vue-storefront/core/lib/sync/types/Task'
 
+import pick from 'lodash-es/pick'
+import omit from 'lodash-es/omit'
+import isEmpty from 'lodash-es/isEmpty'
+
 export { MutationTypesInterface }
 
 export interface OptionsInterface {
@@ -20,37 +24,47 @@ export interface SingleOptionsInterface {
 }
 
 export interface ListOptionsInterface {
-  [key: string]: any
+  [key: string]: any,
+  identifier?: string,
+  sort?: string,
+  size?: number,
+  page?: number
 }
 
+const listSortOptionsParamKeys = [ 'sort', 'size', 'page' ]
+
 const listMethod = async <T>(options: OptionsInterface): Promise<T[]|Task> => {
-  let filter = options.options as ListOptionsInterface | string
+  let query = options.options as ListOptionsInterface | string
+  let sortOptions = {}
   let { context, documentType, mutationTypes, stateKey, queue } = options
   const { state } = context
 
   const identifier = options.identifier || 'identifier'
 
-  if (typeof filter === 'string') {
-    let valuesArray = filter.split(',')
+  if (typeof query === 'string') {
+    let valuesArray = query.split(',')
     const existingStateItems = valuesArray.filter(i => (state.items.find(s => s[identifier] === i)))
 
     if (state.items.length > 0 && valuesArray.length === existingStateItems.length) {
       return state.items.filter(i => existingStateItems.includes(i[identifier]))
     }
 
-    filter = valuesArray.filter(i => !existingStateItems.includes(i)).join(',')
-  }
+    query = valuesArray.filter(i => !existingStateItems.includes(i)).join(',')
 
-  if (filter.length === 0) {
-    return
+    if (query.length === 0) {
+      return
+    }
+  } else if (typeof query === 'object') {
+    sortOptions = pick(query, listSortOptionsParamKeys)
+    query = omit(query, listSortOptionsParamKeys)
   }
 
   if (queue) {
     const actionName = `store:${stateKey}/listSync`
-    return CmsService.listQueue({ documentType, query: (filter as any), actionName })
+    return CmsService.listQueue({ documentType, query, ...sortOptions, actionName })
       .then(results => results)
   } else {
-    return CmsService.list<T>({ documentType, query: (filter as any) })
+    return CmsService.list<T>({ documentType, query, ...sortOptions })
       .then(results => {
         results.forEach(data => context.commit(mutationTypes.add, data))
         return results
@@ -85,7 +99,9 @@ export const single = async <T>(options: OptionsInterface): Promise<T> => {
 
   const promise = CmsService.single({ documentType, uid: value })
   return promise.then<T>((data: any): T => {
-    commit(mutationTypes.add, data)
+    if (!isEmpty(data)) {
+      commit(mutationTypes.add, data)
+    }
     return data
   })
 }

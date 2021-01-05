@@ -140,13 +140,13 @@ export default {
       }
 
       this.$store.dispatch('mailer/sendEmail', mail)
-        .then(res => {
+        .then(async (res) => {
           this.$bus.$emit('notification-progress-stop')
 
           if (res.ok) {
             this.onSuccess()
           } else {
-            res = res.json()
+            res = await res.json()
             const errorPrefix = i18n.t('An error appeared:')
             this.onError(errorPrefix + ' ' + i18n.t(res.result))
           }
