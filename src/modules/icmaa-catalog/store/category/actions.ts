@@ -8,6 +8,7 @@ import { router } from '@vue-storefront/core/app'
 import { products } from 'config'
 import { changeFilterQuery } from '@vue-storefront/core/modules/catalog-next/helpers/filterHelpers'
 import * as orgTypes from '@vue-storefront/core/modules/catalog-next/store/category/mutation-types'
+import * as types from './mutation-types'
 
 import extendedCoreActions from './actions/index'
 import searchActions from './actions/search'
@@ -43,6 +44,31 @@ const actions: ActionTree<CategoryState, RootState> = {
     commit(orgTypes.CATEGORY_ADD_CATEGORIES, categories)
 
     return categories
+  },
+  async loadChildCategories ({ dispatch, getters, commit }) {
+    let currentCategory: Category = getters.getCurrentCategory
+    if (currentCategory) {
+      const { children_count, children_data: children } = currentCategory
+      if (Number(children_count) === 0 || !children || children.length === 0) {
+        return
+      }
+
+      const childrenIds: number[] = children.map(c => parseInt(c.id as string))
+      await dispatch('loadCategories', { filters: { id: childrenIds } })
+
+      const filters = { category: [] }
+      getters.getCategories
+        .filter(c => childrenIds.includes(c.id))
+        .forEach(c => {
+          const { id, name: label, position, url_path, slug } = c
+          const filter = { id, label, position, url_path, slug }
+          filters.category.push(filter)
+        })
+
+      filters.category.sort((a, b) => a.position - b.position)
+
+      commit(types.CATEGORY_UPD_CATEGORY_FILTERS, { categoryId: currentCategory.id, filters })
+    }
   }
 }
 

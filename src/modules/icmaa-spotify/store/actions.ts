@@ -62,6 +62,9 @@ const actions: ActionTree<SpotifyState, RootState> = {
     /** Only load not already loaded categories (prevent invinite load of `category-next/loadCategories`) */
     const categoriesNotInState = relatedArtists.filter(a => !rootGetters['category-next/getCategories'].map(c => c.name).includes(a))
 
+    /** Don't load anything if everythin is already loaded */
+    if (categoriesNotInState.length === 0) return
+
     /**
      * To make full-text search possible in elasticsearch we must search the "name.keyword" field of our field.
      * Otherwise it wont find any content because the originial "name" field is type "text"
