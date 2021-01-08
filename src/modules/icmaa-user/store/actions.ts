@@ -175,11 +175,14 @@ const actions: ActionTree<UserState, RootState> = {
         return history[index]
       })
   },
-  setCluster ({ commit }, cluster) {
+  setCluster ({ commit }, value) {
     // Don't set cluster for `always visible`/`0` as `customercluster` value
-    if ((!isEmpty(cluster) || cluster === false) && cluster !== '0' && cluster !== 0) {
-      commit(types.USER_ADD_SESSION_DATA, { key: 'cluster', value: cluster })
+    if ((!isEmpty(value) || value === false) && value !== '0' && value !== 0) {
+      commit(types.USER_ADD_SESSION_DATA, { key: 'cluster', value })
     }
+  },
+  setGender ({ commit }, value) {
+    commit(types.USER_ADD_SESSION_DATA, { key: 'gender', value: value })
   },
   async loadSessionData ({ commit }) {
     const usersCollection = StorageManager.get('user')
