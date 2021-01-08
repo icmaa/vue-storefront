@@ -11,7 +11,7 @@ export const IcmaaExtendedUserModule: StorefrontModule = async function ({ store
   extendStore('user', ExtendedUserStore)
 
   store.subscribe((mutation, state) => {
-    if (mutation.type.endsWith(types.USER_ADD_SESSION_DATA)) {
+    if (mutation.type.endsWith(types.USER_ADD_SESSION_DATA) || mutation.type.endsWith(types.USER_RMV_SESSION_DATA)) {
       StorageManager.get('user').setItem('session-data', state.user.sessionData)
         .catch((reason) => { console.error(reason) })
     }

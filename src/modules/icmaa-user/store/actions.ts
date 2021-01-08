@@ -184,6 +184,9 @@ const actions: ActionTree<UserState, RootState> = {
   setGender ({ commit }, value) {
     commit(types.USER_ADD_SESSION_DATA, { key: 'gender', value: value })
   },
+  unsetGender ({ commit }) {
+    commit(types.USER_RMV_SESSION_DATA, 'gender')
+  },
   async loadSessionData ({ commit }) {
     const usersCollection = StorageManager.get('user')
     const userData = await usersCollection.getItem('session-data')
