@@ -74,7 +74,7 @@ const actions: ActionTree<CategoryState, RootState> = {
       attributeMetadata,
       category: searchCategory,
       filters: searchQuery.filters,
-      userSessionFilterKeys: rootGetters['user/getuserSessionFilterKeys']
+      userSessionFilterKeys: rootGetters['user/getSessionFilterKeys']
     })
 
     commit(types.CATEGORY_SET_SEARCH_PRODUCTS_STATS, { perPage, start, total })
