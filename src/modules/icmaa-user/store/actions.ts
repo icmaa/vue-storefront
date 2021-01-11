@@ -194,6 +194,15 @@ const actions: ActionTree<UserState, RootState> = {
       commit(types.USER_SET_SESSION_DATA, userData)
     }
   },
+  applySessionFilterToSearchQuery ({ getters }, { query, filters = {} }: { query: SearchQuery, filters: any }) {
+    getters.getSessionFilters.forEach(({ attributeCode, value }) => {
+      if (!filters[attributeCode]) {
+        query
+          .applyFilter({ key: attributeCode, value: { or: value } })
+          .applyFilter({ key: attributeCode, value: { or: null } })
+      }
+    })
+  },
   async facebookLogin ({ commit, dispatch }, params: { accessToken: string, version: string}) {
     const { endpoint } = config.icmaa_facebook
     const { accessToken, version } = params
