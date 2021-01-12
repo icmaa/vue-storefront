@@ -64,6 +64,7 @@ export default {
   methods: {
     async changeFilter (filterVariant) {
       this.$store.dispatch('category-next/switchSearchFilters', [ filterVariant ])
+      this.$store.dispatch('user/addSessionDataByCategoryFilter', filterVariant)
       IcmaaGoogleTagManagerExecutors.onProductListFilter({ filter: filterVariant })
     },
     getType (attributeKey) {

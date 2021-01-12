@@ -6,20 +6,18 @@ import * as types from '../mutation-types'
 import { SearchQuery } from 'storefront-query-builder'
 import { StorageManager } from '@vue-storefront/core/lib/storage-manager'
 
+import { changeFilterQuery } from '@vue-storefront/core/modules/catalog-next/helpers/filterHelpers'
+import { router } from '@vue-storefront/core/app'
+import { products } from 'config'
+
 import isEmpty from 'lodash-es/isEmpty'
 
 const actions: ActionTree<UserState, RootState> = {
-  setCluster ({ commit }, value) {
+  setCluster ({ dispatch }, value) {
     // Don't set cluster for `always visible`/`0` as `customercluster` value
     if ((!isEmpty(value) || value === false) && value !== '0' && value !== 0) {
-      commit(types.USER_ADD_SESSION_DATA, { key: 'cluster', value })
+      dispatch('addSessionData', { key: 'cluster', value })
     }
-  },
-  setGender ({ commit }, value) {
-    commit(types.USER_ADD_SESSION_DATA, { key: 'gender', value: value })
-  },
-  unsetGender ({ commit }) {
-    commit(types.USER_RMV_SESSION_DATA, 'gender')
   },
   async loadSessionData ({ commit }) {
     const usersCollection = StorageManager.get('user')
@@ -27,6 +25,35 @@ const actions: ActionTree<UserState, RootState> = {
     if (userData) {
       commit(types.USER_SET_SESSION_DATA, userData)
     }
+  },
+  addSessionData ({ commit }, { key, value }: { key: string, value: any }) {
+    commit(types.USER_ADD_SESSION_DATA, { key, value })
+  },
+  removeSessionData ({ commit }, key: string) {
+    commit(types.USER_RMV_SESSION_DATA, key)
+  },
+  addSessionDataByCategoryFilter ({ dispatch, getters, rootGetters }, filter: { id: any, type: string, label: string }) {
+    const { type: key, id: value } = filter
+    const currentQuery = router.currentRoute[products.routerFiltersSource]
+    const query = changeFilterQuery({ currentQuery, filterVariant: filter })
+
+    if (getters.isSessionFilterAttribute(key) && !getters.hasSessionFilterAttribute(key)) {
+      dispatch('addSessionData', { key, value })
+    } else {
+      if (!query[key]) {
+        dispatch('removeSessionData', key)
+      } else if (query[key] && query[key].includes(value)) {
+        dispatch('addSessionData', { key, value })
+      }
+    }
+  },
+  removeSessionDataByCategoryFilter ({ dispatch, getters }, key: string) {
+    if (getters.isSessionFilterAttribute(key)) {
+      dispatch('removeSessionData', key)
+    }
+  },
+  resetSessionDataByCategoryFilter ({ dispatch, getters }) {
+    getters.getSessionFilterKeys.forEach(key => dispatch('removeSessionData', key))
   },
   applySessionFilterToSearchQuery ({ getters }, { query, filters = {} }: { query: SearchQuery, filters: any }) {
     getters.getSessionFilters.forEach(({ attributeCode, value }) => {

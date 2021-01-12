@@ -141,9 +141,11 @@ export default {
     },
     resetAllFilters () {
       this.$store.dispatch('category-next/resetSearchFilters')
+      this.$store.dispatch('user/resetSessionDataByCategoryFilter')
     },
     unsetFilter (attributeKey) {
       this.$store.dispatch('category-next/unsetSearchFilterForAttribute', attributeKey)
+      this.$store.dispatch('user/removeSessionDataByCategoryFilter', attributeKey)
     },
     currentFilters (attributeKey) {
       let activeFilter = this.getCurrentFilters[attributeKey]
