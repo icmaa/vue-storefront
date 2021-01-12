@@ -1,31 +1,29 @@
 import { ActionTree } from 'vuex'
-import { StorageManager } from '@vue-storefront/core/lib/storage-manager'
 import RootState from '@vue-storefront/core/types/RootState'
 import UserState from '../types/UserState'
 import { UserProfile } from '@vue-storefront/core/modules/user/types/UserProfile'
 import { UserService } from '@vue-storefront/core/data-resolver'
 import { UserService as IcmaaUserService } from '../data-resolver/UserService'
-import * as types from './mutation-types'
 import * as userTypes from '@vue-storefront/core/modules/user/store/mutation-types'
 import { SearchQuery } from 'storefront-query-builder'
-import { userHooksExecutors } from '@vue-storefront/core/modules/user/hooks'
 import { isServer } from '@vue-storefront/core/helpers'
 import { Logger } from '@vue-storefront/core/lib/logger'
 import { TaskQueue } from '@vue-storefront/core/lib/sync'
 import Task from '@vue-storefront/core/lib/sync/types/Task'
 import EventBus from '@vue-storefront/core/compatibility/plugins/event-bus'
 import asyncForEach from 'icmaa-config/helpers/asyncForEach'
+import config, { entities } from 'config'
 
 import getApiEndpointUrl from '@vue-storefront/core/helpers/getApiEndpointUrl'
 import { processLocalizedURLAddress } from '@vue-storefront/core/helpers'
 import { notifications } from 'icmaa-cart/helpers'
 
-import config, { entities } from 'config'
-import fetch from 'isomorphic-fetch'
-import isEmpty from 'lodash-es/isEmpty'
-import fetchErrorHandler from 'icmaa-config/helpers/fetchResponseHandler'
+import facebookLoginActions from './actions/facebook-login'
+import userSessionActions from './actions/user-session'
 
 const actions: ActionTree<UserState, RootState> = {
+  ...facebookLoginActions,
+  ...userSessionActions,
   async startSessionWithToken ({ commit, dispatch }, { token }) {
     if (isServer) {
       return
@@ -174,66 +172,6 @@ const actions: ActionTree<UserState, RootState> = {
         history[index].products = products.items
         return history[index]
       })
-  },
-  setCluster ({ commit }, value) {
-    // Don't set cluster for `always visible`/`0` as `customercluster` value
-    if ((!isEmpty(value) || value === false) && value !== '0' && value !== 0) {
-      commit(types.USER_ADD_SESSION_DATA, { key: 'cluster', value })
-    }
-  },
-  setGender ({ commit }, value) {
-    commit(types.USER_ADD_SESSION_DATA, { key: 'gender', value: value })
-  },
-  unsetGender ({ commit }) {
-    commit(types.USER_RMV_SESSION_DATA, 'gender')
-  },
-  async loadSessionData ({ commit }) {
-    const usersCollection = StorageManager.get('user')
-    const userData = await usersCollection.getItem('session-data')
-    if (userData) {
-      commit(types.USER_SET_SESSION_DATA, userData)
-    }
-  },
-  applySessionFilterToSearchQuery ({ getters }, { query, filters = {} }: { query: SearchQuery, filters: any }) {
-    getters.getSessionFilters.forEach(({ attributeCode, value }) => {
-      if (!filters[attributeCode]) {
-        query
-          .applyFilter({ key: attributeCode, value: { or: value } })
-          .applyFilter({ key: attributeCode, value: { or: null } })
-      }
-    })
-  },
-  async facebookLogin ({ commit, dispatch }, params: { accessToken: string, version: string}) {
-    const { endpoint } = config.icmaa_facebook
-    const { accessToken, version } = params
-    const apiUrl = processLocalizedURLAddress(endpoint + '/login')
-    const fetchOptions = {
-      method: 'POST',
-      body: JSON.stringify({ 'access_token': accessToken, version }),
-      headers: {
-        'Accept': 'application/json, text/plain, */*',
-        'Content-Type': 'application/json'
-      },
-      mode: 'cors' as RequestMode
-    }
-
-    const resp = await fetch(apiUrl, fetchOptions)
-      .then(fetchErrorHandler)
-      .then(r => r.json())
-      .catch(e => { throw new Error(e.response.result) })
-
-    userHooksExecutors.afterUserAuthorize(resp)
-
-    if (resp.code === 200) {
-      try {
-        await dispatch('resetUserInvalidateLock', {}, { root: true })
-        commit(userTypes.USER_TOKEN_CHANGED, { newToken: resp.result }) // TODO: handle the "Refresh-token" header
-        await dispatch('sessionAfterAuthorized', { refresh: true, useCache: false })
-      } catch (err) {
-        await dispatch('clearCurrentUser')
-        throw new Error(err)
-      }
-    }
   }
 }
 

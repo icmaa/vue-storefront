@@ -1,13 +1,11 @@
 import { ActionTree } from 'vuex'
 import * as types from '@vue-storefront/core/modules/catalog-next/store/category/mutation-types'
-import FilterVariant from '@vue-storefront/core/modules/catalog-next/types/FilterVariant'
 import RootState from '@vue-storefront/core/types/RootState'
 import CategoryState from '@vue-storefront/core/modules/catalog-next/store/category/CategoryState'
 import addDefaultProductFilter from 'icmaa-catalog/helpers/defaultProductFilter'
 import { icmaa, products, entities } from 'config'
 import { buildFilterProductsQuery } from '@vue-storefront/core/helpers'
 import { _prepareCategoryPathIds } from '@vue-storefront/core/modules/catalog-next/helpers/categoryHelpers'
-import { changeFilterQuery } from '@vue-storefront/core/modules/catalog-next/helpers/filterHelpers'
 import { formatCategoryLink } from '@vue-storefront/core/modules/url/helpers'
 
 import intersection from 'lodash-es/intersection'
@@ -161,13 +159,6 @@ const actions: ActionTree<CategoryState, RootState> = {
         cloneDeep(omit(aggregationFilters, [...filtersKeys, ...userSessionFilterKeys])))
     }
     commit(types.CATEGORY_SET_CATEGORY_FILTERS, { category, filters: resultFilters })
-  },
-  async setSearchFilters ({ dispatch }, filterVariants: FilterVariant[] = []) {
-    let currentQuery = {}
-    filterVariants.forEach(filterVariant => {
-      currentQuery = changeFilterQuery({ currentQuery, filterVariant })
-    })
-    await dispatch('changeRouterFilterParameters', currentQuery)
   },
   /**
    * Changes:
