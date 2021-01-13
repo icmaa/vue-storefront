@@ -34,17 +34,19 @@ const actions: ActionTree<UserState, RootState> = {
   },
   addSessionDataByCategoryFilter ({ dispatch, getters, rootGetters }, filter: { id: any, type: string, label: string }) {
     const { type: key, id: value } = filter
+    if (!getters.isSessionFilterAttribute(key)) {
+      return
+    }
+
     const currentQuery = router.currentRoute[products.routerFiltersSource]
     const query = changeFilterQuery({ currentQuery, filterVariant: filter })
 
-    if (getters.isSessionFilterAttribute(key) && !getters.hasSessionFilterAttribute(key)) {
+    if (getters.getSessionData(key) === value &&
+      (!query[key] || !query[key].includes(value))
+    ) {
+      dispatch('removeSessionData', key)
+    } else if (query[key] && query[key].includes(value)) {
       dispatch('addSessionData', { key, value })
-    } else {
-      if (!query[key]) {
-        dispatch('removeSessionData', key)
-      } else if (query[key] && query[key].includes(value)) {
-        dispatch('addSessionData', { key, value })
-      }
     }
   },
   removeSessionDataByCategoryFilter ({ dispatch, getters }, key: string) {

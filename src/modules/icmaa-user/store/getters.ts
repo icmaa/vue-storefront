@@ -17,7 +17,8 @@ const getters: GetterTree<UserState, RootState> = {
       .map(attributeCode => ({ attributeCode, value: getters.getSessionData(attributeCode) }))
   },
   getSessionFilterKeys: (state, getters): string[] => getters.getSessionFilters.map(f => f.attributeCode),
-  hasSessionFilterAttribute: (state, getters) => (attributeCode: string): boolean => getters.getSessionFilterKeys.includes(attributeCode),
+  hasSessionFilterAttribute: (state, getters) => (attributeCode: string): boolean =>
+    getters.getSessionFilterKeys.includes(attributeCode),
   isSessionFilterAttribute: (state, getters) => (attributeCode: string): boolean => {
     const sessionFilterAttributes = icmaa.user.clpSessionFilters || []
     return sessionFilterAttributes.includes(attributeCode)
