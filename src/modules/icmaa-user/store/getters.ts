@@ -23,7 +23,6 @@ const getters: GetterTree<UserState, RootState> = {
     const sessionFilterAttributes = icmaa.user.clpSessionFilters || []
     return sessionFilterAttributes.includes(attributeCode)
   },
-  getGender: (state, getters): string|false => getters.getSessionData('gender'),
   getCluster: (state, getters): string|false => getters.getSessionData('cluster')
 }
 
