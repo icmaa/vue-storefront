@@ -82,7 +82,15 @@ registerRoute(
   imgCache
 )
 
+/**
+ * We don't want to cache just all `/api/icmaa-*` requests as they probably needed to be updated in time.
+ * I noticed that there are only a few that really needed to be cache besides the `/api/catalog` requests.
+ * So I decided to make an allow-list for the cachable endpoints of the ICMAA modules.
+ *
+ * We could probably also us a disallow-list using a negative-lookahead regex like:
+ * new RegExp(`^${api.url}/api/(?!(ext/)*(icmaa-mailer|icmaa-competitions))(catalog|(ext/)*icmaa-.+)`),
+ */
 registerRoute(
-  new RegExp(`^${api.url}/api/(catalog|ext/icmaa-.+)/`),
+  new RegExp(`^${api.url}/api/(catalog|(ext/)*icmaa-(spotify|twitter|cms))`),
   apiCache
 )
