@@ -6,14 +6,14 @@
     <template v-slot:default>
       <gender-navigation :items="genderNavigationItems" class="t--mx-4 t--mt-4 t-mb-4" />
       <div class="t-flex t-flex-wrap t--mx-1 t--mb-2">
-        <navigation-item v-for="link in getMainNavigation" v-bind="link" :key="link.id" />
+        <navigation-item v-for="link in mainNavigationItems" v-bind="link" :key="link.id" />
       </div>
     </template>
     <template v-slot:footer>
       <div class="t-flex-expand t-bg-base-lightest t-p-4" data-test-id="SidebarMenuFooter">
         <div class="t-flex t-items-center t-flex-wrap t-w-full">
           <div class="t-flex t-items-center" @click="closeMenu">
-            <template v-for="(link, index) in metaNavigation">
+            <template v-for="(link, index) in metaNavigationItems">
               <router-link :to="localizedRoute(link.route)" :title="link.name | htmlDecode" class="t-flex t-flex-fit t-mr-6 t-text-xs t-uppercase t-text-base-tone" :key="index" v-if="link.isRoute === true">
                 {{ link.name }}
               </router-link>
@@ -62,10 +62,10 @@ export default {
       'getJsonBlockByIdentifier': 'icmaaCmsBlock/getJsonBlockByIdentifier',
       'isLoggedIn': 'user/isLoggedIn'
     }),
-    getMainNavigation () {
-      return this.getJsonBlockByIdentifier('navigation-main')
+    mainNavigation () {
+      return this.getJsonBlockByIdentifier('navigation-main-new')
     },
-    metaNavigation () {
+    metaNavigationItems () {
       return this.getJsonBlockByIdentifier('navigation-meta').map(link =>
         Object.assign(link, { isRoute: (typeof link.route === 'object' || link.route.startsWith('/')) })
       ).slice(0, 4)
@@ -73,27 +73,11 @@ export default {
     loginButtonText () {
       return this.isLoggedIn ? 'My Account' : 'Login'
     },
+    mainNavigationItems () {
+      return this.mainNavigation.mainNavigation
+    },
     genderNavigationItems () {
-      return [
-        {
-          label: 'Boys',
-          gender: '9',
-          route: 'boys.html',
-          background: 'https://www.impericon.com/460x460x85/media/impericon/teaser/1x1/20201112_kt_winterjacke_herren_hellbunt.jpg'
-        },
-        {
-          label: 'Girls',
-          gender: '8',
-          route: 'girls.html',
-          background: 'https://www.impericon.com/460x460x85/media/impericon/teaser/1x1/20201112_kt_winterjacke_damen_hellbunt.jpg'
-        },
-        {
-          label: 'Diverse',
-          gender: false,
-          route: 'clothing.html',
-          background: 'https://www.impericon.com/460x460x85/media/impericon/teaser/1x1/20201030_kt_jacken_hellbunt.jpg'
-        }
-      ]
+      return this.mainNavigation.genderNavigation
     }
   },
   methods: {
