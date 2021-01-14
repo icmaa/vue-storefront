@@ -8,9 +8,7 @@
     >
       {{ o.label }}
     </button-component>
-    <button-component type="ghost" @click="setValue()">
-      Unset
-    </button-component>
+    <button-component type="ghost" @click="setValue()" icon="delete" :icon-only="true" />
   </div>
 </template>
 

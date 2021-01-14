@@ -4,6 +4,7 @@
       <top-button icon="person" :text="loginButtonText" :tab-index="2" class="t-text-base-light" @click.native="login" />
     </template>
     <template v-slot:default>
+      <gender-navigation :items="genderNavigationItems" class="t--mx-4 t--mt-4 t-mb-4" />
       <div class="t-flex t-flex-wrap t--mx-1 t--mb-2">
         <navigation-item v-for="link in getMainNavigation" v-bind="link" :key="link.id" />
       </div>
@@ -30,10 +31,12 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex'
+import { mapGetters } from 'vuex'
 import { currentStoreView } from '@vue-storefront/core/lib/multistore'
+
 import Sidebar from 'theme/components/core/blocks/AsyncSidebar/Sidebar'
 import TopButton from 'theme/components/core/blocks/AsyncSidebar/TopButton'
+import GenderNavigation from 'theme/components/core/blocks/SidebarMenu/ClusterNavigation'
 import NavigationItem from 'theme/components/core/blocks/SidebarMenu/NavigationItem'
 import FlagIcon from 'theme/components/core/blocks/FlagIcon'
 import FlagMixin from 'theme/mixins/flagMixin'
@@ -44,6 +47,7 @@ export default {
   components: {
     Sidebar,
     TopButton,
+    GenderNavigation,
     NavigationItem,
     FlagIcon
   },
@@ -53,22 +57,43 @@ export default {
     }
   },
   computed: {
-    ...mapState({
-      submenu: state => state.ui.submenu,
-      currentUser: state => state.user.current
+    ...mapGetters({
+      'currentUser': 'user/getCustomer',
+      'getJsonBlockByIdentifier': 'icmaaCmsBlock/getJsonBlockByIdentifier',
+      'isLoggedIn': 'user/isLoggedIn'
     }),
-    ...mapGetters('icmaaCmsBlock', ['getJsonBlockByIdentifier']),
-    ...mapGetters('user', ['isLoggedIn']),
     getMainNavigation () {
       return this.getJsonBlockByIdentifier('navigation-main')
     },
     metaNavigation () {
       return this.getJsonBlockByIdentifier('navigation-meta').map(link =>
         Object.assign(link, { isRoute: (typeof link.route === 'object' || link.route.startsWith('/')) })
-      ).slice(0, 3)
+      ).slice(0, 4)
     },
     loginButtonText () {
       return this.isLoggedIn ? 'My Account' : 'Login'
+    },
+    genderNavigationItems () {
+      return [
+        {
+          label: 'Boys',
+          gender: '9',
+          route: 'boys.html',
+          background: 'https://www.impericon.com/460x460x85/media/impericon/teaser/1x1/20201112_kt_winterjacke_herren_hellbunt.jpg'
+        },
+        {
+          label: 'Girls',
+          gender: '8',
+          route: 'girls.html',
+          background: 'https://www.impericon.com/460x460x85/media/impericon/teaser/1x1/20201112_kt_winterjacke_damen_hellbunt.jpg'
+        },
+        {
+          label: 'Diverse',
+          gender: false,
+          route: 'clothing.html',
+          background: 'https://www.impericon.com/460x460x85/media/impericon/teaser/1x1/20201030_kt_jacken_hellbunt.jpg'
+        }
+      ]
     }
   },
   methods: {
