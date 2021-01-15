@@ -10,7 +10,8 @@ Load CMS blocks, pages and more from API and insert them into state or as compon
 * Add the following API endpoint to `config/local.json`:
   ```
   "icmaa_cms": {
-    "endpoint": "/api/ext/icmaa-cms"
+    "endpoint": "/api/ext/icmaa-cms",
+    "release": 123455
   }
   ```
 
