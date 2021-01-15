@@ -11,19 +11,20 @@
     </template>
     <template v-slot:footer>
       <div class="t-flex-expand t-bg-base-lightest t-p-4" data-test-id="SidebarMenuFooter">
-        <div class="t-flex t-items-center t-flex-wrap t-w-full">
-          <div class="t-flex t-items-center" @click="closeMenu">
+        <div class="t-flex t-w-full t-justify-between">
+          <div class="t-flex t-flex-wrap t-items-center" @click="closeMenu">
             <template v-for="(link, index) in metaNavigationItems">
-              <router-link :to="localizedRoute(link.route)" :title="link.name | htmlDecode" class="t-flex t-flex-fit t-mr-6 t-text-xs t-uppercase t-text-base-tone" :key="index" v-if="link.isRoute === true">
+              <router-link :to="localizedRoute(link.route)" :title="link.name | htmlDecode" class="t-flex t-flex-fit t-mr-6 t-py-1 t-text-xs t-uppercase t-text-base-tone" :key="index" v-if="link.isRoute === true">
                 {{ link.name }}
               </router-link>
-              <a :href="link.route" class="t-flex t-flex-fit t-mr-6 t-text-xs t-uppercase t-text-base-tone" target="_blank" rel="noopener noreferrer" :title="link.name | htmlDecode" :key="index" v-else>
+              <a :href="link.route" class="t-flex t-flex-fit t-mr-6 t-py-1 t-text-xs t-uppercase t-text-base-tone" target="_blank" rel="noopener noreferrer" :title="link.name | htmlDecode" :key="index" v-else>
                 {{ link.name }}
               </a>
             </template>
           </div>
-          <div class="t-flex-expand t-border-base-lighter t-border-r t-h-8 t-mx-4" />
-          <flag-icon :iso="languageCode" width="20" height="20" class="t-flex-initial t-w-5 t-h-5 t-cursor-pointer" @click.native="showLanguageSwitcher" />
+          <div class="t-flex-initial t-h-8 t-ml-4 t-pl-4 t-border-l t-border-base-lighter t-flex t-items-center">
+            <flag-icon :iso="languageCode" width="20" height="20" class="t-w-5 t-h-5 t-cursor-pointer" @click.native="showLanguageSwitcher" />
+          </div>
         </div>
       </div>
     </template>
@@ -63,12 +64,12 @@ export default {
       'isLoggedIn': 'user/isLoggedIn'
     }),
     mainNavigation () {
-      return this.getJsonBlockByIdentifier('navigation-main-new')
+      return this.getJsonBlockByIdentifier('navigation-main')
     },
     metaNavigationItems () {
       return this.getJsonBlockByIdentifier('navigation-meta').map(link =>
         Object.assign(link, { isRoute: (typeof link.route === 'object' || link.route.startsWith('/')) })
-      ).slice(0, 4)
+      )
     },
     loginButtonText () {
       return this.isLoggedIn ? 'My Account' : 'Login'

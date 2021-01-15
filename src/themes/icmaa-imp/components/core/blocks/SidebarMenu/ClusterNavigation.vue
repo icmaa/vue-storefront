@@ -61,7 +61,7 @@ export default {
       return this.items.find(i => i[this.attributeCode] === this.current)
     },
     backgroundImage () {
-      return this.getMediaThumbnail(this.currentNavigationItem.background, 460, 460)
+      return this.getMediaThumbnail(this.currentNavigationItem.background, 920, 920)
     }
   },
   methods: {

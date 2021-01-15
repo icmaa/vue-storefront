@@ -91,7 +91,7 @@ export default {
       return this.$store.dispatch('icmaaMeta/load')
     },
     fetchCmsData () {
-      const defaultBlocks = [ 'navigation-main-new', 'navigation-meta', 'footer', 'pdp-trust-signals' ]
+      const defaultBlocks = [ 'navigation-main', 'navigation-meta', 'footer', 'pdp-trust-signals' ]
       return this.$store.dispatch('icmaaCmsBlock/list', defaultBlocks.join(','))
     }
   },
