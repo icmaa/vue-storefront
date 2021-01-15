@@ -12,7 +12,7 @@ import CmsService from 'icmaa-cms/data-resolver/CmsService'
 
 const actions: ActionTree<CategoryExtrasState, RootState> = {
   async loadCategoryWithExtras ({ dispatch }, categorySearchOptions: DataResolver.CategorySearchOptions): Promise<Category> {
-    categorySearchOptions.includeFields = config.entities.category.includeFields.concat(config.icmaa_cms.categoryExtras.categoryAttributes)
+    categorySearchOptions.includeFields = config.entities.category.includeFields.concat(config.icmaa_categoryextras.categoryAttributes)
     return dispatch('category-next/loadCategory', categorySearchOptions, { root: true })
   },
   loadContentHeader: async ({ getters }, identifier: string): Promise<CategoryExtrasContentHeader|any[]> => {
