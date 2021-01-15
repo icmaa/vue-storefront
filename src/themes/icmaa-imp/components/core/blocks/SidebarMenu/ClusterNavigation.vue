@@ -41,6 +41,10 @@ export default {
     items: {
       type: Array,
       default: () => []
+    },
+    hideUnsetInitially: {
+      type: Boolean,
+      default: true
     }
   },
   computed: {
@@ -51,8 +55,8 @@ export default {
       return this.getSessionData(this.attributeCode)
     },
     filteredItems () {
-      if (this.current === false) {
-        return this.items.filter(i => i.current !== false)
+      if (this.hideUnsetInitially && this.current === false) {
+        return this.items.filter(i => i[this.attributeCode] !== false)
       }
 
       return this.items
