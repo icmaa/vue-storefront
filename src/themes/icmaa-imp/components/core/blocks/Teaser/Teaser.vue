@@ -49,6 +49,11 @@ export default {
       required: false,
       default: false
     },
+    gender: {
+      type: [String, Boolean],
+      required: false,
+      default: false
+    },
     showLarge: {
       type: Boolean,
       default: true
@@ -83,10 +88,10 @@ export default {
       viewport: 'ui/getViewport'
     }),
     teaserLarge () {
-      return this.teaserByType('large', this.tags, this.customercluster)[0]
+      return this.teaserByType({ size: 'large', tag: this.tags, cluster: this.customercluster, gender: this.gender })[0]
     },
     teaserSmall () {
-      const teaser = this.teaserByType('small', this.tags, this.customercluster)
+      const teaser = this.teaserByType({ size: 'small', tag: this.tags, cluster: this.customercluster, gender: this.gender })
       return teaser.slice(0, this.TeaserSmallRow ? 4 : this.limit)
     },
     isMobile () {
