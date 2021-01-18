@@ -29,6 +29,7 @@
 <script>
 
 import { mapGetters } from 'vuex'
+import lozad from 'lozad'
 
 export default {
   name: 'ClusterNavigation',
@@ -75,6 +76,13 @@ export default {
         this.$store.dispatch('user/addSessionData', { key: this.attributeCode, value })
       }
     }
+  },
+  mounted () {
+    const images = this.items.forEach(i => {
+      const img = new Image()
+      img.src = this.getMediaThumbnail(i.background, 920, 920)
+      lozad(img).triggerLoad(img)
+    })
   }
 }
 </script>
