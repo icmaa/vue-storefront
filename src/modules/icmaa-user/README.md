@@ -13,6 +13,14 @@ You need to add the following config to the `config/local.json`:
   ...
   "icmaa": {
     "user: {
+      "genderMap": {
+        "male": "1129",
+        ...
+      },
+      "genderProductMap": {
+        "male": "9",
+        ...
+      },
       "noClusterValue": "4352",  # The attribute-value for "No cluster"
       "clpSessionFilters": [ "gender" ] # The attributes that are stored in the customer-session that should be filtered in CLP
     }

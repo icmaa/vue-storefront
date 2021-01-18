@@ -26,4 +26,8 @@ export const IcmaaExtendedUserModule: StorefrontModule = async function ({ store
   if (!isServer) {
     await store.dispatch('user/loadSessionData')
   }
+
+  EventBus.$on('user-after-loggedin', () => {
+    store.dispatch('user/setSessionGenderByCustomerData')
+  })
 }

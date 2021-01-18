@@ -1,3 +1,4 @@
+import config from 'config'
 import { ActionTree } from 'vuex'
 import RootState from '@vue-storefront/core/types/RootState'
 import UserState from '../../types/UserState'
@@ -11,6 +12,7 @@ import { router } from '@vue-storefront/core/app'
 import { products } from 'config'
 
 import isEmpty from 'lodash-es/isEmpty'
+import invert from 'lodash-es/invert'
 
 const actions: ActionTree<UserState, RootState> = {
   setCluster ({ dispatch }, value) {
@@ -65,6 +67,17 @@ const actions: ActionTree<UserState, RootState> = {
           .applyFilter({ key: attributeCode, value: { or: null } })
       }
     })
+  },
+  setSessionGenderByCustomerData ({ dispatch, getters }) {
+    const customer = getters.getCustomer
+    if (customer.gender) {
+      const { genderMap, genderProductMap } = config.icmaa.user
+      const customerGenderString = invert(genderMap)[customer.gender.toString()]
+      const productGenderString = genderProductMap[customerGenderString]
+      if (customerGenderString && productGenderString) {
+        dispatch('addSessionData', { key: 'gender', value: productGenderString })
+      }
+    }
   }
 }
 
