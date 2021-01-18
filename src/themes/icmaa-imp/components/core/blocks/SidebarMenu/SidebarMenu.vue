@@ -5,7 +5,7 @@
     </template>
     <template v-slot:default>
       <gender-navigation :items="genderNavigationItems" class="t--mx-4 t--mt-4 t-mb-4" />
-      <div class="t-flex t-flex-wrap t--mx-1 t--mb-2">
+      <div class="t-flex t-flex-wrap t--mx-1 t--mb-2" @click="closeMenu">
         <navigation-item v-for="link in mainNavigationItems" v-bind="link" :key="link.id" />
       </div>
     </template>
@@ -14,10 +14,23 @@
         <div class="t-flex t-w-full t-justify-between">
           <div class="t-flex t-flex-wrap t-items-center" @click="closeMenu">
             <template v-for="(link, index) in metaNavigationItems">
-              <router-link :to="localizedRoute(link.route)" :title="link.name | htmlDecode" class="t-flex t-flex-fit t-mr-6 t-py-1 t-text-xs t-uppercase t-text-base-tone" :key="index" v-if="link.isRoute === true">
+              <router-link
+                v-if="link.isRoute === true"
+                :key="index"
+                :to="localizedRoute(link.route)" :title="link.name | htmlDecode"
+                class="t-flex t-flex-fit t-mr-6 t-py-1 t-text-xs t-uppercase t-text-base-tone"
+              >
                 {{ link.name }}
               </router-link>
-              <a :href="link.route" class="t-flex t-flex-fit t-mr-6 t-py-1 t-text-xs t-uppercase t-text-base-tone" target="_blank" rel="noopener noreferrer" :title="link.name | htmlDecode" :key="index" v-else>
+              <a
+                v-else
+                :key="index"
+                :href="link.route"
+                :title="link.name | htmlDecode"
+                class="t-flex t-flex-fit t-mr-6 t-py-1 t-text-xs t-uppercase t-text-base-tone"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 {{ link.name }}
               </a>
             </template>

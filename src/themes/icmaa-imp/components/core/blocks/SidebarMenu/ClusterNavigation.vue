@@ -8,9 +8,8 @@
       :key="`${attributeCode}-${i}`"
       class="t-cursor-pointer"
     >
-      <router-link
-        :to="localizedRoute(item.route)"
-        @click.native="setSessionValue(item[attributeCode])"
+      <div
+        @click="setSessionValue(item[attributeCode])"
         class="t-block t-bg-white t-px-3 t-pt-1 t-pb-2"
       >
         <span
@@ -22,7 +21,7 @@
           }"
           v-text="item.label"
         />
-      </router-link>
+      </div>
     </div>
   </div>
 </template>

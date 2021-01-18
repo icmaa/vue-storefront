@@ -1,5 +1,5 @@
 <template>
-  <sidebar :title="$t('Shopping cart')" class="microcart t-relative" data-test-id="MicroCart" :close-on-click="false">
+  <sidebar :title="$t('Shopping cart')" class="microcart t-relative" data-test-id="MicroCart">
     <template v-slot:top-after-title>
       <button-component v-if="productsInCart.length" type="transparent" size="sm" icon="delete" :icon-only="true" @click="clearCart">
         {{ $t('Clear cart') }}

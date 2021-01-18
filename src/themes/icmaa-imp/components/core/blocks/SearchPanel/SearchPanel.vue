@@ -1,5 +1,5 @@
 <template>
-  <sidebar :close-on-click="false" :use-expander-in-title="false" ref="searchSidebar" data-test-id="SearchPanel">
+  <sidebar :use-expander-in-title="false" ref="searchSidebar" data-test-id="SearchPanel">
     <template v-slot:top>
       <div class="t-flex t-self-stretch t-items-center t-px-2 t-cursor-pointer" data-test-id="closeButton" @click="closeSidebar">
         <material-icon icon="keyboard_arrow_left" />

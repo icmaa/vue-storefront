@@ -1,5 +1,5 @@
 <template>
-  <sidebar :title="$t('Filter')" :close-icon="closeIcon" :close-on-click="false">
+  <sidebar :title="$t('Filter')" :close-icon="closeIcon">
     <template v-slot:top-after-title>
       <button-component v-if="hasActiveFilters" type="transparent" size="sm" icon="delete_sweep" :icon-only="true" @click="resetAllFilters">
         {{ $t('Clear filters') }}

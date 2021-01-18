@@ -1,5 +1,5 @@
 <template>
-  <sidebar :title="productOptionsLabelPlaceholder" :close-on-click="false">
+  <sidebar :title="productOptionsLabelPlaceholder">
     <div class="t-flex t-flex-wrap t-pb-20">
       <template v-if="product.type_id === 'configurable'">
         <div class="error t-w-full " v-if="product.errors && Object.keys(product.errors).length > 0">
