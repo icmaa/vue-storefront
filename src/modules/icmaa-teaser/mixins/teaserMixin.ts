@@ -50,7 +50,7 @@ export default {
     setGender () {
       const { gender } = this.teaser
       if (gender && gender !== '' && gender !== 'none') {
-        this.$store.dispatch('user/addSessionData', { key: gender, value: gender })
+        this.$store.dispatch('user/addSessionData', { key: 'gender', value: gender })
       }
     },
     redirect () {
