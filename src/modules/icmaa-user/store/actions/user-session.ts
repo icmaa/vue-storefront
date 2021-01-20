@@ -62,9 +62,7 @@ const actions: ActionTree<UserState, RootState> = {
   applySessionFilterToSearchQuery ({ getters }, { query, filters = {} }: { query: SearchQuery, filters: any }) {
     getters.getSessionFilters.forEach(({ attributeCode, value }) => {
       if (!filters[attributeCode]) {
-        query
-          .applyFilter({ key: attributeCode, value: { or: value } })
-          .applyFilter({ key: attributeCode, value: { or: null } })
+        query.applyFilter({ key: attributeCode, value: { orNull: [ value ] } })
       }
     })
   },
