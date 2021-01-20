@@ -59,7 +59,7 @@ export const fetchChildCategories = async (
     })
 }
 
-const SORT_PREFIX_REGEXP = /^(the|der|die|das)\s/gmi
+const SORT_PREFIX_REGEXP = /^()\s/gmi // Is not intended yet but could be smth. like: /^(the|der|die|das)\s/gmi
 const SORT_REPLACE_REGEXP = /[^0-9a-zA-Z]/gm
 export const extractPrefix = (name) => name.replace(SORT_PREFIX_REGEXP, '')
 export const filterAlphanum = (name) => name
