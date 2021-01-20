@@ -18,9 +18,9 @@ const mutationTypes: MutationTypesInterface = {
 }
 
 const actions: ActionTree<TeaserState, RootState> = {
-  list: async (context, tags: string): Promise<Task> => {
+  list: async (context, { tags }: { tags: string }): Promise<Task> => {
     const datetime = getCurrentStoreviewDatetime()
-    const options = {
+    const options: any = {
       tag: { 'in_array': tags },
       active: { 'in': true },
       show_from: { 'lt-date': datetime },
