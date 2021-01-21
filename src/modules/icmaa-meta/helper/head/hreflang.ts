@@ -26,6 +26,8 @@ class Hreflang {
 
       if (path === '/' + this._currentStore.storeCode) {
         path = ''
+      } else if (!path.startsWith('/')) {
+        path = `/${path}`
       }
 
       path = (!store.url.startsWith('/'))
