@@ -14,7 +14,8 @@ export const uiStore = {
     modals: {},
     sidebars: {},
     sidebarPath: [],
-    overlay: false
+    overlay: false,
+    sidebarMenuGenderChange: false
   },
   mutations: {
     setViewport (state, viewport: string) {
@@ -74,6 +75,9 @@ export const uiStore = {
     setModalPriority (state, { name, priority }) {
       const modal = Object.assign({}, state.modals[name], { priority })
       Vue.set(state.modals, name, modal)
+    },
+    setSidebarMenuGenderChange (state, value) {
+      state.sidebarMenuGenderChange = value
     }
   },
   actions: {
@@ -144,12 +148,16 @@ export const uiStore = {
     },
     setModalPriority ({ commit }, { name, priority }) {
       commit('setModalPriority', { name, priority })
+    },
+    setSidebarMenuGenderChange ({ commit }, value) {
+      commit('setSidebarMenuGenderChange', value)
     }
   },
   getters: {
     getViewport: state => state.viewport,
     getSidebarPath: state => state.sidebarPath,
     getSidebarStatus: (state) => (key: string) => state.sidebars.hasOwnProperty(key) ? state.sidebars[key] : false,
+    getSidebarMenuGenderChange: (state): boolean => state.sidebarMenuGenderChange,
     getVisibleModals: state => {
       return Object.entries(state.modals)
         .map((m: any) => ({ ...m[1], name: m[0] }))
