@@ -6,6 +6,7 @@ Allow: /*.xml?*
 Allow: /*.ttf?*
 Allow: /*.woff2?*
 Allow: /*utm_source=connexity*
+Allow: /*utm_source=Affiliate*
 Disallow: /uk/welcome-back/
 Disallow: /en/welcome-back/
 Disallow: /eu/welcome-back/
