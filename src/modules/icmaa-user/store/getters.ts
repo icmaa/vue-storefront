@@ -16,6 +16,7 @@ const getters: GetterTree<UserState, RootState> = {
       .filter(attributeCode => getters.getSessionData(attributeCode) !== false)
       .map(attributeCode => ({ attributeCode, value: getters.getSessionData(attributeCode) }))
   },
+  hasSessionFilters: (state, getters): boolean => getters.getSessionFilters.length > 0,
   getSessionFilterKeys: (state, getters): string[] => getters.getSessionFilters.map(f => f.attributeCode),
   hasSessionFilterAttribute: (state, getters) => (attributeCode: string): boolean =>
     getters.getSessionFilterKeys.includes(attributeCode),

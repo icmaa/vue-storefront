@@ -29,7 +29,8 @@ const actions: ActionTree<CategoryState, RootState> = {
     const searchCategory = category || getters.getCategoryFrom(route.path) || {}
     const categoryMappedFilters = getters.getFiltersMap[searchCategory.id]
     const areFiltersInQuery = !!Object.keys(route[products.routerFiltersSource]).length
-    if (!categoryMappedFilters && areFiltersInQuery) { // loading all filters only when some filters are currently chosen and category has no available filters yet
+    const hasSessionFilters = !!rootGetters['user/hasSessionFilters']
+    if (!categoryMappedFilters && (areFiltersInQuery || hasSessionFilters)) { // loading all filters only when some filters are currently chosen and category has no available filters yet
       await dispatch('loadCategoryFilters', searchCategory)
     }
     const searchQuery = getters.getCurrentFiltersFrom(route[products.routerFiltersSource], categoryMappedFilters)
