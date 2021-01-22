@@ -1,5 +1,5 @@
 <template>
-  <sidebar :title="$t('Filter')" :close-icon="closeIcon" :close-on-click="false">
+  <sidebar :title="$t('Filter')" :close-icon="closeIcon">
     <template v-slot:top-after-title>
       <button-component v-if="hasActiveFilters" type="transparent" size="sm" icon="delete_sweep" :icon-only="true" @click="resetAllFilters">
         {{ $t('Clear filters') }}
@@ -42,6 +42,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import config from 'config'
+import i18n from '@vue-storefront/i18n'
 import Sidebar from 'theme/components/core/blocks/AsyncSidebar/Sidebar'
 import FilterWrapper from 'theme/components/core/blocks/Category/Filter'
 import ButtonComponent from 'theme/components/core/blocks/Button'
@@ -74,7 +75,7 @@ export default {
       const singleOptionFilters = config.products.singleOptionFilters || []
       const attributes = this.attributes
 
-      return Object.entries(this.filters)
+      let filters = Object.entries(this.filters)
         .map(v => {
           // Quickfix - There is a bug where an empty option is added for `preorder_searchable`
           const options = v[1].filter(o => o.id !== '0')
@@ -83,6 +84,12 @@ export default {
         .filter(f => (f.options.length > 1 || (f.options.length === 1 && singleOptionFilters.includes(f.attributeKey))) && !this.getSystemFilterNames.includes(f.attributeKey) && this.isVisibleFilter(f.attributeKey) && attributes[f.attributeKey])
         .map(f => ({ ...f, submenu: submenuFilters.includes(f.attributeKey), attributeLabel: this.attributeLabel({ attributeKey: f.attributeKey }), position: attributes[f.attributeKey].position || 0 }))
         .map(this.sortOptions)
+
+      if (this.categoryFilter) {
+        filters.push(this.categoryFilter)
+      }
+
+      return filters
     },
     groupedFilters () {
       let allAvailableFilters = sortBy(this.availableFilters, 'position', 'attributeLabel')
@@ -92,6 +99,20 @@ export default {
         allAvailableFilters.filter(f => parentsOfNestedFilters.includes(f.attributeKey)),
         allAvailableFilters.filter(f => !parentsOfNestedFilters.includes(f.attributeKey))
       ].map(this.sortOptions)
+    },
+    categoryFilter () {
+      const filter = this.filters.category
+      if (!filter || !this.isVisibleFilter('category')) {
+        return false
+      }
+
+      return {
+        attributeLabel: i18n.t('Categories'),
+        attributeKey: 'category',
+        options: filter,
+        submenu: true,
+        position: 0
+      }
     },
     closeIcon () {
       return this.hasActiveFilters ? 'check' : undefined
@@ -120,9 +141,11 @@ export default {
     },
     resetAllFilters () {
       this.$store.dispatch('category-next/resetSearchFilters')
+      this.$store.dispatch('user/resetSessionDataByCategoryFilter')
     },
     unsetFilter (attributeKey) {
       this.$store.dispatch('category-next/unsetSearchFilterForAttribute', attributeKey)
+      this.$store.dispatch('user/removeSessionDataByCategoryFilter', attributeKey)
     },
     currentFilters (attributeKey) {
       let activeFilter = this.getCurrentFilters[attributeKey]
@@ -150,6 +173,9 @@ export default {
     closeIcon (closeIcon) {
       this.$store.dispatch('ui/mapSidebarPathItems', sidebar => Object.assign(sidebar, { closeIcon }))
     }
+  },
+  mounted () {
+    this.$store.dispatch('category-next/loadChildCategories')
   }
 }
 </script>

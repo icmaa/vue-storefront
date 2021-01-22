@@ -8,9 +8,6 @@ import rootStore from '@vue-storefront/core/store'
 import { defaultStateKey } from '../store/default'
 import * as types from '../store/default/mutation-types'
 
-const createQueryString: Function = (params: Record<string, any>): string =>
-  Object.keys(params).map((key) => encodeURIComponent(key) + '=' + encodeURIComponent(params[key])).join('&')
-
 const getTaskId: Function = (s: string): string => `task-${getHash(s)}`
 
 const IcmaaTaskQueue = {
@@ -43,7 +40,6 @@ const IcmaaTaskQueue = {
     return TaskQueue.queue(task)
   },
 
-  createQueryString,
   getHash,
   getTaskId
 }

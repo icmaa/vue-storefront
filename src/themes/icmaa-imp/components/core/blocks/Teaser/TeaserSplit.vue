@@ -4,7 +4,7 @@
     <div class="t-w-full md:t-w-1/2 t-flex t-items-center">
       <div class="t-w-full t-p-8">
         <h2 class="t-w-full t-leading-tight t-font-bold t-text-2-1/2xl t-mb-5">
-          <router-link :to="link" :title="teaser.text1 | translate | htmlDecode" :class="{ 't-text-base-darkest': !textColor }" :style="{ color: textColor }">
+          <router-link :to="link" @click.native="setGender" :title="teaser.text1 | translate | htmlDecode" :class="{ 't-text-base-darkest': !textColor }" :style="{ color: textColor }">
             {{ teaser.text1 | translate }}
           </router-link>
         </h2>

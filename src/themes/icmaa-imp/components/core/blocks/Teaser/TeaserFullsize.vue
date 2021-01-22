@@ -3,7 +3,7 @@
     <div class="t-relative">
       <picture-component :alt="teaser.text1 | translate | htmlDecode" :src="imageUrl" :width="size.width" :height="size.height" :placeholder="true" :sizes="sizes" :ratio="ratio" class="t-w-full" />
       <h2 class="t-absolute t-bottom-0 t-inset-x-0 t-mb-6 t-text-sm t-text-small t-uppercase">
-        <router-link :to="link" :title="teaser.text1 | translate | htmlDecode" class="t-flex t-justify-center t-items-center" :class="{ 't-text-white': !textColor }" :style="{ color: textColor }">
+        <router-link :to="link" @click.native="setGender" :title="teaser.text1 | translate | htmlDecode" class="t-flex t-justify-center t-items-center" :class="{ 't-text-white': !textColor }" :style="{ color: textColor }">
           {{ teaser.text1 | translate }}
           <material-icon icon="arrow_forward" size="sm" class="t-ml-2" />
         </router-link>

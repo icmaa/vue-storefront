@@ -115,10 +115,10 @@ export default {
         await this.$store.dispatch('user/update', { customer })
           .then(response => {
             if (response.resultCode === 200) {
-              if (!message) {
-                message = i18n.t('Account data has successfully been updated')
-              }
+              message = message || i18n.t('Account data has successfully been updated')
               this.showNotification(i18n.t(message), 'success')
+
+              this.$store.dispatch('user/setSessionGenderByCustomerData')
             }
           })
           .catch(err => {

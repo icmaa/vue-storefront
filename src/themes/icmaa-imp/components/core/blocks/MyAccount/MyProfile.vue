@@ -227,7 +227,7 @@ export default {
       if (!this.validation.$invalid) {
         let profile = this.profile
         if (profile.gender) {
-          const gender = config.icmaa.user.gender_map[profile.gender]
+          const gender = config.icmaa.user.genderMap[profile.gender]
           profile = Object.assign({}, profile, { gender })
         }
         if (profile.dob) {
@@ -259,7 +259,7 @@ export default {
         }
 
         if (this.profile.gender) {
-          this.profile.gender = invert(config.icmaa.user.gender_map)[this.profile.gender.toString()]
+          this.profile.gender = invert(config.icmaa.user.genderMap)[this.profile.gender.toString()]
         }
       }
     }

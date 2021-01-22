@@ -1,5 +1,6 @@
 import config from 'config'
 import pick from 'lodash-es/pick'
+import { stringify } from 'query-string'
 
 import { getCurrentStoreCode } from '../helpers'
 import IcmaaTaskQueue from './Task'
@@ -7,17 +8,23 @@ import IcmaaTaskQueue from './Task'
 import { processURLAddress } from '@vue-storefront/core/helpers'
 import Task from '@vue-storefront/core/lib/sync/types/Task'
 
-const getSortOptionsByOptions = (options: any): { sort?: string, size?: number, page?: number } => {
+interface QueryOptions { documentType: string, storeCode?: string, [key: string]: any }
+
+const getSortOptionsFromOptions = (options: any): { sort?: string, size?: number, page?: number } => {
   return pick(options, ['sort', 'size', 'page'])
 }
 
-const single = <T>(options: { documentType: string, uid: string, storeCode?: string }): Promise<T | boolean> => {
-  const queryString = IcmaaTaskQueue.createQueryString({
-    'type': options.documentType,
-    'uid': options.uid,
-    'lang': options.storeCode || getCurrentStoreCode()
-  })
+const createQueryString = (query: Record<string, any>, options: QueryOptions): string => {
+  const release = config.icmaa_cms.release ? { release: config.icmaa_cms.release } : {}
+  const defaults = {
+    'lang': options.storeCode || getCurrentStoreCode(),
+    'type': options.documentType
+  }
+  return stringify(Object.assign(defaults, release, query))
+}
 
+const single = <T>(options: { documentType: string, uid: string, storeCode?: string }): Promise<T | boolean> => {
+  const queryString = createQueryString({ 'uid': options.uid }, options)
   return IcmaaTaskQueue.execute({
     url: processURLAddress(config.icmaa_cms.endpoint) + `/by-uid?${queryString}`,
     is_result_cacheable: true,
@@ -26,12 +33,7 @@ const single = <T>(options: { documentType: string, uid: string, storeCode?: str
 }
 
 const singleQueue = (options: { documentType: string, uid: string, storeCode?: string, actionName?: string }): Promise<Task|any> => {
-  const queryString = IcmaaTaskQueue.createQueryString({
-    'type': options.documentType,
-    'uid': options.uid,
-    'lang': options.storeCode || getCurrentStoreCode()
-  })
-
+  const queryString = createQueryString({ 'uid': options.uid }, options)
   return IcmaaTaskQueue.queue({
     url: processURLAddress(config.icmaa_cms.endpoint) + `/by-uid?${queryString}`,
     is_result_cacheable: true,
@@ -41,12 +43,10 @@ const singleQueue = (options: { documentType: string, uid: string, storeCode?: s
 }
 
 const list = <T>(options: { documentType: string, query: Record<string, any> | string, sort?: string, size?: number, page?: number, storeCode?: string }): Promise<T[]> => {
-  const queryString = IcmaaTaskQueue.createQueryString({
-    'type': options.documentType,
+  const queryString = createQueryString({
     'q': typeof options.query === 'object' ? JSON.stringify(options.query) : options.query,
-    'lang': options.storeCode || getCurrentStoreCode(),
-    ...getSortOptionsByOptions(options)
-  })
+    ...getSortOptionsFromOptions(options)
+  }, options)
 
   return IcmaaTaskQueue.execute({
     url: processURLAddress(config.icmaa_cms.endpoint) + `/search?${queryString}`,
@@ -56,12 +56,10 @@ const list = <T>(options: { documentType: string, query: Record<string, any> | s
 }
 
 const listQueue = (options: { documentType: string, query: Record<string, any> | string, sort?: string, size?: number, page?: number, storeCode?: string, actionName?: string }): Promise<Task|any> => {
-  const queryString = IcmaaTaskQueue.createQueryString({
-    'type': options.documentType,
+  const queryString = createQueryString({
     'q': typeof options.query === 'object' ? JSON.stringify(options.query) : options.query,
-    'lang': options.storeCode || getCurrentStoreCode(),
-    ...getSortOptionsByOptions(options)
-  })
+    ...getSortOptionsFromOptions(options)
+  }, options)
 
   return IcmaaTaskQueue.queue({
     url: processURLAddress(config.icmaa_cms.endpoint) + `/search?${queryString}`,

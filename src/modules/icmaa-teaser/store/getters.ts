@@ -10,34 +10,39 @@ import isArray from 'lodash-es/isArray'
 import intersection from 'lodash-es/intersection'
 import orderBy from 'lodash-es/orderBy'
 
+interface TeaserByTypeOptions { size: 'small'|'large', tag: string, cluster?: string|boolean, gender?: string|boolean }
+
 const getters: GetterTree<TeaserState, RootState> = {
   getTeaser: (state): TeaserStateItem[] => state.items,
-  getTeaserByType: (state, getters) => (size: 'small'|'large', tag: string, cluster?: string|boolean): TeaserStateItem[] => {
+  getTeaserByType: (state, getters) => ({ size, tag, cluster, gender }: TeaserByTypeOptions): TeaserStateItem[] => {
     let filter: any = { size, tag: tag.split(',') }
-    if (cluster) {
-      filter = Object.assign(filter, { cluster })
-    }
-
     return getters.getFilteredTeaser(filter)
   },
-  getFilteredTeaser: (state, getters, RootState, rootGetters) => (filters): TeaserStateItem[] => {
+  getFilteredTeaser: (state, getters, RootState, rootGetters) => (filters: Record<string, any>): TeaserStateItem[] => {
     let items = state.items
 
-    const cluster = filters.hasOwnProperty('cluster') ? filters.cluster : rootGetters['user/getCluster']
+    const cluster = filters.cluster || rootGetters['user/getCluster']
     if (filters.hasOwnProperty('cluster')) {
       delete filters.cluster
     }
 
     items = items.filter(i => {
-      if (i.cluster.length === 0) {
+      if (i.cluster.length === 0 || (!cluster && i.cluster.includes(config.icmaa.user.noClusterValue))) {
         return true
       }
-
-      if (!cluster && i.cluster.includes(config.icmaa_cluster.noClusterValue)) {
-        return true
-      }
-
       return i.cluster.includes(cluster)
+    })
+
+    const gender = filters.gender || rootGetters['user/getSessionData']('gender')
+    if (filters.hasOwnProperty('gender')) {
+      delete filters.gender
+    }
+
+    items = items.filter(i => {
+      if ((i.gender === '' || !i.gender) || (!gender && i.gender === 'none')) {
+        return true
+      }
+      return i.gender === gender
     })
 
     forEach(filters, (value, key) => {

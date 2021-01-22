@@ -7,7 +7,10 @@ Load and show category-extras from cms
 * Add options to `config/local.json`:
   ```
   "icmaa_categoryextras": {
-    "logoFilePath": "impericon/department-logos"
+    "logoFilePath": "impericon/department-logos",
+    "categoryAttributes": [
+      ...
+    ]
   }
   ```
   

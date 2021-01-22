@@ -2,8 +2,8 @@
 
 * Extend the `user` module and add `customercluster` store.
 * Add Facebook login action to store and configs to `local.json`.
-* Add debug toolbar to quickly switch the cluster for debugging.
 * Add functionallity for JWT expiration.
+* Add methods to add demographic user-data to session and filter them in CLP
 
 ## Configs
 
@@ -11,9 +11,20 @@ You need to add the following config to the `config/local.json`:
 
 ```
   ...
-  "icmaa_cluster": {
-    "noClusterValue": "4352"  # The attribute-value for "No cluster"
-  },
+  "icmaa": {
+    "user: {
+      "genderMap": {
+        "male": "1129",
+        ...
+      },
+      "genderProductMap": {
+        "male": "9",
+        ...
+      },
+      "noClusterValue": "4352",  # The attribute-value for "No cluster"
+      "clpSessionFilters": [ "gender" ] # The attributes that are stored in the customer-session that should be filtered in CLP
+    }
+  }
   "icmaa_facebook": {
     "endpoint": "/api/ext/icmaa-facebook",
     "login": {
