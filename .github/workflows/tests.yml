@@ -38,6 +38,11 @@ jobs:
       - name: Install
         uses: bahmutov/npm-install@v1
 
+      - name: Get repository name, and branch name
+        run: |
+          echo "APP=$(echo ${GITHUB_REPOSITORY##*/})" >> $GITHUB_ENV
+          echo "BRANCH_NAME=$(echo ${GITHUB_REF#refs/heads/})" >> $GITHUB_ENV
+
       - name: Checkout "icmaa/shop-workspace" repo
         run: |
           echo "CONFIG_BRANCH=$(if [ ${{ env.BRANCH_NAME }} = "master" ]; then echo "master"; else echo "develop"; fi)" >> $GITHUB_ENV
