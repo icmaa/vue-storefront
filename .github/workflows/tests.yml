@@ -46,8 +46,8 @@ jobs:
       - name: Checkout "icmaa/shop-workspace" repo
         run: |
           rm -rf shop-workspace
-          CONFIG_BRANCH=$(if [ "${{ env.BRANCH_NAME }}" -ne "master" ]; then echo "-b develop"; fi)
-          git clone --no-tags --depth 1 https://${{ secrets.GITHUB_PAT }}@github.com/icmaa/shop-workspace ${{ CONFIG_BRANCH }}
+          export CONFIG_BRANCH=$(if [ "${{ env.BRANCH_NAME }}" -ne "master" ]; then echo "-b develop"; fi)
+          git clone --no-tags --depth 1 https://${{ secrets.GITHUB_PAT }}@github.com/icmaa/shop-workspace $CONFIG_BRANCH
 
       - name: Sync config JSON files
         run: rsync -r ./shop-workspace/template/vue-storefront/ ./
