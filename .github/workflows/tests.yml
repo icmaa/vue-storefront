@@ -46,7 +46,7 @@ jobs:
       - name: Checkout "icmaa/shop-workspace" repo
         run: |
           rm -rf shop-workspace
-          export CONFIG_BRANCH=$(if [ "${{ env.github.base_ref }}" != "master" ]; then echo "-b develop"; fi)
+          export CONFIG_BRANCH=$(if [ "${{ env.github.ref }}" != "master" ]; then echo "-b develop"; fi)
           git clone --no-tags --depth 1 https://${{ secrets.GITHUB_PAT }}@github.com/icmaa/shop-workspace $CONFIG_BRANCH
 
       - name: Sync config JSON files
