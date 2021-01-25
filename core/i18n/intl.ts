@@ -1,3 +1,4 @@
+import { isServer } from '@vue-storefront/core/helpers'
 import areIntlLocalesSupported from 'intl-locales-supported'
 
 export const importIntlPolyfill = async () => {
@@ -7,7 +8,7 @@ export const importIntlPolyfill = async () => {
 
 export const checkForIntlPolyfill = async (storeView) => {
   const globDTO = typeof window !== 'undefined' ? window : global
-  if (!globDTO.hasOwnProperty('Intl') || !areIntlLocalesSupported(storeView.i18n.defaultLocale)) {
+  if (isServer && (!globDTO.hasOwnProperty('Intl') || !areIntlLocalesSupported(storeView.i18n.defaultLocale))) {
     await importIntlPolyfill()
   }
 }
