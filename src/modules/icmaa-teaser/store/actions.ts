@@ -1,9 +1,10 @@
 import { ActionTree } from 'vuex'
-import { listQueue as listAbstract, MutationTypesInterface, ListOptionsInterface } from 'icmaa-cms/store/abstract/actions'
+import { listQueue as listAbstract, MutationTypesInterface } from 'icmaa-cms/store/abstract/actions'
 
 import { teaserStateKey as stateKey } from './'
 import * as types from './mutation-types'
 import TeaserState, { TeaserStateItem, TagStateItem } from '../types/TeaserState'
+import searchTeaser from '../data-resolver/TeaserService'
 import Task from '@vue-storefront/core/lib/sync/types/Task'
 import CmsService from 'icmaa-cms/data-resolver/CmsService'
 import RootState from '@vue-storefront/core/types/RootState'
@@ -19,6 +20,11 @@ const mutationTypes: MutationTypesInterface = {
 
 const actions: ActionTree<TeaserState, RootState> = {
   list: async (context, { tags }: { tags: string }): Promise<Task> => {
+    // const gender = context.rootGetters['user/getSessionData']('gender')
+    // const cluster = context.rootGetters['user/getCluster']
+    // const teaser = await searchTeaser({ tags, gender, cluster })
+    // console.error('TEASER', teaser)
+
     const datetime = getCurrentStoreviewDatetime()
     const options: any = {
       tag: { 'in_array': tags },
