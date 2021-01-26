@@ -5,7 +5,7 @@
     </div>
     <picture-component :src="imageUrl" :alt="teaser.text1 | translate | htmlDecode" :width="288" :height="288" :placeholder="true" :sizes="sizes" ratio="1:1" class="t-flex-fix t-min-w-full t-max-w-full" />
     <h2 class="t-flex-grow t-text-sm t-text-primary t-leading-tight t-pt-4" :class="{ 't-pb-8 lg:t-pb-0': !lastRow }">
-      <router-link :to="link" :title="teaser.text1 | translate | htmlDecode" class="t-text-primary">
+      <router-link :to="link" @click.native="setGender" :title="teaser.text1 | translate | htmlDecode" class="t-text-primary">
         {{ teaser.text1 | translate }}
       </router-link>
     </h2>

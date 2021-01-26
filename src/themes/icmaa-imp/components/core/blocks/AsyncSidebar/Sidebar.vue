@@ -40,7 +40,7 @@ export default {
     },
     closeOnClick: {
       type: Boolean,
-      default: true
+      default: false
     }
   },
   components: {

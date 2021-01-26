@@ -22,7 +22,7 @@ const getters: GetterTree<AdviceState, RootState> = {
         return true
       }
 
-      if (!cluster && i.cluster.includes(config.icmaa_cluster.noClusterValue)) {
+      if (!cluster && i.cluster.includes(config.icmaa.user.noClusterValue)) {
         return true
       }
 

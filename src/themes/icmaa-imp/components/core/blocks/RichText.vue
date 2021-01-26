@@ -6,7 +6,6 @@
 
 <script>
 import config from 'config'
-import { mapGetters } from 'vuex'
 import { stringToComponent } from 'icmaa-cms/helpers'
 
 export default {

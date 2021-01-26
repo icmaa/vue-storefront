@@ -4,7 +4,10 @@
       <base-input v-model="filterString" :placeholder="$t('Filter {label}', { label: attributeLabel }) + ' ...'" icon="search" />
     </li>
     <li v-for="(option, index) in filteredOptions" :key="index" class="t-border-b t-border-base-lighter t-px-2 t-py-3">
-      <button @click="$emit('change', option)" :aria-label="option.label" class="t-w-full t-text-sm t-flex t-items-center t-justify-between">
+      <router-link :to="localizedRoute(option.url_path)" @click.native="$store.dispatch('ui/closeAll')" :aria-label="option.label" class="t-w-full t-text-sm t-flex t-items-center t-justify-between" v-if="useLinks">
+        {{ option.label }}
+      </router-link>
+      <button @click="$emit('change', option)" :aria-label="option.label" class="t-w-full t-text-sm t-flex t-items-center t-justify-between" v-else>
         {{ option.label }}
         <material-icon icon="check" class="t-leading-1-rem" v-if="isActiveOption(option)" />
       </button>
@@ -42,6 +45,10 @@ export default {
       default: ''
     },
     searchable: {
+      type: Boolean,
+      default: false
+    },
+    useLinks: {
       type: Boolean,
       default: false
     }

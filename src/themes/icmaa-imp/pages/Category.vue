@@ -171,7 +171,8 @@ export default {
       getCurrentFilters: 'category-next/getCurrentFilters',
       getProductsStats: 'category-next/getCategorySearchProductsStats',
       isInTicketWhitelist: 'category-next/isCurrentCategoryInTicketWhitelist',
-      contentHeader: 'icmaaCategoryExtras/getContentHeaderByCurrentCategory'
+      contentHeader: 'icmaaCategoryExtras/getContentHeaderByCurrentCategory',
+      sidebarMenuGenderChange: 'ui/getSidebarMenuGenderChange'
     }),
     isLazyHydrateEnabled () {
       return config.ssr.lazyHydrateFor.includes('category-next.products')
@@ -188,6 +189,17 @@ export default {
     },
     activeFilterCount () {
       return Object.keys(this.getCurrentFilters).length
+    }
+  },
+  watch: {
+    async sidebarMenuGenderChange (newValue) {
+      if (newValue === true) {
+        this.$store.dispatch('ui/setSidebarMenuGenderChange', false)
+
+        this.loading = true
+        await composeInitialPageState(this.$store, this.$route, false, this.$route.params.pagesize || this.pageSize)
+        this.loading = false
+      }
     }
   },
   async asyncData ({ store, route, context }) { // this is for SSR purposes to prefetch data - and it's always executed before parent component methods

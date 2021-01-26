@@ -25,7 +25,9 @@ export default {
     }
   },
   computed: {
-    ...mapGetters({ viewport: 'ui/getViewport' }),
+    ...mapGetters({
+      viewport: 'ui/getViewport'
+    }),
     imageUrl () {
       return this.teaser.imageUrl
     },
@@ -45,7 +47,14 @@ export default {
     }
   },
   methods: {
+    setGender () {
+      const { gender } = this.teaser
+      if (gender && gender !== '' && gender !== 'none') {
+        this.$store.dispatch('user/addSessionData', { key: 'gender', value: gender })
+      }
+    },
     redirect () {
+      this.setGender()
       this.$router.push(this.link)
     },
     onHover (e) {

@@ -4,8 +4,8 @@ import _round from 'lodash-es/round'
 
 export const formatValue = (value, locale?) => {
   if (!locale) {
-    const _storeView = currentStoreView();
-    locale = !_storeView.i18n ? 'en-US' : _storeView.i18n.defaultLocale;
+    const _storeView = currentStoreView()
+    locale = !_storeView.i18n ? 'en-US' : _storeView.i18n.defaultLocale
   }
 
   const price = Math.abs(parseFloat(value))

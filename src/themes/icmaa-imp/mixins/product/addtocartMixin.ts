@@ -48,11 +48,12 @@ export default {
 
           this.notifyUser(notificationData)
         })
-      } catch (message) {
+      } catch (err) {
         this.$store.commit(
           cartMutationTypes.SN_CART + '/' + cartMutationTypes.CART_ADDING_ITEM,
           { isAdding: false }
         )
+        const message = err instanceof Error ? err.message : err
         this.notifyUser(notifications.createNotification({ type: 'error', message }))
       }
     },
