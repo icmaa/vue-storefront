@@ -12,12 +12,12 @@ interface FetchChildCategoriesOptions {
   onlyShowTargetLevelItems?: boolean,
   onlyActive?: boolean,
   includeFields?: any[],
-  collectedCategories?: any[]
+  letters?: boolean|string[]
 }
 
-export const fetchCategoryById = ({ parentId }): Promise<SearchResponse> => {
+export const fetchCategoryById = ({ id }): Promise<SearchResponse> => {
   let searchQuery = new SearchQuery()
-  searchQuery.applyFilter({ key: 'id', value: { 'eq': parentId } })
+  searchQuery.applyFilter({ key: 'id', value: id })
 
   return quickSearchByQuery({ entityType: 'category', query: searchQuery, size: 1, includeFields: entities.category.includeFields })
 }
@@ -28,6 +28,7 @@ export const fetchChildCategories = async (
     sort = 'position:asc',
     level = 1,
     onlyShowTargetLevelItems = true,
+    letters = false,
     onlyActive = false,
     includeFields = entities.category.includeFields
   }: FetchChildCategoriesOptions
@@ -41,6 +42,10 @@ export const fetchChildCategories = async (
 
   if (!Array.isArray(level)) {
     level = [level]
+  }
+
+  if (letters) {
+    searchQuery.applyFilter({ key: 'name.keyword', value: { 'prefix': letters } })
   }
 
   if (onlyShowTargetLevelItems) {
