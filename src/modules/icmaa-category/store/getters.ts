@@ -10,10 +10,7 @@ const getters: GetterTree<CategoryState, RootState> = {
     if (categoryList) {
       const { list, parent } = categoryList
       const categories = rootGetters['category-next/getCategories']
-      return {
-        list: list.map(id => categories.find(c => c.id === id)),
-        parent: categories.find(c => c.id === parent)
-      }
+      return { parent: categories.find(c => c.id === parent), list }
     }
 
     return false

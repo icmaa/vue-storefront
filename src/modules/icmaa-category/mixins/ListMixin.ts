@@ -13,8 +13,7 @@ export default {
   name: 'IcmaaCategoryList',
   computed: {
     ...mapGetters({
-      sortedListByParentId: 'icmaaCategory/sortedListByParentId',
-      cluster: 'user/getCluster'
+      sortedListByParentId: 'icmaaCategory/sortedListByParentId'
     }),
     rootCategoryId (): number {
       return Number(this.$route.params.parentCategoryId)
@@ -31,13 +30,10 @@ export default {
     notEmpty (): boolean {
       return (this.list && this.list.list)
     },
-    categories (): Category[] {
-      return this.list.list.filter(category => category.is_active === true)
-    },
     categoriesGroupedByFirstLetter (): Letter[] {
       let groups: Letter[] = []
 
-      this.categories.forEach(category => {
+      this.list.list.forEach(category => {
         let firstChar: string = extractPrefix(category.name).charAt(0)
         let letter: string = /^[a-z]/gmi.test(firstChar) ? firstChar.toUpperCase() : '#'
 

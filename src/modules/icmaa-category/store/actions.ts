@@ -35,14 +35,15 @@ const actions: ActionTree<CategoryState, RootState> = {
         level.push(parseInt(parent.level) + parseInt(crawlDepth))
       }
 
-      let list: Category[] | void = await fetchChildCategories({ parentId, level })
+      const includeFields = [ 'name', 'url_path', 'ceCluster' ]
+      let list: Category[] | void = await fetchChildCategories({ parentId, level, onlyActive: true, includeFields })
         .then(resp => resp)
         .catch(error => {
           Logger.error('Error while fetching children of category: ' + parentId, 'icmaaCategoryList', error)()
         })
 
-      commit(`category-next/${catTypes.CATEGORY_ADD_CATEGORIES}`, [ parent, ...list ], { root: true })
-      commit(types.ICMAA_CATEGORY_LIST_ADD_CATEGORY_LIST, { parent, list })
+      commit(`category-next/${catTypes.CATEGORY_ADD_CATEGORIES}`, [ parent ], { root: true })
+      commit(types.ICMAA_CATEGORY_LIST_ADD_CATEGORY_LIST, { parent: parent.id, list })
 
       return { parent, list: list as Category[] }
     }

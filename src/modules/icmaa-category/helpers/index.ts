@@ -29,8 +29,7 @@ export const fetchChildCategories = async (
     level = 1,
     onlyShowTargetLevelItems = true,
     onlyActive = false,
-    includeFields = entities.category.includeFields,
-    collectedCategories = []
+    includeFields = entities.category.includeFields
   }: FetchChildCategoriesOptions
 ): Promise<Category[]> => {
   let searchQuery = new SearchQuery()
@@ -38,25 +37,18 @@ export const fetchChildCategories = async (
 
   if (onlyActive) {
     searchQuery.applyFilter({ key: 'is_active', value: { 'eq': true } })
-    searchQuery.applyFilter({ key: 'product_count', value: { 'gt': 0 } })
   }
 
   if (!Array.isArray(level)) {
     level = [level]
   }
 
-  return quickSearchByQuery({ entityType: 'category', query: searchQuery, sort, includeFields, size: 5000 })
-    .then(resp => {
-      if (resp.items.length > 0) {
-        resp.items.forEach(item => {
-          if (!onlyShowTargetLevelItems || (onlyShowTargetLevelItems && (level as number[]).includes(item.level))) {
-            collectedCategories.push(item)
-          }
-        })
-      }
+  if (onlyShowTargetLevelItems) {
+    searchQuery.applyFilter({ key: 'level', value: level })
+  }
 
-      return collectedCategories
-    })
+  return quickSearchByQuery({ entityType: 'category', query: searchQuery, sort, includeFields, size: 5000 })
+    .then(resp => resp.items)
 }
 
 const SORT_PREFIX_REGEXP = /^()\s/gmi // Is not intended yet but could be smth. like: /^(the|der|die|das)\s/gmi

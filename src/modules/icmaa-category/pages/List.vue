@@ -17,22 +17,7 @@
       </li>
     </ul>
     <ul class="letters t-px-6">
-      <li :key="letter.letter" v-for="letter in categoriesGroupedByFirstLetter" :id="letter.anchor" class="t-p-4 t-py-8 t-bg-white t-my-4 t-flex t--mx-2">
-        <h2 class="t-w-2/12 lg:t-w-1/12 t-px-2 t-pr-6 t-py-1 t-text-right t-text-3xl t-font-bold">
-          {{ letter.letter }}
-        </h2>
-        <ul class="t-w-10/12 lg:t-w-11/12 t-px-2">
-          <li :key="category.id" v-for="category in letter.list" class="category t-inline-block t-w-full t-leading-snug t-py-1">
-            <router-link
-              :to="getCategoryRoute(category)"
-              data-testid="categoryLink"
-              v-html="category.name"
-              class="t-block"
-              :class="[ category.ceCluster === cluster ? 't-text-primary t-font-bold' : 't-text-base-tone' ]"
-            />
-          </li>
-        </ul>
-      </li>
+      <letter v-for="letter in categoriesGroupedByFirstLetter" :key="`${rootCategoryId}-${letter.letter}`" :id="letter.anchor" :letter="letter" class="t-p-4 t-py-8 t-bg-white t-my-4 t-flex t--mx-2" />
     </ul>
     <lazy-hydrate>
       <product-listing-widget appearance="t-px-3 lg:t-px-4 t-mt-2" :category-id="3278" :limit="8" :filter="{ department }" />
@@ -45,11 +30,11 @@
 
 <script>
 import LazyHydrate from 'vue-lazy-hydration'
-import List from 'icmaa-category/components/List'
+import List from 'icmaa-category/mixins/ListMixin'
+import Letter from 'icmaa-category/components/core/List/Letter'
 import LogoLine from 'theme/components/core/blocks/CategoryExtras/LogoLine'
 import Teaser from 'theme/components/core/blocks/Teaser/Teaser'
 import ProductListingWidget from 'icmaa-category/components/core/ProductListingWidget'
-import { formatCategoryLink } from '@vue-storefront/core/modules/url/helpers'
 
 export default {
   mixins: [ List ],
@@ -57,12 +42,8 @@ export default {
     LogoLine,
     Teaser,
     LazyHydrate,
+    Letter,
     ProductListingWidget
-  },
-  methods: {
-    getCategoryRoute (category) {
-      return formatCategoryLink(category)
-    }
   },
   computed: {
     teaserTag () {
