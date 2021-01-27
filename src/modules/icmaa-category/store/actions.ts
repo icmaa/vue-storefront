@@ -7,7 +7,7 @@ import * as catTypes from '@vue-storefront/core/modules/catalog-next/store/categ
 import addDefaultProductFilter from 'icmaa-catalog/helpers/defaultProductFilter'
 import { fetchCategoryById, fetchChildCategories } from '../helpers'
 import { SearchQuery } from 'storefront-query-builder'
-import { getFilterHash } from '../helpers'
+import { sortByLetter, getFilterHash } from '../helpers'
 
 import forEach from 'lodash-es/forEach'
 import { Logger } from '@vue-storefront/core/lib/logger'
@@ -37,7 +37,7 @@ const actions: ActionTree<CategoryState, RootState> = {
 
       const includeFields = [ 'name', 'url_path', 'ceCluster' ]
       let list: Category[] | void = await fetchChildCategories({ parentId, level, onlyActive: true, includeFields })
-        .then(resp => resp)
+        .then(resp => resp.sort(sortByLetter))
         .catch(error => {
           Logger.error('Error while fetching children of category: ' + parentId, 'icmaaCategoryList', error)()
         })

@@ -17,7 +17,11 @@
       </li>
     </ul>
     <ul class="letters t-px-6">
-      <letter v-for="letter in categoriesGroupedByFirstLetter" :key="`${rootCategoryId}-${letter.letter}`" :id="letter.anchor" :letter="letter" class="t-p-4 t-py-8 t-bg-white t-my-4 t-flex t--mx-2" />
+      <template v-for="letter in categoriesGroupedByFirstLetter">
+        <lazy-hydrate :key="`lazy-${rootCategoryId}-${letter.letter}`" when-visible>
+          <letter :key="`${rootCategoryId}-${letter.letter}`" :id="letter.anchor" :letter="letter" class="t-p-4 t-py-8 t-bg-white t-my-4 t-flex t--mx-2" />
+        </lazy-hydrate>
+      </template>
     </ul>
     <lazy-hydrate>
       <product-listing-widget appearance="t-px-3 lg:t-px-4 t-mt-2" :category-id="3278" :limit="8" :filter="{ department }" />

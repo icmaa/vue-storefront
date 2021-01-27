@@ -13,7 +13,7 @@ export default {
   name: 'IcmaaCategoryList',
   computed: {
     ...mapGetters({
-      sortedListByParentId: 'icmaaCategory/sortedListByParentId'
+      listByParentId: 'icmaaCategory/listByParentId'
     }),
     rootCategoryId (): number {
       return Number(this.$route.params.parentCategoryId)
@@ -22,7 +22,7 @@ export default {
       return Number(this.$route.params.depth || this.$route.query.depth) || undefined
     },
     list (): Category[] {
-      return this.sortedListByParentId(this.rootCategoryId)
+      return this.listByParentId(this.rootCategoryId)
     },
     parent (): Category {
       return this.list.parent

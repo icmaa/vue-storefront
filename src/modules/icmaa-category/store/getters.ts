@@ -1,7 +1,7 @@
 import { GetterTree } from 'vuex'
 import CategoryState, { CategoryStateListItem, ProductListingWidgetState } from '../types/CategoryState'
 import RootState from '@vue-storefront/core/types/RootState'
-import { sortByLetter, getFilterHash } from '../helpers'
+import { getFilterHash } from '../helpers'
 
 const getters: GetterTree<CategoryState, RootState> = {
   lists: state => state.lists,
@@ -11,15 +11,6 @@ const getters: GetterTree<CategoryState, RootState> = {
       const { list, parent } = categoryList
       const categories = rootGetters['category-next/getCategories']
       return { parent: categories.find(c => c.id === parent), list }
-    }
-
-    return false
-  },
-  sortedListByParentId: (state, getters) => (id: number): CategoryStateListItem | boolean => {
-    let list = getters.listByParentId(id)
-    if (list) {
-      list.list.sort(sortByLetter)
-      return list
     }
 
     return false
