@@ -1,19 +1,12 @@
-import Vue from 'vue'
 import { MutationTree } from 'vuex'
 import * as types from './mutation-types'
 import CategoryListState, { ProductListingWidgetState } from '../types/CategoryState'
-import { sortByLetter } from '../helpers'
 
 const mutations: MutationTree<CategoryListState> = {
-  [types.ICMAA_CATEGORY_LIST_ADD_CATEGORY_LIST] (state, { payload, letter }) {
-    const itemIndex = state.lists.findIndex(item => item.parent === payload.parent)
-    if (itemIndex === -1) {
-      if (letter) {
-        payload.list[letter] = payload.list.sort(sortByLetter)
-      }
+  [types.ICMAA_CATEGORY_LIST_ADD_CATEGORY_LIST] (state, payload) {
+    const item = state.lists.find(item => item.parent === payload.parent)
+    if (!item) {
       state.lists.push(payload)
-    } else {
-      Vue.set(state.lists[itemIndex]['list'], letter, payload.list.sort(sortByLetter))
     }
   },
   [types.ICMAA_CATEGORY_LIST_ADD_PRODUCT] (state, payload: ProductListingWidgetState) {

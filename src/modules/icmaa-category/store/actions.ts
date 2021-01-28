@@ -1,55 +1,51 @@
 import { ActionTree } from 'vuex'
 import RootState from '@vue-storefront/core/types/RootState'
 import { Category } from '@vue-storefront/core/modules/catalog-next/types/Category'
-import CategoryState, { CategoryStateListItem, ProductListingWidgetState } from '../types/CategoryState'
+import CategoryState, { CategoryStateListItemHydrated, ProductListingWidgetState } from '../types/CategoryState'
 import * as types from './mutation-types'
 import * as catTypes from '@vue-storefront/core/modules/catalog-next/store/category/mutation-types'
 import addDefaultProductFilter from 'icmaa-catalog/helpers/defaultProductFilter'
 import { fetchCategoryById, fetchChildCategories } from '../helpers'
 import { SearchQuery } from 'storefront-query-builder'
-import { getFilterHash } from '../helpers'
+import { sortByLetter, getFilterHash } from '../helpers'
 
 import forEach from 'lodash-es/forEach'
 import { Logger } from '@vue-storefront/core/lib/logger'
 
 const actions: ActionTree<CategoryState, RootState> = {
-  async loadParentCategory ({ commit }, { id }): Promise<void|boolean> {
-    return fetchCategoryById({ id })
-      .then((resp): Category => resp.items[0])
-      .then(cat => {
-        commit(`category-next/${catTypes.CATEGORY_ADD_CATEGORIES}`, [ cat ], { root: true })
-        commit(types.ICMAA_CATEGORY_LIST_ADD_CATEGORY_LIST, { payload: { parent: cat.id, list: [] } })
-      })
-      .catch(error => {
-        Logger.error('Can\'t find category: ' + id, 'icmaaCategoryList', error)()
-        return false
-      })
-  },
-  async loadListCategories ({ state, commit, rootGetters }, { parentId, depth = 1, letters }): Promise<void> {
-    const letter = letters[0]
-    if (!state.lists.find(item => item.parent === parentId && item.list[letter])) {
-      const categories: Category[] = rootGetters['category-next/getCategories']
-      const parent: Category = categories.find(c => c.id === parentId)
+  async list ({ state, commit }, { parentId, crawlDepth = 1 }): Promise<CategoryStateListItemHydrated> {
+    if (!state.lists.find(item => item.parent === parentId)) {
+      let parent = await fetchCategoryById({ parentId })
+        .then(resp => {
+          return resp.items[0]
+        })
+        .catch(error => {
+          Logger.error('Can\'t find category: ' + parentId, 'icmaaCategoryList', error)()
+          return false
+        })
 
       if (!parent) {
         return
       }
 
       let level: number[] = []
-      if (typeof depth === 'string' && depth.split(',').length > 1) {
-        level = depth.split(',').map(i => parseInt(parent.level as any) + parseInt(i))
+      if (typeof crawlDepth === 'string' && crawlDepth.split(',').length > 1) {
+        level = crawlDepth.split(',').map(i => parseInt(parent.level) + parseInt(i))
       } else {
-        level.push(parseInt(parent.level as any) + parseInt(depth))
+        level.push(parseInt(parent.level) + parseInt(crawlDepth))
       }
 
       const includeFields = [ 'name', 'url_path', 'ceCluster' ]
-      let list: Category[] | void = await fetchChildCategories({ parentId, level, onlyActive: true, letters, includeFields })
-        .then(resp => resp)
+      let list: Category[] | void = await fetchChildCategories({ parentId, level, onlyActive: true, includeFields })
+        .then(resp => resp.sort(sortByLetter))
         .catch(error => {
           Logger.error('Error while fetching children of category: ' + parentId, 'icmaaCategoryList', error)()
         })
 
-      commit(types.ICMAA_CATEGORY_LIST_ADD_CATEGORY_LIST, { payload: { parent: parent.id, list }, letter })
+      commit(`category-next/${catTypes.CATEGORY_ADD_CATEGORIES}`, [ parent ], { root: true })
+      commit(types.ICMAA_CATEGORY_LIST_ADD_CATEGORY_LIST, { parent: parent.id, list })
+
+      return { parent, list: list as Category[] }
     }
   },
   async loadProductListingWidgetProducts ({ state, commit, dispatch, rootGetters }, params: { categoryId: number, filter: any, cluster: any, size: number, sort: string|string[] }): Promise<ProductListingWidgetState> {

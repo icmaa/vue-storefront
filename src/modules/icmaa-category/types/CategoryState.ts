@@ -8,7 +8,12 @@ export default interface CategoryState {
 
 export interface CategoryStateListItem {
   parent: number,
-  list: Record<string, Category[]>
+  list: number[]
+}
+
+export interface CategoryStateListItemHydrated {
+  parent: Category,
+  list: Category[]
 }
 
 export interface ProductListingWidgetState {
