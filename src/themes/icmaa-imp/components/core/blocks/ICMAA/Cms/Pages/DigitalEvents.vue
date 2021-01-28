@@ -115,7 +115,7 @@
 import ButtonComponent from 'theme/components/core/blocks/Button'
 import LazyHydrate from 'vue-lazy-hydration'
 import Page from 'icmaa-cms/mixins/Page'
-import ProductListingWidget from 'icmaa-category/components/core/ProductListingWidget'
+import ProductListingWidget from 'icmaa-category/components/ProductListingWidget'
 import Teaser from 'theme/components/core/blocks/Teaser/Teaser'
 
 import { mapGetters } from 'vuex'
