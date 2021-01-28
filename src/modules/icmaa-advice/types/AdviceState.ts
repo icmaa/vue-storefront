@@ -4,7 +4,6 @@ export interface AdviceStateItem extends AbstractStateItem {
   active: boolean,
   showFrom: string,
   showTo: string,
-  tag: string[],
   cluster: string[],
   text: string,
   buttonText: string,

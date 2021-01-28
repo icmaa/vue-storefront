@@ -17,17 +17,10 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import i18n from '@vue-storefront/i18n'
 import ButtonComponent from 'theme/components/core/blocks/Button'
 
 export default {
   name: 'Advice',
-  props: {
-    tags: {
-      type: String,
-      required: true
-    }
-  },
   components: {
     ButtonComponent
   },
@@ -46,10 +39,9 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('icmaaAdvice', ['getSingleAdvice']),
-    advice () {
-      return this.getSingleAdvice(this.tags)
-    }
+    ...mapGetters({
+      'advice': 'icmaaAdvice/getSingleAdvice'
+    })
   },
   async mounted () {
     await this.$store.dispatch('claims/check', { claimCode: 'adviceClaimAccepted' })
@@ -63,7 +55,7 @@ export default {
       })
 
     if (this.isOpen) {
-      this.$store.dispatch('icmaaAdvice/list', this.tags)
+      this.$store.dispatch('icmaaAdvice/list')
     }
   }
 }
