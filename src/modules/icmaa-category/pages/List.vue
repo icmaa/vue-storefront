@@ -2,7 +2,7 @@
   <div id="category-list" class="t-container t-my-8" v-if="notEmpty">
     <div class="t-flex t-flex-wrap t--mx-4 t-px-4">
       <h1 class="t-px-4 t-mb-3 t-text-2xl t-font-medium t-leading-5">
-        {{ parent.name }}
+        {{ category.name }}
       </h1>
       <div class="t-w-full">
         <teaser :tags="teaserTag" :show-large="false" :show-small-in-row="true" />
@@ -33,28 +33,90 @@
 </template>
 
 <script>
+
+import { mapGetters } from 'vuex'
+import { htmlDecode } from '@vue-storefront/core/lib/store/filters'
+import { extractPrefix } from '../helpers'
+
 import LazyHydrate from 'vue-lazy-hydration'
-import List from 'icmaa-category/mixins/ListMixin'
-import Letter from 'icmaa-category/components/core/List/Letter'
+import Letter from 'icmaa-category/components/List/Letter'
 import LogoLine from 'theme/components/core/blocks/CategoryExtras/LogoLine'
 import Teaser from 'theme/components/core/blocks/Teaser/Teaser'
-import ProductListingWidget from 'icmaa-category/components/core/ProductListingWidget'
+import ProductListingWidget from 'icmaa-category/components/ProductListingWidget'
 
 export default {
-  mixins: [ List ],
+  name: 'IcmaaCategoryList',
   components: {
+    LazyHydrate,
     LogoLine,
     Teaser,
-    LazyHydrate,
     Letter,
     ProductListingWidget
   },
   computed: {
+    ...mapGetters({
+      listByParentId: 'icmaaCategory/listByParentId'
+    }),
+    rootCategoryId () {
+      return Number(this.$route.params.parentCategoryId)
+    },
+    depth () {
+      return Number(this.$route.params.depth || this.$route.query.depth) || undefined
+    },
+    list () {
+      return this.listByParentId(this.rootCategoryId)
+    },
+    category () {
+      return this.list.category
+    },
+    notEmpty () {
+      return (this.list && this.list.items)
+    },
+    categoriesGroupedByFirstLetter () {
+      let groups = []
+
+      this.list.items.forEach(category => {
+        let firstChar = extractPrefix(category.name).charAt(0)
+        let letter = /^[a-z]/gmi.test(firstChar) ? firstChar.toUpperCase() : '#'
+
+        if (!groups.find(g => g.letter === letter)) {
+          let anchor = letter !== '#' ? letter.toLowerCase() : 'numbers'
+          groups.push({ letter, anchor, items: [] })
+        }
+
+        groups[groups.findIndex(g => g.letter === letter)].items.push(category)
+      })
+
+      return groups
+    },
     teaserTag () {
       return String(this.$route.params.teaserTag)
     },
     department () {
       return String(this.$route.params.department)
+    }
+  },
+  async asyncData ({ store, route, context }) {
+    if (context) {
+      context.output.cacheTags
+        .add('category')
+        .add('cms')
+    }
+
+    await store.dispatch(
+      'icmaaCategory/list',
+      {
+        id: route.params.parentCategoryId,
+        depth: route.params.depth || route.query.depth
+      }
+    )
+  },
+  metaInfo () {
+    return !this.notEmpty || {
+      title: htmlDecode(this.category.meta_title || this.category.name),
+      meta: this.category.meta_description
+        ? [{ vmid: 'description', name: 'description', content: htmlDecode(this.category.meta_description) }]
+        : []
     }
   }
 }

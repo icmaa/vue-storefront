@@ -4,7 +4,7 @@
       {{ letter.letter }}
     </h2>
     <ul class="t-w-10/12 lg:t-w-11/12 t-px-2">
-      <LetterItem v-for="category in letter.list" :key="category.id" :category="category" class="category t-inline-block t-w-full t-leading-snug t-py-1" />
+      <LetterItem v-for="category in letter.items" :key="category.name" :category="category" class="category t-inline-block t-w-full t-leading-snug t-py-1" />
     </ul>
   </li>
 </template>

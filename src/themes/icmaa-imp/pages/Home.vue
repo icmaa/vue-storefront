@@ -28,7 +28,7 @@ import { currentStoreView, localizedRoute } from '@vue-storefront/core/lib/multi
 import LazyHydrate from 'vue-lazy-hydration'
 import Teaser from 'theme/components/core/blocks/Teaser/Teaser'
 import LogoLine from 'theme/components/core/blocks/CategoryExtras/LogoLineBlock'
-import ProductListingWidget from 'icmaa-category/components/core/ProductListingWidget'
+import ProductListingWidget from 'icmaa-category/components/ProductListingWidget'
 import CmsBlock from 'icmaa-cms/components/Block'
 
 export default {

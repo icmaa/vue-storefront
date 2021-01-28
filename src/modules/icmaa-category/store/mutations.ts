@@ -4,7 +4,7 @@ import CategoryListState, { ProductListingWidgetState } from '../types/CategoryS
 
 const mutations: MutationTree<CategoryListState> = {
   [types.ICMAA_CATEGORY_LIST_ADD_CATEGORY_LIST] (state, payload) {
-    const item = state.lists.find(item => item.parent === payload.parent)
+    const item = state.lists.find(item => item.category === payload.category)
     if (!item) {
       state.lists.push(payload)
     }

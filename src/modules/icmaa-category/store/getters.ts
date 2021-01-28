@@ -6,11 +6,11 @@ import { getFilterHash } from '../helpers'
 const getters: GetterTree<CategoryState, RootState> = {
   lists: state => state.lists,
   listByParentId: (state, getters, RootState, rootGetters) => (id: number): CategoryStateListItem | boolean => {
-    let categoryList = getters.lists.find(l => l.parent === id)
+    let categoryList = getters.lists.find(l => l.category === id)
     if (categoryList) {
-      const { list, parent } = categoryList
+      const { items, category } = categoryList
       const categories = rootGetters['category-next/getCategories']
-      return { parent: categories.find(c => c.id === parent), list }
+      return { category: categories.find(c => c.id === category), items }
     }
 
     return false

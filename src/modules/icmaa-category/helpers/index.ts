@@ -15,9 +15,9 @@ interface FetchChildCategoriesOptions {
   collectedCategories?: any[]
 }
 
-export const fetchCategoryById = ({ parentId }): Promise<SearchResponse> => {
+export const fetchCategoryById = ({ id: value }): Promise<SearchResponse> => {
   let searchQuery = new SearchQuery()
-  searchQuery.applyFilter({ key: 'id', value: { 'eq': parentId } })
+  searchQuery.applyFilter({ key: 'id', value })
 
   return quickSearchByQuery({ entityType: 'category', query: searchQuery, size: 1, includeFields: entities.category.includeFields })
 }

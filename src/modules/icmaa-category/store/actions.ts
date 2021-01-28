@@ -1,7 +1,7 @@
 import { ActionTree } from 'vuex'
 import RootState from '@vue-storefront/core/types/RootState'
 import { Category } from '@vue-storefront/core/modules/catalog-next/types/Category'
-import CategoryState, { CategoryStateListItemHydrated, ProductListingWidgetState } from '../types/CategoryState'
+import CategoryState, { ProductListingWidgetState } from '../types/CategoryState'
 import * as types from './mutation-types'
 import * as catTypes from '@vue-storefront/core/modules/catalog-next/store/category/mutation-types'
 import addDefaultProductFilter from 'icmaa-catalog/helpers/defaultProductFilter'
@@ -13,39 +13,35 @@ import forEach from 'lodash-es/forEach'
 import { Logger } from '@vue-storefront/core/lib/logger'
 
 const actions: ActionTree<CategoryState, RootState> = {
-  async list ({ state, commit }, { parentId, crawlDepth = 1 }): Promise<CategoryStateListItemHydrated> {
-    if (!state.lists.find(item => item.parent === parentId)) {
-      let parent = await fetchCategoryById({ parentId })
-        .then(resp => {
-          return resp.items[0]
-        })
+  async list ({ state, commit }, { id, depth = 1 }): Promise<void> {
+    if (!state.lists.find(item => item.category === id)) {
+      let category = await fetchCategoryById({ id })
+        .then(resp => resp.items[0])
         .catch(error => {
-          Logger.error('Can\'t find category: ' + parentId, 'icmaaCategoryList', error)()
+          Logger.error('Can\'t find category: ' + id, 'icmaaCategoryList', error)()
           return false
         })
 
-      if (!parent) {
+      if (!category) {
         return
       }
 
       let level: number[] = []
-      if (typeof crawlDepth === 'string' && crawlDepth.split(',').length > 1) {
-        level = crawlDepth.split(',').map(i => parseInt(parent.level) + parseInt(i))
+      if (typeof depth === 'string' && depth.split(',').length > 1) {
+        level = depth.split(',').map(i => parseInt(category.level) + parseInt(i))
       } else {
-        level.push(parseInt(parent.level) + parseInt(crawlDepth))
+        level.push(parseInt(category.level) + parseInt(depth))
       }
 
       const includeFields = [ 'name', 'url_path', 'ceCluster' ]
-      let list: Category[] | void = await fetchChildCategories({ parentId, level, onlyActive: true, includeFields })
+      let items: Category[] | void = await fetchChildCategories({ parentId: id, level, onlyActive: true, includeFields })
         .then(resp => resp.sort(sortByLetter))
         .catch(error => {
-          Logger.error('Error while fetching children of category: ' + parentId, 'icmaaCategoryList', error)()
+          Logger.error('Error while fetching children of category: ' + id, 'icmaaCategoryList', error)()
         })
 
-      commit(`category-next/${catTypes.CATEGORY_ADD_CATEGORIES}`, [ parent ], { root: true })
-      commit(types.ICMAA_CATEGORY_LIST_ADD_CATEGORY_LIST, { parent: parent.id, list })
-
-      return { parent, list: list as Category[] }
+      commit(`category-next/${catTypes.CATEGORY_ADD_CATEGORIES}`, [ category ], { root: true })
+      commit(types.ICMAA_CATEGORY_LIST_ADD_CATEGORY_LIST, { category: category.id, items })
     }
   },
   async loadProductListingWidgetProducts ({ state, commit, dispatch, rootGetters }, params: { categoryId: number, filter: any, cluster: any, size: number, sort: string|string[] }): Promise<ProductListingWidgetState> {
