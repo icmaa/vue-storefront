@@ -11,7 +11,7 @@
 
 <script>
 
-import LetterItem from 'icmaa-category/components/core/List/Item'
+import LetterItem from 'icmaa-category/components/List/Item'
 
 export default {
   name: 'CategoryListLetter',
