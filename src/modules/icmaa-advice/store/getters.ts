@@ -4,17 +4,11 @@ import RootState from '@vue-storefront/core/types/RootState'
 
 import config from 'config'
 import head from 'lodash-es/head'
-import intersection from 'lodash-es/intersection'
 
 const getters: GetterTree<AdviceState, RootState> = {
   getAdvice: (state): AdviceStateItem[] => state.items,
-  getSingleAdvice: (state, getters, RootState, rootGetters) => (tag: string): AdviceStateItem => {
-    let items = state.items
-    const tags = tag.split(',')
-
-    items = items.filter(i => {
-      return intersection(i.tag, tags).length > 0
-    })
+  getSingleAdvice: (state, getters, RootState, rootGetters): AdviceStateItem => {
+    let items = state.items.filter(i => i.active === true)
 
     const cluster = rootGetters['user/getCluster']
     items = items.filter(i => {
