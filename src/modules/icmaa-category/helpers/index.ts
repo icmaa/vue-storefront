@@ -33,10 +33,10 @@ export const fetchChildCategories = async (
   }: FetchChildCategoriesOptions
 ): Promise<Category[]> => {
   let searchQuery = new SearchQuery()
-  searchQuery.applyFilter({ key: 'path', value: { 'eq': parentId } })
+  searchQuery.applyFilter({ key: 'path', value: parentId })
 
   if (onlyActive) {
-    searchQuery.applyFilter({ key: 'is_active', value: { 'eq': true } })
+    searchQuery.applyFilter({ key: 'is_active', value: true })
   }
 
   if (!Array.isArray(level)) {
@@ -44,7 +44,7 @@ export const fetchChildCategories = async (
   }
 
   if (onlyShowTargetLevelItems) {
-    searchQuery.applyFilter({ key: 'level', value: level })
+    searchQuery.applyFilter({ key: 'level', value: { in: level } })
   }
 
   return quickSearchByQuery({ entityType: 'category', query: searchQuery, sort, includeFields, size: 5000 })
