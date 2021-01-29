@@ -48,9 +48,9 @@ export default {
   name: 'IcmaaCategoryList',
   components: {
     LazyHydrate,
-    LogoLine,
-    Teaser,
     Letter,
+    Teaser,
+    LogoLine,
     ProductListingWidget
   },
   computed: {

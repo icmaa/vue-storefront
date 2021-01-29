@@ -4,25 +4,35 @@
       {{ letter.letter }}
     </h2>
     <ul class="t-w-10/12 lg:t-w-11/12 t-px-2">
-      <LetterItem v-for="category in letter.items" :key="category.name" :category="category" class="category t-inline-block t-w-full t-leading-snug t-py-1" />
+      <li v-for="category in letter.items" :key="category.name">
+        <router-link
+          :to="localizedRoute(category.url_path)"
+          data-testid="categoryLink"
+          v-html="category.name"
+          class="t-block"
+          :class="[ category.ceCluster === cluster ? 't-text-primary t-font-bold' : 't-text-base-tone' ]"
+        />
+      </li>
     </ul>
   </li>
 </template>
 
 <script>
 
-import LetterItem from 'icmaa-category/components/List/Item'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'CategoryListLetter',
-  components: {
-    LetterItem
-  },
   props: {
     letter: {
       type: Object,
       required: true
     }
+  },
+  computed: {
+    ...mapGetters({
+      cluster: 'user/getCluster'
+    })
   }
 }
 </script>
