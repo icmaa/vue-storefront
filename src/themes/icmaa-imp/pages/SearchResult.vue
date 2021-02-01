@@ -72,18 +72,12 @@
 import LazyHydrate from 'vue-lazy-hydration'
 
 import config from 'config'
-import rootStore from '@vue-storefront/core/store'
 import { mapGetters, mapMutations } from 'vuex'
-import { isServer } from '@vue-storefront/core/helpers'
 import { Logger } from '@vue-storefront/core/lib/logger'
-import { htmlDecode } from '@vue-storefront/core/filters'
-import { getSearchOptionsFromRouteParams } from '@vue-storefront/core/modules/catalog-next/helpers/categoryHelpers'
 import { IcmaaGoogleTagManagerExecutors } from 'icmaa-google-tag-manager/hooks'
 import * as productMutationTypes from '@vue-storefront/core/modules/catalog/store/product/mutation-types'
-import i18n from '@vue-storefront/i18n'
 
 import AsyncSidebar from 'theme/components/core/blocks/AsyncSidebar/AsyncSidebar.vue'
-import Sidebar from 'theme/components/core/blocks/Category/Sidebar'
 import SortBy from 'theme/components/core/blocks/Category/SortBy'
 import Presets from 'theme/components/core/blocks/Category/Presets'
 import ProductListing from 'theme/components/core/ProductListing'
@@ -189,11 +183,11 @@ export default {
         this.loadingProducts = false
       }
     },
-    async fetchAsyncData () {
+    async fetchAsyncData (newRoute) {
       try {
         await this.$store.dispatch('icmaaSearchAlias/setCurrentResultAlias', this.term)
 
-        const route = this.$route
+        const route = newRoute || this.$route
         const pageSize = route.params.pagesize || this.pageSize
         const category = { id: this.termHash, term: this.searchAlias }
 
@@ -206,7 +200,12 @@ export default {
       }
     }
   },
-  async asyncData ({ store, route, context }) {
+  beforeRouteUpdate (to, from, next) {
+    this.fetchAsyncData(to)
+      .then(next)
+      .catch(next)
+  },
+  async asyncData ({ context }) {
     if (context) {
       context.output.cacheTags.add(`search`)
     }
