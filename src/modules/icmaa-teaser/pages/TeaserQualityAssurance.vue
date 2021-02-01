@@ -21,7 +21,14 @@
         <div v-if="type === 'tag'" class="t-font-bold t-mb-4 t-text-1xl t-font-mono">
           {{ teaser.customerclusterLabel }}
         </div>
-        <teaser :tags="`${teaser.tags}`" :customercluster="`${teaser.customercluster}`" :show-small-in-row="!showAsSplitTeaser" :redirect-to-edit="true" class="t--mx-4" />
+        <lazyload>
+          <template v-slot:loading>
+            <div class="t-h-56 t-bg-white t-flex t-items-center t-justify-center t-text-base-lighter">
+              Loading ...
+            </div>
+          </template>
+          <teaser :key="getUniqueKey('teaser', i, teaser)" :tags="`${teaser.tags}`" :customercluster="`${teaser.customercluster}`" :show-small-in-row="!showAsSplitTeaser" :redirect-to-edit="true" class="t--mx-4" />
+        </lazyload>
       </div>
     </div>
   </div>
@@ -30,6 +37,7 @@
 <script>
 import { mapGetters } from 'vuex'
 
+import Lazyload from 'icmaa-cms/components/Lazyload'
 import Teaser from 'theme/components/core/blocks/Teaser/Teaser'
 import BaseSelect from 'theme/components/core/blocks/Form/BaseSelect'
 import BaseCheckbox from 'theme/components/core/blocks/Form/BaseCheckbox'
@@ -38,6 +46,7 @@ import NoSSR from 'vue-no-ssr'
 export default {
   name: 'TeaserQualityAssurance',
   components: {
+    Lazyload,
     Teaser,
     BaseSelect,
     BaseCheckbox,
