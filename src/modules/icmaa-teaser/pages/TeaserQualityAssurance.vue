@@ -21,7 +21,7 @@
         <div v-if="type === 'tag'" class="t-font-bold t-mb-4 t-text-1xl t-font-mono">
           {{ teaser.customerclusterLabel }}
         </div>
-        <teaser :tags="`${teaser.tags}`" :customercluster="`${teaser.customercluster}`" :show-small-in-row="!showAsSplitTeaser" :redirect-to-edit="true" class="t--mx-4" />
+        <teaser :key="getUniqueKey('teaser', i, teaser)" :tags="`${teaser.tags}`" :customercluster="`${teaser.customercluster}`" :show-small-in-row="!showAsSplitTeaser" :redirect-to-edit="true" class="t--mx-4" />
       </div>
     </div>
   </div>
