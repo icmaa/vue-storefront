@@ -1,11 +1,24 @@
+import { isServer } from '@vue-storefront/core/helpers'
+
 export default {
+  props: {
+    serverRendering: {
+      type: Boolean,
+      default: false
+    }
+  },
   data () {
     return {
       inViewport: false
     }
   },
+  computed: {
+    isServer () {
+      return isServer
+    }
+  },
   mounted () {
-    if (!('IntersectionObserver' in window)) {
+    if (isServer || !('IntersectionObserver' in window)) {
       this.inViewport = true
       return
     }

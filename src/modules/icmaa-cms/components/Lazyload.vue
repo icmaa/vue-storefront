@@ -1,5 +1,5 @@
 <template>
-  <div v-if="inViewport">
+  <div v-if="(isServer && serverRendering) || inViewport">
     <slot />
   </div>
   <div class="loader" v-else>

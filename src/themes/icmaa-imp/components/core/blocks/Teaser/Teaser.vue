@@ -1,16 +1,6 @@
 <template>
   <div data-test-id="Teaser">
-    <div class="placeholder" v-if="loading">
-      <div class="xs:t-px-0 sm:t-px-4" :class="{ 't-mb-8': showSplit }" v-if="showLarge">
-        <placeholder :ratio="isMobile ? '1:1' : '2:1'" />
-      </div>
-      <div class="t-flex t-flex-wrap" v-if="showSplit">
-        <div v-for="(n, i) in 4" :key="'placeholder-' + i" class="t-px-4" :class="{ 't-w-1/2 lg:t-w-1/4 t-mb-8': showSmallInRow, 't-w-full': !showSmallInRow, 't-mb-8': !showSmallInRow && i !== 3 }">
-          <placeholder :ratio="'32:35'" v-if="showSmallInRow" />
-          <placeholder :ratio="isMobile ? '215:334' : '2:1'" v-else />
-        </div>
-      </div>
-    </div>
+    <teaser-skeleton v-if="loading" v-bind="{ isMobile, showLarge, showSplit, showSmallInRow }" />
     <template v-else>
       <template v-if="showLarge && teaserLarge">
         <teaser-fullsize :teaser="teaserLarge" :redirect-to-edit="redirectToEdit" :class="{ 't-mb-8': showSplit }" />
@@ -32,7 +22,7 @@
 <script>
 import { mapGetters } from 'vuex'
 
-import Placeholder from 'theme/components/core/blocks/Placeholder'
+import TeaserSkeleton from 'theme/components/core/blocks/Teaser/TeaserSkeleton'
 import TeaserFullsize from 'theme/components/core/blocks/Teaser/TeaserFullsize'
 import TeaserSplit from 'theme/components/core/blocks/Teaser/TeaserSplit'
 import TeaserSmall from 'theme/components/core/blocks/Teaser/TeaserSmall'
@@ -81,7 +71,7 @@ export default {
     }
   },
   components: {
-    Placeholder,
+    TeaserSkeleton,
     TeaserFullsize,
     TeaserSplit,
     TeaserSmall
