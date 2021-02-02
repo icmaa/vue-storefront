@@ -10,10 +10,10 @@
           {{ link.name | htmlDecode }}
         </template>
       </router-link>
-      <span v-else :key="index" class="t-text-base-tone" v-text="link.name || htmlDecode" />
+      <span v-else :key="index" class="t-text-base-tone">{{ link.name | htmlDecode }}</span>
       <span class="t-mx-3 lg:t-mx-4 t-text-xs t-font-thin" :key="'bullet-' + index" v-text="spacerCharacter" />
     </template>
-    <span class="t-text-base-tone" v-text="current || htmlDecode" />
+    <span class="t-text-base-tone">{{ current | htmlDecode }}</span>
   </div>
 </template>
 

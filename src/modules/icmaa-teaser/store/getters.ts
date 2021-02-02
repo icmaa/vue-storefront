@@ -15,7 +15,7 @@ interface TeaserByTypeOptions { size: 'small'|'large', tag: string, cluster?: st
 const getters: GetterTree<TeaserState, RootState> = {
   getTeaser: (state): TeaserStateItem[] => state.items,
   getTeaserByType: (state, getters) => ({ size, tag, cluster, gender }: TeaserByTypeOptions): TeaserStateItem[] => {
-    let filter: any = { size, tag: tag.split(',') }
+    let filter: any = { size, cluster, gender, tag: tag.split(',') }
     return getters.getFilteredTeaser(filter)
   },
   getFilteredTeaser: (state, getters, RootState, rootGetters) => (filters: Record<string, any>): TeaserStateItem[] => {
