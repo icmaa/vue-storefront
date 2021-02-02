@@ -6,6 +6,7 @@ import { googleTagManager } from 'config'
 import { formatValue } from 'icmaa-config/helpers/price'
 import { toDate } from 'icmaa-config/helpers/datetime'
 import omit from 'lodash-es/omit'
+import pick from 'lodash-es/pick'
 import round from 'lodash-es/round'
 
 export default {
@@ -53,9 +54,11 @@ export default {
       return this.order.coupon_rule_name
     },
     singleOrderItems () {
+      const itemAttributeMap = ['base_price', 'base_tax_amount']
       return this.order.items
         .map(i => {
-          const product = this.order.products.find(p => p.sku === i.sku || (p.configurable_children && p.configurable_children.some(c => c.sku === i.sku))) || {}
+          let product = this.order.products.find(p => p.sku === i.sku || (p.configurable_children && p.configurable_children.some(c => c.sku === i.sku))) || {}
+          product = Object.assign(product, pick(i, itemAttributeMap))
           const productDTO = this.getGTMProductDTO(product)
           const additionalData = { sku: i.sku, quantity: round(i.qty_ordered), id: String(productDTO.id).toString() }
           return Object.assign(productDTO, additionalData)
