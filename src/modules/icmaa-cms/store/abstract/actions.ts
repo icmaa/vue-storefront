@@ -3,7 +3,7 @@ import { SearchQuery } from 'storefront-query-builder'
 import { MutationTypesInterface } from '../abstract/mutation-types'
 import Task from '@vue-storefront/core/lib/sync/types/Task'
 import CmsService from 'icmaa-cms/data-resolver/CmsService'
-import searchByQuery, { SearchServiceResponse } from 'icmaa-cms/data-resolver/CmsEsService'
+import searchByQuery, { SearchServiceResponse } from 'icmaa-cms/data-resolver/ElasticSearchService'
 
 import pick from 'lodash-es/pick'
 import omit from 'lodash-es/omit'
