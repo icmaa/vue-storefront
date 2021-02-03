@@ -90,10 +90,13 @@ export default {
     },
     isMobile () {
       return ['xs', 'sm'].includes(this.viewport)
+    },
+    size () {
+      return !this.showLarge ? 'small' : this.showSplit ? undefined : 'large'
     }
   },
   mounted () {
-    this.$store.dispatch('icmaaTeaser/list', { tags: this.tags })
+    this.$store.dispatch('icmaaTeaser/list', { tags: this.tags, size: this.size })
       .then(() => {
         this.loading = false
       })
