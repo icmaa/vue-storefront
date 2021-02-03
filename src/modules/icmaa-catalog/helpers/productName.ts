@@ -29,7 +29,7 @@ export default class ProductName {
   }
 
   public get translatedName (): string {
-    const escapedRegexSearchString = (this.typeString as string).replace(/[[\]/{}()*+?.\\^$|]/ui, '\\$&')
+    const escapedRegexSearchString = (this.typeString as string).replace(/[[\]/{}()*+?.\\^$|"«»]/uig, '\\$&')
     const typeRegExp = new RegExp(escapedRegexSearchString + '$', 'ui')
 
     if (this.typeTranslationFound() && typeRegExp.test(this.name)) {
