@@ -21,7 +21,12 @@
         <div v-if="type === 'tag'" class="t-font-bold t-mb-4 t-text-1xl t-font-mono">
           {{ teaser.customerclusterLabel }}
         </div>
-        <teaser :tags="`${teaser.tags}`" :customercluster="`${teaser.customercluster}`" :show-small-in-row="!showAsSplitTeaser" :redirect-to-edit="true" class="t--mx-4" />
+        <lazyload>
+          <template v-slot:loading>
+            <teaser-skeleton v-bind="{ isMobile, showSmallInRow: !showAsSplitTeaser }" class="t--mx-4" />
+          </template>
+          <teaser :key="getUniqueKey('teaser', i, teaser)" :tags="`${teaser.tags}`" :customercluster="`${teaser.customercluster}`" :show-small-in-row="!showAsSplitTeaser" :redirect-to-edit="true" class="t--mx-4" />
+        </lazyload>
       </div>
     </div>
   </div>
@@ -30,6 +35,8 @@
 <script>
 import { mapGetters } from 'vuex'
 
+import Lazyload from 'icmaa-cms/components/Lazyload'
+import TeaserSkeleton from 'theme/components/core/blocks/Teaser/TeaserSkeleton'
 import Teaser from 'theme/components/core/blocks/Teaser/Teaser'
 import BaseSelect from 'theme/components/core/blocks/Form/BaseSelect'
 import BaseCheckbox from 'theme/components/core/blocks/Form/BaseCheckbox'
@@ -38,6 +45,8 @@ import NoSSR from 'vue-no-ssr'
 export default {
   name: 'TeaserQualityAssurance',
   components: {
+    Lazyload,
+    TeaserSkeleton,
     Teaser,
     BaseSelect,
     BaseCheckbox,
@@ -54,7 +63,8 @@ export default {
   computed: {
     ...mapGetters({
       attributes: 'attribute/getAttributeListByCode',
-      tags: 'icmaaTeaser/getTags'
+      tags: 'icmaaTeaser/getTags',
+      viewport: 'ui/getViewport'
     }),
     typeOptions () {
       return [
@@ -96,6 +106,9 @@ export default {
       }
 
       return []
+    },
+    isMobile () {
+      return ['xs', 'sm'].includes(this.viewport)
     }
   },
   methods: {

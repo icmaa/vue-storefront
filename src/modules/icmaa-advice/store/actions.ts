@@ -16,10 +16,9 @@ const mutationTypes: MutationTypesInterface = {
 }
 
 const actions: ActionTree<AdviceState, RootState> = {
-  list: async (context, tags: string): Promise<AdviceStateItem[]> => {
+  list: async (context): Promise<AdviceStateItem[]> => {
     const options = {
-      tag: { 'in_array': tags },
-      active: { in: true },
+      i18n_active: { in: true },
       show_from: { 'lt-date': getCurrentStoreviewDatetime() },
       show_to: { 'gt-date': getCurrentStoreviewDatetime() }
     }

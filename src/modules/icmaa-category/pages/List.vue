@@ -2,7 +2,7 @@
   <div id="category-list" class="t-container t-my-8" v-if="notEmpty">
     <div class="t-flex t-flex-wrap t--mx-4 t-px-4">
       <h1 class="t-px-4 t-mb-3 t-text-2xl t-font-medium t-leading-5">
-        {{ parent.name }}
+        {{ category.name }}
       </h1>
       <div class="t-w-full">
         <teaser :tags="teaserTag" :show-large="false" :show-small-in-row="true" />
@@ -17,22 +17,11 @@
       </li>
     </ul>
     <ul class="letters t-px-6">
-      <li :key="letter.letter" v-for="letter in categoriesGroupedByFirstLetter" :id="letter.anchor" class="t-p-4 t-py-8 t-bg-white t-my-4 t-flex t--mx-2">
-        <h2 class="t-w-2/12 lg:t-w-1/12 t-px-2 t-pr-6 t-py-1 t-text-right t-text-3xl t-font-bold">
-          {{ letter.letter }}
-        </h2>
-        <ul class="t-w-10/12 lg:t-w-11/12 t-px-2">
-          <li :key="category.id" v-for="category in letter.list" class="category t-inline-block t-w-full t-leading-snug t-py-1">
-            <router-link
-              :to="getCategoryRoute(category)"
-              data-testid="categoryLink"
-              v-html="category.name"
-              class="t-block"
-              :class="[ category.ceCluster === cluster ? 't-text-primary t-font-bold' : 't-text-base-tone' ]"
-            />
-          </li>
-        </ul>
-      </li>
+      <template v-for="letter in categoriesGroupedByFirstLetter">
+        <lazy-hydrate :key="`lazy-${rootCategoryId}-${letter.letter}`" when-visible>
+          <letter :key="`${rootCategoryId}-${letter.letter}`" :id="letter.anchor" :letter="letter" class="t-p-4 t-py-8 t-bg-white t-my-4 t-flex t--mx-2" />
+        </lazy-hydrate>
+      </template>
     </ul>
     <lazy-hydrate>
       <product-listing-widget appearance="t-px-3 lg:t-px-4 t-mt-2" :category-id="3278" :limit="8" :filter="{ department }" />
@@ -44,32 +33,90 @@
 </template>
 
 <script>
+
+import { mapGetters } from 'vuex'
+import { htmlDecode } from '@vue-storefront/core/lib/store/filters'
+import { extractPrefix } from '../helpers'
+
 import LazyHydrate from 'vue-lazy-hydration'
-import List from 'icmaa-category/components/List'
+import Letter from 'icmaa-category/components/List/Letter'
 import LogoLine from 'theme/components/core/blocks/CategoryExtras/LogoLine'
 import Teaser from 'theme/components/core/blocks/Teaser/Teaser'
-import ProductListingWidget from 'icmaa-category/components/core/ProductListingWidget'
-import { formatCategoryLink } from '@vue-storefront/core/modules/url/helpers'
+import ProductListingWidget from 'icmaa-category/components/ProductListingWidget'
 
 export default {
-  mixins: [ List ],
+  name: 'IcmaaCategoryList',
   components: {
-    LogoLine,
-    Teaser,
     LazyHydrate,
+    Letter,
+    Teaser,
+    LogoLine,
     ProductListingWidget
   },
-  methods: {
-    getCategoryRoute (category) {
-      return formatCategoryLink(category)
-    }
-  },
   computed: {
+    ...mapGetters({
+      listByParentId: 'icmaaCategory/listByParentId'
+    }),
+    rootCategoryId () {
+      return Number(this.$route.params.parentCategoryId)
+    },
+    depth () {
+      return Number(this.$route.params.depth || this.$route.query.depth) || undefined
+    },
+    list () {
+      return this.listByParentId(this.rootCategoryId)
+    },
+    category () {
+      return this.list.category
+    },
+    notEmpty () {
+      return (this.list && this.list.items)
+    },
+    categoriesGroupedByFirstLetter () {
+      let groups = []
+
+      this.list.items.forEach(category => {
+        let firstChar = extractPrefix(category.name).charAt(0)
+        let letter = /^[a-z]/gmi.test(firstChar) ? firstChar.toUpperCase() : '#'
+
+        if (!groups.find(g => g.letter === letter)) {
+          let anchor = letter !== '#' ? letter.toLowerCase() : 'numbers'
+          groups.push({ letter, anchor, items: [] })
+        }
+
+        groups[groups.findIndex(g => g.letter === letter)].items.push(category)
+      })
+
+      return groups
+    },
     teaserTag () {
       return String(this.$route.params.teaserTag)
     },
     department () {
       return String(this.$route.params.department)
+    }
+  },
+  async asyncData ({ store, route, context }) {
+    if (context) {
+      context.output.cacheTags
+        .add('category')
+        .add('cms')
+    }
+
+    await store.dispatch(
+      'icmaaCategory/list',
+      {
+        id: route.params.parentCategoryId,
+        depth: route.params.depth || route.query.depth
+      }
+    )
+  },
+  metaInfo () {
+    return !this.notEmpty || {
+      title: htmlDecode(this.category.meta_title || this.category.name),
+      meta: this.category.meta_description
+        ? [{ vmid: 'description', name: 'description', content: htmlDecode(this.category.meta_description) }]
+        : []
     }
   }
 }

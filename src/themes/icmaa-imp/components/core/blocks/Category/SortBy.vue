@@ -5,13 +5,13 @@
 </template>
 
 <script>
+
 import { mapGetters } from 'vuex'
-import { products, icmaa_catalog } from 'config'
+import { products } from 'config'
 import { getCustomCategorySort } from 'icmaa-catalog/helpers/defaultCategorySort'
 import i18n from '@vue-storefront/i18n'
 import isEmpty from 'lodash-es/isEmpty'
 
-import { CategorySort } from '@vue-storefront/core/modules/catalog/components/CategorySort'
 import BaseSelect from 'theme/components/core/blocks/Form/BaseSelect'
 
 export default {
@@ -59,6 +59,9 @@ export default {
     },
     currentOption () {
       return this.sortingOptions.find(o => o.id === this.selected)
+    },
+    routerSortParam () {
+      return this.query.sort
     }
   },
   mounted () {
@@ -66,6 +69,9 @@ export default {
   },
   watch: {
     category () {
+      this.initSelected()
+    },
+    routerSortParam () {
       this.initSelected()
     }
   },
@@ -83,7 +89,7 @@ export default {
         }
       }
     },
-    sort (value) {
+    sort () {
       let currentOption = this.currentOption
       if (currentOption.id === 'reset') {
         currentOption.id = ''

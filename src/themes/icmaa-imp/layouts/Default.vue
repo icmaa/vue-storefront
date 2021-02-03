@@ -5,7 +5,7 @@
     <div id="viewport" class="w-100 relative">
       <main-header />
       <no-ssr>
-        <advice tags="2" />
+        <advice />
       </no-ssr>
       <async-sidebar
         :state-key="'searchpanel'"
