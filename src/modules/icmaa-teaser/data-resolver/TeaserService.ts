@@ -1,3 +1,4 @@
+import config from 'config'
 import { SearchQuery } from 'storefront-query-builder'
 import { TeaserStateItem } from '../types/TeaserState'
 import searchByQuery, { SearchServiceResponse } from 'icmaa-cms/data-resolver/CmsEsService'
@@ -24,8 +25,8 @@ export const createSearchQuery = ({ tags, size, cluster, gender }: TeaserQueryOp
     query.applyFilter({ key: 'size', value: size })
   }
 
-  const clusterValue = cluster ? { orNull: [ cluster ] } : null
-  query.applyFilter({ key: 'cluster', value: clusterValue })
+  const clusterValue = cluster || config.icmaa.user.noClusterValue
+  query.applyFilter({ key: 'cluster', value: { orNull: [ clusterValue ] } })
 
   const genderValues = gender ? [ '', gender ] : [ '' ]
   query.applyFilter({ key: 'gender', value: { orNull: genderValues } })
