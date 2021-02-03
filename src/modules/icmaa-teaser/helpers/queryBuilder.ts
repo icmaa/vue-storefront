@@ -1,7 +1,5 @@
 import config from 'config'
 import { SearchQuery } from 'storefront-query-builder'
-import { TeaserStateItem } from '../types/TeaserState'
-import searchByQuery, { SearchServiceResponse } from 'icmaa-cms/data-resolver/CmsEsService'
 
 interface TeaserQueryOptions {
   tags: string,
@@ -10,11 +8,7 @@ interface TeaserQueryOptions {
   gender?: string
 }
 
-interface TeaserResponse extends SearchServiceResponse {
-  items: TeaserStateItem[]
-}
-
-export const createSearchQuery = ({ tags, size, cluster, gender }: TeaserQueryOptions): SearchQuery => {
+export default ({ tags, size, cluster, gender }: TeaserQueryOptions): SearchQuery => {
   const query = new SearchQuery()
   query
     .applyFilter({ key: 'active', value: true })
@@ -34,9 +28,4 @@ export const createSearchQuery = ({ tags, size, cluster, gender }: TeaserQueryOp
   query.applySort({ field: 'order', options: 'desc' })
 
   return query
-}
-
-export default (options: TeaserQueryOptions) => {
-  const query = createSearchQuery(options)
-  return searchByQuery<TeaserResponse>({ query })
 }
