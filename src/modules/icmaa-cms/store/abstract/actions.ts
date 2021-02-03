@@ -94,13 +94,13 @@ export const listQueue = async <T>(options: OptionsInterface): Promise<Task> => 
 
 export const elasticList = async <T, S, R>(options: ElasticOptionsInterface<S, R>): Promise<SearchServiceResponse<T>> => {
   const { entityType, query, context, mutationTypes } = options
+  const { commit } = context
 
-  // context.commit(mutationTypes.add, {})
-
-  return searchByQuery<T>({ entityType, query }).then(r => {
-    console.error(r)
-    return r
-  })
+  return searchByQuery<T>({ entityType, query })
+    .then(resp => {
+      commit(mutationTypes.add, resp.items)
+      return resp
+    })
 }
 
 export const single = async <T>(options: OptionsInterface): Promise<T> => {

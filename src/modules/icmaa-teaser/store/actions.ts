@@ -16,11 +16,8 @@ const mutationTypes: MutationTypesInterface = {
 }
 
 const actions: ActionTree<TeaserState, RootState> = {
-  list: async (context, { tags, size }: { tags: string, size?: string }) => {
-    const gender = context.rootGetters['user/getSessionData']('gender')
-    const cluster = context.rootGetters['user/getCluster']
+  list: async (context, { tags, size, gender, cluster }: { tags: string, size?: string, cluster?: string, gender?: string }) => {
     const query = createTeaserQuery({ tags, gender, cluster, size })
-
     return elasticListAbstract<TeaserStateItem, TeaserState, RootState>({ entityType, mutationTypes, stateKey, context, query })
   },
   fetchTags: async ({ commit }): Promise<TagStateItem[]|boolean> => {

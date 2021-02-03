@@ -6,10 +6,16 @@ import AbstractState from '../../types/AbstractState'
 export const mutationsFactory = <T extends AbstractState>(types: MutationTypesInterface, identifier: string = 'identifier'): MutationTree<T> => {
   return {
     [types.add] (state, payload) {
-      const item = state.items.find(item => item[identifier] === payload[identifier])
-      if (!item) {
-        state.items.push(payload)
+      if (!Array.isArray(payload)) {
+        payload = [payload]
       }
+
+      payload.forEach(p => {
+        const item = state.items.find(item => item[identifier] === p[identifier])
+        if (!item) {
+          state.items.push(p)
+        }
+      })
     },
     [types.upd] (state, payload) {
       const index = state.items.findIndex(item => item[identifier] === payload[identifier])

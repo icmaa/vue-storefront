@@ -79,7 +79,8 @@ export default {
   computed: {
     ...mapGetters({
       teaserByType: 'icmaaTeaser/getTeaserByType',
-      viewport: 'ui/getViewport'
+      viewport: 'ui/getViewport',
+      getUserSessionData: 'user/getSessionData'
     }),
     teaserLarge () {
       return this.teaserByType({ size: 'large', tag: this.tags, cluster: this.customercluster, gender: this.gender })[0]
@@ -93,10 +94,30 @@ export default {
     },
     size () {
       return !this.showLarge ? 'small' : this.showSplit ? undefined : 'large'
+    },
+    currentGender () {
+      return this.gender || this.getUserSessionData('gender')
+    },
+    currentCluster () {
+      return this.customercluster || this.getUserSessionData('cluster')
+    }
+  },
+  methods: {
+    async fetchTeaser () {
+      const { tags, size, currentGender: gender, currentCluster: cluster } = this
+      await this.$store.dispatch('icmaaTeaser/list', { tags, size, cluster, gender })
+    }
+  },
+  watch: {
+    currentCluster () {
+      this.fetchTeaser()
+    },
+    currentGender () {
+      this.fetchTeaser()
     }
   },
   mounted () {
-    this.$store.dispatch('icmaaTeaser/list', { tags: this.tags, size: this.size })
+    this.fetchTeaser()
       .then(() => {
         this.loading = false
       })
