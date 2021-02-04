@@ -154,7 +154,7 @@ export class SearchAdapter {
   }
 
   public initBaseTypes () {
-    const baseTypes = ['product', 'attribute', 'category', 'taxrule', 'review', 'cms_page', 'cms_block', 'cms_hierarchy']
+    const baseTypes = ['product', 'attribute', 'category', 'taxrule', 'review', 'cms_page', 'cms_block', 'cms_hierarchy', 'teaser']
     baseTypes.forEach(type => {
       this.registerEntityType(type, {
         queryProcessor: (query) => {

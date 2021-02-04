@@ -1,6 +1,9 @@
-import CmsService from 'icmaa-cms/data-resolver/CmsService'
+import { ActionContext } from 'vuex'
+import { SearchQuery } from 'storefront-query-builder'
 import { MutationTypesInterface } from '../abstract/mutation-types'
 import Task from '@vue-storefront/core/lib/sync/types/Task'
+import CmsService from 'icmaa-cms/data-resolver/CmsService'
+import searchByQuery, { SearchServiceResponse } from 'icmaa-cms/data-resolver/ElasticSearchService'
 
 import pick from 'lodash-es/pick'
 import omit from 'lodash-es/omit'
@@ -29,6 +32,14 @@ export interface ListOptionsInterface {
   sort?: string,
   size?: number,
   page?: number
+}
+
+export interface ElasticOptionsInterface<S, R> {
+  context: ActionContext<S, R>,
+  query: SearchQuery,
+  entityType: string,
+  mutationTypes: MutationTypesInterface,
+  stateKey: string
 }
 
 const listSortOptionsParamKeys = [ 'sort', 'size', 'page' ]
@@ -79,6 +90,17 @@ export const list = async <T>(options: OptionsInterface): Promise<T[]> => {
 export const listQueue = async <T>(options: OptionsInterface): Promise<Task> => {
   options.queue = true
   return listMethod<T>(options) as Promise<Task>
+}
+
+export const elasticList = async <T, S, R>(options: ElasticOptionsInterface<S, R>): Promise<SearchServiceResponse<T>> => {
+  const { entityType, query, context, mutationTypes } = options
+  const { commit } = context
+
+  return searchByQuery<T>({ entityType, query })
+    .then(resp => {
+      commit(mutationTypes.add, resp.items)
+      return resp
+    })
 }
 
 export const single = async <T>(options: OptionsInterface): Promise<T> => {
