@@ -12,6 +12,8 @@
     </lazyload>
     <lazyload>
       <product-listing-widget :category-id="3278" />
+    </lazyload>
+    <lazyload>
       <product-listing-widget :category-id="4251" />
     </lazyload>
     <cms-block identifier="home-seo" class="t-mb-8 t-px-4 t-text-sm" />
