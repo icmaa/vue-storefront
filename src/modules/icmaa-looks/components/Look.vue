@@ -70,6 +70,11 @@ export default {
       return this.getProducts(this.look.products)
     }
   },
+  watch: {
+    look () {
+      this.loadProducts()
+    }
+  },
   methods: {
     async loadProducts (skus) {
       return this.$store.dispatch('icmaaLooks/getLookProducts', this.look.products || [])
