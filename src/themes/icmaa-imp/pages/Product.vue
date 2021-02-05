@@ -94,7 +94,7 @@
           </details-tabs>
         </div>
         <div class="reviews t-relative t-w-full t-p-8 t-bg-base-lighter lg:t-w-1/2" id="reviews">
-          <lazyload>
+          <lazyload data-test-id="ReviewsLoader">
             <reviews :product="product" :product-name="translatedProductName" v-show="isOnline" />
             <reviews-claim />
           </lazyload>
@@ -105,10 +105,10 @@
     <div class="spacer t-h-8" />
 
     <div class="t-container t-px-4">
-      <lazyload>
+      <lazyload data-test-id="RecommendationsLoader">
         <recommendations type="crosssell" :title="$t('You may like these too')" class="lg:t-mb-8" />
       </lazyload>
-      <lazyload>
+      <lazyload data-test-id="RecommendationsLoader">
         <recommendations type="upsell" :title="$t('Similar products')" class="lg:t-mb-8" />
       </lazyload>
     </div>

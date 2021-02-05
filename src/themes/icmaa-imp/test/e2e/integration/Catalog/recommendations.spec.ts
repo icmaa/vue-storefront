@@ -2,6 +2,8 @@ describe('Recommendations', () => {
   it('Recommendations should be visible', () => {
     cy.visitProductDetailPage()
 
+    cy.getByTestId('RecommendationsLoader').scrollIntoView()
+
     cy.getByTestId('Recommendations')
       .as('recommendations')
       .findByTestId('ProductTile')
