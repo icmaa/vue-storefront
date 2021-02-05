@@ -104,12 +104,14 @@
 
     <div class="spacer t-h-8" />
 
-    <lazyload>
-      <div class="t-container t-px-4">
+    <div class="t-container t-px-4">
+      <lazyload>
         <recommendations type="crosssell" :title="$t('You may like these too')" class="lg:t-mb-8" />
+      </lazyload>
+      <lazyload>
         <recommendations type="upsell" :title="$t('Similar products')" class="lg:t-mb-8" />
-      </div>
-    </lazyload>
+      </lazyload>
+    </div>
 
     <async-sidebar
       :state-key="'addtocart'"
@@ -119,7 +121,7 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import { mapGetters } from 'vuex'
 import i18n from '@vue-storefront/i18n'
 
 import { registerModule } from '@vue-storefront/core/lib/modules'
