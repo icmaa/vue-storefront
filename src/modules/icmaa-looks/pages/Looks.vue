@@ -45,9 +45,9 @@ export default {
       return this.looks[0]
     }
   },
-  async asyncData ({ store, route, context }) {
+  async asyncData ({ store, route }) {
     const identifier = route.params.identifier
-    if (identifier && !store.getters['icmaaLooks/getByIdentifier']('identifier')) {
+    if (identifier && !store.getters['icmaaLooks/getByIdentifier'](identifier)) {
       await store.dispatch('icmaaLooks/single', { value: identifier })
     }
 
