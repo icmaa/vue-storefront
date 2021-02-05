@@ -33,6 +33,8 @@ describe('Reviews', () => {
 
     cy.wait(1000)
 
+    cy.getByTestId('ReviewsLoader').scrollIntoView()
+
     cy.getByTestId('ReviewsClaim').should('be.visible')
     cy.getByTestId('ReviewsClaimAccept').click()
     cy.getByTestId('ReviewsClaim').should('not.be.visible')
