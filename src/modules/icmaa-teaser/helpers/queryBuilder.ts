@@ -22,7 +22,7 @@ export default ({ tags, size, cluster, gender }: TeaserQueryOptions): SearchQuer
   const clusterValue = cluster || config.icmaa.user.noClusterValue
   query.applyFilter({ key: 'cluster', value: { orNull: [ clusterValue ] } })
 
-  const genderValues = gender ? [ '', gender ] : [ '' ]
+  const genderValues = gender ? [ '', gender ] : [ '', 'none' ]
   query.applyFilter({ key: 'gender', value: { orNull: genderValues } })
 
   query.applySort({ field: 'order', options: 'desc' })
