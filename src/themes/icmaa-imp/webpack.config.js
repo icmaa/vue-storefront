@@ -85,12 +85,8 @@ module.exports = function (config, { isClient, isDev }) {
          * @see https://github.com/webpack-contrib/mini-css-extract-plugin/issues/90
          */
         .map(plugin => {
-          if (extractCSS) {
-            if (plugin === 'vue-style-loader' && isClient) {
-              return { loader: MiniCssExtractPlugin.loader }
-            } else if (plugin === 'vue-style-loader' && !isClient) {
-              return 'null-loader'
-            }
+          if (extractCSS && plugin === 'vue-style-loader') {
+            return isClient ? { loader: MiniCssExtractPlugin.loader } : 'null-loader'
           }
           return plugin
         })
