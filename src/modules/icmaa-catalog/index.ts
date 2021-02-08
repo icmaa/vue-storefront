@@ -5,6 +5,7 @@ import { isServer } from '@vue-storefront/core/helpers'
 import { IcmaaExtendedAttributeStore } from './store/attribute'
 import { IcmaaExtendedCategoryStore } from './store/category'
 import { IcmaaExtendedProductStore } from './store/product'
+import { IcmaaBreadcrumbsStore } from './store/breadcrumbs'
 import { SearchAliasStore, stateKey } from './store/search-alias'
 import { icmaaCatalogHooks } from './hooks'
 
@@ -17,6 +18,7 @@ export const IcmaaExtendedCatalogModule: StorefrontModule = async ({ store }) =>
   extendStore('attribute', IcmaaExtendedAttributeStore)
   extendStore('category-next', IcmaaExtendedCategoryStore)
   extendStore('product', IcmaaExtendedProductStore)
+  extendStore('breadcrumbs', IcmaaBreadcrumbsStore)
   store.registerModule(stateKey, SearchAliasStore)
 
   /**
