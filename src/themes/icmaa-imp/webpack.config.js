@@ -77,6 +77,9 @@ module.exports = function (config, { isClient, isDev }) {
   const rewriteMapping = (rule) => {
     if (/(css|scss|sass)/.exec(rule.test)) {
       rule.use = rule.use
+        /**
+         * Replace original `postcss-loader`
+         */
         .map(plugin => (plugin.loader && plugin.loader === 'postcss-loader') ? postcssConfig : plugin)
         /**
          * Add `mini-css-extract-plugin.loader` to extract CSS into seperate files in production.
