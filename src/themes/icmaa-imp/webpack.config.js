@@ -5,6 +5,7 @@ const path = require('path')
 
 const i18nHelpers = require('@vue-storefront/i18n/helpers')
 
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const SpritesmithPlugin = require('webpack-spritesmith')
 
 /**
@@ -69,19 +70,46 @@ module.exports = function (config, { isClient, isDev }) {
         })
       ]
     }
-  };
+  }
+
+  const extractCSS = !isDev && vsfConfig.has('icmaa_config.extractCSS') && vsfConfig.get('icmaa_config.extractCSS') === true
 
   const rewriteMapping = (rule) => {
     if (/(css|scss|sass)/.exec(rule.test)) {
-      rule.use = rule.use.map(
-        plugin => (plugin.loader && plugin.loader === 'postcss-loader') ? postcssConfig : plugin
-      )
+      rule.use = rule.use
+        .map(plugin => (plugin.loader && plugin.loader === 'postcss-loader') ? postcssConfig : plugin)
+        /**
+         * Add `mini-css-extract-plugin.loader` to extract CSS into seperate files in production.
+         * This loader isn't SSR compatible, so we need to use the `null-loader` to load the CSS files into manifest but don't resolve them.
+         * This loader replaces the `vue-style-loader` in production-mode.
+         * @see https://github.com/webpack-contrib/mini-css-extract-plugin/issues/90
+         */
+        .map(plugin => {
+          if (extractCSS) {
+            if (plugin === 'vue-style-loader' && isClient) {
+              return { loader: MiniCssExtractPlugin.loader }
+            } else if (plugin === 'vue-style-loader' && !isClient) {
+              return 'null-loader'
+            }
+          }
+          return plugin
+        })
     }
 
     return rule
   }
 
   config.module.rules.map(rewriteMapping)
+
+  /**
+   * Add `mini-css-extract-plugin` to extract CSS into files in production
+   */
+  if (extractCSS) {
+    config.plugins.push(new MiniCssExtractPlugin({
+      filename: isDev ? '[name].css' : '[name].[contenthash].css',
+      chunkFilename: isDev ? '[name]-[id].css' : '[name]-[id].[contenthash].css'
+    }))
+  }
 
   /**
    * Remove `data-test-id` attributes from DOM for production mode
