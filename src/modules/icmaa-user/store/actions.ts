@@ -1,21 +1,17 @@
 import { ActionTree } from 'vuex'
 import RootState from '@vue-storefront/core/types/RootState'
 import UserState from '../types/UserState'
-import { UserProfile } from '@vue-storefront/core/modules/user/types/UserProfile'
 import { UserService } from '@vue-storefront/core/data-resolver'
 import { UserService as IcmaaUserService } from '../data-resolver/UserService'
 import * as userTypes from '@vue-storefront/core/modules/user/store/mutation-types'
 import { SearchQuery } from 'storefront-query-builder'
 import { isServer } from '@vue-storefront/core/helpers'
 import { Logger } from '@vue-storefront/core/lib/logger'
-import { TaskQueue } from '@vue-storefront/core/lib/sync'
 import Task from '@vue-storefront/core/lib/sync/types/Task'
 import EventBus from '@vue-storefront/core/compatibility/plugins/event-bus'
 import asyncForEach from 'icmaa-config/helpers/asyncForEach'
-import config, { entities } from 'config'
+import { entities } from 'config'
 
-import getApiEndpointUrl from '@vue-storefront/core/helpers/getApiEndpointUrl'
-import { processLocalizedURLAddress } from '@vue-storefront/core/helpers'
 import { notifications } from 'icmaa-cart/helpers'
 
 import facebookLoginActions from './actions/facebook-login'
@@ -75,29 +71,6 @@ const actions: ActionTree<UserState, RootState> = {
 
       await dispatch('logout', { silent: true })
     }
-  },
-  /**
-   * Copy of original – changes:
-   * * The original method now uses the `queue` (instead `execute`) to update the profile.
-   *   This leads to the problem that we can't trigger the user interaction as we want using a promise chain.
-   *   I rebuild the `UserService.updateProfile` method using `execute` to make it work again.
-   */
-  async update ({ dispatch }, profile: UserProfile): Promise<Task> {
-    return TaskQueue.execute({
-      url: processLocalizedURLAddress(getApiEndpointUrl(config.users, 'me_endpoint')),
-      payload: {
-        method: 'POST',
-        body: JSON.stringify(profile)
-      }
-    }).then(resp => {
-      if (resp.resultCode === 200) {
-        dispatch('user/setCurrentUser', resp.result, { root: true })
-      } else {
-        Logger.error('Error while updating user:', 'user', resp)()
-        throw new Error('Error while saving customer data')
-      }
-      return resp
-    })
   },
   async changePassword ({ dispatch, getters }, passwordData): Promise<Task> {
     return UserService.changePassword(passwordData)
