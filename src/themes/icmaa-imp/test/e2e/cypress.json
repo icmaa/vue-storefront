@@ -15,6 +15,6 @@
   "requestTimeout": 20000,
   "env": {
     "store_codes": ["de", "fr", "es", "uk"],
-    "category_pages": ["new", "boys.html", "girls.html"]
+    "category_pages": ["new", "clothing.html", "shoes.html", "accessories.html"]
   }
 }

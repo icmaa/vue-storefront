@@ -4,28 +4,26 @@
     <teaser tags="21" :show-large="false" :show-small-in-row="true" class="t-pb-8" />
     <teaser tags="2" :show-large="false" :limit="3" class="t-pb-8" />
     <teaser tags="20" :show-large="false" :show-small-in-row="true" class="t-pb-8" />
-    <lazy-hydrate when-idle>
+    <lazyload data-test-id="LogoLineBlockLoader">
       <div class="t-flex t-flex-wrap t-px-4 t--mx-4 t-pb-4">
         <logo-line :parent-id="16" path="/merchandise" :title="'Bands'" class="t-mb-4 lg:t-mb-0" />
         <logo-line :parent-id="4681" path="/fashion" :title="'Brands'" />
       </div>
-    </lazy-hydrate>
-    <lazy-hydrate when-visible>
+    </lazyload>
+    <lazyload data-test-id="ProductListingWidgetLoader">
       <product-listing-widget :category-id="3278" />
-    </lazy-hydrate>
-    <lazy-hydrate when-visible>
+    </lazyload>
+    <lazyload data-test-id="ProductListingWidgetLoader">
       <product-listing-widget :category-id="4251" />
-    </lazy-hydrate>
+    </lazyload>
     <cms-block identifier="home-seo" class="t-mb-8 t-px-4 t-text-sm" />
   </div>
 </template>
 
 <script>
-import config from 'config'
-import { onlineHelper } from '@vue-storefront/core/helpers'
 import { currentStoreView, localizedRoute } from '@vue-storefront/core/lib/multistore'
 
-import LazyHydrate from 'vue-lazy-hydration'
+import Lazyload from 'icmaa-cms/components/Lazyload'
 import Teaser from 'theme/components/core/blocks/Teaser/Teaser'
 import LogoLine from 'theme/components/core/blocks/CategoryExtras/LogoLineBlock'
 import ProductListingWidget from 'icmaa-category/components/ProductListingWidget'
@@ -33,7 +31,7 @@ import CmsBlock from 'icmaa-cms/components/Block'
 
 export default {
   components: {
-    LazyHydrate,
+    Lazyload,
     Teaser,
     LogoLine,
     ProductListingWidget,

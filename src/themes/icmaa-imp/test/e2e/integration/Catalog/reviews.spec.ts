@@ -4,6 +4,9 @@ describe('Reviews', () => {
       .visitProductDetailPage()
 
     cy.wait(1000)
+
+    cy.getByTestId('ReviewsLoader').scrollIntoView()
+
     cy.getByTestId('Reviews')
       .scrollIntoView({ offset: { top: -200, left: 0 }, duration: 1000 })
       .find('button')
@@ -29,6 +32,8 @@ describe('Reviews', () => {
       .visitProductDetailPage()
 
     cy.wait(1000)
+
+    cy.getByTestId('ReviewsLoader').scrollIntoView()
 
     cy.getByTestId('ReviewsClaim').should('be.visible')
     cy.getByTestId('ReviewsClaimAccept').click()

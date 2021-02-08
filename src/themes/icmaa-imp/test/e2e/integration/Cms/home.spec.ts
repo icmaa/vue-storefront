@@ -10,6 +10,7 @@ describe('Homepage', () => {
     // Teaser is a Image with "teaser" in img src
     cy.getByTestId('TeaserSmall').first().scrollIntoView().findImageWithPlaceholder().checkImage()
     // 2 LogoLineBlocks
+    cy.getByTestId('LogoLineBlockLoader').scrollIntoView()
     cy.getByTestId('LogoLineBlock').should('have.length', 2)
     // 2 LogoLines
     cy.getByTestId('LogoLine').should('have.length', 2)

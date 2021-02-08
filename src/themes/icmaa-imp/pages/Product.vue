@@ -94,24 +94,24 @@
           </details-tabs>
         </div>
         <div class="reviews t-relative t-w-full t-p-8 t-bg-base-lighter lg:t-w-1/2" id="reviews">
-          <lazy-hydrate when-idle>
+          <lazyload data-test-id="ReviewsLoader">
             <reviews :product="product" :product-name="translatedProductName" v-show="isOnline" />
-          </lazy-hydrate>
-          <lazy-hydrate when-idle>
             <reviews-claim />
-          </lazy-hydrate>
+          </lazyload>
         </div>
       </div>
     </div>
 
     <div class="spacer t-h-8" />
 
-    <lazy-hydrate when-visible>
-      <div class="t-container t-px-4">
+    <div class="t-container t-px-4">
+      <lazyload data-test-id="RecommendationsLoader">
         <recommendations type="crosssell" :title="$t('You may like these too')" class="lg:t-mb-8" />
+      </lazyload>
+      <lazyload data-test-id="RecommendationsLoader">
         <recommendations type="upsell" :title="$t('Similar products')" class="lg:t-mb-8" />
-      </div>
-    </lazy-hydrate>
+      </lazyload>
+    </div>
 
     <async-sidebar
       :state-key="'addtocart'"
@@ -121,9 +121,8 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import { mapGetters } from 'vuex'
 import i18n from '@vue-storefront/i18n'
-import config from 'config'
 
 import { registerModule } from '@vue-storefront/core/lib/modules'
 import { onlineHelper, isServer } from '@vue-storefront/core/helpers'
@@ -156,9 +155,8 @@ import ReviewsShort from 'theme/components/core/blocks/Reviews/ReviewsShort'
 import ReviewsClaim from 'theme/components/core/blocks/Reviews/ReviewsClaim'
 import Recommendations from 'icmaa-recommendations/components/Recommendations'
 import LoaderBackground from 'theme/components/core/LoaderBackground'
-import LazyHydrate from 'vue-lazy-hydration'
+import Lazyload from 'icmaa-cms/components/Lazyload'
 
-import VueOfflineMixin from 'vue-offline/mixin'
 import ProductMetaMixin from 'icmaa-meta/mixins/productMeta'
 import ProductPriceMixin from 'theme/mixins/product/priceMixin'
 import ProductOptionsMixin from 'theme/mixins/product/optionsMixin'
@@ -190,7 +188,7 @@ export default {
     ReviewsClaim,
     Recommendations,
     WebShare,
-    LazyHydrate
+    Lazyload
   },
   mixins: [IcmaaProduct, ProductMetaMixin, ProductPriceMixin, ProductOptionsMixin, ProductAddToCartMixin, FeaturesMixin, ClusterMixin],
   beforeCreate () {
