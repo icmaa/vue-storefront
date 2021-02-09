@@ -106,10 +106,10 @@
 
     <div class="t-container t-px-4">
       <lazyload data-test-id="RecommendationsLoader">
-        <recommendations type="crosssell" :title="$t('You may like these too')" class="lg:t-mb-8" />
+        <recommendations :key="'crosssell-' + product.id" type="crosssell" :title="$t('You may like these too')" class="lg:t-mb-8" />
       </lazyload>
       <lazyload data-test-id="RecommendationsLoader">
-        <recommendations type="upsell" :title="$t('Similar products')" class="lg:t-mb-8" />
+        <recommendations :key="'upsell-' + product.id" type="upsell" :title="$t('Similar products')" class="lg:t-mb-8" />
       </lazyload>
     </div>
 

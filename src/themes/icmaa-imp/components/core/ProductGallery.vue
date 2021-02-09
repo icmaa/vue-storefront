@@ -10,6 +10,7 @@
             :configuration="configuration"
             :product-name="product.name"
             @loaded="carouselLoaded = true"
+            :key="product.id"
           />
         </no-ssr>
       </div>
