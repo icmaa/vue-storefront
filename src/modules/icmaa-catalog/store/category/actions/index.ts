@@ -3,13 +3,11 @@ import * as types from '@vue-storefront/core/modules/catalog-next/store/category
 import RootState from '@vue-storefront/core/types/RootState'
 import CategoryState from '@vue-storefront/core/modules/catalog-next/store/category/CategoryState'
 import addDefaultProductFilter from 'icmaa-catalog/helpers/defaultProductFilter'
-import { icmaa, products, entities } from 'config'
+import { products, entities } from 'config'
 import { buildFilterProductsQuery } from '@vue-storefront/core/helpers'
 import { _prepareCategoryPathIds } from '@vue-storefront/core/modules/catalog-next/helpers/categoryHelpers'
 import { formatCategoryLink } from '@vue-storefront/core/modules/url/helpers'
 
-import intersection from 'lodash-es/intersection'
-import union from 'lodash-es/union'
 import omit from 'lodash-es/omit'
 import cloneDeep from 'lodash-es/cloneDeep'
 
@@ -163,23 +161,17 @@ const actions: ActionTree<CategoryState, RootState> = {
   },
   /**
    * Changes:
-   * * Add category allowlist support to hide unimportant categories
    * * Don't load it using `loadCategories` because the result might overwrite the current category in state
+   * * Don't load root-category
    */
   async loadCategoryBreadcrumbs ({ dispatch }, { category, currentRouteName }) {
     if (!category) {
       return dispatch('breadcrumbs/set', { current: currentRouteName, routes: [] }, { root: true })
     }
 
-    let categoryHierarchyIds = _prepareCategoryPathIds(category).map(id => Number(id))
-    let allowlistCategoryHierarchyIds = intersection(categoryHierarchyIds, icmaa.breadcrumbs.allowlist)
-    if (allowlistCategoryHierarchyIds.length > 0) {
-      categoryHierarchyIds = union(allowlistCategoryHierarchyIds, categoryHierarchyIds.slice(-1))
-    } else {
-      categoryHierarchyIds = allowlistCategoryHierarchyIds
-    }
+    let categoryPathIds = _prepareCategoryPathIds(category).map(id => Number(id))
 
-    const filters = { 'id': categoryHierarchyIds }
+    const filters = { id: categoryPathIds, level: { gt: 1 } }
     const categories = await dispatch('findCategories', { filters })
 
     categories.sort((a, b) => a.level - b.level)

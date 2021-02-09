@@ -40,12 +40,20 @@ const actions: ActionTree<ProductState, RootState> = {
    *
    * Changes:
    * * Load only parent categories containing `icmaa.breadcrumbs.path` items in path
-   * * This way we can prior categories of products to be used as parent category
+   * * This way we can prior categories of products to be used as parent category (department categories by product)
+   * * Only add product-name to current path if a path exists – this to use existing category-path when
+   *   browsing through clothing categories
    * * Don't load categories using `loadingCategories` action as it will overwrite existing ones and
-   *   the category-extras will diappear
+   *   the category-extras will disappear
    */
   async loadProductBreadcrumbs ({ dispatch, rootGetters }, { product } = {}) {
     if (product && product.category_ids) {
+      const routes = rootGetters['breadcrumbs/getBreadcrumbsRoutes']
+      if (routes.length > 0 && rootGetters['breadcrumbs/isPreserved']) {
+        await dispatch('breadcrumbs/set', { current: product.name, routes, preserve: false }, { root: true })
+        return
+      }
+
       const currentCategory = rootGetters['icmaaCategoryExtras/getCurrentCategory']
 
       let breadcrumbCategory
