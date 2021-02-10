@@ -164,7 +164,7 @@ const actions: ActionTree<CategoryState, RootState> = {
    * * Don't load it using `loadCategories` because the result might overwrite the current category in state
    * * Don't load root-category
    */
-  async loadCategoryBreadcrumbs ({ dispatch }, { category, currentRouteName }) {
+  async loadCategoryBreadcrumbs ({ dispatch }, { category, currentRouteName, preserve }) {
     if (!category) {
       return dispatch('breadcrumbs/set', { current: currentRouteName, routes: [] }, { root: true })
     }
@@ -179,7 +179,7 @@ const actions: ActionTree<CategoryState, RootState> = {
       return { name: c.name, route_link: formatCategoryLink(c) }
     })
 
-    await dispatch('breadcrumbs/set', { current: currentRouteName, routes }, { root: true })
+    await dispatch('breadcrumbs/set', { current: currentRouteName, routes, preserve }, { root: true })
     return categories
   }
 }

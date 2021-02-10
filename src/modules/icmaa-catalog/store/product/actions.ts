@@ -74,7 +74,7 @@ const actions: ActionTree<ProductState, RootState> = {
         breadcrumbCategory = categories.sort((a, b) => (a.level > b.level) ? -1 : 1)[0] // sort starting by deepest level
       }
 
-      await dispatch('category-next/loadCategoryBreadcrumbs', { category: breadcrumbCategory, currentRouteName: product.name }, { root: true })
+      await dispatch('category-next/loadCategoryBreadcrumbs', { category: breadcrumbCategory, currentRouteName: product.name, preserve: false }, { root: true })
     }
   },
   /**
