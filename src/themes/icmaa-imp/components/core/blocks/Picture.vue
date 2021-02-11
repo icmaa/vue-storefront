@@ -1,7 +1,7 @@
 <template>
   <picture>
     <source v-for="(sImage, i) in sourceImages" :key="sImage.srcset + '-' + i" :media="sImage.media" :data-srcset="sImage.srcset" :alt="alt + (sImage.alt || '')">
-    <img :src="defaultImage.src" :data-src="defaultImage.src" :data-srcset="`${defaultImage.src} 1x, ${defaultImage.srcAt2x} 2x`" :class="[{ 't-hidden': (placeholder && loading), 't-w-full': imgFullSize }, ...imgClassTransformed]" v-bind="$attrs" v-on="$listeners" @error="loading = true" ref="image">
+    <img :src="defaultImage.src" :data-src="defaultImage.src" :data-srcset="`${defaultImage.src} 1x, ${defaultImage.srcAt2x} 2x`" :class="[{ 't-hidden': (placeholder && loading), 't-w-full': imgFullSize }, ...imgClassTransformed]" v-bind="$attrs" v-on="$listeners" @error="loading = true" ref="image" :alt="alt">
     <placeholder :ratio="ratio" v-if="placeholder && loading" :class="placeholderClassTransformed" />
   </picture>
 </template>
