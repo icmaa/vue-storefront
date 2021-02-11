@@ -1,4 +1,5 @@
 import { serverHooksExecutors } from '@vue-storefront/core/server/hooks'
+import { storeCodeFromUrlPath } from 'icmaa-config/helpers/store'
 import { Context } from './utils/types';
 
 let config = require('config')
@@ -186,7 +187,8 @@ app.get('*', (req, res, next) => {
       console.error(`Error during render : ${req.url}`)
       console.error(err)
       serverHooksExecutors.ssrException({ err, req, isProd })
-      return res.redirect('/error')
+      const storeCode = storeCodeFromUrlPath(req.url)
+      return res.redirect(storeCode ? `/${storeCode}/error` : '/error')
     }
   }
 
