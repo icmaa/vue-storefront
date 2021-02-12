@@ -5,6 +5,7 @@
     "display": "standalone",
     "theme_color": "#ffffff",
     "start_url": "/${ storeCode }",
+    "scope": "../",
     "icons": [
       {
         "src": "/assets/imp/meta/android/android-icon-48x48.png",
