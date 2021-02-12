@@ -35,7 +35,6 @@
 </template>
 
 <script>
-import config from 'config'
 import i18n from '@vue-storefront/i18n'
 import MaterialIcon from 'theme/components/core/blocks/MaterialIcon'
 import ProductImage from 'theme/components/core/ProductImage'
@@ -47,7 +46,6 @@ import ProductPriceMixin from 'theme/mixins/product/priceMixin'
 import ProductOptionsMixin from 'theme/mixins/product/optionsMixin'
 import ProductAddToCartMixin from 'theme/mixins/product/addtocartMixin'
 import { IsOnWishlist } from '@vue-storefront/core/modules/wishlist/components/IsOnWishlist'
-import { productThumbnailPath } from '@vue-storefront/core/helpers'
 
 export default {
   name: 'ProductTile',

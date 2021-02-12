@@ -24,7 +24,7 @@ registerRoute(
 )
 
 registerRoute(
-  /\/(dist|assets)\/.+\.(woff|woff2|eot|ttf|json|svg|png|jpg|jpeg|js)$/,
+  /\/(dist|assets)\/.+\.(woff|woff2|eot|ttf|json|svg|png|jpg|jpeg|js|css)$/,
   assetCache
 )
 
