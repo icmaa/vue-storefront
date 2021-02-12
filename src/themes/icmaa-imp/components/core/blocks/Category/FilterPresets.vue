@@ -18,6 +18,7 @@ import sampleSize from 'lodash-es/sampleSize'
 import orderBy from 'lodash-es/orderBy'
 
 export default {
+  name: 'FilterPresets',
   beforeCreate () {
     registerGenericCmsStateModule('filter-presets', 'filter-preset')
   },

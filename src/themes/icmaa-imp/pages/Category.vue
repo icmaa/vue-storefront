@@ -23,7 +23,8 @@
                 {{ $t('Filters') }}
                 <span v-if="activeFilterCount > 0" v-text="`(${activeFilterCount})`" class="t-flex-grow t-text-left t-pl-2 t-opacity-75" />
               </button-component>
-              <presets class="t-hidden lg:t-flex t-items-center t-ml-2" />
+              <filter-presets class="t-hidden lg:t-flex t-items-center t-ml-2" v-if="shouldLoadPresets" />
+              <category-links :categories="filterCategories" class="t-flex t-items-center t-ml-2" v-else />
             </div>
             <div class="t-w-1/2 lg:t-w-1/4 t-px-1 lg:t-px-2">
               <sort-by @change="changeFilter" />
@@ -81,7 +82,6 @@
 import LazyHydrate from 'vue-lazy-hydration'
 
 import config from 'config'
-import rootStore from '@vue-storefront/core/store'
 import { mapGetters, mapMutations } from 'vuex'
 import { isServer } from '@vue-storefront/core/helpers'
 import { catalogHooksExecutors } from '@vue-storefront/core/modules/catalog-next/hooks'
@@ -91,9 +91,7 @@ import { IcmaaGoogleTagManagerExecutors } from 'icmaa-google-tag-manager/hooks'
 import * as productMutationTypes from '@vue-storefront/core/modules/catalog/store/product/mutation-types'
 
 import AsyncSidebar from 'theme/components/core/blocks/AsyncSidebar/AsyncSidebar.vue'
-import Sidebar from 'theme/components/core/blocks/Category/Sidebar'
 import SortBy from 'theme/components/core/blocks/Category/SortBy'
-import Presets from 'theme/components/core/blocks/Category/Presets'
 import ProductListing from 'theme/components/core/ProductListing'
 import Breadcrumbs from 'theme/components/core/Breadcrumbs'
 import Dropdown from 'theme/components/core/blocks/Dropdown'
@@ -109,6 +107,8 @@ import CategoryExtrasMixin from 'icmaa-category-extras/mixins/categoryExtras'
 import CategoryMetaMixin from 'icmaa-meta/mixins/categoryMeta'
 import ClusterMixin from 'icmaa-user/mixins/cluster'
 
+const CategoryLinks = () => import(/* webpackChunkName: "vsf-category-links" */ 'theme/components/core/blocks/Category/CategoryLinks')
+const FilterPresets = () => import(/* webpackChunkName: "vsf-category-filter-presets" */ 'theme/components/core/blocks/Category/FilterPresets')
 const FilterSidebar = () => import(/* webpackChunkName: "vsf-sidebar-categoryfilter" */ 'theme/components/core/blocks/Category/Sidebar')
 const AddToCartSidebar = () => import(/* webpackChunkName: "vsf-addtocart-sidebar" */ 'theme/components/core/blocks/AddToCartSidebar/AddToCartSidebar')
 const ProductListingTicket = () => import(/* webpackChunkName: "vsf-product-listing-ticket" */ 'theme/components/core/ProductListingTicket')
@@ -119,7 +119,11 @@ const composeInitialPageState = async (store, route, forceLoad = false, pageSize
     const cachedCategory = store.getters['category-next/getCategoryFrom'](route.path)
     const hasCategoryExtras = store.getters['icmaaCategoryExtras/getCategoryExtrasByUrlKey'](route.path)
     const currentCategory = cachedCategory && !forceLoad && hasCategoryExtras ? cachedCategory : await store.dispatch('category-next/loadCategoryWithExtras', { filters })
-    await store.dispatch('category-next/loadCategoryProducts', { route, category: currentCategory, pageSize })
+
+    await Promise.all([
+      store.dispatch('category-next/loadCategoryProducts', { route, category: currentCategory, pageSize }),
+      store.dispatch('category-next/loadChildCategoryFilter')
+    ])
 
     const breadCrumbsLoader = store.dispatch(
       'category-next/loadCategoryBreadcrumbs',
@@ -142,7 +146,8 @@ export default {
     ButtonComponent,
     MaterialIcon,
     LoaderBackground,
-    Presets,
+    FilterPresets,
+    CategoryLinks,
     ProductListing,
     Breadcrumbs,
     SortBy,
@@ -170,6 +175,7 @@ export default {
       getCategoryProductsTotal: 'category-next/getCategoryProductsTotal',
       getCurrentFilters: 'category-next/getCurrentFilters',
       getProductsStats: 'category-next/getCategorySearchProductsStats',
+      filterCategories: 'category-next/getFilterCategories',
       isInTicketWhitelist: 'category-next/isCurrentCategoryInTicketWhitelist',
       contentHeader: 'icmaaCategoryExtras/getContentHeaderByCurrentCategory',
       sidebarMenuGenderChange: 'ui/getSidebarMenuGenderChange'
@@ -189,6 +195,9 @@ export default {
     },
     activeFilterCount () {
       return Object.keys(this.getCurrentFilters).length
+    },
+    shouldLoadPresets () {
+      return this.filterCategories.length === 0
     }
   },
   watch: {
