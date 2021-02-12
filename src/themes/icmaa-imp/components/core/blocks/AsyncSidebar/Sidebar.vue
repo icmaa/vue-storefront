@@ -18,7 +18,6 @@
 </template>
 
 <script>
-import { currentStoreView } from '@vue-storefront/core/lib/multistore'
 import onEscapePress from '@vue-storefront/core/mixins/onEscapePress'
 
 import TopButton from 'theme/components/core/blocks/AsyncSidebar/TopButton'

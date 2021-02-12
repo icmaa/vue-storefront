@@ -9,7 +9,9 @@
       </button-component>
     </template>
     <div class="t-pb-20">
-      <list-options @change="changeSort" class="t-pb-4" />
+      <button-component icon="arrow_forward" type="select" class="t-w-full t-mb-4" @click="openSortMenu()">
+        {{ $t('Sorting') }}
+      </button-component>
       <div v-for="(group, groupKey) in groupedFilters" :key="groupKey">
         <div v-if="groupKey === 1" :class="{ 't-border-t t-border-base-lighter t-mt-8 t-pt-6': groupedFilters[0].length > 0 }">
           <h4 class="t-text-sm t-mb-6">
@@ -48,19 +50,18 @@ import { mapGetters } from 'vuex'
 import config from 'config'
 import i18n from '@vue-storefront/i18n'
 import Sidebar from 'theme/components/core/blocks/AsyncSidebar/Sidebar'
-import ListOptions from 'theme/components/core/blocks/Category/ListOptions'
 import FilterWrapper from 'theme/components/core/blocks/Category/Filter'
 import ButtonComponent from 'theme/components/core/blocks/Button'
 import MaterialIcon from 'theme/components/core/blocks/MaterialIcon'
 import sortBy from 'lodash-es/sortBy'
 
 const AsyncFilter = () => import(/* webpackChunkName: "vsf-category-filter" */ 'theme/components/core/blocks/Category/Filter')
+const AsyncListOptions = () => import(/* webpackChunkName: "vsf-category-list-options" */ 'theme/components/core/blocks/Category/ListOptions')
 
 export default {
   name: 'CategorySidebar',
   components: {
     Sidebar,
-    ListOptions,
     FilterWrapper,
     ButtonComponent,
     MaterialIcon
@@ -174,6 +175,11 @@ export default {
         const sidebar = { component: AsyncFilter, ...sidebarProps, props: filter }
         this.$store.dispatch('ui/addSidebarPath', { sidebar })
       }
+    },
+    openSortMenu () {
+      const sidebarProps = { title: i18n.t('Sorting') }
+      const sidebar = { component: AsyncListOptions, ...sidebarProps, props: {} }
+      this.$store.dispatch('ui/addSidebarPath', { sidebar })
     }
   },
   watch: {

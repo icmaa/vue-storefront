@@ -7,7 +7,12 @@
         <block-wrapper :components="contentHeader" v-if="contentHeader" />
         <div class="t-w-full">
           <div class="t-flex t-flex-wrap t-items-center t--mx-1 lg:t--mx-2">
-            <h1 class="category-title t-hidden md:t-block t-w-3/4 t-px-1 md:t-px-2 t-mb-4 t-font-light t-text-2xl t-text-base-dark" v-text="category.name" />
+            <h1 class="category-title t-hidden md:t-block t-w-3/4 t-px-1 md:t-px-2 t-mb-4 t-font-light t-text-2xl t-text-base-dark">
+              {{ category.name | htmlDecode }}
+              <span class="t-hidden md:t-inline-block t-font-thin t-text-base-light t-text-sm t-leading-7 t-pt-1 t-pl-2">
+                <span data-test-id="productsTotal">{{ productsTotal }}</span> {{ $t('items') }}
+              </span>
+            </h1>
             <div class="t-w-full t-px-1 md:t-px-2 t-flex t-flex-wrap t-items-stretch">
               <button-component style="second" align="center" :icon="activeFilterCount > 0 ? 'check' : 'filter_list'" @click.native="openFilters" class="t-w-full lg:t-w-auto" data-test-id="ButtonFilter">
                 {{ $t('Filters') }}
@@ -156,7 +161,8 @@ export default {
       getCurrentCategory: 'category-next/getCurrentCategory',
       getCategoryProductsTotal: 'category-next/getCategoryProductsTotal',
       getCurrentFilters: 'category-next/getCurrentFilters',
-      getProductsStats: 'category-next/getCategorySearchProductsStats',
+      productsStats: 'category-next/getCategorySearchProductsStats',
+      productsTotal: 'category-next/getCategoryProductsTotal',
       filterCategories: 'category-next/getFilterCategories',
       isInTicketWhitelist: 'category-next/isCurrentCategoryInTicketWhitelist',
       contentHeader: 'icmaaCategoryExtras/getContentHeaderByCurrentCategory',
@@ -169,7 +175,7 @@ export default {
       return this.getCategoryProductsTotal === 0
     },
     moreProductsInSearchResults () {
-      const { perPage, start, total } = this.getProductsStats
+      const { perPage, start, total } = this.productsStats
       return (start + perPage < total)
     },
     activeFilterCount () {

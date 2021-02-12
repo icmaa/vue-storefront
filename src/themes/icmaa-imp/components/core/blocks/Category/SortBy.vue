@@ -1,6 +1,20 @@
 <template>
   <div class="sort-by">
-    <base-select name="sortby" id="sortby" v-model="selected" @change="sort" :options="sortingOptionsForSelect" :initial-option-text="$t('Sort By')" :label="$t('Sort By')" :hide-label="true" select-class="t-text-sm" />
+    <ul>
+      <li
+        v-for="(sortOpt, i) in sortingOptions"
+        :key="sortOpt.id || i"
+        class="t-border-b t-border-base-lighter t-px-2 t-py-3"
+      >
+        <button
+          @click="sort(sortOpt)"
+          class="t-w-full t-text-sm t-flex t-items-center t-justify-between"
+        >
+          {{ $t('Sort by') }} {{ sortOpt.label }}
+          <material-icon icon="check" class="t-leading-1-rem" v-if="currentOption.id === sortOpt.id" />
+        </button>
+      </li>
+    </ul>
   </div>
 </template>
 
@@ -12,12 +26,12 @@ import { getCustomCategorySort } from 'icmaa-catalog/helpers/defaultCategorySort
 import i18n from '@vue-storefront/i18n'
 import isEmpty from 'lodash-es/isEmpty'
 
-import BaseSelect from 'theme/components/core/blocks/Form/BaseSelect'
+import MaterialIcon from 'theme/components/core/blocks/MaterialIcon'
 
 export default {
   name: 'SortBy',
   components: {
-    BaseSelect
+    MaterialIcon
   },
   data () {
     return {
@@ -34,17 +48,13 @@ export default {
       let variants = []
       Object.keys(this.sortingConfigOptions).map(label => {
         variants.push({
-          label: label,
+          label: `${i18n.t(label)}`,
           id: this.sortingConfigOptions[label],
           type: 'sort'
         })
       })
 
       return variants
-    },
-    sortingOptionsForSelect () {
-      return this.sortingOptions
-        .map(v => ({ label: `${i18n.t('Sort by')} ${i18n.t(v.label)}`, value: v.id }))
     },
     sortingConfigOptions () {
       return Object.assign(products.sortByAttributes, this.customConfigOptions)
@@ -89,7 +99,9 @@ export default {
         }
       }
     },
-    sort () {
+    sort (opt) {
+      this.selected = opt.id
+
       let currentOption = this.currentOption
       if (currentOption.id === 'reset') {
         currentOption.id = ''

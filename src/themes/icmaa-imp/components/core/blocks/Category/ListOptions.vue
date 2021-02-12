@@ -3,41 +3,43 @@
     <div class="t-flex t-items-center t-flex-wrap t--mx-2">
       <sort-by
         @change="changeSorting"
-        class="t-w-1/2 t-px-2"
+        class="t-w-full t-px-2 t-mb-4"
       />
-      <base-select
-        :value="parseInt(pageSize)"
-        :options="pageSizeOptions"
-        :hide-label="true"
-        @change="changePageSize"
-        select-class="t-text-sm"
-        class="t-w-1/2 t-px-2"
-      />
+      <div class="t-w-full t-flex t-items-center t-flex-wrap t-px-4 t-mt-4">
+        <label class="t-text-sm t-mr-2">
+          {{ $t('Items per page') }}:
+        </label>
+        <button-component
+          v-for="size in pageSizes"
+          :key="size"
+          type="tag"
+          size="sm"
+          @click="changePageSize(size)"
+          :class="{ 't-opacity-50': parseInt(pageSize) !== size }"
+          class="t-ml-1"
+        >
+          {{ size }}
+        </button-component>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 
-import i18n from '@vue-storefront/i18n'
-import BaseSelect from 'theme/components/core/blocks/Form/BaseSelect'
+import ButtonComponent from 'theme/components/core/blocks/Button'
 import SortBy from 'theme/components/core/blocks/Category/SortBy'
 
 export default {
   name: 'ListOptions',
   components: {
     SortBy,
-    BaseSelect
+    ButtonComponent
   },
   data () {
     return {
       pageSizes: [24, 48, 60, 100],
       pageSize: this.$route && this.$route.query.pagesize ? this.$route.query.pagesize : 24
-    }
-  },
-  computed: {
-    pageSizeOptions () {
-      return this.pageSizes.map(s => { return { value: s, label: s + ' ' + i18n.t('items per page') } })
     }
   },
   methods: {
