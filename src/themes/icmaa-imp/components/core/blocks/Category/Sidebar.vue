@@ -173,9 +173,6 @@ export default {
     closeIcon (closeIcon) {
       this.$store.dispatch('ui/mapSidebarPathItems', sidebar => Object.assign(sidebar, { closeIcon }))
     }
-  },
-  mounted () {
-    this.$store.dispatch('category-next/loadChildCategories')
   }
 }
 </script>

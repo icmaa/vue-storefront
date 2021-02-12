@@ -19,7 +19,7 @@
                 {{ $t('Filters') }}
                 <span v-if="activeFilterCount > 0" v-text="`(${activeFilterCount})`" class="t-flex-grow t-text-left t-pl-2 t-opacity-75" />
               </button-component>
-              <presets class="t-hidden lg:t-flex t-items-center t-ml-2" />
+              <filter-presets class="t-hidden lg:t-flex t-items-center t-ml-2" />
             </div>
             <div class="t-w-1/2 lg:t-w-1/4 t-px-1 lg:t-px-2">
               <sort-by @change="changeFilter" />
@@ -79,7 +79,7 @@ import * as productMutationTypes from '@vue-storefront/core/modules/catalog/stor
 
 import AsyncSidebar from 'theme/components/core/blocks/AsyncSidebar/AsyncSidebar.vue'
 import SortBy from 'theme/components/core/blocks/Category/SortBy'
-import Presets from 'theme/components/core/blocks/Category/Presets'
+import FilterPresets from 'theme/components/core/blocks/Category/FilterPresets'
 import ProductListing from 'theme/components/core/ProductListing'
 import Breadcrumbs from 'theme/components/core/Breadcrumbs'
 import Dropdown from 'theme/components/core/blocks/Dropdown'
@@ -100,7 +100,7 @@ export default {
     ButtonComponent,
     MaterialIcon,
     LoaderBackground,
-    Presets,
+    FilterPresets,
     ProductListing,
     Breadcrumbs,
     SortBy
