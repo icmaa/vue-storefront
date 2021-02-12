@@ -1,6 +1,6 @@
 <template>
-  <div class="presets">
-    <button-component v-for="c in categories" :key="'filter-' + c.slug" size="sm" class="t-ml-2 t-opacity-75 hover:t-opacity-100" @click="$router.push(c.url_path)">
+  <div class="category-links">
+    <button-component v-for="c in categories" :key="'filter-' + c.slug" size="sm" class="t-flex-shrink-0 t-mr-2 t-opacity-75 hover:t-opacity-100" @click="$router.push(c.url_path)">
       {{ c.label }}
     </button-component>
   </div>

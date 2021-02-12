@@ -1,11 +1,15 @@
 <template>
   <sidebar :title="$t('Filter')" :close-icon="closeIcon">
     <template v-slot:top-after-title>
+      <span class="t-font-thin t-text-base-light t-text-sm t-leading-7 t-pt-1 t-pl-2">
+        <span data-test-id="productsTotal">{{ productsTotal }}</span> {{ $t('items') }}
+      </span>
       <button-component v-if="hasActiveFilters" type="transparent" size="sm" icon="delete_sweep" :icon-only="true" @click="resetAllFilters">
         {{ $t('Clear filters') }}
       </button-component>
     </template>
     <div class="t-pb-20">
+      <list-options @change="changeSort" class="t-pb-4" />
       <div v-for="(group, groupKey) in groupedFilters" :key="groupKey">
         <div v-if="groupKey === 1" :class="{ 't-border-t t-border-base-lighter t-mt-8 t-pt-6': groupedFilters[0].length > 0 }">
           <h4 class="t-text-sm t-mb-6">
@@ -44,6 +48,7 @@ import { mapGetters } from 'vuex'
 import config from 'config'
 import i18n from '@vue-storefront/i18n'
 import Sidebar from 'theme/components/core/blocks/AsyncSidebar/Sidebar'
+import ListOptions from 'theme/components/core/blocks/Category/ListOptions'
 import FilterWrapper from 'theme/components/core/blocks/Category/Filter'
 import ButtonComponent from 'theme/components/core/blocks/Button'
 import MaterialIcon from 'theme/components/core/blocks/MaterialIcon'
@@ -55,6 +60,7 @@ export default {
   name: 'CategorySidebar',
   components: {
     Sidebar,
+    ListOptions,
     FilterWrapper,
     ButtonComponent,
     MaterialIcon
@@ -68,7 +74,8 @@ export default {
       getSystemFilterNames: 'category-next/getSystemFilterNames',
       isVisibleFilter: 'category-next/isVisibleFilter',
       attributeLabel: 'attribute/getAttributeLabel',
-      attributes: 'attribute/getAttributeListByCode'
+      attributes: 'attribute/getAttributeListByCode',
+      productsTotal: 'category-next/getCategoryProductsTotal'
     }),
     availableFilters () {
       const submenuFilters = config.products.submenuFilters || []
