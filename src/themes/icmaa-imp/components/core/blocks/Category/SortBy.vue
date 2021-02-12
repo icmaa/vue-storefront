@@ -11,7 +11,7 @@
           class="t-w-full t-text-sm t-flex t-items-center t-justify-between"
         >
           {{ $t('Sort by') }} {{ sortOpt.label }}
-          <material-icon icon="check" class="t-leading-1-rem" v-if="currentOption.id === sortOpt.id" />
+          <material-icon icon="check" class="t-leading-1-rem" v-if="currentOption && currentOption.id === sortOpt.id" />
         </button>
       </li>
     </ul>
