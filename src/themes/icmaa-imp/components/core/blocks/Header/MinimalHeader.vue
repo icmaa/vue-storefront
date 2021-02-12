@@ -4,7 +4,7 @@
       <div class="t-flex">
         <div class="t-container t-pr-4 md:t-px-4 t-flex t-items-center">
           <div class="t-flex t-w-full t-h-full t-flex-wrap t-items-stretch">
-            <router-link :to="localizedRoute('')" class="t-flex t-items-center t-cursor-pointer t-text-base-tone t-bg-base-lightest t-px-3">
+            <router-link :to="localizedRoute('/')" class="t-flex t-items-center t-cursor-pointer t-text-base-tone t-bg-base-lightest t-px-3">
               <material-icon icon="keyboard_backspace" class="t-flex t-flex-fix" />
               <span class="t-sr-only">{{ $t('Home Page') }}</span>
             </router-link>
