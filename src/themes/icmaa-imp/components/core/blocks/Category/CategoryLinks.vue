@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+
 import ButtonComponent from 'theme/components/core/blocks/Button'
 
 export default {
