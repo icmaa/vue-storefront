@@ -1,11 +1,7 @@
 <template>
   <div>
     <div class="t-flex t-items-center t-flex-wrap t--mx-2">
-      <sort-by
-        @change="changeSorting"
-        class="t-w-full t-px-2 t-mb-4"
-      />
-      <div class="t-w-full t-flex t-items-center t-flex-wrap t-px-4 t-mt-4">
+      <div class="t-w-full t-flex t-items-center t-flex-wrap t-px-4 t-mb-4">
         <label class="t-text-sm t-mr-2">
           {{ $t('Items per page') }}:
         </label>
@@ -14,6 +10,7 @@
           :key="size"
           type="tag"
           size="sm"
+          padding-x="t-px-2"
           @click="changePageSize(size)"
           :class="{ 't-opacity-50': parseInt(pageSize) !== size }"
           class="t-ml-1"
@@ -21,6 +18,10 @@
           {{ size }}
         </button-component>
       </div>
+      <sort-by
+        @change="changeSorting"
+        class="t-w-full t-px-2"
+      />
     </div>
   </div>
 </template>

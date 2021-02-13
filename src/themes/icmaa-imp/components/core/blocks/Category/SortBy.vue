@@ -4,7 +4,7 @@
       <li
         v-for="(sortOpt, i) in sortingOptions"
         :key="sortOpt.id || i"
-        class="t-border-b t-border-base-lighter t-px-2 t-py-3"
+        class="t-border-t t-border-base-lighter t-px-2 t-py-3"
       >
         <button
           @click="sort(sortOpt)"

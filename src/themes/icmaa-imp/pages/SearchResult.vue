@@ -5,24 +5,17 @@
         <breadcrumbs class="t-w-full t-my-8" />
         <div class="t-w-full">
           <div class="t-flex t-flex-wrap t-items-center t--mx-1 lg:t--mx-2">
-            <h1 class="category-title t-hidden lg:t-block t-w-3/4 t-px-1 lg:t-px-2 t-mb-4 t-font-light t-text-2xl t-text-base-dark" v-text="$t('Search results for: {term}', { term })" />
-            <div class="t-hidden lg:t-block t-w-1/4 t-px-1 lg:t-px-2 t-text-sm t-text-base-dark t-text-right">
-              <span class="t-font-bold" data-test-id="productsTotal">{{ getCategoryProductsTotal }}</span> {{ $t('items') }}
-              <span class="t-mx-2 t-text-base-lighter">|</span>
-              <dropdown @change="changePageSize" :options="pageSizeOptions" :current="parseInt(pageSize)" position="right" name="pagesize" class="t-inline-block" :dropdown-class="{ 't-w-32 t-mt-2': true }">
-                {{ pageSize }} {{ $t('items per page') }}
-                <material-icon icon="keyboard_arrow_down" size="xs" class="t-align-middle t-text-primary" />
-              </dropdown>
-            </div>
-            <div class="t-w-1/2 lg:t-w-3/4 t-px-1 lg:t-px-2 t-flex t-items-center">
-              <button-component style="second" align="stretch" :icon="activeFilterCount > 0 ? 'check' : 'filter_list'" @click.native="openFilters" class="t-w-full lg:t-w-auto" data-test-id="ButtonFilter">
+            <h1 class="category-title t-hidden lg:t-block t-w-3/4 t-px-1 lg:t-px-2 t-mb-4 t-font-light t-text-2xl t-text-base-dark">
+              <span data-test-id="productsTotal">{{ productsTotal }}</span> {{ $t('Search results for: {term}', { term }) }}
+            </h1>
+            <div class="t-w-full t-px-1 md:t-px-2 t-flex t-flex-wrap t-items-stretch">
+              <button-component style="second" align="center" :icon="activeFilterCount > 0 ? 'check' : 'filter_list'" @click.native="openFilters" class="t-w-full lg:t-w-auto" data-test-id="ButtonFilter">
                 {{ $t('Filters') }}
                 <span v-if="activeFilterCount > 0" v-text="`(${activeFilterCount})`" class="t-flex-grow t-text-left t-pl-2 t-opacity-75" />
               </button-component>
-              <filter-presets class="t-hidden lg:t-flex t-items-center t-ml-2" />
-            </div>
-            <div class="t-w-1/2 lg:t-w-1/4 t-px-1 lg:t-px-2">
-              <sort-by @change="changeFilter" />
+              <div class="t-w-full md:t-flex-1 t-mt-2 md:t-mt-0 t-overflow-x-auto t-hide-scrollbar t-flex t-items-center">
+                <filter-presets class="t-flex t-items-center md:t-ml-2" />
+              </div>
             </div>
           </div>
         </div>
@@ -78,13 +71,10 @@ import { IcmaaGoogleTagManagerExecutors } from 'icmaa-google-tag-manager/hooks'
 import * as productMutationTypes from '@vue-storefront/core/modules/catalog/store/product/mutation-types'
 
 import AsyncSidebar from 'theme/components/core/blocks/AsyncSidebar/AsyncSidebar.vue'
-import SortBy from 'theme/components/core/blocks/Category/SortBy'
 import FilterPresets from 'theme/components/core/blocks/Category/FilterPresets'
 import ProductListing from 'theme/components/core/ProductListing'
 import Breadcrumbs from 'theme/components/core/Breadcrumbs'
-import Dropdown from 'theme/components/core/blocks/Dropdown'
 import ButtonComponent from 'theme/components/core/blocks/Button'
-import MaterialIcon from 'theme/components/core/blocks/MaterialIcon'
 import LoaderBackground from 'theme/components/core/LoaderBackground'
 
 const FilterSidebar = () => import(/* webpackChunkName: "vsf-sidebar-categoryfilter" */ 'theme/components/core/blocks/Category/Sidebar')
@@ -96,14 +86,11 @@ export default {
   components: {
     AsyncSidebar,
     LazyHydrate,
-    Dropdown,
     ButtonComponent,
-    MaterialIcon,
     LoaderBackground,
     FilterPresets,
     ProductListing,
-    Breadcrumbs,
-    SortBy
+    Breadcrumbs
   },
   data () {
     return {
@@ -122,9 +109,9 @@ export default {
       getCurrentSearchQuery: 'category-next/getCurrentSearchQuery',
       getCategoryProducts: 'category-next/getCategoryProducts',
       getCurrentCategory: 'category-next/getCurrentCategory',
-      getCategoryProductsTotal: 'category-next/getCategoryProductsTotal',
       getCurrentFilters: 'category-next/getCurrentFilters',
       getProductsStats: 'category-next/getCategorySearchProductsStats',
+      productsTotal: 'category-next/getCategoryProductsTotal',
       contentHeader: 'icmaaCategoryExtras/getContentHeaderByCurrentCategory',
       term: 'icmaaSearchAlias/getCurrentResultsPageTerm',
       termHash: 'icmaaSearchAlias/getCurrentResultsPageTermHash',
@@ -134,7 +121,7 @@ export default {
       return config.ssr.lazyHydrateFor.includes('category-next.products')
     },
     isCategoryEmpty () {
-      return this.getCategoryProductsTotal === 0
+      return this.productsTotal === 0
     },
     pageSizeOptions () {
       return this.pageSizes.map(s => { return { value: s, label: s } })
