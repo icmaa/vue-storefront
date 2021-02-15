@@ -142,6 +142,7 @@ module.exports = {
       addUtilities(
         {
           '.hide-scrollbar': { 'scrollbar-width': 'none', '-ms-overflow-style': 'none' },
+          '.hide-scrollbar::-webkit-scrollbar': { 'display': 'none' },
           '.webkit-tap-transparent': { '-webkit-tap-highlight-color': 'transparent' },
           '.blend-hard-light': { 'mix-blend-mode': 'hard-light' }
         },

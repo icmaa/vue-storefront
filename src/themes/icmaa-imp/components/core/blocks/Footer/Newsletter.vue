@@ -1,8 +1,8 @@
 <template>
   <div class="newsletter" data-test-id="Newsletter">
-    <h6 class="t-text-primary t-text-lg t-font-bold t-mb-2">
+    <h2 class="t-text-primary t-text-lg t-font-bold t-mb-2">
       {{ $t('Get your {voucher_value} Voucher', { voucher_value }) }}
-    </h6>
+    </h2>
     <p class="t-text-sm t-mb-3 t-leading-tight">
       {{ $t('Get the Impericon Newsletter & and get yourself a {voucher_value} gift.', { voucher_value }) }}
     </p>

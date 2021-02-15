@@ -5,9 +5,9 @@
         <div class="t--mx-4 md:t-flex">
           <div class="t-mb-6 t-px-4 md:t-w-1/3 md:t-mb-0">
             <div class="social-media">
-              <h6 class="t-hidden md:t-block t-text-sm t-text-base-tone t-mb-4">
+              <h2 class="t-hidden md:t-block t-text-sm t-text-base-tone t-mb-4">
                 {{ $t("You can find us on") }}
-              </h6>
+              </h2>
               <div class="t-flex t-flex-wrap t-justify-between xl:t-justify-start">
                 <template v-for="(icon, index) in socialMediaIcons">
                   <a :key="index" :href="icon.href" :title="icon.name" target="_blank" rel="noopener noreferrer" class="t-flex t-flex-fix t-items-center t-justify-center t-w-10 t-h-10 t-rounded-full t-bg-base-light t-text-white md:t-w-8 md:t-h-8 lg:t-w-10 lg:t-h-10 xl:t-mr-4">
@@ -17,9 +17,9 @@
               </div>
             </div>
             <div class="country t-hidden md:t-block t-mt-4" v-if="multistoreEnabled">
-              <h6 class="t-text-sm t-text-base-tone t-mb-4">
+              <h2 class="t-text-sm t-text-base-tone t-mb-4">
                 {{ $t('Choose your country') }}
-              </h6>
+              </h2>
               <div class="t-flex t-flex-wrap t--mx-2">
                 <template v-for="(store, index) in languages">
                   <a :href="store.href" :title="store.label" :key="index" class="t-mx-2 t-mb-2">
@@ -30,9 +30,9 @@
             </div>
           </div>
           <div class="service-carrier t-px-4 t-mb-4 md:t-w-1/3 md:t-mb-0 md:t-justify-start md:t-content-start">
-            <h6 class="t-hidden md:t-block t-text-sm t-text-base-tone t-mb-4">
+            <h2 class="t-hidden md:t-block t-text-sm t-text-base-tone t-mb-4">
               {{ $t("Payments & Shipping") }}
-            </h6>
+            </h2>
             <div class="logos t-flex t-justify-between t-flex-wrap t--mx-2">
               <template v-for="(name, path) in carrierLogos">
                 <div :key="path" class="t-flex t-flex-initial t-w-1/3 t-justify-center t-px-2 t-pb-4">

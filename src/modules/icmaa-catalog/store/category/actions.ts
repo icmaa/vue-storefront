@@ -8,8 +8,7 @@ import { DataResolver } from '@vue-storefront/core/data-resolver/types/DataResol
 import { router } from '@vue-storefront/core/app'
 import { products } from 'config'
 import { changeFilterQuery } from '@vue-storefront/core/modules/catalog-next/helpers/filterHelpers'
-import * as orgTypes from '@vue-storefront/core/modules/catalog-next/store/category/mutation-types'
-import * as types from './mutation-types'
+import * as types from '@vue-storefront/core/modules/catalog-next/store/category/mutation-types'
 
 import extendedCoreActions from './actions/index'
 import searchActions from './actions/search'
@@ -49,11 +48,11 @@ const actions: ActionTree<CategoryState, RootState> = {
       })
     }
 
-    commit(orgTypes.CATEGORY_ADD_CATEGORIES, categories)
+    commit(types.CATEGORY_ADD_CATEGORIES, categories)
 
     return categories
   },
-  async loadChildCategories ({ dispatch, getters, commit }) {
+  async loadChildCategoryFilter ({ dispatch, getters, commit }) {
     let currentCategory: Category = getters.getCurrentCategory
     if (currentCategory) {
       const { children_count, children_data: children } = currentCategory
@@ -75,7 +74,7 @@ const actions: ActionTree<CategoryState, RootState> = {
 
       filters.category.sort((a, b) => a.position - b.position)
 
-      commit(types.CATEGORY_UPD_CATEGORY_FILTERS, { categoryId: currentCategory.id, filters })
+      commit(types.CATEGORY_SET_CATEGORY_FILTERS, { category: currentCategory, filters })
     }
   }
 }

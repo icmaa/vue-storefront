@@ -1,11 +1,17 @@
 <template>
   <sidebar :title="$t('Filter')" :close-icon="closeIcon">
     <template v-slot:top-after-title>
+      <span class="t-font-thin t-text-base-light t-text-sm t-leading-7 t-pt-1 t-pl-2">
+        <span data-test-id="productsTotal">{{ productsTotal }}</span> {{ $t('items') }}
+      </span>
       <button-component v-if="hasActiveFilters" type="transparent" size="sm" icon="delete_sweep" :icon-only="true" @click="resetAllFilters">
         {{ $t('Clear filters') }}
       </button-component>
     </template>
     <div class="t-pb-20">
+      <button-component icon="arrow_forward" type="select" class="t-w-full t-mb-4" @click="openSortMenu()">
+        {{ $t('Sorting') }}
+      </button-component>
       <div v-for="(group, groupKey) in groupedFilters" :key="groupKey">
         <div v-if="groupKey === 1" :class="{ 't-border-t t-border-base-lighter t-mt-8 t-pt-6': groupedFilters[0].length > 0 }">
           <h4 class="t-text-sm t-mb-6">
@@ -50,6 +56,7 @@ import MaterialIcon from 'theme/components/core/blocks/MaterialIcon'
 import sortBy from 'lodash-es/sortBy'
 
 const AsyncFilter = () => import(/* webpackChunkName: "vsf-category-filter" */ 'theme/components/core/blocks/Category/Filter')
+const AsyncListOptions = () => import(/* webpackChunkName: "vsf-category-list-options" */ 'theme/components/core/blocks/Category/ListOptions')
 
 export default {
   name: 'CategorySidebar',
@@ -68,7 +75,8 @@ export default {
       getSystemFilterNames: 'category-next/getSystemFilterNames',
       isVisibleFilter: 'category-next/isVisibleFilter',
       attributeLabel: 'attribute/getAttributeLabel',
-      attributes: 'attribute/getAttributeListByCode'
+      attributes: 'attribute/getAttributeListByCode',
+      productsTotal: 'category-next/getCategoryProductsTotal'
     }),
     availableFilters () {
       const submenuFilters = config.products.submenuFilters || []
@@ -167,15 +175,17 @@ export default {
         const sidebar = { component: AsyncFilter, ...sidebarProps, props: filter }
         this.$store.dispatch('ui/addSidebarPath', { sidebar })
       }
+    },
+    openSortMenu () {
+      const sidebarProps = { title: i18n.t('Sorting') }
+      const sidebar = { component: AsyncListOptions, ...sidebarProps, props: {} }
+      this.$store.dispatch('ui/addSidebarPath', { sidebar })
     }
   },
   watch: {
     closeIcon (closeIcon) {
       this.$store.dispatch('ui/mapSidebarPathItems', sidebar => Object.assign(sidebar, { closeIcon }))
     }
-  },
-  mounted () {
-    this.$store.dispatch('category-next/loadChildCategories')
   }
 }
 </script>
