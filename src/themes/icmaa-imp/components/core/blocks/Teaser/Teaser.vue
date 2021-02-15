@@ -109,6 +109,9 @@ export default {
     }
   },
   watch: {
+    tags () {
+      this.fetchTeaser()
+    },
     currentCluster () {
       this.fetchTeaser()
     },
