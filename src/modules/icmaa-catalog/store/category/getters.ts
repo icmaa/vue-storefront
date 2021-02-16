@@ -46,6 +46,7 @@ const getters: GetterTree<CategoryState, RootState> = {
 
     return intersection(parents, currentFilterKeys).length > 0
   },
+  getFilterCategories: (state, getters) => getters.getAvailableFilters.category || [],
   isCategoryInTicketWhitelist: () => (category: Category): boolean => {
     if (!category || !category.path) {
       return false

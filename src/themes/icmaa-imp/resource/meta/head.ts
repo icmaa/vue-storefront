@@ -114,7 +114,7 @@ const defaults: any = (store: StoreView) => {
         href: `${iconPath}/apple/apple_splash_640.png`,
         sizes: '640x1136'
       },
-      { // iPhone 5, SE
+      {
         rel: 'manifest',
         href: `/dist/manifest.${storeCode}.json`
       }

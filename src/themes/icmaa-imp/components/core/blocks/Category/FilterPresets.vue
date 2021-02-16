@@ -1,6 +1,6 @@
 <template>
   <div class="presets">
-    <button-component v-for="(p, i) in presets" :key="'filter-' + i" size="sm" :icon="p.active ? 'clear' : false" @click.native="changeFilter(p)" class="t-ml-2 t-opacity-75 hover:t-opacity-100">
+    <button-component v-for="(p, i) in presets" :key="'filter-' + i" size="sm" :icon="p.active ? 'clear' : false" @click.native="changeFilter(p)" class="t-flex-shrink-0 t-mr-2 t-opacity-75 hover:t-opacity-100">
       {{ p.label }}
     </button-component>
   </div>
@@ -18,17 +18,12 @@ import sampleSize from 'lodash-es/sampleSize'
 import orderBy from 'lodash-es/orderBy'
 
 export default {
+  name: 'FilterPresets',
   beforeCreate () {
     registerGenericCmsStateModule('filter-presets', 'filter-preset')
   },
   created () {
     this.$store.dispatch('icmaaCmsFilterPresets/list')
-  },
-  props: {
-    limit: {
-      type: Number,
-      default: 4
-    }
   },
   components: {
     ButtonComponent
@@ -82,8 +77,6 @@ export default {
 
           return preset
         })
-
-      presets = sampleSize(presets, this.limit)
 
       if (cluster) {
         presets = orderBy(presets, ['active', 'cluster'], ['desc', 'asc'])
