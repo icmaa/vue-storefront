@@ -5,7 +5,7 @@ import CategoryState, { ProductListingWidgetState } from '../types/CategoryState
 import * as types from './mutation-types'
 import * as catTypes from '@vue-storefront/core/modules/catalog-next/store/category/mutation-types'
 import addDefaultProductFilter from 'icmaa-catalog/helpers/defaultProductFilter'
-import { fetchCategoryById, fetchChildCategories } from '../helpers'
+import { fetchChildCategories } from '../helpers'
 import { SearchQuery } from 'storefront-query-builder'
 import { sortByLetter, getFilterHash } from '../helpers'
 
@@ -13,17 +13,12 @@ import forEach from 'lodash-es/forEach'
 import { Logger } from '@vue-storefront/core/lib/logger'
 
 const actions: ActionTree<CategoryState, RootState> = {
-  async list ({ state, commit }, { id, depth = 1 }): Promise<void> {
+  async list ({ state, commit, dispatch, rootGetters }, { id, depth = 1 }): Promise<void> {
     if (!state.lists.find(item => item.category === id)) {
-      let category = await fetchCategoryById({ id })
-        .then(resp => resp.items[0])
-        .catch(error => {
-          Logger.error('Can\'t find category: ' + id, 'icmaaCategoryList', error)()
-          return false
-        })
-
+      let category = rootGetters['category-next/getCategoryById'](id)
       if (!category) {
-        return
+        category = await dispatch('category-next/loadCategory', { filters: { id } }, { root: true })
+        if (!category) return
       }
 
       let level: number[] = []
