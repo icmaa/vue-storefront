@@ -1,12 +1,10 @@
+import config from 'config'
+import CmsService from 'icmaa-cms/data-resolver/CmsService'
 import { ActionTree } from 'vuex'
 import { UrlState } from '@vue-storefront/core/modules/url/types/UrlState'
-import { PageStateItem } from 'icmaa-cms/types/PageState'
-import { GenericStateItem } from 'icmaa-cms/types/GenericState'
-import { Competition as CompetitionStateItem } from 'icmaa-competitions/types/CompetitionsState'
 import { removeStoreCodeFromRoute, currentStoreView, localizedDispatcherRouteName } from '@vue-storefront/core/lib/multistore'
 import { removeHashFromRoute } from '../helpers'
 import { Logger } from '@vue-storefront/core/lib/logger'
-import config from 'config'
 
 interface UrlMapperOptions {
   urlPath: string,
@@ -29,7 +27,7 @@ const getLocalizedDispatcherRouteName = (name) => {
 /**
  * This is our custom url fallback mapper for custom urls
  */
-const forCustomUrls = async ({ dispatch }, { urlPath }: UrlMapperOptions) => {
+const customUrls = async ({ dispatch }, { urlPath }: UrlMapperOptions) => {
   if (config.hasOwnProperty('icmaa_url')) {
     let urlFromConfig = config.icmaa_url.find((item) => item.request_path === urlPath)
     if (urlFromConfig) {
@@ -41,72 +39,62 @@ const forCustomUrls = async ({ dispatch }, { urlPath }: UrlMapperOptions) => {
   return undefined
 }
 
-/**
- * This is our cms page url fallback mapper
- */
-const forCmsPageUrls = async ({ dispatch }, { urlPath }: UrlMapperOptions) => {
-  return dispatch('icmaaCmsPage/single', { value: urlPath }, { root: true })
-    .then((page: PageStateItem) => {
-      if (page !== null && (page.content || page.rte)) {
-        return {
-          name: getLocalizedDispatcherRouteName(page.routeName || 'icmaa-cms-page'),
-          params: {
-            identifier: page.identifier
-          }
-        }
-      }
-
-      return undefined
-    })
-    .catch(() => undefined)
-}
-
-/**
- * This is our cms landing page url fallback mapper
- */
-const forCmsLandingPageUrls = async ({ dispatch }, { urlPath }: UrlMapperOptions) => {
-  return dispatch('icmaaCmsLandingPages/single', { value: urlPath }, { root: true })
-    .then((page: GenericStateItem) => {
-      if (page !== null && Object.values(page).length > 0) {
-        return {
-          name: getLocalizedDispatcherRouteName('icmaa-cms-landing-page'),
-          params: {
-            identifier: page.identifier
-          }
-        }
-      }
-
-      return undefined
-    })
-    .catch(() => undefined)
-}
-
-/**
- * This is our competitions url fallback mapper
- */
-const forCmsCompetitionsUrls = async ({ dispatch }, { urlPath }: UrlMapperOptions) => {
-  return dispatch('icmaaCompetitions/single', { value: urlPath }, { root: true })
-    .then((competition: CompetitionStateItem) => {
-      if (competition !== null && competition.enabled === true) {
-        return {
-          name: 'icmaa-competition',
-          params: {
-            identifier: competition.identifier
-          }
-        }
-      }
-
-      return undefined
-    })
-    .catch(() => undefined)
-}
-
 export const actions: ActionTree<UrlState, any> = {
+  async mapCmsUrls ({ commit, rootGetters }, { urlPath }: UrlMapperOptions) {
+    /**
+     * @todo Load items from state if exists
+     */
+    // if (state.items && state.items.length > 0) {
+    //   const existing = state.items.find(v => v['identifier'] === urlPath)
+    //   if (existing) {
+    //     return existing
+    //   }
+    // }
+
+    const typeMap = {
+      'page': 'icmaaCmsPage',
+      'landing-page': 'icmaaCmsLandingPage',
+      'competition': 'icmaaCmsCompetition'
+    }
+
+    return CmsService
+      .single({ documentType: Object.keys(typeMap).join(','), uid: urlPath })
+      .then((payload: any) => {
+        console.error(payload)
+
+        if (payload !== null && Object.values(payload).length > 0 && typeMap[payload.component]) {
+          const { component, identifier } = payload
+          const stateKey = typeMap[component]
+
+          commit(`${stateKey}/ADD`, payload, { root: true })
+
+          let route
+          try {
+            route = rootGetters[`${stateKey}/getRouteByIdentifier`](urlPath)
+            if (!route) {
+              throw Error(`No getter found: ${stateKey}/getRouteByIdentifier`)
+            }
+          } catch (err) {
+            route = {
+              name: `icmaa-cms-${component}`,
+              params: { identifier }
+            }
+          }
+
+          route.name = getLocalizedDispatcherRouteName(route.name)
+
+          return route
+        }
+
+        return undefined
+      })
+      .catch(() => undefined)
+  },
   async mapFallbackUrl ({ dispatch }, { url, params }: { url: string, params: any }) {
     const urlPath = getUrlPathFromUrl(url)
     const paramsObj = { urlPath, params }
 
-    const customUrl = await forCustomUrls({ dispatch }, paramsObj)
+    const customUrl = await customUrls({ dispatch }, paramsObj)
     if (customUrl) {
       return customUrl
     }
@@ -121,19 +109,9 @@ export const actions: ActionTree<UrlState, any> = {
       return result
     }
 
-    const cmsPageUrl = await forCmsPageUrls({ dispatch }, paramsObj)
+    const cmsPageUrl = await dispatch('mapCmsUrls', paramsObj)
     if (cmsPageUrl) {
       return cmsPageUrl
-    }
-
-    const cmsLandingPageUrl = await forCmsLandingPageUrls({ dispatch }, paramsObj)
-    if (cmsLandingPageUrl) {
-      return cmsLandingPageUrl
-    }
-
-    const cmsCompetitionsUrl = await forCmsCompetitionsUrls({ dispatch }, paramsObj)
-    if (cmsCompetitionsUrl) {
-      return cmsCompetitionsUrl
     }
 
     Logger.error('No route found for:', 'icmaa-url', url)()
