@@ -7,12 +7,12 @@ import CmsMetaMixin from 'icmaa-meta/mixins/cmsMeta'
 export default {
   mixins: [ CmsMetaMixin ],
   computed: {
-    ...mapGetters('icmaaCmsPage', ['getPageByIdentifier']),
+    ...mapGetters('icmaaCmsPage', ['getByIdentifier']),
     identifier (): string {
       return this.$route.params.identifier
     },
     page (): PageStateItem {
-      return this.getPageByIdentifier(this.identifier)
+      return this.getByIdentifier(this.identifier)
     },
     pageData (): string {
       return this.page.content

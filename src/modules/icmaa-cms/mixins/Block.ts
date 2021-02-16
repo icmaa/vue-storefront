@@ -23,12 +23,12 @@ export default {
     await this.fetchContent()
   },
   computed: {
-    ...mapGetters('icmaaCmsBlock', ['getBlockByIdentifier']),
+    ...mapGetters('icmaaCmsBlock', ['getByIdentifier']),
     loaded (): boolean {
       return (this.block && this.block.hasOwnProperty('content'))
     },
     block (): BlockStateItem {
-      return this.getBlockByIdentifier(this.identifier)
+      return this.getByIdentifier(this.identifier)
     },
     content (): object {
       return stringToComponent(this.block.content)

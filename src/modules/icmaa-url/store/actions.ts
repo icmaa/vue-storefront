@@ -53,15 +53,13 @@ export const actions: ActionTree<UrlState, any> = {
 
     const typeMap = {
       'page': 'icmaaCmsPage',
-      'landing-page': 'icmaaCmsLandingPage',
-      'competition': 'icmaaCmsCompetition'
+      'landing-page': 'icmaaCmsLandingPages',
+      'competition': 'icmaaCompetitions'
     }
 
     return CmsService
       .single({ documentType: Object.keys(typeMap).join(','), uid: urlPath })
       .then((payload: any) => {
-        console.error(payload)
-
         if (payload !== null && Object.values(payload).length > 0 && typeMap[payload.component]) {
           const { component, identifier } = payload
           const stateKey = typeMap[component]
