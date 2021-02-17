@@ -29,13 +29,25 @@ const getLocalizedDispatcherRouteName = (name) => {
 /**
  * This is our custom url fallback mapper for custom urls
  */
-const customUrls = async ({ dispatch }, { urlPath }: UrlMapperOptions) => {
+const customUrls = async ({ urlPath }: UrlMapperOptions) => {
   if (has(config, 'icmaa_url.custom')) {
-    let urlFromConfig = config.icmaa_url.custom.find((item) => item.request_path === urlPath)
+    let urlFromConfig = config.icmaa_url.custom.find(item => item.request_path === urlPath)
     if (urlFromConfig) {
       delete urlFromConfig.request_path
       return urlFromConfig
     }
+  }
+
+  return undefined
+}
+
+/**
+ * This is for CMS url's that should overwrite major entity url's like products/categories.
+ * Otherwise we would need to check the CMS api before each product-/category-request.
+ */
+const isCmsOverwrite = async (urlPath: string) => {
+  if (has(config, 'icmaa_url.cmsOverwrites')) {
+    return config.icmaa_url.cmsOverwrites.find(path => path === urlPath)
   }
 
   return undefined
@@ -80,9 +92,16 @@ export const actions: ActionTree<UrlState, any> = {
     const urlPath = getUrlPathFromUrl(url)
     const paramsObj = { urlPath, params }
 
-    const customUrl = await customUrls({ dispatch }, paramsObj)
+    const customUrl = await customUrls(paramsObj)
     if (customUrl) {
       return customUrl
+    }
+
+    if (isCmsOverwrite(urlPath)) {
+      const cmsPageUrl = await dispatch('mapCmsUrls', paramsObj)
+      if (cmsPageUrl) {
+        return cmsPageUrl
+      }
     }
 
     // This is the code of VSF
