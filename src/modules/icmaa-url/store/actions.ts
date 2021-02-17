@@ -45,11 +45,12 @@ const customUrls = async ({ urlPath }: UrlMapperOptions) => {
  * This is for CMS url's that should overwrite major entity url's like products/categories.
  * Otherwise we would need to check the CMS api before each product-/category-request.
  */
-const isCmsOverwrite = async (urlPath: string) => {
+const isCmsOverwrite = (urlPath: string): string => {
   if (has(config, 'icmaa_url.cmsOverwrites')) {
-    return config.icmaa_url.cmsOverwrites.find(path => path === urlPath)
+    const rewrite = config.icmaa_url.cmsOverwrites
+      .find(p => typeof p === 'object' ? Object.keys(p).includes(urlPath) : p === urlPath)
+    return typeof rewrite === 'object' ? Object.values(rewrite).pop() : rewrite
   }
-
   return undefined
 }
 
@@ -97,7 +98,9 @@ export const actions: ActionTree<UrlState, any> = {
       return customUrl
     }
 
-    if (isCmsOverwrite(urlPath)) {
+    const isOverwrite = isCmsOverwrite(urlPath)
+    if (isOverwrite) {
+      paramsObj.urlPath = isOverwrite
       const cmsPageUrl = await dispatch('mapCmsUrls', paramsObj)
       if (cmsPageUrl) {
         return cmsPageUrl
