@@ -4,8 +4,8 @@ import RootState from '@vue-storefront/core/types/RootState'
 import { Logger } from '@vue-storefront/core/lib/logger'
 
 const getters: GetterTree<BlockState, RootState> = {
-  getBlocks: (state) => state.items,
-  getBlockByIdentifier: (state) => (identifier): BlockStateItem => {
+  getItems: (state) => state.items,
+  getByIdentifier: (state) => (identifier): BlockStateItem => {
     return state.items.find(item => item.identifier === identifier)
   },
   getJsonBlockByIdentifier: (state) => (identifier): Record<string, any>|false => {

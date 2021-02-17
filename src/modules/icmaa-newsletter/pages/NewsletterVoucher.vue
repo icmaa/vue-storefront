@@ -65,7 +65,7 @@ export default {
   computed: {
     ...mapGetters({
       voucher: 'newsletter/getVoucher',
-      getBlockByIdentifier: 'icmaaCmsBlock/getBlockByIdentifier'
+      getBlockByIdentifier: 'icmaaCmsBlock/getByIdentifier'
     }),
     email () {
       return this.$route.query.email
