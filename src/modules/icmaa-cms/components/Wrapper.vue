@@ -1,10 +1,15 @@
 <template>
   <div class="t-flex t-flex-wrap t--mx-4 t-flex-full">
-    <div v-for="(c, i) in componentsReady" :key="`${c.name}-${i}`" class="t-flex-auto" :class="[{ 't-px-4': c.padding, 't-w-full': (c.size === 'full'), 'lg:t-w-1/2': (c.size === 'half') }, c.cssClass]">
+    <div v-for="(c, i) in aggregatedComponents" :key="`${c.name}-${i}`" class="t-flex-auto" :class="[{ 't-px-4': c.padding, 't-w-full': (c.size === 'full'), 'lg:t-w-1/2': (c.size === 'half') }, c.cssClass]">
       <router-link v-if="c.hasLink" :to="localizedRoute(c.props.componentLink)">
         <component :is="c.component" v-bind="c.props" :name="c.type" />
       </router-link>
-      <component :is="c.component" v-bind="c.props" :name="c.type" v-else />
+      <template v-else>
+        <lazyload v-if="c.lazyload">
+          <component :is="c.component" v-bind="c.props" :name="c.type" />
+        </lazyload>
+        <component :is="c.component" v-bind="c.props" :name="c.type" v-else />
+      </template>
     </div>
   </div>
 </template>
@@ -16,14 +21,21 @@ import mapKeys from 'lodash-es/mapKeys'
 import mapValues from 'lodash-es/mapValues'
 import camelCase from 'lodash-es/camelCase'
 
+import Lazyload from 'icmaa-cms/components/Lazyload'
+
 const AsyncLogoline = () => import(/* webpackChunkName: "vsf-content-block-logoline" */ 'theme/components/core/blocks/CategoryExtras/LogoLine')
 const AsyncTeaser = () => import(/* webpackChunkName: "vsf-content-block-teaser" */ 'theme/components/core/blocks/Teaser/Teaser')
+const AsyncHeadline = () => import(/* webpackChunkName: "vsf-content-block-headline" */ 'theme/components/core/blocks/Headline')
 const AsyncText = () => import(/* webpackChunkName: "vsf-content-block-text" */ 'theme/components/core/blocks/RichText')
 const AsyncPicture = () => import(/* webpackChunkName: "vsf-content-block-picture" */ 'theme/components/core/blocks/Picture')
 const AsyncProductlisting = () => import(/* webpackChunkName: "vsf-content-block-productlisting" */ '../../icmaa-category/components/ProductListingWidget')
+const AsyncCategorylist = () => import(/* webpackChunkName: "vsf-content-block-categorylist" */ 'icmaa-category/components/List/List')
 
 export default {
   name: 'CmsBlockWrapper',
+  components: {
+    Lazyload
+  },
   props: {
     components: {
       type: Array,
@@ -57,6 +69,13 @@ export default {
           cssClass: 't-mb-4 lg:t-mb-6',
           padding: true
         },
+        'component_headline': {
+          component: AsyncHeadline,
+          propsTypes: {},
+          propsDefaults: {},
+          cssClass: 't-my-4',
+          padding: false
+        },
         'component_text': {
           component: AsyncText,
           propsTypes: {},
@@ -85,10 +104,19 @@ export default {
           },
           cssClass: 't-mb-8',
           padding: false
+        },
+        'component_categorylist': {
+          component: AsyncCategorylist,
+          propsTypes: {
+            categoryId: 'number'
+          },
+          propsDefaults: {},
+          cssClass: 't-mb-8',
+          padding: false
         }
       }
     },
-    componentsReady () {
+    aggregatedComponents () {
       return this.components
         .filter(c => Object.keys(this.componentsMap).includes(c.component))
         .map(c => {
@@ -96,9 +124,10 @@ export default {
           const { component, propsTypes, propsDefaults, cssClass, padding } = componentsMap
 
           const size = c.hasOwnProperty('width') ? c.width : 'full'
+          const lazyload = c.hasOwnProperty('lazyload') ? c.lazyload : false
 
           let props = mapKeys(
-            omit(c, ['_uid', 'component', 'width']),
+            omit(c, ['_uid', 'component', 'width', 'lazyload']),
             (v, k) => camelCase(k)
           )
 
@@ -132,7 +161,7 @@ export default {
           const type = c.component.replace('component_', '')
           const hasLink = Object.keys(props).includes('componentLink')
 
-          return { type, component, props, cssClass, padding, size, hasLink }
+          return { type, component, props, cssClass, padding, size, hasLink, lazyload }
         })
     }
   }

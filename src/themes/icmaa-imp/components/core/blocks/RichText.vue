@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import config from 'config'
+
 import { stringToComponent } from 'icmaa-cms/helpers'
 
 export default {
