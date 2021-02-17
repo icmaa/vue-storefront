@@ -1,3 +1,3 @@
-export const ICMAA_ADVICE_ADD = 'ADD_ADVICE'
-export const ICMAA_ADVICE_UPD = 'UPDATE_ADVICE'
-export const ICMAA_ADVICE_RMV = 'REMOVE_ADVICE'
+export const ICMAA_ADVICE_ADD = 'ADD'
+export const ICMAA_ADVICE_UPD = 'UPD'
+export const ICMAA_ADVICE_RMV = 'RMV'
