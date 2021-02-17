@@ -48,11 +48,11 @@ You can add your mappings to the `config/local.json`:
       "landing-page": "icmaaCmsLandingPages",
       "competition": "icmaaCompetitions"
     }
-    "cmsOverwrites": [
-      "fashion.html",
-      "merchandise.html",
+    "cmsOverwrites": {
+      "fashion.html": [ "fashion", "streetwear" ],
+      "cms-identifier.html": [ "alias-1.html", "alias-2" ],
       ...
-    ],
+    },
     "custom": [
       {
         "request_path": "new",

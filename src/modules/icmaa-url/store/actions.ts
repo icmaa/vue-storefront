@@ -47,9 +47,10 @@ const customUrls = async ({ urlPath }: UrlMapperOptions) => {
  */
 const isCmsOverwrite = (urlPath: string): string => {
   if (has(config, 'icmaa_url.cmsOverwrites')) {
-    const rewrite = config.icmaa_url.cmsOverwrites
-      .find(p => typeof p === 'object' ? Object.keys(p).includes(urlPath) : p === urlPath)
-    return typeof rewrite === 'object' ? Object.values(rewrite).pop() : rewrite
+    const { cmsOverwrites: overwrites } = config.icmaa_url
+    const overwrite = Object.entries<string[]>(overwrites)
+      .find(([path, aliases]) => path === urlPath || aliases.includes(urlPath))
+    return overwrite ? overwrite.shift() as string : undefined
   }
   return undefined
 }
