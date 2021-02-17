@@ -6,6 +6,8 @@ import { removeStoreCodeFromRoute, currentStoreView, localizedDispatcherRouteNam
 import { removeHashFromRoute } from '../helpers'
 import { Logger } from '@vue-storefront/core/lib/logger'
 
+import has from 'lodash-es/has'
+
 interface UrlMapperOptions {
   urlPath: string,
   params: Record<string, any>
@@ -28,8 +30,8 @@ const getLocalizedDispatcherRouteName = (name) => {
  * This is our custom url fallback mapper for custom urls
  */
 const customUrls = async ({ dispatch }, { urlPath }: UrlMapperOptions) => {
-  if (config.hasOwnProperty('icmaa_url')) {
-    let urlFromConfig = config.icmaa_url.find((item) => item.request_path === urlPath)
+  if (has(config, 'icmaa_url.custom')) {
+    let urlFromConfig = config.icmaa_url.custom.find((item) => item.request_path === urlPath)
     if (urlFromConfig) {
       delete urlFromConfig.request_path
       return urlFromConfig
@@ -41,21 +43,7 @@ const customUrls = async ({ dispatch }, { urlPath }: UrlMapperOptions) => {
 
 export const actions: ActionTree<UrlState, any> = {
   async mapCmsUrls ({ commit, rootGetters }, { urlPath }: UrlMapperOptions) {
-    /**
-     * @todo Load items from state if exists
-     */
-    // if (state.items && state.items.length > 0) {
-    //   const existing = state.items.find(v => v['identifier'] === urlPath)
-    //   if (existing) {
-    //     return existing
-    //   }
-    // }
-
-    const typeMap = {
-      'page': 'icmaaCmsPage',
-      'landing-page': 'icmaaCmsLandingPages',
-      'competition': 'icmaaCompetitions'
-    }
+    const { cmsTypeMap: typeMap } = config.icmaa_url
 
     return CmsService
       .single({ documentType: Object.keys(typeMap).join(','), uid: urlPath })
