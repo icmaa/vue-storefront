@@ -18,9 +18,9 @@
                 {{ $t('Filters') }}
                 <span v-if="activeFilterCount > 0" v-text="`(${activeFilterCount})`" class="t-flex-grow t-text-left t-pl-2 t-opacity-75" />
               </button-component>
-              <div class="t-w-full md:t-flex-1 t-mt-2 md:t-mt-0 t-overflow-x-auto t-hide-scrollbar t-flex t-items-center">
+              <div class="t-w-full lg:t-flex-1 t-mt-2 lg:t-mt-0 t-overflow-x-auto t-hide-scrollbar t-flex t-items-center">
                 <filter-presets class="t-flex t-items-center md:t-ml-2" v-if="shouldLoadPresets" />
-                <category-links :categories="filterCategories" class="t-flex t-items-center md:t-ml-2" v-else />
+                <category-links :categories="filterCategories" class="t-flex t-items-center lg:t-ml-2" v-else />
               </div>
             </div>
           </div>
