@@ -154,7 +154,8 @@
               text: $t('This is not a valid postcode. Format: {code}', { code: postCodeFormat})
             }
           ]"
-          class="t-w-1/2 lg:t-w-1/4 t-px-2 t-mb-4"
+          :class="[ showStateSelect ? 't-w-full lg:t-w-1/2' : 't-w-1/2 lg:t-w-1/4']"
+          class="t-px-2 t-mb-4"
         />
         <country-select
           name="country_id"
@@ -166,6 +167,16 @@
             text: $t('Field is required.')
           }]"
           class="t-w-1/2 lg:t-w-1/4 t-px-2 t-mb-4"
+        />
+        <base-select
+          name="state_id"
+          id="state_id"
+          v-model="address.state_id"
+          :initial-option-text="$t('State')"
+          :label="$t('State') + ' *'"
+          :options="states"
+          class="t-w-1/2 lg:t-w-1/4 t-px-2 t-mb-4"
+          v-if="showStateSelect"
         />
         <div class="t-w-full lg:t-w-1/2 t-px-2 t-mb-4">
           <base-input
@@ -199,6 +210,7 @@
             class="t-w-full lg:t-w-1/2 t-px-2"
           />
         </div>
+        <div class="t-w-full" />
         <base-checkbox
           name="is_default_billing"
           id="is_default_billing"
@@ -239,26 +251,24 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import config from 'config'
 import i18n from '@vue-storefront/i18n'
 import { currentStoreView } from '@vue-storefront/core/lib/multistore'
 
 import pick from 'lodash-es/pick'
-import invert from 'lodash-es/invert'
 
-import { required, minLength, email, sameAs } from 'vuelidate/lib/validators'
+import { required } from 'vuelidate/lib/validators'
 import { latin, unicodeAlphaNum, streetname, housenumber, postcode, getPostcodeRegex } from 'icmaa-config/helpers/validators'
-import { date } from 'icmaa-config/helpers/validators'
-import { toDate } from 'icmaa-config/helpers/datetime'
 
 import Headline from 'theme/components/core/blocks/MyAccount/Headline'
-import BaseCheckbox from 'theme/components/core/blocks/Form/BaseCheckbox'
 import BaseInput from 'theme/components/core/blocks/Form/BaseInput'
+import BaseSelect from 'theme/components/core/blocks/Form/BaseSelect'
+import BaseCheckbox from 'theme/components/core/blocks/Form/BaseCheckbox'
 import ButtonComponent from 'theme/components/core/blocks/Button'
 import CountrySelect from 'theme/components/core/blocks/Form/CountrySelect'
 import MaterialIcon from 'theme/components/core/blocks/MaterialIcon'
 
-import { getTranslatedCountries } from 'icmaa-config/helpers/countries'
+import { getTranslatedCountries } from 'icmaa-config/helpers/i18n/countries'
+import { getStates } from 'icmaa-config/helpers/i18n/states'
 
 export default {
   name: 'MyAdresses',
@@ -273,8 +283,9 @@ export default {
   },
   components: {
     Headline,
-    BaseCheckbox,
     BaseInput,
+    BaseSelect,
+    BaseCheckbox,
     ButtonComponent,
     CountrySelect,
     MaterialIcon
@@ -282,6 +293,7 @@ export default {
   computed: {
     ...mapGetters({
       viewport: 'ui/getViewport',
+      storeConfig: 'icmaaConfig/getCurrentStoreConfig',
       customer: 'user/getCustomer'
     }),
     addresses () {
@@ -301,6 +313,16 @@ export default {
     },
     postCodeFormat () {
       return getPostcodeRegex(this.address.country_id)[1]
+    },
+    showStateSelect () {
+      return this.address.country_id === 'US'
+    },
+    states () {
+      if (this.showStateSelect) {
+        return getStates().map(({ code: value, name: label }) => ({ label, value }))
+      }
+
+      return []
     },
     houseNumberAdvice () {
       const street = this.address.street.join('')

@@ -10,8 +10,9 @@
 
 <script>
 import BaseSelect from 'theme/components/core/blocks/Form/BaseSelect'
+import { mapGetters } from 'vuex'
 import { currentStoreView } from '@vue-storefront/core/lib/multistore'
-import { getTranslatedCountries } from 'icmaa-config/helpers/countries'
+import { getTranslatedCountries } from 'icmaa-config/helpers/i18n/countries'
 
 export default {
   name: 'CountrySelect',
@@ -26,6 +27,10 @@ export default {
     preselectStoreViewLanguage: {
       type: Boolean,
       default: true
+    },
+    onlyAllowed: {
+      type: Boolean,
+      default: true
     }
   },
   data () {
@@ -34,6 +39,9 @@ export default {
     }
   },
   computed: {
+    ...mapGetters({
+      storeConfig: 'icmaaConfig/getCurrentStoreConfig'
+    }),
     country () {
       if (!this.value && this.preselectStoreViewLanguage) {
         return currentStoreView().i18n.defaultCountry
@@ -41,12 +49,9 @@ export default {
       return this.value
     },
     countryOptions () {
-      return this.countries.map((item) => {
-        return {
-          value: item.code,
-          label: item.name
-        }
-      })
+      return this.countries
+        .filter(({ code }) => !this.onlyAllowed || this.storeConfig.i18n.allowedCountries.includes(code))
+        .map(({ code: value, name: label }) => ({ value, label }))
     }
   }
 }
