@@ -169,12 +169,16 @@
           class="t-w-1/2 lg:t-w-1/4 t-px-2 t-mb-4"
         />
         <base-select
-          name="state_id"
-          id="state_id"
-          v-model="address.state_id"
+          name="region_id"
+          id="region_id"
+          v-model="address.region_id"
           :initial-option-text="$t('State')"
           :label="$t('State') + ' *'"
           :options="states"
+          :validations="[{
+            condition: !validation.region_id.required && validation.region_id.$error,
+            text: $t('Field is required.')
+          }]"
           class="t-w-1/2 lg:t-w-1/4 t-px-2 t-mb-4"
           v-if="showStateSelect"
         />
@@ -298,11 +302,11 @@ export default {
     }),
     addresses () {
       return this.customer.addresses.map(address => {
-        let { entity_id, company, prefix, firstname, lastname, suffix, postcode, city, country_id, is_default_billing, is_default_shipping } = address
+        let { entity_id, company, prefix, firstname, lastname, suffix, postcode, city, country_id, is_default_billing, is_default_shipping, region_id } = address
         let country = this.countries.find(c => c.code === country_id)
         let street = address.street.filter(s => s.length > 0).join('<br>')
 
-        return { entity_id, company, prefix, firstname, lastname, suffix, street, postcode, city, country, is_default_billing, is_default_shipping }
+        return { entity_id, company, prefix, firstname, lastname, suffix, street, postcode, city, country, is_default_billing, is_default_shipping, region_id }
       })
     },
     validation () {
@@ -425,6 +429,7 @@ export default {
         postcode: '',
         city: '',
         country_id: currentStoreView().storeCode.toUpperCase(),
+        region_id: null,
         telephone: '',
         vat_id: null,
         is_default_billing: false,
@@ -481,6 +486,9 @@ export default {
           latin
         },
         country_id: {
+          required
+        },
+        region_id: {
           required
         },
         street: {
