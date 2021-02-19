@@ -9,10 +9,12 @@
 </template>
 
 <script>
+import config from 'config'
 import BaseSelect from 'theme/components/core/blocks/Form/BaseSelect'
-import { mapGetters } from 'vuex'
 import { currentStoreView } from '@vue-storefront/core/lib/multistore'
 import { getTranslatedCountries } from 'icmaa-config/helpers/i18n/countries'
+
+import get from 'lodash-es/get'
 
 export default {
   name: 'CountrySelect',
@@ -39,18 +41,23 @@ export default {
     }
   },
   computed: {
-    ...mapGetters({
-      storeConfig: 'icmaaConfig/getCurrentStoreConfig'
-    }),
     country () {
       if (!this.value && this.preselectStoreViewLanguage) {
         return currentStoreView().i18n.defaultCountry
       }
       return this.value
     },
+    allowedCountries () {
+      /**
+       * We can't just use the values from `currentStoreView()`, because they are concatenated by
+       * the lodash/merge method instead of overwritten – thats why we call them this way.
+       */
+      const storeConfigPath = `storeViews.${currentStoreView().storeCode}.i18n.allowedCountries`
+      return get(config, storeConfigPath, config.i18n.allowedCountries || [])
+    },
     countryOptions () {
       return this.countries
-        .filter(({ code }) => !this.onlyAllowed || this.storeConfig.i18n.allowedCountries.includes(code))
+        .filter(({ code }) => !this.onlyAllowed || this.allowedCountries.includes(code))
         .map(({ code: value, name: label }) => ({ value, label }))
     }
   }
