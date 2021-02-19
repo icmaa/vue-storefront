@@ -23,13 +23,12 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { StorageManager } from '@vue-storefront/core/lib/storage-manager'
 
 import GoogleCustomerReview from 'icmaa-google-tag-manager/components/GoogleCustomerReview'
 import CheckoutSuccessGtmMixin from 'icmaa-google-tag-manager/mixins/checkoutSuccessGtm'
 
 export default {
-  name: 'ExternalThankYouPage',
+  name: 'ExternalCheckoutSuccess',
   components: {
     GoogleCustomerReview
   },

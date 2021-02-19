@@ -154,7 +154,7 @@
               text: $t('This is not a valid postcode. Format: {code}', { code: postCodeFormat})
             }
           ]"
-          :class="[ showStateSelect ? 't-w-full lg:t-w-1/2' : 't-w-1/2 lg:t-w-1/4']"
+          :class="[ hasState ? 't-w-full lg:t-w-1/2' : 't-w-1/2 lg:t-w-1/4']"
           class="t-px-2 t-mb-4"
         />
         <country-select
@@ -180,7 +180,7 @@
             text: $t('Field is required.')
           }]"
           class="t-w-1/2 lg:t-w-1/4 t-px-2 t-mb-4"
-          v-if="showStateSelect"
+          v-if="hasState"
         />
         <div class="t-w-full lg:t-w-1/2 t-px-2 t-mb-4">
           <base-input
@@ -318,11 +318,8 @@ export default {
     postCodeFormat () {
       return getPostcodeRegex(this.address.country_id)[1]
     },
-    showStateSelect () {
-      return this.address.country_id === 'US'
-    },
     states () {
-      if (this.showStateSelect) {
+      if (this.hasState) {
         return getStates().map(({ code: value, name: label }) => ({ label, value }))
       }
 
@@ -338,6 +335,9 @@ export default {
     isDefaultAddress () {
       let address = this.customerAddress
       return address && (address.is_default_billing === true || address.is_default_shipping === true)
+    },
+    hasState () {
+      return ['US'].includes(this.countryId)
     },
     hasVatId () {
       return ['IT'].includes(this.countryId)
@@ -472,6 +472,10 @@ export default {
       vat_id: { required }
     } : {}
 
+    const region_id = this.hasState ? {
+      region_id: { required }
+    } : {}
+
     return {
       address: {
         firstname: {
@@ -486,9 +490,6 @@ export default {
           latin
         },
         country_id: {
-          required
-        },
-        region_id: {
           required
         },
         street: {
@@ -510,6 +511,7 @@ export default {
         telephone: {
           unicodeAlphaNum
         },
+        ...region_id,
         ...vatId
       }
     }
