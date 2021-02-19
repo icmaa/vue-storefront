@@ -5,11 +5,13 @@ import ConfigState, { StoreView } from '../types/ConfigState'
 import * as types from './mutation-types'
 import { getExtendedStoreviewConfig } from '../helpers'
 import { Logger } from '@vue-storefront/core/lib/logger'
+import { currentStoreView } from '@vue-storefront/core/lib/multistore'
 
 const actions: ActionTree<ConfigState, RootState> = {
-  setMap (context): StoreView[] {
+  setMap ({ commit }, storeView?: StoreView): StoreView[] {
     Logger.debug('Hydrate store-view config values', 'icmaa-config')()
 
+    if (!storeView) storeView = currentStoreView()
     const { icmaa_config, storeViews } = config
     let storeConfigs = storeViews.mapStoreUrlsFor.map(storeCode => {
       let store = icmaa_config.map.find(s => s.storeCode === storeCode) || { storeCode }
@@ -17,9 +19,11 @@ const actions: ActionTree<ConfigState, RootState> = {
       return store
     })
 
-    storeConfigs = storeConfigs.map(storeConfig => getExtendedStoreviewConfig(storeConfig, storeConfigs))
+    storeConfigs = storeConfigs
+      .map(storeConfig => getExtendedStoreviewConfig(storeConfig, storeConfigs))
+      .filter(store => store.storeCode === storeView.storeCode)
 
-    context.commit(types.ICMAA_CONFIG_ADD_MAP, storeConfigs)
+    commit(types.ICMAA_CONFIG_ADD_MAP, storeConfigs)
     return storeConfigs
   }
 }

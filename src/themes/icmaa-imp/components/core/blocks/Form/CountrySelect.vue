@@ -9,9 +9,12 @@
 </template>
 
 <script>
+import config from 'config'
 import BaseSelect from 'theme/components/core/blocks/Form/BaseSelect'
 import { currentStoreView } from '@vue-storefront/core/lib/multistore'
-import { getTranslatedCountries } from 'icmaa-config/helpers/countries'
+import { getTranslatedCountries } from 'icmaa-config/helpers/i18n/countries'
+
+import get from 'lodash-es/get'
 
 export default {
   name: 'CountrySelect',
@@ -24,6 +27,10 @@ export default {
       required: true
     },
     preselectStoreViewLanguage: {
+      type: Boolean,
+      default: true
+    },
+    onlyAllowed: {
       type: Boolean,
       default: true
     }
@@ -40,13 +47,18 @@ export default {
       }
       return this.value
     },
+    allowedCountries () {
+      /**
+       * We can't just use the values from `currentStoreView()`, because they are concatenated by
+       * the lodash/merge method instead of overwritten – thats why we call them this way.
+       */
+      const storeConfigPath = `storeViews.${currentStoreView().storeCode}.i18n.allowedCountries`
+      return get(config, storeConfigPath, config.i18n.allowedCountries || [])
+    },
     countryOptions () {
-      return this.countries.map((item) => {
-        return {
-          value: item.code,
-          label: item.name
-        }
-      })
+      return this.countries
+        .filter(({ code }) => !this.onlyAllowed || this.allowedCountries.includes(code))
+        .map(({ code: value, name: label }) => ({ value, label }))
     }
   }
 }

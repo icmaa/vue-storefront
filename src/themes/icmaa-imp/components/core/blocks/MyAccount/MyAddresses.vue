@@ -154,7 +154,8 @@
               text: $t('This is not a valid postcode. Format: {code}', { code: postCodeFormat})
             }
           ]"
-          class="t-w-1/2 lg:t-w-1/4 t-px-2 t-mb-4"
+          :class="[ hasState ? 't-w-full lg:t-w-1/2' : 't-w-1/2 lg:t-w-1/4']"
+          class="t-px-2 t-mb-4"
         />
         <country-select
           name="country_id"
@@ -166,6 +167,20 @@
             text: $t('Field is required.')
           }]"
           class="t-w-1/2 lg:t-w-1/4 t-px-2 t-mb-4"
+        />
+        <base-select
+          name="region_id"
+          id="region_id"
+          v-model="address.region_id"
+          :initial-option-text="$t('State')"
+          :label="$t('State') + ' *'"
+          :options="states"
+          :validations="[{
+            condition: !validation.region_id.required && validation.region_id.$error,
+            text: $t('Field is required.')
+          }]"
+          class="t-w-1/2 lg:t-w-1/4 t-px-2 t-mb-4"
+          v-if="hasState"
         />
         <div class="t-w-full lg:t-w-1/2 t-px-2 t-mb-4">
           <base-input
@@ -199,6 +214,7 @@
             class="t-w-full lg:t-w-1/2 t-px-2"
           />
         </div>
+        <div class="t-w-full" />
         <base-checkbox
           name="is_default_billing"
           id="is_default_billing"
@@ -239,26 +255,24 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import config from 'config'
 import i18n from '@vue-storefront/i18n'
 import { currentStoreView } from '@vue-storefront/core/lib/multistore'
 
 import pick from 'lodash-es/pick'
-import invert from 'lodash-es/invert'
 
-import { required, minLength, email, sameAs } from 'vuelidate/lib/validators'
+import { required } from 'vuelidate/lib/validators'
 import { latin, unicodeAlphaNum, streetname, housenumber, postcode, getPostcodeRegex } from 'icmaa-config/helpers/validators'
-import { date } from 'icmaa-config/helpers/validators'
-import { toDate } from 'icmaa-config/helpers/datetime'
 
 import Headline from 'theme/components/core/blocks/MyAccount/Headline'
-import BaseCheckbox from 'theme/components/core/blocks/Form/BaseCheckbox'
 import BaseInput from 'theme/components/core/blocks/Form/BaseInput'
+import BaseSelect from 'theme/components/core/blocks/Form/BaseSelect'
+import BaseCheckbox from 'theme/components/core/blocks/Form/BaseCheckbox'
 import ButtonComponent from 'theme/components/core/blocks/Button'
 import CountrySelect from 'theme/components/core/blocks/Form/CountrySelect'
 import MaterialIcon from 'theme/components/core/blocks/MaterialIcon'
 
-import { getTranslatedCountries } from 'icmaa-config/helpers/countries'
+import { getTranslatedCountries } from 'icmaa-config/helpers/i18n/countries'
+import { getStates } from 'icmaa-config/helpers/i18n/states'
 
 export default {
   name: 'MyAdresses',
@@ -273,8 +287,9 @@ export default {
   },
   components: {
     Headline,
-    BaseCheckbox,
     BaseInput,
+    BaseSelect,
+    BaseCheckbox,
     ButtonComponent,
     CountrySelect,
     MaterialIcon
@@ -282,15 +297,16 @@ export default {
   computed: {
     ...mapGetters({
       viewport: 'ui/getViewport',
+      storeConfig: 'icmaaConfig/getCurrentStoreConfig',
       customer: 'user/getCustomer'
     }),
     addresses () {
       return this.customer.addresses.map(address => {
-        let { entity_id, company, prefix, firstname, lastname, suffix, postcode, city, country_id, is_default_billing, is_default_shipping } = address
+        let { entity_id, company, prefix, firstname, lastname, suffix, postcode, city, country_id, is_default_billing, is_default_shipping, region_id } = address
         let country = this.countries.find(c => c.code === country_id)
         let street = address.street.filter(s => s.length > 0).join('<br>')
 
-        return { entity_id, company, prefix, firstname, lastname, suffix, street, postcode, city, country, is_default_billing, is_default_shipping }
+        return { entity_id, company, prefix, firstname, lastname, suffix, street, postcode, city, country, is_default_billing, is_default_shipping, region_id }
       })
     },
     validation () {
@@ -302,6 +318,13 @@ export default {
     postCodeFormat () {
       return getPostcodeRegex(this.address.country_id)[1]
     },
+    states () {
+      if (this.hasState) {
+        return getStates().map(({ code: value, name: label }) => ({ label, value }))
+      }
+
+      return []
+    },
     houseNumberAdvice () {
       const street = this.address.street.join('')
       return street.length > 8 && !/(\d)+/.test(street)
@@ -312,6 +335,9 @@ export default {
     isDefaultAddress () {
       let address = this.customerAddress
       return address && (address.is_default_billing === true || address.is_default_shipping === true)
+    },
+    hasState () {
+      return ['US', 'GB'].includes(this.countryId)
     },
     hasVatId () {
       return ['IT'].includes(this.countryId)
@@ -354,6 +380,10 @@ export default {
 
         if (!this.hasVatId) {
           address.vat_id = null
+        }
+
+        if (!this.hasState) {
+          address.region_id = null
         }
 
         customer.addresses = customer.addresses
@@ -402,7 +432,8 @@ export default {
         street: [''],
         postcode: '',
         city: '',
-        country_id: currentStoreView().storeCode.toUpperCase(),
+        country_id: currentStoreView().i18n.defaultCountry,
+        region_id: null,
         telephone: '',
         vat_id: null,
         is_default_billing: false,
@@ -445,6 +476,10 @@ export default {
       vat_id: { required }
     } : {}
 
+    const regionId = this.hasState ? {
+      region_id: { required }
+    } : {}
+
     return {
       address: {
         firstname: {
@@ -480,6 +515,7 @@ export default {
         telephone: {
           unicodeAlphaNum
         },
+        ...regionId,
         ...vatId
       }
     }

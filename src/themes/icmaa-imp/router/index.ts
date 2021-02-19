@@ -6,7 +6,6 @@ const ErrorPage = () => import(/* webpackChunkName: "vsf-error" */ 'theme/pages/
 const Product = () => import(/* webpackChunkName: "vsf-product" */ 'theme/pages/Product.vue')
 const Category = () => import(/* webpackChunkName: "vsf-category" */ 'theme/pages/Category.vue')
 const SearchResult = () => import(/* webpackChunkName: "vsf-searchresult" */ 'theme/pages/SearchResult.vue')
-const Checkout = () => import(/* webpackChunkName: "vsf-checkout" */ 'theme/pages/Checkout.vue')
 const Compare = () => import(/* webpackChunkName: "vsf-compare" */ 'theme/pages/Compare.vue')
 const MyAccount = () => import(/* webpackChunkName: "vsf-my-account" */ 'theme/pages/MyAccount.vue')
 const ResetPassword = () => import(/* webpackChunkName: "vsf-reset-password" */ 'theme/pages/ResetPassword.vue')
@@ -14,7 +13,6 @@ const ResetPassword = () => import(/* webpackChunkName: "vsf-reset-password" */ 
 let routes = [
   { name: 'home', path: '/', component: Home },
   { name: 'home-pwa', path: '/pwa.html', component: Home },
-  { name: 'checkout', path: '/checkout', component: Checkout },
   { name: 'my-account', path: '/my-account', component: MyAccount },
   { name: 'my-addresses', path: '/my-account/addresses', component: MyAccount, props: { activeBlock: 'MyAddresses' } },
   { name: 'my-coupons', path: '/my-account/coupons', component: MyAccount, props: { activeBlock: 'MyGiftcert' } },

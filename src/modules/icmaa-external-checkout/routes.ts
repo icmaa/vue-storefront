@@ -1,4 +1,5 @@
-const ExternalSuccessPage = () => import(/* webpackChunkName: "vsf-order-success" */ './pages/ExternalSuccess.vue')
+const Checkout = () => import(/* webpackChunkName: "vsf-external-checkout" */ './pages/Checkout.vue')
+const SuccessPage = () => import(/* webpackChunkName: "vsf-external-checkout-success" */ './pages/Success.vue')
 
 /**
  * As we register this route dynamically using this module, it is important to consider the order of
@@ -7,5 +8,6 @@ const ExternalSuccessPage = () => import(/* webpackChunkName: "vsf-order-success
  * the ìcmaa-external-checkout` module as it was registered afterwards. So, keep that in mind.
  */
 export default [
-  { name: 'external-thank-you', path: '/order-success', component: ExternalSuccessPage }
+  { name: 'checkout', path: '/checkout', component: Checkout },
+  { name: 'checkout-success', path: '/order-success', component: SuccessPage }
 ]
