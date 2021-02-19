@@ -18,9 +18,9 @@ export const IcmaaExtendedConfigModule: StorefrontModule = function ({ store }) 
 
   if (config.storeViews.multistore === true) {
     store.registerModule('icmaaConfig', ExtendedConfigStore)
-    coreHooks.afterAppInit(() => {
-      store.dispatch('icmaaConfig/setMap')
-    })
+
+    coreHooks.afterAppInit(() => { store.dispatch('icmaaConfig/setMap') })
+    coreHooks.beforeStoreViewChanged(storeView => { store.dispatch('icmaaConfig/setMap', { storeView }) })
 
     if (!isServer && !(window as any).Cypress) {
       coreHooks.afterAppInit(async () => {
