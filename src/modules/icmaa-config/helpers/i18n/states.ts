@@ -10,9 +10,9 @@ export const getStates = (defaultCountry?: string): { id: number, name: string, 
 
   if (states[defaultCountry]) {
     return states[defaultCountry].map(c => {
-      let [ id, code, name ] = c
+      let [ code, name ] = c
 
-      return { id, code, name }
+      return { code, name }
     }).sort((a, b) => a.name.localeCompare(b.name))
   }
 

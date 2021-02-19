@@ -337,7 +337,7 @@ export default {
       return address && (address.is_default_billing === true || address.is_default_shipping === true)
     },
     hasState () {
-      return ['US'].includes(this.countryId)
+      return ['US', 'GB'].includes(this.countryId)
     },
     hasVatId () {
       return ['IT'].includes(this.countryId)
@@ -380,6 +380,10 @@ export default {
 
         if (!this.hasVatId) {
           address.vat_id = null
+        }
+
+        if (!this.hasState) {
+          address.region_id = null
         }
 
         customer.addresses = customer.addresses
@@ -428,7 +432,7 @@ export default {
         street: [''],
         postcode: '',
         city: '',
-        country_id: currentStoreView().storeCode.toUpperCase(),
+        country_id: currentStoreView().i18n.defaultCountry,
         region_id: null,
         telephone: '',
         vat_id: null,
@@ -472,7 +476,7 @@ export default {
       vat_id: { required }
     } : {}
 
-    const region_id = this.hasState ? {
+    const regionId = this.hasState ? {
       region_id: { required }
     } : {}
 
@@ -511,7 +515,7 @@ export default {
         telephone: {
           unicodeAlphaNum
         },
-        ...region_id,
+        ...regionId,
         ...vatId
       }
     }
