@@ -27,7 +27,7 @@ export default {
       return this.rawLandingPages && this.rawLandingPages.find(p => p.identifier === this.identifier)
     }
   },
-  async asyncData ({ store, context }) {
+  async asyncData ({ store, context, route }) {
     if (context) {
       context.output.cacheTags
         .add('landingpage')
@@ -35,7 +35,7 @@ export default {
         .add('product')
     }
 
-    await store.dispatch('icmaaCmsLandingPages/single', { value: this.identifier })
+    await store.dispatch('icmaaCmsLandingPages/single', { value: route.params.identifier })
   }
 }
 </script>

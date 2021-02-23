@@ -14,7 +14,7 @@ describe('Landingpage A to Z ', () => {
 
     cy.getByTestId('DepartmentLogo').find('img').each(e => cy.wrap(e).checkImage())
 
-    cy.get('ul.slingrope').find('li a').random().click()
-    cy.get('ul.letters').find('li a').random().click()
+    cy.get('ul.slingrope').should('be.visible')
+    cy.get('ul.letters').find('li').random().scrollIntoView().find('a').random().click()
   })
 })

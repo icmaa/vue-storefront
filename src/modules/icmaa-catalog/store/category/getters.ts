@@ -9,6 +9,7 @@ import union from 'lodash-es/union'
 import get from 'lodash-es/get'
 
 const getters: GetterTree<CategoryState, RootState> = {
+  getCategoryById: (state, getters) => (id): Category|boolean => getters.getCategoriesMap[id] || false,
   getDefaultCategorySort: (state, getters, rootState, rootGetters) => {
     return getDefaultCategorySort(getters.getCurrentCategory as Category)
   },
