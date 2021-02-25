@@ -157,17 +157,6 @@
           :class="[ hasState ? 't-w-full lg:t-w-1/2' : 't-w-1/2 lg:t-w-1/4']"
           class="t-px-2 t-mb-4"
         />
-        <country-select
-          name="country_id"
-          id="country_id"
-          v-model="address.country_id"
-          :label="$t('Country') + ' *'"
-          :validations="[{
-            condition: !validation.country_id.required && validation.country_id.$error,
-            text: $t('Field is required.')
-          }]"
-          class="t-w-1/2 lg:t-w-1/4 t-px-2 t-mb-4"
-        />
         <base-select
           name="region_id"
           id="region_id"
@@ -181,6 +170,17 @@
           }]"
           class="t-w-1/2 lg:t-w-1/4 t-px-2 t-mb-4"
           v-if="hasState"
+        />
+        <country-select
+          name="country_id"
+          id="country_id"
+          v-model="address.country_id"
+          :label="$t('Country') + ' *'"
+          :validations="[{
+            condition: !validation.country_id.required && validation.country_id.$error,
+            text: $t('Field is required.')
+          }]"
+          class="t-w-1/2 lg:t-w-1/4 t-px-2 t-mb-4"
         />
         <div class="t-w-full lg:t-w-1/2 t-px-2 t-mb-4">
           <base-input

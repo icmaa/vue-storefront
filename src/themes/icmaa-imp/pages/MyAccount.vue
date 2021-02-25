@@ -1,35 +1,34 @@
 <template>
   <div id="my_account" class="t-container t-px-4">
-    <div class="t-flex t--mx-2 t-py-4">
-      <div class="t-hidden lg:t-flex t-w-1/4 t-px-2" v-if="viewport && !['xs','sm','md'].includes(viewport)">
+    <div class="t-flex t--mx-2 t-py-4" v-if="isValidCustomer">
+      <div class="t-hidden lg:t-flex t-w-1/4 t-px-2" v-if="!['xs','sm','md'].includes(viewport)">
         <navigation />
       </div>
-      <no-ssr>
-        <div class="t-w-full lg:t-w-3/4 t-px-2">
-          <component :is="this.$props.activeBlock" />
-        </div>
-      </no-ssr>
+      <div class="t-w-full lg:t-w-3/4 t-px-2">
+        <component :is="this.$props.activeBlock" />
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
-import { currentStoreView, localizedRoute } from '@vue-storefront/core/lib/multistore'
+import { localizedRoute } from '@vue-storefront/core/lib/multistore'
 import { Logger } from '@vue-storefront/core/lib/logger'
+import EventBus from '@vue-storefront/core/compatibility/plugins/event-bus'
 
 import i18n from '@vue-storefront/i18n'
 import Composite from '@vue-storefront/core/mixins/composite'
 import NoSSR from 'vue-no-ssr'
 
-const Navigation = () => import(/* webpackChunkName: "vsf-myaccount-navigation" */'../components/core/blocks/MyAccount/Navigation')
-const MyProfile = () => import(/* webpackChunkName: "vsf-myaccount-myprofile" */'../components/core/blocks/MyAccount/MyProfile')
-const MyAddresses = () => import(/* webpackChunkName: "vsf-myaccount-myaddresses" */'../components/core/blocks/MyAccount/MyAddresses')
-const MyNewsletter = () => import(/* webpackChunkName: "vsf-myaccount-mynewsletter" */'../components/core/blocks/MyAccount/MyNewsletter')
-const MyGiftcert = () => import(/* webpackChunkName: "vsf-myaccount-mygiftcert" */'../components/core/blocks/MyAccount/MyGiftcert')
-const MyOrders = () => import(/* webpackChunkName: "vsf-myaccount-myorders" */'../components/core/blocks/MyAccount/MyOrders')
-const MyOrder = () => import(/* webpackChunkName: "vsf-myaccount-myorder" */'../components/core/blocks/MyAccount/MyOrder')
-const MyProductAlerts = () => import(/* webpackChunkName: "vsf-myaccount-myproductalerts" */'../components/core/blocks/MyAccount/MyProductAlerts')
+const Navigation = () => import(/* webpackChunkName: "vsf-myaccount-navigation" */'theme/components/core/blocks/MyAccount/Navigation')
+const MyProfile = () => import(/* webpackChunkName: "vsf-myaccount-myprofile" */'theme/components/core/blocks/MyAccount/MyProfile')
+const MyAddresses = () => import(/* webpackChunkName: "vsf-myaccount-myaddresses" */'theme/components/core/blocks/MyAccount/MyAddresses')
+const MyNewsletter = () => import(/* webpackChunkName: "vsf-myaccount-mynewsletter" */'theme/components/core/blocks/MyAccount/MyNewsletter')
+const MyGiftcert = () => import(/* webpackChunkName: "vsf-myaccount-mygiftcert" */'theme/components/core/blocks/MyAccount/MyGiftcert')
+const MyOrders = () => import(/* webpackChunkName: "vsf-myaccount-myorders" */'theme/components/core/blocks/MyAccount/MyOrders')
+const MyOrder = () => import(/* webpackChunkName: "vsf-myaccount-myorder" */'theme/components/core/blocks/MyAccount/MyOrder')
+const MyProductAlerts = () => import(/* webpackChunkName: "vsf-myaccount-myproductalerts" */'theme/components/core/blocks/MyAccount/MyProductAlerts')
 const MyOrderReview = () => import(/* webpackChunkName: "vsf-myaccount-myorderreview" */'icmaa-review/components/MyAccount/MyOrderReview')
 
 export default {
@@ -56,20 +55,18 @@ export default {
   beforeMount () {
     this.$bus.$on('myAccount-before-updateUser', this.onBeforeUpdateUser)
   },
-  async mounted () {
-    await this.$store.dispatch('user/startSession')
-    if (!this.$store.getters['user/isLoggedIn']) {
-      localStorage.setItem('redirect', this.$route.path)
-      this.$router.push(localizedRoute('/', currentStoreView().storeCode))
-    }
-  },
   destroyed () {
     this.$bus.$off('myAccount-before-updateUser', this.onBeforeUpdateUser)
   },
   computed: {
     ...mapGetters({
-      viewport: 'ui/getViewport'
+      viewport: 'ui/getViewport',
+      isLoggedIn: 'user/isLoggedIn',
+      isLocalDataLoaded: 'user/isLocalDataLoaded'
     }),
+    isValidCustomer () {
+      return this.isLocalDataLoaded && this.isLoggedIn
+    },
     metaTitle () {
       const titleMap = {
         'MyAccount': 'My profile',
@@ -142,11 +139,11 @@ export default {
       meta: this.$route.meta.description ? [{ vmid: 'description', name: 'description', content: this.$route.meta.description }] : []
     }
   },
-  asyncData ({ store, route, context }) { // this is for SSR purposes to prefetch data
-    return new Promise((resolve, reject) => {
-      if (context) context.output.cacheTags.add(`my-account`)
-      resolve()
-    })
+  async asyncData ({ context }) {
+    if (context) {
+      context.output.cacheTags
+        .add(`my-account`)
+    }
   }
 }
 </script>
