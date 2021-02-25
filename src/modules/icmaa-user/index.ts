@@ -18,7 +18,9 @@ export const IcmaaExtendedUserModule: StorefrontModule = async function ({ store
           if (store.getters['user/isLoggedIn']) {
             next()
           } else {
-            next(localizedRoute('/'))
+            next(
+              localizedRoute({ name: 'home', query: { fwd: 'login' } })
+            )
           }
         })
         return

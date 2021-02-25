@@ -21,6 +21,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import { currentStoreView, localizedRoute } from '@vue-storefront/core/lib/multistore'
 
 import Lazyload from 'icmaa-cms/components/Lazyload'
@@ -37,6 +38,11 @@ export default {
     ProductListingWidget,
     CmsBlock
   },
+  computed: {
+    ...mapGetters({
+      isLoggedIn: 'user/isLoggedIn'
+    })
+  },
   mounted () {
     if (!this.isLoggedIn && localStorage.getItem('redirect')) {
       this.$store.dispatch('ui/showModal', 'modal-signup')
@@ -44,10 +50,10 @@ export default {
 
     const { fwd } = this.$route.query
     if (fwd) {
-      if (fwd === 'login' && !this.$store.getters('user/isLoggedIn')) {
+      if (fwd === 'login' && !this.isLoggedIn) {
         this.$store.commit('ui/setAuthElem', 'login')
         this.$store.dispatch('ui/showModal', 'modal-signup')
-      } else if ((fwd === 'create' || fwd === 'register') && !this.$store.getters('user/isLoggedIn')) {
+      } else if ((fwd === 'create' || fwd === 'register') && !this.isLoggedIn) {
         this.$store.commit('ui/setAuthElem', 'register')
         this.$store.dispatch('ui/showModal', 'modal-signup')
       } else if (fwd === 'cart') {
