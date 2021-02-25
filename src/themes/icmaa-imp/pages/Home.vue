@@ -44,10 +44,10 @@ export default {
 
     const { fwd } = this.$route.query
     if (fwd) {
-      if (fwd === 'login') {
+      if (fwd === 'login' && !this.$store.getters('user/isLoggedIn')) {
         this.$store.commit('ui/setAuthElem', 'login')
         this.$store.dispatch('ui/showModal', 'modal-signup')
-      } else if (fwd === 'create' || fwd === 'register') {
+      } else if ((fwd === 'create' || fwd === 'register') && !this.$store.getters('user/isLoggedIn')) {
         this.$store.commit('ui/setAuthElem', 'register')
         this.$store.dispatch('ui/showModal', 'modal-signup')
       } else if (fwd === 'cart') {
