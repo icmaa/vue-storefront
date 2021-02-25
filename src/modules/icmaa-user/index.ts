@@ -7,8 +7,17 @@ import { isServer } from '@vue-storefront/core/helpers'
 import { ExtendedUserStore } from './store'
 import * as types from './store/mutation-types'
 
-export const IcmaaExtendedUserModule: StorefrontModule = async function ({ store }) {
+export const IcmaaExtendedUserModule: StorefrontModule = async function ({ store, router }) {
   extendStore('user', ExtendedUserStore)
+
+  router.beforeEach((to, from, next) => {
+    if (!isServer && to.meta.isSecure === true) {
+      console.error('TEST', to, store.getters['user/isLoggedIn'])
+      next()
+    }
+
+    next()
+  })
 
   store.subscribe((mutation, state) => {
     if (mutation.type.endsWith(types.USER_ADD_SESSION_DATA) || mutation.type.endsWith(types.USER_RMV_SESSION_DATA)) {
