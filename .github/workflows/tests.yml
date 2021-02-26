@@ -101,7 +101,9 @@ jobs:
 
       - name: Cypress run
         uses: cypress-io/github-action@v2
+        id: cypress
         timeout-minutes: 5
+        continue-on-error: true
         with:
           working-directory: src/themes/icmaa-imp/test/e2e
           wait-on: http://localhost:3000
