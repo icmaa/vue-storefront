@@ -27,14 +27,21 @@ export const IcmaaExtendedUserModule: StorefrontModule = async function ({ store
         const unwatch = store.watch(
           () => store.state.user.session_started,
           value => {
+            const unauthorizedRedirect = localizedRoute({ name: 'home', query: { fwd: 'login' } })
+            const timeout = setTimeout(() => {
+              Logger.log('User is not authorized in time, redirect to login.', 'user')()
+              next(unauthorizedRedirect)
+            }, 2000)
+
             if (value !== null) {
               unwatch()
+              clearTimeout(timeout)
 
               if (store.getters['user/isLoggedIn'] === true) {
                 next()
               } else {
-                Logger.log('User is not authorized, redirect to login.', 'icmaa-user')()
-                next(localizedRoute({ name: 'home', query: { fwd: 'login' } }))
+                Logger.log('User is not authorized, redirect to login.', 'user')()
+                next(unauthorizedRedirect)
               }
             }
           }
