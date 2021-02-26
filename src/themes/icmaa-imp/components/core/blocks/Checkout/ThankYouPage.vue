@@ -42,7 +42,7 @@
               </button-component>
             </p>
             <p>
-              <button-component @click="$router.push('/')">
+              <button-component @click="$router.push(localizedRoute({ name: 'home', path: '' }))">
                 {{ $t('Return to shopping') }}
               </button-component>
             </p>

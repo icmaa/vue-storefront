@@ -21,8 +21,6 @@
 </template>
 
 <script>
-import { currentStoreView, localizedRoute } from '@vue-storefront/core/lib/multistore'
-
 import Lazyload from 'icmaa-cms/components/Lazyload'
 import Teaser from 'theme/components/core/blocks/Teaser/Teaser'
 import LogoLine from 'theme/components/core/blocks/CategoryExtras/LogoLineBlock'
@@ -54,7 +52,7 @@ export default {
         this.$store.dispatch('ui/setSidebar', { key: 'microcart' })
       }
 
-      this.$router.push(localizedRoute('/', currentStoreView().storeCode))
+      this.$router.push(this.localizedRoute({ name: 'home', path: '' }))
     }
   },
   async asyncData ({ context }) {
