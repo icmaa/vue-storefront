@@ -112,6 +112,7 @@ jobs:
           # spec: integration/Cms/**/*
           record: true
           parallel: true
+          tag: ${{ github.event_name }}
           group: ${{ runner.os }}
           ci-build-id: '${{ github.sha }}-${{ github.workflow }}-${{ github.event_name }}'
         env:
