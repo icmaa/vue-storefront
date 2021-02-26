@@ -4,6 +4,7 @@ import { extendStore } from '@vue-storefront/core/helpers'
 import { StorageManager } from '@vue-storefront/core/lib/storage-manager'
 import { isServer } from '@vue-storefront/core/helpers'
 import { localizedRoute } from '@vue-storefront/core/lib/multistore'
+import { Logger } from '@vue-storefront/core/lib/logger'
 
 import { ExtendedUserStore } from './store'
 import * as types from './store/mutation-types'
@@ -12,19 +13,35 @@ export const IcmaaExtendedUserModule: StorefrontModule = async function ({ store
   extendStore('user', ExtendedUserStore)
 
   if (!isServer) {
+    /**
+     * Call this action here to be able to overwrite the original action.
+     * The original one inside the user module is uncommented.
+     */
+    store.dispatch('user/startSession')
+
+    /**
+     * This is our router-guard to be able to protect router by login.
+     */
     router.beforeEach(async (to, from, next) => {
       if (to.meta.isSecure === true && !store.getters['user/isLoggedIn']) {
-        EventBus.$once('session-after-started', () => {
-          if (store.getters['user/isLoggedIn']) {
-            next()
-          } else {
-            next(
-              localizedRoute({ name: 'home', query: { fwd: 'login' } })
-            )
+        const unwatch = store.watch(
+          () => store.state.user.session_started,
+          value => {
+            if (value !== null) {
+              unwatch()
+
+              if (store.getters['user/isLoggedIn'] === true) {
+                next()
+              } else {
+                Logger.log('User is not authorized, redirect to login.', 'icmaa-user')()
+                next(localizedRoute({ name: 'home', query: { fwd: 'login' } }))
+              }
+            }
           }
-        })
+        )
         return
       }
+
       next()
     })
   }
