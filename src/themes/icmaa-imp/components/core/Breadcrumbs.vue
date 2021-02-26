@@ -86,7 +86,7 @@ export default {
       }
 
       if (this.withHomepage) {
-        routes.unshift({ name: i18n.t('Homepage'), route_link: this.localizedRoute({ name: 'home', path: '' }), visible: true })
+        routes.unshift({ name: i18n.t('Homepage'), route_link: this.localizedHomeRoute(), visible: true })
       }
 
       return routes

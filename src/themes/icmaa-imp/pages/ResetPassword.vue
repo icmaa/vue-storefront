@@ -88,7 +88,7 @@ export default {
     if (!this.$route.query.email || !this.$route.query.token) {
       this.$store.dispatch('ui/showModal', 'modal-signup')
       this.$store.commit('ui/setAuthElem', 'forgot-pass')
-      this.$router.push(this.localizedRoute({ name: 'home', path: '' }))
+      this.$router.push(this.localizedHomeRoute)
     }
   },
   methods: {
@@ -129,7 +129,7 @@ export default {
                 type: 'success'
               })
 
-              this.$router.push(this.localizedRoute({ name: 'home', path: '' }));
+              this.$router.push(this.localizedHomeRoute);
             }
           }
         } else {

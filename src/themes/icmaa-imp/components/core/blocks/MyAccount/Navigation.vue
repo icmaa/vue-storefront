@@ -83,7 +83,7 @@ export default {
     logout () {
       this.$store.dispatch('user/logout', { silent: false })
         .then(() => {
-          this.$router.push(this.localizedRoute({ name: 'home', path: '' }))
+          this.$router.push(this.localizedHomeRoute)
         })
     },
     onClick () {

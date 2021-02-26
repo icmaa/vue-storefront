@@ -16,7 +16,7 @@
           <i18n path="You can also use {link} to find anything you were looking for." tag="p" class="t-mb-4">
             <span @click="toggleSearchpanel" place="link" class="t-cursor-pointer t-text-base-tone t-underline">{{ $t('our search') }}</span>
           </i18n>
-          <router-link :to="localizedRoute({ name: 'home', path: '' })" :title="$t('Home')">
+          <router-link :to="localizedHomeRoute" :title="$t('Home')">
             <button-component class="t-w-full" type="primary">
               <i class="t-mr-2 material-icons">keyboard_backspace</i> {{ $t('Home') }}
             </button-component>

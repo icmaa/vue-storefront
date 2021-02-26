@@ -58,7 +58,7 @@ export default {
         this.$store.dispatch('ui/setSidebar', { key: 'microcart' })
       }
 
-      this.$router.push(this.localizedRoute({ name: 'home', path: '' }))
+      this.$router.push(this.localizedHomeRoute)
     }
   },
   async asyncData ({ context }) {

@@ -1,11 +1,11 @@
 import { setupMultistoreRoutes } from '@vue-storefront/core/lib/multistore'
 import App from './App.vue'
 import routes from './router'
+import mixins from './mixins/defaultMixins'
 import Vue from 'vue'
 import VueProgressBar from 'vue-progressbar'
 import VueScrollTo from 'vue-scrollto'
 import '@vue-storefront/core/lib/passive-listeners'
-import { RouterManager } from '@vue-storefront/core/lib/router-manager'
 import { once } from '@vue-storefront/core/helpers'
 
 import { claimsStore } from 'theme/store/claims'
@@ -15,6 +15,7 @@ import { StorageManager } from '@vue-storefront/core/lib/storage-manager'
 once('__VUE_EXTEND_DROPPOINT_VPB__', () => {
   Vue.use(VueProgressBar, { thickness: '4px' })
   Vue.use(VueScrollTo, { offset: -55 })
+  Vue.mixin(mixins)
 })
 
 const themeEntry = App
