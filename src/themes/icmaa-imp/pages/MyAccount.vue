@@ -1,13 +1,15 @@
 <template>
   <div id="my_account" class="t-container t-px-4">
-    <div class="t-flex t--mx-2 t-py-4" v-if="isValidCustomer">
-      <div class="t-hidden lg:t-flex t-w-1/4 t-px-2" v-if="!['xs','sm','md'].includes(viewport)">
-        <navigation />
+    <no-ssr>
+      <div class="t-flex t--mx-2 t-py-4" v-if="isLoggedIn">
+        <div class="t-hidden lg:t-flex t-w-1/4 t-px-2" v-if="!['xs','sm','md'].includes(viewport)">
+          <navigation />
+        </div>
+        <div class="t-w-full lg:t-w-3/4 t-px-2">
+          <component :is="this.$props.activeBlock" />
+        </div>
       </div>
-      <div class="t-w-full lg:t-w-3/4 t-px-2">
-        <component :is="this.$props.activeBlock" />
-      </div>
-    </div>
+    </no-ssr>
   </div>
 </template>
 
@@ -59,12 +61,8 @@ export default {
   computed: {
     ...mapGetters({
       viewport: 'ui/getViewport',
-      isLoggedIn: 'user/isLoggedIn',
-      isLocalDataLoaded: 'user/isLocalDataLoaded'
+      isLoggedIn: 'user/isLoggedIn'
     }),
-    isValidCustomer () {
-      return this.isLocalDataLoaded && this.isLoggedIn
-    },
     metaTitle () {
       const titleMap = {
         'MyAccount': 'My profile',
