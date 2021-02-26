@@ -45,11 +45,8 @@
 </template>
 
 <script>
-import i18n from '@vue-storefront/i18n'
 import { mapGetters } from 'vuex'
-import { notifications } from '@vue-storefront/core/modules/cart/helpers'
 import { filterChangedProduct } from '@vue-storefront/core/modules/catalog/events'
-import Composite from '@vue-storefront/core/mixins/composite'
 import ProductPriceMixin from 'theme/mixins/product/priceMixin'
 import ProductOptionsMixin from 'theme/mixins/product/optionsMixin'
 import ProductAddToCartMixin from 'theme/mixins/product/addtocartMixin'
@@ -65,7 +62,7 @@ import LoaderBackground from 'theme/components/core/LoaderBackground'
 
 export default {
   name: 'AddToCartSidebar',
-  mixins: [ Composite, ProductOptionsMixin, ProductAddToCartMixin, ProductPriceMixin, ProductStockAlertMixin ],
+  mixins: [ ProductOptionsMixin, ProductAddToCartMixin, ProductPriceMixin, ProductStockAlertMixin ],
   components: {
     Sidebar,
     DefaultSelector,

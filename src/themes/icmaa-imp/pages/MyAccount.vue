@@ -23,7 +23,6 @@ import { mapGetters } from 'vuex'
 import { Logger } from '@vue-storefront/core/lib/logger'
 
 import i18n from '@vue-storefront/i18n'
-import Composite from '@vue-storefront/core/mixins/composite'
 import NoSSR from 'vue-no-ssr'
 
 const Navigation = () => import(/* webpackChunkName: "vsf-myaccount-navigation" */'theme/components/core/blocks/MyAccount/Navigation')
@@ -38,7 +37,6 @@ const MyOrderReview = () => import(/* webpackChunkName: "vsf-myaccount-myorderre
 
 export default {
   name: 'MyAccount',
-  mixins: [Composite],
   props: {
     activeBlock: {
       type: String,

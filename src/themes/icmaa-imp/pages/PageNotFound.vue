@@ -29,7 +29,6 @@
 
 <script>
 import i18n from '@vue-storefront/i18n'
-import Composite from '@vue-storefront/core/mixins/composite'
 import { Logger } from '@vue-storefront/core/lib/logger'
 import ButtonComponent from 'theme/components/core/blocks/Button'
 
@@ -38,7 +37,6 @@ export default {
   components: {
     ButtonComponent
   },
-  mixins: [Composite],
   async asyncData ({ store, route, context }) {
     Logger.log('Entering asyncData for PageNotFound ' + new Date())()
     if (context) {
