@@ -10,16 +10,18 @@ const Compare = () => import(/* webpackChunkName: "vsf-compare" */ 'theme/pages/
 const MyAccount = () => import(/* webpackChunkName: "vsf-my-account" */ 'theme/pages/MyAccount.vue')
 const ResetPassword = () => import(/* webpackChunkName: "vsf-reset-password" */ 'theme/pages/ResetPassword.vue')
 
+const secureRoute = { meta: { isSecure: true } }
+
 let routes = [
   { name: 'home', path: '/', component: Home },
   { name: 'home-pwa', path: '/pwa.html', component: Home },
-  { name: 'my-account', path: '/my-account', component: MyAccount },
-  { name: 'my-addresses', path: '/my-account/addresses', component: MyAccount, props: { activeBlock: 'MyAddresses' } },
-  { name: 'my-coupons', path: '/my-account/coupons', component: MyAccount, props: { activeBlock: 'MyGiftcert' } },
-  { name: 'my-newsletter', path: '/my-account/newsletter', component: MyAccount, props: { activeBlock: 'MyNewsletter' } },
-  { name: 'my-orders', path: '/my-account/orders', component: MyAccount, props: { activeBlock: 'MyOrders' } },
-  { name: 'my-order', path: '/my-account/orders/:orderId', component: MyAccount, props: { activeBlock: 'MyOrder' } },
-  { name: 'my-product-alerts', path: '/my-account/product-alerts', component: MyAccount, props: { activeBlock: 'MyProductAlerts' } },
+  { name: 'my-account', path: '/my-account', component: MyAccount, ...secureRoute },
+  { name: 'my-addresses', path: '/my-account/addresses', component: MyAccount, props: { activeBlock: 'MyAddresses' }, ...secureRoute },
+  { name: 'my-coupons', path: '/my-account/coupons', component: MyAccount, props: { activeBlock: 'MyGiftcert' }, ...secureRoute },
+  { name: 'my-newsletter', path: '/my-account/newsletter', component: MyAccount, props: { activeBlock: 'MyNewsletter' }, ...secureRoute },
+  { name: 'my-orders', path: '/my-account/orders', component: MyAccount, props: { activeBlock: 'MyOrders' }, ...secureRoute },
+  { name: 'my-order', path: '/my-account/orders/:orderId', component: MyAccount, props: { activeBlock: 'MyOrder' }, ...secureRoute },
+  { name: 'my-product-alerts', path: '/my-account/product-alerts', component: MyAccount, props: { activeBlock: 'MyProductAlerts' }, ...secureRoute },
   { name: 'compare', path: '/compare', component: Compare, props: { title: 'Compare Products' } },
   { name: 'error', path: '/error', component: ErrorPage, meta: { layout: 'minimal' } },
   { name: 'virtual-product', path: '/p/:parentSku/:slug', component: Product }, // :sku param can be marked as optional with ":sku?" (https://github.com/vuejs/vue-router/blob/dev/examples/route-matching/app.js#L16), but it requires a lot of work to adjust the rest of the site
