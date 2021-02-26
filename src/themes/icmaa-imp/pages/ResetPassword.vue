@@ -56,7 +56,6 @@
 </template>
 
 <script>
-import { currentStoreView, localizedRoute } from '@vue-storefront/core/lib/multistore'
 import i18n from '@vue-storefront/i18n'
 import BaseInput from 'theme/components/core/blocks/Form/BaseInput.vue'
 import ButtonComponent from 'theme/components/core/blocks/Button'
@@ -89,7 +88,7 @@ export default {
     if (!this.$route.query.email || !this.$route.query.token) {
       this.$store.dispatch('ui/showModal', 'modal-signup')
       this.$store.commit('ui/setAuthElem', 'forgot-pass')
-      this.$router.push(localizedRoute('/'))
+      this.$router.push(this.localizedHomeRoute)
     }
   },
   methods: {
@@ -130,7 +129,7 @@ export default {
                 type: 'success'
               })
 
-              this.$router.push(this.localizedRoute('/'));
+              this.$router.push(this.localizedHomeRoute);
             }
           }
         } else {
