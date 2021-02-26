@@ -80,9 +80,6 @@ export default {
     }
   },
   methods: {
-    isActive (link) {
-      return this.$route.path.endsWith(link)
-    },
     logout () {
       this.$store.dispatch('user/logout', { silent: false })
         .then(() => {
