@@ -1,15 +1,20 @@
 <template>
   <div id="my_account" class="t-container t-px-4">
-    <no-ssr>
-      <div class="t-flex t--mx-2 t-py-4" v-if="isLoggedIn">
-        <div class="t-hidden lg:t-flex t-w-1/4 t-px-2" v-if="!['xs','sm','md'].includes(viewport)">
-          <navigation />
-        </div>
-        <div class="t-w-full lg:t-w-3/4 t-px-2">
-          <component :is="this.$props.activeBlock" />
-        </div>
+    <div class="t-flex t--mx-2 t-py-4">
+      <div class="t-hidden lg:t-flex t-w-1/4 t-px-2" v-if="!['xs','sm','md'].includes(viewport)">
+        <navigation />
       </div>
-    </no-ssr>
+      <div class="t-w-full lg:t-w-3/4 t-px-2">
+        <no-ssr>
+          <component :is="this.$props.activeBlock" v-if="isLoggedIn" />
+          <div slot="placeholder">
+            <div class="t-p-4 t-bg-white t-text-base-light">
+              {{ $t('Please wait') }} ...
+            </div>
+          </div>
+        </no-ssr>
+      </div>
+    </div>
   </div>
 </template>
 
