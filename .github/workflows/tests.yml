@@ -88,6 +88,11 @@ jobs:
       - name: Sync config JSON files
         run: rsync -r ./shop-workspace/template/vue-storefront/ ./
 
+      - name: Dump GitHub context
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+        run: echo "$GITHUB_CONTEXT"
+
       - name: Install
         uses: bahmutov/npm-install@v1.1.0
 
@@ -110,11 +115,10 @@ jobs:
           browser: chrome
           headless: true
           config: video=true
-          spec: integration/Customer/address.*
+          # spec: integration/Cms/**/*
           record: true
           parallel: true
           tag: ${{ github.event_name }}
-          group: ${{ runner.os }}
           ci-build-id: '${{ github.sha }}-${{ github.workflow }}-${{ github.event_name }}'
         env:
           COMMIT_INFO_MESSAGE: ${{ github.event.pull_request.title }}
