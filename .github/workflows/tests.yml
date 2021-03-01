@@ -140,8 +140,8 @@ jobs:
           name: build
           path: artifacts
 
-      - name: Job failed – Trigger re-run manually
+      - name: Job failed - Trigger re-run manually
         if: failure()
         run: |
           echo "Run the following command to trigger a rerun which sends metrics to Cypress.io dashboard:"
-          echo "git commit --no-verify --allow-empty -m 'Re-run CI tests' && git push --no-verify origin {{ github.head_ref }}"
+          echo "git commit --no-verify --allow-empty -m \"Re-run CI tests\" && git push --no-verify origin {{ github.head_ref }}"
