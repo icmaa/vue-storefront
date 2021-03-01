@@ -140,7 +140,7 @@ jobs:
           name: build
           path: artifacts
 
-      - name: Job failed - Trigger re-run manually
+      - name: Trigger re-run manually if necessary
         if: failure()
         run: |
           echo "Run the following command to trigger a rerun which sends metrics to Cypress.io dashboard:"
