@@ -33,6 +33,7 @@ describe('Add to Cart', () => {
 
     cy.get('@Sidebar')
       .findByTestId('DefaultSelector')
+      .filter('.available')
       .clickRandomElement()
 
     cy.getByTestId('AddToCart')

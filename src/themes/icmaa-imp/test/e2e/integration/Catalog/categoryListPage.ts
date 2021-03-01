@@ -1,5 +1,13 @@
-describe('Filter', () => {
-  it('Select department filter', () => {
+describe('CLP', () => {
+  it('has Teaser and Productlistings should be visible', () => {
+    cy.visitCategoryPage()
+
+    cy.getByTestId('ProductListing')
+      .findImageWithPlaceholder()
+      .each(e => cy.wrap(e).scrollIntoView().checkImage())
+  })
+
+  it('has products and valid department filter', () => {
     cy.visitCategoryPage()
 
     cy.getByTestId('productsTotal').then((element) => {
