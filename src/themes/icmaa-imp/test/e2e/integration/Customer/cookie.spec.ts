@@ -9,7 +9,7 @@ describe('Cookie-Notice', () => {
       .find('button').last().click()
 
     cy.getByTestId('CookieNotification')
-      .should('not.be.visible')
+      .should('not.exist')
 
     cy.getFromLocalStorage('shop/uniClaims/cookiesAccepted')
       .then(claim => {
@@ -27,7 +27,7 @@ describe('Cookie-Notice', () => {
       .find('button').first().click()
 
     cy.getByTestId('CookieNotification')
-      .should('not.be.visible')
+      .should('not.exist')
 
     cy.getFromLocalStorage('shop/uniClaims/cookiesAccepted')
       .then(claim => {
@@ -45,7 +45,7 @@ describe('Cookie-Notice', () => {
       .find('a').first().click()
 
     cy.getByTestId('CookieNotification')
-      .should('not.be.visible')
+      .should('not.exist')
 
     cy.visit('/')
     cy.getByTestId('CookieNotification')
