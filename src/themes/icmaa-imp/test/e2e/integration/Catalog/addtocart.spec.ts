@@ -4,7 +4,7 @@ describe('Add to Cart', () => {
   })
 
   it('is working for random product on PLP.', () => {
-    cy.visitCategoryPage({ url: '/girls.html?type_top=99' })
+    cy.visitCategoryPage({ url: '/clothing.html?type_top=99' })
 
     /**
      * @todo The page gets rerendered after initial load.
