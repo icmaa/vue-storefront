@@ -118,8 +118,8 @@ jobs:
           # spec: integration/Cms/**/*
           record: true
           parallel: true
-          tag: ${{ github.event_name }}
-          ci-build-id: '${{ github.sha }}-${{ github.workflow }}-${{ github.event_name }}'
+          tag: ${{ github.event_name }},${{ github.event_name }}/${{ github.event.action }}
+          ci-build-id: '${{ github.sha }}-${{ github.workflow }}-${{ github.event_name }}-${{ github.event.action }}-${{ github.run_id }}-${{ github.run_number }}'
         env:
           COMMIT_INFO_MESSAGE: ${{ github.event.pull_request.title }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
