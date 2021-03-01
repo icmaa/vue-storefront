@@ -191,7 +191,7 @@ Cypress.Commands.add('openSidebar', (trigger: string = '[data-test-id="HeaderBut
 
 Cypress.Commands.add('closeSidebar', (alias: string = '@sidebar') => {
   cy.get(alias).findByTestId('closeButton').click()
-  cy.get(alias).should('not.be.visible')
+  cy.get(alias).should('not.exist')
 })
 
 Cypress.Commands.add('openFilterSidebar', () => {
@@ -380,7 +380,7 @@ Cypress.Commands.add('addCurrentProductToCart', (checkAvailability = true) => {
           })
           .click()
 
-        cy.get('@sidebar').should('not.be.visible')
+        cy.get('@sidebar').should('not.exist')
 
         cy.get<string>('@optionLabel').then(label => {
           cy.getByTestId('AddToCartSize').contains(label)

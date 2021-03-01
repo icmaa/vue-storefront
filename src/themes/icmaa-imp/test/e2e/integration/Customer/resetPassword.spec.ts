@@ -8,7 +8,7 @@ describe('Resetpassword page', () => {
   })
   it('Dont show forgot-password modal', () => {
     cy.visitAsRecurringUser('/customer/account/resetpassword?token=testtoken&email=testemail')
-    cy.get('[data-test-id=Modal]').should('not.be.visible')
+    cy.get('[data-test-id=Modal]').should('not.exist')
     cy.location('pathname').should('include', '/customer/account/resetpassword')
   })
 })
