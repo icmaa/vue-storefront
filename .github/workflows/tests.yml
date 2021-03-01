@@ -88,11 +88,6 @@ jobs:
       - name: Sync config JSON files
         run: rsync -r ./shop-workspace/template/vue-storefront/ ./
 
-      # - name: Dump GitHub context
-      #   env:
-      #     GITHUB_CONTEXT: ${{ toJson(github) }}
-      #   run: echo "$GITHUB_CONTEXT"
-
       - name: Install
         uses: bahmutov/npm-install@v1.1.0
 
@@ -106,7 +101,6 @@ jobs:
 
       - name: Cypress run
         uses: cypress-io/github-action@v2
-        id: cypress
         timeout-minutes: 5
         with:
           working-directory: src/themes/icmaa-imp/test/e2e
@@ -118,10 +112,9 @@ jobs:
           # spec: integration/Cms/**/*
           record: true
           parallel: true
-          tag: ${{ github.event_name }},${{ github.event_name }}/${{ github.event.action }}
-          ci-build-id: '${{ github.sha }}-${{ github.workflow }}-${{ github.event_name }}-${{ github.event.action }}-${{ github.run_number }}'
+          group: ${{ runner.os }}
+          ci-build-id: 'continous-integration-${{ github.sha }}-${{ github.run_id }}-${{ github.run_number }}'
         env:
-          COMMIT_INFO_MESSAGE: ${{ github.event.pull_request.title }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           CYPRESS_RECORD_KEY: ${{secrets.CYPRESS_RECORD_KEY}}
           CYPRESS_PROJECT_ID: ${{secrets.CYPRESS_PROJECT_ID}}
@@ -139,9 +132,3 @@ jobs:
         with:
           name: build
           path: artifacts
-
-      - name: Job failed - Trigger re-run manually
-        if: failure()
-        run: |
-          echo "Run the following command to trigger a rerun which sends metrics to Cypress.io dashboard:"
-          echo "git commit --no-verify --allow-empty -m \"Re-run CI tests\" && git push --no-verify origin"
