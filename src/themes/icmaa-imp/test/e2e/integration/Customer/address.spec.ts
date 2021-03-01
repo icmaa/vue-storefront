@@ -17,7 +17,7 @@ describe('Customer', () => {
         cy.get('@form').find('input[name="company"]').type(faker.company.companyName())
       }
 
-      cy.get('@form').find('input[name="street[1]"]').type(faker.address.streetAddress())
+      cy.get('@form').find('input[name="street[0]"]').type(faker.address.streetAddress())
       cy.get('@form').find('input[name="city"]').type(faker.address.city())
       cy.get('@form').find('input[name="postcode"]').type(faker.address.zipCode())
       cy.get('@form').find('input[name="telephone"]').type(faker.phone.phoneNumber())
