@@ -9,7 +9,7 @@
     "@types/faker": "^4.1.9",
     "@types/mocha": "^7.0.1",
     "@types/node": "^13.7.0",
-    "cypress": "^4.1.0",
+    "cypress": "^6.5.0",
     "eslint-plugin-cypress": "^2.9.0",
     "faker": "^4.1.0"
   }
