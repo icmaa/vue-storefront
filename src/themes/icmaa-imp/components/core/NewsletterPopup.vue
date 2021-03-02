@@ -29,9 +29,11 @@
     <div v-else>
       {{ $t('Oh great, you are already subscribed.') }}
       <i18n path="You can manage your subscription in your {account-settings}." tag="div" class="t-text-xs t-text-base-light">
-        <router-link place="account-settings" :to="localizedRoute('/my-account/newsletter')" class="t-text-base-light t-underline">
-          {{ $t('account settings') }}
-        </router-link>
+        <template #account-settings>
+          <router-link :to="localizedRoute('/my-account/newsletter')" class="t-text-base-light t-underline">
+            {{ $t('account settings') }}
+          </router-link>
+        </template>
       </i18n>
     </div>
   </modal>
