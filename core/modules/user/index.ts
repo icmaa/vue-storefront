@@ -27,7 +27,11 @@ export const UserModule: StorefrontModule = async function ({ store }) {
       })
     })
 
-    store.dispatch('user/startSession')
+    /**
+     * In order to be able to overwrite this action we need to uncomment it here.
+     * Look inside the `icmaa-user` module for more info.
+     */
+    // store.dispatch('user/startSession')
   }
 
   store.subscribe((mutation, state) => {

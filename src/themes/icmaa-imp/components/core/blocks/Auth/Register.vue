@@ -134,9 +134,15 @@
           <div class="t-w-full t-text-xs t-text-base-lighter t-leading-1-rem lg:t-text-center">
             <material-icon icon="asterisk" icon-set="icmaa" size="xxs" class="t-mr-1" />
             <i18n path="I have read and agree with the {terms}, {policy} and {return}." tag="span">
-              <router-link place="terms" :to="localizedRoute('/service-conditions')" v-html="$t('Terms and Conditions')" class="t-text-base-lighter t-underline" @click.native="close()" />
-              <router-link place="policy" :to="localizedRoute('/service-imprint')" v-html="$t('Privacy Policy')" class="t-text-base-lighter t-underline" @click.native="close()" />
-              <router-link place="return" :to="localizedRoute('/service-return')" v-html="$t('Return Instructions')" class="t-text-base-lighter t-underline" @click.native="close()" />
+              <template #terms>
+                <router-link :to="localizedRoute('/service-conditions')" v-html="$t('Terms and Conditions')" class="t-text-base-lighter t-underline" @click.native="close()" />
+              </template>
+              <template #policy>
+                <router-link :to="localizedRoute('/service-imprint')" v-html="$t('Privacy Policy')" class="t-text-base-lighter t-underline" @click.native="close()" />
+              </template>
+              <template #return>
+                <router-link :to="localizedRoute('/service-return')" v-html="$t('Return Instructions')" class="t-text-base-lighter t-underline" @click.native="close()" />
+              </template>
             </i18n>
           </div>
         </div>

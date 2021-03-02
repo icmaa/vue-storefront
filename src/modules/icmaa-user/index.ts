@@ -3,12 +3,55 @@ import { StorefrontModule } from '@vue-storefront/core/lib/modules'
 import { extendStore } from '@vue-storefront/core/helpers'
 import { StorageManager } from '@vue-storefront/core/lib/storage-manager'
 import { isServer } from '@vue-storefront/core/helpers'
+import { localizedRoute } from '@vue-storefront/core/lib/multistore'
+import { Logger } from '@vue-storefront/core/lib/logger'
 
 import { ExtendedUserStore } from './store'
 import * as types from './store/mutation-types'
 
-export const IcmaaExtendedUserModule: StorefrontModule = async function ({ store }) {
+export const IcmaaExtendedUserModule: StorefrontModule = async function ({ store, router }) {
   extendStore('user', ExtendedUserStore)
+
+  if (!isServer) {
+    /**
+     * Call this action here to be able to overwrite the original action.
+     * The original one inside the user module is uncommented.
+     */
+    store.dispatch('user/startSession')
+
+    /**
+     * This is our router-guard to be able to protect router by login.
+     */
+    router.beforeEach(async (to, from, next) => {
+      if (to.meta.isSecure === true && !store.getters['user/isLoggedIn']) {
+        const unwatch = store.watch(
+          () => store.state.user.session_started,
+          value => {
+            const unauthorizedRedirect = localizedRoute({ name: 'home', query: { fwd: 'login' } })
+            const timeout = setTimeout(() => {
+              Logger.log('User is not authorized in time, redirect to login.', 'user')()
+              next(unauthorizedRedirect)
+            }, 2000)
+
+            if (value !== null) {
+              unwatch()
+              clearTimeout(timeout)
+
+              if (store.getters['user/isLoggedIn'] === true) {
+                next()
+              } else {
+                Logger.log('User is not authorized, redirect to login.', 'user')()
+                next(unauthorizedRedirect)
+              }
+            }
+          }
+        )
+        return
+      }
+
+      next()
+    })
+  }
 
   store.subscribe((mutation, state) => {
     if (mutation.type.endsWith(types.USER_ADD_SESSION_DATA) || mutation.type.endsWith(types.USER_RMV_SESSION_DATA)) {

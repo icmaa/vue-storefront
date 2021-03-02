@@ -109,7 +109,6 @@
 
 <script>
 import { required } from 'vuelidate/lib/validators'
-import Composite from '@vue-storefront/core/mixins/composite'
 
 import BaseCheckbox from 'theme/components/core/blocks/Form/BaseCheckbox'
 import ButtonComponent from 'theme/components/core/blocks/Button'
@@ -126,7 +125,7 @@ export default {
     CartSummary,
     Modal
   },
-  mixins: [OrderReview, Composite],
+  mixins: [OrderReview],
   validations: {
     orderReview: {
       terms: {

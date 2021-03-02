@@ -4,12 +4,10 @@ import { currentStoreView } from '@vue-storefront/core/lib/multistore'
 export default {
   computed: {
     languageSwitcherConfigs () {
-      return config.icmaa.languageSwitcher.map(l => ({
-        url: l[0],
-        storeCode: l[1],
-        languageCode: l[2],
-        name: l[3]
-      }))
+      return config.icmaa.languageSwitcher.map(l => {
+        const [ url, storeCode, languageCode, name ] = l
+        return { url, storeCode, languageCode, name }
+      })
     },
     languageSwitcherConfig () {
       const { storeCode } = currentStoreView()

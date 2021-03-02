@@ -1,5 +1,5 @@
-describe('Add to And Remove from Wishlist ', () => {
-  it('from ProductDetailPage', () => {
+describe('Add to and remove from wishlist ', () => {
+  it('on PDP', () => {
     cy.visitProductDetailPage()
     cy.getByTestId('AddToWishlistButton').click()
     cy.checkNotification('success')
@@ -9,7 +9,7 @@ describe('Add to And Remove from Wishlist ', () => {
     cy.checkNotification('success')
   })
 
-  it('from ProductListing', () => {
+  it('on CLP', () => {
     cy.visitCategoryPage()
     cy.wait(1000)
     cy.getByTestId('ProductTile').random().findByTestId('AddToWishlist').click()

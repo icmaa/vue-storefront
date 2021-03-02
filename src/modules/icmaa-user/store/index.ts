@@ -9,6 +9,7 @@ import merge from 'lodash-es/merge'
 
 export const ExtendedUserStore: Module<UserState, any> = {
   state: merge(userStore.state, {
+    session_started: null,
     sessionData: {}
   }),
   mutations,

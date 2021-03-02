@@ -14,7 +14,7 @@ describe('Language selector', () => {
 
     cy.getByTestId('Modal').should('be.visible')
     cy.getByTestId('ModalClose').click()
-    cy.getByTestId('Modal').should('not.be.visible')
+    cy.getByTestId('Modal').should('not.exist')
   })
 
   it('Language modal should show', () => {

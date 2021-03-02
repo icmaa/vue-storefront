@@ -19,7 +19,6 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { localizedRoute } from '@vue-storefront/core/lib/multistore'
 import i18n from '@vue-storefront/i18n'
 import last from 'lodash-es/last'
 
@@ -87,7 +86,7 @@ export default {
       }
 
       if (this.withHomepage) {
-        routes.unshift({ name: i18n.t('Homepage'), route_link: localizedRoute('/'), visible: true })
+        routes.unshift({ name: i18n.t('Homepage'), route_link: this.localizedHomeRoute, visible: true })
       }
 
       return routes

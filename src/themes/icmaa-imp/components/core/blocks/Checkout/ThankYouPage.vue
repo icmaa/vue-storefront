@@ -42,7 +42,7 @@
               </button-component>
             </p>
             <p>
-              <button-component @click="$router.push('/')">
+              <button-component @click="$router.push(localizedHomeRoute)">
                 {{ $t('Return to shopping') }}
               </button-component>
             </p>
@@ -76,7 +76,6 @@
 </template>
 
 <script>
-import Composite from '@vue-storefront/core/mixins/composite'
 import Breadcrumbs from 'theme/components/core/Breadcrumbs'
 import BaseTextarea from 'theme/components/core/blocks/Form/BaseTextarea'
 import ButtonComponent from 'theme/components/core/blocks/Button'
@@ -89,7 +88,7 @@ import { MailerModule } from '@vue-storefront/core/modules/mailer'
 
 export default {
   name: 'ThankYouPage',
-  mixins: [Composite, VueOfflineMixin, EmailForm],
+  mixins: [VueOfflineMixin, EmailForm],
   beforeCreate () {
     registerModule(MailerModule)
   },

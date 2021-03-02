@@ -46,12 +46,10 @@ export default {
       return currentStoreView()
     },
     storeViews () {
-      return config.icmaa.languageSwitcher.map(l => ({
-        url: l[0],
-        storeCode: l[1],
-        languageCode: l[2],
-        name: l[3]
-      }))
+      return config.icmaa.languageSwitcher.map(l => {
+        const [ url, storeCode, languageCode, name ] = l
+        return { url, storeCode, languageCode, name }
+      })
     }
   },
   methods: {

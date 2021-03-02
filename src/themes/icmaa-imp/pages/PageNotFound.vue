@@ -11,12 +11,16 @@
             {{ $t("Unfortunately we can't find the page you are looking for.") }}
           </h2>
           <i18n path="If you need assistance you can drop {link}." tag="p" class="t-mb-2 lg:t-mb-0">
-            <router-link :to="localizedRoute(`/service`)" place="link" class="t-text-base-tone t-underline" v-text="$t('us a line here')" />
+            <template #link>
+              <router-link :to="localizedRoute(`/service`)" class="t-text-base-tone t-underline" v-text="$t('us a line here')" />
+            </template>
           </i18n>
           <i18n path="You can also use {link} to find anything you were looking for." tag="p" class="t-mb-4">
-            <span @click="toggleSearchpanel" place="link" class="t-cursor-pointer t-text-base-tone t-underline">{{ $t('our search') }}</span>
+            <template #link>
+              <span @click="toggleSearchpanel" class="t-cursor-pointer t-text-base-tone t-underline">{{ $t('our search') }}</span>
+            </template>
           </i18n>
-          <router-link :to="localizedRoute('/')" :title="$t('Home')">
+          <router-link :to="localizedHomeRoute" :title="$t('Home')">
             <button-component class="t-w-full" type="primary">
               <i class="t-mr-2 material-icons">keyboard_backspace</i> {{ $t('Home') }}
             </button-component>
@@ -29,7 +33,6 @@
 
 <script>
 import i18n from '@vue-storefront/i18n'
-import Composite from '@vue-storefront/core/mixins/composite'
 import { Logger } from '@vue-storefront/core/lib/logger'
 import ButtonComponent from 'theme/components/core/blocks/Button'
 
@@ -38,7 +41,6 @@ export default {
   components: {
     ButtonComponent
   },
-  mixins: [Composite],
   async asyncData ({ store, route, context }) {
     Logger.log('Entering asyncData for PageNotFound ' + new Date())()
     if (context) {

@@ -21,8 +21,7 @@
 </template>
 
 <script>
-import { currentStoreView, localizedRoute } from '@vue-storefront/core/lib/multistore'
-
+import { mapGetters } from 'vuex'
 import Lazyload from 'icmaa-cms/components/Lazyload'
 import Teaser from 'theme/components/core/blocks/Teaser/Teaser'
 import LogoLine from 'theme/components/core/blocks/CategoryExtras/LogoLineBlock'
@@ -37,6 +36,11 @@ export default {
     ProductListingWidget,
     CmsBlock
   },
+  computed: {
+    ...mapGetters({
+      isLoggedIn: 'user/isLoggedIn'
+    })
+  },
   mounted () {
     if (!this.isLoggedIn && localStorage.getItem('redirect')) {
       this.$store.dispatch('ui/showModal', 'modal-signup')
@@ -44,17 +48,17 @@ export default {
 
     const { fwd } = this.$route.query
     if (fwd) {
-      if (fwd === 'login') {
+      if (fwd === 'login' && !this.isLoggedIn) {
         this.$store.commit('ui/setAuthElem', 'login')
         this.$store.dispatch('ui/showModal', 'modal-signup')
-      } else if (fwd === 'create' || fwd === 'register') {
+      } else if ((fwd === 'create' || fwd === 'register') && !this.isLoggedIn) {
         this.$store.commit('ui/setAuthElem', 'register')
         this.$store.dispatch('ui/showModal', 'modal-signup')
       } else if (fwd === 'cart') {
         this.$store.dispatch('ui/setSidebar', { key: 'microcart' })
       }
 
-      this.$router.push(localizedRoute('/', currentStoreView().storeCode))
+      this.$router.push(this.localizedHomeRoute)
     }
   },
   async asyncData ({ context }) {

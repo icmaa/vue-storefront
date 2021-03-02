@@ -37,7 +37,7 @@ describe('Reviews', () => {
 
     cy.getByTestId('ReviewsClaim').should('be.visible')
     cy.getByTestId('ReviewsClaimAccept').click()
-    cy.getByTestId('ReviewsClaim').should('not.be.visible')
+    cy.getByTestId('ReviewsClaim').should('not.exist')
     cy.get('#reviews-form').should('be.visible')
 
     cy.getFromLocalStorage('shop/uniClaims/reviewsClaimAccepted')

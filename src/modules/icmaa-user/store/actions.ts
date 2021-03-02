@@ -4,6 +4,7 @@ import UserState from '../types/UserState'
 import { UserService } from '@vue-storefront/core/data-resolver'
 import { UserService as IcmaaUserService } from '../data-resolver/UserService'
 import * as userTypes from '@vue-storefront/core/modules/user/store/mutation-types'
+import { StorageManager } from '@vue-storefront/core/lib/storage-manager'
 import { SearchQuery } from 'storefront-query-builder'
 import { isServer } from '@vue-storefront/core/helpers'
 import { Logger } from '@vue-storefront/core/lib/logger'
@@ -20,6 +21,40 @@ import userSessionActions from './actions/user-session'
 const actions: ActionTree<UserState, RootState> = {
   ...facebookLoginActions,
   ...userSessionActions,
+  /**
+   * Copy of original – changes:
+   * * Set `session_started` default to `null` and set it after the authorization is checked.
+   *   This way we can use a watcher to check if the session is already authorized and don't need
+   *   to relay on the "session-after-started" event and preserve the write-in-one-direction approach of Vuex.
+   * * We must uncomment the original dispatch of `startSession` in  `UserModule` to be able to overwrite this action.
+   */
+  async startSession ({ commit, dispatch, getters }) {
+    const usersCollection = StorageManager.get('user')
+    const userData = await usersCollection.getItem('current-user')
+
+    if (isServer || getters.isLocalDataLoaded) return
+    commit(userTypes.USER_LOCAL_DATA_LOADED, true)
+
+    if (userData) {
+      commit(userTypes.USER_INFO_LOADED, userData)
+    }
+
+    const lastUserToken = await usersCollection.getItem('current-token')
+
+    if (lastUserToken) {
+      commit(userTypes.USER_TOKEN_CHANGED, { newToken: lastUserToken })
+      await dispatch('sessionAfterAuthorized', {})
+
+      if (userData) {
+        dispatch('setUserGroup', userData)
+      }
+    } else {
+      EventBus.$emit('session-after-nonauthorized')
+    }
+
+    commit(userTypes.USER_START_SESSION)
+    EventBus.$emit('session-after-started')
+  },
   async startSessionWithToken ({ commit, dispatch }, { token }) {
     if (isServer) {
       return

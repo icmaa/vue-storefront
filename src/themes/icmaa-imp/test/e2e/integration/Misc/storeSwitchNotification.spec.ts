@@ -26,7 +26,7 @@ describe('Notification for Store switch', () => {
 
           cy.getByTestId('ModalStoreViewAdvice').scrollIntoView().should('be.visible')
           cy.getByTestId('ModalClose').click()
-          cy.getByTestId('Modal').should('not.be.visible')
+          cy.getByTestId('Modal').should('not.exist')
 
           cy.getFromLocalStorage('shop/uniClaims/languageAccepted')
             .then(claim => {
