@@ -11,10 +11,14 @@
             {{ $t("Unfortunately we can't find the page you are looking for.") }}
           </h2>
           <i18n path="If you need assistance you can drop {link}." tag="p" class="t-mb-2 lg:t-mb-0">
-            <router-link :to="localizedRoute(`/service`)" place="link" class="t-text-base-tone t-underline" v-text="$t('us a line here')" />
+            <template #link>
+              <router-link :to="localizedRoute(`/service`)" class="t-text-base-tone t-underline" v-text="$t('us a line here')" />
+            </template>
           </i18n>
           <i18n path="You can also use {link} to find anything you were looking for." tag="p" class="t-mb-4">
-            <span @click="toggleSearchpanel" place="link" class="t-cursor-pointer t-text-base-tone t-underline">{{ $t('our search') }}</span>
+            <template #link>
+              <span @click="toggleSearchpanel" class="t-cursor-pointer t-text-base-tone t-underline">{{ $t('our search') }}</span>
+            </template>
           </i18n>
           <router-link :to="localizedHomeRoute" :title="$t('Home')">
             <button-component class="t-w-full" type="primary">
