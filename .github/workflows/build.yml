@@ -35,7 +35,7 @@ jobs:
 
       - name: Get environment by branch
         run: |
-          echo "ENV=$(if [ ${{ env.BRANCH_NAME }} = "master" ]; then echo "production"; else echo "test"; fi)" >> $GITHUB_ENV
+          echo "ENV=$(if [[ ${{ env.BRANCH_NAME }} =~ ^master ]]; then echo "production"; else echo "test"; fi)" >> $GITHUB_ENV
 
       - name: Checkout "icmaa/shop-workspace" repo
         run: |
