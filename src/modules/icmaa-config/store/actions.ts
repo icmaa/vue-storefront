@@ -18,10 +18,10 @@ const actions: ActionTree<ConfigState, RootState> = {
       return store
     })
 
-    // if (!storeView) storeView = currentStoreView()
+    if (!storeView) storeView = currentStoreView()
     storeConfigs = storeConfigs
       .map(storeConfig => getExtendedStoreviewConfig(storeConfig, storeConfigs))
-      // .filter(store => store.storeCode === storeView.storeCode)
+      .filter(store => store.storeCode === storeView.storeCode)
 
     commit(types.ICMAA_CONFIG_ADD_MAP, storeConfigs)
     return storeConfigs
