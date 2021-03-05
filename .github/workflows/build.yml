@@ -59,9 +59,9 @@ jobs:
       - name: Zip build
         run: |
           mkdir builds
-          zip -r builds/${{ env.APP }}-${{ matrix.env.MANDANT }}-${{ env.ENV }}-latest.zip $(cat .build-files)
+          zip -r builds/${{ env.APP }}-${{ matrix.env.MANDANT }}-${{ env.ENV }}-latest.zip $(cat .build-files) > /dev/null 2>&1
           cp builds/${{ env.APP }}-${{ matrix.env.MANDANT }}-${{ env.ENV }}-latest.zip builds/${{ env.APP }}-${{ matrix.env.MANDANT }}-${{ env.ENV }}-$(date '+%Y%m%d-%H%M%S').zip
-          [[ "${{ env.BRANCH_NAME }}" =~ ^(master) && ! "${{ env.BRANCH_NAME }}" =~ ^master$ ]] && rm builds/${{ env.APP }}-${{ matrix.env.MANDANT }}-${{ env.ENV }}-latest.zip
+          [[ "${{ env.BRANCH_NAME }}" =~ ^master && ! "${{ env.BRANCH_NAME }}" =~ ^master$ ]] && (echo "Remove latest-build" && rm builds/${{ env.APP }}-${{ matrix.env.MANDANT }}-${{ env.ENV }}-latest.zip) || echo "Keep latest build"
 
       - name: Upload binary to S3 bucket
         uses: jakejarvis/s3-sync-action@master
