@@ -326,7 +326,7 @@ app.get('*', (req, res, next) => {
             if (config.server.dynamicConfigContinueOnError) {
               dynamicCacheHandler()
             } else {
-              console.log('config provider error:', error)
+              console.error(`Config provider error: ${req.url}`, error)
               if (req.url !== '/error') {
                 res.redirect('/error')
               }
