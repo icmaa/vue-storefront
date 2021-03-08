@@ -189,7 +189,7 @@ export default {
     WebShare,
     Lazyload
   },
-  mixins: [IcmaaProduct, ProductMetaMixin, ProductPriceMixin, ProductOptionsMixin, ProductAddToCartMixin, FeaturesMixin, ClusterMixin],
+  mixins: [IcmaaProduct, ProductPriceMixin, ProductOptionsMixin, ProductAddToCartMixin, FeaturesMixin, ClusterMixin],
   beforeCreate () {
     registerModule(ReviewModule)
     registerModule(IcmaaExtendedReviewModule)

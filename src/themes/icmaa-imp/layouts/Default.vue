@@ -95,11 +95,11 @@ export default {
       return this.$store.dispatch('icmaaCmsBlock/list', defaultBlocks.join(','))
     }
   },
-  serverPrefetch () {
-    return Promise.all([
-      this.fetchMetaData()
-    ])
-  },
+  // serverPrefetch () {
+  //   return Promise.all([
+  //     this.fetchMetaData()
+  //   ])
+  // },
   beforeMount () {
     // Progress bar on top of the page
     this.$router.beforeEach((to, from, next) => {
@@ -119,7 +119,7 @@ export default {
     this.$bus.$off('offline-order-confirmation', this.onOrderConfirmation)
   },
   metaInfo () {
-    let metaData = this.getMetaData()
+    let metaData = {} // this.getMetaData()
 
     /**
      * #199586 We need to enable it for iOS devices to prevent from input zoom on focus

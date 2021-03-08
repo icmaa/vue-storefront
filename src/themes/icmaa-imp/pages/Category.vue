@@ -143,7 +143,7 @@ export default {
     CategoryExtrasFooter,
     BlockWrapper
   },
-  mixins: [ CategoryMixin, CategoryExtrasMixin, CategoryMetaMixin, ClusterMixin ],
+  mixins: [ CategoryMixin, CategoryExtrasMixin, ClusterMixin ],
   data () {
     return {
       pageSize: this.$route && this.$route.query.pagesize ? this.$route.query.pagesize : 24,
