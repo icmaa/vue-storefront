@@ -1,7 +1,7 @@
 import { mapGetters } from 'vuex'
 import { htmlDecode } from '@vue-storefront/core/filters'
 import { getThumbnailPath } from '@vue-storefront/core/helpers'
-import { currentStoreView, localizedRoute } from '@vue-storefront/core/lib/multistore'
+import { currentStoreView } from '@vue-storefront/core/lib/multistore'
 
 const store = currentStoreView()
 
