@@ -27,7 +27,7 @@ jobs:
           node-version: '14.x'
 
       - name: Install
-        uses: bahmutov/npm-install@v1.1.0
+        uses: bahmutov/npm-install@v1
 
       - name: Get repository name, and branch name
         run: |
@@ -46,9 +46,6 @@ jobs:
 
       - name: Sync config JSON files
         run: rsync -r ./shop-workspace/template/${{ env.APP }}/ ./
-
-      - name: Install dependencies
-        run: yarn
 
       - name: Build "${{ env.APP }}"
         run: yarn build
