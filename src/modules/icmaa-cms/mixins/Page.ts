@@ -5,7 +5,7 @@ import { stringToComponent } from '../helpers'
 import CmsMetaMixin from 'icmaa-meta/mixins/cmsMeta'
 
 export default {
-  mixins: [ ],
+  mixins: [ CmsMetaMixin ],
   computed: {
     ...mapGetters('icmaaCmsPage', ['getByIdentifier']),
     identifier (): string {

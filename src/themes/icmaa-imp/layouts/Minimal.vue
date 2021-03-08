@@ -30,14 +30,14 @@ export default {
       return this.$store.dispatch('icmaaMeta/load')
     }
   },
-  // serverPrefetch () {
-  //   return Promise.all([
-  //     this.fetchMetaData()
-  //   ])
-  // },
-  // metaInfo () {
-  //   return this.getMetaData()
-  // },
+  serverPrefetch () {
+    return Promise.all([
+      this.fetchMetaData()
+    ])
+  },
+  metaInfo () {
+    return this.getMetaData()
+  },
   components: {
     MinimalHeader,
     MinimalFooter
