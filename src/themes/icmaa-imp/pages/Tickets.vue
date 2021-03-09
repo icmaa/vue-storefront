@@ -5,7 +5,7 @@
       <twitter-status-bar screen-name="Impericonticket" :limit="1" class="t-w-full t-px-1 lg:t-px-2 t-mb-4" />
       <div v-for="(ticket, i) in sortedTickets" :key="i" class="t-w-1/2 lg:t-w-1/4 t-px-1 lg:t-px-2 t-mb-8" data-test-id="Tickets">
         <router-link :to="getCategoryRoute(ticket.category)" :title="ticket.category.name" class="t-block t-mb-4">
-          <retina-image :image="getImageUrl(ticket.poster)" :alt="ticket.category.name" :placeholder="true" ratio="263:370" class="t-w-full" />
+          <picture-component :alt="ticket.category.name | stripHTML" :src="ticket.poster" :width="263" :height="370" :placeholder="true" :sizes="sizes" ratio="1:1" class="t-w-full" />
         </router-link>
         <router-link :to="getCategoryRoute(ticket.category)" :title="ticket.category.name" class="t-block t-leading-tight t-text-sm t-text-primary">
           {{ ticket.category.name }}
@@ -20,13 +20,12 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { getThumbnailPath } from '@vue-storefront/core/helpers'
 import { formatCategoryLink } from '@vue-storefront/core/modules/url/helpers'
 import { getCurrentStoreviewDatetime } from 'icmaa-config/helpers/datetime'
 import registerGenericCmsStateModule from 'icmaa-cms/helpers/genericStateModule'
 import orderBy from 'lodash-es/orderBy'
 
-import RetinaImage from 'theme/components/core/blocks/RetinaImage'
+import PictureComponent from 'theme/components/core/blocks/Picture'
 import ButtonComponent from 'theme/components/core/blocks/Button'
 import TwitterStatusBar from 'theme/components/core/blocks/Twitter/TwitterStatusBar'
 import Teaser from 'theme/components/core/blocks/Teaser/Teaser'
@@ -34,7 +33,7 @@ import Teaser from 'theme/components/core/blocks/Teaser/Teaser'
 export default {
   name: 'Tickets',
   components: {
-    RetinaImage,
+    PictureComponent,
     ButtonComponent,
     TwitterStatusBar,
     Teaser
@@ -59,12 +58,19 @@ export default {
     },
     categoryUrlKeys () {
       return this.rawTickets.map(t => t.categoryUrlKey)
+    },
+    sizes () {
+      return [
+        // Order high-to-low is important
+        { media: '(min-width: 1280px)', width: 263 },
+        { media: '(min-width: 1024px)', width: 236 },
+        { media: '(min-width: 769px)', width: 364 },
+        { media: '(max-width: 767px)', width: 300 },
+        { media: '(max-width: 415px)', width: 220 }
+      ]
     }
   },
   methods: {
-    getImageUrl (image) {
-      return getThumbnailPath('/' + image, 0, 0, 'media')
-    },
     getCategoryRoute (category) {
       return formatCategoryLink(category)
     }

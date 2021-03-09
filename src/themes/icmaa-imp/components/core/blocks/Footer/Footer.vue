@@ -78,7 +78,6 @@ import Newsletter from 'theme/components/core/blocks/Footer/Newsletter'
 import BackToTop from 'theme/components/core/BackToTop'
 import MaterialIcon from 'theme/components/core/blocks/MaterialIcon'
 import FlagIcon from 'theme/components/core/blocks/FlagIcon'
-import RetinaImage from 'theme/components/core/blocks/RetinaImage'
 
 import throttle from 'lodash-es/throttle'
 

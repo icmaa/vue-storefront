@@ -119,7 +119,6 @@ import ProductListingWidget from 'icmaa-category/components/ProductListingWidget
 import Teaser from 'theme/components/core/blocks/Teaser/Teaser'
 
 import { mapGetters } from 'vuex'
-import RetinaImage from 'theme/components/core/blocks/RetinaImage'
 
 export default {
   name: 'DigitalEvent',
