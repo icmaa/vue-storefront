@@ -1,9 +1,7 @@
 import { mapGetters } from 'vuex'
 import { htmlDecode } from '@vue-storefront/core/filters'
 import { getThumbnailPath } from '@vue-storefront/core/helpers'
-import { currentStoreView, localizedRoute } from '@vue-storefront/core/lib/multistore'
-
-const store = currentStoreView()
+import { currentStoreView } from '@vue-storefront/core/lib/multistore'
 
 export default {
   computed: {
@@ -75,7 +73,7 @@ export default {
         { name: 'product.price', content: this.productPrice },
         { name: 'product:condition', content: 'new' },
         { name: 'product:availability', content: this.product.stock ? this.product.stock.is_in_stock : false },
-        { name: 'product:price:currency', content: store.i18n.currencyCode },
+        { name: 'product:price:currency', content: storeView.i18n.currencyCode },
         { name: 'product:price:amount', content: this.productFinalPrice },
         { name: 'product:brand', content: this.getOptionLabel({ attributeKey: this.productBandOrBrandCode, optionId: this.productBandOrBrand }) },
         ...this.productFbImages

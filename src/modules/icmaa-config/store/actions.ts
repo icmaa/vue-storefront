@@ -11,7 +11,6 @@ const actions: ActionTree<ConfigState, RootState> = {
   setMap ({ commit }, storeView?: StoreView): StoreView[] {
     Logger.debug('Hydrate store-view config values', 'icmaa-config')()
 
-    if (!storeView) storeView = currentStoreView()
     const { icmaa_config, storeViews } = config
     let storeConfigs = storeViews.mapStoreUrlsFor.map(storeCode => {
       let store = icmaa_config.map.find(s => s.storeCode === storeCode) || { storeCode }
@@ -19,11 +18,12 @@ const actions: ActionTree<ConfigState, RootState> = {
       return store
     })
 
+    if (!storeView) storeView = currentStoreView()
     storeConfigs = storeConfigs
       .map(storeConfig => getExtendedStoreviewConfig(storeConfig, storeConfigs))
       .filter(store => store.storeCode === storeView.storeCode)
 
-    commit(types.ICMAA_CONFIG_ADD_MAP, storeConfigs)
+    commit(types.ICMAA_CONFIG_ADD_MAPS, storeConfigs)
     return storeConfigs
   }
 }

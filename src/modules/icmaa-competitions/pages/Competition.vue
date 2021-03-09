@@ -2,7 +2,7 @@
   <div class="competition t-container" v-if="competition && hasStarted">
     <div class="t-px-4 t-pt-4 lg:t-pt-8 t-mb-8">
       <div class="t-flex t-flex-wrap t-items-start lg:t-items-stretch t-mb-8">
-        <retina-image :image="image" :alt="competition.headline | stripHTML" class="t-w-full lg:t-w-1/2" />
+        <picture-component :alt="competition.headline | stripHTML" :src="image" :width="624" :height="624" :placeholder="true" :sizes="sizes" ratio="1:1" class="t-w-full lg:t-w-1/2" />
         <div class="t-w-full lg:t-w-1/2 t-bg-white t-p-8 t-flex t-flex-col t-justify-center">
           <h1 class="t-font-light t-leading-tight t-mb-8 t-text-3xl t-text-primary lg:t-whitespace-pre-line" v-html="competition.headline" />
           <component :is="description" class="description t-text-sm t-leading-relaxed t-text-base-tone" />
@@ -20,7 +20,7 @@
         <div class="t-w-full lg:t-w-1/2 t-pt-px lg:t-pl-px lg:t-pt-0 t-flex">
           <div class="t-relative t-flex-1 t-bg-white">
             <router-link :to="competition.bannerLink" class="t-flex">
-              <retina-image :image="bannerImage" :alt="competition.bannerLinkText | stripHTML" class="t-flex-1 t-self-start" />
+              <picture-component :alt="competition.bannerLinkText | stripHTML" :src="bannerImage" :width="624" :height="312" :placeholder="true" :sizes="sizes" ratio="1:1" class="t-flex-1 t-self-start" />
             </router-link>
             <router-link :to="competition.bannerLink" class="t-flex t-items-center t-w-full lg:t-absolute lg:t-bottom-0 t-bg-white t-p-4 lg:t-px-6 lg:t-py-8 t-text-primary t-text-xl">
               <span v-text="competition.bannerLinkText" class="t-flex-1" />
@@ -63,13 +63,12 @@
 <script>
 import i18n from '@vue-storefront/i18n'
 import { mapGetters } from 'vuex'
-import { getThumbnailPath } from '@vue-storefront/core/helpers'
 import { toDate, isDatetimeSameOrAfter, isDateInBetween } from 'icmaa-config/helpers/datetime'
 import { stringToComponent } from 'icmaa-cms/helpers'
 import { Logger } from '@vue-storefront/core/lib/logger'
 
 import FormComponent from 'theme/components/core/blocks/Form/Form'
-import RetinaImage from 'theme/components/core/blocks/RetinaImage'
+import PictureComponent from 'theme/components/core/blocks/Picture'
 import ButtonComponent from 'theme/components/core/blocks/Button'
 import MaterialIcon from 'theme/components/core/blocks/MaterialIcon'
 
@@ -78,7 +77,7 @@ export default {
   components: {
     FormComponent,
     ButtonComponent,
-    RetinaImage,
+    PictureComponent,
     MaterialIcon
   },
   data () {
@@ -109,16 +108,26 @@ export default {
       return stringToComponent(this.competition.description)
     },
     image () {
-      return getThumbnailPath('/' + this.competition.image, 0, 0, 'media')
+      return this.competition.image
     },
     bannerImage () {
-      return getThumbnailPath('/' + this.competition.bannerImage, 0, 0, 'media')
+      return this.competition.bannerImage
     },
     youtubeVideoUrl () {
       return `https://www.youtube.com/embed/${this.competition.youtubeVideoId}`
     },
     showTo () {
       return this.competition.showTo ? toDate(this.competition.showTo) : false
+    },
+    sizes () {
+      return [
+        // Order high-to-low is important
+        { media: '(min-width: 1280px)', width: 1248 },
+        { media: '(min-width: 1024px)', width: 992 },
+        { media: '(min-width: 640px)', width: 768 },
+        { media: '(min-width: 415px)', width: 640 },
+        { media: '(max-width: 415px)', width: 415 }
+      ]
     }
   },
   methods: {
