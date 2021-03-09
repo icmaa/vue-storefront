@@ -123,7 +123,7 @@ export const actions: ActionTree<UrlState, any> = {
       return cmsPageUrl
     }
 
-    Logger.error('No route found for:', 'icmaa-url', url)()
+    Logger.error('No route found for:', 'icmaa-url', { url, params })()
 
     return {
       name: 'page-not-found',
