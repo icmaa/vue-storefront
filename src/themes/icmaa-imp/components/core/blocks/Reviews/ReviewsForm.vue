@@ -150,7 +150,7 @@ export default {
       reviewsTotalRating: 'review/getReviewsTotalRating'
     }),
     productId () {
-      return this.product.id
+      return this.product.parentId || this.product.id
     },
     currentUser () {
       return this.$store.state.user.current
