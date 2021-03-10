@@ -12,7 +12,7 @@ import { claimsStore } from 'theme/store/claims'
 import { uiStore } from 'theme/store/ui'
 import { StorageManager } from '@vue-storefront/core/lib/storage-manager'
 
-once('__VUE_EXTEND_DROPPOINT_VPB__', () => {
+once('__VUE_EXTEND_THEME__', () => {
   Vue.use(VueProgressBar, { thickness: '4px' })
   Vue.use(VueScrollTo, { offset: -55 })
   Vue.mixin(mixins)
