@@ -43,7 +43,7 @@ export function getExtendedStoreviewConfig (storeView: StoreView): StoreView {
 /**
  * Returns base storeView object that can be created without storeCode
  */
-function buildBaseStoreView (): StoreView {
+export function buildBaseStoreView (): StoreView {
   return cloneDeep({
     tax: config.tax,
     i18n: config.i18n,
