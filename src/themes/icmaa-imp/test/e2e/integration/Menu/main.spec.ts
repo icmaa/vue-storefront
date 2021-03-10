@@ -8,7 +8,7 @@ describe('Menu sidebar', () => {
       .should('have.length.gt', 0)
 
     cy.get('@sidebar')
-      .find('a')
+      .find('.sidebar-content a:not([rel*="noopener"])')
       .random()
       .as('link')
       .should('have.attr', 'href')
