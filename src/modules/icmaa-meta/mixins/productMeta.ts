@@ -1,14 +1,12 @@
 import { mapGetters } from 'vuex'
 import { htmlDecode } from '@vue-storefront/core/filters'
 import { getThumbnailPath } from '@vue-storefront/core/helpers'
-import { currentStoreView } from '@vue-storefront/core/lib/multistore'
 
 export default {
   computed: {
     ...mapGetters({
       getOptionLabel: 'attribute/getOptionLabel',
-      storeConfig: 'icmaaConfig/getCurrentStoreConfig',
-      store: 'icmaaConfig/getCurrentStore'
+      storeConfig: 'icmaaConfig/getCurrentStoreConfig'
     }),
     currencyCode () {
       return this.storeConfig ? this.storeConfig.i18n.currencyCode : ''
@@ -43,26 +41,7 @@ export default {
     }
   },
   metaInfo () {
-    /**
-     * @todo We can't load the current store-view from state management yet, the value is always empty in metaInfo().
-     * I opened an issue here: @see https://github.com/DivanteLtd/vue-storefront/issues/3674
-     */
-    const storeView = currentStoreView()
-
     return {
-      link: [
-        // {
-        //   rel: 'amphtml',
-        //   href: this.$router.resolve(localizedRoute({
-        //     name: this.product.type_id + '-product-amp',
-        //     params: {
-        //       parentSku: this.product.parentSku ? this.product.parentSku : this.product.sku,
-        //       slug: this.product.slug,
-        //       childSku: this.product.sku
-        //     }
-        //   }, storeView.storeCode)).href
-        // }
-      ],
       title: this.translatedProductName,
       meta: [
         { vmid: 'description', name: 'description', content: htmlDecode(this.product.description) },
@@ -73,7 +52,7 @@ export default {
         { name: 'product.price', content: this.productPrice },
         { name: 'product:condition', content: 'new' },
         { name: 'product:availability', content: this.product.stock ? this.product.stock.is_in_stock : false },
-        { name: 'product:price:currency', content: storeView.i18n.currencyCode },
+        { name: 'product:price:currency', content: this.storeConfig.i18n.currencyCode },
         { name: 'product:price:amount', content: this.productFinalPrice },
         { name: 'product:brand', content: this.getOptionLabel({ attributeKey: this.productBandOrBrandCode, optionId: this.productBandOrBrand }) },
         ...this.productFbImages
