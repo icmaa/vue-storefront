@@ -55,9 +55,18 @@ function buildBaseStoreView (): StoreView {
 }
 
 export function currentStoreView (): StoreView {
-  const serverStoreView = get(global, 'process.storeView', undefined)
-  const clientStoreView = get(rootStore, 'state.storeView', undefined)
-  return (isServer ? serverStoreView : clientStoreView) || buildBaseStoreView()
+  /**
+   * @see https://github.com/vuestorefront/vue-storefront/issues/5639
+   * We don't need to load it from global variable in SSR as it will be overwritten between multiple concurrent requests.
+   * This will cause a bunch of errors on shared nodes. As the rootState is unique for each request we can just use
+   * it without an extra global process variable for SSR. The rootState is initialized in the `createApp` factory at
+   * beginning this should be soon enough for all processes that need the store-view.
+   *
+   * const serverStoreView = get(global, 'process.storeView', undefined)
+   * const clientStoreView = get(rootStore, 'state.storeView', undefined)
+   * return (isServer ? serverStoreView : clientStoreView) || buildBaseStoreView()
+   */
+  return get(rootStore, 'state.storeView', undefined) || buildBaseStoreView()
 }
 
 export async function prepareStoreView (storeCode: string): Promise<StoreView> {
@@ -82,9 +91,10 @@ export async function prepareStoreView (storeCode: string): Promise<StoreView> {
     storeView = coreHooksExecutors.beforeStoreViewChanged(storeView)
     rootStore.state.storeView = storeView
 
-    if (global && isServer) {
-      (global.process as any).storeView = storeView
-    }
+    // See `currentStoreView()` for explaination
+    // if (global && isServer) {
+    //   (global.process as any).storeView = storeView
+    // }
 
     await loadLanguageAsync(storeView.i18n.defaultLocale)
   }
@@ -179,7 +189,7 @@ export function localizedRoute (routeObj: LocalizedRoute | string | RouteConfig 
 
   const storeCode = (forcedStoreCode && getStoreViewByStoreCode(forcedStoreCode))
     ? forcedStoreCode
-    : currentStoreView().storeCode
+    : (currentStoreView() ? currentStoreView().storeCode : false)
 
   if (storeCode) {
     if (typeof routeObj !== 'object') {
