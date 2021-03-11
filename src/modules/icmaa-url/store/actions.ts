@@ -2,8 +2,8 @@ import config from 'config'
 import CmsService from 'icmaa-cms/data-resolver/CmsService'
 import { ActionTree } from 'vuex'
 import { UrlState } from '@vue-storefront/core/modules/url/types/UrlState'
-import { removeStoreCodeFromRoute, currentStoreView, localizedDispatcherRouteName } from '@vue-storefront/core/lib/multistore'
-import { removeHashFromRoute } from '../helpers'
+import { currentStoreView, localizedDispatcherRouteName } from '@vue-storefront/core/lib/multistore'
+import { getUrlPathFromUrl, isCatalogOverwrite } from '../helpers'
 import { Logger } from '@vue-storefront/core/lib/logger'
 
 import has from 'lodash-es/has'
@@ -11,14 +11,6 @@ import has from 'lodash-es/has'
 interface UrlMapperOptions {
   urlPath: string,
   params: Record<string, any>
-}
-
-const getUrlPathFromUrl = (url): string => {
-  if (url.startsWith('/')) url = url.slice(1)
-  if (url.endsWith('/')) url = url.slice(0, -1)
-  url = removeStoreCodeFromRoute(url) as string
-  url = removeHashFromRoute(url) as string
-  return url
 }
 
 const getLocalizedDispatcherRouteName = (name) => {
@@ -38,20 +30,6 @@ const customUrls = async ({ urlPath }: UrlMapperOptions) => {
     }
   }
 
-  return undefined
-}
-
-/**
- * This is for CMS url's that should overwrite major entity url's like products/categories.
- * Otherwise we would need to check the CMS api before each product-/category-request.
- */
-const isCmsOverwrite = (urlPath: string): string => {
-  if (has(config, 'icmaa_url.cmsOverwrites')) {
-    const { cmsOverwrites: overwrites } = config.icmaa_url
-    const overwrite = Object.entries<string[]>(overwrites)
-      .find(([path, aliases]) => path === urlPath || aliases.includes(urlPath))
-    return overwrite ? overwrite.shift() as string : undefined
-  }
   return undefined
 }
 
@@ -99,7 +77,7 @@ export const actions: ActionTree<UrlState, any> = {
       return customUrl
     }
 
-    const isOverwrite = isCmsOverwrite(urlPath)
+    const isOverwrite = isCatalogOverwrite(urlPath)
     if (isOverwrite) {
       paramsObj.urlPath = isOverwrite
       const cmsPageUrl = await dispatch('mapCmsUrls', paramsObj)
