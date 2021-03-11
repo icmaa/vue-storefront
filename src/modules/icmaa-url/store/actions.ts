@@ -69,7 +69,7 @@ export const actions: ActionTree<UrlState, any> = {
       .catch(() => undefined)
   },
   async mapFallbackUrl ({ dispatch }, { url, params }: { url: string, params: any }) {
-    const urlPath = getUrlPathFromUrl(url)
+    let urlPath = getUrlPathFromUrl(url)
     const paramsObj = { urlPath, params }
 
     const customUrl = await customUrls(paramsObj)
@@ -80,10 +80,19 @@ export const actions: ActionTree<UrlState, any> = {
     const isOverwrite = isCatalogOverwrite(urlPath)
     if (isOverwrite) {
       paramsObj.urlPath = isOverwrite
+
+      const customUrl = await customUrls(paramsObj)
+      if (customUrl) {
+        return customUrl
+      }
+
       const cmsPageUrl = await dispatch('mapCmsUrls', paramsObj)
       if (cmsPageUrl) {
         return cmsPageUrl
       }
+
+      // Call rewrite from catalog when overwrite exists but not found in CMS on CSR
+      urlPath = isOverwrite
     }
 
     // This is the code of VSF
