@@ -29,8 +29,8 @@ The related Vuex storage should have an `ADD` mutation (called the same way) and
 
 If no `getRouteByIdentifier` getter is defined a default route like `{ name: `icmaa-cms-${component}`, params: { identifier } }` is composed.
 
-To overwrite active categories or products using the CMS you can add the specific url-path to the `icmaa_url.cmsOverwrites` config.
-This way VSF knows there is a CMS page for this path and checks the CMS resolution – if none found it will try to resolve the major catalog entities as usual. If would change the order of the url-resolution the VSF would make a request to the CMS api for each product or category just in case there is an overwrite – this would increase the network traffic and response time.
+To overwrite active categories or products using the CMS you can add the specific url-path to the `icmaa_url.catalogOverwrites` config.
+This way VSF knows there is a CMS page for this path and checks the CMS resolution – if none found it will try to resolve the major catalog entities as usual. If we change the order of the url-resolution the VSF would make a request to the CMS api for each product or category just in case there is an overwrite – this would increase the network traffic and response time.
 
 ## Static url-mapping
 
@@ -48,7 +48,7 @@ You can add your mappings to the `config/local.json`:
       "landing-page": "icmaaCmsLandingPages",
       "competition": "icmaaCompetitions"
     }
-    "cmsOverwrites": {
+    "catalogOverwrites": {
       "fashion.html": [ "fashion", "streetwear" ],
       "cms-identifier.html": [ "alias-1.html", "alias-2" ],
       ...
