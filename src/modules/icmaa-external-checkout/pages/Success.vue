@@ -23,6 +23,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import i18n from '@vue-storefront/i18n'
 
 import GoogleCustomerReview from 'icmaa-google-tag-manager/components/GoogleCustomerReview'
 import CheckoutSuccessGtmMixin from 'icmaa-google-tag-manager/mixins/checkoutSuccessGtm'
@@ -82,6 +83,14 @@ export default {
       if (!this.isLoggedIn && this.lastOrder) {
         this.$bus.$emit('checkout-success-last-order-loaded', this.lastOrder)
       }
+    }
+  },
+  metaInfo () {
+    return {
+      title: i18n.t('Order completed'),
+      meta: [
+        { vmid: 'robots', name: 'robots', content: 'noindex, nofollow' }
+      ]
     }
   }
 }
