@@ -87,7 +87,7 @@ export default {
   },
   metaInfo () {
     return {
-      title: i18n.t('Order completed'),
+      title: i18n.t('Order complete'),
       meta: [
         { vmid: 'robots', name: 'robots', content: 'noindex, nofollow' }
       ]
