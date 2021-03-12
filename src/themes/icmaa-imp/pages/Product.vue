@@ -211,10 +211,14 @@ export default {
     })
   },
   watch: {
-    product (newVal, oldVal) {
-      if (newVal.id !== oldVal.id) {
+    product (nProduct, oProduct) {
+      if (nProduct.id !== oProduct.id) {
         this.getQuantity()
         this.userHasSelectedVariant = false
+      }
+
+      if (nProduct.parentId) {
+        catalogHooksExecutors.productPageVisited(nProduct)
       }
     }
   },
