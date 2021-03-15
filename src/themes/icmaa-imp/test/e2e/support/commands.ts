@@ -156,6 +156,9 @@ Cypress.Commands.add('visitProductDetailPage', (options?) => {
     cy.visitCategoryPage(options)
   }
 
+  cy.intercept({ method: 'GET', pathname: '/api/stock/check*' })
+    .as('apiStockReq')
+
   cy.getByTestId('ProductTile')
     .random()
     .findByTestId('productLink')
@@ -311,6 +314,8 @@ Cypress.Commands.add('findImageWithPlaceholder', { prevSubject: 'element' }, (su
 })
 
 Cypress.Commands.add('checkAvailabilityOfCurrentProduct', () => {
+  cy.wait('@apiStockReq')
+
   cy.getByTestId('AddToCart').then($button => {
     if ($button.attr('disabled')) {
       cy.wrap(false).as('availability')
