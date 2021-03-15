@@ -2,7 +2,7 @@
   <div class="easter-calendar t-container">
     <div class="lg:t-p-4">
       <div class="wrapper t-p-4">
-        <div class="t-grid t-grid-cols-2 sm:t-grid-cols-6 t-gap-4">
+        <div class="t-grid t-grid-cols-2 sm:t-grid-cols-4 t-gap-4">
           <template v-for="(day, i) in daysOrdered">
             <div v-if="day === 'title'" :key="'title-' + i" class="t-col-span-2 sm:t-order-none t-flex t-items-center t-justify-center">
               <picture-component
@@ -11,9 +11,9 @@
                 :title="title.title"
                 :placeholder="true"
                 :width="getSizeBySpan(2)"
-                :height="getSizeBySpan(1)"
+                :height="getSizeBySpan(3)"
                 :sizes="getSizes(2)"
-                ratio="2:1"
+                ratio="3:2"
               />
             </div>
             <div v-else-if="day === 'ad'" :key="'ad-' + i" class="t-col-span-2 t-row-span-2 t-flex t-items-center t-justify-center">
@@ -92,9 +92,9 @@
               :src="`${imgPath}/logos/${logo.imagePath}`"
               :alt="logo.title"
               :placeholder="true"
-              :width="80"
-              :height="50"
-              :sizes="[ { media: '(min-width: 0px)', width: 80 } ]"
+              :width="160"
+              :height="65"
+              :sizes="[ { media: '(min-width: 0px)', width: 160 } ]"
               ratio="8:5"
             />
           </div>
