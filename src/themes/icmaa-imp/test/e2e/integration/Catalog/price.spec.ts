@@ -33,6 +33,9 @@ const findProductInStock = (run: number = 1, tries: number = 3) => {
   }
 
   cy.visitCategoryPage()
+
+  cy.registerStockApiRequest()
+
   cy.getByTestId('ProductTile')
     .random()
     .then($product => {

@@ -283,6 +283,18 @@ declare namespace Cypress {
 
     /**
      * Check availability of current product.
+     * Adds alias `apiStockReq` for further use.
+     *
+     * @example
+     * cy.registerStockApiRequest()
+     * //...
+     * cy.wait('@apiStockReq')
+     */
+    registerStockApiRequest(): Chainable<Window>,
+
+    /**
+     * Check availability of current product.
+     * Its important that the `registerStockApiRequest` is called to register the stock-api route before the PDP is opened.
      * Adds alias `availability` for further use.
      * Adds alias `productType` for further use.
      *

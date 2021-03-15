@@ -59,7 +59,7 @@ export default {
       reviewsTotalRating: 'review/getReviewsTotalRating'
     }),
     productId () {
-      return this.product.id
+      return this.product.parentId || this.product.id
     },
     total () {
       return this.reviewsCount + ' ' + (this.reviewsCount > 1 ? i18n.t('Reviews') : i18n.t('Review'))
