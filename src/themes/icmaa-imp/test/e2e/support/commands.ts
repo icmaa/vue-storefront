@@ -156,8 +156,7 @@ Cypress.Commands.add('visitProductDetailPage', (options?) => {
     cy.visitCategoryPage(options)
   }
 
-  cy.intercept({ method: 'GET', pathname: '/api/stock/check*' })
-    .as('apiStockReq')
+  cy.registerStockApiRequest()
 
   cy.getByTestId('ProductTile')
     .random()
@@ -311,6 +310,11 @@ Cypress.Commands.add('getBrowserLanguage', () => {
 
 Cypress.Commands.add('findImageWithPlaceholder', { prevSubject: 'element' }, (subject, selector: string = 'img') => {
   cy.wrap(subject).find(selector + ':not(.t-hidden)')
+})
+
+Cypress.Commands.add('registerStockApiRequest', () => {
+  cy.intercept({ method: 'GET', pathname: '/api/stock/check*' })
+    .as('apiStockReq')
 })
 
 Cypress.Commands.add('checkAvailabilityOfCurrentProduct', () => {
