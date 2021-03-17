@@ -9,7 +9,6 @@
 import config from 'config'
 import cloneDeep from 'lodash-es/cloneDeep'
 import LozadMixin from 'theme/mixins/lozadMixin'
-import { getThumbnailPath } from '@vue-storefront/core/helpers'
 
 export default {
   name: 'ProductImage',
@@ -83,7 +82,7 @@ export default {
   methods: {
     getImageWithSize (width = 0, height = 0) {
       const src = this.image || ''
-      return getThumbnailPath(src, width, height)
+      return this.getThumbnail(src, width, height)
     },
     onLoaded () {
       if (this.loading === true) {

@@ -10,7 +10,6 @@
 import Placeholder from 'theme/components/core/blocks/Placeholder'
 import LozadMixin from 'theme/mixins/lozadMixin'
 import cloneDeep from 'lodash-es/cloneDeep'
-import { getThumbnailPath } from '@vue-storefront/core/helpers'
 
 export default {
   name: 'Picture',
@@ -120,7 +119,7 @@ export default {
       return `${path}`
     },
     getImageWithSize (src, width = 0, height = 0) {
-      return getThumbnailPath(src, width, height, this.pathType || 'media')
+      return this.getThumbnail(src, width, height, this.pathType || 'media')
     },
     prepareClassProp (value) {
       if (typeof value === 'string') {
