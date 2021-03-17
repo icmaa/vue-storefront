@@ -9,8 +9,6 @@ export interface ImageHookReturn {
   path: string
 }
 
-export interface ImakeHook {
-  default: {
-    afterProductThumbnailPathGenerate(params: ImageHookProperties): ImageHookReturn
-  }
+export interface ImageHook {
+  afterProductThumbnailPathGenerate(params: ImageHookProperties): ImageHookReturn
 }
