@@ -13,7 +13,7 @@
                 :width="getSizeBySpan(2)"
                 :height="getSizeBySpan(3)"
                 :sizes="getSizes(2)"
-                ratio="3:2"
+                ratio="2:1"
               />
             </div>
             <div v-else-if="day === 'ad'" :key="'ad-' + i" class="t-col-span-2 t-row-span-2 t-flex t-items-center t-justify-center">
@@ -26,7 +26,7 @@
                   :width="getSizeBySpan(2)"
                   :height="getSizeBySpan(2)"
                   :sizes="getSizes(2)"
-                  ratio="1:1"
+                  ratio="2:2"
                 />
               </router-link>
             </div>
@@ -57,7 +57,7 @@
               <template v-else-if="day.status === 'done'">
                 <picture-component
                   class="t-w-full t-opacity-75"
-                  style="filter: grayscale(1)"
+                  style="filter: grayscale(1); mix-blend-mode: multiply;"
                   :src="`${imgPath}/opened/${day.imagePath}`"
                   :alt="`Door # ${day.int}`"
                   :placeholder="true"
@@ -197,7 +197,7 @@ export default {
   },
   methods: {
     getSizeBySpan (colSpan) {
-      return (200 * colSpan) + ((colSpan - 1) * 16)
+      return (300 * colSpan) + ((colSpan - 1) * 16)
     },
     getSizes (colSpan) {
       return [
