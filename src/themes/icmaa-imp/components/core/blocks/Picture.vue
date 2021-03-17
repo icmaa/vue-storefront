@@ -104,10 +104,13 @@ export default {
       })
     },
     defaultImage () {
-      return {
+      const test = {
         src: this.getImageWithSize(this.image, this.width, this.height),
         srcAt2x: this.getImageWithSize(this.image, this.width * 2, this.height * 2)
       }
+      console.error('image', test)
+
+      return test
     }
   },
   methods: {
