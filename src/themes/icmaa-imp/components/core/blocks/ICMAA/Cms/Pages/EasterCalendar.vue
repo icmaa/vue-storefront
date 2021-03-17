@@ -82,7 +82,7 @@
             </div>
           </template>
         </div>
-        <div class="t-mt-4 t-grid t-grid-cols-4 sm:t-grid-cols-9 t-gap-4" v-if="sponsoreLogos && sponsoreLogos.length > 0">
+        <div class="t-mt-4 t-grid t-grid-cols-3 sm:t-grid-cols-9 t-gap-4" v-if="sponsoreLogos && sponsoreLogos.length > 0">
           <div class="t-col-span-2 sm:t-col-span-9 t-flex t-font-bold t-italic t-items-center t-text-white sm:t-pt-4 sm:t-pl-4">
             Sponsored by
           </div>
