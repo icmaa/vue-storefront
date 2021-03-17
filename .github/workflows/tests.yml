@@ -114,8 +114,9 @@ jobs:
           # spec: integration/Cms/**/*
           record: true
           parallel: true
+          group: ${{ runner.os }}
           tag: ${{ github.event_name }},${{ github.event_name }}/${{ github.event.action }}
-          ci-build-id: '${{ github.sha }}-${{ github.workflow }}-${{ github.event_name }}-${{ github.event.action }}-${{ github.run_number }}'
+          ci-build-id: 'continous-integration-${{ github.sha }}-${{ github.run_id }}-${{ github.run_number }}'
         env:
           COMMIT_INFO_MESSAGE: ${{ github.event.pull_request.title }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
