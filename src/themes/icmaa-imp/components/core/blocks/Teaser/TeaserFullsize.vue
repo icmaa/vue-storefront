@@ -15,7 +15,6 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { getThumbnailPath } from '@vue-storefront/core/helpers'
 import TeaserMixin from 'icmaa-teaser/mixins/teaserMixin'
 import MaterialIcon from 'theme/components/core/blocks/MaterialIcon'
 import PictureComponent from 'theme/components/core/blocks/Picture'
