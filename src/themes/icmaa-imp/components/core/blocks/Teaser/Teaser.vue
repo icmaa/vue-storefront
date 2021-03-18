@@ -7,12 +7,14 @@
       </template>
       <template v-if="showSplit && teaserSmall && teaserSmall.length > 0">
         <template v-if="showSmallInRow">
-          <div class="t-flex t-flex-wrap">
-            <teaser-small v-for="(teaser, index) in teaserSmall" :teaser="teaser" :index="index" :redirect-to-edit="redirectToEdit" :key="'small_' + teaser.storyId" />
+          <div class="t-flex t-flex-wrap t--mb-8">
+            <teaser-small v-for="(teaser, index) in teaserSmall" :teaser="teaser" :index="index" :redirect-to-edit="redirectToEdit" :key="'small_' + teaser.storyId" class="t-mb-8" />
           </div>
         </template>
         <template v-else>
-          <teaser-split v-for="(teaser, index) in teaserSmall" :teaser="teaser" :index="index" :redirect-to-edit="redirectToEdit" :key="'small_' + teaser.storyId" :class="{ 't-mb-8': index !== (teaserSmall.length - 1) }" />
+          <div class="t--mb-8">
+            <teaser-split v-for="(teaser, index) in teaserSmall" :teaser="teaser" :index="index" :redirect-to-edit="redirectToEdit" :key="'small_' + teaser.storyId" class="t-mb-8" />
+          </div>
         </template>
       </template>
     </template>
