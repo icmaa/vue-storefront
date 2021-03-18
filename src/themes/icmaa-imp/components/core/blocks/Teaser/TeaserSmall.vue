@@ -4,7 +4,7 @@
       {{ teaser.buttonText | translate }}
     </div>
     <picture-component :src="imageUrl" :alt="teaser.text1 | translate | htmlDecode" :width="288" :height="288" :placeholder="true" :sizes="sizes" ratio="1:1" class="t-flex-fix t-min-w-full t-max-w-full" />
-    <h2 class="t-flex-grow t-text-sm t-text-primary t-leading-tight t-pt-4" :class="{ 't-pb-8 lg:t-pb-0': !lastRow }">
+    <h2 class="t-flex-grow t-text-sm t-text-primary t-leading-tight t-pt-4">
       <router-link :to="link" @click.native="setGender" :title="teaser.text1 | translate | htmlDecode" class="t-text-primary">
         {{ teaser.text1 | translate }}
       </router-link>
@@ -16,7 +16,6 @@
 <script>
 import TeaserMixin from 'icmaa-teaser/mixins/teaserMixin'
 import PictureComponent from 'theme/components/core/blocks/Picture'
-import ButtonComponent from 'theme/components/core/blocks/Button'
 import EditButton from 'theme/components/core/blocks/Teaser/EditButton'
 
 export default {
@@ -36,9 +35,6 @@ export default {
         { media: '(max-width: 767px)', width: 285 },
         { media: '(max-width: 415px)', width: 176 }
       ]
-    },
-    lastRow () {
-      return this.index + 1 > 2
     }
   }
 }
