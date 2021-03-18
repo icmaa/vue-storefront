@@ -1,7 +1,7 @@
 <template>
-  <div class="product-gallery">
+  <div class="product-gallery t-overflow-hidden">
     <img src="/assets/product-placeholder.svg" class="t-block t-w-full lg:t-w-2/3" v-if="!isOnline">
-    <div v-else class="media-gallery t-overflow-scroll">
+    <div v-else class="media-gallery t-flex t-items-center t-overflow-hidden" :style="{ '--n': images.length }">
       <product-image v-for="image in images" :key="image" :image="image" />
     </div>
   </div>
@@ -48,6 +48,10 @@ export default {
 
 <style lang="scss" scoped>
 
+/**
+ * This is a custom approach by using CSS and JS in combination with standard browser funcs.
+ * @see https://css-tricks.com/simple-swipe-with-vanilla-javascript/
+ */
 .product-gallery {
   --image-width: 100%;
 
@@ -66,17 +70,17 @@ export default {
   }
 
   .media-gallery {
-    display: flex;
-    align-items: center;
-
     --n: 1;
 
     width: 100%;
-    width: calc(var(--n) * var(100%));
+    width: calc(var(--n) * 100%);
+    transform: translate(calc(var(--i, 0) / var(--n) * (-1 * var(--image-width))));
+    transition: transform .5s ease-out;
 
     picture {
       min-width: var(--image-width);
       width: var(--image-width);
+      min-width: calc(var(--image-width) / var(--n));
       width: calc(var(--image-width) / var(--n));
     }
   }
