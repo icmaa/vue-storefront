@@ -161,6 +161,7 @@ import BaseCheckbox from 'theme/components/core/blocks/Form/BaseCheckbox'
 import MaterialIcon from 'theme/components/core/blocks/MaterialIcon'
 import FacebookLoginButton from 'theme/components/core/blocks/Auth/FacebookLoginButton'
 import NoSSR from 'vue-no-ssr'
+import { toDate } from 'icmaa-config/helpers/datetime'
 import { date } from 'icmaa-config/helpers/validators'
 import { required, email, minLength, sameAs } from 'vuelidate/lib/validators'
 import { Logger } from '@vue-storefront/core/lib/logger'
@@ -252,6 +253,10 @@ export default {
         gender: this.gender,
         cluster: this.cluster || null,
         newsletter: this.newsletter
+      }
+
+      if (this.dob) {
+        formData.dob = toDate(this.dob, 'YYYY-MM-DD HH:mm:ss', this.dateFormat)
       }
 
       this.$store.dispatch('user/register', formData).then((result) => {

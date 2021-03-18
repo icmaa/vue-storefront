@@ -172,7 +172,7 @@ import pick from 'lodash-es/pick'
 import invert from 'lodash-es/invert'
 
 import { required, minLength, email, sameAs } from 'vuelidate/lib/validators'
-import { unicodeAlpha, unicodeAlphaNum } from '@vue-storefront/core/helpers/validators'
+import { unicodeAlpha } from '@vue-storefront/core/helpers/validators'
 import { date } from 'icmaa-config/helpers/validators'
 import { toDate } from 'icmaa-config/helpers/datetime'
 
