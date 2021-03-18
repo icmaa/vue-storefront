@@ -1,9 +1,25 @@
 <template>
-  <div class="product-gallery t-overflow-hidden">
+  <div class="product-gallery t-overflow-hidden t-relative">
     <img src="/assets/product-placeholder.svg" class="t-block t-w-full lg:t-w-2/3" v-if="!isOnline">
-    <div v-else class="media-gallery t-flex t-items-center t-overflow-hidden" :style="{ '--n': images.length, '--i': currentIndex }">
-      <product-image v-for="image in images" :key="image" :image="image" />
-    </div>
+    <template v-else>
+      <div
+        class="t-hidden lg:t-flex t-absolute t-right-0 t-top-1/2 t-z-1 t--mt-6 t-items-center t-justify-center t-w-12 t-h-12 t-bg-black t-text-white t-rounded-full t-border t-border-white t-cursor-pointer t-mr-4"
+        v-if="images.length > 0 && currentIndex < images.length"
+        @click="step(+1)"
+      >
+        <i class="material-icons t-text-2xl">keyboard_arrow_right</i>
+      </div>
+      <div
+        class="t-hidden lg:t-flex t-absolute t-left-0 t-top-1/2 t-z-1 t--mt-6 t-items-center t-justify-center t-w-12 t-h-12 t-bg-black t-text-white t-rounded-full t-border t-border-white t-cursor-pointer t-ml-4"
+        v-if="images.length > 0 && currentIndex > 1"
+        @click="step(-1)"
+      >
+        <i class="material-icons t-text-2xl">keyboard_arrow_left</i>
+      </div>
+      <div class="media-gallery t-flex t-items-center t-overflow-hidden" :style="{ '--n': images.length, '--i': currentIndex }">
+        <product-image v-for="image in images" :key="image" :image="image" />
+      </div>
+    </template>
   </div>
 </template>
 
@@ -39,8 +55,18 @@ export default {
         return regex.exec(image) === null
       })
     },
-    isOnline (value) {
+    isOnline () {
       return onlineHelper.isOnline
+    }
+  },
+  methods: {
+    step (index) {
+      const newIndex = this.currentIndex + index
+      if (newIndex > this.images.length || newIndex < 1) {
+        return
+      }
+
+      this.currentIndex = newIndex
     }
   }
 }
