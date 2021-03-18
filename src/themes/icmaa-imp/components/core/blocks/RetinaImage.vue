@@ -8,7 +8,6 @@
 
 <script>
 import Placeholder from 'theme/components/core/blocks/Placeholder'
-import { getThumbnailPath } from '@vue-storefront/core/helpers'
 
 export default {
   name: 'RetinaImage',
@@ -61,14 +60,14 @@ export default {
     },
     baseImage () {
       if (this.resize) {
-        return getThumbnailPath(this.path, this.width, this.height, 'media')
+        return this.getMediaThumbnail(this.path, this.width, this.height, 'media')
       }
 
       return this.path
     },
     retinaImage () {
       if (this.resize) {
-        return getThumbnailPath(this.path, this.width * 2, this.height * 2, 'media')
+        return this.getMediaThumbnail(this.path, this.width * 2, this.height * 2, 'media')
       }
 
       return this.baseImage.replace(/(\.\w{3,4})(\?\w*)?$/gm, '@2x$1$2')

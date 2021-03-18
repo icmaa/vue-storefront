@@ -15,13 +15,11 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { getThumbnailPath } from '@vue-storefront/core/helpers'
 import { formatCategoryLink } from '@vue-storefront/core/modules/url/helpers'
 import DepartmentLogo from 'theme/components/core/blocks/CategoryExtras/DepartmentLogo'
 import PictureComponent from 'theme/components/core/blocks/Picture'
 
 import { isDatetimeInBetween } from 'icmaa-config/helpers/datetime'
-import sampleSize from 'lodash-es/sampleSize'
 
 export default {
   name: 'CategoryExtrasHeader',

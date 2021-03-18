@@ -11,6 +11,7 @@ const FestivalComponent = () => import(/* webpackChunkName: "vsf-icmaa-cms-page-
 const INSDComponent = () => import(/* webpackChunkName: "vsf-icmaa-cms-page-custom-impericon-never-say-die" */ 'theme/components/core/blocks/ICMAA/Cms/Pages/ImpericonNeverSayDie.vue')
 const DigitalEventsComponent = () => import(/* webpackChunkName: "vsf-icmaa-cms-page-custom-digital-events" */ 'theme/components/core/blocks/ICMAA/Cms/Pages/DigitalEvents.vue')
 const XmasCalendar = () => import(/* webpackChunkName: "vsf-icmaa-cms-page-custom-xmas-calendar" */ 'theme/components/core/blocks/ICMAA/Cms/Pages/XmasCalendar.vue')
+const EasterCalendar = () => import(/* webpackChunkName: "vsf-icmaa-cms-page-custom-easter-calendar" */ 'theme/components/core/blocks/ICMAA/Cms/Pages/EasterCalendar.vue')
 const NextGeneration = () => import(/* webpackChunkName: "vsf-icmaa-cms-page-custom-next-generation" */ 'theme/components/core/blocks/ICMAA/Cms/Pages/NextGeneration.vue')
 
 export const routes: any = [
@@ -27,5 +28,6 @@ export const routes: any = [
   { name: 'impericon-never-say-die', path: '/:identifier', component: INSDComponent },
   { name: 'digital-events', path: '/:identifier', component: DigitalEventsComponent },
   { name: 'xmas-calendar', path: '/:identifier', component: XmasCalendar },
+  { name: 'easter-calendar', path: '/:identifier', component: EasterCalendar },
   { name: 'next-generation', path: '/:identifier', component: NextGeneration }
 ]
