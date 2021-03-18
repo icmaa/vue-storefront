@@ -50,6 +50,10 @@ export default {
       return this.product.promo_id
     },
     promo () {
+      if (this.promoId === '') {
+        return false
+      }
+
       if (this.product.special_price && parseFloat(this.product.special_price) > 0) {
         return this.map.find(v => v.key === 'sale')
       }
