@@ -1,7 +1,7 @@
 <template>
   <div class="product-gallery t-overflow-hidden">
     <img src="/assets/product-placeholder.svg" class="t-block t-w-full lg:t-w-2/3" v-if="!isOnline">
-    <div v-else class="media-gallery t-flex t-items-center t-overflow-hidden" :style="{ '--n': images.length }">
+    <div v-else class="media-gallery t-flex t-items-center t-overflow-hidden" :style="{ '--n': images.length, '--i': currentIndex }">
       <product-image v-for="image in images" :key="image" :image="image" />
     </div>
   </div>
@@ -27,7 +27,7 @@ export default {
   },
   data () {
     return {
-      currentSlide: 0,
+      currentIndex: 1,
       galleryLoaded: false
     }
   },
@@ -74,7 +74,7 @@ export default {
 
     width: 100%;
     width: calc(var(--n) * 100%);
-    transform: translate(calc(var(--i, 0) / var(--n) * (-1 * var(--image-width))));
+    transform: translate(calc((var(--i, 1) - 1) / var(--n) * (-1 * var(--image-width))));
     transition: transform .5s ease-out;
 
     picture {
