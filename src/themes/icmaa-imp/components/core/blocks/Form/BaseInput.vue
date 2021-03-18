@@ -36,6 +36,7 @@
 import ValidationMessages from './ValidationMessages'
 import MaterialIcon from 'theme/components/core/blocks/MaterialIcon'
 import { mask as maskDirective } from 'vue-the-mask'
+import { currentStoreView } from '@vue-storefront/core/lib/multistore'
 
 export default {
   name: 'BaseInput',
@@ -139,7 +140,10 @@ export default {
       return this.validations.filter(v => v.condition).length > 0
     },
     maskSettings () {
-      return this.mask === 'date' ? '##.##.####' : this.mask
+      if (this.mask === 'date') {
+        return currentStoreView().i18n.dateFormat.replace(/([DMY])/gm, '#')
+      }
+      return this.mask
     },
     hasLabel () {
       return this.$slots.default || this.label

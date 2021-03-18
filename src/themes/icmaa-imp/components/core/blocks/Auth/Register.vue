@@ -62,7 +62,7 @@
           autocomplete="bday"
           mask="date"
           v-model="dob"
-          :placeholder="$t('Date of birth') + ' (DD.MM.YYYY) *'"
+          :placeholder="`${$t('Date of birth')} (${dateFormat}) *`"
           :validations="[
             {
               condition: !$v.dob.required && $v.dob.$error,
@@ -219,13 +219,17 @@ export default {
   },
   computed: {
     ...mapGetters({
-      cluster: 'user/getCluster'
+      cluster: 'user/getCluster',
+      storeConfig: 'icmaaConfig/getCurrentStoreConfig'
     }),
     genderOptions () {
       return [
         { label: i18n.t('Male'), value: 'male' },
         { label: i18n.t('Female'), value: 'female' }
       ]
+    },
+    dateFormat () {
+      return this.storeConfig.i18n.dateFormat
     }
   },
   methods: {

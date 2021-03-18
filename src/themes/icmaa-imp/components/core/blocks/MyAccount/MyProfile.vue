@@ -70,7 +70,7 @@
         mask="date"
         v-model="profile.dob"
         :label="$t('Date of birth') + ' *'"
-        :placeholder="'DD.MM.YYYY'"
+        :placeholder="dateFormat"
         :validations="[
           {
             condition: !validation.dob.required && validation.dob.$error,
@@ -219,6 +219,9 @@ export default {
         { label: i18n.t('Male'), value: 'male' },
         { label: i18n.t('Female'), value: 'female' }
       ]
+    },
+    dateFormat () {
+      return currentStoreView().i18n.dateFormat
     }
   },
   methods: {
@@ -231,7 +234,7 @@ export default {
           profile = Object.assign({}, profile, { gender })
         }
         if (profile.dob) {
-          profile.dob = toDate(profile.dob, 'YYYY-MM-DD HH:mm:ss', currentStoreView().i18n.dateFormat)
+          profile.dob = toDate(profile.dob, 'YYYY-MM-DD HH:mm:ss', this.dateFormat)
         }
 
         let customer = Object.assign({}, this.customer, profile)
