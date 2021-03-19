@@ -4,20 +4,28 @@
     <template v-else>
       <div
         class="t-hidden lg:t-flex t-absolute t-right-0 t-top-1/2 t-z-1 t--mt-6 t-items-center t-justify-center t-w-12 t-h-12 t-bg-black t-text-white t-rounded-full t-border t-border-white t-cursor-pointer t-mr-4"
-        v-if="images.length > 0 && currentIndex < images.length"
+        v-if="imagesCount > 0 && currentIndex < imagesCount"
         @click="step(+1)"
       >
         <i class="material-icons t-text-2xl">keyboard_arrow_right</i>
       </div>
       <div
         class="t-hidden lg:t-flex t-absolute t-left-0 t-top-1/2 t-z-1 t--mt-6 t-items-center t-justify-center t-w-12 t-h-12 t-bg-black t-text-white t-rounded-full t-border t-border-white t-cursor-pointer t-ml-4"
-        v-if="images.length > 0 && currentIndex > 1"
+        v-if="imagesCount > 0 && currentIndex > 1"
         @click="step(-1)"
       >
         <i class="material-icons t-text-2xl">keyboard_arrow_left</i>
       </div>
-      <div class="media-gallery t-flex t-items-center t-overflow-hidden" :style="{ '--n': images.length, '--i': currentIndex }">
-        <product-image v-for="image in images" :key="image" :image="image" />
+      <div
+        class="media-gallery t-flex t-items-center t-overflow-hidden"
+        :class="{ 'animate': animate }"
+        :style="{ '--n': imagesCount, '--i': currentIndex, '--tx': `${drag}px` }"
+        ref="track"
+        @touchstart="onTouchStart"
+        @touchmove="onTouch"
+        @touchend="onTouchEnd"
+      >
+        <product-image v-for="image in images" :key="image" :image="image" :alt="product.name | htmlDecode" />
       </div>
     </template>
   </div>
@@ -44,7 +52,9 @@ export default {
   data () {
     return {
       currentIndex: 1,
-      galleryLoaded: false
+      animate: true,
+      dragLock: 0,
+      drag: 0
     }
   },
   computed: {
@@ -55,18 +65,41 @@ export default {
         return regex.exec(image) === null
       })
     },
+    imagesCount () {
+      return this.images.length
+    },
     isOnline () {
       return onlineHelper.isOnline
     }
   },
   methods: {
-    step (index) {
-      const newIndex = this.currentIndex + index
-      if (newIndex > this.images.length || newIndex < 1) {
-        return
+    setIndex (index) {
+      if (index >= 1 && index <= this.imagesCount) {
+        this.currentIndex = index
       }
+    },
+    step (index) {
+      this.setIndex(this.currentIndex + index)
+    },
+    onTouchStart (e) {
+      this.animate = false
+      this.dragLock = e.touches[0].clientX
+    },
+    onTouch (e) {
+      this.drag = e.touches[0].clientX - this.dragLock
+    },
+    onTouchEnd (e) {
+      const drag = this.drag
+      const direction = Math.sign(this.drag)
+      const newIndex = this.currentIndex - direction
 
-      this.currentIndex = newIndex
+      this.animate = true
+      this.dragLock = 0
+      this.drag = 0
+
+      if (Math.abs(drag) > 100) {
+        this.setIndex(newIndex)
+      }
     }
   }
 }
@@ -100,8 +133,11 @@ export default {
 
     width: 100%;
     width: calc(var(--n) * 100%);
-    transform: translate(calc((var(--i, 1) - 1) / var(--n) * (-1 * var(--image-width))));
-    transition: transform .5s ease-out;
+    transform: translate(calc((var(--i, 1) - 1) / var(--n) * (-1 * var(--image-width)) + var(--tx, 0px)));
+
+    &.animate {
+      transition: transform .5s ease-out;
+    }
 
     picture {
       min-width: var(--image-width);
