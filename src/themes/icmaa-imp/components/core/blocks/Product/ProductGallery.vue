@@ -18,7 +18,11 @@
           <i class="material-icons t-text-2xl">keyboard_arrow_left</i>
         </div>
       </template>
+      <div class="t-absolute t-z-1 t-p-2 t-bg-white" style="top: 10px; left: 10px">
+        {{ debug }}
+      </div>
       <div
+        ref="zoom"
         class="zoom"
         :class="{ 'animate': animate, 't-cursor-zoom-in': !zoom, 't-cursor-move': zoom }"
         :style="{ '--z': zoomFactor, '--zx': `${zoomPosition.x}px`, '--zy': `${zoomPosition.y}px` }"
@@ -27,10 +31,10 @@
         @touchmove="onZoomMove"
       >
         <div
+          ref="track"
           class="media-gallery t-flex t-items-center t-overflow-hidden"
           :class="{ 'animate': animate }"
           :style="{ '--n': imagesCount, '--i': dragX }"
-          ref="track"
           @touchstart="onTouchStart"
           @touchmove="onTouch"
           @touchend="onTouchEnd"
@@ -73,8 +77,8 @@ export default {
       dragX: 1,
       zoom: false,
       zoomFactor: 1,
-      zoomPositionLock: { x: 0, y: 0 },
-      zoomPosition: { x: 0, y: 0 }
+      zoomPosition: { x: 0, y: 0 },
+      debug: {}
     }
   },
   computed: {
@@ -146,19 +150,28 @@ export default {
       } else {
         this.drag = false
         this.zoom = true
-        this.zoomFactor = 3
-        this.zoomPositionLock = { x: e.pageX, y: e.pageY }
+        this.zoomFactor = 2
       }
     },
     onZoomMove (e) {
+      const $zoom = this.$refs.zoom
+      var zoomRect = $zoom.getBoundingClientRect();
+      const ex = e.clientX * this.zoomFactor
+      const ey = e.clientY * this.zoomFactor
+      const zx = zoomRect.left
+      const zy = zoomRect.top
+      const rx = ex - zx
+      const ry = ey - zy
+
+      this.debug = {
+        ex, ey, zx, zy, rx, ry
+      }
+
       if (!this.zoom) {
         return
       }
 
       this.animate = false
-
-      const { x, y } = this.zoomPositionLock
-      this.zoomPosition = { x: x - e.pageX, y: y - e.pageY }
     },
     universalTouch (e) {
       return ['touchend'].includes(e.type)
