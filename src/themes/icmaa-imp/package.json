@@ -16,7 +16,6 @@
     "tailwindcss-accessibility": "^1.0.0",
     "tailwindcss-animations": "^2.0.0",
     "vue": "^2.6.6",
-    "vue-carousel": "^0.18.0",
     "vue-no-ssr": "^1.1.1",
     "vue-progressbar": "^0.7.5",
     "vue-recaptcha": "^1.2.0",
