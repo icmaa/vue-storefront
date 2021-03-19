@@ -19,7 +19,7 @@
       <div
         class="media-gallery t-flex t-items-center t-overflow-hidden"
         :class="{ 'animate': animate }"
-        :style="{ '--n': imagesCount, '--i': currentIndex, '--tx': `${drag}px` }"
+        :style="{ '--n': imagesCount, '--i': drag }"
         ref="track"
         @touchstart="onTouchStart"
         @touchmove="onTouch"
@@ -51,10 +51,10 @@ export default {
   },
   data () {
     return {
-      currentIndex: 1,
       animate: true,
+      currentIndex: 1,
       dragLock: 0,
-      drag: 0
+      drag: 1
     }
   },
   computed: {
@@ -75,6 +75,7 @@ export default {
   methods: {
     setIndex (index) {
       if (index >= 1 && index <= this.imagesCount) {
+        this.drag = index
         this.currentIndex = index
       }
     },
@@ -86,20 +87,25 @@ export default {
       this.dragLock = e.touches[0].clientX
     },
     onTouch (e) {
-      this.drag = e.touches[0].clientX - this.dragLock
+      const drag = e.touches[0].clientX - this.dragLock
+      const imageWidth = this.getImageWidth()
+      this.drag = this.currentIndex - (drag / imageWidth)
     },
     onTouchEnd (e) {
       const drag = this.drag
-      const direction = Math.sign(this.drag)
-      const newIndex = this.currentIndex - direction
+      const direction = this.drag > this.currentIndex ? -1 : 1
+      const nextIndex = this.currentIndex - direction
 
       this.animate = true
       this.dragLock = 0
-      this.drag = 0
+      this.drag = this.currentIndex
 
-      if (Math.abs(drag) > 100) {
-        this.setIndex(newIndex)
+      if (Math.abs(drag - this.currentIndex) > 0.2) {
+        this.setIndex(nextIndex)
       }
+    },
+    getImageWidth () {
+      return this.$refs.track.querySelector('img').clientWidth
     }
   }
 }
@@ -133,7 +139,7 @@ export default {
 
     width: 100%;
     width: calc(var(--n) * 100%);
-    transform: translate(calc((var(--i, 1) - 1) / var(--n) * (-1 * var(--image-width)) + var(--tx, 0px)));
+    transform: translate(calc((var(--i, 1) - 1) / var(--n) * (-1 * var(--image-width))));
 
     &.animate {
       transition: transform .5s ease-out;
