@@ -2,30 +2,41 @@
   <div class="product-gallery t-overflow-hidden t-relative">
     <img src="/assets/product-placeholder.svg" class="t-block t-w-full lg:t-w-2/3" v-if="!isOnline">
     <template v-else>
+      <template v-if="!zoom && imagesCount > 0">
+        <div
+          :class="[ 't-right-0', controlsClass ]"
+          v-if="currentIndex < imagesCount"
+          @click="step(+1)"
+        >
+          <i class="material-icons t-text-2xl">keyboard_arrow_right</i>
+        </div>
+        <div
+          :class="[ 't-left-0', controlsClass ]"
+          v-if="currentIndex > 1"
+          @click="step(-1)"
+        >
+          <i class="material-icons t-text-2xl">keyboard_arrow_left</i>
+        </div>
+      </template>
       <div
-        class="t-hidden lg:t-flex t-absolute t-right-0 t-top-1/2 t-z-1 t--mt-6 t-items-center t-justify-center t-w-12 t-h-12 t-bg-black t-text-white t-rounded-full t-border t-border-white t-cursor-pointer t-mr-4"
-        v-if="imagesCount > 0 && currentIndex < imagesCount"
-        @click="step(+1)"
+        class="zoom"
+        :class="{ 'animate': animate, 't-cursor-zoom-in': !zoom, 't-cursor-move': zoom }"
+        :style="{ '--z': zoomFactor, '--zx': `${zoomPosition.x}px`, '--zy': `${zoomPosition.y}px` }"
+        @mouseup="toggleZoom"
+        @mousemove="onZoomMove"
+        @touchmove="onZoomMove"
       >
-        <i class="material-icons t-text-2xl">keyboard_arrow_right</i>
-      </div>
-      <div
-        class="t-hidden lg:t-flex t-absolute t-left-0 t-top-1/2 t-z-1 t--mt-6 t-items-center t-justify-center t-w-12 t-h-12 t-bg-black t-text-white t-rounded-full t-border t-border-white t-cursor-pointer t-ml-4"
-        v-if="imagesCount > 0 && currentIndex > 1"
-        @click="step(-1)"
-      >
-        <i class="material-icons t-text-2xl">keyboard_arrow_left</i>
-      </div>
-      <div
-        class="media-gallery t-flex t-items-center t-overflow-hidden"
-        :class="{ 'animate': animate }"
-        :style="{ '--n': imagesCount, '--i': drag }"
-        ref="track"
-        @touchstart="onTouchStart"
-        @touchmove="onTouch"
-        @touchend="onTouchEnd"
-      >
-        <product-image v-for="image in images" :key="image" :image="image" :alt="product.name | htmlDecode" :sizes="sizes" />
+        <div
+          class="media-gallery t-flex t-items-center t-overflow-hidden"
+          :class="{ 'animate': animate }"
+          :style="{ '--n': imagesCount, '--i': dragX }"
+          ref="track"
+          @touchstart="onTouchStart"
+          @touchmove="onTouch"
+          @touchend="onTouchEnd"
+        >
+          <product-image v-for="image in images" :key="image" :image="image" :alt="product.name | htmlDecode" :sizes="sizes" />
+        </div>
       </div>
     </template>
   </div>
@@ -47,14 +58,23 @@ export default {
     product: {
       type: Object,
       required: true
+    },
+    controlsClass: {
+      type: String,
+      default: 't-hidden lg:t-flex t-absolute t-top-1/2 t-z-1 t--mt-6 t-items-center t-justify-center t-w-12 t-h-12 t-bg-black t-text-white t-rounded-full t-border t-border-white t-cursor-pointer t-mx-4'
     }
   },
   data () {
     return {
       animate: true,
       currentIndex: 1,
+      drag: true,
       dragLock: 0,
-      drag: 1
+      dragX: 1,
+      zoom: false,
+      zoomFactor: 1,
+      zoomPositionLock: { x: 0, y: 0 },
+      zoomPosition: { x: 0, y: 0 }
     }
   },
   computed: {
@@ -84,7 +104,7 @@ export default {
   methods: {
     setIndex (index) {
       if (index >= 1 && index <= this.imagesCount) {
-        this.drag = index
+        this.dragX = index
         this.currentIndex = index
       }
     },
@@ -92,26 +112,53 @@ export default {
       this.setIndex(this.currentIndex + index)
     },
     onTouchStart (e) {
+      if (!this.drag) return
       this.animate = false
       this.dragLock = this.universalTouch(e).clientX
     },
     onTouch (e) {
+      if (!this.drag) return
       const drag = this.universalTouch(e).clientX - this.dragLock
       const imageWidth = this.getImageWidth()
-      this.drag = this.currentIndex - (drag / imageWidth)
+      this.dragX = this.currentIndex - (drag / imageWidth)
     },
     onTouchEnd () {
-      const drag = this.drag
-      const direction = this.drag > this.currentIndex ? -1 : 1
+      if (!this.drag) return
+      const drag = this.dragX
+      const direction = this.dragX > this.currentIndex ? -1 : 1
       const nextIndex = this.currentIndex - direction
 
       this.animate = true
       this.dragLock = 0
-      this.drag = this.currentIndex
+      this.dragX = this.currentIndex
 
       if (Math.abs(drag - this.currentIndex) > 0.2) {
         this.setIndex(nextIndex)
       }
+    },
+    toggleZoom (e) {
+      if (this.zoom) {
+        this.drag = true
+        this.animate = true
+        this.zoom = false
+        this.zoomFactor = 1
+        this.zoomPosition = { x: 0, y: 0 }
+      } else {
+        this.drag = false
+        this.zoom = true
+        this.zoomFactor = 3
+        this.zoomPositionLock = { x: e.pageX, y: e.pageY }
+      }
+    },
+    onZoomMove (e) {
+      if (!this.zoom) {
+        return
+      }
+
+      this.animate = false
+
+      const { x, y } = this.zoomPositionLock
+      this.zoomPosition = { x: x - e.pageX, y: y - e.pageY }
     },
     universalTouch (e) {
       return ['touchend'].includes(e.type)
@@ -133,6 +180,14 @@ export default {
  */
 .product-gallery {
   --image-width: 100%;
+
+  .zoom {
+    transform: translate(var(--zx, 0), var(--zy, 0)) scale(var(--z, 1));
+
+    &.animate {
+      transition: transform .5s ease-out;
+    }
+  }
 
   @media (min-width: 1024px) {
     isolation: isolate;

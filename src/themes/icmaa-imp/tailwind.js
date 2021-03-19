@@ -27,6 +27,9 @@ module.exports = {
         'twitter': '#1DA1F2',
         'youtube': '#ff0000'
       },
+      cursor: {
+        'zoom-in': 'zoom-in'
+      },
       inset: {
         '1/2': '50%',
         'full': '100%'
