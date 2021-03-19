@@ -84,14 +84,14 @@ export default {
     },
     onTouchStart (e) {
       this.animate = false
-      this.dragLock = e.touches[0].clientX
+      this.dragLock = this.universalTouch(e).clientX
     },
     onTouch (e) {
-      const drag = e.touches[0].clientX - this.dragLock
+      const drag = this.universalTouch(e).clientX - this.dragLock
       const imageWidth = this.getImageWidth()
       this.drag = this.currentIndex - (drag / imageWidth)
     },
-    onTouchEnd (e) {
+    onTouchEnd () {
       const drag = this.drag
       const direction = this.drag > this.currentIndex ? -1 : 1
       const nextIndex = this.currentIndex - direction
@@ -103,6 +103,11 @@ export default {
       if (Math.abs(drag - this.currentIndex) > 0.2) {
         this.setIndex(nextIndex)
       }
+    },
+    universalTouch (e) {
+      return ['touchend'].includes(e.type)
+        ? e.changedTouches[0]
+        : e.touches[0]
     },
     getImageWidth () {
       return this.$refs.track.querySelector('img').clientWidth
@@ -140,6 +145,7 @@ export default {
     width: 100%;
     width: calc(var(--n) * 100%);
     transform: translate(calc((var(--i, 1) - 1) / var(--n) * (-1 * var(--image-width))));
+    touch-action: pan-y;
 
     &.animate {
       transition: transform .5s ease-out;
