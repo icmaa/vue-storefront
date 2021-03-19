@@ -25,7 +25,7 @@
         @touchmove="onTouch"
         @touchend="onTouchEnd"
       >
-        <product-image v-for="image in images" :key="image" :image="image" :alt="product.name | htmlDecode" />
+        <product-image v-for="image in images" :key="image" :image="image" :alt="product.name | htmlDecode" :sizes="sizes" />
       </div>
     </template>
   </div>
@@ -67,6 +67,15 @@ export default {
     },
     imagesCount () {
       return this.images.length
+    },
+    sizes () {
+      return [
+        // Order high-to-low is important
+        { media: '(min-width: 1024px)', width: 330 },
+        { media: '(max-width: 1024px)', width: 768 },
+        { media: '(max-width: 500px)', width: 500 },
+        { media: '(max-width: 414px)', width: 414 }
+      ]
     },
     isOnline () {
       return onlineHelper.isOnline
@@ -136,6 +145,10 @@ export default {
       mix-blend-mode: multiply;
     }
 
+    --image-width: 90%;
+  }
+
+  @media (min-width: 1280px) {
     --image-width: 75%;
   }
 
