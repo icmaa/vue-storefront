@@ -21,7 +21,7 @@
       <div
         ref="zoom"
         class="zoom"
-        :class="{ 'animate': animate, 't-cursor-zoom-in': !zoom, 't-cursor-move': zoom }"
+        :class="{ 'animate': animate, 't-cursor-zoom-in': !zoom, 't-cursor-move enabled': zoom }"
         :style="{ '--z': zoomFactor, '--zx': `${zoomPosition.x}px`, '--zy': `${zoomPosition.y}px` }"
         @mouseup="toggleZoom"
         @mousemove="onZoomMove"
@@ -143,6 +143,7 @@ export default {
         this.drag = true
         this.animate = true
         this.zoom = false
+        this.zoomReady = false
         this.zoomFactor = 1
         this.zoomPosition = { x: 0, y: 0 }
         this.zoomRect = {}
@@ -165,8 +166,8 @@ export default {
 
       const zbl = this.zoomRect.base.left
       const zbt = this.zoomRect.base.top
-      const rcl = e.clientX - zbl
-      const rct = e.clientY - zbt
+      const rcl = this.universalTouch(e).clientX - zbl
+      const rct = this.universalTouch(e).clientY - zbt
       const zeroL = this.zoomRect.magn.left * -1 + zbl
       const zeroT = this.zoomRect.magn.top * -1 + zbt
 
@@ -178,9 +179,15 @@ export default {
       this.animate = false
     },
     universalTouch (e) {
-      return ['touchend'].includes(e.type)
-        ? e.changedTouches[0]
-        : e.touches[0]
+      switch (e.type) {
+        case 'touchend':
+          return e.changedTouches[0]
+        case 'touchstart':
+        case 'touchmove':
+          return e.touches[0]
+        default:
+          return e
+      }
     },
     getImageWidth () {
       return this.$refs.track.querySelector('img').clientWidth
@@ -203,6 +210,10 @@ export default {
 
     &.animate {
       transition: transform .5s ease-out;
+    }
+
+    &.enabled {
+      touch-action: none;
     }
   }
 
