@@ -18,9 +18,6 @@
           <i class="material-icons t-text-2xl">keyboard_arrow_left</i>
         </div>
       </template>
-      <div class="t-absolute t-z-1 t-p-2 t-bg-white" style="top: 10px; left: 10px">
-        {{ debug }}
-      </div>
       <div
         ref="zoom"
         class="zoom"
@@ -76,9 +73,10 @@ export default {
       dragLock: 0,
       dragX: 1,
       zoom: false,
+      zoomReady: false,
       zoomFactor: 1,
-      zoomPosition: { x: 0, y: 0 },
-      debug: {}
+      zoomRect: {},
+      zoomPosition: { x: 0, y: 0 }
     }
   },
   computed: {
@@ -136,7 +134,7 @@ export default {
       this.dragLock = 0
       this.dragX = this.currentIndex
 
-      if (Math.abs(drag - this.currentIndex) > 0.2) {
+      if (Math.abs(drag - this.currentIndex) > 0.15) {
         this.setIndex(nextIndex)
       }
     },
@@ -147,28 +145,34 @@ export default {
         this.zoom = false
         this.zoomFactor = 1
         this.zoomPosition = { x: 0, y: 0 }
+        this.zoomRect = {}
       } else {
         this.drag = false
+        this.zoomRect.base = this.$refs.zoom.getBoundingClientRect()
         this.zoom = true
         this.zoomFactor = 2
+        setTimeout(() => {
+          this.zoomRect.magn = this.$refs.zoom.getBoundingClientRect()
+          this.zoomReady = true
+          this.onZoomMove(e)
+        }, 500)
       }
     },
     onZoomMove (e) {
-      const $zoom = this.$refs.zoom
-      var zoomRect = $zoom.getBoundingClientRect();
-      const ex = e.clientX * this.zoomFactor
-      const ey = e.clientY * this.zoomFactor
-      const zx = zoomRect.left
-      const zy = zoomRect.top
-      const rx = ex - zx
-      const ry = ey - zy
-
-      this.debug = {
-        ex, ey, zx, zy, rx, ry
+      if (!this.zoom || !this.zoomReady) {
+        return
       }
 
-      if (!this.zoom) {
-        return
+      const zbl = this.zoomRect.base.left
+      const zbt = this.zoomRect.base.top
+      const rcl = e.clientX - zbl
+      const rct = e.clientY - zbt
+      const zeroL = this.zoomRect.magn.left * -1 + zbl
+      const zeroT = this.zoomRect.magn.top * -1 + zbt
+
+      this.zoomPosition = {
+        x: zeroL - rcl,
+        y: zeroT - rct
       }
 
       this.animate = false
