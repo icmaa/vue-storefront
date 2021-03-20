@@ -23,9 +23,8 @@
         class="zoom"
         :class="{ 'animate': animate, 't-cursor-zoom-in': !zoom, 't-cursor-move enabled': zoom }"
         :style="{ '--z': zoomFactor, '--zx': `${zoomPosition.x}px`, '--zy': `${zoomPosition.y}px` }"
-        @mouseup="toggleZoom"
+        @mousedown="toggleZoom"
         @mousemove="onZoomMove"
-        @touchmove="onZoomMove"
       >
         <div
           ref="track"
@@ -36,7 +35,7 @@
           @touchmove="onTouch"
           @touchend="onTouchEnd"
         >
-          <product-image v-for="image in images" :key="image" :image="image" :alt="product.name | htmlDecode" :sizes="sizes" />
+          <product-image v-for="image in images" :key="image" :image="image" :alt="product.name | htmlDecode" :sizes="sizes" @dragstart.prevent />
         </div>
       </div>
     </template>
@@ -153,10 +152,10 @@ export default {
         this.zoom = true
         this.zoomFactor = 2
         setTimeout(() => {
+          this.animate = false
           this.zoomRect.magn = this.$refs.zoom.getBoundingClientRect()
           this.zoomReady = true
-          this.onZoomMove(e)
-        }, 500)
+        }, 250)
       }
     },
     onZoomMove (e) {
@@ -171,12 +170,10 @@ export default {
       const zeroL = this.zoomRect.magn.left * -1 + zbl
       const zeroT = this.zoomRect.magn.top * -1 + zbt
 
-      this.zoomPosition = {
-        x: zeroL - rcl,
-        y: zeroT - rct
-      }
+      const x = zeroL - rcl
+      const y = zeroT - rct
 
-      this.animate = false
+      this.zoomPosition = { x, y }
     },
     universalTouch (e) {
       switch (e.type) {
@@ -209,7 +206,7 @@ export default {
     transform: translate(var(--zx, 0), var(--zy, 0)) scale(var(--z, 1));
 
     &.animate {
-      transition: transform .5s ease-out;
+      transition: transform .25s ease-out;
     }
 
     &.enabled {
