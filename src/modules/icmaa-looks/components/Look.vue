@@ -4,7 +4,7 @@
       <div class="t-bg-white">
         <div class="t-p-4">
           <div class="t-font-light t-text-base-light t-text-xs t-mt-2 t-mb-3">
-            {{ look.created | date }}
+            {{ createdAt }}
           </div>
           <h3 class="t-leading-tight t-text-2xl t-font-semibold">
             {{ look.title }}
@@ -32,6 +32,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import { toDate } from 'icmaa-config/helpers/datetime'
 
 import PictureComponent from 'theme/components/core/blocks/Picture'
 import MaterialIcon from 'theme/components/core/blocks/MaterialIcon'
@@ -52,6 +53,9 @@ export default {
   },
   computed: {
     ...mapGetters({ getProducts: 'icmaaLooks/getProducts' }),
+    createdAt () {
+      return toDate(this.look.created)
+    },
     imageWidth () {
       return 360
     },
