@@ -72,7 +72,6 @@ export default {
       dragLock: 0,
       dragX: 1,
       zoom: false,
-      zoomReady: false,
       zoomFactor: 1,
       zoomRect: {},
       zoomPosition: { x: 0, y: 0 }
@@ -142,24 +141,25 @@ export default {
         this.drag = true
         this.animate = true
         this.zoom = false
-        this.zoomReady = false
         this.zoomFactor = 1
         this.zoomPosition = { x: 0, y: 0 }
         this.zoomRect = {}
       } else {
         this.drag = false
-        this.zoomRect.base = this.$refs.zoom.getBoundingClientRect()
         this.zoom = true
-        this.zoomFactor = 2
+
+        const scale = 2
+        this.setZoomRect(scale)
+        this.onZoomMove(e)
+
+        this.zoomFactor = scale
         setTimeout(() => {
           this.animate = false
-          this.zoomRect.magn = this.$refs.zoom.getBoundingClientRect()
-          this.zoomReady = true
         }, 250)
       }
     },
     onZoomMove (e) {
-      if (!this.zoom || !this.zoomReady) {
+      if (!this.zoom) {
         return
       }
 
@@ -188,6 +188,20 @@ export default {
     },
     getImageWidth () {
       return this.$refs.track.querySelector('img').clientWidth
+    },
+    setZoomRect (zoomFactor = 1) {
+      const baseZoomRect = this.$refs.zoom.getBoundingClientRect()
+      this.zoomRect.base = baseZoomRect
+
+      const zoomRect = {
+        width: baseZoomRect.width * zoomFactor,
+        height: baseZoomRect.height * zoomFactor
+      }
+
+      zoomRect.left = baseZoomRect.left - (zoomRect.width / 2) + (baseZoomRect.width / 2)
+      zoomRect.top = baseZoomRect.top - (zoomRect.height / 2) + (baseZoomRect.height / 2)
+
+      this.zoomRect.magn = zoomRect
     }
   }
 }
