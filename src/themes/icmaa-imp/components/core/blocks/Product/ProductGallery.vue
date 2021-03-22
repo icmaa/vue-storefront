@@ -2,9 +2,6 @@
   <div class="product-gallery t-overflow-hidden t-relative">
     <img src="/assets/product-placeholder.svg" class="t-block t-w-full lg:t-w-2/3" v-if="!isOnline">
     <template v-else>
-      <div class="debug t-bg-white t-p-2 t-absolute t-z-1 t-bottom-0 t-right-0">
-        {{ debug }}
-      </div>
       <template v-if="!zoom && imagesCount > 0">
         <div
           :class="[ 't-right-0', controlsClass ]"
@@ -81,8 +78,7 @@ export default {
       zoom: false,
       zoomFactor: 1,
       zoomRect: {},
-      zoomPosition: { x: 0, y: 0 },
-      debug: []
+      zoomPosition: { x: 0, y: 0 }
     }
   },
   computed: {
@@ -190,12 +186,12 @@ export default {
       const cy = this.universalTouch(e).clientY
       const rcx = cx - bx
       const rcy = cy - by
-
-      this.debug = [ cx, cy, rcx, rcy, (rcx / bw), (rcy / bh) ]
+      const pcx = Math.min(Math.max(rcx / bw, 0), 1)
+      const pcy = Math.min(Math.max(rcy / bh, 0), 1)
 
       this.zoomPosition = {
-        x: zeroX - (rcx / bw * w),
-        y: zeroY - (rcy / bh * h)
+        x: zeroX - (pcx * (w - bw)),
+        y: zeroY - (pcy * (h - bh))
       }
     },
     universalTouch (e) {
