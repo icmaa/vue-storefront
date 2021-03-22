@@ -147,31 +147,58 @@ export default {
       }
     },
     initMouseZoom (e) {
-      const cancelEvent = (e) => {
-        this.disableZoom(e)
-        this.$refs.zoom.removeEventListener('mousemove', this.onZoomMove)
-        this.$refs.zoom.removeEventListener(e.type, cancelEvent)
-      }
-
       this.$refs.zoom.addEventListener('mousemove', this.onMouseZoomMove)
-      this.$refs.zoom.addEventListener('mouseup', cancelEvent)
-      this.$refs.zoom.addEventListener('mouseleave', cancelEvent)
-      this.$refs.zoom.addEventListener('mousechancel', cancelEvent)
+      this.$refs.zoom.addEventListener('mouseup', this.onMouseZoomChancel)
+      this.$refs.zoom.addEventListener('mouseleave', this.onMouseZoomChancel)
+      this.$refs.zoom.addEventListener('mousechancel', this.onMouseZoomChancel)
       this.enableZoom(e)
     },
-    initTouchZoom (e) {
-      const touchEvent = (e) => {
-        this.$refs.zoom.addEventListener('touchmove', this.onMouseZoomMove)
+    onMouseZoomMove (e) {
+      if (!this.zoom) {
+        return
       }
 
-      if (!this.zoom) {
-        this.enableZoom(e, true)
-        this.$refs.zoom.addEventListener('touchstart', touchEvent)
-      } else {
-        this.disableZoom()
-        this.$refs.zoom.removeEventListener('touchmove', this.onMouseZoomMove)
-        this.$refs.zoom.removeEventListener('touchstart', touchEvent)
+      const { bx, by, bw, bh, w, h, zeroX, zeroY } = this.zoomRect
+
+      const rcx = this.universalTouch(e).clientX - bx
+      const rcy = this.universalTouch(e).clientY - by
+      const pcx = Math.min(Math.max(rcx / bw, 0), 1)
+      const pcy = Math.min(Math.max(rcy / bh, 0), 1)
+
+      this.zoomPosition = {
+        x: zeroX - (pcx * (w - bw)),
+        y: zeroY - (pcy * (h - bh))
       }
+    },
+    onMouseZoomChancel (e) {
+      this.disableZoom(e)
+      this.$refs.zoom.removeEventListener('mousemove', this.onMouseZoomMove)
+      this.$refs.zoom.removeEventListener('mouseup', this.onMouseZoomChancel)
+      this.$refs.zoom.removeEventListener('mouseleave', this.onMouseZoomChancel)
+      this.$refs.zoom.removeEventListener('mousechancel', this.onMouseZoomChancel)
+    },
+    initTouchZoom (e) {
+      if (!this.zoom) {
+        this.$refs.zoom.addEventListener('touchstart', this.onTouchZoomStart)
+        this.enableZoom(e, true)
+      } else {
+        this.$refs.zoom.removeEventListener('touchstart', this.onTouchZoomStart)
+        this.$refs.zoom.removeEventListener('touchmove', this.onTouchZoomMove)
+        this.$refs.zoom.removeEventListener('touchend', this.onTouchZoomEnd)
+        this.$refs.zoom.removeEventListener('touchchancel', this.onTouchZoomEnd)
+        this.disableZoom()
+      }
+    },
+    onTouchZoomStart (e) {
+      this.$refs.zoom.addEventListener('touchmove', this.onTouchZoomMove)
+      this.$refs.zoom.addEventListener('touchend', this.onTouchZoomEnd)
+      this.$refs.zoom.addEventListener('touchchancel', this.onTouchZoomEnd)
+    },
+    onTouchZoomMove (e) {
+      // ...
+    },
+    onTouchZoomEnd (e) {
+      // ...
     },
     enableZoom (e, initCentered = false) {
       this.drag = false
@@ -194,23 +221,6 @@ export default {
       this.currentZoomFactor = 1
       this.zoomPosition = { x: 0, y: 0 }
       this.zoomRect = {}
-    },
-    onMouseZoomMove (e) {
-      if (!this.zoom) {
-        return
-      }
-
-      const { bx, by, bw, bh, w, h, zeroX, zeroY } = this.zoomRect
-
-      const rcx = this.universalTouch(e).clientX - bx
-      const rcy = this.universalTouch(e).clientY - by
-      const pcx = Math.min(Math.max(rcx / bw, 0), 1)
-      const pcy = Math.min(Math.max(rcy / bh, 0), 1)
-
-      this.zoomPosition = {
-        x: zeroX - (pcx * (w - bw)),
-        y: zeroY - (pcy * (h - bh))
-      }
     },
     universalTouch (e) {
       switch (e.type) {
