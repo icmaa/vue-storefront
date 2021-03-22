@@ -155,6 +155,7 @@ export default {
       }
 
       this.$refs.zoom.addEventListener('mouseup', cancelEvent)
+      this.$refs.zoom.addEventListener('mouseleave', cancelEvent)
       this.$refs.zoom.addEventListener('mousechancel', cancelEvent)
     },
     enableZoom (e) {
