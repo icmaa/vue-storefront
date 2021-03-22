@@ -2,6 +2,9 @@
   <div class="product-gallery t-overflow-hidden t-relative">
     <img src="/assets/product-placeholder.svg" class="t-block t-w-full lg:t-w-2/3" v-if="!isOnline">
     <template v-else>
+      <div class="debug t-bg-white t-p-2 t-absolute t-z-1 t-bottom-0 t-right-0">
+        {{ debug }}
+      </div>
       <template v-if="!zoom && imagesCount > 0">
         <div
           :class="[ 't-right-0', controlsClass ]"
@@ -18,11 +21,11 @@
           <i class="material-icons t-text-2xl">keyboard_arrow_left</i>
         </div>
       </template>
-      <div
+      <!--div
         class="t-absolute t-bottom-0 t-right-0 t-z-1 t-p-4 t-bg-white t-cursor-pointer"
       >
         <i class="material-icons t-text-4xl t-text-base-lighter" v-text="zoom ? 'zoom_out' : 'zoom_in'" />
-      </div>
+      </div-->
       <div
         ref="zoom"
         class="zoom"
@@ -78,7 +81,8 @@ export default {
       zoom: false,
       zoomFactor: 1,
       zoomRect: {},
-      zoomPosition: { x: 0, y: 0 }
+      zoomPosition: { x: 0, y: 0 },
+      debug: []
     }
   },
   computed: {
@@ -179,16 +183,18 @@ export default {
         return
       }
 
-      const { bx, by, bw, bh, w, h, x, y } = this.zoomRect
+      const { bx, by, bw, bh, w, h, zeroX, zeroY } = this.zoomRect
 
-      const rcl = this.universalTouch(e).clientX - bx
-      const rct = this.universalTouch(e).clientY - by
-      const zeroL = x * -1 + bx
-      const zeroT = y * -1 + by
+      const cx = this.universalTouch(e).clientX
+      const cy = this.universalTouch(e).clientY
+      const rcx = cx - bx
+      const rcy = cy - by
+
+      this.debug = [ cx, cy, rcx, rcy, (rcx / bw), (rcy / bh) ]
 
       this.zoomPosition = {
-        x: zeroL - (rcl / bw * w),
-        y: zeroT - (rct / bh * h)
+        x: zeroX - (rcx / bw * w),
+        y: zeroY - (rcy / bh * h)
       }
     },
     universalTouch (e) {
@@ -217,9 +223,15 @@ export default {
       rect.x = bx - (rect.w / 2) + (bw / 2)
       rect.y = by - (rect.h / 2) + (bh / 2)
 
+      const zero = {
+        zeroX: rect.x * -1 + bx,
+        zeroY: rect.y * -1 + by
+      }
+
       this.zoomRect = {
         ...{ bw, bh, bx, by },
-        ...rect
+        ...rect,
+        ...zero
       }
     }
   }
