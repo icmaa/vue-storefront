@@ -18,11 +18,12 @@
           <i class="material-icons t-text-2xl">keyboard_arrow_left</i>
         </div>
       </template>
-      <!--div
-        class="t-absolute t-bottom-0 t-right-0 t-z-1 t-p-4 t-bg-white t-cursor-pointer"
+      <div
+        class="md:t-hidden t-absolute t-bottom-0 t-right-0 t-z-1 t-p-4 t-bg-white t-cursor-pointer"
+        @touchend="initTouchZoom"
       >
         <i class="material-icons t-text-4xl t-text-base-lighter" v-text="zoom ? 'zoom_out' : 'zoom_in'" />
-      </div-->
+      </div>
       <div
         ref="zoom"
         class="zoom"
@@ -141,26 +142,41 @@ export default {
       }
     },
     initMouseZoom (e) {
-      this.enableZoom(e)
-      this.$refs.zoom.addEventListener('mousemove', this.onMouseZoomMove)
-
       const cancelEvent = (e) => {
         this.disableZoom(e)
         this.$refs.zoom.removeEventListener('mousemove', this.onZoomMove)
         this.$refs.zoom.removeEventListener(e.type, cancelEvent)
       }
 
+      this.enableZoom(e)
+      this.$refs.zoom.addEventListener('mousemove', this.onMouseZoomMove)
       this.$refs.zoom.addEventListener('mouseup', cancelEvent)
       this.$refs.zoom.addEventListener('mouseleave', cancelEvent)
       this.$refs.zoom.addEventListener('mousechancel', cancelEvent)
     },
-    enableZoom (e) {
+    initTouchZoom (e) {
+      const touchEvent = (e) => {
+        this.$refs.zoom.addEventListener('touchmove', this.onMouseZoomMove)
+      }
+
+      if (!this.zoom) {
+        this.enableZoom(e, true)
+        this.$refs.zoom.addEventListener('touchstart', touchEvent)
+      } else {
+        this.disableZoom()
+        this.$refs.zoom.removeEventListener('touchmove', this.onMouseZoomMove)
+        this.$refs.zoom.removeEventListener('touchstart', touchEvent)
+      }
+    },
+    enableZoom (e, initCentered = false) {
       this.drag = false
       this.zoom = true
 
       const scale = 4
       this.setZoomRect(scale)
-      this.onMouseZoomMove(e)
+      if (!initCentered) {
+        this.onMouseZoomMove(e)
+      }
 
       this.zoomFactor = scale
       setTimeout(() => {
@@ -182,10 +198,8 @@ export default {
 
       const { bx, by, bw, bh, w, h, zeroX, zeroY } = this.zoomRect
 
-      const cx = this.universalTouch(e).clientX
-      const cy = this.universalTouch(e).clientY
-      const rcx = cx - bx
-      const rcy = cy - by
+      const rcx = this.universalTouch(e).clientX - bx
+      const rcy = this.universalTouch(e).clientY - by
       const pcx = Math.min(Math.max(rcx / bw, 0), 1)
       const pcy = Math.min(Math.max(rcy / bh, 0), 1)
 
