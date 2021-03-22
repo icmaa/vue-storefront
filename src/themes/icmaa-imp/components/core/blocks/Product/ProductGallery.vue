@@ -28,7 +28,7 @@
         ref="zoom"
         class="zoom"
         :class="{ 'animate': animate, 't-cursor-zoom-in': !zoom, 't-cursor-move enabled': zoom }"
-        :style="{ '--z': zoomFactor, '--zx': `${zoomPosition.x}px`, '--zy': `${zoomPosition.y}px` }"
+        :style="{ '--z': currentZoomFactor, '--zx': `${zoomPosition.x}px`, '--zy': `${zoomPosition.y}px` }"
         @mousedown="initMouseZoom"
       >
         <div
@@ -36,9 +36,10 @@
           class="media-gallery t-flex t-items-center t-overflow-hidden"
           :class="{ 'animate': animate }"
           :style="{ '--n': imagesCount, '--i': dragX }"
-          @touchstart="onTouchStart"
-          @touchmove="onTouch"
-          @touchend="onTouchEnd"
+          @touchstart="swipeStart"
+          @touchmove="swipe"
+          @touchend="swipeEnd"
+          @touchchancel="swipeEnd"
         >
           <product-image v-for="image in images" :key="image" :image="image" :alt="product.name | htmlDecode" :sizes="sizes" @dragstart.prevent />
         </div>
@@ -64,6 +65,10 @@ export default {
       type: Object,
       required: true
     },
+    zoomFactor: {
+      type: Number,
+      default: 3
+    },
     controlsClass: {
       type: String,
       default: 't-hidden lg:t-flex t-absolute t-top-1/2 t-z-1 t--mt-6 t-items-center t-justify-center t-w-12 t-h-12 t-bg-black t-text-white t-rounded-full t-border t-border-white t-cursor-pointer t-mx-4'
@@ -77,8 +82,8 @@ export default {
       dragLock: 0,
       dragX: 1,
       zoom: false,
-      zoomFactor: 1,
       zoomRect: {},
+      currentZoomFactor: 1,
       zoomPosition: { x: 0, y: 0 }
     }
   },
@@ -116,18 +121,18 @@ export default {
     step (index) {
       this.setIndex(this.currentIndex + index)
     },
-    onTouchStart (e) {
+    swipeStart (e) {
       if (!this.drag) return
       this.animate = false
       this.dragLock = this.universalTouch(e).clientX
     },
-    onTouch (e) {
+    swipe (e) {
       if (!this.drag) return
       const drag = this.universalTouch(e).clientX - this.dragLock
       const imageWidth = this.getImageWidth()
       this.dragX = this.currentIndex - (drag / imageWidth)
     },
-    onTouchEnd () {
+    swipeEnd () {
       if (!this.drag) return
       const drag = this.dragX
       const direction = this.dragX > this.currentIndex ? -1 : 1
@@ -148,11 +153,11 @@ export default {
         this.$refs.zoom.removeEventListener(e.type, cancelEvent)
       }
 
-      this.enableZoom(e)
       this.$refs.zoom.addEventListener('mousemove', this.onMouseZoomMove)
       this.$refs.zoom.addEventListener('mouseup', cancelEvent)
       this.$refs.zoom.addEventListener('mouseleave', cancelEvent)
       this.$refs.zoom.addEventListener('mousechancel', cancelEvent)
+      this.enableZoom(e)
     },
     initTouchZoom (e) {
       const touchEvent = (e) => {
@@ -172,13 +177,12 @@ export default {
       this.drag = false
       this.zoom = true
 
-      const scale = 4
-      this.setZoomRect(scale)
+      this.setZoomDimensions(this.zoomFactor)
       if (!initCentered) {
         this.onMouseZoomMove(e)
       }
 
-      this.zoomFactor = scale
+      this.currentZoomFactor = this.zoomFactor
       setTimeout(() => {
         this.animate = false
       }, 250)
@@ -187,7 +191,7 @@ export default {
       this.drag = true
       this.animate = true
       this.zoom = false
-      this.zoomFactor = 1
+      this.currentZoomFactor = 1
       this.zoomPosition = { x: 0, y: 0 }
       this.zoomRect = {}
     },
@@ -222,7 +226,7 @@ export default {
     getImageWidth () {
       return this.$refs.track.querySelector('img').clientWidth
     },
-    setZoomRect (zoomFactor = 1) {
+    setZoomDimensions (zoomFactor = 1) {
       const baseRect = this.$refs.zoom.getBoundingClientRect()
       const { width: bw, height: bh, top: by, left: bx } = baseRect
 
