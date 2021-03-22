@@ -19,12 +19,16 @@
         </div>
       </template>
       <div
+        class="t-absolute t-bottom-0 t-right-0 t-z-1 t-p-4 t-bg-white t-cursor-pointer"
+      >
+        <i class="material-icons t-text-4xl t-text-base-lighter" v-text="zoom ? 'zoom_out' : 'zoom_in'" />
+      </div>
+      <div
         ref="zoom"
         class="zoom"
         :class="{ 'animate': animate, 't-cursor-zoom-in': !zoom, 't-cursor-move enabled': zoom }"
         :style="{ '--z': zoomFactor, '--zx': `${zoomPosition.x}px`, '--zy': `${zoomPosition.y}px` }"
-        @mousedown="toggleZoom"
-        @mousemove="onZoomMove"
+        @mousedown="initMouseZoom"
       >
         <div
           ref="track"
@@ -136,44 +140,56 @@ export default {
         this.setIndex(nextIndex)
       }
     },
-    toggleZoom (e) {
-      if (this.zoom) {
-        this.drag = true
-        this.animate = true
-        this.zoom = false
-        this.zoomFactor = 1
-        this.zoomPosition = { x: 0, y: 0 }
-        this.zoomRect = {}
-      } else {
-        this.drag = false
-        this.zoom = true
+    initMouseZoom (e) {
+      this.enableZoom(e)
+      this.$refs.zoom.addEventListener('mousemove', this.onMouseZoomMove)
 
-        const scale = 2
-        this.setZoomRect(scale)
-        this.onZoomMove(e)
-
-        this.zoomFactor = scale
-        setTimeout(() => {
-          this.animate = false
-        }, 250)
+      const cancelEvent = (e) => {
+        this.disableZoom(e)
+        this.$refs.zoom.removeEventListener('mousemove', this.onZoomMove)
+        this.$refs.zoom.removeEventListener(e.type, cancelEvent)
       }
+
+      this.$refs.zoom.addEventListener('mouseup', cancelEvent)
+      this.$refs.zoom.addEventListener('mousechancel', cancelEvent)
     },
-    onZoomMove (e) {
+    enableZoom (e) {
+      this.drag = false
+      this.zoom = true
+
+      const scale = 4
+      this.setZoomRect(scale)
+      this.onMouseZoomMove(e)
+
+      this.zoomFactor = scale
+      setTimeout(() => {
+        this.animate = false
+      }, 250)
+    },
+    disableZoom (e) {
+      this.drag = true
+      this.animate = true
+      this.zoom = false
+      this.zoomFactor = 1
+      this.zoomPosition = { x: 0, y: 0 }
+      this.zoomRect = {}
+    },
+    onMouseZoomMove (e) {
       if (!this.zoom) {
         return
       }
 
-      const zbl = this.zoomRect.base.left
-      const zbt = this.zoomRect.base.top
-      const rcl = this.universalTouch(e).clientX - zbl
-      const rct = this.universalTouch(e).clientY - zbt
-      const zeroL = this.zoomRect.magn.left * -1 + zbl
-      const zeroT = this.zoomRect.magn.top * -1 + zbt
+      const { bx, by, bw, bh, w, h, x, y } = this.zoomRect
 
-      const x = zeroL - rcl
-      const y = zeroT - rct
+      const rcl = this.universalTouch(e).clientX - bx
+      const rct = this.universalTouch(e).clientY - by
+      const zeroL = x * -1 + bx
+      const zeroT = y * -1 + by
 
-      this.zoomPosition = { x, y }
+      this.zoomPosition = {
+        x: zeroL - (rcl / bw * w),
+        y: zeroT - (rct / bh * h)
+      }
     },
     universalTouch (e) {
       switch (e.type) {
@@ -190,18 +206,21 @@ export default {
       return this.$refs.track.querySelector('img').clientWidth
     },
     setZoomRect (zoomFactor = 1) {
-      const baseZoomRect = this.$refs.zoom.getBoundingClientRect()
-      this.zoomRect.base = baseZoomRect
+      const baseRect = this.$refs.zoom.getBoundingClientRect()
+      const { width: bw, height: bh, top: by, left: bx } = baseRect
 
-      const zoomRect = {
-        width: baseZoomRect.width * zoomFactor,
-        height: baseZoomRect.height * zoomFactor
+      const rect = {
+        w: bw * zoomFactor,
+        h: bh * zoomFactor
       }
 
-      zoomRect.left = baseZoomRect.left - (zoomRect.width / 2) + (baseZoomRect.width / 2)
-      zoomRect.top = baseZoomRect.top - (zoomRect.height / 2) + (baseZoomRect.height / 2)
+      rect.x = bx - (rect.w / 2) + (bw / 2)
+      rect.y = by - (rect.h / 2) + (bh / 2)
 
-      this.zoomRect.magn = zoomRect
+      this.zoomRect = {
+        ...{ bw, bh, bx, by },
+        ...rect
+      }
     }
   }
 }
