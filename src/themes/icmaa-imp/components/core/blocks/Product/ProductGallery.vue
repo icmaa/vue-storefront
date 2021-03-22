@@ -92,7 +92,8 @@ export default {
       zoom: false,
       zoomRect: {},
       currentZoomFactor: 1,
-      zoomPosition: { x: 0, y: 0 }
+      zoomPosition: { x: 0, y: 0 },
+      touchZoomLock: { x: 0, y: 0 }
     }
   },
   computed: {
@@ -195,8 +196,10 @@ export default {
 
       const rcx = this.universalTouch(e).clientX - bx
       const rcy = this.universalTouch(e).clientY - by
-      const pcx = Math.min(Math.max(rcx / bw, 0), 1)
-      const pcy = Math.min(Math.max(rcy / bh, 0), 1)
+      const pcx = 1 - Math.min(Math.max(rcx / bw, 0), 1)
+      const pcy = 1 - Math.min(Math.max(rcy / bh, 0), 1)
+
+      console.error(this.touchZoomLock.x, this.touchZoomLock.y, this.universalTouch(e).clientX - bx, this.universalTouch(e).clientY - by)
 
       this.zoomPosition = {
         x: zeroX - (pcx * (w - bw)),
@@ -205,8 +208,13 @@ export default {
     },
     onTouchZoomEnd (e) {
       if (!this.zoom) return
-      // ...
-      console.error(e.type, 'onTouchZoomEnd')
+
+      this.touchZoomLock = {
+        x: this.universalTouch(e).clientX,
+        y: this.universalTouch(e).clientY
+      }
+
+      console.error(e.type, 'onTouchZoomEnd', this.touchZoomLock)
     },
     enableZoom (e, initCentered = false) {
       this.drag = false
