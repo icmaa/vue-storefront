@@ -56,7 +56,7 @@
       </template>
       <div
         class="lg:t-hidden t-absolute t-bottom-0 t-right-0 t-z-1 t-p-4 t-bg-white t-rounded-full t-flex t-mb-2 t-mr-2 t-cursor-pointer"
-        @touchend="initTouchZoom"
+        @click="initTouchZoom"
       >
         <i class="material-icons t-text-4xl t-text-base-lighter" v-text="zoom ? 'zoom_out' : 'zoom_in'" />
       </div>
@@ -240,6 +240,7 @@ export default {
       this.zoomPosition = pos
     },
     bindTouchZoomDoubleTab (e) {
+      if (!this.isMobile) return
       if (!this.isDoubleTab) {
         this.isDoubleTab = true
         setTimeout(() => {
