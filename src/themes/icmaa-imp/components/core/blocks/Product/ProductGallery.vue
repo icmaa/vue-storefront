@@ -36,8 +36,6 @@
         @mousechancel="onMouseZoomChancel"
         @touchstart="onTouchZoomStart"
         @touchmove="onTouchZoomMove"
-        @touchend="onTouchZoomEnd"
-        @touchchancel="onTouchZoomEnd"
       >
         <div
           ref="track"
@@ -91,9 +89,9 @@ export default {
       dragX: 1,
       zoom: false,
       zoomRect: {},
-      currentZoomFactor: 1,
       zoomPosition: { x: 0, y: 0 },
-      touchZoomLock: { x: 0, y: 0 }
+      currentZoomFactor: 1,
+      touchZoomLock: { cx: 0, cy: 0, x: 0, y: 0 }
     }
   },
   computed: {
@@ -191,14 +189,17 @@ export default {
       if (!this.zoom) return
 
       const { clientX: cx, clientY: cy } = this.universalTouch(e)
+      const { minX, maxX, minY, maxY } = this.zoomRect
 
-      this.zoomPosition = {
+      const pos = {
         x: this.touchZoomLock.x + (cx - this.touchZoomLock.cx),
         y: this.touchZoomLock.y + (cy - this.touchZoomLock.cy)
       }
-    },
-    onTouchZoomEnd (e) {
-      // if (!this.zoom) return
+
+      pos.x = Math.min(Math.max(pos.x, minX), maxX)
+      pos.y = Math.min(Math.max(pos.y, minY), maxY)
+
+      this.zoomPosition = pos
     },
     enableZoom (e, initCentered = false) {
       this.drag = false
@@ -218,9 +219,10 @@ export default {
       this.drag = true
       this.animate = true
       this.zoom = false
-      this.currentZoomFactor = 1
-      this.zoomPosition = { x: 0, y: 0 }
       this.zoomRect = {}
+      this.zoomPosition = { x: 0, y: 0 }
+      this.touchZoomLock = { cx: 0, cy: 0, x: 0, y: 0 }
+      this.currentZoomFactor = 1
     },
     universalTouch (e) {
       switch (e.type) {
@@ -253,8 +255,14 @@ export default {
         zeroY: rect.y * -1 + by
       }
 
+      const minX = zero.zeroX - (bw + bw)
+      const maxX = -1 * minX
+      const minY = zero.zeroY - (bh + bh)
+      const maxY = -1 * minY
+
       this.zoomRect = {
         ...{ bw, bh, bx, by },
+        ...{ minX, maxX, minY, maxY },
         ...rect,
         ...zero
       }
