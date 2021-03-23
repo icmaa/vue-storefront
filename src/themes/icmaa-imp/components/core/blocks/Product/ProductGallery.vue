@@ -1,6 +1,6 @@
 <template>
   <div class="product-gallery t-overflow-hidden t-relative">
-    <img src="/assets/product-placeholder.svg" class="t-block t-w-full lg:t-w-2/3" v-if="!isOnline">
+    <img src="/assets/product-placeholder.svg" class="t-block t-w-full lg:t-w-2/3" v-if="isServer">
     <template v-else>
       <template v-if="!zoom && imagesCount > 0">
         <div
@@ -47,7 +47,13 @@
           @touchend="swipeEnd"
           @touchchancel="swipeEnd"
         >
-          <product-image v-for="image in images" :key="image" :image="image" :alt="product.name | htmlDecode" :sizes="sizes" @dragstart.prevent />
+          <product-image
+            v-for="image in images"
+            :key="image"
+            :image="image" :alt="product.name | htmlDecode"
+            :sizes="sizes"
+            @dragstart.prevent
+          />
         </div>
       </div>
     </template>
@@ -55,7 +61,7 @@
 </template>
 
 <script>
-import { onlineHelper } from '@vue-storefront/core/helpers'
+import { isServer } from '@vue-storefront/core/helpers'
 import ProductImage from 'theme/components/core/ProductImage'
 
 export default {
@@ -114,8 +120,8 @@ export default {
         { media: '(max-width: 414px)', width: 414 }
       ]
     },
-    isOnline () {
-      return onlineHelper.isOnline
+    isServer () {
+      return isServer
     }
   },
   methods: {
@@ -154,6 +160,7 @@ export default {
       }
     },
     initMouseZoom (e) {
+      if (this.zoom) return
       this.enableZoom(e)
     },
     onMouseZoomMove (e) {
