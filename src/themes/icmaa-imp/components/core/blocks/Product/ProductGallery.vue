@@ -15,7 +15,7 @@
         @mousechancel="onMouseZoomChancel"
         @touchstart="onTouchZoomStart"
         @touchmove="onTouchZoomMove"
-        @touchend="onTouchZoomDoubleTab"
+        @doubletab="initTouchZoom"
       >
         <div
           ref="track"
@@ -177,7 +177,7 @@ export default {
         this.setIndex(nextIndex)
       }
     },
-    initMouseZoom (e) {
+    initMouseZoom () {
       if (this.isMobile || this.zoom) return
 
       // Prevent init of zoom on click
@@ -189,8 +189,8 @@ export default {
         }
       }, 10)
     },
-    onMouseZoomMove (e) {
-      if (this.isMobile || !this.zoom) return
+    onMouseZoomMove (e, force = false) {
+      if (!force && (this.isMobile || !this.zoom)) return
 
       const { bw, bh, w, h, zeroX, zeroY } = this.zoomRect
       const { clientX: cx, clientY: cy } = this.universalTouch(e)
@@ -217,6 +217,8 @@ export default {
       }
     },
     onTouchZoomStart (e) {
+      this.bindTouchZoomDoubleTab(e)
+
       if (!this.zoom) return
 
       const { clientX: cx, clientY: cy } = this.universalTouch(e)
@@ -238,19 +240,27 @@ export default {
 
       this.zoomPosition = pos
     },
-    onTouchZoomDoubleTab (e) {
-      // this.isDoubleTab = false
-      // setTimeout(() => {
-      //   this.isDoubleTab
-      // }, 100)
+    bindTouchZoomDoubleTab (e) {
+      if (!this.isDoubleTab) {
+        this.isDoubleTab = true
+        setTimeout(() => {
+          this.isDoubleTab = false
+        }, 500)
+      } else {
+        const event = new CustomEvent('doubletab', { detail: e })
+        this.$refs.zoom.dispatchEvent(event)
+      }
     },
     enableZoom (e, initCentered = false) {
+      this.animate = true
       this.drag = false
       this.zoom = true
 
+      const isDblTab = e.type === 'doubletab'
+
       this.setZoomDimensions(this.zoomFactor)
-      if (!initCentered) {
-        this.onMouseZoomMove(e)
+      if (!initCentered || isDblTab) {
+        this.onMouseZoomMove(e, isDblTab)
       }
 
       this.currentZoomFactor = this.zoomFactor
@@ -258,7 +268,7 @@ export default {
         this.animate = false
       }, 250)
     },
-    disableZoom (e) {
+    disableZoom () {
       this.animate = true
       this.drag = true
       this.zoom = false
@@ -274,6 +284,8 @@ export default {
         case 'touchstart':
         case 'touchmove':
           return e.touches[0]
+        case 'doubletab':
+          return e.detail.touches[0]
         default:
           return e
       }
