@@ -55,16 +55,21 @@
         </div>
       </template>
       <div
-        class="lg:t-hidden t-absolute t-bottom-0 t-right-0 t-z-1 t-p-4 t-bg-white t-rounded-full t-flex t-mb-2 t-mr-2 t-cursor-pointer"
+        class="lg:t-hidden t-absolute t-bottom-0 t-right-0 t-z-1 t-p-2 t-bg-white t-rounded-full t-flex t-mb-2 t-mr-2 t-cursor-pointer"
         @click="initTouchZoom"
       >
         <i class="material-icons t-text-4xl t-text-base-lighter" v-text="zoom ? 'zoom_out' : 'zoom_in'" />
       </div>
       <div
-        class="lg:t-hidden t-absolute t-left-0 t-bottom-0 t-z-1 t-bg-white t-px-2 t-py-1 t-ml-4 t-mb-4 t-text-sm t-text-base-light"
+        class="lg:t-hidden t-absolute t-left-0 t-bottom-0 t-z-1 t-ml-4 t-mb-4 t-flex t-opacity-50"
         v-if="imagesCount > 0 && !zoom"
       >
-        {{ index }} / {{ imagesCount }}
+        <div
+          v-for="n in imagesCount"
+          :key="n"
+          :class="[ n === index ? 't-bg-base-tone' : 't-bg-base-lighter']"
+          class="t-h-3 t-w-3 t-rounded-full t-mr-1 t-border t-border-white"
+        />
       </div>
     </template>
   </div>
