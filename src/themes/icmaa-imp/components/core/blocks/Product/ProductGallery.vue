@@ -161,12 +161,9 @@ export default {
     onMouseZoomMove (e) {
       if (!this.zoom) return
 
-      const { bx, by, bw, bh, w, h, zeroX, zeroY } = this.zoomRect
-
-      const rcx = this.universalTouch(e).clientX - bx
-      const rcy = this.universalTouch(e).clientY - by
-      const pcx = Math.min(Math.max(rcx / bw, 0), 1)
-      const pcy = Math.min(Math.max(rcy / bh, 0), 1)
+      const { bw, bh, w, h, zeroX, zeroY } = this.zoomRect
+      const { clientX: cx, clientY: cy } = this.universalTouch(e)
+      const { pcx, pcy } = this.getRelativeCursorPosition(cx, cy)
 
       this.zoomPosition = {
         x: zeroX - (pcx * (w - bw)),
@@ -186,35 +183,22 @@ export default {
     },
     onTouchZoomStart (e) {
       if (!this.zoom) return
-      // ...
-      console.error(e.type, 'onTouchZoomStart')
+
+      const { clientX: cx, clientY: cy } = this.universalTouch(e)
+      this.touchZoomLock = { cx, cy, ...this.zoomPosition }
     },
     onTouchZoomMove (e) {
       if (!this.zoom) return
 
-      const { bx, by, bw, bh, w, h, zeroX, zeroY } = this.zoomRect
-
-      const rcx = this.universalTouch(e).clientX - bx
-      const rcy = this.universalTouch(e).clientY - by
-      const pcx = 1 - Math.min(Math.max(rcx / bw, 0), 1)
-      const pcy = 1 - Math.min(Math.max(rcy / bh, 0), 1)
-
-      console.error(this.touchZoomLock.x, this.touchZoomLock.y, this.universalTouch(e).clientX - bx, this.universalTouch(e).clientY - by)
+      const { clientX: cx, clientY: cy } = this.universalTouch(e)
 
       this.zoomPosition = {
-        x: zeroX - (pcx * (w - bw)),
-        y: zeroY - (pcy * (h - bh))
+        x: this.touchZoomLock.x + (cx - this.touchZoomLock.cx),
+        y: this.touchZoomLock.y + (cy - this.touchZoomLock.cy)
       }
     },
     onTouchZoomEnd (e) {
-      if (!this.zoom) return
-
-      this.touchZoomLock = {
-        x: this.universalTouch(e).clientX,
-        y: this.universalTouch(e).clientY
-      }
-
-      console.error(e.type, 'onTouchZoomEnd', this.touchZoomLock)
+      // if (!this.zoom) return
     },
     enableZoom (e, initCentered = false) {
       this.drag = false
@@ -274,6 +258,20 @@ export default {
         ...rect,
         ...zero
       }
+    },
+    getRelativeCursorPosition (cx, cy, invert = true) {
+      const { bx, by, bw, bh } = this.zoomRect
+      const rcx = cx - bx
+      const rcy = cy - by
+      let pcx = Math.min(Math.max(rcx / bw, 0), 1)
+      let pcy = Math.min(Math.max(rcy / bh, 0), 1)
+
+      if (!invert) {
+        pcx = 1 - pcx
+        pcy = 1 - pcy
+      }
+
+      return { rcx, rcy, pcx, pcy }
     }
   }
 }
