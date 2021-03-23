@@ -15,6 +15,7 @@
         @mousechancel="onMouseZoomChancel"
         @touchstart="onTouchZoomStart"
         @touchmove="onTouchZoomMove"
+        @click="bindTouchZoomDoubleTab"
         @doubletab="initTouchZoom"
       >
         <div
@@ -217,8 +218,6 @@ export default {
       }
     },
     onTouchZoomStart (e) {
-      this.bindTouchZoomDoubleTab(e)
-
       if (!this.zoom) return
 
       const { clientX: cx, clientY: cy } = this.universalTouch(e)
@@ -285,7 +284,7 @@ export default {
         case 'touchmove':
           return e.touches[0]
         case 'doubletab':
-          return e.detail.touches[0]
+          return e.detail
         default:
           return e
       }
