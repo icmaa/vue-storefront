@@ -2,28 +2,6 @@
   <div class="product-gallery t-overflow-hidden t-relative">
     <img src="/assets/product-placeholder.svg" class="t-block t-w-full lg:t-w-2/3" v-if="isServer">
     <template v-else>
-      <template v-if="!zoom && imagesCount > 0">
-        <div
-          :class="[ 't-right-0', controlsClass ]"
-          v-if="index < imagesCount"
-          @click="step(+1)"
-        >
-          <i class="material-icons t-text-2xl">keyboard_arrow_right</i>
-        </div>
-        <div
-          :class="[ 't-left-0', controlsClass ]"
-          v-if="index > 1"
-          @click="step(-1)"
-        >
-          <i class="material-icons t-text-2xl">keyboard_arrow_left</i>
-        </div>
-      </template>
-      <div
-        class="lg:t-hidden t-absolute t-bottom-0 t-right-0 t-z-1 t-p-4 t-bg-white t-rounded-full t-flex t-mb-2 t-mr-2 t-cursor-pointer"
-        @touchend="initTouchZoom"
-      >
-        <i class="material-icons t-text-4xl t-text-base-lighter" v-text="zoom ? 'zoom_out' : 'zoom_in'" />
-      </div>
       <div
         ref="zoom"
         class="zoom"
@@ -54,8 +32,31 @@
             :image="image" :alt="product.name | htmlDecode"
             :sizes="sizes"
             @dragstart.prevent
+            @dragover.prevent
           />
         </div>
+      </div>
+      <template v-if="!zoom && imagesCount > 0">
+        <div
+          :class="[ 't-right-0', controlsClass ]"
+          v-show="index < imagesCount"
+          @click="step(+1)"
+        >
+          <i class="material-icons t-text-2xl">keyboard_arrow_right</i>
+        </div>
+        <div
+          :class="[ 't-left-0', controlsClass ]"
+          v-show="index > 1"
+          @click="step(-1)"
+        >
+          <i class="material-icons t-text-2xl">keyboard_arrow_left</i>
+        </div>
+      </template>
+      <div
+        class="lg:t-hidden t-absolute t-bottom-0 t-right-0 t-z-1 t-p-4 t-bg-white t-rounded-full t-flex t-mb-2 t-mr-2 t-cursor-pointer"
+        @touchend="initTouchZoom"
+      >
+        <i class="material-icons t-text-4xl t-text-base-lighter" v-text="zoom ? 'zoom_out' : 'zoom_in'" />
       </div>
     </template>
   </div>
@@ -244,8 +245,8 @@ export default {
       }, 250)
     },
     disableZoom (e) {
-      this.drag = true
       this.animate = true
+      this.drag = true
       this.zoom = false
       this.zoomRect = {}
       this.zoomPosition = { x: 0, y: 0 }
@@ -323,7 +324,7 @@ export default {
   --image-width: 100%;
 
   .zoom {
-    transform: translate(var(--zx, 0), var(--zy, 0)) scale(var(--z, 1));
+    transform: translate(var(--zx, '0px'), var(--zy, '0px')) scale(var(--z, 1));
 
     &.animate {
       transition: transform .25s ease-out;
