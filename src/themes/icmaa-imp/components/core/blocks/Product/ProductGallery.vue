@@ -30,6 +30,7 @@
         :class="{ 'animate': animate, 't-cursor-zoom-in': !zoom, 't-cursor-move enabled': zoom }"
         :style="{ '--z': currentZoomFactor, '--zx': `${zoomPosition.x}px`, '--zy': `${zoomPosition.y}px` }"
         @mousedown="initMouseZoom"
+        @mousezoomstart="enableZoom"
         @mousemove="onMouseZoomMove"
         @mouseup="onMouseZoomChancel"
         @mouseleave="onMouseZoomChancel"
@@ -96,6 +97,7 @@ export default {
       zoom: false,
       zoomRect: {},
       zoomPosition: { x: 0, y: 0 },
+      isMouseDownOnZoom: false,
       currentZoomFactor: 1,
       touchZoomLock: { cx: 0, cy: 0, x: 0, y: 0 }
     }
@@ -161,7 +163,15 @@ export default {
     },
     initMouseZoom (e) {
       if (this.zoom) return
-      this.enableZoom(e)
+
+      // Prevent init of zoom on click
+      this.isMouseDownOnZoom = true
+      setTimeout(() => {
+        if (this.isMouseDownOnZoom === true) {
+          const event = new Event('mousezoomstart')
+          this.$refs.zoom.dispatchEvent(event)
+        }
+      }, 10)
     },
     onMouseZoomMove (e) {
       if (!this.zoom) return
@@ -176,8 +186,11 @@ export default {
       }
     },
     onMouseZoomChancel (e) {
-      if (!this.zoom) return
-      this.disableZoom(e)
+      this.isMouseDownOnZoom = false
+
+      if (this.zoom) {
+        this.disableZoom(e)
+      }
     },
     initTouchZoom (e) {
       if (!this.zoom) {
