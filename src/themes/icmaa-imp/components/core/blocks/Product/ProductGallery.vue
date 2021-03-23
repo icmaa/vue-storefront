@@ -15,6 +15,7 @@
         @mousechancel="onMouseZoomChancel"
         @touchstart="onTouchZoomStart"
         @touchmove="onTouchZoomMove"
+        @touchend="onTouchZoomDoubleTab"
       >
         <div
           ref="track"
@@ -58,6 +59,12 @@
       >
         <i class="material-icons t-text-4xl t-text-base-lighter" v-text="zoom ? 'zoom_out' : 'zoom_in'" />
       </div>
+      <div
+        class="lg:t-hidden t-absolute t-left-0 t-bottom-0 t-z-1 t-bg-white t-px-2 t-py-1 t-ml-4 t-mb-4 t-text-sm t-text-base-light"
+        v-if="imagesCount > 0 && !zoom"
+      >
+        {{ index }} / {{ imagesCount }}
+      </div>
     </template>
   </div>
 </template>
@@ -100,6 +107,7 @@ export default {
       zoomRect: {},
       zoomPosition: { x: 0, y: 0 },
       isMouseDownOnZoom: false,
+      isDoubleTab: false,
       currentZoomFactor: 1,
       touchZoomLock: { cx: 0, cy: 0, x: 0, y: 0 }
     }
@@ -229,6 +237,12 @@ export default {
       pos.y = Math.min(Math.max(pos.y, minY), maxY)
 
       this.zoomPosition = pos
+    },
+    onTouchZoomDoubleTab (e) {
+      // this.isDoubleTab = false
+      // setTimeout(() => {
+      //   this.isDoubleTab
+      // }, 100)
     },
     enableZoom (e, initCentered = false) {
       this.drag = false
