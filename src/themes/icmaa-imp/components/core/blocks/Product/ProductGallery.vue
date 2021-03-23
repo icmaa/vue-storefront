@@ -5,14 +5,14 @@
       <template v-if="!zoom && imagesCount > 0">
         <div
           :class="[ 't-right-0', controlsClass ]"
-          v-if="currentIndex < imagesCount"
+          v-if="index < imagesCount"
           @click="step(+1)"
         >
           <i class="material-icons t-text-2xl">keyboard_arrow_right</i>
         </div>
         <div
           :class="[ 't-left-0', controlsClass ]"
-          v-if="currentIndex > 1"
+          v-if="index > 1"
           @click="step(-1)"
         >
           <i class="material-icons t-text-2xl">keyboard_arrow_left</i>
@@ -89,7 +89,7 @@ export default {
   data () {
     return {
       animate: true,
-      currentIndex: 1,
+      index: 1,
       drag: true,
       dragLock: 0,
       dragX: 1,
@@ -128,11 +128,11 @@ export default {
     setIndex (index) {
       if (index >= 1 && index <= this.imagesCount) {
         this.dragX = index
-        this.currentIndex = index
+        this.index = index
       }
     },
     step (index) {
-      this.setIndex(this.currentIndex + index)
+      this.setIndex(this.index + index)
     },
     swipeStart (e) {
       if (!this.drag) return
@@ -143,19 +143,19 @@ export default {
       if (!this.drag) return
       const drag = this.universalTouch(e).clientX - this.dragLock
       const imageWidth = this.getImageWidth()
-      this.dragX = this.currentIndex - (drag / imageWidth)
+      this.dragX = this.index - (drag / imageWidth)
     },
     swipeEnd () {
       if (!this.drag) return
       const drag = this.dragX
-      const direction = this.dragX > this.currentIndex ? -1 : 1
-      const nextIndex = this.currentIndex - direction
+      const direction = this.dragX > this.index ? -1 : 1
+      const nextIndex = this.index - direction
 
       this.animate = true
       this.dragLock = 0
-      this.dragX = this.currentIndex
+      this.dragX = this.index
 
-      if (Math.abs(drag - this.currentIndex) > 0.15) {
+      if (Math.abs(drag - this.index) > 0.15) {
         this.setIndex(nextIndex)
       }
     },
