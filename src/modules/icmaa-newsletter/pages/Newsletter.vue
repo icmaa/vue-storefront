@@ -20,6 +20,13 @@
         </button>
       </div>
       <p class="t-mt-4 lg:t-mt-2 t-text-base-light t-text-xs" v-html="content.hint" />
+      <i18n path="Data is not given to third parties and unsubscription is possible at any time. {policy}" tag="p" class="t-text-xs t-text-base-light t-leading-none t-mb-4">
+      <template #policy>
+        <router-link :to="localizedRoute('/service-privacy')">
+          {{ $t('Privacy Policy') }}
+        </router-link>
+      </template>
+    </i18n>
       <newsletter-popup v-if="loadNewsletterPopup" />
     </div>
   </div>
