@@ -19,7 +19,7 @@
         </div>
       </template>
       <div
-        class="md:t-hidden t-absolute t-bottom-0 t-right-0 t-z-1 t-p-4 t-bg-white t-rounded-full t-flex t-mb-2 t-mr-2 t-cursor-pointer"
+        class="lg:t-hidden t-absolute t-bottom-0 t-right-0 t-z-1 t-p-4 t-bg-white t-rounded-full t-flex t-mb-2 t-mr-2 t-cursor-pointer"
         @touchend="initTouchZoom"
       >
         <i class="material-icons t-text-4xl t-text-base-lighter" v-text="zoom ? 'zoom_out' : 'zoom_in'" />
@@ -62,6 +62,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import { isServer } from '@vue-storefront/core/helpers'
 import ProductImage from 'theme/components/core/ProductImage'
 
@@ -103,6 +104,9 @@ export default {
     }
   },
   computed: {
+    ...mapGetters({
+      viewport: 'ui/getViewport'
+    }),
     images () {
       return this.gallery.filter(image => {
         /** Filter out old _sm files, they are duplicates of large ones */
@@ -124,6 +128,9 @@ export default {
     },
     isServer () {
       return isServer
+    },
+    isMobile () {
+      return ['xs', 'sm', 'md'].includes(this.viewport)
     }
   },
   methods: {
@@ -162,7 +169,7 @@ export default {
       }
     },
     initMouseZoom (e) {
-      if (this.zoom) return
+      if (this.isMobile || this.zoom) return
 
       // Prevent init of zoom on click
       this.isMouseDownOnZoom = true
@@ -174,7 +181,7 @@ export default {
       }, 10)
     },
     onMouseZoomMove (e) {
-      if (!this.zoom) return
+      if (this.isMobile || !this.zoom) return
 
       const { bw, bh, w, h, zeroX, zeroY } = this.zoomRect
       const { clientX: cx, clientY: cy } = this.universalTouch(e)
@@ -186,8 +193,9 @@ export default {
       }
     },
     onMouseZoomChancel (e) {
-      this.isMouseDownOnZoom = false
+      if (this.isMobile) return
 
+      this.isMouseDownOnZoom = false
       if (this.zoom) {
         this.disableZoom(e)
       }
