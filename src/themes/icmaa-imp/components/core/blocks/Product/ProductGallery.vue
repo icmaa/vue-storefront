@@ -38,16 +38,16 @@
           />
         </div>
       </div>
-      <template v-if="!zoom && imagesCount > 0">
+      <template v-if="!zoom && imagesCount > 1">
         <div
-          :class="[ 't-right-0', controlsClass ]"
+          class="t-hidden lg:t-flex t-absolute t-top-1/2 t-right-0 t-z-1 t--mt-6 t-items-center t-justify-center t-w-12 t-h-12 t-bg-black t-text-white t-rounded-full t-border t-border-white t-cursor-pointer t-mx-4"
           v-show="index < imagesCount"
           @click="step(+1)"
         >
           <i class="material-icons t-text-2xl">keyboard_arrow_right</i>
         </div>
         <div
-          :class="[ 't-left-0', controlsClass ]"
+          class="t-hidden lg:t-flex t-absolute t-top-1/2 t-left-0 t-z-1 t--mt-6 t-items-center t-justify-center t-w-12 t-h-12 t-bg-black t-text-white t-rounded-full t-border t-border-white t-cursor-pointer t-mx-4"
           v-show="index > 1"
           @click="step(-1)"
         >
@@ -90,11 +90,7 @@ export default {
     },
     zoomFactor: {
       type: Number,
-      default: 3
-    },
-    controlsClass: {
-      type: String,
-      default: 't-hidden lg:t-flex t-absolute t-top-1/2 t-z-1 t--mt-6 t-items-center t-justify-center t-w-12 t-h-12 t-bg-black t-text-white t-rounded-full t-border t-border-white t-cursor-pointer t-mx-4'
+      default: 2
     }
   },
   data () {
@@ -310,10 +306,10 @@ export default {
         zeroY: rect.y * -1 + by
       }
 
-      const minX = zero.zeroX - (bw + bw)
-      const maxX = -1 * minX
-      const minY = zero.zeroY - (bh + bh)
-      const maxY = -1 * minY
+      const maxX = bx - rect.x
+      const minX = -1 * maxX
+      const maxY = by - rect.y
+      const minY = -1 * maxY
 
       this.zoomRect = {
         ...{ bw, bh, bx, by },
