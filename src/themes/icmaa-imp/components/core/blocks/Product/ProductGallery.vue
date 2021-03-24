@@ -30,9 +30,12 @@
         >
           <product-image
             v-for="image in images"
-            :key="currentZoomFactor + 'x ' + image"
-            :image="image" :alt="product.name | htmlDecode"
+            :key="image"
+            :image="image"
+            :alt="product.name | htmlDecode"
             :sizes="sizes"
+            :type="zoom ? 'fullsize' : 'gallery'"
+            :enable-auto-reload="true"
             @dragstart.prevent
             @dragover.prevent
           />

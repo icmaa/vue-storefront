@@ -16,7 +16,7 @@ export default {
         if (element.children) {
           var sources = element.children
           Object.values(sources).forEach(source => {
-            if (!isIE && source.nodeName.toLowerCase() !== 'source') return
+            if (!isIE && !['source', 'img'].includes(source.nodeName.toLowerCase())) return
             const sourceSrc = source.getAttribute('data-src')
             const sourceSrcSet = source.getAttribute('data-srcset')
             if (sourceSrc) source.setAttribute('src', sourceSrc)
