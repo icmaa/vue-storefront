@@ -349,6 +349,24 @@ export default {
 .product-gallery {
   --image-width: 100%;
 
+  @media (min-width: 1024px) {
+    isolation: isolate;
+    background: -moz-linear-gradient(left,  rgba(0,0,0,0) 1%, rgba(0,0,0,0) 75%, rgba(0,0,0,0.05) 90%, rgba(0,0,0,0.1) 98%, rgba(0,0,0,0.1) 99%, rgba(0,0,0,0.15) 100%);
+    background: -webkit-linear-gradient(left,  rgba(0,0,0,0) 1%,rgba(0,0,0,0) 75%,rgba(0,0,0,0.05) 90%,rgba(0,0,0,0.1) 98%,rgba(0,0,0,0.1) 99%,rgba(0,0,0,0.15) 100%);
+    background: linear-gradient(to right,  rgba(0,0,0,0) 1%,rgba(0,0,0,0) 75%,rgba(0,0,0,0.05) 90%,rgba(0,0,0,0.1) 98%,rgba(0,0,0,0.1) 99%,rgba(0,0,0,0.15) 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00000000', endColorstr='#26000000',GradientType=1 );
+
+    .zoom {
+      mix-blend-mode: multiply;
+    }
+
+    --image-width: 90%;
+  }
+
+  @media (min-width: 1280px) {
+    --image-width: 75%;
+  }
+
   .zoom {
     transform: translate(var(--zx, '0px'), var(--zy, '0px')) scale(var(--z, 1));
 
@@ -359,24 +377,6 @@ export default {
     &.enabled {
       touch-action: none;
     }
-  }
-
-  @media (min-width: 1024px) {
-    isolation: isolate;
-    background: -moz-linear-gradient(left,  rgba(0,0,0,0) 1%, rgba(0,0,0,0) 75%, rgba(0,0,0,0.05) 90%, rgba(0,0,0,0.1) 98%, rgba(0,0,0,0.1) 99%, rgba(0,0,0,0.15) 100%);
-    background: -webkit-linear-gradient(left,  rgba(0,0,0,0) 1%,rgba(0,0,0,0) 75%,rgba(0,0,0,0.05) 90%,rgba(0,0,0,0.1) 98%,rgba(0,0,0,0.1) 99%,rgba(0,0,0,0.15) 100%);
-    background: linear-gradient(to right,  rgba(0,0,0,0) 1%,rgba(0,0,0,0) 75%,rgba(0,0,0,0.05) 90%,rgba(0,0,0,0.1) 98%,rgba(0,0,0,0.1) 99%,rgba(0,0,0,0.15) 100%);
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00000000', endColorstr='#26000000',GradientType=1 );
-
-    .media-gallery {
-      mix-blend-mode: multiply;
-    }
-
-    --image-width: 90%;
-  }
-
-  @media (min-width: 1280px) {
-    --image-width: 75%;
   }
 
   .media-gallery {
