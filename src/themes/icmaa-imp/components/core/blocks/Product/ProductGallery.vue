@@ -30,7 +30,7 @@
         >
           <product-image
             v-for="image in images"
-            :key="image"
+            :key="currentZoomFactor + 'x ' + image"
             :image="image" :alt="product.name | htmlDecode"
             :sizes="sizes"
             @dragstart.prevent
@@ -61,15 +61,10 @@
         <i class="material-icons t-text-4xl t-text-base-lighter" v-text="zoom ? 'zoom_out' : 'zoom_in'" />
       </div>
       <div
-        class="lg:t-hidden t-absolute t-left-0 t-bottom-0 t-z-1 t-ml-4 t-mb-4 t-flex t-opacity-50"
-        v-if="imagesCount > 0 && !zoom"
+        class="lg:t-hidden t-absolute t-left-0 t-bottom-0 t-z-1 t-ml-4 t-mb-4 t-px-2 t-py-1 t-bg-white t-text-base-light t-text-sm"
+        v-if="imagesCount > 1 && !zoom"
       >
-        <div
-          v-for="n in imagesCount"
-          :key="n"
-          :class="[ n === index ? 't-bg-base-tone' : 't-bg-base-lighter']"
-          class="t-h-3 t-w-3 t-rounded-full t-mr-1 t-border t-border-white"
-        />
+        {{ index }} / {{ imagesCount }}
       </div>
     </template>
   </div>
@@ -135,10 +130,10 @@ export default {
     sizes () {
       return [
         // Order high-to-low is important
-        { media: '(min-width: 1024px)', width: 330 },
-        { media: '(max-width: 1024px)', width: 768 },
-        { media: '(max-width: 500px)', width: 500 },
-        { media: '(max-width: 414px)', width: 414 }
+        { media: '(min-width: 1024px)', width: 330 * this.currentZoomFactor },
+        { media: '(max-width: 1024px)', width: 768 * this.currentZoomFactor },
+        { media: '(max-width: 500px)', width: 500 * this.currentZoomFactor },
+        { media: '(max-width: 414px)', width: 414 * this.currentZoomFactor }
       ]
     },
     isServer () {
