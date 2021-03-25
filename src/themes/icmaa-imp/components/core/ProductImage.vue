@@ -1,6 +1,6 @@
 <template>
   <picture>
-    <source v-for="sImage in sourceImages" :key="sImage.srcset" :media="sImage.media" :data-srcset="sImage.srcset" :alt="alt + ` - ${sImage.width}px`">
+    <source v-for="(sImage, i) in sourceImages" :key="i + '-' + sImage.key" :media="sImage.media" :data-srcset="sImage.srcset" :alt="alt + ` - ${sImage.width}px`">
     <img :src="placeholder" :data-src="defaultImage.src" :data-srcset="`${defaultImage.src} 1x, ${defaultImage.srcAt2x} 2x`" class="product-image t-w-full" v-bind="$attrs" v-on="$listeners" :alt="alt" ref="image">
   </picture>
 </template>
@@ -67,6 +67,7 @@ export default {
         const image2x = this.getImageWithSize(image.width * 2, image.height * 2)
         const image3x = this.getImageWithSize(image.width * 3, image.height * 3)
         image.srcset = `${image1x} 1x, ${image2x} 2x, ${image3x} 3x`
+        image.key = `${image.width}-${image.height}-${this.image}`
 
         return image
       })

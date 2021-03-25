@@ -1,6 +1,6 @@
 <template>
   <div class="product-gallery t-overflow-hidden t-relative">
-    <img src="/assets/product-placeholder.svg" class="t-block t-w-full lg:t-w-2/3" v-if="isServer">
+    <img src="/assets/product-placeholder.svg" class="t-block t-w-full lg:t-w-2/3" v-if="!isOnline">
     <template v-else>
       <div
         ref="zoom"
@@ -75,7 +75,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { isServer } from '@vue-storefront/core/helpers'
+import { onlineHelper } from '@vue-storefront/core/helpers'
 import ProductImage from 'theme/components/core/ProductImage'
 
 export default {
@@ -135,8 +135,8 @@ export default {
         { media: '(max-width: 414px)', width: 414 * this.currentZoomFactor }
       ]
     },
-    isServer () {
-      return isServer
+    isOnline () {
+      return onlineHelper.isOnline
     },
     isMobile () {
       return ['xs', 'sm', 'md'].includes(this.viewport)
