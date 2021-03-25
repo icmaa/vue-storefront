@@ -129,7 +129,7 @@ export default {
     sizes () {
       return [
         // Order high-to-low is important
-        { media: '(min-width: 1024px)', width: 330 * this.currentZoomFactor },
+        { media: '(min-width: 1024px)', width: 500 * this.currentZoomFactor },
         { media: '(max-width: 1024px)', width: 768 * this.currentZoomFactor },
         { media: '(max-width: 500px)', width: 500 * this.currentZoomFactor },
         { media: '(max-width: 414px)', width: 414 * this.currentZoomFactor }
