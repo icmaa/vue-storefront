@@ -1,6 +1,6 @@
 <template>
   <div class="product-gallery t-overflow-hidden t-relative">
-    <img src="/assets/product-placeholder.svg" class="t-block t-w-full lg:t-w-2/3" v-if="isServer">
+    <img src="/assets/product-placeholder.svg" class="t-block t-w-full lg:t-w-2/3" v-if="!isOnline">
     <template v-else>
       <div
         ref="zoom"
@@ -29,8 +29,8 @@
           @touchchancel="swipeEnd"
         >
           <product-image
-            v-for="image in images"
-            :key="image"
+            v-for="(image, i) in images"
+            :key="'zoom-' + product.sku + '-' + i"
             :image="image"
             :alt="product.name | htmlDecode"
             :sizes="sizes"
@@ -75,7 +75,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { isServer } from '@vue-storefront/core/helpers'
+import { onlineHelper } from '@vue-storefront/core/helpers'
 import ProductImage from 'theme/components/core/ProductImage'
 
 export default {
@@ -129,14 +129,14 @@ export default {
     sizes () {
       return [
         // Order high-to-low is important
-        { media: '(min-width: 1024px)', width: 330 * this.currentZoomFactor },
+        { media: '(min-width: 1024px)', width: 500 * this.currentZoomFactor },
         { media: '(max-width: 1024px)', width: 768 * this.currentZoomFactor },
         { media: '(max-width: 500px)', width: 500 * this.currentZoomFactor },
         { media: '(max-width: 414px)', width: 414 * this.currentZoomFactor }
       ]
     },
-    isServer () {
-      return isServer
+    isOnline () {
+      return onlineHelper.isOnline
     },
     isMobile () {
       return ['xs', 'sm', 'md'].includes(this.viewport)
@@ -177,14 +177,14 @@ export default {
         this.setIndex(nextIndex)
       }
     },
-    initMouseZoom () {
+    initMouseZoom (e) {
       if (this.isMobile || this.zoom) return
 
       // Prevent init of zoom on click
       this.isMouseDownOnZoom = true
       setTimeout(() => {
         if (this.isMouseDownOnZoom === true) {
-          const event = new Event('mousezoomstart')
+          const event = new CustomEvent('mousezoomstart', { detail: e })
           this.$refs.zoom.dispatchEvent(event)
         }
       }, 10)
@@ -284,6 +284,7 @@ export default {
         case 'touchmove':
           return e.touches[0]
         case 'doubletab':
+        case 'mousezoomstart':
           return e.detail
         default:
           return e
