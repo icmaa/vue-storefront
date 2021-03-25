@@ -79,6 +79,7 @@ export const icmaaGoogleTagManagerModule: Module<GoogleTagManagerState, any> = {
 
       const storeView = currentStoreView()
       const { currencyCode } = storeView.i18n
+      const breadcrumbs = rootGetters['breadcrumbs/getBreadcrumbsRoutes']
 
       switch (type) {
         case 'product':
@@ -89,6 +90,7 @@ export const icmaaGoogleTagManagerModule: Module<GoogleTagManagerState, any> = {
 
           DTO = {
             event: 'icmaa-product-view',
+            breadcrumb: breadcrumbs,
             ecommerce: {
               currencyCode,
               detail: {
@@ -107,6 +109,7 @@ export const icmaaGoogleTagManagerModule: Module<GoogleTagManagerState, any> = {
 
           DTO = {
             event: 'icmaa-category-view',
+            breadcrumb: breadcrumbs,
             ecommerce: {
               currencyCode,
               categoryId: category.id,

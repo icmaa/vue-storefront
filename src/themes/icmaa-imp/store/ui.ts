@@ -88,7 +88,7 @@ export const uiStore = {
        */
       type viewport = [string, number]
       const viewports: viewport[] = [ ['xs', 375], ['sm', 640], ['md', 768], ['lg', 1024], ['xl', 1280] ]
-      let viewport: viewport = viewports.find(vp => window.innerWidth <= vp[1])
+      let viewport: viewport = viewports.find(vp => window.matchMedia(`(max-width: ${vp[1]}px)`).matches)
 
       /** If no viewport is found because its the largest viewport */
       if (!viewport) {

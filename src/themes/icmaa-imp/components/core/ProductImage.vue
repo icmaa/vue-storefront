@@ -1,7 +1,7 @@
 <template>
   <picture>
     <source v-for="sImage in sourceImages" :key="sImage.srcset" :media="sImage.media" :data-srcset="sImage.srcset" :alt="alt + ` - ${sImage.width}px`">
-    <img :src="placeholder" :data-src="defaultImage.src" :data-srcset="`${defaultImage.src} 1x, ${defaultImage.srcAt2x} 2x`" class="product-image t-w-full t-w-auto" v-bind="$attrs" v-on="$listeners" :alt="alt" ref="image">
+    <img :src="placeholder" :data-src="defaultImage.src" :data-srcset="`${defaultImage.src} 1x, ${defaultImage.srcAt2x} 2x`" class="product-image t-w-full" v-bind="$attrs" v-on="$listeners" :alt="alt" ref="image">
   </picture>
 </template>
 
@@ -30,7 +30,11 @@ export default {
     type: {
       type: String,
       default: 'thumbnails',
-      validation: (value) => ['gallery', 'thumbnails'].includes(value)
+      validation: (value) => ['fullsize', 'gallery', 'thumbnails'].includes(value)
+    },
+    enableAutoReload: {
+      type: Boolean,
+      default: false
     }
   },
   data () {
@@ -49,6 +53,8 @@ export default {
       ]
     },
     sourceImages () {
+      if (this.isFullSize) return []
+
       const { width, height } = this.typeSize
       /**
        * We need to use cloneDeep to not mutate the parent property or original computed item using `map`.
@@ -73,10 +79,13 @@ export default {
       }
     },
     typeSize () {
-      return config.products[this.type]
+      return config.products[this.type] || { width: 0, height: 0 }
     },
     placeholder () {
       return require('theme/assets/product-placeholder-loading.svg')
+    },
+    isFullSize () {
+      return this.type === 'fullsize'
     }
   },
   methods: {
@@ -104,6 +113,7 @@ export default {
     this.lazyload(
       this.$el,
       {
+        enableAutoReload: this.enableAutoReload,
         loaded: () => {
           this.$refs.image.addEventListener('load', this.onLoaded)
         }

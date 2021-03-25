@@ -4,10 +4,10 @@
       <div class="t--mx-4 lg:t-px-4 t-flex t-flex-wrap">
         <breadcrumbs :show-active-route="false" class="breadcrumbs t-w-full t-my-4 md:t-my-8 t-px-4 md:t-px-0" />
         <product-gallery
-          class="product-gallery t-w-full t-border-base-lightest t-border-b t-bg-white lg:t-w-1/2 lg:t-border-b-0"
+          class="t-w-full t-border-base-lightest t-border-b t-bg-white lg:t-w-1/2 lg:t-border-b-0"
           :gallery="gallery.map(i => i.src)"
-          :configuration="configuration"
           :product="product"
+          :key="`product-gallery-${product.parentId}`"
         />
         <div class="t-w-full t-p-8 t-bg-white lg:t-w-1/2" :class="{ 'lg:t-flex lg:t-flex-col lg:t-justify-between': isPreorder }">
           <category-extras-header class="t--mx-8 t--mt-8 t-mb-8 lg:t-pl-px t-border-b t-border-base-lightest" :linked-banner="true" :banner-sizes="categoryHeaderBannerSizes" :spotify-logo-limit="spotifyLogoLimit">
@@ -138,7 +138,7 @@ import Reviews from 'theme/components/core/blocks/Reviews/Reviews'
 import AsyncSidebar from 'theme/components/core/blocks/AsyncSidebar/AsyncSidebar'
 import IcmaaProduct from 'icmaa-catalog/components/Product'
 import Breadcrumbs from 'theme/components/core/Breadcrumbs'
-import ProductGallery from 'theme/components/core/ProductGallery'
+import ProductGallery from 'theme/components/core/blocks/Product/ProductGallery'
 import WebShare from 'theme/components/core/blocks/WebShare'
 import ButtonComponent from 'theme/components/core/blocks/Button'
 import AddToWishlist from 'theme/components/core/blocks/Wishlist/AddToWishlist'
