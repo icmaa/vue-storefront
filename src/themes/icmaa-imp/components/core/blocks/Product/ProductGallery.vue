@@ -29,8 +29,8 @@
           @touchchancel="swipeEnd"
         >
           <product-image
-            v-for="image in images"
-            :key="image"
+            v-for="(image, i) in images"
+            :key="'zoom-' + product.sku + '-' + i"
             :image="image"
             :alt="product.name | htmlDecode"
             :sizes="sizes"
@@ -177,14 +177,14 @@ export default {
         this.setIndex(nextIndex)
       }
     },
-    initMouseZoom () {
+    initMouseZoom (e) {
       if (this.isMobile || this.zoom) return
 
       // Prevent init of zoom on click
       this.isMouseDownOnZoom = true
       setTimeout(() => {
         if (this.isMouseDownOnZoom === true) {
-          const event = new Event('mousezoomstart')
+          const event = new CustomEvent('mousezoomstart', { detail: e })
           this.$refs.zoom.dispatchEvent(event)
         }
       }, 10)
@@ -284,6 +284,7 @@ export default {
         case 'touchmove':
           return e.touches[0]
         case 'doubletab':
+        case 'mousezoomstart':
           return e.detail
         default:
           return e
