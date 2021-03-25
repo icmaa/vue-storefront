@@ -1,7 +1,7 @@
 User-agent: *
 Disallow: /*?*
-Disallow /c/*
-Disallow /p/*
+Disallow /*/c/*
+Disallow /*/p/*
 Allow: /*.svg?*
 Allow: /*.css?*
 Allow: /*.js?*
