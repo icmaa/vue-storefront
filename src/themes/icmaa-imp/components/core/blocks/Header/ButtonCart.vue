@@ -4,6 +4,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import { syncCartWhenLocalStorageChange } from '@vue-storefront/core/modules/cart/helpers'
 import ButtonIcon from 'theme/components/core/blocks/Header/ButtonIcon'
 
 export default {
@@ -25,6 +26,12 @@ export default {
   computed: {
     ...mapGetters({
       quantity: 'cart/getItemsTotalQuantity'
+    })
+  },
+  mounted () {
+    syncCartWhenLocalStorageChange.addEventListener()
+    this.$once('hook:beforeDestroy', () => {
+      syncCartWhenLocalStorageChange.removeEventListener()
     })
   }
 }
