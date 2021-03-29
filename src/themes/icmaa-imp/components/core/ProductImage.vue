@@ -117,6 +117,9 @@ export default {
         enableAutoReload: this.enableAutoReload,
         loaded: () => {
           this.$refs.image.addEventListener('load', this.onLoaded)
+          this.$once('hook:destroyed', () => {
+            document.removeEventListener('load', this.onLoaded)
+          })
         }
       }
     )
