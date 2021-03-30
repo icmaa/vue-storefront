@@ -23,9 +23,10 @@ export default {
   name: 'LoadingError',
   mixins: [VueOfflineMixin],
   mounted () {
-    this.$on('online', () => {
-      this.reload()
-    })
+    this.$on('online', () => this.reload)
+  },
+  destroyed () {
+    this.$off('online', () => this.reload)
   },
   methods: {
     reload () {

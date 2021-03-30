@@ -206,8 +206,10 @@ export default {
   created () {
     this.getQuantity()
 
-    this.$bus.$on('user-has-selected-product-variant', () => {
-      this.userHasSelectedVariant = true
+    const selectVariantCallback = () => { this.userHasSelectedVariant = true }
+    this.$bus.$on('user-has-selected-product-variant', selectVariantCallback)
+    this.$once('hook:destroyed', () => {
+      this.$bus.$off('user-has-selected-product-variant', selectVariantCallback)
     })
   },
   watch: {

@@ -128,6 +128,9 @@ export default {
   mounted () {
     window.addEventListener('resize', this.setFooterNavigationOffset)
     this.$nextTick(this.setFooterNavigationOffset)
+  },
+  destroyed () {
+    window.removeEventListener('resize', this.setFooterNavigationOffset)
   }
 }
 </script>

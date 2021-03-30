@@ -86,6 +86,7 @@ export default {
   },
   destroyed () {
     this.$bus.$off('product-after-load', this.refreshList)
+    this.$bus.$off('reviews-open-form', this.goToForm)
   },
   beforeMount () {
     this.refreshList()
