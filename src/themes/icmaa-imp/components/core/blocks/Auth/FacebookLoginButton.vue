@@ -200,6 +200,9 @@ export default {
     })
 
     this.$bus.$on('user-after-logout', this.logout)
+    this.$once('hook:destroyed', () => {
+      this.$bus.$off('user-after-logout', this.logout)
+    })
 
     this.process(created).then(() => {
       if (this.connected && !this.isLoggedIn) {
