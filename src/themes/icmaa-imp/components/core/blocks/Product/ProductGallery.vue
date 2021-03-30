@@ -76,6 +76,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import { onlineHelper } from '@vue-storefront/core/helpers'
+import { setCleanTimeout } from 'icmaa-config/helpers/cleanTimeout'
 import ProductImage from 'theme/components/core/ProductImage'
 
 export default {
@@ -182,7 +183,7 @@ export default {
 
       // Prevent init of zoom on click
       this.isMouseDownOnZoom = true
-      setTimeout(() => {
+      setCleanTimeout.call(this, () => {
         if (this.isMouseDownOnZoom === true) {
           const event = new CustomEvent('mousezoomstart', { detail: e })
           this.$refs.zoom.dispatchEvent(event)
@@ -242,7 +243,7 @@ export default {
       if (!this.isMobile) return
       if (!this.isDoubleTab) {
         this.isDoubleTab = true
-        setTimeout(() => {
+        setCleanTimeout.call(this, () => {
           this.isDoubleTab = false
         }, 500)
       } else {
@@ -263,7 +264,7 @@ export default {
       }
 
       this.currentZoomFactor = this.zoomFactor
-      setTimeout(() => {
+      setCleanTimeout.call(this, () => {
         this.animate = false
       }, 250)
     },
