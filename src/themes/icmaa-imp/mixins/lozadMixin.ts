@@ -6,7 +6,7 @@ import lozad from 'lozad'
 export default {
   data () {
     return {
-      lazyloadObserver: undefined
+      lozadObserver: undefined
     }
   },
   methods: {
@@ -50,8 +50,12 @@ export default {
 
       const defaults = { load: this.lazyloadLoad }
 
-      this.lazyloadObserver = lozad($el, Object.assign(defaults, options))
-      this.lazyloadObserver.observe()
+      this.lozadObserver = lozad($el, Object.assign(defaults, options))
+      this.lozadObserver.observe()
     }
+  },
+  destroyed () {
+    if (!this.lozadObserver) return
+    this.lozadObserver.observer.disconnect()
   }
 }

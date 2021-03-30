@@ -53,6 +53,10 @@ export default {
     const observerOptions = Object.assign({ rootMargin: '200px 0px' }, this.intersectOptions)
     const observer = new IntersectionObserver(observerCallback, observerOptions)
     observer.observe(this.$el)
+
+    this.$once('hook:destroyed', () => {
+      observer.disconnect()
+    })
   },
   methods: {
     observerCallback (entries, observer) {
