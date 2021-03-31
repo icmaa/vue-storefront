@@ -7,16 +7,13 @@
         class="zoom"
         :class="{ 'animate': animate, 't-cursor-zoom-in': !zoom, 't-cursor-move enabled': zoom }"
         :style="{ '--z': currentZoomFactor, '--zx': `${zoomPosition.x}px`, '--zy': `${zoomPosition.y}px` }"
-        @mousedown="initMouseZoom"
-        @mousezoomstart="enableZoom"
+        @click="onZoomClick"
         @mousemove="onMouseZoomMove"
-        @mouseup="onMouseZoomChancel"
         @mouseleave="onMouseZoomChancel"
         @mousechancel="onMouseZoomChancel"
+        @doubletab="initTouchZoom"
         @touchstart="onTouchZoomStart"
         @touchmove="onTouchZoomMove"
-        @click="bindTouchZoomDoubleTab"
-        @doubletab="initTouchZoom"
       >
         <div
           ref="track"
@@ -107,7 +104,6 @@ export default {
       zoom: false,
       zoomRect: {},
       zoomPosition: { x: 0, y: 0 },
-      isMouseDownOnZoom: false,
       isDoubleTab: false,
       currentZoomFactor: 1,
       touchZoomLock: { cx: 0, cy: 0, x: 0, y: 0 }
@@ -178,17 +174,16 @@ export default {
         this.setIndex(nextIndex)
       }
     },
-    initMouseZoom (e) {
-      if (this.isMobile || this.zoom) return
-
-      // Prevent init of zoom on click
-      this.isMouseDownOnZoom = true
-      setCleanTimeout.call(this, () => {
-        if (this.isMouseDownOnZoom === true) {
-          const event = new CustomEvent('mousezoomstart', { detail: e })
-          this.$refs.zoom.dispatchEvent(event)
+    onZoomClick (e) {
+      if (!this.isMobile) {
+        if (!this.zoom) {
+          this.enableZoom(e)
+        } else {
+          this.onMouseZoomChancel(e)
         }
-      }, 10)
+      } else {
+        this.bindTouchZoomDoubleTab(e)
+      }
     },
     onMouseZoomMove (e, force = false) {
       if (!force && (this.isMobile || !this.zoom)) return
@@ -205,7 +200,6 @@ export default {
     onMouseZoomChancel (e) {
       if (this.isMobile) return
 
-      this.isMouseDownOnZoom = false
       if (this.zoom) {
         this.disableZoom(e)
       }
@@ -285,7 +279,6 @@ export default {
         case 'touchmove':
           return e.touches[0]
         case 'doubletab':
-        case 'mousezoomstart':
           return e.detail
         default:
           return e
