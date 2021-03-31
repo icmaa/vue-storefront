@@ -16,10 +16,13 @@
       <div v-for="voting in votings" :key="voting.name" class="t-w-1/2 t-text-center md:t-w-1/4 t-p-4 t-self-center t-mt-4">
         <div class="t-relative">
           <picture-component :src="voting.img.src" :width="voting.img.width" :height="voting.img.height" :sizes="voting.img.sizes" :placeholder="true" :ratio="`${voting.img.width}:${voting.img.height}`" :alt="voting.img.alt | htmlDecode" class="t-w-full" />
-          <div v-if="voting.votes" class="t-text-white t-w-10 t-h-10 lg:t-w-12 lg:t-h-12 t-bg-base-lighter t-flex t-items-center t-justify-center t-cursor-pointer t-absolute t-bottom-0 t-left-0 t-z-1">
-            <span v-text="voting.votes" />
-            <span class="t-block"> {{ $t(' Votes') }}</span>
+          <div v-if="voting.votes" class="t-text-white t-w-10 t-h-10 lg:t-w-12 lg:t-h-12 t-bg-base-lighter t-items-center t-justify-center t-cursor-pointer t-absolute t-bottom-0 t-left-0 t-z-1">
+            <span v-text="voting.votes" class="t-font-bold" />
+            <span class="t-text-xs"> {{ $t(' Votes') }}</span>
           </div>
+        </div>
+        <div v-if="voting.video" class="t-relative t-w-full t-bg-white t-pb-4" style="padding-top: 56.25%">
+          <iframe class="t-absolute t-top-0" width="100%" height="100%" :src="voting.video" frameborder="0" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture" allowfullscreen />
         </div>
         <div class="t-my-4">
           <span class="t-my-4" v-text="voting.name" />
