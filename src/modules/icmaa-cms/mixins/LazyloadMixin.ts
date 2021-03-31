@@ -1,4 +1,5 @@
 import { isServer } from '@vue-storefront/core/helpers'
+import { setCleanTimeout } from 'icmaa-config/helpers/cleanTimeout'
 
 /**
  * Everything you need to know about IntersectionObserver:
@@ -45,13 +46,17 @@ export default {
       let timeout
       observerCallback = (e, o) => {
         clearTimeout(timeout)
-        timeout = setTimeout(this.observerCallback.bind(this, e, o), this.timeout)
+        timeout = setCleanTimeout.call(this, this.observerCallback.bind(this, e, o), this.timeout)
       }
     }
 
     const observerOptions = Object.assign({ rootMargin: '200px 0px' }, this.intersectOptions)
     const observer = new IntersectionObserver(observerCallback, observerOptions)
     observer.observe(this.$el)
+
+    this.$once('hook:destroyed', () => {
+      observer.disconnect()
+    })
   },
   methods: {
     observerCallback (entries, observer) {

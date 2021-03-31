@@ -95,6 +95,9 @@ export default {
   beforeMount () {
     this.$bus.$on('modal-toggle-switcher', this.showLanguagesModal)
   },
+  destroyed () {
+    this.$bus.$off('modal-toggle-switcher', this.showLanguagesModal)
+  },
   async mounted () {
     this.claim = await this.getClaim()
     if (!this.claim) {
