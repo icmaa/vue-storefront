@@ -8,6 +8,7 @@ export const uiStore = {
   namespaced: true,
   state: {
     viewport: false,
+    isTouchDevice: false,
     loader: false,
     authElem: 'login',
     /** Sidebar and modal type states: */
@@ -20,6 +21,9 @@ export const uiStore = {
   mutations: {
     setViewport (state, viewport: string) {
       state.viewport = viewport
+    },
+    setIsTouchDevice (state, status: boolean) {
+      state.isTouchDevice = status
     },
     setCloseAll (state) {
       Object.keys(state.sidebars).forEach(k => {
@@ -99,6 +103,12 @@ export const uiStore = {
         commit('setViewport', viewport[0])
       }
     },
+    setIsTouchDevice ({ commit }, { window, navigator }: { window: Window, navigator: Navigator }) {
+      const isTouchDevice = 'ontouchstart' in window ||
+        navigator.maxTouchPoints > 0 ||
+        navigator.msMaxTouchPoints > 0
+      commit('setIsTouchDevice', isTouchDevice)
+    },
     closeAll ({ commit }) {
       commit('setCloseAll')
       clearAllBodyScrollLocks()
@@ -155,6 +165,7 @@ export const uiStore = {
   },
   getters: {
     getViewport: state => state.viewport,
+    isTouchDevice: state => state.isTouchDevice,
     getSidebarPath: state => state.sidebarPath,
     getSidebarStatus: (state) => (key: string) => state.sidebars.hasOwnProperty(key) ? state.sidebars[key] : false,
     getSidebarMenuGenderChange: (state): boolean => state.sidebarMenuGenderChange,
