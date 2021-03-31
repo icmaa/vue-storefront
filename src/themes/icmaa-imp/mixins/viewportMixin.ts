@@ -16,6 +16,7 @@ export default {
   methods: {
     handleResize: throttle(function () {
       this.$store.dispatch('ui/setViewport', window)
+      this.$store.dispatch('ui/setIsTouchDevice', { window, navigator })
 
       /**
        * Fix viewport vh bug in mobile browsers

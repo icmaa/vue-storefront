@@ -111,7 +111,7 @@ export default {
   },
   computed: {
     ...mapGetters({
-      viewport: 'ui/getViewport'
+      isTouchDevice: 'ui/isTouchDevice'
     }),
     images () {
       return this.gallery.filter(image => {
@@ -134,9 +134,6 @@ export default {
     },
     isOnline () {
       return onlineHelper.isOnline
-    },
-    isMobile () {
-      return ['xs', 'sm', 'md'].includes(this.viewport)
     }
   },
   methods: {
@@ -175,7 +172,7 @@ export default {
       }
     },
     onZoomClick (e) {
-      if (!this.isMobile) {
+      if (!this.isTouchDevice) {
         if (!this.zoom) {
           this.enableZoom(e)
         } else {
@@ -186,7 +183,7 @@ export default {
       }
     },
     onMouseZoomMove (e, force = false) {
-      if (!force && (this.isMobile || !this.zoom)) return
+      if (!force && (this.isTouchDevice || !this.zoom)) return
 
       const { bw, bh, w, h, zeroX, zeroY } = this.zoomRect
       const { clientX: cx, clientY: cy } = this.universalTouch(e)
@@ -198,7 +195,7 @@ export default {
       }
     },
     onMouseZoomChancel (e) {
-      if (this.isMobile) return
+      if (this.isTouchDevice) return
 
       if (this.zoom) {
         this.disableZoom(e)
@@ -212,13 +209,13 @@ export default {
       }
     },
     onTouchZoomStart (e) {
-      if (!this.zoom) return
+      if (!this.zoom || !this.isTouchDevice) return
 
       const { clientX: cx, clientY: cy } = this.universalTouch(e)
       this.touchZoomLock = { cx, cy, ...this.zoomPosition }
     },
     onTouchZoomMove (e) {
-      if (!this.zoom) return
+      if (!this.zoom || !this.isTouchDevice) return
 
       const { clientX: cx, clientY: cy } = this.universalTouch(e)
       const { minX, maxX, minY, maxY } = this.zoomRect
@@ -234,7 +231,7 @@ export default {
       this.zoomPosition = pos
     },
     bindTouchZoomDoubleTab (e) {
-      if (!this.isMobile) return
+      if (!this.isTouchDevice) return
       if (!this.isDoubleTab) {
         this.isDoubleTab = true
         setCleanTimeout.call(this, () => {
