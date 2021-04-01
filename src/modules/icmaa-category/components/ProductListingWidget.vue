@@ -44,13 +44,19 @@ export default {
   },
   computed: {
     ...mapGetters('icmaaCategory', ['getProductListingWidget']),
-    ...mapGetters({ cluster: 'user/getCluster' }),
+    ...mapGetters({
+      cluster: 'user/getCluster',
+      getUserSessionData: 'user/getSessionData'
+    }),
     products () {
       const products = this.getProductListingWidget(this.categoryId, this.filter)
       if (!products) {
         return []
       }
       return products.list.slice(0, this.limit)
+    },
+    gender () {
+      return this.getUserSessionData('gender')
     }
   },
   methods: {
@@ -73,6 +79,9 @@ export default {
   },
   watch: {
     cluster (a, b) {
+      this.fetchProducts()
+    },
+    gender () {
       this.fetchProducts()
     }
   },

@@ -66,6 +66,12 @@ const actions: ActionTree<CategoryState, RootState> = {
       sortArray.push('customercluster:desc')
     }
 
+    dispatch(
+      'user/applySessionFilterToSearchQuery',
+      { query },
+      { root: true }
+    )
+
     sortArray.forEach(sort => {
       const [ field, options ] = sort.split(':')
       query.applySort({ field, options })
