@@ -1,7 +1,7 @@
 import { GetterTree } from 'vuex'
 import CategoryState, { CategoryStateListItem, ProductListingWidgetState } from '../types/CategoryState'
 import RootState from '@vue-storefront/core/types/RootState'
-import { getFilterHash } from '../helpers'
+import { getObjectHash } from 'icmaa-config/helpers/hash'
 
 const getters: GetterTree<CategoryState, RootState> = {
   lists: state => state.lists,
@@ -15,13 +15,8 @@ const getters: GetterTree<CategoryState, RootState> = {
 
     return false
   },
-  getProductListingWidget: (state, getters, RootState, rootGetters) => (parent: number, filter: Record<string, any>|boolean = false): ProductListingWidgetState => {
-    let cluster = rootGetters['user/getCluster']
-    if (cluster !== false) {
-      cluster = parseInt(rootGetters['user/getCluster'])
-    }
-
-    return state.productListingWidget.find(i => i.parent === parent && i.cluster === cluster && i.filterHash === getFilterHash(filter))
+  getProductListingWidget: (state) => (options: Record<string, any>): ProductListingWidgetState => {
+    return state.productListingWidget.find(i => i.optionsHash === getObjectHash(options))
   }
 }
 

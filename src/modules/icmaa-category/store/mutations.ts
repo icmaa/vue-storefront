@@ -9,14 +9,13 @@ const mutations: MutationTree<CategoryListState> = {
       state.lists.push(payload)
     }
   },
-  [types.ICMAA_CATEGORY_LIST_ADD_PRODUCT] (state, payload: ProductListingWidgetState) {
-    let list = state.productListingWidget.find(i => i.parent === payload.parent && i.cluster === payload.cluster && i.filterHash === payload.filterHash)
-    if (list) {
-      const newProductids = payload.list.map(p => p.id).filter(id => !list.list.map(p => p.id).includes(id))
-      list.list.push(...payload.list.filter(p => newProductids.includes(p.id)))
-      return
+  [types.ICMAA_CATEGORY_LIST_ADD_PRODUCT_LIST_WIDGET] (state, payload: ProductListingWidgetState) {
+    let index = state.productListingWidget.findIndex(i => i.optionsHash === payload.optionsHash)
+    if (index !== -1) {
+      state.productListingWidget.splice(index, 1, payload)
+    } else {
+      state.productListingWidget.push(payload)
     }
-    state.productListingWidget.push(payload)
   }
 }
 

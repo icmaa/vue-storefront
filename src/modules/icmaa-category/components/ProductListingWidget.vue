@@ -1,7 +1,7 @@
 <template>
   <div data-test-id="ProductListingWidget" class="product-listing t-flex t-flex-wrap t-justify-start lg:t--mx-2" :class="[ appearance ] ">
-    <template v-for="(product, i) in products">
-      <product-tile :product="product" :key="`product-${i}`" class="t-px-1 lg:t-px-2 t-mb-8" :class="['t-w-1/2 lg:t-w-1/' + columns]" />
+    <template v-for="(product) in products">
+      <product-tile :product="product" :key="`product-${product.sku}`" class="t-px-1 lg:t-px-2 t-mb-8" :class="['t-w-1/2 lg:t-w-1/' + columns]" />
     </template>
   </div>
 </template>
@@ -48,11 +48,17 @@ export default {
       cluster: 'user/getCluster',
       getUserSessionData: 'user/getSessionData'
     }),
-    products () {
-      const products = this.getProductListingWidget(this.categoryId, this.filter)
-      if (!products) {
-        return []
+    options () {
+      return {
+        categoryId: this.categoryId,
+        filter: this.filter,
+        sort: this.sort,
+        size: this.limit
       }
+    },
+    products () {
+      const products = this.getProductListingWidget(this.options)
+      if (!products) return []
       return products.list.slice(0, this.limit)
     },
     gender () {
@@ -60,30 +66,19 @@ export default {
     }
   },
   methods: {
-    async fetchProducts () {
-      let size = this.limit
-
-      // If products are not enough because of different limit than product count in state, load more.
-      if (this.products.length < this.limit) {
-        size = this.limit - this.products.length
-      }
-
-      await this.$store.dispatch('icmaaCategory/loadProductListingWidgetProducts', {
-        categoryId: this.categoryId,
-        cluster: this.cluster,
-        gender: this.gender,
-        filter: this.filter,
-        sort: this.sort,
-        size
-      })
+    async fetchProducts (reload = false) {
+      await this.$store.dispatch(
+        'icmaaCategory/loadProductListingWidgetProducts',
+        { ...this.options, reload }
+      )
     }
   },
   watch: {
     cluster () {
-      this.fetchProducts()
+      this.fetchProducts(true)
     },
     gender () {
-      this.fetchProducts()
+      this.fetchProducts(true)
     }
   },
   mounted () {
