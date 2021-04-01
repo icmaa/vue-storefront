@@ -21,12 +21,12 @@
             <div class="t-leading-none t-text-xs">{{ $t('Votes') }}</div>
           </div>
         </div>
-        <div v-if="voting.video" class="t-relative t-w-full t-bg-white t-pb-4" style="padding-top: 56.25%">
+        <div v-if="voting.video" class="t-relative t-w-full t-bg-white t-mt-1" style="padding-top: 56.25%">
           <iframe class="t-absolute t-top-0" width="100%" height="100%" :src="voting.video" frameborder="0" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture" allowfullscreen />
         </div>
         <div class="t-my-4">
           <span class="t-flex-grow t-text-sm t-text-primary t-leading-tight t-pt-4" v-text="voting.name" />
-          <a :href="voting.link" target="_blank" :title="voting.name | htmlDecode" class="t-align-text-bottom">
+          <a :href="voting.link" target="_blank" :title="voting.name | htmlDecode" class="t-ml-4 t-align-text-bottom">
             <material-icon :icon="voting.icon" icon-set="icmaa" size="xs" class="t-align-text-bottom" />
           </a>
         </div>
