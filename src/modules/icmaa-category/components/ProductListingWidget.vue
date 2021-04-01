@@ -71,6 +71,7 @@ export default {
       await this.$store.dispatch('icmaaCategory/loadProductListingWidgetProducts', {
         categoryId: this.categoryId,
         cluster: this.cluster,
+        gender: this.gender,
         filter: this.filter,
         sort: this.sort,
         size
@@ -78,7 +79,7 @@ export default {
     }
   },
   watch: {
-    cluster (a, b) {
+    cluster () {
       this.fetchProducts()
     },
     gender () {

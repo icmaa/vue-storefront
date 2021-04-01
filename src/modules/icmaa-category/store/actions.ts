@@ -39,17 +39,19 @@ const actions: ActionTree<CategoryState, RootState> = {
       commit(types.ICMAA_CATEGORY_LIST_ADD_CATEGORY_LIST, { category: category.id, items })
     }
   },
-  async loadProductListingWidgetProducts ({ state, commit, dispatch, rootGetters }, params: { categoryId: number, filter: any, cluster: any, size: number, sort: string|string[] }): Promise<ProductListingWidgetState> {
-    let { categoryId, filter, cluster, size, sort } = params
+  async loadProductListingWidgetProducts ({ state, commit, dispatch, rootGetters }, params: { categoryId: number, filter: any, cluster: any, gender: any, size: number, sort: string|string[] }): Promise<ProductListingWidgetState> {
+    let { categoryId, filter, cluster, gender, size, sort } = params
+    let filterHash = getFilterHash(filter)
 
-    if (state.productListingWidget.find(i => i.parent === categoryId && i.cluster === cluster && i.list.length >= size)) {
+    if (state.productListingWidget.find(i => i.parent === categoryId && i.cluster === cluster && i.gender === gender && i.filterHash === filterHash && i.list.length >= size)) {
       return
     }
 
     let query = addDefaultProductFilter(new SearchQuery(), true)
     query.applyFilter({ key: 'category_ids', value: { in: [categoryId] } })
 
-    let filterHash = getFilterHash(filter)
+    console.error('loadProductListingWidgetProducts', filter)
+
     if (filter !== false) {
       forEach(filter, (value, key) => {
         value = { in: [value] }
