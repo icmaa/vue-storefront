@@ -1,9 +1,7 @@
 import { SearchQuery } from 'storefront-query-builder'
 import { Category } from '@vue-storefront/core/modules/catalog-next/types/Category'
-import { SearchResponse } from '@vue-storefront/core/types/search/SearchResponse'
 import { quickSearchByQuery } from '@vue-storefront/core/lib/search'
 import { entities } from 'config'
-import { getObjectHash } from 'icmaa-config/helpers/hash'
 
 interface FetchChildCategoriesOptions {
   parentId: number | number[],
@@ -57,8 +55,4 @@ export const filterAlphanum = (name) => name
 export const sortByLetter = (a: Category, b: Category) => {
   const [aName, bName] = [extractPrefix(a.name), extractPrefix(b.name)]
   return aName === bName ? 0 : filterAlphanum(aName) < filterAlphanum(bName) ? -1 : 1
-}
-
-export const getFilterHash = (filter: Record<string, any>|boolean) => {
-  return filter !== false ? getObjectHash(filter as Record<string, any>) : false
 }
