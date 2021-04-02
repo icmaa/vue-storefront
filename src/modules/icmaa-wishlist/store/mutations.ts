@@ -14,7 +14,7 @@ const mutations: MutationTree<WishlistState> = {
     const rmvProducts = products.map(p => p.sku)
     state.products = state.products.filter(p => !rmvProducts.includes(p.sku))
   },
-  [types.WISHLIST_CLR_PRODUCTS] (state, products: Product[]) {
+  [types.WISHLIST_CLR_PRODUCTS] (state) {
     state.products = []
   }
 }

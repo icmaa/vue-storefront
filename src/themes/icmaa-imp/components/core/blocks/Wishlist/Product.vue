@@ -27,7 +27,6 @@
 </template>
 
 <script>
-import Product from '@vue-storefront/core/compatibility/components/blocks/Wishlist/Product'
 import { currentStoreView } from '@vue-storefront/core/lib/multistore'
 import { formatProductLink } from 'icmaa-url/helpers'
 import ProductImage from 'theme/components/core/ProductImage'
@@ -40,7 +39,12 @@ export default {
     ProductImage,
     ButtonComponent
   },
-  mixins: [Product],
+  props: {
+    product: {
+      type: Object,
+      required: true
+    }
+  },
   computed: {
     productLink () {
       return formatProductLink(this.product, currentStoreView().storeCode)

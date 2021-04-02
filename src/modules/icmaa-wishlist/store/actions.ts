@@ -66,7 +66,7 @@ const actions: ActionTree<WishlistState, RootState> = {
 
     return dispatch(
       'product/findProducts',
-      { query },
+      { query, options: { separateSelectedVariant: true } },
       { root: true }
     ).then(result => {
       commit(customTypes.WISHLIST_ADD_PRODUCTS, result.items)

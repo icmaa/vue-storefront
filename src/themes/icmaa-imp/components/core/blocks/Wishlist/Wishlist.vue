@@ -5,11 +5,11 @@
         {{ $t('Clear wishlist') }}
       </button-component>
     </template>
-    <div class="t-pb-20">
+    <div class="t-pb-20" v-if="!loading">
       <h4 v-if="!items.length" class="t-text-sm">
         {{ $t('Your wishlist is empty.') }}
       </h4>
-      <div class="t-container">
+      <div class="t-container" v-else>
         <ul>
           <product v-for="(item, i) in items" :key="item.id" :product="item.product" :class="{ 't-border-b': items.length !== (i + 1) }" />
         </ul>
@@ -30,6 +30,11 @@ export default {
     Sidebar,
     Product
   },
+  data () {
+    return {
+      loading: false
+    }
+  },
   computed: {
     ...mapGetters({
       'items': 'wishlist/getWishlistItemsWithProduct'
@@ -49,8 +54,10 @@ export default {
       })
     }
   },
-  mounted () {
-    this.$store.dispatch('wishlist/getProducts')
+  async mounted () {
+    this.loading = true
+    await this.$store.dispatch('wishlist/getProducts')
+    this.loading = false
   }
 }
 </script>
