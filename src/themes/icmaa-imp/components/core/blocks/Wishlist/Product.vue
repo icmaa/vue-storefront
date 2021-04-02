@@ -20,7 +20,7 @@
         <button-component type="primary" class="t-flex-grow" @click.native="redirect">
           {{ $t('Add to cart') }}
         </button-component>
-        <add-to-wishlist :product="product" :icon-remove="'delete'" :button-type="'transparent'" class="t-flex-fix" @click.native.stop />
+        <wishlist-button :product="product" :icon-remove="'delete'" :button-type="'transparent'" class="t-flex-fix" @click.native.stop />
       </div>
     </div>
   </li>
@@ -29,16 +29,14 @@
 <script>
 import Product from '@vue-storefront/core/compatibility/components/blocks/Wishlist/Product'
 import { currentStoreView } from '@vue-storefront/core/lib/multistore'
-import { htmlDecode } from '@vue-storefront/core/lib/store/filters'
 import { formatProductLink } from 'icmaa-url/helpers'
-import i18n from '@vue-storefront/i18n'
 import ProductImage from 'theme/components/core/ProductImage'
 import ButtonComponent from 'theme/components/core/blocks/Button'
-import AddToWishlist from 'theme/components/core/blocks/Wishlist/AddToWishlist'
+import WishlistButton from 'theme/components/core/blocks/Wishlist/WishlistButton'
 
 export default {
   components: {
-    AddToWishlist,
+    WishlistButton,
     ProductImage,
     ButtonComponent
   },

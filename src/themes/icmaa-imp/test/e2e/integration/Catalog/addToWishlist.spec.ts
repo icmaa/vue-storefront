@@ -1,18 +1,18 @@
 describe('Add to and remove from wishlist ', () => {
   it('on PDP', () => {
     cy.visitProductDetailPage()
-    cy.getByTestId('AddToWishlistButton').click()
+    cy.getByTestId('wishlistButton').click()
     cy.checkNotification('success')
     cy.scrollTo('top')
     cy.openSidebar('[data-test-id="HeaderButtonWishlist"]')
-    cy.get('@sidebar').findByTestId('AddToWishlistButton').clickRandomElement()
+    cy.get('@sidebar').findByTestId('wishlistButton').clickRandomElement()
     cy.checkNotification('success')
   })
 
   it('on CLP', () => {
     cy.visitCategoryPage()
     cy.wait(1000)
-    cy.getByTestId('ProductTile').random().findByTestId('AddToWishlist').click()
+    cy.getByTestId('ProductTile').random().findByTestId('wishlistButton').click()
     cy.checkNotification('success')
   })
 })
