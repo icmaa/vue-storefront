@@ -103,6 +103,15 @@ module.exports = {
         '0%, 50%, 100%': { transform: 'translateX(0)' },
         '25%': { transform: 'translateX(-5px)' },
         '75%': { transform: 'translateX(5px)' }
+      },
+      'spin': {
+        // t-animation-spin t-animation-linear
+        from: {
+          transform: 'rotate(0deg)'
+        },
+        to: {
+          transform: 'rotate(360deg)'
+        }
       }
     },
     animationDuration: {
