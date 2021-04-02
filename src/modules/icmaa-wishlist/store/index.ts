@@ -1,9 +1,17 @@
 import { Module } from 'vuex'
-import WishlistState from '@vue-storefront/core/modules/wishlist/types/WishlistState'
-import actions from './actions'
+import { wishlistStore } from '@vue-storefront/core/modules/wishlist/store/index'
+import WishlistState from '../types/WishlistState'
 import getters from './getters'
+import actions from './actions'
+import mutations from './mutations'
+
+import merge from 'lodash-es/merge'
 
 export const ExtendedWishlistStore: Module<WishlistState, any> = {
   actions,
-  getters
+  mutations,
+  getters,
+  state: merge(wishlistStore.state, {
+    products: []
+  })
 }

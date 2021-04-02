@@ -11,7 +11,7 @@
       </h4>
       <div class="t-container">
         <ul>
-          <product v-for="(item, i) in items" :key="item.id" :product="wishlistProduct" :class="{ 't-border-b': items.length !== (i + 1) }" />
+          <product v-for="(item, i) in items" :key="item.id" :product="item.product" :class="{ 't-border-b': items.length !== (i + 1) }" />
         </ul>
       </div>
     </div>
@@ -30,16 +30,9 @@ export default {
     Sidebar,
     Product
   },
-  props: {
-    product: {
-      type: Object,
-      required: false,
-      default: () => {}
-    }
-  },
   computed: {
     ...mapGetters({
-      'items': 'wishlist/getWishlistItems'
+      'items': 'wishlist/getWishlistItemsWithProduct'
     })
   },
   methods: {
@@ -55,6 +48,9 @@ export default {
         hasNoTimeout: true
       })
     }
+  },
+  mounted () {
+    this.$store.dispatch('wishlist/getProducts')
   }
 }
 </script>
