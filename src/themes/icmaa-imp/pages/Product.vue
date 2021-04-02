@@ -245,8 +245,10 @@ export default {
       return this.$v.$invalid || this.loading || !this.quantity
     },
     wishlistProduct () {
-      const { parentSku: sku, parentId: id, name } = this.product
-      return { sku, id, name }
+      return Object.assign({}, this.product, {
+        sku: this.product.parentSku,
+        id: this.product.parentId
+      })
     },
     isPreorder () {
       return this.product.promo_id === '5'
