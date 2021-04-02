@@ -44,9 +44,7 @@ export default {
         message: this.$t('Are you sure you would like to remove all the items from the wishlist?'),
         action1: {
           label: this.$t('OK'),
-          action: () => {
-            this.$store.dispatch('wishlist/clear')
-          }
+          action: () => this.$store.dispatch('wishlist/clear')
         },
         action2: { label: this.$t('Cancel'), action: 'close' },
         hasNoTimeout: true

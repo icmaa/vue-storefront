@@ -7,6 +7,6 @@ import { ExtendedWishlistStore } from './store'
 export const IcmaaExtendedWishlistModule: StorefrontModule = async function ({ store }) {
   extendStore('wishlist', ExtendedWishlistStore)
   EventBus.$on('user-after-loggedin', () => {
-    store.dispatch('wishlist/load', true)
+    store.dispatch('wishlist/sync')
   })
 }

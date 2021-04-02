@@ -5,25 +5,25 @@ import config from 'config'
 
 const getWishlist = async (): Promise<Task> =>
   TaskQueue.execute({
-    url: processLocalizedURLAddress(config.icmaa_wishlist.endpoint)
+    url: processLocalizedURLAddress(config.icmaa_wishlist.endpoint + '/index?token={{token}}')
   })
 
 const addWishlistItems = async (productIds: string[]): Promise<Task> =>
   TaskQueue.execute({
-    url: processLocalizedURLAddress(config.icmaa_wishlist.endpoint),
+    url: processLocalizedURLAddress(config.icmaa_wishlist.endpoint + '/index?token={{token}}'),
     payload: {
       method: 'POST',
-      body: JSON.stringify({ productIds })
+      body: JSON.stringify({ product_ids: productIds })
     },
     silent: true
   })
 
 const removeWishlistItems = async (productIds: string[]): Promise<Task> =>
   TaskQueue.execute({
-    url: processLocalizedURLAddress(config.icmaa_wishlist.endpoint),
+    url: processLocalizedURLAddress(config.icmaa_wishlist.endpoint + '/index?token={{token}}'),
     payload: {
       method: 'DELETE',
-      body: JSON.stringify({ productIds })
+      body: JSON.stringify({ product_ids: productIds })
     },
     silent: true
   })
