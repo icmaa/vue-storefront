@@ -48,6 +48,11 @@ export default {
       default: ''
     }
   },
+  data () {
+    return {
+      loading: false
+    }
+  },
   computed: {
     favoriteIcon () {
       return this.isOnWishlist ? this.iconRemove : this.iconAdd
@@ -57,21 +62,31 @@ export default {
     toggleWishlist () {
       return this.isOnWishlist ? this.removeProductFromWhishList(this.product) : this.addProductToWhishlist(this.product)
     },
-    addProductToWhishlist (product) {
+    async addProductToWhishlist (product) {
+      if (this.loading) return
+
+      this.loading = true
+      await this.addToWishlist(product)
       this.$store.dispatch('notification/spawnNotification', {
         type: 'success',
         message: i18n.t('Product {productName} has been added to wishlist!', { productName: htmlDecode(product.name) }),
         action1: { label: i18n.t('OK') }
       }, { root: true })
-      this.addToWishlist(product)
+
+      this.loading = false
     },
-    removeProductFromWhishList (product) {
+    async removeProductFromWhishList (product) {
+      if (this.loading) return
+
+      this.loading = true
+      await this.removeFromWishlist(product)
       this.$store.dispatch('notification/spawnNotification', {
         type: 'success',
         message: i18n.t('Product {productName} has been removed from wishlist!', { productName: htmlDecode(product.name) }),
         action1: { label: i18n.t('OK') }
       }, { root: true })
-      this.removeFromWishlist(product)
+
+      this.loading = false
     }
   }
 }

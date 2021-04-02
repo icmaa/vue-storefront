@@ -28,7 +28,7 @@ const removeWishlistItems = async (productIds: string[]): Promise<Task> =>
     silent: true
   })
 
-export const WishlistService: any = {
+export const WishlistService = {
   getWishlist,
   addWishlistItems,
   removeWishlistItems

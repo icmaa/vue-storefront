@@ -4,9 +4,9 @@ import { extendStore } from '@vue-storefront/core/helpers'
 
 import { ExtendedWishlistStore } from './store'
 
-export const IcmaaExtendedWishlistModule: StorefrontModule = async function ({ store, router }) {
+export const IcmaaExtendedWishlistModule: StorefrontModule = async function ({ store }) {
   extendStore('wishlist', ExtendedWishlistStore)
   EventBus.$on('user-after-loggedin', () => {
-    // store.dispatch('user/setSessionGenderByCustomerData')
+    store.dispatch('wishlist/load', true)
   })
 }
