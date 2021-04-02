@@ -29,6 +29,7 @@ import i18n from '@vue-storefront/i18n'
 import MaterialIcon from 'theme/components/core/blocks/MaterialIcon'
 import ButtonComponent from 'theme/components/core/blocks/Button'
 import { htmlDecode } from '@vue-storefront/core/lib/store/filters'
+import { IcmaaGoogleTagManagerExecutors } from 'icmaa-google-tag-manager/hooks'
 
 export default {
   name: 'WishlistButton',
@@ -85,19 +86,27 @@ export default {
   methods: {
     toggleWishlist () {
       return this.isActive
-        ? this.wishlistAction('removeItem', 'Product {productName} has been removed from wishlist!')
-        : this.wishlistAction('addItem', 'Product {productName} has been added to wishlist!')
+        ? this.wishlistAction('rmv', 'Product {productName} has been removed from wishlist!')
+        : this.wishlistAction('add', 'Product {productName} has been added to wishlist!')
     },
     async wishlistAction (action, message) {
       if (this.loading) return
 
+      const actionNameMap = { add: 'addItem', rmv: 'removeItem' }
+      if (!Object.keys(actionNameMap).includes(action)) return
+
       this.loading = true
-      await this.$store.dispatch(`wishlist/${action}`, this.product)
+      await this.$store.dispatch(`wishlist/${actionNameMap[action]}`, this.product)
       this.$store.dispatch('notification/spawnNotification', {
         type: 'success',
         message: i18n.t(message, { productName: htmlDecode(this.product.name) }),
         action1: { label: i18n.t('OK') }
       }, { root: true })
+
+      IcmaaGoogleTagManagerExecutors.wishlistInteraction({
+        type: action,
+        product: this.product
+      })
 
       this.loading = false
     }
