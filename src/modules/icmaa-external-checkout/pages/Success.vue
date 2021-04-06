@@ -48,7 +48,7 @@ export default {
     }
   },
   async beforeMount () {
-    this.clearCart()
+    await this.clearCart()
     await this.onLogin()
   },
   watch: {
@@ -65,10 +65,10 @@ export default {
     }
   },
   methods: {
-    clearCart () {
+    async clearCart () {
       if (this.cartIsNotEmpty) {
-        this.$store.dispatch('cart/clear', {})
-        this.$store.dispatch('cart/serverCreate', { guestCart: false })
+        await this.$store.dispatch('cart/clear', {})
+        await this.$store.dispatch('cart/sync', { forceClientState: true })
       }
     },
     async onLogin (value) {
