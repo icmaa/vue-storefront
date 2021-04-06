@@ -72,11 +72,11 @@ export default {
       return this.content.votings.map(c => {
         const imageDefaults = {
           alt: c.name,
-          width: 610,
-          height: 460,
+          width: 600,
+          height: 600,
           sizes: [
-            { media: '(min-width: 415px)', width: 560 },
-            { media: '(max-width: 414px)', width: 415 }
+            { media: '(min-width: 415px)', width: 450 },
+            { media: '(max-width: 414px)', width: 300 }
           ]
         }
 
