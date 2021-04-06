@@ -89,6 +89,7 @@ export const IcmaaExternalCheckoutModule: StorefrontModule = function ({ router,
 
       Vue.$cookies.remove('vsf_token_customer', undefined, getCookieHostname())
       Vue.$cookies.remove('vsf_token_lastorder', undefined, getCookieHostname())
+      Vue.$cookies.remove('vsf_token_recentorder', undefined, getCookieHostname())
     })
   }
 
