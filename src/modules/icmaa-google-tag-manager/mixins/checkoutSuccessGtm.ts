@@ -3,6 +3,7 @@ import VueGtm from 'vue-gtm'
 import { mapGetters } from 'vuex'
 import { currentStoreView } from '@vue-storefront/core/lib/multistore'
 import { googleTagManager } from 'config'
+import { getCookieHostname } from 'icmaa-external-checkout/helper'
 import { formatValue } from 'icmaa-config/helpers/price'
 import { toDate } from 'icmaa-config/helpers/datetime'
 import omit from 'lodash-es/omit'
@@ -67,8 +68,16 @@ export default {
     }
   },
   methods: {
+    isRecentOrder (): boolean {
+      const cookie = Vue.$cookies.get('vsf_token_recentorder')
+      return !!cookie && cookie === '1'
+    },
+    removeRecentOrderCookie (): void {
+      Vue.$cookies.remove('vsf_token_recentorder', undefined, getCookieHostname())
+    },
     checkoutSuccessGtm () {
-      if (!this.isGtmEnabled || !this.order || this.gtmLastOrderId === this.orderId) {
+      if (!this.isGtmEnabled || !this.order || this.gtmLastOrderId === this.orderId || !this.isRecentOrder()) {
+        this.removeRecentOrderCookie()
         return
       }
 
@@ -76,21 +85,6 @@ export default {
 
       const storeView = currentStoreView()
       const currencyCode = storeView.i18n.currencyCode
-
-      /** These might cause problems */
-      // const dataLayer = {
-      //   'order-id': this.orderId,
-      //   'order-date': this.orderDate,
-      //   'order-website': this.orderStoreName,
-      //   'order-total': this.orderGrandTotal,
-      //   'order-subtotal': this.orderSubTotal,
-      //   'order-tax': this.orderTaxAmount,
-      //   'order-shipping': this.orderShippingAmount,
-      //   'order-shipping-method': this.orderShippingDescription,
-      //   'order-payment': this.paymentMethod,
-      //   'order-currency-code': currencyCode,
-      //   'order-promo-code': this.couponCode
-      // }
 
       GTM.trackEvent({
         event: 'icmaa-checkout-success',
@@ -116,6 +110,8 @@ export default {
       })
 
       this.$store.dispatch('icmaaGoogleTagManager/setLastOrderId', this.orderId)
+
+      this.removeRecentOrderCookie(this.removeRecentOrderCookie())
     }
   },
   async mounted () {
