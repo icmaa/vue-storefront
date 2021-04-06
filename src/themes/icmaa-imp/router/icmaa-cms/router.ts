@@ -13,6 +13,7 @@ const DigitalEventsComponent = () => import(/* webpackChunkName: "vsf-icmaa-cms-
 const XmasCalendar = () => import(/* webpackChunkName: "vsf-icmaa-cms-page-custom-xmas-calendar" */ 'theme/components/core/blocks/ICMAA/Cms/Pages/XmasCalendar.vue')
 const EasterCalendar = () => import(/* webpackChunkName: "vsf-icmaa-cms-page-custom-easter-calendar" */ 'theme/components/core/blocks/ICMAA/Cms/Pages/EasterCalendar.vue')
 const NextGeneration = () => import(/* webpackChunkName: "vsf-icmaa-cms-page-custom-next-generation" */ 'theme/components/core/blocks/ICMAA/Cms/Pages/NextGeneration.vue')
+const NextGenerationVoting = () => import(/* webpackChunkName: "vsf-icmaa-cms-page-custom-next-generation-voting" */ 'theme/components/core/blocks/ICMAA/Cms/Pages/NextGenerationVoting.vue')
 
 export const routes: any = [
   // Custom cms routes, like /service or /festivals
@@ -29,5 +30,6 @@ export const routes: any = [
   { name: 'digital-events', path: '/:identifier', component: DigitalEventsComponent },
   { name: 'xmas-calendar', path: '/:identifier', component: XmasCalendar },
   { name: 'easter-calendar', path: '/:identifier', component: EasterCalendar },
-  { name: 'next-generation', path: '/:identifier', component: NextGeneration }
+  { name: 'next-generation', path: '/:identifier', component: NextGeneration },
+  { name: 'next-generation-voting', path: '/:identifier', component: NextGenerationVoting }
 ]
