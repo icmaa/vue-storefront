@@ -161,8 +161,8 @@
           name="region_id"
           id="region_id"
           v-model="address.region_id"
-          :initial-option-text="$t('State')"
-          :label="$t('State') + ' *'"
+          :initial-option-text="$t('State / Region')"
+          :label="$t('State / Region') + ' *'"
           :options="states"
           :validations="[{
             condition: !validation.region_id.required && validation.region_id.$error,

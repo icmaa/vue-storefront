@@ -58,7 +58,7 @@
                   {{ userHasSelectedVariant && isAddToCartDisabled && !loading ? $t('Out of stock') : $t('Add to cart') }}
                   <loader-background v-if="loading" class="t-bottom-0" height="t-h-1" bar="t-bg-base-lightest t-opacity-25" />
                 </button-component>
-                <add-to-wishlist :product="product" class="t-flex-fix t-mb-4" />
+                <wishlist-button :product="wishlistProduct" class="t-flex-fix t-mb-4" />
               </div>
               <product-trust-signals />
             </div>
@@ -141,7 +141,7 @@ import Breadcrumbs from 'theme/components/core/Breadcrumbs'
 import ProductGallery from 'theme/components/core/blocks/Product/ProductGallery'
 import WebShare from 'theme/components/core/blocks/WebShare'
 import ButtonComponent from 'theme/components/core/blocks/Button'
-import AddToWishlist from 'theme/components/core/blocks/Wishlist/AddToWishlist'
+import WishlistButton from 'theme/components/core/blocks/Wishlist/WishlistButton'
 import CategoryExtrasHeader from 'theme/components/core/blocks/CategoryExtras/Header'
 import DepartmentLogo from 'theme/components/core/blocks/CategoryExtras/DepartmentLogo'
 import DetailsTabs from 'theme/components/core/blocks/Product/Tabs'
@@ -169,7 +169,7 @@ export default {
   name: 'Product',
   components: {
     AsyncSidebar,
-    AddToWishlist,
+    WishlistButton,
     Breadcrumbs,
     DepartmentLogo,
     CategoryExtrasHeader,
@@ -243,6 +243,12 @@ export default {
       }
 
       return this.$v.$invalid || this.loading || !this.quantity
+    },
+    wishlistProduct () {
+      return Object.assign({}, this.product, {
+        sku: this.product.parentSku,
+        id: this.product.parentId
+      })
     },
     isPreorder () {
       return this.product.promo_id === '5'

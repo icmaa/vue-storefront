@@ -26,7 +26,6 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
 import CurrentPage from 'theme/mixins/currentPage'
 import Logo from 'theme/components/core/blocks/Header/Logo'
 import ButtonUiSidebar from 'theme/components/core/blocks/Header/ButtonUiSidebar'

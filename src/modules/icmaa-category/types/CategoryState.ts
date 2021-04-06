@@ -13,7 +13,6 @@ export interface CategoryStateListItem {
 
 export interface ProductListingWidgetState {
   parent: number,
-  cluster: number|boolean,
-  filterHash: string|boolean,
+  optionsHash: string|boolean,
   list: Product[]
 }

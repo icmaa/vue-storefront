@@ -54,32 +54,6 @@ export function afterRegistration () {
       })
     }
 
-    // Adding a product to wishlist
-    if (type === 'wishlist/' + wishlistMutations.WISH_ADD_ITEM) {
-      GTM.trackEvent({
-        event: 'icmaa-add-to-wishlist',
-        ecommerce: {
-          currencyCode: currencyCode,
-          wishlist_add: {
-            products: [ getProduct(payload.product) ]
-          }
-        }
-      })
-    }
-
-    // Remove a product from wishlist
-    if (type === 'wishlist' + wishlistMutations.WISH_DEL_ITEM) {
-      GTM.trackEvent({
-        event: 'icmaa-remove-from-wishlist',
-        ecommerce: {
-          currencyCode: currencyCode,
-          wishlist_remove: {
-            products: payload.product ? [ getProduct(payload.product) ] : [ ]
-          }
-        }
-      })
-    }
-
     // Spawn notification
     if (type === 'notification/add') {
       GTM.trackEvent({
@@ -130,6 +104,30 @@ export function afterRegistration () {
         }
       }
     })
+  })
+
+  EventHooks.wishlistInteraction(({ type, product }) => {
+    if (type === 'add') {
+      GTM.trackEvent({
+        event: 'icmaa-add-to-wishlist',
+        ecommerce: {
+          currencyCode: currencyCode,
+          wishlist_add: {
+            products: [ getProduct(product) ]
+          }
+        }
+      })
+    } else if (type === 'rmv') {
+      GTM.trackEvent({
+        event: 'icmaa-remove-from-wishlist',
+        ecommerce: {
+          currencyCode: currencyCode,
+          wishlist_remove: {
+            products: product ? [ getProduct(product) ] : [ ]
+          }
+        }
+      })
+    }
   })
 
   EventHooks.facebookLoginClicked(({ status }) => {

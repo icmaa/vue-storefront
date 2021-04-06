@@ -7,7 +7,8 @@ import * as catTypes from '@vue-storefront/core/modules/catalog-next/store/categ
 import addDefaultProductFilter from 'icmaa-catalog/helpers/defaultProductFilter'
 import { fetchChildCategories } from '../helpers'
 import { SearchQuery } from 'storefront-query-builder'
-import { sortByLetter, getFilterHash } from '../helpers'
+import { sortByLetter } from '../helpers'
+import { getObjectHash } from 'icmaa-config/helpers/hash'
 
 import forEach from 'lodash-es/forEach'
 import { Logger } from '@vue-storefront/core/lib/logger'
@@ -39,17 +40,17 @@ const actions: ActionTree<CategoryState, RootState> = {
       commit(types.ICMAA_CATEGORY_LIST_ADD_CATEGORY_LIST, { category: category.id, items })
     }
   },
-  async loadProductListingWidgetProducts ({ state, commit, dispatch, rootGetters }, params: { categoryId: number, filter: any, cluster: any, size: number, sort: string|string[] }): Promise<ProductListingWidgetState> {
-    let { categoryId, filter, cluster, size, sort } = params
+  async loadProductListingWidgetProducts ({ state, commit, dispatch, rootGetters }, params: { categoryId: number, filter: any, size: number, sort: string|string[], reload?: boolean }): Promise<ProductListingWidgetState> {
+    let { categoryId, filter, size, sort, reload } = params
+    let optionsHash = getObjectHash({ categoryId, filter, sort, size })
 
-    if (state.productListingWidget.find(i => i.parent === categoryId && i.cluster === cluster && i.list.length >= size)) {
+    if (!reload && state.productListingWidget.find(i => i.optionsHash === optionsHash)) {
       return
     }
 
     let query = addDefaultProductFilter(new SearchQuery(), true)
     query.applyFilter({ key: 'category_ids', value: { in: [categoryId] } })
 
-    let filterHash = getFilterHash(filter)
     if (filter !== false) {
       forEach(filter, (value, key) => {
         value = { in: [value] }
@@ -59,12 +60,19 @@ const actions: ActionTree<CategoryState, RootState> = {
 
     let sortArray: string[] = typeof sort === 'string' ? [sort] : sort
 
+    let cluster = rootGetters['user/getCluster']
     if (cluster) {
       cluster = parseInt(cluster)
       query.applyFilter({ key: 'customercluster', value: { or: [cluster] } })
       query.applyFilter({ key: 'customercluster', value: { or: null } })
       sortArray.push('customercluster:desc')
     }
+
+    dispatch(
+      'user/applySessionFilterToSearchQuery',
+      { query },
+      { root: true }
+    )
 
     sortArray.forEach(sort => {
       const [ field, options ] = sort.split(':')
@@ -74,8 +82,8 @@ const actions: ActionTree<CategoryState, RootState> = {
     const options = { separateSelectedVariant: rootGetters['category-next/separateSelectedVariantInProductList'] }
 
     return dispatch('product/findProducts', { query, size, options }, { root: true }).then(products => {
-      const payload = { parent: categoryId, list: products.items, cluster, filterHash }
-      commit(types.ICMAA_CATEGORY_LIST_ADD_PRODUCT, payload)
+      const payload = { parent: categoryId, list: products.items, optionsHash }
+      commit(types.ICMAA_CATEGORY_LIST_ADD_PRODUCT_LIST_WIDGET, payload)
       return payload
     })
   }
