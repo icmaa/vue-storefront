@@ -217,7 +217,8 @@ export default {
     genderOptions () {
       return [
         { label: i18n.t('Male'), value: 'male' },
-        { label: i18n.t('Female'), value: 'female' }
+        { label: i18n.t('Female'), value: 'female' },
+        { label: i18n.t('Non-binary'), value: 'non-binary' }
       ]
     },
     dateFormat () {
