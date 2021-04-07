@@ -165,7 +165,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import config from 'config'
-import i18n from '@vue-storefront/i18n'
+
 import { currentStoreView } from '@vue-storefront/core/lib/multistore'
 
 import pick from 'lodash-es/pick'
@@ -176,6 +176,7 @@ import { unicodeAlpha } from '@vue-storefront/core/helpers/validators'
 import { date } from 'icmaa-config/helpers/validators'
 import { toDate } from 'icmaa-config/helpers/datetime'
 
+import GenderMixin from 'icmaa-user/mixins/gender'
 import Headline from 'theme/components/core/blocks/MyAccount/Headline'
 import BaseCheckbox from 'theme/components/core/blocks/Form/BaseCheckbox'
 import BaseSelect from 'theme/components/core/blocks/Form/BaseSelect'
@@ -184,6 +185,7 @@ import ButtonComponent from 'theme/components/core/blocks/Button'
 
 export default {
   name: 'MyProfile',
+  mixins: [GenderMixin],
   components: {
     Headline,
     BaseCheckbox,
@@ -213,13 +215,6 @@ export default {
     }),
     validation () {
       return this.$v.profile
-    },
-    genderOptions () {
-      return [
-        { label: i18n.t('Male'), value: 'male' },
-        { label: i18n.t('Female'), value: 'female' },
-        { label: i18n.t('Non-binary'), value: 'non-binary' }
-      ]
     },
     dateFormat () {
       return currentStoreView().i18n.dateFormat

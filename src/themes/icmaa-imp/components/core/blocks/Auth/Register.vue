@@ -154,6 +154,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import i18n from '@vue-storefront/i18n'
+import GenderMixin from 'icmaa-user/mixins/gender'
 import ButtonComponent from 'theme/components/core/blocks/Button'
 import BaseInput from 'theme/components/core/blocks/Form/BaseInput'
 import BaseSelect from 'theme/components/core/blocks/Form/BaseSelect'
@@ -168,6 +169,7 @@ import { Logger } from '@vue-storefront/core/lib/logger'
 
 export default {
   name: 'Register',
+  mixins: [GenderMixin],
   components: {
     BaseInput,
     BaseSelect,
@@ -223,13 +225,6 @@ export default {
       cluster: 'user/getCluster',
       storeConfig: 'icmaaConfig/getCurrentStoreConfig'
     }),
-    genderOptions () {
-      return [
-        { label: i18n.t('Male'), value: 'male' },
-        { label: i18n.t('Female'), value: 'female' },
-        { label: i18n.t('Non-binary'), value: 'non-binary' }
-      ]
-    },
     dateFormat () {
       return this.storeConfig.i18n.dateFormat
     }
