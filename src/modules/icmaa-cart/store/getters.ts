@@ -10,7 +10,7 @@ const getters: GetterTree<CartState, RootState> = {
    * The server-cart-token won't work as unique cart-hash anymore because it changes on each `cart/pull`.
    */
   getCurrentCartHash: state => calcItemsHmac(state.cartItems, ''),
-  getCoupon: ({ platformTotals }): AppliedCoupon | false => {
+  getCoupon: ({ platformTotals }, getters): AppliedCoupon | false => {
     if (!platformTotals) {
       return false
     }
@@ -19,11 +19,23 @@ const getters: GetterTree<CartState, RootState> = {
       return { code: platformTotals.coupon_code, discount: platformTotals.discount_amount }
     }
 
-    const giftcert = platformTotals.total_segments.find(s => s.code === 'ugiftcert')
+    const giftcert = getters.getGiftcert
     if (giftcert) {
-      return { code: giftcert.giftcert_code, discount: giftcert.base_balances * -1 }
+      return giftcert
     }
+
+    return false
   },
+  getGiftcert: ({ platformTotals }, getters): AppliedCoupon | false => {
+    if (!platformTotals || !getters.hasGiftcert) {
+      return false
+    }
+
+    const giftcert = platformTotals.total_segments.find(s => s.code === 'ugiftcert')
+    return { code: giftcert.giftcert_code, discount: giftcert.base_balances * -1 }
+  },
+  hasGiftcert: ({ platformTotals }): boolean =>
+    !!platformTotals && platformTotals.total_segments.find(s => s.code === 'ugiftcert'),
   getFreeCartItems: (state): string[] => state.freeCartItems
 }
 
