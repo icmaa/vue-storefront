@@ -58,7 +58,7 @@
                   {{ userHasSelectedVariant && isAddToCartDisabled && !loading ? $t('Out of stock') : $t('Add to cart') }}
                   <loader-background v-if="loading" class="t-bottom-0" height="t-h-1" bar="t-bg-base-lightest t-opacity-25" />
                 </button-component>
-                <wishlist-button :product="wishlistProduct" class="t-flex-fix t-mb-4" />
+                <wishlist-button :product="wishlistProduct" class="t-flex-fix t-mb-4" data-test-id="CurrentProductWishlistButton" />
               </div>
               <product-trust-signals />
             </div>
