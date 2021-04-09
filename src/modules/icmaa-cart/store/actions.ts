@@ -39,7 +39,7 @@ const actions: ActionTree<CartState, RootState> = {
     if ((!canUpdateMethods || !isSyncRequired) && !forceSync) return createDiffLog()
     commit(orgTypes.CART_SET_SYNC)
     const { result, resultCode } = await CartService.getItems()
-    const { serverItems, clientItems } = cartHooksExecutors.beforeSync({ clientItems: getCartItems, serverItems: result.items })
+    const { serverItems, clientItems } = await cartHooksExecutors.beforeSync({ clientItems: getCartItems, serverItems: result.items })
 
     if (resultCode === 200) {
       if (result.token) {
@@ -115,7 +115,7 @@ const actions: ActionTree<CartState, RootState> = {
     const { getCartItems, isTotalsSyncRequired } = getters
 
     const { result, resultCode } = await CartService.getItems()
-    const { serverItems, clientItems } = cartHooksExecutors.beforeSync({
+    const { serverItems, clientItems } = await cartHooksExecutors.beforeSync({
       clientItems: getCartItems,
       serverItems: result.items
     })

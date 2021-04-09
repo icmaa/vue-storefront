@@ -1,7 +1,7 @@
 describe('Add to and remove from wishlist ', () => {
   it('on PDP', () => {
     cy.visitProductDetailPage()
-    cy.getByTestId('wishlistButton').click()
+    cy.getByTestId('CurrentProductWishlistButton').click()
     cy.checkNotification('success')
     cy.scrollTo('top')
     cy.openSidebar('[data-test-id="HeaderButtonWishlist"]')
