@@ -7,7 +7,7 @@ import { IcmaaExtendedCartStore } from './store'
 export const IcmaaExtendedCartModule: StorefrontModule = function ({ store }) {
   extendStore('cart', IcmaaExtendedCartStore)
 
-  cartHooks.beforeSync(data => {
+  cartHooks.beforeSync(async data => {
     store.dispatch('cart/updateFreeCartItems', data.serverItems)
     return data
   })
