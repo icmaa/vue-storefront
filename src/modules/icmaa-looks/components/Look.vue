@@ -19,7 +19,7 @@
             {{ look.description }}
           </div>
         </div>
-        <picture-component :src="look.image" :width="imageWidth" :height="imageHeight" :sizes="imageSizes" :placeholder="true" :ratio="`${imageWidth}:${imageHeight}`" :alt="look.title | htmlDecode" />
+        <picture-component :key="look.image" :src="look.image" :width="imageWidth" :height="imageHeight" :sizes="imageSizes" :placeholder="true" :ratio="`${imageWidth}:${imageHeight}`" :alt="look.title | htmlDecode" />
       </div>
     </div>
     <div class="t-w-full md:t-w-2/3 t-px-2">
