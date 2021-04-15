@@ -52,10 +52,10 @@ export default {
 
       this.lozadObserver = lozad($el, Object.assign(defaults, options))
       this.lozadObserver.observe()
+
+      this.$once('hook:destroyed', () => {
+        this.lozadObserver.observer.disconnect()
+      })
     }
-  },
-  destroyed () {
-    if (!this.lozadObserver) return
-    this.lozadObserver.observer.disconnect()
   }
 }
