@@ -136,7 +136,8 @@ export const icmaaGoogleTagManagerModule: Module<GoogleTagManagerState, any> = {
         event: 'icmaa-page-view',
         customerLoggedIn: rootGetters['user/isLoggedIn'],
         customerEmail: rootGetters['user/getUserEmail'],
-        storeCode: storeView.storeCode
+        storeCode: storeView.storeCode,
+        urlPath: rootGetters['url/getCurrentRoute'].path || ''
       }
 
       return Object.assign(defaultDTO, DTO)
