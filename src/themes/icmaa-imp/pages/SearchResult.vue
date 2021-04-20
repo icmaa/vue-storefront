@@ -187,10 +187,10 @@ export default {
       }
     }
   },
-  beforeRouteUpdate (to, from, next) {
-    this.fetchAsyncData(to)
-      .then(next)
-      .catch(next)
+  watch: {
+    '$route.params.term': function () {
+      this.fetchAsyncData(this.$route)
+    }
   },
   async asyncData ({ context }) {
     if (context) {
