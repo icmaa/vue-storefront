@@ -12,8 +12,7 @@ export default (to: Route) => {
   }
 
   const eventRouteData = {
-    contentName: to.fullPath,
-    contentViewName: to.meta.gtm || to.name,
+    urlPath: to.path,
     storeCode: currentStoreView().storeCode
   }
 

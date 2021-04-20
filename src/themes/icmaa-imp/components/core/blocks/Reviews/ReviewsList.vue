@@ -9,7 +9,7 @@
       <meta itemprop="reviewBody" :content="item.detail | htmlDecode">
       <reviews-stars :rating="item.ratings_total" stars-size="sm" class="t-flex t-items-center t-text-md t-text-base-light t-mt-2" />
       <p class="t-text-sm t-my-4" v-html="item.detail" />
-      <p class="t-text-sm t-text-base-light" v-text="item.nickname" />
+      <p class="t-text-sm t-text-base-light" v-text="item.nickname + ' / ' + item.date" />
     </div>
     <div class="t-flex t-justify-center t-mt-8" v-if="pageCount > 1">
       <button-component type="ghost" icon="chevron_left" :icon-only="true" size="sm" class="t-mx-2" :class="{ 't-opacity-25': currentPage === 1, 't-bg-white': currentPage !== 1 }" @click.native="prevPage" />
@@ -20,6 +20,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import { toDate } from 'icmaa-config/helpers/datetime'
 import ReviewsStars from 'theme/components/core/blocks/Reviews/ReviewsStars'
 import ButtonComponent from 'theme/components/core/blocks/Button'
 
@@ -55,6 +56,7 @@ export default {
     items () {
       return this.reviews.map(rvw => {
         rvw['ratings_total'] = this.reviewAvgRating(rvw)
+        rvw.date = toDate(rvw.created_at, undefined, 'YYYY-MM-DD HH:mm:ss')
         return rvw
       })
     },

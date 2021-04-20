@@ -5,7 +5,6 @@ import { currentStoreView } from '@vue-storefront/core/lib/multistore'
 import { userHooks } from '@vue-storefront/core/modules/user/hooks'
 import { catalogHooks } from '@vue-storefront/core/modules/catalog-next/hooks'
 import * as cartMutations from '@vue-storefront/core/modules/cart/store/mutation-types'
-import * as wishlistMutations from '@vue-storefront/core/modules/wishlist/store/mutation-types'
 
 import { IcmaaGoogleTagManager as EventHooks, IcmaaGoogleTagManagerExecutors } from './'
 import triggerPageView from '../helpers/pageView'
