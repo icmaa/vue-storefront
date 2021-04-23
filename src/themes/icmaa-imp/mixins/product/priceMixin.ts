@@ -25,7 +25,7 @@ export default {
       }
       return false
     },
-    minimalPrice () {
+    lowestPriceInclTax () {
       const product = this.product
       if (product.type_id === 'configurable' &&
         product.configurable_children &&
