@@ -24,6 +24,27 @@ export default {
         })
       }
       return false
+    },
+    lowestPriceInclTax () {
+      const product = this.product
+      if (product.type_id === 'configurable' &&
+        product.configurable_children &&
+        product.configurable_children.length > 0
+      ) {
+        const cheapestProduct = product.configurable_children.reduce((a, b) => {
+          if (!a.stock.is_in_stock || a.stock.qty === 0) {
+            return b
+          }
+          const aPrice = a.price_incl_tax || a.original_price_incl_tax
+          const bPrice = b.price_incl_tax || b.original_price_incl_tax
+
+          return aPrice < bPrice ? a : b
+        }, {})
+
+        return cheapestProduct.price_incl_tax || cheapestProduct.original_price_incl_tax || 0
+      }
+
+      return product.price_incl_tax
     }
   },
   methods: {
