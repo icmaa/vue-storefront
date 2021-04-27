@@ -32,7 +32,7 @@ export default {
         product.configurable_children.length > 0
       ) {
         const cheapestProduct = product.configurable_children.reduce((a, b) => {
-          if (!a.stock.is_in_stock || a.stock.qty === 0) {
+          if (!a.stock || !a.stock.is_in_stock || a.stock.qty === 0) {
             return b
           }
           const aPrice = a.price_incl_tax || a.original_price_incl_tax
