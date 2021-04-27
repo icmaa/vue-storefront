@@ -23,11 +23,11 @@
         </span>
         <span class="price-special t-text-sale t-font-bold" v-if="product.special_price && parseFloat(product.special_price) > 0" data-test-id="specialPrice">
           <span v-if="hasMultiplePrices" v-text="$t('as low as')" />
-          {{ price(product.price_incl_tax) }}
+          {{ price(lowestPriceInclTax) }}
         </span>
         <span class="price t-text-base-dark t-font-bold" v-if="!product.special_price && parseFloat(product.price_incl_tax) > 0" data-test-id="price">
           <span v-if="hasMultiplePrices" v-text="$t('as low as')" />
-          {{ price(product.price_incl_tax) }}
+          {{ price(lowestPriceInclTax) }}
         </span>
       </p>
     </router-link>
