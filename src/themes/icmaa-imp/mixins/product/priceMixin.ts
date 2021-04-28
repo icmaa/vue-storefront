@@ -38,7 +38,7 @@ export default {
           const aPrice = a.price_incl_tax || a.original_price_incl_tax
           const bPrice = b.price_incl_tax || b.original_price_incl_tax
 
-          return aPrice < bPrice ? a : b
+          return aPrice <= bPrice ? a : b
         }, {})
 
         return cheapestProduct.price_incl_tax || cheapestProduct.original_price_incl_tax || 0
