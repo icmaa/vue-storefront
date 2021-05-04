@@ -111,7 +111,7 @@ export default {
 
       this.$store.dispatch('icmaaGoogleTagManager/setLastOrderId', this.orderId)
 
-      this.removeRecentOrderCookie(this.removeRecentOrderCookie())
+      this.removeRecentOrderCookie()
     }
   },
   async mounted () {
@@ -121,9 +121,9 @@ export default {
     await this.$store.dispatch('attribute/list', { filterValues })
   },
   beforeMount () {
-    this.$bus.$on('checkout-success-last-order-loaded', this.checkoutSuccessGtm)
+    this.$bus.$on('icmaa-external-checkout-user-data-complete', this.checkoutSuccessGtm)
   },
   beforeDestroy () {
-    this.$bus.$off('checkout-success-last-order-loaded', this.checkoutSuccessGtm)
+    this.$bus.$off('icmaa-external-checkout-user-data-complete', this.checkoutSuccessGtm)
   }
 }

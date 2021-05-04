@@ -27,6 +27,7 @@ const actions: ActionTree<UserState, RootState> = {
    *   This way we can use a watcher to check if the session is already authorized and don't need
    *   to relay on the "session-after-started" event and preserve the write-in-one-direction approach of Vuex.
    * * We must uncomment the original dispatch of `startSession` in  `UserModule` to be able to overwrite this action.
+   * * Add `session-after-authorized` event to have unique event for each state
    */
   async startSession ({ commit, dispatch, getters }) {
     const usersCollection = StorageManager.get('user')
@@ -48,6 +49,8 @@ const actions: ActionTree<UserState, RootState> = {
       if (userData) {
         dispatch('setUserGroup', userData)
       }
+
+      EventBus.$emit('session-after-authorized')
     } else {
       EventBus.$emit('session-after-nonauthorized')
     }
@@ -68,6 +71,7 @@ const actions: ActionTree<UserState, RootState> = {
     if (token) {
       commit(userTypes.USER_TOKEN_CHANGED, { newToken: token })
       await dispatch('sessionAfterAuthorized', {})
+      EventBus.$emit('session-after-authorized')
     } else {
       EventBus.$emit('session-after-nonauthorized')
     }
@@ -138,7 +142,7 @@ const actions: ActionTree<UserState, RootState> = {
 
     return resp
   },
-  async loadLastOrderToHistory ({ commit, dispatch }, { token }) {
+  async loadOrderByToken ({ commit, dispatch }, { token }) {
     const resp = await IcmaaUserService.getLastOrder(token)
 
     if (resp.code === 200) {
