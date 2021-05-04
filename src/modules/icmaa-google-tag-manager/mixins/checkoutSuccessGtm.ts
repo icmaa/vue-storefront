@@ -86,8 +86,6 @@ export default {
       const storeView = currentStoreView()
       const currencyCode = storeView.i18n.currencyCode
 
-      console.error('TRACK-ORDER-SUCCESS', this.orderId)
-
       GTM.trackEvent({
         event: 'icmaa-checkout-success',
         // ...dataLayer,
@@ -113,7 +111,7 @@ export default {
 
       this.$store.dispatch('icmaaGoogleTagManager/setLastOrderId', this.orderId)
 
-      this.removeRecentOrderCookie(this.removeRecentOrderCookie())
+      this.removeRecentOrderCookie()
     }
   },
   async mounted () {
