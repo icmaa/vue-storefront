@@ -40,6 +40,11 @@ export const IcmaaExternalCheckoutModule: StorefrontModule = function ({ router,
       }
     })
 
+    EventBus.$on('session-after-authorized', async () => {
+      await store.dispatch('user/refreshOrdersHistory', { resolvedFromCache: false })
+      EventBus.$emit('icmaa-external-checkout-user-data-complete')
+    })
+
     EventBus.$on('session-after-nonauthorized', async () => {
       const { customerToken, lastOrderToken } = getCookies()
 
@@ -50,14 +55,18 @@ export const IcmaaExternalCheckoutModule: StorefrontModule = function ({ router,
             Vue.$cookies.remove('vsf_token_customer', undefined, getCookieHostname())
             Vue.$cookies.remove('vsf_token_lastorder', undefined, getCookieHostname())
           })
+        } else {
+          if (lastOrderToken) {
+            Logger.info('Last-order token found in cookie – try to load last order:', 'external-checkout', lastOrderToken)()
+            store.dispatch('user/loadOrderByToken', { token: lastOrderToken }).then(() => {
+              Vue.$cookies.remove('vsf_token_lastorder', undefined, getCookieHostname())
+              EventBus.$emit('icmaa-external-checkout-user-data-complete')
+            })
+          }
         }
-
-        if (!customerToken && lastOrderToken) {
-          Logger.info('Last-order token found in cookie – try to load last order:', 'external-checkout', lastOrderToken)()
-          store.dispatch('user/loadLastOrderToHistory', { token: lastOrderToken }).then(() => {
-            Vue.$cookies.remove('vsf_token_lastorder', undefined, getCookieHostname())
-          })
-        }
+      } else if (!store.getters['user/isLoggedIn']) {
+        await store.dispatch('user/loadLastOrderFromCache', { resolvedFromCache: false })
+        EventBus.$emit('icmaa-external-checkout-user-data-complete')
       }
     })
 

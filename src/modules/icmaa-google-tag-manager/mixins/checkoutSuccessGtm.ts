@@ -86,6 +86,8 @@ export default {
       const storeView = currentStoreView()
       const currencyCode = storeView.i18n.currencyCode
 
+      console.error('TRACK-ORDER-SUCCESS', this.orderId)
+
       GTM.trackEvent({
         event: 'icmaa-checkout-success',
         // ...dataLayer,
@@ -121,9 +123,9 @@ export default {
     await this.$store.dispatch('attribute/list', { filterValues })
   },
   beforeMount () {
-    this.$bus.$on('checkout-success-last-order-loaded', this.checkoutSuccessGtm)
+    this.$bus.$on('icmaa-external-checkout-user-data-complete', this.checkoutSuccessGtm)
   },
   beforeDestroy () {
-    this.$bus.$off('checkout-success-last-order-loaded', this.checkoutSuccessGtm)
+    this.$bus.$off('icmaa-external-checkout-user-data-complete', this.checkoutSuccessGtm)
   }
 }

@@ -48,6 +48,8 @@ const actions: ActionTree<UserState, RootState> = {
       if (userData) {
         dispatch('setUserGroup', userData)
       }
+
+      EventBus.$emit('session-after-authorized')
     } else {
       EventBus.$emit('session-after-nonauthorized')
     }
@@ -68,6 +70,7 @@ const actions: ActionTree<UserState, RootState> = {
     if (token) {
       commit(userTypes.USER_TOKEN_CHANGED, { newToken: token })
       await dispatch('sessionAfterAuthorized', {})
+      EventBus.$emit('session-after-authorized')
     } else {
       EventBus.$emit('session-after-nonauthorized')
     }
@@ -138,7 +141,7 @@ const actions: ActionTree<UserState, RootState> = {
 
     return resp
   },
-  async loadLastOrderToHistory ({ commit, dispatch }, { token }) {
+  async loadOrderByToken ({ commit, dispatch }, { token }) {
     const resp = await IcmaaUserService.getLastOrder(token)
 
     if (resp.code === 200) {

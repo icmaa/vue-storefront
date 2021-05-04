@@ -47,41 +47,11 @@ export default {
       return this.cartItems.length > 0
     }
   },
-  async beforeMount () {
-    await this.clearCart()
-    await this.onLogin()
-  },
-  watch: {
-    /**
-     * We need to call the `onLogin` method using a watcher because it's possible that the user isn't already
-     * logged in when the beforeMount event hook is called. Otherwise the `checkout-success-last-order-loaded`
-     * event won't ever be fired on first request because `isLoggedIn` is false.
-     */
-    isLoggedIn (value) {
-      this.onLogin(value)
-    },
-    lastOrder () {
-      this.guestOrder()
-    }
-  },
   methods: {
     async clearCart () {
       if (this.cartIsNotEmpty) {
         await this.$store.dispatch('cart/clear', {})
         await this.$store.dispatch('cart/sync', { forceClientState: true })
-      }
-    },
-    async onLogin (value) {
-      if (value || this.isLoggedIn) {
-        await this.$store.dispatch('user/refreshOrdersHistory', { resolvedFromCache: false })
-        this.$bus.$emit('checkout-success-last-order-loaded', this.lastOrder)
-      } else if (!value && !this.isLoggedIn) {
-        await this.$store.dispatch('user/loadLastOrderFromCache')
-      }
-    },
-    async guestOrder () {
-      if (!this.isLoggedIn && this.lastOrder) {
-        this.$bus.$emit('checkout-success-last-order-loaded', this.lastOrder)
       }
     }
   },
