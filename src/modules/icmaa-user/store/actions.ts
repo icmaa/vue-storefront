@@ -27,6 +27,7 @@ const actions: ActionTree<UserState, RootState> = {
    *   This way we can use a watcher to check if the session is already authorized and don't need
    *   to relay on the "session-after-started" event and preserve the write-in-one-direction approach of Vuex.
    * * We must uncomment the original dispatch of `startSession` in  `UserModule` to be able to overwrite this action.
+   * * Add `session-after-authorized` event to have unique event for each state
    */
   async startSession ({ commit, dispatch, getters }) {
     const usersCollection = StorageManager.get('user')
