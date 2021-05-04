@@ -41,6 +41,9 @@ export const IcmaaExternalCheckoutModule: StorefrontModule = function ({ router,
     })
 
     EventBus.$on('session-after-authorized', async () => {
+      /**
+       * @todo Don't load all orders and its products here – maybe just last N
+       */
       await store.dispatch('user/refreshOrdersHistory', { resolvedFromCache: false })
       EventBus.$emit('icmaa-external-checkout-user-data-complete')
     })
