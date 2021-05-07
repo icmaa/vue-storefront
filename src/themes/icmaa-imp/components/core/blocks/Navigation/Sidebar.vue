@@ -5,7 +5,7 @@
     </template>
     <template v-slot:default>
       <gender-navigation :items="genderNavigationItems" class="t--mx-4 t--mt-4 t-mb-4" />
-      <div class="t-flex t-flex-wrap t--mx-1 t--mb-2" @click="closeMenu">
+      <div class="t-flex t-flex-wrap t--mx-1 t--mb-2">
         <navigation-item v-for="link in mainNavigationItems" v-bind="link" :key="link.id" />
       </div>
     </template>

@@ -7,7 +7,8 @@
         class="t-cursor-pointer t-rounded-sm t-flex t-flex-wrap t-mx-1 t-w-full t-h-full t-text-center t-justify-center t-items-center t-text-sm"
         :class="[ icon ? 't-py-2' : 't-py-4', backgroundColorClass, textColorClass, backgroundImageClass ]"
         :style="[ backgroundImageStyle ]"
-        @click.prevent="console.error(route)"
+        :event="!hasSubNavigation ? 'click' : ''"
+        @click.native="click"
       >
         <template v-if="icon">
           <material-icon v-bind="{ icon, iconSet }" size="sm" />
@@ -49,6 +50,10 @@ export default {
       type: [Object, String],
       default: ''
     },
+    sub: {
+      type: [Boolean, String],
+      default: false
+    },
     width: {
       type: String,
       default: '1/2'
@@ -78,6 +83,9 @@ export default {
     hasChildren () {
       return this.children.length > 0
     },
+    hasSubNavigation () {
+      return !!this.sub
+    },
     widthClass () {
       return 't-w-' + this.width
     },
@@ -105,13 +113,20 @@ export default {
     },
     textColorClass () {
       return this.backgroundColor !== 'base-lightest' || this.hasBackgroundImage ? 't-text-white' : 't-text-base-dark'
+    },
+    genderNavigationItems () {
+      return this.mainNavigation.genderNavigation
     }
   },
   methods: {
-    openSupNavigation () {
-      const sidebarProps = { title: 'TEST' }
-      const sidebar = { component: AsyncSubNavigation, ...sidebarProps, props: {} }
-      this.$store.dispatch('ui/addSidebarPath', { sidebar })
+    click (e) {
+      if (this.hasSubNavigation) {
+        const sidebarProps = { title: this.name }
+        const sidebar = { component: AsyncSubNavigation, ...sidebarProps, props: { subNavigationKey: this.sub } }
+        this.$store.dispatch('ui/addSidebarPath', { sidebar })
+      } else {
+        this.$store.dispatch('ui/closeAll')
+      }
     }
   }
 }
