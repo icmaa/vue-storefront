@@ -109,6 +109,9 @@ export default {
       this.closeMenu()
       this.$bus.$emit('modal-toggle-switcher')
     }
+  },
+  mounted () {
+    this.$store.dispatch('icmaaCmsBlock/list', 'navigation-main-sub')
   }
 }
 </script>

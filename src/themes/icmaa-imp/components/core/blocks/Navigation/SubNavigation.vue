@@ -1,12 +1,12 @@
 <template>
   <div v-if="navigation">
-    <gender-navigation :items="genderNavigationItems" class="t--mx-4 t--mt-4 t-mb-4" />
+    <gender-navigation :items="genderNavigationItems" class="t--mx-4 t--mt-4 t-mb-4" v-if="genderNavigationItems" />
     <div
-      v-if="navigation.navigation && navigation.navigation.length"
+      v-if="navigation && navigation.length > 0"
       class="t-flex t-flex-wrap t-mb-6"
     >
       <router-link
-        v-for="(item, i) in navigation.navigation"
+        v-for="(item, i) in navigation"
         :key="`nav-${i}`"
         :to="localizedRoute(item.route)"
         class="t-w-full t-py-2 t-px-4 t-border-b t-border-base-lightest t-text-sm"
@@ -14,7 +14,19 @@
         v-text="item.name"
       />
     </div>
-    {{ navigation }}
+    <div
+      v-if="teaser && teaser.length > 0"
+      class="t-flex t-flex-wrap t-mb-6"
+    >
+      <router-link
+        v-for="(item, i) in teaser"
+        :key="`nav-${i}`"
+        :to="localizedRoute(item.route)"
+        class="t-w-full t-py-2 t-px-4 t-border-b t-border-base-lightest t-text-sm"
+        :class="{ 't-font-bold': item.bold }"
+        v-text="item.name"
+      />
+    </div>
   </div>
 </template>
 
@@ -37,14 +49,23 @@ export default {
     ...mapGetters({
       'getJsonBlockByIdentifier': 'icmaaCmsBlock/getJsonBlockByIdentifier'
     }),
-    mainNavigation () {
-      return this.getJsonBlockByIdentifier('navigation-main')
+    navigationDTO () {
+      return this.getJsonBlockByIdentifier('navigation-main-sub')
     },
     genderNavigationItems () {
-      return this.mainNavigation.genderNavigation
+      return this.getJsonBlockByIdentifier('navigation-main').genderNavigation || false
+    },
+    sub () {
+      return this.navigationDTO[this.subNavigationKey] || false
     },
     navigation () {
-      return this.mainNavigation.subNavigation[this.subNavigationKey] || false
+      return this.sub.navigation || false
+    },
+    teaser () {
+      return this.sub.teaser || false
+    },
+    logos () {
+      return this.sub.logos || false
     }
   }
 }
