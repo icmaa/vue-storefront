@@ -19,6 +19,8 @@
 import NavigationItem from 'theme/components/core/blocks/Navigation/Item'
 import MaterialIcon from 'theme/components/core/blocks/MaterialIcon'
 
+const AsyncSubNavigation = () => import(/* webpackChunkName: "vsf-navigation-sub" */ 'theme/components/core/blocks/Navigation/SubNavigation')
+
 export default {
   name: 'NavigationItem',
   components: {
@@ -94,6 +96,13 @@ export default {
     },
     textColorClass () {
       return this.backgroundColor !== 'base-lightest' || this.hasBackgroundImage ? 't-text-white' : 't-text-base-dark'
+    }
+  },
+  methods: {
+    openSupNavigation () {
+      const sidebarProps = { title: 'TEST' }
+      const sidebar = { component: AsyncSubNavigation, ...sidebarProps, props: {} }
+      this.$store.dispatch('ui/addSidebarPath', { sidebar })
     }
   }
 }
