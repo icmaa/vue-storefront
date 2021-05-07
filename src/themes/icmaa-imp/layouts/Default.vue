@@ -18,7 +18,7 @@
       />
       <async-sidebar
         :state-key="'sidebar'"
-        :async-component="SidebarMenu"
+        :async-component="NavigationSidebar"
         direction="left"
       />
       <async-sidebar
@@ -57,7 +57,7 @@ import { isServer } from '@vue-storefront/core/helpers'
 import viewportMixin from 'theme/mixins/viewportMixin.ts'
 import NoSSR from 'vue-no-ssr'
 
-const SidebarMenu = () => import(/* webpackPreload: true */ /* webpackChunkName: "vsf-sidebar-menu" */ 'theme/components/core/blocks/SidebarMenu/SidebarMenu')
+const NavigationSidebar = () => import(/* webpackPreload: true */ /* webpackChunkName: "vsf-sidebar-navigation" */ 'theme/components/core/blocks/Navigation/Sidebar')
 const Microcart = () => import(/* webpackPreload: true */ /* webpackChunkName: "vsf-microcart" */ 'theme/components/core/blocks/Microcart/Microcart')
 const Wishlist = () => import(/* webpackPreload: true */ /* webpackChunkName: "vsf-wishlist" */ 'theme/components/core/blocks/Wishlist/Wishlist')
 const SearchPanel = () => import(/* webpackChunkName: "vsf-search-panel" */ 'theme/components/core/blocks/SearchPanel/SearchPanel')
@@ -71,7 +71,7 @@ export default {
       Microcart,
       Wishlist,
       SearchPanel,
-      SidebarMenu
+      NavigationSidebar
     }
   },
   mixins: [viewportMixin],
@@ -141,7 +141,7 @@ export default {
     MainHeader,
     Advice,
     MainFooter,
-    SidebarMenu, // eslint-disable-line vue/no-unused-components
+    NavigationSidebar, // eslint-disable-line vue/no-unused-components
     Overlay,
     Loader,
     Notifications,

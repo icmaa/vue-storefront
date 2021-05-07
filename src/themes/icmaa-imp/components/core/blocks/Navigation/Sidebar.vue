@@ -5,6 +5,9 @@
     </template>
     <template v-slot:default>
       <gender-navigation :items="genderNavigationItems" class="t--mx-4 t--mt-4 t-mb-4" />
+      <div @click="openSupMenu">
+        SUBMENU
+      </div>
       <div class="t-flex t-flex-wrap t--mx-1 t--mb-2" @click="closeMenu">
         <navigation-item v-for="link in mainNavigationItems" v-bind="link" :key="link.id" />
       </div>
@@ -46,14 +49,15 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { currentStoreView } from '@vue-storefront/core/lib/multistore'
 
 import Sidebar from 'theme/components/core/blocks/AsyncSidebar/Sidebar'
 import TopButton from 'theme/components/core/blocks/AsyncSidebar/TopButton'
-import GenderNavigation from 'theme/components/core/blocks/SidebarMenu/ClusterNavigation'
-import NavigationItem from 'theme/components/core/blocks/SidebarMenu/NavigationItem'
+import GenderNavigation from 'theme/components/core/blocks/Navigation/ClusterNavigation'
+import NavigationItem from 'theme/components/core/blocks/Navigation/Item'
 import FlagIcon from 'theme/components/core/blocks/FlagIcon'
 import FlagMixin from 'theme/mixins/flagMixin'
+
+const AsyncSubNavigation = () => import(/* webpackChunkName: "vsf-navigation-sub" */ 'theme/components/core/blocks/Navigation/SubNavigation')
 
 export default {
   name: 'SidebarMenu',
@@ -97,6 +101,11 @@ export default {
   methods: {
     closeMenu () {
       this.$store.dispatch('ui/closeAll')
+    },
+    openSupMenu () {
+      const sidebarProps = { title: 'TEST' }
+      const sidebar = { component: AsyncSubNavigation, ...sidebarProps, props: {} }
+      this.$store.dispatch('ui/addSidebarPath', { sidebar })
     },
     login () {
       this.closeMenu()

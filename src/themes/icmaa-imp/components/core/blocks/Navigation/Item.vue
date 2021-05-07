@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import NavigationItem from 'theme/components/core/blocks/SidebarMenu/NavigationItem'
+import NavigationItem from 'theme/components/core/blocks/Navigation/Item'
 import MaterialIcon from 'theme/components/core/blocks/MaterialIcon'
 
 export default {
