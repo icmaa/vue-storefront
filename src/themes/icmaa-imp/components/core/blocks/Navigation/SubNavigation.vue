@@ -10,7 +10,7 @@
         :key="`nav-${i}`"
         :to="localizedRoute(item.route)"
         class="t-w-full t-py-3 t-px-4 t-border-base-lightest t-text-sm"
-        :class="{ 't-border-b': i !== (navigation.length - 1), 't-font-bold': item.bold }"
+        :class="{ 't-border-b': i !== (filteredNavigation.length - 1), 't-font-bold': item.bold }"
         @click.native="closeMenu"
         v-text="item.name"
       />
