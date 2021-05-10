@@ -5,7 +5,7 @@
     </template>
     <template v-slot:default>
       <gender-navigation :items="genderNavigationItems" class="t--mx-4 t--mt-4 t-mb-4" />
-      <div class="t-flex t-flex-wrap t--mx-1 t--mb-2" @click="closeMenu">
+      <div class="t-flex t-flex-wrap t--mx-1 t--mb-2">
         <navigation-item v-for="link in mainNavigationItems" v-bind="link" :key="link.id" />
       </div>
     </template>
@@ -46,12 +46,11 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { currentStoreView } from '@vue-storefront/core/lib/multistore'
 
 import Sidebar from 'theme/components/core/blocks/AsyncSidebar/Sidebar'
 import TopButton from 'theme/components/core/blocks/AsyncSidebar/TopButton'
-import GenderNavigation from 'theme/components/core/blocks/SidebarMenu/ClusterNavigation'
-import NavigationItem from 'theme/components/core/blocks/SidebarMenu/NavigationItem'
+import GenderNavigation from 'theme/components/core/blocks/Navigation/ClusterNavigation'
+import NavigationItem from 'theme/components/core/blocks/Navigation/Item'
 import FlagIcon from 'theme/components/core/blocks/FlagIcon'
 import FlagMixin from 'theme/mixins/flagMixin'
 

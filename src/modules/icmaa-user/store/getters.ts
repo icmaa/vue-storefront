@@ -4,6 +4,7 @@ import UserState from '../types/UserState'
 import { icmaa } from 'config'
 
 import isEmpty from 'lodash-es/isEmpty'
+import invert from 'lodash-es/invert'
 
 const getters: GetterTree<UserState, RootState> = {
   isLoggedIn: (state): boolean => !isEmpty(state.current) && !isEmpty(state.token),
@@ -24,7 +25,12 @@ const getters: GetterTree<UserState, RootState> = {
     const sessionFilterAttributes = icmaa.user.clpSessionFilters || []
     return sessionFilterAttributes.includes(attributeCode)
   },
-  getCluster: (state, getters): string|false => getters.getSessionData('cluster')
+  getCluster: (state, getters): string|false => getters.getSessionData('cluster'),
+  getGender: (state, getters): string|false => {
+    const currentGenderId = getters.getSessionData('gender')
+    const { genderProductMap: genderMap } = icmaa.user
+    return invert(genderMap)[currentGenderId] || false
+  }
 }
 
 export default getters

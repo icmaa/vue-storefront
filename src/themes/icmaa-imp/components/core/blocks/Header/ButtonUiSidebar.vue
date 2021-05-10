@@ -1,5 +1,5 @@
 <template>
-  <button-icon :icon="icon" :title="title" :qty="quantity" @click="openSidebarMenu" data-test-id="ButtonUiSidebar" />
+  <button-icon :icon="icon" :title="title" :qty="quantity" @click="openSidebarNavigation" data-test-id="ButtonUiSidebar" />
 </template>
 
 <script>
@@ -42,7 +42,7 @@ export default {
     }
   },
   methods: {
-    openSidebarMenu () {
+    openSidebarNavigation () {
       this.$store.dispatch('ui/setSidebar', { key: this.uiState, status: !this.isOpen })
     }
   }

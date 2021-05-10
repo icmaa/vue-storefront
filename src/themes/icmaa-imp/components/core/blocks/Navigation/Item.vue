@@ -1,23 +1,35 @@
 <template>
   <div class="t-flex t-flex-wrap t-flex-fix t-content-center t-justify-center" :class="[ widthClass, { 't-mb-2': marginBottom } ]">
-    <router-link v-if="!hasChildren" :to="localizedRoute(route)" :title="name | htmlDecode" class="t-cursor-pointer t-rounded-sm t-flex t-flex-wrap t-mx-1 t-w-full t-h-full t-text-center t-justify-center t-items-center t-text-sm" :class="[ icon ? 't-py-2' : 't-py-4', backgroundColorClass, textColorClass, backgroundImageClass ]" :style="[ backgroundImageStyle ]">
-      <template v-if="icon">
-        <material-icon v-bind="{ icon, iconSet }" size="sm" />
-        <span class="t-block t-w-full t-text-xxs t-mt-1">
+    <template v-if="!hasChildren">
+      <router-link
+        :to="localizedRoute(route)"
+        :title="name | htmlDecode"
+        class="t-cursor-pointer t-rounded-sm t-flex t-flex-wrap t-mx-1 t-w-full t-h-full t-text-center t-justify-center t-items-center t-text-sm"
+        :class="[ icon ? 't-py-2' : 't-py-4', backgroundColorClass, textColorClass, backgroundImageClass ]"
+        :style="[ backgroundImageStyle ]"
+        :event="!hasSubNavigation ? 'click' : ''"
+        @click.native="click"
+      >
+        <template v-if="icon">
+          <material-icon v-bind="{ icon, iconSet }" size="sm" />
+          <span class="t-block t-w-full t-text-xxs t-mt-1">
+            {{ name }}
+          </span>
+        </template>
+        <template v-else>
           {{ name }}
-        </span>
-      </template>
-      <template v-else>
-        {{ name }}
-      </template>
-    </router-link>
+        </template>
+      </router-link>
+    </template>
     <navigation-item v-for="(child, index) in children" v-bind="child" :level="level + 1" :key="index" />
   </div>
 </template>
 
 <script>
-import NavigationItem from 'theme/components/core/blocks/SidebarMenu/NavigationItem'
+import NavigationItem from 'theme/components/core/blocks/Navigation/Item'
 import MaterialIcon from 'theme/components/core/blocks/MaterialIcon'
+
+const AsyncSubNavigation = () => import(/* webpackChunkName: "vsf-navigation-sub" */ 'theme/components/core/blocks/Navigation/SubNavigation')
 
 export default {
   name: 'NavigationItem',
@@ -37,6 +49,10 @@ export default {
     route: {
       type: [Object, String],
       default: ''
+    },
+    sub: {
+      type: [Boolean, String],
+      default: false
     },
     width: {
       type: String,
@@ -67,6 +83,9 @@ export default {
     hasChildren () {
       return this.children.length > 0
     },
+    hasSubNavigation () {
+      return !!this.sub
+    },
     widthClass () {
       return 't-w-' + this.width
     },
@@ -94,6 +113,20 @@ export default {
     },
     textColorClass () {
       return this.backgroundColor !== 'base-lightest' || this.hasBackgroundImage ? 't-text-white' : 't-text-base-dark'
+    },
+    genderNavigationItems () {
+      return this.mainNavigation.genderNavigation
+    }
+  },
+  methods: {
+    click (e) {
+      if (this.hasSubNavigation) {
+        const sidebarProps = { title: this.name }
+        const sidebar = { component: AsyncSubNavigation, ...sidebarProps, props: { subNavigationKey: this.sub } }
+        this.$store.dispatch('ui/addSidebarPath', { sidebar })
+      } else {
+        this.$store.dispatch('ui/closeAll')
+      }
     }
   }
 }
