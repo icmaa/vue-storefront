@@ -1,6 +1,9 @@
 <template>
   <div v-if="navigation">
     <gender-navigation :items="genderNavigationItems" class="t--mx-4 t--mt-4 t-mb-4" v-if="genderNavigationItems" />
+    <div class="t-flex t-flex-wrap t--mx-1">
+      <navigation-item v-for="link in mainNavigationItems" v-bind="link" :key="link.id" />
+    </div>
     <div
       v-if="navigation && filteredNavigation.length > 0"
       class="t-flex t-flex-wrap t-mb-4"
@@ -60,6 +63,7 @@
 <script>
 import { mapGetters } from 'vuex'
 
+import NavigationItem from 'theme/components/core/blocks/Navigation/Item'
 import GenderNavigation from 'theme/components/core/blocks/Navigation/ClusterNavigation'
 import LogoLine from 'theme/components/core/blocks/CategoryExtras/LogoLine'
 import PictureComponent from 'theme/components/core/blocks/Picture'
@@ -67,6 +71,7 @@ import PictureComponent from 'theme/components/core/blocks/Picture'
 export default {
   name: 'SubNavigation',
   components: {
+    NavigationItem,
     GenderNavigation,
     LogoLine,
     PictureComponent
@@ -85,8 +90,14 @@ export default {
     sub () {
       return this.getJsonBlockByIdentifier('navigation-main-sub-' + this.subNavigationKey)
     },
+    mainNavigation () {
+      return this.getJsonBlockByIdentifier('navigation-main')
+    },
     genderNavigationItems () {
-      return this.getJsonBlockByIdentifier('navigation-main').genderNavigation || false
+      return this.mainNavigation.genderNavigation || false
+    },
+    mainNavigationItems () {
+      return this.mainNavigation.mainNavigation.slice(0, 2) || false
     },
     navigation () {
       return this.sub.navigation || false
