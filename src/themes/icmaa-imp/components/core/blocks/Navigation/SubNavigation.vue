@@ -11,6 +11,7 @@
         :to="localizedRoute(item.route)"
         class="t-w-full t-py-3 t-px-4 t-border-base-lightest t-text-sm"
         :class="{ 't-border-b': i !== (navigation.length - 1), 't-font-bold': item.bold }"
+        @click.native="closeMenu"
         v-text="item.name"
       />
     </div>
@@ -27,6 +28,7 @@
           :to="t.route"
           v-text="t.name"
           class="t-absolute t-flex t-h-full t-items-center t-justify-center t-text-sm t-text-white t-w-full"
+          @click.native="closeMenu"
         />
         <picture-component
           :alt="t.name"
@@ -43,10 +45,10 @@
     <div
       v-if="logos"
       class="t-flex t-flex-wrap"
+      @click="closeMenu"
     >
       <logo-line
-        :parent-id="logos.parentId"
-        :limit="logos.limit || 6"
+        v-bind="logoLineProps"
         :placeholder="true"
         column-class="t-mb-8"
         class="t-justify-evenly t--mx-4 t--mb-4 t-py-8 t-pb-0 t-bg-base-lightest"
@@ -56,7 +58,6 @@
 </template>
 
 <script>
-import config from 'config'
 import { mapGetters } from 'vuex'
 
 import GenderNavigation from 'theme/components/core/blocks/Navigation/ClusterNavigation'
@@ -94,10 +95,10 @@ export default {
       if (!this.navigation) return []
 
       if (!this.currentGender) {
-        return this.navigation
+        return this.navigation.filter(n => !n.gender || n.gender === 'non-binary')
       }
 
-      return this.navigation.filter(n => !this.currentGender || !n.gender || n.gender === this.currentGender)
+      return this.navigation.filter(n => !n.gender || n.gender === this.currentGender)
     },
     teaser () {
       return this.sub.teaser || false
@@ -112,6 +113,24 @@ export default {
     },
     logos () {
       return this.sub.logos || false
+    },
+    logoLineProps () {
+      if (Array.isArray(this.logos)) {
+        return {
+          parentId: 0,
+          staticItems: this.logos || []
+        }
+      }
+
+      return {
+        parentId: this.logos.parentId,
+        limit: this.logos.limit || 6
+      }
+    }
+  },
+  methods: {
+    closeMenu () {
+      this.$store.dispatch('ui/closeAll')
     }
   },
   mounted () {
