@@ -140,8 +140,7 @@ export const icmaaGoogleTagManagerModule: Module<GoogleTagManagerState, any> = {
         customerEmail: rootGetters['user/getUserEmail'],
         storeCode: storeView.storeCode,
         urlPath: rootGetters['url/getCurrentRoute'].path || '',
-        documentTitle: rootGetters['icmaaMeta/getData'].title || '',
-        ecommerce: null
+        documentTitle: rootGetters['icmaaMeta/getData'].title || ''
       }
 
       return Object.assign(defaultDTO, DTO)
