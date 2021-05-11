@@ -12,7 +12,7 @@ on:
 jobs:
 
   build:
-    timeout-minutes: 10
+    timeout-minutes: 20
     runs-on: ubuntu-latest
 
     strategy:
@@ -29,10 +29,11 @@ jobs:
       - name: Install
         uses: bahmutov/npm-install@v1
 
-      - name: Get repository name, and branch name
+      - name: Get repository-name, branch-name and version-name
         run: |
           echo "APP=$(echo ${GITHUB_REPOSITORY##*/})" >> $GITHUB_ENV
           echo "BRANCH_NAME=$(echo ${GITHUB_REF#refs/heads/})" >> $GITHUB_ENV
+          echo "VERSION_NAME=$(echo $(echo ${GITHUB_REF#refs/heads/} | cut -c -52)-$(git rev-parse --short ${GITHUB_SHA}) | sed -e 's/[^a-zA-Z0-9]/-/g')" >> $GITHUB_ENV
 
       - name: Get environment by branch
         run: |
@@ -41,7 +42,7 @@ jobs:
       - name: Checkout "icmaa/shop-workspace" repo
         run: |
           rm -rf shop-workspace
-          export CONFIG_BRANCH=$(if [[ ! ${{ env.BRANCH_NAME }} =~ ^master ]]; then echo "-b develop"; fi)
+          export CONFIG_BRANCH=$(if [[ ${{ env.BRANCH_NAME }} =~ ^master ]]; then echo "-b master-gcp"; else echo "-b develop-gcp"; fi)
           git clone --no-tags --depth 1 https://${{ secrets.PAT }}@github.com/icmaa/shop-workspace $CONFIG_BRANCH
 
       - name: Sync config JSON files
@@ -53,18 +54,10 @@ jobs:
           NODE_CONFIG_ENV: ${{ env.ENV }}
           NODE_APP_INSTANCE: ${{ matrix.env.MANDANT }}
 
-      - name: Zip build
-        run: |
-          mkdir builds
-          zip -r builds/${{ env.APP }}-${{ matrix.env.MANDANT }}-${{ env.ENV }}-latest.zip $(cat .build-files) > /dev/null 2>&1
-          cp builds/${{ env.APP }}-${{ matrix.env.MANDANT }}-${{ env.ENV }}-latest.zip builds/${{ env.APP }}-${{ matrix.env.MANDANT }}-${{ env.ENV }}-$(date '+%Y%m%d-%H%M%S').zip
-          [[ "${{ env.BRANCH_NAME }}" =~ ^master && ! "${{ env.BRANCH_NAME }}" =~ ^master$ ]] && (echo "Remove latest build" && rm builds/${{ env.APP }}-${{ matrix.env.MANDANT }}-${{ env.ENV }}-latest.zip) || echo "Keep latest build"
-
-      - name: Upload binary to S3 bucket
-        uses: jakejarvis/s3-sync-action@master
-        env:
-          SOURCE_DIR: builds/
-          AWS_REGION: 'us-east-1'
-          AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      - id: deploy
+        uses: google-github-actions/deploy-appengine@main
+        with:
+          credentials: ${{ env.ENV == 'production' && secrets.GCP_VSF_SA_KEY_PROD || secrets.GCP_VSF_SA_KEY_TEST }}
+          deliverables: app-${{ matrix.env.MANDANT }}-${{ env.ENV == 'production' && 'prod' || 'test' }}.yaml
+          version: ${{ env.VERSION_NAME }}
+          promote: ${{ env.ENV == 'production' && 'false' || 'true' }}

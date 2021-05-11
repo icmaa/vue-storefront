@@ -39,6 +39,7 @@
   "exclude": [
     "node_modules",
     "**/*.spec.ts",
+    "src/themes/**/node_modules",
     "src/themes/**/test"
   ]
 }
