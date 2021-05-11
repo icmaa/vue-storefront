@@ -91,6 +91,7 @@ export const icmaaGoogleTagManagerModule: Module<GoogleTagManagerState, any> = {
           DTO = {
             event: 'icmaa-product-view',
             breadcrumb: breadcrumbs,
+            documentTitle: currentProduct.description,
             ecommerce: {
               currencyCode,
               detail: {
@@ -110,6 +111,7 @@ export const icmaaGoogleTagManagerModule: Module<GoogleTagManagerState, any> = {
           DTO = {
             event: 'icmaa-category-view',
             breadcrumb: breadcrumbs,
+            documentTitle: category.ceMetaTitle || category.ceTitle,
             ecommerce: {
               currencyCode,
               categoryId: category.id,
@@ -137,7 +139,8 @@ export const icmaaGoogleTagManagerModule: Module<GoogleTagManagerState, any> = {
         customerLoggedIn: rootGetters['user/isLoggedIn'],
         customerEmail: rootGetters['user/getUserEmail'],
         storeCode: storeView.storeCode,
-        urlPath: rootGetters['url/getCurrentRoute'].path || ''
+        urlPath: rootGetters['url/getCurrentRoute'].path || '',
+        documentTitle: rootGetters['icmaaMeta/getData'].title || ''
       }
 
       return Object.assign(defaultDTO, DTO)

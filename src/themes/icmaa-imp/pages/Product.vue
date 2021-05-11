@@ -203,18 +203,9 @@ export default {
       userHasSelectedVariant: false
     }
   },
-  created () {
-    this.getQuantity()
-
-    const selectVariantCallback = () => { this.userHasSelectedVariant = true }
-    this.$bus.$on('user-has-selected-product-variant', selectVariantCallback)
-    this.$once('hook:destroyed', () => {
-      this.$bus.$off('user-has-selected-product-variant', selectVariantCallback)
-    })
-  },
   watch: {
     product (nProduct, oProduct) {
-      if (nProduct.id !== oProduct.id) {
+      if (nProduct && nProduct.id && nProduct.id !== oProduct.id) {
         this.getQuantity()
         this.userHasSelectedVariant = false
       }
@@ -349,8 +340,16 @@ export default {
       await loadBreadcrumbsPromise
     }
   },
-  mounted () {
+  async mounted () {
+    await this.getQuantity()
     catalogHooksExecutors.productPageVisited(this.product)
+  },
+  created () {
+    const selectVariantCallback = () => { this.userHasSelectedVariant = true }
+    this.$bus.$on('user-has-selected-product-variant', selectVariantCallback)
+    this.$once('hook:destroyed', () => {
+      this.$bus.$off('user-has-selected-product-variant', selectVariantCallback)
+    })
   }
 }
 </script>

@@ -168,7 +168,7 @@ export default {
       filterCategories: 'category-next/getFilterCategories',
       isInTicketWhitelist: 'category-next/isCurrentCategoryInTicketWhitelist',
       contentHeader: 'icmaaCategoryExtras/getContentHeaderByCurrentCategory',
-      sidebarMenuGenderChange: 'ui/getSidebarMenuGenderChange'
+      sidebarNavigationGenderChange: 'ui/getSidebarNavigationGenderChange'
     }),
     isLazyHydrateEnabled () {
       return config.ssr.lazyHydrateFor.includes('category-next.products')
@@ -188,9 +188,9 @@ export default {
     }
   },
   watch: {
-    async sidebarMenuGenderChange (newValue) {
+    async sidebarNavigationGenderChange (newValue) {
       if (newValue === true) {
-        this.$store.dispatch('ui/setSidebarMenuGenderChange', false)
+        this.$store.dispatch('ui/setSidebarNavigationGenderChange', false)
 
         this.loading = true
         await composeInitialPageState(this.$store, this.$route, false, this.$route.params.pagesize || this.pageSize)

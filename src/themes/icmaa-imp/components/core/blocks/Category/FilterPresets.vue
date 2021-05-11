@@ -1,5 +1,5 @@
 <template>
-  <div class="presets">
+  <div class="presets" v-if="loaded">
     <button-component v-for="(p, i) in presets" :key="'filter-' + i" size="sm" :icon="p.active ? 'clear' : false" @click.native="changeFilter(p)" class="t-flex-shrink-0 t-mr-2 t-opacity-75 hover:t-opacity-100">
       {{ p.label }}
     </button-component>
@@ -14,16 +14,21 @@ import ButtonComponent from 'theme/components/core/blocks/Button'
 import mapValues from 'lodash-es/mapValues'
 import intersection from 'lodash-es/intersection'
 import pick from 'lodash-es/pick'
-import sampleSize from 'lodash-es/sampleSize'
 import orderBy from 'lodash-es/orderBy'
 
 export default {
   name: 'FilterPresets',
-  beforeCreate () {
+  data () {
+    return {
+      loaded: false
+    }
+  },
+  beforeMount () {
     registerGenericCmsStateModule('filter-presets', 'filter-preset')
   },
-  created () {
-    this.$store.dispatch('icmaaCmsFilterPresets/list')
+  async mounted () {
+    await this.$store.dispatch('icmaaCmsFilterPresets/list')
+    this.loaded = true
   },
   components: {
     ButtonComponent
@@ -32,9 +37,11 @@ export default {
     ...mapGetters({
       selectedFilters: 'category-next/getCurrentFilters',
       getAvailableFilters: 'category-next/getAvailableFilters',
-      cluster: 'user/getCluster',
-      rawPresets: 'icmaaCmsFilterPresets/getAll'
+      cluster: 'user/getCluster'
     }),
+    rawPresets () {
+      return this.$store.getters['icmaaCmsFilterPresets/getAll'] || []
+    },
     formatedPresets () {
       return this.rawPresets.map(p => {
         let preset = pick(p, ['label', 'enabled', 'filters', 'clusters'])

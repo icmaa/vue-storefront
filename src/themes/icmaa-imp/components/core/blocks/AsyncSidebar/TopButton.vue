@@ -9,7 +9,7 @@
 import MaterialIcon from 'theme/components/core/blocks/MaterialIcon'
 
 export default {
-  name: 'SidebarMenu',
+  name: 'TopButton',
   props: {
     icon: {
       type: String,

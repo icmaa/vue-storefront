@@ -17,11 +17,6 @@ export default {
 
     if (account) {
       await store.dispatch('category-next/loadCategoryWithExtras', { filters: { 'ceAccount': account } })
-
-      const category = store.getters['icmaaCategoryExtras/getCurrentProductDepartmentCategory']
-      if (category) {
-        await store.dispatch('icmaaSpotify/fetchRelatedArtists', category)
-      }
     }
   },
   mounted () {
@@ -29,6 +24,13 @@ export default {
       this.$store.dispatch('attribute/loadProductAttributes', { products: [ this.product ] })
     } else {
       this.$store.dispatch('product/loadProductAttributes', { product: this.product })
+    }
+
+    this.fetchSpotifyArtists()
+  },
+  watch: {
+    '$route' (to, from) {
+      this.fetchSpotifyArtists()
     }
   },
   computed: {
@@ -77,6 +79,14 @@ export default {
         'Checkout this out: {name} for {price}',
         { name: this.translatedProductName, price: this.formattedProductPrice }
       )
+    }
+  },
+  methods: {
+    fetchSpotifyArtists () {
+      const category = this.departmentCategory
+      if (category) {
+        this.$store.dispatch('icmaaSpotify/fetchRelatedArtists', category)
+      }
     }
   }
 }

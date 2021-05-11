@@ -76,7 +76,7 @@ export default {
         this.$store.dispatch('user/addSessionData', { key: this.attributeCode, value })
       }
 
-      this.$store.dispatch('ui/setSidebarMenuGenderChange', true)
+      this.$store.dispatch('ui/setSidebarNavigationGenderChange', true)
     }
   },
   mounted () {
