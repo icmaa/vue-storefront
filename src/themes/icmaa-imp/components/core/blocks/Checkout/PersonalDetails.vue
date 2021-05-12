@@ -165,7 +165,7 @@
               {{ $t('or') }}
               <span
                 class="link pointer"
-                @click.prevent="gotoAccount"
+                @click="gotoAccount"
               >
                 {{ $t('login to your account') }}
               </span>
