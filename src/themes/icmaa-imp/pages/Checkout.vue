@@ -1,7 +1,7 @@
 <template>
   <div id="checkout">
-    <div class="container">
-      <div class="row" v-show="!isThankYouPage">
+    <div class="container" v-if="!isThankYouPage">
+      <div class="row">
         <div class="col-sm-7 col-xs-12 pb70">
           <div class="checkout-title py5 px20">
             <h1>
@@ -23,32 +23,30 @@
         </div>
       </div>
     </div>
-    <thank-you-page v-show="isThankYouPage" />
   </div>
 </template>
 
 <script>
-import Checkout from '@vue-storefront/core/pages/Checkout'
+import Checkout from 'icmaa-checkout/pages/Checkout'
 
 import PersonalDetails from 'theme/components/core/blocks/Checkout/PersonalDetails'
 import Shipping from 'theme/components/core/blocks/Checkout/Shipping'
 import Payment from 'theme/components/core/blocks/Checkout/Payment'
 import OrderReview from 'theme/components/core/blocks/Checkout/OrderReview'
 import CartSummary from 'theme/components/core/blocks/Checkout/CartSummary'
-import ThankYouPage from 'theme/components/core/blocks/Checkout/ThankYouPage'
 import { registerModule } from '@vue-storefront/core/lib/modules'
 import { OrderModule } from '@vue-storefront/core/modules/order'
 
 export default {
+  name: 'Checkout',
   components: {
     PersonalDetails,
     Shipping,
     Payment,
     OrderReview,
-    CartSummary,
-    ThankYouPage
+    CartSummary
   },
-  mixins: [Checkout],
+  mixins: [ Checkout ],
   beforeCreate () {
     registerModule(OrderModule)
   },
