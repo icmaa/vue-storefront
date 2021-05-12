@@ -1,7 +1,7 @@
 <template>
   <div class="t-container" id="checkout" v-if="!isThankYouPage">
-    <div class="t-flex t-px-4 t-pt-8 t-pb-8">
-      <div class="t-w-full lg:t-w-2/3 t-p-8 t-bg-white">
+    <div class="t-flex t-p-4 lg:t-py-8">
+      <div class="t-w-full t-p-6 lg:t-w-2/3 lg:t-p-8 t-bg-white">
         <h1>
           {{ $t('Checkout') }}
         </h1>
@@ -33,6 +33,7 @@
           name="review"
           :title="$t('Review') "
           :index="4"
+          :last="true"
           :active="activeSection.orderReview"
         >
           <order-review :is-active="activeSection.orderReview" />
