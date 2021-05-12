@@ -2,7 +2,10 @@
   <div class="t-container" id="checkout" v-if="!isThankYouPage">
     <div class="t-flex t-p-4 lg:t-py-8">
       <div class="t-w-full t-p-6 lg:t-w-2/3 lg:t-p-8 t-bg-white">
-        <h1>
+        <h1 class="t-flex t-items-center t-mb-6 lg:t-mb-8 t-text-1xl t-font-bold">
+          <span class="t-flex t-items-center t-justify-center t-w-8 t-mr-4">
+            <material-icon icon="credit_card" size="lg" />
+          </span>
           {{ $t('Checkout') }}
         </h1>
         <step
@@ -12,6 +15,7 @@
           :index="index + 1"
           :title="$t(step.title)"
           :active="activeSection[step.name]"
+          :last="(index + 1) === steps.length"
         >
           <component :is="step.component" :is-active="activeSection[step.name]" />
         </step>
@@ -31,6 +35,7 @@ import { OrderModule } from '@vue-storefront/core/modules/order'
 import Checkout from 'icmaa-checkout/pages/Checkout'
 import Step from 'theme/components/core/blocks/Checkout/Step'
 import CartSummary from 'theme/components/core/blocks/Checkout/CartSummary'
+import MaterialIcon from 'theme/components/core/blocks/MaterialIcon'
 
 const PersonalDetails = () => import(/* webpackChunkName: "vsf-checkout-personal-details" */ 'theme/components/core/blocks/Checkout/PersonalDetails')
 const Shipping = () => import(/* webpackChunkName: "vsf-checkout-shipping" */ 'theme/components/core/blocks/Checkout/Shipping')
@@ -41,7 +46,8 @@ export default {
   name: 'Checkout',
   components: {
     Step,
-    CartSummary
+    CartSummary,
+    MaterialIcon
   },
   mixins: [ Checkout ],
   beforeCreate () {
