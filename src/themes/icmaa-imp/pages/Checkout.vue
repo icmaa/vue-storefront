@@ -20,13 +20,20 @@
           :index="index + 1"
           :title="$t(step.title)"
           :active="activeSection[step.name]"
+          :done="doneSection[step.name]"
           :last="(index + 1) === steps.length"
+          @edit-section="activateSection"
         >
-          <component :is="step.component" :is-active="activeSection[step.name]" />
+          <component
+            :is="step.component"
+            :is-active="activeSection[step.name]"
+            v-model="doneSection[step.name]"
+          />
         </step>
       </div>
       <div class="t-hidden lg:t-block lg:t-w-3/5 t-pl-8">
         <div class="t-min-h-full t-bg-base-lightest t-p-8">
+          {{ doneSection }}<br>
           Cart summary comes here …
           <!-- <cart-summary /> -->
         </div>

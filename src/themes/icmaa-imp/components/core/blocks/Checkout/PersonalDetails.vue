@@ -1,23 +1,6 @@
 <template>
   <div class="personal-details">
-    <div class="row pl20">
-      <div class="col-xs-11 col-sm-9 col-md-11">
-        <div class="row mb15">
-          <div class="col-xs-12 col-md-5 pr30">
-            <div class="lh30 flex end-lg" v-if="isFilled && !isActive">
-              <a href="#" class="cl-tertiary flex" @click.prevent="edit">
-                <span class="pr5">
-                  {{ $t('Edit personal details') }}
-                </span>
-                <i class="material-icons cl-tertiary">edit</i>
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
     <div class="row pl20" v-if="isActive">
-      <div class="hidden-xs col-sm-2 col-md-1" />
       <div class="col-xs-11 col-sm-9 col-md-10">
         <div class="row">
           <base-input
@@ -151,7 +134,7 @@
           <div class="col-xs-12 col-md-7 px20 button-container">
             <button-component
               data-test-id="personalDetailsSubmit"
-              @click="sendDataToCheckout"
+              @click.native.stop="sendDataToCheckout"
               :disabled="createAccount ? $v.$invalid : $v.personalDetails.$invalid"
             >
               {{ $t((isVirtualCart ? 'Continue to payment' : 'Continue to shipping')) }}
@@ -209,8 +192,8 @@
 
 <script>
 import { required, minLength, email, sameAs } from 'vuelidate/lib/validators'
-import { PersonalDetails } from '@vue-storefront/core/modules/checkout/components/PersonalDetails'
 
+import PersonalDetails from 'icmaa-checkout/components/PersonalDetails'
 import BaseCheckbox from 'theme/components/core/blocks/Form/BaseCheckbox'
 import BaseInput from 'theme/components/core/blocks/Form/BaseInput'
 import ButtonComponent from 'theme/components/core/blocks/Button'

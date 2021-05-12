@@ -21,6 +21,12 @@ export default {
         payment: false,
         review: false
       },
+      doneSection: {
+        personal: false,
+        shipping: false,
+        payment: false,
+        review: false
+      },
       order: {},
       personalDetails: {},
       shipping: {},
@@ -244,9 +250,9 @@ export default {
     activateSection (sectionToActivate) {
       for (let section in this.activeSection) {
         this.activeSection[section] = false
+        this.doneSection[section] = false
       }
       this.activeSection[sectionToActivate] = true
-      if (!isServer) window.location.href = window.location.origin + window.location.pathname + '#' + sectionToActivate
     },
     // This method checks if there exists a mapping of chosen payment method to one of Magento's payment methods.
     getPaymentMethod () {
