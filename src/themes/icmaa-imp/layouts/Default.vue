@@ -2,7 +2,7 @@
   <div class="default-layout">
     <overlay v-if="overlayActive" />
     <loader />
-    <div id="viewport" class="w-100 relative">
+    <div id="viewport">
       <main-header />
       <no-ssr>
         <advice />

@@ -115,8 +115,6 @@ import ButtonComponent from 'theme/components/core/blocks/Button'
 import CartSummary from 'theme/components/core/blocks/Checkout/CartSummary'
 import Modal from 'theme/components/core/Modal'
 import { OrderReview } from '@vue-storefront/core/modules/checkout/components/OrderReview'
-import { OrderModule } from '@vue-storefront/core/modules/order'
-import { registerModule } from '@vue-storefront/core/lib/modules'
 
 export default {
   components: {
@@ -132,9 +130,6 @@ export default {
         required
       }
     }
-  },
-  beforeCreate () {
-    registerModule(OrderModule)
   },
   methods: {
     onSuccess () {

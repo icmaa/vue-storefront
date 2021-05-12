@@ -1,13 +1,18 @@
 <template>
   <div class="t-container" id="checkout" v-if="!isThankYouPage">
-    <div class="t-flex t-p-4 lg:t-py-8">
+    <div class="t-flex lg:t-py-8">
       <div class="t-w-full t-p-6 lg:t-w-2/3 lg:t-p-8 t-bg-white">
-        <h1 class="t-flex t-items-center t-mb-6 lg:t-mb-8 t-text-1xl t-font-bold">
-          <span class="t-flex t-items-center t-justify-center t-w-8 t-mr-4">
-            <material-icon icon="credit_card" size="lg" />
-          </span>
-          {{ $t('Checkout') }}
-        </h1>
+        <div class="t-flex t-items-center t-justify-between t-mb-6 lg:t-mb-8">
+          <h1 class="t-flex t-items-center t-text-1xl t-font-bold">
+            <span class="t-flex t-items-center t-justify-center t-w-8 t-mr-4">
+              <material-icon icon="credit_card" size="lg" />
+            </span>
+            <span class="title">
+              {{ $t('Checkout') }}
+            </span>
+          </h1>
+          <logo width="174" height="43" class="logo t-flex-fix t--mr-6 lg:t-mr-0" />
+        </div>
         <step
           v-for="(step, index) in steps"
           :key="`${step.name}-${index}`"
@@ -33,6 +38,7 @@ import { registerModule } from '@vue-storefront/core/lib/modules'
 import { OrderModule } from '@vue-storefront/core/modules/order'
 
 import Checkout from 'icmaa-checkout/pages/Checkout'
+import Logo from 'theme/components/core/blocks/Header/Logo'
 import Step from 'theme/components/core/blocks/Checkout/Step'
 import CartSummary from 'theme/components/core/blocks/Checkout/CartSummary'
 import MaterialIcon from 'theme/components/core/blocks/MaterialIcon'
@@ -45,6 +51,7 @@ const Review = () => import(/* webpackChunkName: "vsf-checkout-review" */ 'theme
 export default {
   name: 'Checkout',
   components: {
+    Logo,
     Step,
     CartSummary,
     MaterialIcon
@@ -118,3 +125,13 @@ export default {
   }
 }
 </script>
+
+<style lang="scss">
+
+@media (max-width: 400px) {
+  h1 > .title {
+    @apply t-hidden;
+  }
+}
+
+</style>
