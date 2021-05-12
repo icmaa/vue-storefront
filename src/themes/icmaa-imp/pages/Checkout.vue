@@ -6,37 +6,14 @@
           {{ $t('Checkout') }}
         </h1>
         <step
-          name="personal-details"
-          :index="1"
-          :title="$t('Personal Details')"
-          :active="activeSection.personalDetails"
+          v-for="(step, index) in steps"
+          :key="`${step.name}-${index}`"
+          :name="step.name"
+          :index="index + 1"
+          :title="$t(step.title)"
+          :active="activeSection[step.name]"
         >
-          <personal-details :is-active="activeSection.personalDetails" />
-        </step>
-        <step
-          name="shipping"
-          :index="2"
-          :title="$t('Shipping')"
-          :active="activeSection.shipping"
-        >
-          <shipping :is-active="activeSection.shipping" v-if="!isVirtualCart" />
-        </step>
-        <step
-          name="payment"
-          :index="3"
-          :title="$t('Payment')"
-          :active="activeSection.payment"
-        >
-          <payment :is-active="activeSection.payment" />
-        </step>
-        <step
-          name="review"
-          :title="$t('Review') "
-          :index="4"
-          :last="true"
-          :active="activeSection.orderReview"
-        >
-          <order-review :is-active="activeSection.orderReview" />
+          <component :is="step.component" :is-active="activeSection[step.name]" />
         </step>
       </div>
       <div class="t-hidden lg:t-block lg:t-w-1/3 t-pl-8">
@@ -53,25 +30,48 @@ import { OrderModule } from '@vue-storefront/core/modules/order'
 
 import Checkout from 'icmaa-checkout/pages/Checkout'
 import Step from 'theme/components/core/blocks/Checkout/Step'
-import PersonalDetails from 'theme/components/core/blocks/Checkout/PersonalDetails'
-import Shipping from 'theme/components/core/blocks/Checkout/Shipping'
-import Payment from 'theme/components/core/blocks/Checkout/Payment'
-import OrderReview from 'theme/components/core/blocks/Checkout/OrderReview'
 import CartSummary from 'theme/components/core/blocks/Checkout/CartSummary'
+
+const PersonalDetails = () => import(/* webpackChunkName: "vsf-checkout-personal-details" */ 'theme/components/core/blocks/Checkout/PersonalDetails')
+const Shipping = () => import(/* webpackChunkName: "vsf-checkout-shipping" */ 'theme/components/core/blocks/Checkout/Shipping')
+const Payment = () => import(/* webpackChunkName: "vsf-checkout-payment" */ 'theme/components/core/blocks/Checkout/Payment')
+const Review = () => import(/* webpackChunkName: "vsf-checkout-review" */ 'theme/components/core/blocks/Checkout/OrderReview')
 
 export default {
   name: 'Checkout',
   components: {
     Step,
-    PersonalDetails,
-    Shipping,
-    Payment,
-    OrderReview,
     CartSummary
   },
   mixins: [ Checkout ],
   beforeCreate () {
     registerModule(OrderModule)
+  },
+  computed: {
+    steps () {
+      return [
+        {
+          name: 'personal',
+          component: PersonalDetails,
+          title: 'Personal Details'
+        },
+        {
+          name: 'shipping',
+          component: Shipping,
+          title: 'Shipping'
+        },
+        {
+          name: 'payment',
+          component: Payment,
+          title: 'Payment'
+        },
+        {
+          name: 'review',
+          component: Review,
+          title: 'Review'
+        }
+      ]
+    }
   },
   methods: {
     notifyEmptyCart () {

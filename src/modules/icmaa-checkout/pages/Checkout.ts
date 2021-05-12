@@ -4,7 +4,7 @@ import VueOfflineMixin from 'vue-offline/mixin'
 import { mapGetters } from 'vuex'
 import { StorageManager } from '@vue-storefront/core/lib/storage-manager'
 import Composite from '@vue-storefront/core/mixins/composite'
-import { currentStoreView, localizedRoute } from '@vue-storefront/core/lib/multistore'
+import { currentStoreView } from '@vue-storefront/core/lib/multistore'
 import { isServer } from '@vue-storefront/core/helpers'
 import { Logger } from '@vue-storefront/core/lib/logger'
 
@@ -14,12 +14,12 @@ export default {
     return {
       stockCheckCompleted: false,
       stockCheckOK: false,
-      confirmation: null, // order confirmation from server
+      confirmation: null,
       activeSection: {
-        personalDetails: true,
+        personal: true,
         shipping: false,
         payment: false,
-        orderReview: false
+        review: false
       },
       order: {},
       personalDetails: {},
@@ -166,7 +166,7 @@ export default {
     onAfterPaymentDetails (receivedData, validationResult) {
       this.payment = receivedData
       this.validationResults.payment = validationResult
-      this.activateSection('orderReview')
+      this.activateSection('review')
       this.savePaymentDetails()
     },
     onAfterShippingDetails (receivedData, validationResult) {
@@ -232,7 +232,7 @@ export default {
         if (this.activeSection.hasOwnProperty(urlStep) && this.activeSection[urlStep] === false) {
           this.activateSection(urlStep)
         } else if (urlStep === '') {
-          this.activateSection('personalDetails')
+          this.activateSection('personal')
         }
       }
     },
