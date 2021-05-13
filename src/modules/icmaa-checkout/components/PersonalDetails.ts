@@ -35,9 +35,6 @@ export default {
     submit () {
       this.$v.personalDetails.$touch()
       if (!this.$v.personalDetails.$invalid) {
-        console.error(this.$v)
-
-        this.submit()
         this.isFilled = true
         this.$emit('input', true)
       }
