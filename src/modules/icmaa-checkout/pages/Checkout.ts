@@ -248,10 +248,13 @@ export default {
       }
     },
     activateSection (sectionToActivate) {
+      let currentIndex = false
       for (let section in this.activeSection) {
         this.activeSection[section] = false
-        this.doneSection[section] = false
+        if (section === sectionToActivate) currentIndex = true
+        if (currentIndex) this.doneSection[section] = false
       }
+
       this.activeSection[sectionToActivate] = true
     },
     // This method checks if there exists a mapping of chosen payment method to one of Magento's payment methods.

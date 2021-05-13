@@ -1,6 +1,6 @@
 <template>
   <div :class="{ 't-relative': validationsAsTooltip }">
-    <base-label v-if="hasLabel && !isFloating" :id="id || name">
+    <base-label v-if="hasLabel && !isFloating" :class="{ 't-sr-only': hideLabel }" :id="id || name">
       <slot>
         {{ label || placeholder }}
       </slot>
@@ -78,25 +78,6 @@ export default {
     type: {
       type: String,
       default: 'text'
-    },
-    value: {
-      type: [String, Number],
-      default: ''
-    },
-    id: {
-      type: String,
-      required: false,
-      default: ''
-    },
-    name: {
-      type: String,
-      required: false,
-      default: ''
-    },
-    placeholder: {
-      type: String,
-      required: false,
-      default: ''
     },
     autocomplete: {
       type: String,

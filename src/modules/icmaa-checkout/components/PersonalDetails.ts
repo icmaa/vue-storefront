@@ -33,10 +33,12 @@ export default {
       }
     },
     submit () {
-      this.$v.personalDetails.$touch()
-      if (!this.$v.personalDetails.$invalid) {
+      this.$v.$touch()
+      if (!this.$v.$invalid) {
         this.isFilled = true
         this.$emit('input', true)
+
+        this.$bus.$emit('checkout-after-personalDetails', this.personalDetails, this.$v)
       }
     },
     openLoginModal () {

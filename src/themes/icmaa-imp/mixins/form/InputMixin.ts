@@ -19,6 +19,29 @@ export default {
     floatingLabel: {
       type: Boolean,
       default: false
+    },
+    hideLabel: {
+      type: Boolean,
+      default: false
+    },
+    value: {
+      type: [String, Number],
+      default: ''
+    },
+    id: {
+      type: String,
+      required: false,
+      default: ''
+    },
+    name: {
+      type: String,
+      required: false,
+      default: ''
+    },
+    placeholder: {
+      type: String,
+      required: false,
+      default: ''
     }
   },
   computed: {
@@ -26,7 +49,7 @@ export default {
       return this.$slots.default || this.label || this.placeholder
     },
     isFloating () {
-      return this.floatingLabel || !(this.$slots.default || this.label)
+      return !this.hideLabel && (this.floatingLabel || !(this.$slots.default || this.label))
     }
   },
   methods: {

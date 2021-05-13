@@ -69,8 +69,11 @@
             :placeholder="$t('Password')"
             v-model="personalDetails.password"
             :validations="[{
-              condition: $v.password.$error && !$v.password.required,
+              condition: $v.personalDetails.password.$error && !$v.personalDetails.password.required,
               text: $t('Field is required.')
+            },{
+              condition: $v.personalDetails.password.$error && !$v.personalDetails.password.minLength,
+              text: $t('Password must have at least 8 letters.')
             }]"
           />
           <base-input
@@ -87,7 +90,7 @@
                 text: $t('Field is required.')
               },
               {
-                condition:!$v.rPassword.sameAsPassword,
+                condition: $v.rPassword.$error && !$v.rPassword.sameAsPassword,
                 text: $t('Passwords must be identical.')
               }
             ]"
@@ -159,11 +162,11 @@ export default {
       },
       lastName: {
         required
+      },
+      password: {
+        minLength: minLength(8),
+        required
       }
-    },
-    password: {
-      minLength: minLength(8),
-      required
     },
     rPassword: {
       sameAsPassword: sameAs(function () { return this.personalDetails.password }),

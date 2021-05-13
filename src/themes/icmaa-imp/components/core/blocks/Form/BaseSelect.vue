@@ -1,6 +1,6 @@
 <template>
   <div class="base-select">
-    <base-label v-if="hasLabel && !isFloating" :id="id">
+    <base-label v-if="hasLabel && !isFloating" :class="{ 't-sr-only': hideLabel }" :id="id">
       <slot>
         {{ label }}
       </slot>
@@ -25,7 +25,7 @@
         @change="$emit('change', $event.target.value)"
         @input="$emit('input', $event.target.value)"
       >
-        <option disabled :selected="!value" v-if="selected === ''" value="" v-html="initialOptionText" />
+        <option disabled :selected="!value" v-if="selected === ''" value="" v-html="isFloating ? '' : initialOptionText" />
         <option
           v-for="(option, key) in options"
           :key="key"
@@ -53,28 +53,16 @@
 import i18n from '@vue-storefront/i18n'
 import InputMixin from 'theme/mixins/form/InputMixin'
 import MaterialIcon from 'theme/components/core/blocks/MaterialIcon'
+import LoaderBackground from 'theme/components/core/LoaderBackground'
 
 export default {
   name: 'BaseSelect',
   mixins: [ InputMixin ],
   components: {
-    MaterialIcon
+    MaterialIcon,
+    LoaderBackground
   },
   props: {
-    value: {
-      type: [String, Number],
-      default: ''
-    },
-    id: {
-      type: String,
-      required: false,
-      default: ''
-    },
-    name: {
-      type: String,
-      required: false,
-      default: ''
-    },
     options: {
       type: Array,
       required: true,
@@ -122,9 +110,6 @@ export default {
     },
     hasLabel () {
       return this.$slots.default || this.label || this.initialOptionText
-    },
-    isFloating () {
-      return this.floatingLabel || !(this.$slots.default || this.label)
     },
     sizeClasses () {
       let classes = ''

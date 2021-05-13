@@ -1,6 +1,6 @@
 <template>
   <div class="base-textarea">
-    <base-label v-if="hasLabel && !isFloating" :id="id">
+    <base-label v-if="hasLabel && !isFloating" :class="{ 't-sr-only': hideLabel }" :id="id">
       <slot>
         {{ label || placeholder }}
       </slot>
@@ -44,25 +44,6 @@ export default {
     }
   },
   props: {
-    value: {
-      type: [String, Number],
-      default: ''
-    },
-    id: {
-      type: String,
-      required: false,
-      default: ''
-    },
-    name: {
-      type: String,
-      required: false,
-      default: ''
-    },
-    placeholder: {
-      type: String,
-      required: false,
-      default: ''
-    },
     autocomplete: {
       type: String,
       required: false,

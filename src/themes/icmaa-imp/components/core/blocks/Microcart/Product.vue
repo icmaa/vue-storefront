@@ -61,6 +61,7 @@
             :value="productQty"
             :disabled="loading || isAddingToCart"
             :loading="loading || isAddingToCart"
+            :hide-label="true"
             @change="updateQty"
             v-if="!isFree"
           />
@@ -75,8 +76,6 @@
 </template>
 
 <script>
-import config from 'config'
-import i18n from '@vue-storefront/i18n'
 import { mapGetters } from 'vuex'
 import { currentStoreView } from '@vue-storefront/core/lib/multistore'
 import { productThumbnailPath } from '@vue-storefront/core/helpers'
