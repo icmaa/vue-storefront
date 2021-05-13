@@ -1,5 +1,4 @@
-import { mapState, mapGetters } from 'vuex'
-import RootState from '@vue-storefront/core/types/RootState'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'PersonalDetails',
@@ -7,32 +6,25 @@ export default {
     isActive: {
       type: Boolean,
       required: true
-    },
-    focusedField: {
-      type: String,
-      required: false
     }
   },
   data () {
     return {
       isFilled: false,
-      personalDetails: this.$store.state.checkout.personalDetails,
-      createAccount: false,
-      acceptConditions: false,
-      password: '',
-      rPassword: '',
-      isValidationError: false
+      personalDetails: {},
+      rPassword: ''
     }
   },
   computed: {
-    ...mapState({
-      currentUser: (state: RootState) => state.user.current
-    }),
     ...mapGetters({
+      currentUser: 'user/getCustomer',
       isVirtualCart: 'cart/isVirtualCart'
     })
   },
   methods: {
+    onCheckoutLoad () {
+      this.personalDetails = this.$store.state.checkout.personalDetails
+    },
     onLoggedIn (receivedData) {
       this.personalDetails = {
         firstName: receivedData.firstname,
@@ -40,40 +32,18 @@ export default {
         emailAddress: receivedData.email
       }
     },
-    sendDataToCheckout () {
-      if (this.createAccount) {
-        this.personalDetails.password = this.password
-        this.personalDetails.createAccount = true
-      } else {
-        this.personalDetails.createAccount = false
-      }
-      this.$bus.$emit('checkout-after-personalDetails', this.personalDetails, this.$v)
-      this.isFilled = true
-      this.isValidationError = false
+    submit () {
+      this.$v.personalDetails.$touch()
+      if (!this.$v.personalDetails.$invalid) {
+        console.error(this.$v)
 
-      this.$emit('input', true)
-    },
-    edit () {
-      if (this.isFilled) {
-        this.$bus.$emit('checkout-before-edit', 'personalDetails')
+        this.submit()
+        this.isFilled = true
+        this.$emit('input', true)
       }
     },
-    gotoAccount () {
+    openLoginModal () {
       this.$store.dispatch('ui/showModal', 'modal-signup')
-    },
-    onCheckoutLoad () {
-      this.personalDetails = this.$store.state.checkout.personalDetails
-    }
-  },
-  updated () {
-    // Perform focusing on a field, name of which is passed through 'focusedField' prop
-    if (this.focusedField && !this.isValidationError) {
-      if (this.focusedField === 'password') {
-        this.isValidationError = true
-        this.password = ''
-        this.rPassword = ''
-        this.$refs['password'].setFocus('password')
-      }
     }
   },
   beforeMount () {

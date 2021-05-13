@@ -53,13 +53,13 @@
           <base-checkbox
             v-if="!currentUser"
             class="t-w-full t-px-2 t-mb-4"
-            id="createAccountCheckbox"
-            name="createAccountCheckbox"
-            v-model="createAccount"
+            id="create-account"
+            name="create-account"
+            v-model="personalDetails.createAccount"
           >
             {{ $t('I want to create an account') }}
           </base-checkbox>
-          <template v-if="createAccount && !currentUser">
+          <template v-if="personalDetails.createAccount && !currentUser">
             <base-input
               class="t-w-full lg:t-w-1/2 t-px-2 t-mb-4"
               type="password"
@@ -68,7 +68,7 @@
               id="password"
               name="password"
               :placeholder="$t('Password')"
-              v-model="password"
+              v-model="personalDetails.password"
               :validations="[{
                 condition: $v.password.$error && !$v.password.required,
                 text: $t('Field is required.')
@@ -80,7 +80,6 @@
               autocomplete="new-password"
               id="password-confirm"
               name="password-confirm"
-              :label="$t('Repeat password')"
               :placeholder="$t('Repeat password')"
               v-model="rPassword"
               :validations="[
@@ -95,32 +94,22 @@
               ]"
             />
           </template>
-        </div>
-      </div>
-      <div class="col-xs-11 col-sm-9 col-md-10">
-        <div class="row my30">
-          <div class="col-xs-12 col-md-7 px20 button-container">
+          <div class="t-flex t-flex-wrap">
             <button-component
               data-test-id="personalDetailsSubmit"
-              @click.native.stop="sendDataToCheckout"
-              :disabled="createAccount ? $v.$invalid : $v.personalDetails.$invalid"
+              class="t-w-full lg:t-w-auto"
+              @click.native.stop="submit"
             >
               {{ $t((isVirtualCart ? 'Continue to payment' : 'Continue to shipping')) }}
             </button-component>
-          </div>
-          <div
-            class="col-xs-12 col-md-5 center-xs end-md"
-            v-if="!currentUser"
-          >
-            <p class="h4 cl-accent">
-              {{ $t('or') }}
-              <span
-                class="link pointer"
-                @click="gotoAccount"
-              >
-                {{ $t('login to your account') }}
-              </span>
-            </p>
+            <button-component
+              v-if="!currentUser"
+              data-test-id="loginToYourAccount"
+              @click="openLoginModal"
+              class="t-w-full lg:t-w-auto"
+            >
+              {{ $t('Login to your account') }}
+            </button-component>
           </div>
         </div>
       </div>
@@ -130,19 +119,16 @@
         {{ personalDetails.firstName }} {{ personalDetails.lastName }}<br>
         {{ personalDetails.emailAddress }}
       </div>
-      <div v-if="createAccount && !currentUser">
+      <div v-if="personalDetails.createAccount && !currentUser">
         <base-checkbox
           class="mt25"
           id="createAccountCheckboxInfo"
           name="createAccountCheckboxInfo"
-          v-model="createAccount"
+          v-model="personalDetails.createAccount"
           disabled
         >
           {{ $t('Create a new account') }}
         </base-checkbox>
-        <p class="h5 cl-tertiary">
-          {{ $t('The new account will be created with the purchase. You will receive details on e-mail.') }}
-        </p>
       </div>
     </div>
   </div>
@@ -181,8 +167,8 @@ export default {
       required
     },
     rPassword: {
-      required,
-      sameAsPassword: sameAs('password')
+      sameAsPassword: sameAs(function () { return this.personalDetails.password }),
+      required
     }
   }
 }
