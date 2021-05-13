@@ -1,56 +1,100 @@
 <template>
-  <div id="checkout">
-    <div class="container">
-      <div class="row" v-show="!isThankYouPage">
-        <div class="col-sm-7 col-xs-12 pb70">
-          <div class="checkout-title py5 px20">
-            <h1>
+  <div class="t-container" id="checkout" v-if="!isThankYouPage">
+    <div class="t-flex lg:t-px-4 lg:t-py-8">
+      <div class="t-w-full t-p-6 t-pt-4 lg:t-w-2/5 lg:t-p-0 lg:t-py-8">
+        <div class="t-flex t-items-center t-justify-between t-mb-6 lg:t-mb-8">
+          <h1 class="t-flex t-items-center t-text-1xl t-font-bold">
+            <span class="t-flex t-items-center t-justify-center t-w-8 t-mr-4">
+              <material-icon icon="credit_card" size="lg" />
+            </span>
+            <span class="title">
               {{ $t('Checkout') }}
-            </h1>
-          </div>
-          <personal-details
-            class="line relative"
-            :is-active="activeSection.personalDetails"
-            :focused-field="focusedField"
-          />
-          <shipping class="line relative" :is-active="activeSection.shipping" v-if="!isVirtualCart" />
-          <payment class="line relative" :is-active="activeSection.payment" />
-          <order-review class="line relative" :is-active="activeSection.orderReview" />
-          <div id="custom-steps" />
+            </span>
+          </h1>
+          <logo width="174" height="43" class="logo t-flex-fix t--mr-6 lg:t-mr-0" />
         </div>
-        <div class="hidden-xs col-sm-5 bg-cl-secondary">
-          <cart-summary />
+        <step
+          v-for="(step, index) in steps"
+          :key="`${step.name}-${index}`"
+          :name="step.name"
+          :index="index + 1"
+          :title="$t(step.title)"
+          :active="activeSection[step.name]"
+          :done="doneSection[step.name]"
+          :last="(index + 1) === steps.length"
+          @edit-section="activateSection"
+        >
+          <component
+            :is="step.component"
+            :is-active="activeSection[step.name]"
+            v-model="doneSection[step.name]"
+          />
+        </step>
+      </div>
+      <div class="t-hidden lg:t-block lg:t-w-3/5 t-pl-8">
+        <div class="t-min-h-full t-bg-base-lightest t-p-8">
+          <div>
+            Cart summary comes here …
+            <!-- <cart-summary /> -->
+          </div>
         </div>
       </div>
     </div>
-    <thank-you-page v-show="isThankYouPage" />
   </div>
 </template>
 
 <script>
-import Checkout from '@vue-storefront/core/pages/Checkout'
-
-import PersonalDetails from 'theme/components/core/blocks/Checkout/PersonalDetails'
-import Shipping from 'theme/components/core/blocks/Checkout/Shipping'
-import Payment from 'theme/components/core/blocks/Checkout/Payment'
-import OrderReview from 'theme/components/core/blocks/Checkout/OrderReview'
-import CartSummary from 'theme/components/core/blocks/Checkout/CartSummary'
-import ThankYouPage from 'theme/components/core/blocks/Checkout/ThankYouPage'
 import { registerModule } from '@vue-storefront/core/lib/modules'
 import { OrderModule } from '@vue-storefront/core/modules/order'
 
+import Checkout from 'icmaa-checkout/pages/Checkout'
+import Logo from 'theme/components/core/blocks/Header/Logo'
+import Step from 'theme/components/core/blocks/Checkout/Step'
+import CartSummary from 'theme/components/core/blocks/Checkout/CartSummary'
+import MaterialIcon from 'theme/components/core/blocks/MaterialIcon'
+
+const PersonalDetails = () => import(/* webpackChunkName: "vsf-checkout-personal-details" */ 'theme/components/core/blocks/Checkout/PersonalDetails')
+const Shipping = () => import(/* webpackChunkName: "vsf-checkout-shipping" */ 'theme/components/core/blocks/Checkout/Shipping')
+const Payment = () => import(/* webpackChunkName: "vsf-checkout-payment" */ 'theme/components/core/blocks/Checkout/Payment')
+const Review = () => import(/* webpackChunkName: "vsf-checkout-review" */ 'theme/components/core/blocks/Checkout/OrderReview')
+
 export default {
+  name: 'Checkout',
   components: {
-    PersonalDetails,
-    Shipping,
-    Payment,
-    OrderReview,
+    Logo,
+    Step,
     CartSummary,
-    ThankYouPage
+    MaterialIcon
   },
-  mixins: [Checkout],
+  mixins: [ Checkout ],
   beforeCreate () {
     registerModule(OrderModule)
+  },
+  computed: {
+    steps () {
+      return [
+        {
+          name: 'personal',
+          component: PersonalDetails,
+          title: 'Personal Details'
+        },
+        {
+          name: 'shipping',
+          component: Shipping,
+          title: 'Shipping'
+        },
+        {
+          name: 'payment',
+          component: Payment,
+          title: 'Payment'
+        },
+        {
+          name: 'review',
+          component: Review,
+          title: 'Review'
+        }
+      ]
+    }
   },
   methods: {
     notifyEmptyCart () {
@@ -93,91 +137,11 @@ export default {
 </script>
 
 <style lang="scss">
-  @import '~theme/css/base/global_vars';
 
-  #checkout {
-    .number-circle {
-      width: 35px;
-      height: 35px;
-
-      @media (max-width: 768px) {
-        width: 25px;
-        height: 25px;
-        line-height: 25px;
-      }
-    }
-    .radioStyled {
-      display: block;
-      position: relative;
-      padding-left: 35px;
-      margin-bottom: 12px;
-      cursor: pointer;
-      font-size: 16px;
-      line-height: 30px;
-      -webkit-user-select: none;
-      -moz-user-select: none;
-      -ms-user-select: none;
-      user-select: none;
-
-      input {
-        position: absolute;
-        opacity: 0;
-        cursor: pointer;
-      }
-
-      .checkmark {
-        position: absolute;
-        top: 0;
-        left: 0;
-        height: 25px;
-        width: 25px;
-        border-radius: 50%;
-        border: 1px solid $color-basetone;
-
-        &:after {
-          content: "";
-          position: absolute;
-          display: none;
-          top: 3px;
-          left: 3px;
-          width: 19px;
-          height: 19px;
-          border-radius: 50%;
-          background: $color-basetone;
-        }
-      }
-
-      input:checked ~ .checkmark:after {
-        display: block;
-      }
-    }
+@media (max-width: 400px) {
+  h1 > .title {
+    @apply t-hidden;
   }
+}
 
-  .line {
-    &:after {
-      content: '';
-      display: block;
-      position: absolute;
-      top: 0;
-      left: 37px;
-      z-index: -1;
-      width: 1px;
-      height: 100%;
-      background-color: $color-basetone;
-
-      @media (max-width: 768px) {
-        display: none;
-      }
-    }
-  }
-
-  .checkout-title {
-    @media (max-width: 767px) {
-      margin-bottom: 25px;
-
-      h1 {
-        font-size: 36px;
-      }
-    }
-  }
 </style>

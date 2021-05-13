@@ -2,10 +2,10 @@
   <div class="reviews-form" id="reviews-form">
     <form name="review" action="#" @submit.prevent="outOfScope()">
       <div class="t-mb-4">
-        <base-label form-id="name" :label-text="$t('First name')" />
         <base-input
           id="name"
           name="name"
+          :label="$t('First name')"
           :placeholder="sampleName"
           v-model="reviewForm.name"
           :validations="[
@@ -21,11 +21,11 @@
         />
       </div>
       <div class="t-mb-4">
-        <base-label form-id="email" :label-text="$t('Email address')" />
         <base-input
           id="email"
           name="email"
           type="email"
+          :label="$t('Email address')"
           :placeholder="sampleEmail"
           v-model="reviewForm.email"
           :validations="[
@@ -41,11 +41,11 @@
         />
       </div>
       <div class="t-mb-4">
-        <base-label form-id="rating" :label-text="$t('Rating')" />
         <base-select
           id="rating"
           name="rating"
           :options="ratingOptions"
+          :label="$t('Rating')"
           :initial-option-text="$t('How did you like it?')"
           :validations="[
             {
@@ -57,10 +57,10 @@
         />
       </div>
       <div class="t-mb-4">
-        <base-label form-id="summary" :label-text="$t('Summary')" />
         <base-input
           id="summary"
           name="summary"
+          :label="$t('Summary')"
           :placeholder="$t('...')"
           v-model="reviewForm.summary"
           :validations="[
@@ -72,10 +72,10 @@
         />
       </div>
       <div class="t-mb-4">
-        <base-label form-id="review" :label-text="$t('Review')" />
         <base-textarea
           id="review"
           name="review"
+          :label="$t('Review')"
           placeholder="..."
           v-model="reviewForm.review"
           :validations="[
@@ -109,11 +109,9 @@ import { required, email, minLength } from 'vuelidate/lib/validators'
 
 import VueRecaptcha from 'vue-recaptcha'
 import ButtonComponent from 'theme/components/core/blocks/Button'
-import BaseLabel from 'theme/components/core/blocks/Form/BaseLabel'
 import BaseInput from 'theme/components/core/blocks/Form/BaseInput'
 import BaseTextarea from 'theme/components/core/blocks/Form/BaseTextarea'
 import BaseSelect from 'theme/components/core/blocks/Form/BaseSelect'
-import { AddReview } from '@vue-storefront/core/modules/review/components/AddReview'
 
 export default {
   name: 'ReviewsForm',
@@ -138,7 +136,6 @@ export default {
   components: {
     VueRecaptcha,
     ButtonComponent,
-    BaseLabel,
     BaseInput,
     BaseTextarea,
     BaseSelect

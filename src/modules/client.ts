@@ -27,7 +27,7 @@ import { IcmaaExtendedWishlistModule } from 'icmaa-wishlist'
 import { IcmaaExtendedReviewRoutes } from 'icmaa-review'
 import { IcmaaCategoryModule } from 'icmaa-category'
 import { IcmaaCategoryExtrasModule } from 'icmaa-category-extras'
-import { IcmaaExternalCheckoutModule } from 'icmaa-external-checkout'
+import { IcmaaCheckoutModule } from 'icmaa-checkout'
 import { IcmaaCdnModule } from 'icmaa-cdn'
 import { IcmaaCmsModule } from 'icmaa-cms'
 import { IcmaaFormsModule } from 'icmaa-forms'
@@ -86,7 +86,7 @@ export function registerClientModules () {
   registerModule(IcmaaGiftcertModule)
   registerModule(IcmaaTrackingModule)
   registerModule(IcmaaLooksModule)
-  registerModule(IcmaaExternalCheckoutModule)
+  registerModule(IcmaaCheckoutModule)
   registerModule(IcmaaLogsModule)
 }
 

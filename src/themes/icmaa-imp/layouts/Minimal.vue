@@ -9,21 +9,11 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex'
+import { mapGetters } from 'vuex'
 import MinimalHeader from 'theme/components/core/blocks/Header/MinimalHeader.vue'
 import MinimalFooter from 'theme/components/core/blocks/Footer/MinimalFooter.vue'
 
 export default {
-  data () {
-    return {
-      ordersData: []
-    }
-  },
-  computed: {
-    ...mapState({
-      overlayActive: state => state.ui.overlay
-    })
-  },
   methods: {
     ...mapGetters({ getMetaData: 'icmaaMeta/getData' }),
     fetchMetaData () {
