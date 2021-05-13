@@ -1,17 +1,16 @@
 <template>
   <div :class="{ 't-relative': validationsAsTooltip }">
-    <label v-if="hasLabel && !isFloating" :for="id" class="t-w-full t-flex t-self-center t-mb-1 t-px-1 t-text-base-tone t-text-sm">
+    <base-label v-if="hasLabel && !isFloating" :id="id || name">
       <slot>
         {{ label || placeholder }}
       </slot>
-    </label>
+    </base-label>
     <div class="base-input t-relative t-flex t-flex-wrap" :class="{ 'floating-label': isFloating }">
       <material-icon :icon="passTypeIcon" v-if="passIconActive" @click.native="togglePassType()" class="t-absolute t-flex t-self-center t-p-2 t-cursor-pointer t-text-base-lighter" :class="[`t-${iconPosition}-0`]" :aria-label="$t('Toggle password visibility')" :title="$t('Toggle password visibility')" />
       <input
-        class="t-h-10 t-w-full t-px-3 t-border t-rounded-sm t-appearance-none t-text-sm t-leading-tigh"
+        class="t-h-10 t-w-full t-px-3 t-border t-rounded-sm t-appearance-none t-text-sm t-leading-tigh placeholder:t-text-base-light"
         :class="[
           invalid ? 't-border-alert' : 't-border-base-light',
-          isFloating ? 'placeholder:t-text-transparent' : 'placeholder:t-text-base-light',
           {
             't-pr-10': type === 'password' || (icon && iconPosition === 'right'),
             't-pl-10': icon && iconPosition === 'left'
@@ -33,28 +32,28 @@
         @keyup.enter="$emit('keyup.enter', $event.target.value)"
         @keyup="$emit('keyup', $event)"
       >
-      <label v-if="hasLabel && isFloating" :for="id" @click.prevent="setFocus" class="t-absolute t-text-sm">
+      <floating-label v-if="hasLabel && isFloating" :id="id || name" @click.prevent="setFocus">
         <slot>
           {{ label || placeholder }}
         </slot>
-      </label>
+      </floating-label>
       <material-icon v-if="icon" :icon="icon" class="t-absolute t-flex t-self-center t-p-2" :class="[`t-${iconPosition}-0`]" />
     </div>
-    <ValidationMessages :validations="validations" :validations-as-tooltip="validationsAsTooltip" />
+    <validation-messages :validations="validations" :validations-as-tooltip="validationsAsTooltip" />
   </div>
 </template>
 
 <script>
-import ValidationMessages from './ValidationMessages'
+import InputMixin from 'theme/mixins/form/InputMixin'
 import MaterialIcon from 'theme/components/core/blocks/MaterialIcon'
 import { mask as maskDirective } from 'vue-the-mask'
 import { currentStoreView } from '@vue-storefront/core/lib/multistore'
 
 export default {
   name: 'BaseInput',
+  mixins: [ InputMixin ],
   components: {
-    MaterialIcon,
-    ValidationMessages
+    MaterialIcon
   },
   directives: {
     /**
@@ -76,14 +75,6 @@ export default {
     }
   },
   props: {
-    label: {
-      type: [String, Boolean],
-      default: false
-    },
-    floatingLabel: {
-      type: [Boolean],
-      default: false
-    },
     type: {
       type: String,
       default: 'text'
@@ -156,12 +147,6 @@ export default {
         return currentStoreView().i18n.dateFormat.replace(/([DMY])/gm, '#')
       }
       return this.mask
-    },
-    hasLabel () {
-      return this.$slots.default || this.label || this.placeholder
-    },
-    isFloating () {
-      return this.floatingLabel || !(this.$slots.default || this.label)
     }
   },
   methods: {
@@ -173,11 +158,6 @@ export default {
         this.passType = 'password'
         this.passTypeIcon = 'visibility_off'
       }
-    },
-    setFocus () {
-      if (this.name) {
-        this.$refs[this.name].focus()
-      }
     }
   },
   created () {
@@ -187,33 +167,8 @@ export default {
   },
   mounted () {
     if (this.focus) {
-      this.$refs[this.name].focus()
+      this.setFocus()
     }
   }
 }
 </script>
-
-<style lang="scss">
-
-.floating-label {
-  > label {
-    top: calc(1.25rem - 0.4em);
-    left: calc(.9em);
-    line-height: 1em;
-    @apply t-opacity-60;
-    transition: opacity .1s ease-in-out, transform .1s ease-in-out;
-  }
-
-  input:focus, input:not(:placeholder-shown) {
-
-    &  ~ label {
-      @apply t-opacity-100 t-bg-white;
-      left: calc(.9em - 5px);
-      padding: 0 5px 0;
-      transform-origin: top left;
-      transform: scale(.75) translate(0, calc(-2rem + 2px));
-    }
-  }
-}
-
-</style>

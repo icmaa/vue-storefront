@@ -1,14 +1,22 @@
 <template>
   <div class="base-select">
-    <label v-if="hasLabel" :for="id" :class="{ 't-sr-only': hideLabel }" class="t-w-full t-flex t-self-center t-mb-1 t-px-1 t-text-base-tone t-text-sm">
+    <base-label v-if="hasLabel && !isFloating" :id="id">
       <slot>
         {{ label }}
       </slot>
-    </label>
-    <div class="t-relative">
+    </base-label>
+    <div class="t-relative" :class="{ 'floating-label': isFloating }">
       <select
         class="t-w-full t-border t-rounded-sm t-text-sm t-leading-tight t-bg-white t-appearance-none t-cursor-pointer focus:outline-none focus:shadow-outline"
-        :class="[ sizeClasses, invalid ? 't-border-alert' : 't-border-base-light', { 't-text-base-light': !value || value === selected }, { [selectClass]: selectClass !== false } ]"
+        :class="[
+          sizeClasses,
+          invalid ? 't-border-alert' : 't-border-base-light',
+          {
+            't-text-base-light': !value || value === selected,
+            [selectClass]: selectClass !== false,
+            'value-selected': isFloating && value
+          }
+        ]"
         :name="name"
         :id="id"
         :disabled="disabled"
@@ -27,6 +35,11 @@
           {{ option.label }}
         </option>
       </select>
+      <floating-label v-if="hasLabel && isFloating" :id="id || name">
+        <slot>
+          {{ label || initialOptionText }}
+        </slot>
+      </floating-label>
       <div class="t-pointer-events-none t-absolute t-inset-y-0 t-right-0 t-flex t-items-center" :class="[ size === 'sm' ? 't-px-1' : 't-px-2' ]">
         <material-icon icon="keyboard_arrow_down" />
       </div>
@@ -38,26 +51,16 @@
 
 <script>
 import i18n from '@vue-storefront/i18n'
-import ValidationMessages from './ValidationMessages'
+import InputMixin from 'theme/mixins/form/InputMixin'
 import MaterialIcon from 'theme/components/core/blocks/MaterialIcon'
-import LoaderBackground from 'theme/components/core/LoaderBackground'
 
 export default {
   name: 'BaseSelect',
+  mixins: [ InputMixin ],
   components: {
-    MaterialIcon,
-    LoaderBackground,
-    ValidationMessages
+    MaterialIcon
   },
   props: {
-    label: {
-      type: [String, Boolean],
-      default: false
-    },
-    hideLabel: {
-      type: [Boolean],
-      default: false
-    },
     value: {
       type: [String, Number],
       default: ''
@@ -118,7 +121,10 @@ export default {
       return this.validations.filter(v => v.condition).length > 0
     },
     hasLabel () {
-      return this.$slots.default || this.label
+      return this.$slots.default || this.label || this.initialOptionText
+    },
+    isFloating () {
+      return this.floatingLabel || !(this.$slots.default || this.label)
     },
     sizeClasses () {
       let classes = ''

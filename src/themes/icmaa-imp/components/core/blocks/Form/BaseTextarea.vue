@@ -1,11 +1,11 @@
 <template>
   <div class="base-textarea">
-    <label v-if="hasLabel" :class="{ 't-sr-only': hideLabel }" :for="id" class="t-w-full t-flex t-self-center t-mb-1 t-px-1 t-text-base-tone t-text-sm">
+    <base-label v-if="hasLabel && !isFloating" :id="id">
       <slot>
-        {{ label }}
+        {{ label || placeholder }}
       </slot>
-    </label>
-    <div class="t-relative">
+    </base-label>
+    <div class="t-relative" :class="{ 'floating-label': isFloating }">
       <textarea
         class="t-w-full t-h-40 t-px-3 t-py-2 t-border t-rounded-sm t-appearance-none t-text-sm placeholder:t-text-base-light"
         :class="[ invalid ? 't-border-alert' : 't-border-base-light' ]"
@@ -15,25 +15,28 @@
         :autocomplete="autocomplete"
         :value="value"
         :autofocus="autofocus"
-        :ref="focus ? name : false"
+        :ref="name"
         @input="$emit('input', $event.target.value)"
         @blur="$emit('blur')"
         @keyup.enter="$emit('keyup.enter', $event.target.value)"
         @keyup="$emit('keyup', $event)"
       />
+      <floating-label v-if="hasLabel && isFloating" :id="id || name" @click.prevent="setFocus">
+        <slot>
+          {{ label || placeholder }}
+        </slot>
+      </floating-label>
       <ValidationMessages v-if="invalid" :validations="validations" :validations-as-tooltip="validationsAsTooltip" />
     </div>
   </div>
 </template>
 
 <script>
-import ValidationMessages from './ValidationMessages'
+import InputMixin from 'theme/mixins/form/InputMixin'
 
 export default {
   name: 'BaseTextarea',
-  components: {
-    ValidationMessages
-  },
+  mixins: [ InputMixin ],
   data () {
     return {
       iconActive: false,
@@ -41,14 +44,6 @@ export default {
     }
   },
   props: {
-    label: {
-      type: [String, Boolean],
-      default: false
-    },
-    hideLabel: {
-      type: [Boolean],
-      default: false
-    },
     value: {
       type: [String, Number],
       default: ''
@@ -95,21 +90,12 @@ export default {
   computed: {
     invalid () {
       return this.validations.filter(v => v.condition).length > 0
-    },
-    hasLabel () {
-      return this.$slots.default || this.label
     }
   },
   mounted () {
     if (this.focus) {
-      this.$refs[this.name].focus()
+      this.setFocus()
     }
   }
 }
 </script>
-
-<style lang="scss" scoped>
-.base-textarea textarea:focus + .validation-message {
-  display: block;
-}
-</style>
