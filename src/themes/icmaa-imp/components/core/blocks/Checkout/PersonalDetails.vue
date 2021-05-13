@@ -9,7 +9,6 @@
             autocomplete="email"
             id="email-address"
             name="email-address"
-            :label="$t('Email address')"
             :placeholder="$t('Email address')"
             v-model="personalDetails.emailAddress"
             :validations="[
@@ -18,7 +17,7 @@
                 text: $t('Field is required')
               },
               {
-                condition: !$v.personalDetails.emailAddress.email && $v.personalDetails.emailAddress.$error,
+                condition: $v.personalDetails.emailAddress.$error && !$v.personalDetails.emailAddress.email,
                 text: $t('Please provide valid e-mail address.')
               }
             ]"
@@ -29,17 +28,12 @@
             autocomplete="given-name"
             id="first-name"
             name="first-name"
-            :label="$t('First name')"
             :placeholder="$t('First name')"
             v-model.trim="personalDetails.firstName"
             :validations="[
               {
                 condition: $v.personalDetails.firstName.$error && !$v.personalDetails.firstName.required,
                 text: $t('Field is required')
-              },
-              {
-                condition: !$v.personalDetails.firstName.minLength,
-                text: $t('Name must have at least 2 letters.')
               }
             ]"
           />
@@ -49,7 +43,6 @@
             autocomplete="family-name"
             id="last-name"
             name="last-name"
-            :label="$t('Last name')"
             :placeholder="$t('Last name')"
             v-model.trim="personalDetails.lastName"
             :validations="[{
@@ -74,7 +67,6 @@
               ref="password"
               id="password"
               name="password"
-              :label="$t('Password')"
               :placeholder="$t('Password')"
               v-model="password"
               :validations="[{
@@ -157,45 +149,40 @@
 </template>
 
 <script>
-import { required, minLength, email, sameAs } from 'vuelidate/lib/validators'
+import { required, email, minLength, sameAs } from 'vuelidate/lib/validators'
 
 import PersonalDetails from 'icmaa-checkout/components/PersonalDetails'
 import BaseCheckbox from 'theme/components/core/blocks/Form/BaseCheckbox'
 import BaseInput from 'theme/components/core/blocks/Form/BaseInput'
 import ButtonComponent from 'theme/components/core/blocks/Button'
-import Tooltip from 'theme/components/core/Tooltip'
 
 export default {
   components: {
     ButtonComponent,
-    Tooltip,
     BaseCheckbox,
     BaseInput
   },
-  mixins: [PersonalDetails],
+  mixins: [ PersonalDetails ],
   validations: {
     personalDetails: {
-      firstName: {
-        required,
-        minLength: minLength(2)
-      },
-      lastName: {
-        required
-      },
       emailAddress: {
         required,
         email
+      },
+      firstName: {
+        required
+      },
+      lastName: {
+        required
       }
     },
     password: {
+      minLength: minLength(8),
       required
     },
     rPassword: {
       required,
       sameAsPassword: sameAs('password')
-    },
-    acceptConditions: {
-      required
     }
   }
 }

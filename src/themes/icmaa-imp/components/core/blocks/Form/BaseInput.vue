@@ -1,15 +1,22 @@
 <template>
   <div :class="{ 't-relative': validationsAsTooltip }">
-    <label v-if="hasLabel" :for="id" :class="{ 't-sr-only': hideLabel }" class="t-w-full t-flex t-self-center t-mb-1 t-px-1 t-text-base-tone t-text-sm">
+    <label v-if="hasLabel && !isFloating" :for="id" class="t-w-full t-flex t-self-center t-mb-1 t-px-1 t-text-base-tone t-text-sm">
       <slot>
-        {{ label }}
+        {{ label || placeholder }}
       </slot>
     </label>
-    <div class="base-input t-relative t-flex t-flex-wrap">
+    <div class="base-input t-relative t-flex t-flex-wrap" :class="{ 'floating-label': isFloating }">
       <material-icon :icon="passTypeIcon" v-if="passIconActive" @click.native="togglePassType()" class="t-absolute t-flex t-self-center t-p-2 t-cursor-pointer t-text-base-lighter" :class="[`t-${iconPosition}-0`]" :aria-label="$t('Toggle password visibility')" :title="$t('Toggle password visibility')" />
       <input
-        class="t-w-full t-h-10 t-px-3 t-border t-rounded-sm t-appearance-none t-text-sm t-leading-tight placeholder:t-text-base-light"
-        :class="[ invalid ? 't-border-alert' : 't-border-base-light', { 't-pr-10': type === 'password' || (icon && iconPosition === 'right'), 't-pl-10': icon && iconPosition === 'left' } ]"
+        class="t-h-10 t-w-full t-px-3 t-border t-rounded-sm t-appearance-none t-text-sm t-leading-tigh"
+        :class="[
+          invalid ? 't-border-alert' : 't-border-base-light',
+          isFloating ? 'placeholder:t-text-transparent' : 'placeholder:t-text-base-light',
+          {
+            't-pr-10': type === 'password' || (icon && iconPosition === 'right'),
+            't-pl-10': icon && iconPosition === 'left'
+          }
+        ]"
         :placeholder="placeholder"
         :type="type === 'password' ? passType : type"
         :name="name || null"
@@ -26,6 +33,11 @@
         @keyup.enter="$emit('keyup.enter', $event.target.value)"
         @keyup="$emit('keyup', $event)"
       >
+      <label v-if="hasLabel && isFloating" :for="id" @click.prevent="setFocus" class="t-absolute t-text-sm">
+        <slot>
+          {{ label || placeholder }}
+        </slot>
+      </label>
       <material-icon v-if="icon" :icon="icon" class="t-absolute t-flex t-self-center t-p-2" :class="[`t-${iconPosition}-0`]" />
     </div>
     <ValidationMessages :validations="validations" :validations-as-tooltip="validationsAsTooltip" />
@@ -68,7 +80,7 @@ export default {
       type: [String, Boolean],
       default: false
     },
-    hideLabel: {
+    floatingLabel: {
       type: [Boolean],
       default: false
     },
@@ -146,7 +158,10 @@ export default {
       return this.mask
     },
     hasLabel () {
-      return this.$slots.default || this.label
+      return this.$slots.default || this.label || this.placeholder
+    },
+    isFloating () {
+      return this.floatingLabel || !(this.$slots.default || this.label)
     }
   },
   methods: {
@@ -159,9 +174,8 @@ export default {
         this.passTypeIcon = 'visibility_off'
       }
     },
-    // setFocus sets focus on a field which has a value of 'ref' tag equal to fieldName
-    setFocus (fieldName) {
-      if (this.name === fieldName) {
+    setFocus () {
+      if (this.name) {
         this.$refs[this.name].focus()
       }
     }
@@ -178,3 +192,28 @@ export default {
   }
 }
 </script>
+
+<style lang="scss">
+
+.floating-label {
+  > label {
+    top: calc(1.25rem - 0.4em);
+    left: calc(.9em);
+    line-height: 1em;
+    @apply t-opacity-60;
+    transition: opacity .1s ease-in-out, transform .1s ease-in-out;
+  }
+
+  input:focus, input:not(:placeholder-shown) {
+
+    &  ~ label {
+      @apply t-opacity-100 t-bg-white;
+      left: calc(.9em - 5px);
+      padding: 0 5px 0;
+      transform-origin: top left;
+      transform: scale(.75) translate(0, calc(-2rem + 2px));
+    }
+  }
+}
+
+</style>
