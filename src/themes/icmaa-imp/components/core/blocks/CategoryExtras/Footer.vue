@@ -30,7 +30,7 @@
       <h2 class="t-flex t-items-center t-h-10 t-text-1xl t-text-base-dark t-font-thin t-leading-1-em t-mb-4">
         {{ categoryExtras.title }}
       </h2>
-      <p class="t-text-base-tone t-text-sm t-leading-snug" v-html="descriptionFolded ? descriptionShort : description" />
+      <p class="t-text-base-tone t-text-sm t-leading-snug" :class="{ 't-h-40 t-overflow-hidden t-fade-out-text': descriptionFolded }" v-html="description" />
       <div class="t-text-base-light t-text-sm t-leading-1em t-mt-4 t-cursor-pointer" v-if="isLongDescription" @click="descriptionFolded = !descriptionFolded">
         <material-icon :icon="descriptionFolded ? 'keyboard_arrow_down' : 'keyboard_arrow_up'" size="xs" class="t-align-middle" />
         {{ descriptionFolded ? $t('Read more') : $t('Read less') }}
@@ -70,9 +70,6 @@ export default {
     description () {
       return this.categoryExtras.description
     },
-    descriptionShort () {
-      return this.trimText(stripHTML(this.categoryExtras.description, 500))
-    },
     isLongDescription () {
       return (stripHTML(this.description).length > 500)
     },
@@ -101,20 +98,6 @@ export default {
       return this.categoryExtras.twitterId || false
     }
   },
-  methods: {
-    trimText (text, size = 300) {
-      let truncatedText = text.slice(0, size)
-      if (text.slice(size, size + 1) !== ' ') {
-        Array.from(text.slice(size))
-          .some(l => {
-            truncatedText = truncatedText + l
-            return (l === ' ')
-          })
-      }
-
-      return truncatedText + '...'
-    }
-  },
   created () {
     if (this.isLongDescription) {
       this.descriptionFolded = true
@@ -122,3 +105,17 @@ export default {
   }
 }
 </script>
+
+<style lang="scss">
+
+.t-fade-out-text {
+  background: -webkit-linear-gradient(top, #000 50%, transparent);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  * { @apply t-inline t-text-left t-text-sm t-text-base-tone t-font-normal; }
+  br { @apply t-hidden; }
+  a { @apply t-static; }
+}
+
+</style>

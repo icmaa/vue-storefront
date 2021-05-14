@@ -1,20 +1,21 @@
 <template>
   <div class="category-links">
-    <button-component v-for="c in categories" :key="'filter-' + c.slug" size="sm" class="t-flex-shrink-0 t-mr-2 t-opacity-75 hover:t-opacity-100" @click="$router.push(c.url_path)">
+    <router-link
+      v-for="c in categories"
+      :key="'filter-' + c.slug"
+      size="sm"
+      class="t-flex t-items-center t-webkit-tap-transparent t-flex-shrink-0 t-mr-2 t-opacity-75 hover:t-opacity-100 t-uppercase t-rounded-sm t-min-h-8 t-px-4 t-text-xs t-bg-base-darkest t-text-white t-justify-center"
+      :to="localizedRoute(c.url_path)"
+    >
       {{ c.label }}
-    </button-component>
+    </router-link>
   </div>
 </template>
 
 <script>
 
-import ButtonComponent from 'theme/components/core/blocks/Button'
-
 export default {
   name: 'CategoryLinks',
-  components: {
-    ButtonComponent
-  },
   props: {
     categories: {
       type: Array,
