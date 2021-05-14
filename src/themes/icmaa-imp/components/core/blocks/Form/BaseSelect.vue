@@ -18,6 +18,7 @@
           }
         ]"
         :name="name"
+        :ref="name"
         :id="id"
         :disabled="disabled"
         @focus="$emit('focus')"
@@ -35,7 +36,7 @@
           {{ option.label }}
         </option>
       </select>
-      <floating-label v-if="hasLabel && isFloating" :id="id || name">
+      <floating-label v-if="hasLabel && isFloating" :id="id || name" class="t-pointer-events-none">
         <slot>
           {{ label || initialOptionText }}
         </slot>
