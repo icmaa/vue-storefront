@@ -9,14 +9,14 @@
           id="email"
           name="email"
           :placeholder="$t('Email address')"
-          v-model="personalDetails.email"
+          v-model="details.emailAddress"
           :validations="[
             {
-              condition: $v.personalDetails.email.$error && !$v.personalDetails.email.required,
+              condition: $v.details.emailAddress.$error && !$v.details.emailAddress.required,
               text: $t('Field is required')
             },
             {
-              condition: $v.personalDetails.email.$error && !$v.personalDetails.email.email,
+              condition: $v.details.emailAddress.$error && !$v.details.emailAddress.email,
               text: $t('Please provide valid e-mail address.')
             }
           ]"
@@ -28,10 +28,10 @@
           id="first-name"
           name="first-name"
           :placeholder="$t('First name')"
-          v-model.trim="personalDetails.firstName"
+          v-model.trim="details.firstName"
           :validations="[
             {
-              condition: $v.personalDetails.firstName.$error && !$v.personalDetails.firstName.required,
+              condition: $v.details.firstName.$error && !$v.details.firstName.required,
               text: $t('Field is required')
             }
           ]"
@@ -43,9 +43,9 @@
           id="last-name"
           name="last-name"
           :placeholder="$t('Last name')"
-          v-model.trim="personalDetails.lastName"
+          v-model.trim="details.lastName"
           :validations="[{
-            condition: $v.personalDetails.lastName.$error && !$v.personalDetails.lastName.required,
+            condition: $v.details.lastName.$error && !$v.details.lastName.required,
             text: $t('Field is required')
           }]"
         />
@@ -54,11 +54,11 @@
           class="t-w-full t-px-2 t-mb-4"
           id="create-account"
           name="create-account"
-          v-model="personalDetails.createAccount"
+          v-model="details.createAccount"
         >
           {{ $t('I want to create an account') }}
         </base-checkbox>
-        <template v-if="personalDetails.createAccount && !currentUser">
+        <template v-if="details.createAccount && !currentUser">
           <base-input
             class="t-w-full t-px-2 t-mb-4"
             type="password"
@@ -67,12 +67,12 @@
             id="password"
             name="password"
             :placeholder="$t('Password')"
-            v-model="personalDetails.password"
+            v-model="details.password"
             :validations="[{
-              condition: $v.personalDetails.password.$error && !$v.personalDetails.password.required,
+              condition: $v.details.password.$error && !$v.details.password.required,
               text: $t('Field is required.')
             },{
-              condition: $v.personalDetails.password.$error && !$v.personalDetails.password.minLength,
+              condition: $v.details.password.$error && !$v.details.password.minLength,
               text: $t('Password must have at least 8 letters.')
             }]"
           />
@@ -118,15 +118,15 @@
     </form>
     <div class="" v-if="!isActive && isFilled">
       <div>
-        {{ personalDetails.firstName }} {{ personalDetails.lastName }}<br>
-        {{ personalDetails.email }}
+        {{ details.firstName }} {{ details.lastName }}<br>
+        {{ details.emailAddress }}
       </div>
-      <div v-if="personalDetails.createAccount && !currentUser" class="t-mt-4">
+      <div v-if="details.createAccount && !currentUser" class="t-mt-4">
         <base-checkbox
           class="mt25"
           id="createAccountCheckboxInfo"
           name="createAccountCheckboxInfo"
-          v-model="personalDetails.createAccount"
+          v-model="details.createAccount"
           disabled
         >
           {{ $t('Create a new account') }}
@@ -137,7 +137,6 @@
 </template>
 
 <script>
-import { required, email, minLength, sameAs } from 'vuelidate/lib/validators'
 
 import PersonalDetails from 'icmaa-checkout/components/PersonalDetails'
 import BaseCheckbox from 'theme/components/core/blocks/Form/BaseCheckbox'
@@ -145,40 +144,12 @@ import BaseInput from 'theme/components/core/blocks/Form/BaseInput'
 import ButtonComponent from 'theme/components/core/blocks/Button'
 
 export default {
+  name: 'PersonalDetails',
   components: {
     ButtonComponent,
     BaseCheckbox,
     BaseInput
   },
-  mixins: [ PersonalDetails ],
-  validations () {
-    const val = {
-      personalDetails: {
-        email: {
-          required,
-          email
-        },
-        firstName: {
-          required
-        },
-        lastName: {
-          required
-        }
-      }
-    }
-
-    if (this.personalDetails.createAccount) {
-      val.personalDetails.password = {
-        minLength: minLength(8),
-        required
-      }
-      val.rPassword = {
-        sameAsPassword: sameAs(function () { return this.personalDetails.password }),
-        required
-      }
-    }
-
-    return val
-  }
+  mixins: [ PersonalDetails ]
 }
 </script>

@@ -3,13 +3,11 @@ import config from 'config'
 import VueOfflineMixin from 'vue-offline/mixin'
 import { mapGetters } from 'vuex'
 import { StorageManager } from '@vue-storefront/core/lib/storage-manager'
-import Composite from '@vue-storefront/core/mixins/composite'
 import { currentStoreView } from '@vue-storefront/core/lib/multistore'
-import { isServer } from '@vue-storefront/core/helpers'
 import { Logger } from '@vue-storefront/core/lib/logger'
 
 export default {
-  mixins: [Composite, VueOfflineMixin],
+  mixins: [ VueOfflineMixin ],
   data () {
     return {
       stockCheckCompleted: false,
@@ -33,13 +31,7 @@ export default {
       shippingMethod: {},
       payment: {},
       orderReview: {},
-      cartSummary: {},
-      validationResults: {
-        personalDetails: { $invalid: true },
-        shipping: { $invalid: true },
-        payment: { $invalid: true }
-      },
-      focusedField: null
+      cartSummary: {}
     }
   },
   computed: {
@@ -52,20 +44,18 @@ export default {
     await this.$store.dispatch('checkout/load')
     this.$bus.$emit('checkout-after-load')
     this.$store.dispatch('checkout/setModifiedAt', Date.now())
-    // TODO: Use one event with name as apram
-    this.$bus.$on('cart-after-update', this.onCartAfterUpdate)
-    this.$bus.$on('cart-after-delete', this.onCartAfterUpdate)
+
     this.$bus.$on('checkout-after-personalDetails', this.onAfterPersonalDetails)
     this.$bus.$on('checkout-after-shippingDetails', this.onAfterShippingDetails)
     this.$bus.$on('checkout-after-paymentDetails', this.onAfterPaymentDetails)
+    this.$bus.$on('checkout-before-shippingMethods', this.onBeforeShippingMethods)
+    this.$bus.$on('checkout-after-shippingMethodChanged', this.onAfterShippingMethodChanged)
+
     this.$bus.$on('checkout-after-cartSummary', this.onAfterCartSummary)
     this.$bus.$on('checkout-before-placeOrder', this.onBeforePlaceOrder)
     this.$bus.$on('checkout-do-placeOrder', this.onDoPlaceOrder)
-    this.$bus.$on('checkout-before-edit', this.onBeforeEdit)
     this.$bus.$on('order-after-placed', this.onAfterPlaceOrder)
-    this.$bus.$on('checkout-before-shippingMethods', this.onBeforeShippingMethods)
-    this.$bus.$on('checkout-after-shippingMethodChanged', this.onAfterShippingMethodChanged)
-    this.$bus.$on('checkout-after-validationError', this.focusField)
+
     if (!this.isThankYouPage) {
       this.$store.dispatch('cart/load', { forceClientState: true }).then(() => {
         if (this.$store.state.cart.cartItems.length === 0) {
@@ -111,32 +101,21 @@ export default {
     this.$bus.$emit('checkout-before-shippingMethods', country)
   },
   beforeDestroy () {
-    this.$store.dispatch('checkout/setModifiedAt', 0) // exit checkout
-    this.$bus.$off('cart-after-update', this.onCartAfterUpdate)
-    this.$bus.$off('cart-after-delete', this.onCartAfterUpdate)
+    this.$store.dispatch('checkout/setModifiedAt', 0)
     this.$bus.$off('checkout-after-personalDetails', this.onAfterPersonalDetails)
     this.$bus.$off('checkout-after-shippingDetails', this.onAfterShippingDetails)
     this.$bus.$off('checkout-after-paymentDetails', this.onAfterPaymentDetails)
     this.$bus.$off('checkout-after-cartSummary', this.onAfterCartSummary)
     this.$bus.$off('checkout-before-placeOrder', this.onBeforePlaceOrder)
     this.$bus.$off('checkout-do-placeOrder', this.onDoPlaceOrder)
-    this.$bus.$off('checkout-before-edit', this.onBeforeEdit)
     this.$bus.$off('order-after-placed', this.onAfterPlaceOrder)
     this.$bus.$off('checkout-before-shippingMethods', this.onBeforeShippingMethods)
     this.$bus.$off('checkout-after-shippingMethodChanged', this.onAfterShippingMethodChanged)
-    this.$bus.$off('checkout-after-validationError', this.focusField)
   },
   watch: {
-    '$route': 'activateHashSection',
     'OnlineOnly': 'onNetworkStatusCheck'
   },
   methods: {
-    onCartAfterUpdate (payload) {
-      if (this.$store.state.cart.cartItems.length === 0) {
-        this.notifyEmptyCart()
-        this.$router.push(this.localizedRoute('/'))
-      }
-    },
     async onAfterShippingMethodChanged (payload) {
       await this.$store.dispatch('cart/syncTotals', { forceServerSync: true, methodsData: payload })
       this.shippingMethod = payload
@@ -152,13 +131,27 @@ export default {
       this.$store.dispatch('user/getOrdersHistory', { refresh: true, useCache: true })
       Logger.debug(payload.order)()
     },
-    onBeforeEdit (section) {
-      this.activateSection(section)
-    },
     onBeforePlaceOrder (payload) {
     },
     onAfterCartSummary (receivedData) {
       this.cartSummary = receivedData
+    },
+    onAfterPersonalDetails (data) {
+      this.activateSection(this.isVirtualCart === true ? 'payment' : 'shipping')
+      this.$store.dispatch('checkout/savePersonalDetails', data)
+    },
+    onAfterPaymentDetails (receivedData) {
+      this.payment = receivedData
+      this.activateSection('review')
+      this.savePaymentDetails()
+    },
+    onAfterShippingDetails (receivedData) {
+      this.shipping = receivedData
+      this.activateSection('payment')
+      this.saveShippingDetails()
+
+      const storeView = currentStoreView()
+      storeView.tax.defaultCountry = this.shipping.country
     },
     onDoPlaceOrder (additionalPayload) {
       if (this.$store.state.cart.cartItems.length === 0) {
@@ -168,33 +161,6 @@ export default {
         this.payment.paymentMethodAdditional = additionalPayload
         this.placeOrder()
       }
-    },
-    onAfterPaymentDetails (receivedData, validationResult) {
-      this.payment = receivedData
-      this.validationResults.payment = validationResult
-      this.activateSection('review')
-      this.savePaymentDetails()
-    },
-    onAfterShippingDetails (receivedData, validationResult) {
-      this.shipping = receivedData
-      this.validationResults.shipping = validationResult
-      this.activateSection('payment')
-      this.saveShippingDetails()
-
-      const storeView = currentStoreView()
-      storeView.tax.defaultCountry = this.shipping.country
-    },
-    onAfterPersonalDetails (receivedData, validationResult) {
-      this.personalDetails = receivedData
-      this.validationResults.personalDetails = validationResult
-
-      if (this.isVirtualCart === true) {
-        this.activateSection('payment')
-      } else {
-        this.activateSection('shipping')
-      }
-      this.savePersonalDetails()
-      this.focusedField = null
     },
     onNetworkStatusCheck (isOnline) {
       this.checkConnection(isOnline)
@@ -231,16 +197,6 @@ export default {
         }
       }
       return isValid
-    },
-    activateHashSection () {
-      if (!isServer) {
-        var urlStep = window.location.hash.replace('#', '')
-        if (this.activeSection.hasOwnProperty(urlStep) && this.activeSection[urlStep] === false) {
-          this.activateSection(urlStep)
-        } else if (urlStep === '') {
-          this.activateSection('personal')
-        }
-      }
     },
     checkConnection (isOnline) {
       if (!isOnline) {
@@ -319,26 +275,11 @@ export default {
         this.notifyNotAvailable()
       }
     },
-    savePersonalDetails () {
-      this.$store.dispatch('checkout/savePersonalDetails', this.personalDetails)
-    },
     saveShippingDetails () {
       this.$store.dispatch('checkout/saveShippingDetails', this.shipping)
     },
     savePaymentDetails () {
       this.$store.dispatch('checkout/savePaymentDetails', this.payment)
-    },
-    focusField (fieldName) {
-      if (fieldName === 'password') {
-        window.scrollTo(0, 0)
-        this.activateSection('personalDetails')
-        this.focusedField = fieldName
-      }
-      if (fieldName === 'email-address') {
-        window.scrollTo(0, 0)
-        this.activateSection('personalDetails')
-        this.focusedField = fieldName
-      }
     }
   },
   metaInfo () {

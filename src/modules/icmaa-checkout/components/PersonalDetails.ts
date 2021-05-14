@@ -1,7 +1,7 @@
 import { mapGetters } from 'vuex'
+import { required, email, minLength, sameAs } from 'vuelidate/lib/validators'
 
 export default {
-  name: 'PersonalDetails',
   props: {
     isActive: {
       type: Boolean,
@@ -11,25 +11,26 @@ export default {
   data () {
     return {
       isFilled: false,
-      personalDetails: {},
+      details: {},
       rPassword: ''
     }
   },
   computed: {
     ...mapGetters({
       currentUser: 'user/getCustomer',
+      personalDetails: 'checkout/getPersonalDetails',
       isVirtualCart: 'cart/isVirtualCart'
     })
   },
   methods: {
     onCheckoutLoad () {
-      this.personalDetails = this.$store.state.checkout.personalDetails
+      this.details = this.personalDetails
     },
-    onLoggedIn (receivedData) {
-      this.personalDetails = {
-        firstName: receivedData.firstname,
-        lastName: receivedData.lastname,
-        email: receivedData.email
+    onLoggedIn (data) {
+      this.details = {
+        firstName: data.firstname,
+        lastName: data.lastname,
+        emailAddress: data.email
       }
     },
     submit () {
@@ -38,7 +39,7 @@ export default {
         this.isFilled = true
         this.$emit('input', true)
 
-        this.$bus.$emit('checkout-after-personalDetails', this.personalDetails, this.$v)
+        this.$bus.$emit('checkout-after-personalDetails', this.details)
       }
     },
     openLoginModal () {
@@ -49,8 +50,40 @@ export default {
     this.$bus.$on('checkout-after-load', this.onCheckoutLoad)
     this.$bus.$on('user-after-loggedin', this.onLoggedIn)
   },
+  mounted () {
+    this.onCheckoutLoad()
+  },
   beforeDestroy () {
     this.$bus.$off('checkout-after-load', this.onCheckoutLoad)
     this.$bus.$off('user-after-loggedin', this.onLoggedIn)
+  },
+  validations () {
+    const val: any = {
+      details: {
+        emailAddress: {
+          required,
+          email
+        },
+        firstName: {
+          required
+        },
+        lastName: {
+          required
+        }
+      }
+    }
+
+    if (this.details.createAccount) {
+      val.details.password = {
+        minLength: minLength(8),
+        required
+      }
+      val.rPassword = {
+        sameAsPassword: sameAs(function () { return this.details.password }),
+        required
+      }
+    }
+
+    return val
   }
 }

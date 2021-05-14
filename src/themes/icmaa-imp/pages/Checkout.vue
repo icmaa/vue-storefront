@@ -75,23 +75,23 @@ export default {
       return [
         {
           name: 'personal',
-          component: PersonalDetails,
-          title: 'Personal Details'
+          title: 'Personal Details',
+          component: PersonalDetails
         },
         {
           name: 'shipping',
-          component: Shipping,
-          title: 'Shipping'
+          title: 'Shipping',
+          component: Shipping
         },
         {
           name: 'payment',
-          component: Payment,
-          title: 'Payment'
+          title: 'Payment',
+          component: Payment
         },
         {
           name: 'review',
-          component: Review,
-          title: 'Review'
+          title: 'Review',
+          component: Review
         }
       ]
     }
