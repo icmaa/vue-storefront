@@ -151,27 +151,34 @@ export default {
     BaseInput
   },
   mixins: [ PersonalDetails ],
-  validations: {
-    personalDetails: {
-      emailAddress: {
-        required,
-        email
-      },
-      firstName: {
-        required
-      },
-      lastName: {
-        required
-      },
-      password: {
+  validations () {
+    const val = {
+      personalDetails: {
+        emailAddress: {
+          required,
+          email
+        },
+        firstName: {
+          required
+        },
+        lastName: {
+          required
+        }
+      }
+    }
+
+    if (this.personalDetails.createAccount) {
+      val.personalDetails.password = {
         minLength: minLength(8),
         required
       }
-    },
-    rPassword: {
-      sameAsPassword: sameAs(function () { return this.personalDetails.password }),
-      required
+      val.rPassword = {
+        sameAsPassword: sameAs(function () { return this.personalDetails.password }),
+        required
+      }
     }
+
+    return val
   }
 }
 </script>
