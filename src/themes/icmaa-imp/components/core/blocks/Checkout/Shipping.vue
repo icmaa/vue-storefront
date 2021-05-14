@@ -1,36 +1,6 @@
 <template>
   <div class="pt20">
-    <div class="row pl20">
-      <div class="col-xs-1 col-sm-2 col-md-1">
-        <div
-          class="number-circle lh35 cl-white brdr-circle align-center weight-700"
-          :class="{ 'bg-cl-th-accent' : active || done, 'bg-cl-tertiary' : !done && !active }"
-        >
-          2
-        </div>
-      </div>
-      <div class="col-xs-11 col-sm-9 col-md-11">
-        <div class="row mb15">
-          <div class="col-xs-12 col-md-7" :class="{ 'cl-bg-tertiary' : !done && !active }">
-            <h3 class="m0 mb5">
-              {{ $t('Shipping') }}
-            </h3>
-          </div>
-          <div class="col-xs-12 col-md-5 pr30">
-            <div class="lh30 flex end-lg" v-if="done && !active">
-              <a href="#" class="cl-tertiary flex" @click.prevent="edit">
-                <span class="pr5">
-                  {{ $t('Edit shipping') }}
-                </span>
-                <i class="material-icons cl-tertiary">edit</i>
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
     <div class="row pl20" v-if="active">
-      <div class="hidden-xs col-sm-2 col-md-1" />
       <div class="col-xs-11 col-sm-9 col-md-10">
         <div class="row">
           <base-checkbox
@@ -261,6 +231,7 @@
 <script>
 import { required, minLength } from 'vuelidate/lib/validators'
 import { unicodeAlpha, unicodeAlphaNum } from '@vue-storefront/core/helpers/validators'
+
 import Shipping from 'icmaa-checkout/components/Shipping'
 
 import BaseCheckbox from 'theme/components/core/blocks/Form/BaseCheckbox'
