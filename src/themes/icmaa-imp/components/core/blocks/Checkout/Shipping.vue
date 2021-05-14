@@ -36,6 +36,7 @@
           <base-checkbox
             v-if="currentUser && hasShippingDetails()"
             class="col-xs-12 mb10"
+            name="shipToMyAddressCheckbox"
             id="shipToMyAddressCheckbox"
             v-model="shipToMyAddress"
           >
