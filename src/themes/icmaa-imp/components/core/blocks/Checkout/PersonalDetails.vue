@@ -2,6 +2,19 @@
   <div class="personal-details">
     <form v-if="isActive">
       <div class="t-flex t-flex-wrap t--mx-2">
+        <div v-if="!isLoggedIn" class="t-w-full t-px-2 t-mb-6">
+          <button-component
+            type="primary"
+            data-test-id="loginToYourAccount"
+            @click="openLoginModal"
+            class="t-w-full lg:t-w-auto"
+          >
+            {{ $t('Login to your account') }}
+          </button-component>
+        </div>
+        <div v-if="!isLoggedIn" class="t-w-full t-px-2 t-mb-6 t-font-light">
+          {{ $t('Proceed as new user') }}
+        </div>
         <base-input
           class="t-w-full t-px-2 t-mb-4"
           type="email"
@@ -10,6 +23,7 @@
           name="email"
           :placeholder="$t('Email address')"
           v-model="details.emailAddress"
+          :disabled="isLoggedIn"
           :validations="[
             {
               condition: $v.details.emailAddress.$error && !$v.details.emailAddress.required,
@@ -50,7 +64,7 @@
           }]"
         />
         <base-checkbox
-          v-if="!currentUser"
+          v-if="!isLoggedIn"
           class="t-w-full t-px-2 t-mb-4"
           id="create-account"
           name="create-account"
@@ -58,7 +72,7 @@
         >
           {{ $t('I want to create an account') }}
         </base-checkbox>
-        <template v-if="details.createAccount && !currentUser">
+        <template v-if="details.createAccount">
           <base-input
             class="t-w-full t-px-2 t-mb-4"
             type="password"
@@ -105,23 +119,15 @@
           >
             {{ $t((isVirtualCart ? 'Continue to payment' : 'Continue to shipping')) }}
           </button-component>
-          <button-component
-            v-if="!currentUser"
-            data-test-id="loginToYourAccount"
-            @click="openLoginModal"
-            class="t-w-full lg:t-w-auto"
-          >
-            {{ $t('Login to your account') }}
-          </button-component>
         </div>
       </div>
     </form>
     <div class="" v-if="!isActive && isFilled">
-      <div>
+      <div class="t-text-sm">
         {{ details.firstName }} {{ details.lastName }}<br>
         {{ details.emailAddress }}
       </div>
-      <div v-if="details.createAccount && !currentUser" class="t-mt-4">
+      <div v-if="details.createAccount && !isLoggedIn" class="t-mt-2">
         <base-checkbox
           class="mt25"
           id="createAccountCheckboxInfo"

@@ -17,6 +17,7 @@ export default {
   },
   computed: {
     ...mapGetters({
+      isLoggedIn: 'user/isLoggedIn',
       currentUser: 'user/getCustomer',
       personalDetails: 'checkout/getPersonalDetails',
       isVirtualCart: 'cart/isVirtualCart'
@@ -26,12 +27,14 @@ export default {
     onCheckoutLoad () {
       this.details = this.personalDetails
     },
-    onLoggedIn (data) {
+    onLoggedIn () {
       this.details = {
-        firstName: data.firstname,
-        lastName: data.lastname,
-        emailAddress: data.email
+        firstName: this.currentUser.firstname,
+        lastName: this.currentUser.lastname,
+        emailAddress: this.currentUser.email
       }
+
+      this.submit()
     },
     submit () {
       this.$v.$touch()
@@ -52,6 +55,11 @@ export default {
   },
   mounted () {
     this.onCheckoutLoad()
+    if (this.isLoggedIn && !this.details.emailAddress) {
+      this.onLoggedIn()
+    } else if (this.isLoggedIn) {
+      this.submit()
+    }
   },
   beforeDestroy () {
     this.$bus.$off('checkout-after-load', this.onCheckoutLoad)
