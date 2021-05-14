@@ -6,17 +6,17 @@
           class="t-w-full t-px-2 t-mb-4"
           type="email"
           autocomplete="email"
-          id="email-address"
-          name="email-address"
+          id="email"
+          name="email"
           :placeholder="$t('Email address')"
-          v-model="personalDetails.emailAddress"
+          v-model="personalDetails.email"
           :validations="[
             {
-              condition: $v.personalDetails.emailAddress.$error && !$v.personalDetails.emailAddress.required,
+              condition: $v.personalDetails.email.$error && !$v.personalDetails.email.required,
               text: $t('Field is required')
             },
             {
-              condition: $v.personalDetails.emailAddress.$error && !$v.personalDetails.emailAddress.email,
+              condition: $v.personalDetails.email.$error && !$v.personalDetails.email.email,
               text: $t('Please provide valid e-mail address.')
             }
           ]"
@@ -60,7 +60,7 @@
         </base-checkbox>
         <template v-if="personalDetails.createAccount && !currentUser">
           <base-input
-            class="t-w-full lg:t-w-1/2 t-px-2 t-mb-4"
+            class="t-w-full t-px-2 t-mb-4"
             type="password"
             autocomplete="new-password"
             ref="password"
@@ -77,7 +77,7 @@
             }]"
           />
           <base-input
-            class="t-w-full lg:t-w-1/2 t-px-2 t-mb-4"
+            class="t-w-full t-px-2 t-mb-4"
             type="password"
             autocomplete="new-password"
             id="password-confirm"
@@ -119,7 +119,7 @@
     <div class="" v-if="!isActive && isFilled">
       <div>
         {{ personalDetails.firstName }} {{ personalDetails.lastName }}<br>
-        {{ personalDetails.emailAddress }}
+        {{ personalDetails.email }}
       </div>
       <div v-if="personalDetails.createAccount && !currentUser" class="t-mt-4">
         <base-checkbox
@@ -154,7 +154,7 @@ export default {
   validations () {
     const val = {
       personalDetails: {
-        emailAddress: {
+        email: {
           required,
           email
         },

@@ -5,6 +5,7 @@
         <input type="hidden" name="cluster" :value="cluster">
         <base-input
           type="email"
+          id="email"
           name="email"
           autocomplete="email"
           v-model="email"
@@ -23,6 +24,7 @@
           class="t-w-full t-px-2 t-mb-4"
         />
         <base-input
+          id="first-name"
           name="first-name"
           autocomplete="given-name"
           v-model="firstName"
@@ -36,6 +38,7 @@
           class="t-w-full sm:t-w-1/2 t-px-2 t-mb-4"
         />
         <base-input
+          id="last-name"
           name="last-name"
           autocomplete="family-name"
           v-model="lastName"
@@ -47,6 +50,7 @@
           class="t-w-full sm:t-w-1/2 t-px-2 t-mb-4"
         />
         <base-select
+          id="gender"
           name="gender"
           v-model="gender"
           :options="genderOptions"
@@ -58,6 +62,7 @@
           class="t-w-full sm:t-w-1/2 t-px-2 t-mb-4"
         />
         <base-input
+          id="dob"
           name="dob"
           autocomplete="bday"
           mask="date"
@@ -77,6 +82,7 @@
         />
         <base-input
           type="password"
+          id="password"
           name="password"
           ref="password"
           autocomplete="new-password"
@@ -96,6 +102,7 @@
         />
         <base-input
           type="password"
+          id="password-confirm"
           name="password-confirm"
           autocomplete="new-password"
           v-model="rPassword"

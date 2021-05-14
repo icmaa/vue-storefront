@@ -29,7 +29,7 @@ export default {
       this.personalDetails = {
         firstName: receivedData.firstname,
         lastName: receivedData.lastname,
-        emailAddress: receivedData.email
+        email: receivedData.email
       }
     },
     submit () {
