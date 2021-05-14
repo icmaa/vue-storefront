@@ -5,7 +5,6 @@
         <div v-if="!isLoggedIn" class="t-w-full t-px-2 t-mb-6">
           <button-component
             type="primary"
-            data-test-id="loginToYourAccount"
             @click="openLoginModal"
             class="t-w-full lg:t-w-auto"
           >
@@ -115,7 +114,6 @@
             class="t-w-full t-mb-2 lg:t-w-auto lg:t-mb-0 lg:t-mr-2"
             type="primary"
             @click.native.stop="submit"
-            data-test-id="personalDetailsSubmit"
           >
             {{ $t((isVirtualCart ? 'Continue to payment' : 'Continue to shipping')) }}
           </button-component>
@@ -129,9 +127,8 @@
       </div>
       <div v-if="details.createAccount && !isLoggedIn" class="t-mt-2">
         <base-checkbox
-          class="mt25"
-          id="createAccountCheckboxInfo"
-          name="createAccountCheckboxInfo"
+          id="create-account-info-box"
+          name="create-account-info-box"
           v-model="details.createAccount"
           disabled
         >

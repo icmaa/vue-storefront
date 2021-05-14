@@ -25,7 +25,6 @@
         >
           <component
             :is="step.component"
-            :is-active="step.active"
             :active="step.active"
             :done="step.done"
           />

@@ -4,14 +4,14 @@
       <div class="col-xs-1 col-sm-2 col-md-1">
         <div
           class="number-circle lh35 cl-white brdr-circle align-center weight-700"
-          :class="{ 'bg-cl-th-accent' : isActive || isFilled, 'bg-cl-tertiary' : !isFilled && !isActive }"
+          :class="{ 'bg-cl-th-accent' : active || done, 'bg-cl-tertiary' : !done && !active }"
         >
           {{ (isVirtualCart ? 3 : 4) }}
         </div>
       </div>
       <div class="col-xs-11 col-sm-9 col-md-11">
         <div class="row">
-          <div class="col-md-12" :class="{ 'cl-bg-tertiary' : !isFilled && !isActive }">
+          <div class="col-md-12" :class="{ 'cl-bg-tertiary' : !done && !active }">
             <h3 class="m0">
               {{ $t('Review order') }}
             </h3>
@@ -19,7 +19,7 @@
         </div>
       </div>
     </div>
-    <div class="row pl20 pr20" v-show="isActive">
+    <div class="row pl20 pr20" v-show="active">
       <div class="hidden-xs col-sm-2 col-md-1" />
       <div class="col-xs-12 col-sm-9 col-md-11">
         <div id="checkout-order-review-additional-container">
@@ -59,7 +59,7 @@
         </div>
       </div>
     </div>
-    <div class="row" v-show="isActive">
+    <div class="row" v-show="active">
       <div class="hidden-xs col-sm-2 col-md-1" />
       <div class="col-xs-12 col-sm-9 col-md-11">
         <div class="row">
@@ -114,7 +114,7 @@ import BaseCheckbox from 'theme/components/core/blocks/Form/BaseCheckbox'
 import ButtonComponent from 'theme/components/core/blocks/Button'
 import CartSummary from 'theme/components/core/blocks/Checkout/CartSummary'
 import Modal from 'theme/components/core/Modal'
-import { OrderReview } from '@vue-storefront/core/modules/checkout/components/OrderReview'
+import Review from 'icmaa-checkout/components/Review'
 
 export default {
   components: {
@@ -123,7 +123,7 @@ export default {
     CartSummary,
     Modal
   },
-  mixins: [OrderReview],
+  mixins: [ Review ],
   validations: {
     orderReview: {
       terms: {
