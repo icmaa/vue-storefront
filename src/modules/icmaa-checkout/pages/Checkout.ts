@@ -13,18 +13,6 @@ export default {
       stockCheckCompleted: false,
       stockCheckOK: false,
       confirmation: null,
-      activeSection: {
-        personal: true,
-        shipping: false,
-        payment: false,
-        review: false
-      },
-      doneSection: {
-        personal: false,
-        shipping: false,
-        payment: false,
-        review: false
-      },
       order: {},
       personalDetails: {},
       shipping: {},
@@ -37,15 +25,17 @@ export default {
   computed: {
     ...mapGetters({
       isVirtualCart: 'cart/isVirtualCart',
+      sections: 'checkout/getSections',
       isThankYouPage: 'checkout/isThankYouPage'
     })
   },
   async beforeMount () {
+    this.registerSections()
+
     await this.$store.dispatch('checkout/load')
     this.$bus.$emit('checkout-after-load')
     this.$store.dispatch('checkout/setModifiedAt', Date.now())
 
-    this.$bus.$on('checkout-after-personalDetails', this.onAfterPersonalDetails)
     this.$bus.$on('checkout-after-shippingDetails', this.onAfterShippingDetails)
     this.$bus.$on('checkout-after-paymentDetails', this.onAfterPaymentDetails)
     this.$bus.$on('checkout-before-shippingMethods', this.onBeforeShippingMethods)
@@ -101,8 +91,8 @@ export default {
     this.$bus.$emit('checkout-before-shippingMethods', country)
   },
   beforeDestroy () {
+    this.$store.dispatch('checkout/setSections')
     this.$store.dispatch('checkout/setModifiedAt', 0)
-    this.$bus.$off('checkout-after-personalDetails', this.onAfterPersonalDetails)
     this.$bus.$off('checkout-after-shippingDetails', this.onAfterShippingDetails)
     this.$bus.$off('checkout-after-paymentDetails', this.onAfterPaymentDetails)
     this.$bus.$off('checkout-after-cartSummary', this.onAfterCartSummary)
@@ -116,6 +106,17 @@ export default {
     'OnlineOnly': 'onNetworkStatusCheck'
   },
   methods: {
+    registerSections () {
+      const sections = {}
+      this.steps.forEach((step, i) => {
+        sections[step.name] = {
+          active: (i === 0),
+          done: false
+        }
+      })
+
+      this.$store.dispatch('checkout/setSections', sections)
+    },
     async onAfterShippingMethodChanged (payload) {
       await this.$store.dispatch('cart/syncTotals', { forceServerSync: true, methodsData: payload })
       this.shippingMethod = payload
@@ -135,10 +136,6 @@ export default {
     },
     onAfterCartSummary (receivedData) {
       this.cartSummary = receivedData
-    },
-    onAfterPersonalDetails (data) {
-      this.activateSection(this.isVirtualCart === true ? 'payment' : 'shipping')
-      this.$store.dispatch('checkout/savePersonalDetails', data)
     },
     onAfterPaymentDetails (receivedData) {
       this.payment = receivedData

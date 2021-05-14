@@ -1,6 +1,6 @@
 <template>
   <div class="personal-details">
-    <form v-if="isActive">
+    <form v-if="active">
       <div class="t-flex t-flex-wrap t--mx-2">
         <div v-if="!isLoggedIn" class="t-w-full t-px-2 t-mb-6">
           <button-component
@@ -122,7 +122,7 @@
         </div>
       </div>
     </form>
-    <div class="" v-if="!isActive && isFilled">
+    <div class="" v-if="!active && done">
       <div class="t-text-sm">
         {{ details.firstName }} {{ details.lastName }}<br>
         {{ details.emailAddress }}

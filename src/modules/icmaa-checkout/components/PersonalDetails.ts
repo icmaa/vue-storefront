@@ -3,14 +3,17 @@ import { required, email, minLength, sameAs } from 'vuelidate/lib/validators'
 
 export default {
   props: {
-    isActive: {
+    active: {
       type: Boolean,
-      required: true
+      default: false
+    },
+    done: {
+      type: Boolean,
+      default: false
     }
   },
   data () {
     return {
-      isFilled: false,
       details: {},
       rPassword: ''
     }
@@ -39,10 +42,8 @@ export default {
     submit () {
       this.$v.$touch()
       if (!this.$v.$invalid) {
-        this.isFilled = true
-        this.$emit('input', true)
-
-        this.$bus.$emit('checkout-after-personalDetails', this.details)
+        this.$store.dispatch('checkout/activateSection', this.isVirtualCart === true ? 'payment' : 'shipping')
+        this.$store.dispatch('checkout/savePersonalDetails', this.details)
       }
     },
     openLoginModal () {

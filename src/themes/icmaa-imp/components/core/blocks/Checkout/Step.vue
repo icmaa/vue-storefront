@@ -61,7 +61,7 @@ export default {
   methods: {
     editSection () {
       if (this.active || !this.done) return
-      this.$emit('edit-section', this.name)
+      this.$store.dispatch('checkout/activateSection', this.name)
     }
   }
 }

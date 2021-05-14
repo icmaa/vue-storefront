@@ -19,15 +19,15 @@
           :name="step.name"
           :index="index + 1"
           :title="$t(step.title)"
-          :active="activeSection[step.name]"
-          :done="doneSection[step.name]"
+          :active="step.active"
+          :done="step.done"
           :last="(index + 1) === steps.length"
-          @edit-section="activateSection"
         >
           <component
             :is="step.component"
-            :is-active="activeSection[step.name]"
-            v-model="doneSection[step.name]"
+            :is-active="step.active"
+            :active="step.active"
+            :done="step.done"
           />
         </step>
       </div>
@@ -93,7 +93,7 @@ export default {
           title: 'Review',
           component: Review
         }
-      ]
+      ].map(step => Object.assign(step, this.sections[step.name]))
     }
   },
   methods: {
