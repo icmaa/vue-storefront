@@ -63,9 +63,11 @@ export default {
   mounted () {
     this.onCheckoutLoad()
     if (this.isLoggedIn && !this.details.emailAddress) {
-      this.onLoggedIn()
-    } else if (this.isLoggedIn) {
-      this.submit()
+      if (this.details.emailAddress) {
+        this.submit()
+      } else {
+        this.onLoggedIn()
+      }
     }
   },
   beforeDestroy () {
