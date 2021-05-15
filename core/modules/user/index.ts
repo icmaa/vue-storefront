@@ -10,22 +10,28 @@ export const UserModule: StorefrontModule = async function ({ store }) {
   StorageManager.init('user')
   store.registerModule('user', userStore)
   if (!isServer) {
-    EventBus.$on('user-before-logout', () => {
-      store.dispatch('user/logout', { silent: false })
-      // TODO: Move it to theme
-      store.commit('ui/setSubmenu', {
-        depth: 0
-      })
-    })
+    /**
+     * We don't need this code, it'd be redundant
+     */
+    // EventBus.$on('user-before-logout', () => {
+    //   store.dispatch('user/logout', { silent: false })
+    //   // TODO: Move it to theme
+    //   store.commit('ui/setSubmenu', {
+    //     depth: 0
+    //   })
+    // })
 
-    EventBus.$on('user-after-loggedin', receivedData => {
-      // TODO: Make independent of checkout module
-      store.dispatch('checkout/savePersonalDetails', {
-        firstName: receivedData.firstname,
-        lastName: receivedData.lastname,
-        emailAddress: receivedData.email
-      })
-    })
+    /**
+     * Don't do this – we do it in the theme if needed
+     */
+    // EventBus.$on('user-after-loggedin', receivedData => {
+    //   // TODO: Make independent of checkout module
+    //   store.dispatch('checkout/savePersonalDetails', {
+    //     firstName: receivedData.firstname,
+    //     lastName: receivedData.lastname,
+    //     emailAddress: receivedData.email
+    //   })
+    // })
 
     /**
      * In order to be able to overwrite this action we need to uncomment it here.
