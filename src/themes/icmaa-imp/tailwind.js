@@ -48,7 +48,8 @@ module.exports = {
         /** These are special classes for the buttons */
         '6': '1.5rem',
         '8': '2rem',
-        '10': '2.5rem'
+        '10': '2.5rem',
+        '12': '3rem'
       },
       maxHeight: {
         '0': '0',

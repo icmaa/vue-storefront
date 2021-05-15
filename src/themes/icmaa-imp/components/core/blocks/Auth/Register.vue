@@ -49,11 +49,10 @@
           }]"
           class="t-w-full sm:t-w-1/2 t-px-2 t-mb-4"
         />
-        <base-select
+        <gender-select
           id="gender"
           name="gender"
           v-model="gender"
-          :options="genderOptions"
           :initial-option-text="$t('Gender') + ' *'"
           :validations="[{
             condition: !$v.gender.required && $v.gender.$error,
@@ -161,10 +160,9 @@
 <script>
 import { mapGetters } from 'vuex'
 import i18n from '@vue-storefront/i18n'
-import GenderMixin from 'icmaa-user/mixins/gender'
 import ButtonComponent from 'theme/components/core/blocks/Button'
 import BaseInput from 'theme/components/core/blocks/Form/BaseInput'
-import BaseSelect from 'theme/components/core/blocks/Form/BaseSelect'
+import GenderSelect from 'theme/components/core/blocks/Form/GenderSelect'
 import BaseCheckbox from 'theme/components/core/blocks/Form/BaseCheckbox'
 import MaterialIcon from 'theme/components/core/blocks/MaterialIcon'
 import FacebookLoginButton from 'theme/components/core/blocks/Auth/FacebookLoginButton'
@@ -176,10 +174,9 @@ import { Logger } from '@vue-storefront/core/lib/logger'
 
 export default {
   name: 'Register',
-  mixins: [GenderMixin],
   components: {
     BaseInput,
-    BaseSelect,
+    GenderSelect,
     BaseCheckbox,
     ButtonComponent,
     MaterialIcon,

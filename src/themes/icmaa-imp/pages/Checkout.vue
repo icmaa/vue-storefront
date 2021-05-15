@@ -74,7 +74,7 @@ export default {
       return [
         {
           name: 'personal',
-          title: 'Personal Details',
+          title: 'Login / Personal Details',
           component: PersonalDetails
         },
         {

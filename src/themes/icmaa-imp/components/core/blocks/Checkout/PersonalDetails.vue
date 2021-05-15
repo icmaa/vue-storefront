@@ -4,14 +4,14 @@
       <div class="t-flex t-flex-wrap t--mx-2">
         <div v-if="!isLoggedIn" class="t-w-full t-px-2 t-mb-6">
           <button-component
-            type="primary"
-            @click="openLoginModal"
+            size="lg"
             class="t-w-full lg:t-w-auto"
+            @click="openLoginModal"
           >
             {{ $t('Login to your account') }}
           </button-component>
         </div>
-        <div v-if="!isLoggedIn" class="t-w-full t-px-2 t-mb-6 t-font-light">
+        <div v-if="!isLoggedIn" class="t-w-full t-px-2 t-mb-4 t-font-light">
           {{ $t('Proceed as new user') }}
         </div>
         <base-input
@@ -72,6 +72,32 @@
           {{ $t('I want to create an account') }}
         </base-checkbox>
         <template v-if="details.createAccount">
+          <gender-select
+            class="t-w-full lg:t-w-1/2 t-px-2 t-mb-4"
+            id="gender"
+            name="gender"
+            v-model="details.gender"
+            :validations="[{
+              condition: !$v.details.gender.required && $v.details.gender.$error,
+              text: $t('Field is required.')
+            }]"
+          />
+          <base-input
+            class="t-w-full lg:t-w-1/2 t-px-2 t-mb-4"
+            id="dob"
+            name="dob"
+            autocomplete="bday"
+            mask="date"
+            :placeholder="`${$t('Date of birth')} (${dateFormat})`"
+            v-model="details.dob"
+            :validations="[{
+              condition: !$v.details.dob.required && $v.details.dob.$error,
+              text: $t('Field is required.')
+            }, {
+              condition: !$v.details.dob.date && $v.details.dob.$error,
+              text: $t('Use a valid date.')
+            }]"
+          />
           <base-input
             class="t-w-full t-px-2 t-mb-4"
             type="password"
@@ -144,6 +170,7 @@
 import PersonalDetails from 'icmaa-checkout/components/PersonalDetails'
 import BaseCheckbox from 'theme/components/core/blocks/Form/BaseCheckbox'
 import BaseInput from 'theme/components/core/blocks/Form/BaseInput'
+import GenderSelect from 'theme/components/core/blocks/Form/GenderSelect'
 import ButtonComponent from 'theme/components/core/blocks/Button'
 
 export default {
@@ -151,7 +178,8 @@ export default {
   components: {
     ButtonComponent,
     BaseCheckbox,
-    BaseInput
+    BaseInput,
+    GenderSelect
   },
   mixins: [ PersonalDetails ]
 }

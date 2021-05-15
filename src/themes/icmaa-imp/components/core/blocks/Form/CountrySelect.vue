@@ -4,7 +4,7 @@
     :initial-option-text="$t('Country')"
     v-bind="{ ...$props, ...$attrs }"
     :value="country"
-    @input="(v) => $emit('input', v)"
+    @input="$emit('input', $event)"
   />
 </template>
 

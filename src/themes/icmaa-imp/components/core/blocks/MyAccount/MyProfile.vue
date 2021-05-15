@@ -50,13 +50,12 @@
         }]"
         class="t-w-full lg:t-w-1/2 t-px-2 t-mb-4"
       />
-      <base-select
+      <gender-select
         name="gender"
         id="gender"
         v-model="profile.gender"
         :options="genderOptions"
         :label="$t('Gender') + ' *'"
-        :initial-option-text="$t('Gender')"
         :validations="[{
           condition: !validation.gender.required && validation.gender.$error,
           text: $t('Field is required.')
@@ -176,20 +175,18 @@ import { unicodeAlpha } from '@vue-storefront/core/helpers/validators'
 import { date } from 'icmaa-config/helpers/validators'
 import { toDate } from 'icmaa-config/helpers/datetime'
 
-import GenderMixin from 'icmaa-user/mixins/gender'
 import Headline from 'theme/components/core/blocks/MyAccount/Headline'
 import BaseCheckbox from 'theme/components/core/blocks/Form/BaseCheckbox'
-import BaseSelect from 'theme/components/core/blocks/Form/BaseSelect'
+import GenderSelect from 'theme/components/core/blocks/Form/GenderSelect'
 import BaseInput from 'theme/components/core/blocks/Form/BaseInput'
 import ButtonComponent from 'theme/components/core/blocks/Button'
 
 export default {
   name: 'MyProfile',
-  mixins: [GenderMixin],
   components: {
     Headline,
     BaseCheckbox,
-    BaseSelect,
+    GenderSelect,
     BaseInput,
     ButtonComponent
   },

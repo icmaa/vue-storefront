@@ -1,5 +1,7 @@
 import { mapGetters } from 'vuex'
 import { required, email, minLength, sameAs } from 'vuelidate/lib/validators'
+import { date } from 'icmaa-config/helpers/validators'
+import merge from 'lodash-es/merge'
 
 export default {
   props: {
@@ -20,11 +22,15 @@ export default {
   },
   computed: {
     ...mapGetters({
+      storeConfig: 'icmaaConfig/getCurrentStoreConfig',
       isLoggedIn: 'user/isLoggedIn',
       currentUser: 'user/getCustomer',
       personalDetails: 'checkout/getPersonalDetails',
       isVirtualCart: 'cart/isVirtualCart'
-    })
+    }),
+    dateFormat () {
+      return this.storeConfig.i18n.dateFormat
+    }
   },
   methods: {
     onCheckoutLoad () {
@@ -67,7 +73,7 @@ export default {
     this.$bus.$off('user-after-loggedin', this.onLoggedIn)
   },
   validations () {
-    const val: any = {
+    let val: any = {
       details: {
         emailAddress: {
           required,
@@ -83,14 +89,27 @@ export default {
     }
 
     if (this.details.createAccount) {
-      val.details.password = {
-        minLength: minLength(8),
-        required
+      const createVal = {
+        details: {
+          gender: {
+            required
+          },
+          dob: {
+            date,
+            required
+          },
+          password: {
+            minLength: minLength(8),
+            required
+          }
+        },
+        rPassword: {
+          sameAsPassword: sameAs(function () { return this.details.password }),
+          required
+        }
       }
-      val.rPassword = {
-        sameAsPassword: sameAs(function () { return this.details.password }),
-        required
-      }
+
+      val = merge(val, createVal)
     }
 
     return val
