@@ -188,7 +188,7 @@ export default {
     }
   },
   watch: {
-    '$route.params.term': function () {
+    '$route.params': function () {
       this.fetchAsyncData(this.$route)
     }
   },
