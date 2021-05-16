@@ -96,8 +96,11 @@ jobs:
         run: yarn build
 
       - name: Start
+        env:
+          VSF_REDIS_HOST: localhost
+          VSF_SERVER_PORT: 6379
+          VSF_STORYBLOK_RELEASE_ID: ${{ secrets.STORYBLOK_RELEASE_ID }}
         run: |
-          export VSF_STORYBLOK_RELEASE_ID=${{ secrets.STORYBLOK_RELEASE_ID }}
           yarn pm2 start ecosystem.ci.json
 
       - name: Cypress run
