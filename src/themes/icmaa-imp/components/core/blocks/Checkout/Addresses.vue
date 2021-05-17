@@ -15,18 +15,14 @@
       </checkbox-component>
       <address-component
         type="billing"
+        :label="$t('Billing address')"
         v-model="billingAddress"
         ref="billingAddress"
+        class="t-mt-8"
         v-if="!billingAddressIsSameAsShipping"
       />
-      <pre>
-      {{ shippingAddress }}
-    </pre>
-      <pre>
-      {{ billingAddress }}
-    </pre>
       <button-component
-        class="t-w-full lg:t-w-auto"
+        class="t-w-full lg:t-w-auto t-mt-4"
         type="primary"
         @click.native.stop="submit"
       >

@@ -35,10 +35,12 @@ export default {
 
       if (!this.billingAddressIsSameAsShipping) {
         const billing = this.$refs.billingAddress.submit()
-        if (!billing.invalid) return false
+        if (billing.$invalid) return false
       }
 
-      if (!shipping.invalid) return false
+      console.error(shipping)
+      if (shipping.$invalid) return false
+      console.error('VALID', shipping)
 
       return this.$store.dispatch('checkout/activateSection', 'shipping')
     }

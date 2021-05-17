@@ -1,23 +1,30 @@
 <template>
   <div class="address" :class="[ `address-${type}` ]">
     <div class="t-flex t-flex-wrap t--mx-2">
+      <h3 class="t-w-full t-px-2 t-mb-4" v-text="label" v-if="label" />
       <address-select
         class="t-w-full t-px-2 t-mb-4"
         name="selected-address"
         :type="type"
         v-model="selectedAddress"
+        :validations="[
+          {
+            condition: $v.selectedAddress.$error && !$v.selectedAddress.required,
+            text: $t('Field is required')
+          }
+        ]"
       />
       <template v-if="isNewAddress">
         <base-input
           class="t-w-full t-px-2 t-mb-4"
           type="text"
           name="company"
+          autocomplete="company"
           :placeholder="$t('Company name')"
           v-model.trim="address.company"
-          autocomplete="company"
           :validations="[
             {
-              condition: $v.company.$error && !$v.company.latin,
+              condition: $v.address.company.$error && !$v.address.company.latin,
               text: $t('Invalid characters.')
             }
           ]"
@@ -27,15 +34,15 @@
           type="text"
           name="firstname"
           :placeholder="$t('First name') + ' *'"
-          v-model.trim="address.firstname"
           autocomplete="given-name"
+          v-model.trim="address.firstname"
           :validations="[
             {
-              condition: $v.firstname.$error && !$v.firstname.required,
+              condition: $v.address.firstname.$error && !$v.address.firstname.required,
               text: $t('Field is required')
             },
             {
-              condition: $v.firstname.$error && !$v.firstname.latin,
+              condition: $v.address.firstname.$error && !$v.address.firstname.latin,
               text: $t('Invalid characters.')
             }
           ]"
@@ -44,16 +51,16 @@
           class="t-w-full lg:t-w-1/2 t-px-2 t-mb-4"
           type="text"
           name="lastname"
+          autocomplete="family-name"
           :placeholder="$t('Last name') + ' *'"
           v-model.trim="address.lastname"
-          autocomplete="family-name"
           :validations="[
             {
-              condition: $v.lastname.$error && !$v.lastname.required,
+              condition: $v.address.lastname.$error && !$v.address.lastname.required,
               text: $t('Field is required')
             },
             {
-              condition: $v.lastname.$error && !$v.lastname.latin,
+              condition: $v.address.lastname.$error && !$v.address.lastname.latin,
               text: $t('Invalid characters.')
             }
           ]"
@@ -72,15 +79,15 @@
                 text: $t('Forgot your house number?')
               },
               {
-                condition: $v.street.$error && !$v.street.$each[i].required,
+                condition: $v.address.street.$error && !$v.address.street.$each[i].required,
                 text: $t('Field is required.')
               },
               {
-                condition: $v.street.$error && !$v.street.$each[i].housenumber,
+                condition: $v.address.street.$error && !$v.address.street.$each[i].housenumber,
                 text: $t('Please leave a space between your address and your housenumber.')
               },
               {
-                condition: $v.street.$error && (!$v.street.$each[i].latin || !$v.street.$each[i].streetname),
+                condition: $v.address.street.$error && (!$v.address.street.$each[i].latin || !$v.address.street.$each[i].streetname),
                 text: $t('Invalid characters.')
               }
             ]"
@@ -97,11 +104,11 @@
           v-model.trim="address.city"
           :validations="[
             {
-              condition: $v.city.$error && !$v.city.required,
+              condition: $v.address.city.$error && !$v.address.city.required,
               text: $t('Field is required')
             },
             {
-              condition: $v.city.$error && !$v.city.latin,
+              condition: $v.address.city.$error && !$v.address.city.latin,
               text: $t('Invalid characters.')
             }
           ]"
@@ -115,11 +122,11 @@
           v-model.trim="address.postcode"
           :validations="[
             {
-              condition: $v.postcode.$error && !$v.postcode.required,
+              condition: $v.address.postcode.$error && !$v.address.postcode.required,
               text: $t('Field is required')
             },
             {
-              condition: $v.postcode.$error && !$v.postcode.postcode,
+              condition: $v.address.postcode.$error && !$v.address.postcode.postcode,
               text: $t('This is not a valid postcode. Format: {code}', { code: postCodeFormat})
             }
           ]"
@@ -131,7 +138,7 @@
           :initial-option-text="$t('State / Region') + ' *'"
           :options="states"
           :validations="[{
-            condition: $v.region_id.$error && !$v.region_id.required,
+            condition: $v.address.region_id.$error && !$v.address.region_id.required,
             text: $t('Field is required.')
           }]"
           class="t-w-full lg:t-w-1/2 t-px-2 t-mb-4"
@@ -142,11 +149,11 @@
           :class="{ 'lg:t-w-1/2': hasState }"
           name="country_id"
           autocomplete="country-name"
-          v-model.number="address.country_id"
+          v-model="address.country_id"
           :placeholder="$t('Country') + ' *'"
           :validations="[
             {
-              condition: $v.country_id.$error && !$v.country_id.required,
+              condition: $v.address.country_id.$error && !$v.address.country_id.required,
               text: $t('Field is required')
             }
           ]"
@@ -160,7 +167,7 @@
             v-model.trim="address.telephone"
             :validations="[
               {
-                condition: $v.telephone.$error && !$v.telephone.unicodeAlphaNum,
+                condition: $v.address.telephone.$error && !$v.address.telephone.unicodeAlphaNum,
                 text: $t('Only alphanumeric characters are allowed.')
               }
             ]"
@@ -178,7 +185,7 @@
             :placeholder="$t('VAT number') + ' *'"
             :validations="[
               {
-                condition: !$v.vat_id.required && $v.vat_id.$error,
+                condition: !$v.address.vat_id.required && $v.address.vat_id.$error,
                 text: $t('Field is required.')
               }
             ]"
@@ -209,54 +216,62 @@ export default {
   },
   mixins: [ Address ],
   validations () {
-    const vatId = this.hasVatId ? {
-      vat_id: { required }
-    } : {}
+    let address = {}
 
-    const regionId = this.hasState ? {
-      region_id: { required }
-    } : {}
+    if (this.isNewAddress) {
+      const vatId = this.hasVatId ? {
+        vat_id: { required }
+      } : {}
+
+      const regionId = this.hasState ? {
+        region_id: { required }
+      } : {}
+
+      address = {
+        company: {
+          latin
+        },
+        firstname: {
+          required,
+          latin
+        },
+        lastname: {
+          required,
+          latin
+        },
+        street: {
+          required,
+          $each: {
+            required,
+            streetname,
+            housenumber,
+            latin
+          }
+        },
+        postcode: {
+          required,
+          postcode: postcode(this.countryId)
+        },
+        city: {
+          required,
+          latin
+        },
+        country_id: {
+          required
+        },
+        telephone: {
+          unicodeAlphaNum
+        },
+        ...regionId,
+        ...vatId
+      }
+    }
+
+    let selectedAddress = this.hasAddresses ? { required } : {}
 
     return {
-      company: {
-        latin
-      },
-      firstname: {
-        required,
-        latin
-      },
-      lastname: {
-        required,
-        latin
-      },
-      street: {
-        required,
-        $each: {
-          required,
-          streetname,
-          housenumber,
-          latin
-        }
-      },
-      postcode: {
-        required,
-        postcode: postcode(this.countryId)
-      },
-      city: {
-        required,
-        latin
-      },
-      country_id: {
-        required
-      },
-      telephone: {
-        unicodeAlphaNum
-      },
-      shippingMethod: {
-        required
-      },
-      ...regionId,
-      ...vatId
+      ...selectedAddress,
+      address
     }
   }
 }

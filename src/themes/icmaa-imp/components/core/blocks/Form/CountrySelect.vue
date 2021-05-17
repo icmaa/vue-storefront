@@ -37,16 +37,11 @@ export default {
   },
   data () {
     return {
+      country: this.value || '',
       countries: getTranslatedCountries()
     }
   },
   computed: {
-    country () {
-      if (!this.value && this.preselectStoreViewLanguage) {
-        return currentStoreView().i18n.defaultCountry
-      }
-      return this.value
-    },
     allowedCountries () {
       /**
        * We can't just use the values from `currentStoreView()`, because they are concatenated by
@@ -60,6 +55,13 @@ export default {
         .filter(({ code }) => !this.onlyAllowed || this.allowedCountries.includes(code))
         .map(({ code: value, name: label }) => ({ value, label }))
     }
+  },
+  mounted () {
+    if (!this.value && this.preselectStoreViewLanguage) {
+      this.country = currentStoreView().i18n.defaultCountry
+    }
+
+    this.$emit('input', this.country)
   }
 }
 </script>

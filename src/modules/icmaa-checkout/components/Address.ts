@@ -1,3 +1,4 @@
+import { mapGetters } from 'vuex'
 import AddressMixin from 'theme/mixins/user/addressMixin'
 
 export default {
@@ -7,6 +8,10 @@ export default {
     type: {
       type: String,
       default: 'shipping'
+    },
+    label: {
+      type: [String, Boolean],
+      default: false
     }
   },
   data () {
@@ -34,19 +39,35 @@ export default {
       }
     },
     selectedAddress (v) {
+      this.resetForm()
+
       if (v === 0) v = this.address
       this.$emit('input', v)
     }
   },
   computed: {
+    ...mapGetters({
+      addresses: 'user/getAddresses'
+    }),
     isNewAddress () {
       return !this.selectedAddress || this.selectedAddress === 0
+    },
+    hasAddresses () {
+      return this.addresses.length > 0
     }
   },
   methods: {
     submit () {
       this.$v.$touch()
       return this.$v
+    },
+    resetForm () {
+      this.$nextTick(() => {
+        this.$v.$reset()
+      })
     }
+  },
+  unmounted () {
+    this.resetForm()
   }
 }
