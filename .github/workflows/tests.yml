@@ -40,7 +40,7 @@ jobs:
       - name: Checkout "icmaa/shop-workspace" repo
         run: |
           rm -rf shop-workspace
-          export CONFIG_BRANCH=$(if [[ ${{ github.base_ref }} =~ ^master ]]; then echo "-b master"; else echo "-b develop"; fi)
+          export CONFIG_BRANCH=$(if [[ ! ${{ github.base_ref }} =~ ^master ]]; then echo "-b develop"; fi)
           git clone --no-tags --depth 1 https://${{ secrets.PAT }}@github.com/icmaa/shop-workspace $CONFIG_BRANCH
 
       - name: Sync config JSON files
@@ -71,7 +71,7 @@ jobs:
 
     env:
       VSF_REDIS_HOST: localhost
-      VSF_SERVER_PORT: 6379
+      VSF_REDIS_PORT: 6379
 
     steps:
       - uses: actions/checkout@v2
@@ -82,7 +82,7 @@ jobs:
       - name: Checkout "icmaa/shop-workspace" repo
         run: |
           rm -rf shop-workspace
-          export CONFIG_BRANCH=$(if [[ ${{ github.base_ref }} =~ ^master ]]; then echo "-b master"; else echo "-b develop"; fi)
+          export CONFIG_BRANCH=$(if [[ ! ${{ github.base_ref }} =~ ^master ]]; then echo "-b develop"; fi)
           git clone --no-tags --depth 1 https://${{ secrets.PAT }}@github.com/icmaa/shop-workspace $CONFIG_BRANCH
 
       - name: Sync config JSON files
