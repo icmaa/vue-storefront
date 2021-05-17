@@ -13,7 +13,14 @@ export default {
   },
   data () {
     return {
-
+      shippingAddress: null,
+      billingAddress: null,
+      billingAddressIsSameAsShipping: true
+    }
+  },
+  watch: {
+    billingAddressIsSameAsShipping (v) {
+      if (v === true) this.billingAddress = null
     }
   },
   computed: {
@@ -24,7 +31,16 @@ export default {
   },
   methods: {
     submit () {
-      this.$store.dispatch('checkout/activateSection', 'shipping')
+      const shipping = this.$refs.shippingAddress.submit()
+
+      if (!this.billingAddressIsSameAsShipping) {
+        const billing = this.$refs.billingAddress.submit()
+        if (!billing.invalid) return false
+      }
+
+      if (!shipping.invalid) return false
+
+      return this.$store.dispatch('checkout/activateSection', 'shipping')
     }
   }
 }

@@ -12,9 +12,9 @@
           sizeClasses,
           invalid ? 't-border-alert' : 't-border-base-light',
           {
-            't-text-base-light': !value || value === selected,
+            't-text-base-light': (!value && value !== 0) || value === selected,
             [selectClass]: selectClass !== false,
-            'value-selected': isFloating && value
+            'value-selected': isFloating && (value || value === 0)
           }
         ]"
         :name="name"

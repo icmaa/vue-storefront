@@ -1,4 +1,3 @@
-import { mapState, mapGetters } from 'vuex'
 import { getPostcodeRegex } from 'icmaa-config/helpers/validators'
 
 export default {
@@ -12,22 +11,39 @@ export default {
   data () {
     return {
       selectedAddress: false,
-      company: '',
-      firstname: '',
-      lastname: '',
-      region: '',
-      city: '',
-      street: [''],
-      postcode: '',
-      country_id: '',
-      region_id: null,
-      telephone: '',
-      vat_id: null
+      address: {
+        company: '',
+        firstname: '',
+        lastname: '',
+        region: '',
+        city: '',
+        street: [''],
+        postcode: '',
+        country_id: '',
+        region_id: null,
+        telephone: '',
+        vat_id: null
+      }
+    }
+  },
+  watch: {
+    address: {
+      deep: true,
+      handler (v) {
+        this.$emit('input', v)
+      }
+    },
+    selectedAddress (v) {
+      if (v === 0) v = this.address
+      this.$emit('input', v)
     }
   },
   computed: {
+    isNewAddress () {
+      return !this.selectedAddress || this.selectedAddress === 0
+    },
     houseNumberAdvice () {
-      const street = this.street.join('')
+      const street = this.address.street.join('')
       return street.length > 8 && !/(\d)+/.test(street)
     },
     hasState () {
@@ -37,16 +53,16 @@ export default {
       return ['IT'].includes(this.countryId)
     },
     countryId () {
-      return this.country_id.length > 0 ? this.country_id : undefined
+      return this.address.country_id.length > 0 ? this.address.country_id : undefined
     },
     postCodeFormat () {
-      return getPostcodeRegex(this.country_id)[1]
+      return getPostcodeRegex(this.address.country_id)[1]
     }
   },
-  mounted () {
-
-  },
   methods: {
-
+    submit () {
+      this.$v.$touch()
+      return this.$v
+    }
   }
 }

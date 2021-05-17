@@ -21,8 +21,8 @@ export interface UserProfile {
     postcode: string | null,
     company?: string,
     telephone?: string,
-    default_billing?: boolean,
-    default_shipping?: boolean,
+    is_default_billing?: boolean,
+    is_default_shipping?: boolean,
     [k: string]: any
   }[],
   custom_attributes?: {

@@ -1,16 +1,17 @@
 <template>
   <base-select
     :options="addressOptions"
-    :initial-option-text="$t('Address')"
+    :initial-option-text="$t('Select an address')"
     v-if="hasAddresses"
     v-bind="{ ...$props, ...$attrs }"
-    v-model="addressId"
-    @input="$emit('input', $event)"
+    v-model.number="addressId"
+    @input="input"
   />
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
+import i18n from '@vue-storefront/i18n'
 import BaseSelect from 'theme/components/core/blocks/Form/BaseSelect'
 
 export default {
@@ -20,13 +21,26 @@ export default {
   },
   props: {
     value: {
-      type: [Boolean, String],
+      type: [Boolean, String, Number],
       default: false
+    },
+    type: {
+      type: String,
+      default: 'shipping'
     }
   },
   data () {
     return {
       addressId: this.value || ''
+    }
+  },
+  mounted () {
+    if (!this.hasAddresses) return
+
+    const defaultAddress = this.addresses.find(a => a['is_default_' + this.type])
+    if (defaultAddress) {
+      this.addressId = defaultAddress.id
+      this.$emit('input', this.addressId)
     }
   },
   computed: {
@@ -49,7 +63,17 @@ export default {
         return { value, label }
       })
 
+      addresses.unshift({
+        label: i18n.t('Add new address'), value: 0
+      })
+
       return addresses
+    }
+  },
+  methods: {
+    input (v, e) {
+      if (v !== 'new') v = parseInt(v)
+      this.$emit('input', v, e)
     }
   }
 }
