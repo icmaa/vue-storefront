@@ -26,7 +26,6 @@
 </template>
 
 <script>
-import CurrentPage from 'theme/mixins/currentPage'
 import Logo from 'theme/components/core/blocks/Header/Logo'
 import ButtonUiSidebar from 'theme/components/core/blocks/Header/ButtonUiSidebar'
 import ButtonCart from 'theme/components/core/blocks/Header/ButtonCart'
@@ -46,7 +45,6 @@ export default {
     MetaNavigation,
     LanguageSwitcher
   },
-  mixins: [CurrentPage],
   data () {
     return {
       navVisible: true,
