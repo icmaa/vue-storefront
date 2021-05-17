@@ -1,0 +1,6 @@
+{
+  "extends": "./tsconfig-build.json",
+  "ts-node": {
+    "transpileOnly": true
+  }
+}
