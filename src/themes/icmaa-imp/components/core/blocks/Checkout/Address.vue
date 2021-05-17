@@ -89,7 +89,7 @@
           />
         </div>
         <base-input
-          class="t-w-full lg:t-w-1/2 t-px-2 t-mb-4"
+          class="t-w-full lg:t-w-2/3 t-px-2 t-mb-4"
           type="text"
           name="city"
           autocomplete="city"
@@ -107,7 +107,7 @@
           ]"
         />
         <base-input
-          class="t-w-full lg:t-w-1/2 t-px-2 t-mb-4"
+          class="t-w-full lg:t-w-1/3 t-px-2 t-mb-4"
           type="text"
           name="postcode"
           autocomplete="postal-code"
@@ -124,17 +124,17 @@
             }
           ]"
         />
-        <base-input
-          class="t-w-full lg:t-w-1/2 t-px-2 t-mb-4"
-          type="text"
-          name="state"
-          autocomplete="address-level1"
-          :placeholder="$t('State / Region') + ' *'"
-          v-model.trim="address.region_id"
+        <base-select
+          name="region_id"
+          id="region_id"
+          v-model="address.region_id"
+          :initial-option-text="$t('State / Region') + ' *'"
+          :options="states"
           :validations="[{
             condition: $v.region_id.$error && !$v.region_id.required,
             text: $t('Field is required.')
           }]"
+          class="t-w-full lg:t-w-1/2 t-px-2 t-mb-4"
           v-if="hasState"
         />
         <country-select
@@ -197,12 +197,14 @@ import Address from 'icmaa-checkout/components/Address'
 
 import CountrySelect from 'theme/components/core/blocks/Form/CountrySelect'
 import AddressSelect from 'theme/components/core/blocks/Form/AddressSelect'
+import BaseSelect from 'theme/components/core/blocks/Form/BaseSelect'
 import BaseInput from 'theme/components/core/blocks/Form/BaseInput'
 
 export default {
   components: {
     AddressSelect,
     CountrySelect,
+    BaseSelect,
     BaseInput
   },
   mixins: [ Address ],

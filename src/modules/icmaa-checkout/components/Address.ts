@@ -1,7 +1,8 @@
-import { getPostcodeRegex } from 'icmaa-config/helpers/validators'
+import AddressMixin from 'theme/mixins/user/addressMixin'
 
 export default {
   name: 'Address',
+  mixins: [ AddressMixin ],
   props: {
     type: {
       type: String,
@@ -15,7 +16,6 @@ export default {
         company: '',
         firstname: '',
         lastname: '',
-        region: '',
         city: '',
         street: [''],
         postcode: '',
@@ -41,22 +41,6 @@ export default {
   computed: {
     isNewAddress () {
       return !this.selectedAddress || this.selectedAddress === 0
-    },
-    houseNumberAdvice () {
-      const street = this.address.street.join('')
-      return street.length > 8 && !/(\d)+/.test(street)
-    },
-    hasState () {
-      return ['US', 'GB'].includes(this.countryId)
-    },
-    hasVatId () {
-      return ['IT'].includes(this.countryId)
-    },
-    countryId () {
-      return this.address.country_id.length > 0 ? this.address.country_id : undefined
-    },
-    postCodeFormat () {
-      return getPostcodeRegex(this.address.country_id)[1]
     }
   },
   methods: {

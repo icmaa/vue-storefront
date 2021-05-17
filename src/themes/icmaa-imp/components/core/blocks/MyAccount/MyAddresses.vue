@@ -256,13 +256,13 @@
 <script>
 import { mapGetters } from 'vuex'
 import i18n from '@vue-storefront/i18n'
-import { currentStoreView } from '@vue-storefront/core/lib/multistore'
 
 import pick from 'lodash-es/pick'
 
 import { required } from 'vuelidate/lib/validators'
-import { latin, unicodeAlphaNum, streetname, housenumber, postcode, getPostcodeRegex } from 'icmaa-config/helpers/validators'
+import { latin, unicodeAlphaNum, streetname, housenumber, postcode } from 'icmaa-config/helpers/validators'
 
+import AddressMixin from 'theme/mixins/user/addressMixin'
 import Headline from 'theme/components/core/blocks/MyAccount/Headline'
 import BaseInput from 'theme/components/core/blocks/Form/BaseInput'
 import BaseSelect from 'theme/components/core/blocks/Form/BaseSelect'
@@ -272,10 +272,10 @@ import CountrySelect from 'theme/components/core/blocks/Form/CountrySelect'
 import MaterialIcon from 'theme/components/core/blocks/MaterialIcon'
 
 import { getTranslatedCountries } from 'icmaa-config/helpers/i18n/countries'
-import { getStates } from 'icmaa-config/helpers/i18n/states'
 
 export default {
   name: 'MyAdresses',
+  mixins: [ AddressMixin ],
   data () {
     return {
       edit: false,
@@ -296,8 +296,6 @@ export default {
   },
   computed: {
     ...mapGetters({
-      viewport: 'ui/getViewport',
-      storeConfig: 'icmaaConfig/getCurrentStoreConfig',
       customer: 'user/getCustomer'
     }),
     addresses () {
@@ -312,35 +310,12 @@ export default {
     validation () {
       return this.$v.address
     },
-    countryId () {
-      return this.address.country_id.length > 0 ? this.address.country_id : undefined
-    },
-    postCodeFormat () {
-      return getPostcodeRegex(this.address.country_id)[1]
-    },
-    states () {
-      if (this.hasState) {
-        return getStates().map(({ code: value, name: label }) => ({ label, value }))
-      }
-
-      return []
-    },
-    houseNumberAdvice () {
-      const street = this.address.street.join('')
-      return street.length > 8 && !/(\d)+/.test(street)
-    },
     customerAddress () {
       return this.customer.addresses.find(a => a.entity_id === this.address.entity_id)
     },
     isDefaultAddress () {
       let address = this.customerAddress
       return address && (address.is_default_billing === true || address.is_default_shipping === true)
-    },
-    hasState () {
-      return ['US', 'GB'].includes(this.countryId)
-    },
-    hasVatId () {
-      return ['IT'].includes(this.countryId)
     }
   },
   methods: {
@@ -420,27 +395,6 @@ export default {
       this.isDelete = true
 
       this.$bus.$emit('myAccount-before-updateUser', customer)
-    },
-    setAddressDefaults () {
-      this.address = {
-        entity_id: '',
-        company: '',
-        prefix: '',
-        firstname: this.customer.firstname,
-        lastname: this.customer.lastname,
-        suffix: '',
-        street: [''],
-        postcode: '',
-        city: '',
-        country_id: currentStoreView().i18n.defaultCountry,
-        region_id: null,
-        telephone: '',
-        vat_id: null,
-        is_default_billing: false,
-        is_default_shipping: false
-      }
-
-      return this.address
     },
     back () {
       this.edit = false
