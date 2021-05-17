@@ -53,6 +53,7 @@ import CartSummary from 'theme/components/core/blocks/Checkout/CartSummary'
 import MaterialIcon from 'theme/components/core/blocks/MaterialIcon'
 
 const PersonalDetails = () => import(/* webpackChunkName: "vsf-checkout-personal-details" */ 'theme/components/core/blocks/Checkout/PersonalDetails')
+const Addresses = () => import(/* webpackChunkName: "vsf-checkout-addresses" */ 'theme/components/core/blocks/Checkout/Addresses')
 const Shipping = () => import(/* webpackChunkName: "vsf-checkout-shipping" */ 'theme/components/core/blocks/Checkout/Shipping')
 const Payment = () => import(/* webpackChunkName: "vsf-checkout-payment" */ 'theme/components/core/blocks/Checkout/Payment')
 const Review = () => import(/* webpackChunkName: "vsf-checkout-review" */ 'theme/components/core/blocks/Checkout/Review')
@@ -76,6 +77,11 @@ export default {
           name: 'personal',
           title: 'Login / Personal Details',
           component: PersonalDetails
+        },
+        {
+          name: 'addresses',
+          title: 'Address',
+          component: Addresses
         },
         {
           name: 'shipping',

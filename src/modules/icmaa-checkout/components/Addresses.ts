@@ -1,7 +1,6 @@
-import { mapGetters } from 'vuex'
 
 export default {
-  name: 'Shipping',
+  name: 'Addresses',
   props: {
     active: {
       type: Boolean,
@@ -18,10 +17,14 @@ export default {
     }
   },
   computed: {
-    ...mapGetters({
-    })
+
   },
   mounted () {
 
+  },
+  methods: {
+    submit () {
+      this.$store.dispatch('checkout/activateSection', 'shipping')
+    }
   }
 }

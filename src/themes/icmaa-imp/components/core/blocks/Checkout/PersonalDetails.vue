@@ -46,6 +46,10 @@
             {
               condition: $v.details.firstName.$error && !$v.details.firstName.required,
               text: $t('Field is required')
+            },
+            {
+              condition: $v.details.firstName.$error && !$v.details.firstName.latin,
+              text: $t('Invalid characters.')
             }
           ]"
         />
@@ -57,10 +61,16 @@
           name="last-name"
           :placeholder="$t('Last name')"
           v-model.trim="details.lastName"
-          :validations="[{
-            condition: $v.details.lastName.$error && !$v.details.lastName.required,
-            text: $t('Field is required')
-          }]"
+          :validations="[
+            {
+              condition: $v.details.lastName.$error && !$v.details.lastName.required,
+              text: $t('Field is required')
+            },
+            {
+              condition: $v.details.lastName.$error && !$v.details.lastName.latin,
+              text: $t('Invalid characters.')
+            }
+          ]"
         />
         <base-checkbox
           v-if="!isLoggedIn"
@@ -107,13 +117,15 @@
             name="password"
             :placeholder="$t('Password')"
             v-model="details.password"
-            :validations="[{
-              condition: $v.details.password.$error && !$v.details.password.required,
-              text: $t('Field is required.')
-            },{
-              condition: $v.details.password.$error && !$v.details.password.minLength,
-              text: $t('Password must have at least 8 letters.')
-            }]"
+            :validations="[
+              {
+                condition: $v.details.password.$error && !$v.details.password.required,
+                text: $t('Field is required.')
+              },{
+                condition: $v.details.password.$error && !$v.details.password.minLength,
+                text: $t('Password must have at least 8 letters.')
+              }
+            ]"
           />
           <base-input
             class="t-w-full t-px-2 t-mb-4"
@@ -135,13 +147,13 @@
             ]"
           />
         </template>
-        <div class="t-w-full t-px-2 t-flex t-flex-wrap t-items-baseline">
+        <div class="t-w-full t-px-2">
           <button-component
-            class="t-w-full t-mb-2 lg:t-w-auto lg:t-mb-0 lg:t-mr-2"
+            class="t-w-full lg:t-w-auto"
             type="primary"
             @click.native.stop="submit"
           >
-            {{ $t((isVirtualCart ? 'Continue to payment' : 'Continue to shipping')) }}
+            {{ $t(('Continue to address')) }}
           </button-component>
         </div>
       </div>

@@ -1,6 +1,6 @@
 import { mapGetters } from 'vuex'
 import { required, email, minLength, sameAs } from 'vuelidate/lib/validators'
-import { date } from 'icmaa-config/helpers/validators'
+import { date, latin } from 'icmaa-config/helpers/validators'
 import merge from 'lodash-es/merge'
 
 export default {
@@ -48,7 +48,7 @@ export default {
     submit () {
       this.$v.$touch()
       if (!this.$v.$invalid) {
-        this.$store.dispatch('checkout/activateSection', this.isVirtualCart === true ? 'payment' : 'shipping')
+        this.$store.dispatch('checkout/activateSection', 'addresses')
         this.$store.dispatch('checkout/savePersonalDetails', this.details)
       }
     },
@@ -82,10 +82,12 @@ export default {
           email
         },
         firstName: {
-          required
+          required,
+          latin
         },
         lastName: {
-          required
+          required,
+          latin
         }
       }
     }
