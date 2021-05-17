@@ -12,5 +12,5 @@ TCK-
 
 ### Checklist
 
-- [ ] No changes in the configs repository `shop-workspace` necessary
-- [ ] Not depending on changes in other repositories
+- [ ] I've made necessary changes in the configs repository `shop-workspace` (if needed)
+- [ ] I'm aware of depending changes in other repositories
