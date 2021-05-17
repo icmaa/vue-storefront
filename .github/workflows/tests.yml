@@ -3,6 +3,8 @@ name: Continuous Integration
 on:
   pull_request:
     types: [ opened, reopened, synchronize ]
+    paths-ignore:
+      - '**/*.md'
 
 env:
   NODE_APP_INSTANCE: "imp"
