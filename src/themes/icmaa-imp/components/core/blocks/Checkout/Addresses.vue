@@ -11,7 +11,7 @@
         id="use-for-billing"
         v-model="billingAddressIsSameAsShipping"
       >
-        {{ $t('Use also as billing address.') }}
+        {{ $t('Use also as billing address') }}
       </checkbox-component>
       <address-component
         type="billing"

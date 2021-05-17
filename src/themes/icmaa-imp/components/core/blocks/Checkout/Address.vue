@@ -1,7 +1,7 @@
 <template>
   <div class="address" :class="[ `address-${type}` ]">
     <div class="t-flex t-flex-wrap t--mx-2">
-      <h3 class="t-w-full t-px-2 t-mb-4" v-text="label" v-if="label" />
+      <h3 class="t-w-full t-px-2 t-mb-4 t-font-light" v-text="label" v-if="label" />
       <address-select
         class="t-w-full t-px-2 t-mb-4"
         name="selected-address"
@@ -13,6 +13,7 @@
             text: $t('Field is required')
           }
         ]"
+        v-if="hasAddresses"
       />
       <template v-if="isNewAddress">
         <base-input
