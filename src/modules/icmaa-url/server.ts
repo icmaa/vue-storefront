@@ -9,7 +9,8 @@ if (appConfig.storeViews.multistore) {
     const storeCodes = appConfig.storeViews.mapStoreUrlsFor
     const blacklist = [
       '__webpack_hmr',
-      'invalidate'
+      'invalidate',
+      '_ah'
     ]
 
     const blacklistStr = blacklist.join('|')
