@@ -1,6 +1,7 @@
 <template>
   <div class="shipping">
-    Shipping
+    Shipping:
+    {{ getShippingMethods }}
   </div>
 </template>
 
