@@ -1,5 +1,5 @@
 <template>
-  <div class="t-container" id="checkout" v-if="!isThankYouPage">
+  <div class="t-container" id="checkout">
     <div class="t-flex lg:t-px-4 lg:t-py-8">
       <div class="t-w-full t-p-6 t-pt-4 lg:t-w-2/5 lg:t-p-0 lg:t-py-8">
         <div class="t-flex t-items-center t-justify-between t-mb-6 lg:t-mb-8">
@@ -43,6 +43,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import { registerModule } from '@vue-storefront/core/lib/modules'
 import { OrderModule } from '@vue-storefront/core/modules/order'
 
@@ -71,11 +72,14 @@ export default {
     registerModule(OrderModule)
   },
   computed: {
+    ...mapGetters({
+      'isLoggedIn': 'user/isLoggedIn'
+    }),
     steps () {
       return [
         {
           name: 'personal',
-          title: 'Login / Personal Details',
+          title: this.isLoggedIn ? 'Personal Details' : 'Login / Personal Details',
           component: PersonalDetails
         },
         {

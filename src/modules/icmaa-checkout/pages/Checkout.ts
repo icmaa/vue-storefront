@@ -3,7 +3,6 @@ import config from 'config'
 import VueOfflineMixin from 'vue-offline/mixin'
 import { mapGetters } from 'vuex'
 import { StorageManager } from '@vue-storefront/core/lib/storage-manager'
-import { currentStoreView } from '@vue-storefront/core/lib/multistore'
 import { Logger } from '@vue-storefront/core/lib/logger'
 
 export default {
@@ -12,14 +11,11 @@ export default {
     return {
       stockCheckCompleted: false,
       stockCheckOK: false,
-      confirmation: null,
       order: {},
       personalDetails: {},
       shipping: {},
       shippingMethod: {},
-      payment: {},
-      orderReview: {},
-      cartSummary: {}
+      payment: {}
     }
   },
   computed: {
@@ -36,17 +32,11 @@ export default {
     this.$bus.$emit('checkout-after-load')
     this.$store.dispatch('checkout/setModifiedAt', Date.now())
 
-    this.$bus.$on('checkout-after-paymentDetails', this.onAfterPaymentDetails)
-    this.$bus.$on('checkout-before-shippingMethods', this.onBeforeShippingMethods)
-    this.$bus.$on('checkout-after-shippingMethodChanged', this.onAfterShippingMethodChanged)
-
-    this.$bus.$on('checkout-after-cartSummary', this.onAfterCartSummary)
-    this.$bus.$on('checkout-before-placeOrder', this.onBeforePlaceOrder)
     this.$bus.$on('checkout-do-placeOrder', this.onDoPlaceOrder)
     this.$bus.$on('order-after-placed', this.onAfterPlaceOrder)
 
-    if (!this.isThankYouPage) {
-      this.$store.dispatch('cart/load', { forceClientState: true }).then(() => {
+    this.$store.dispatch('cart/load', { forceClientState: true })
+      .then(() => {
         if (this.$store.state.cart.cartItems.length === 0) {
           this.notifyEmptyCart()
           this.$router.push(this.localizedRoute('/'))
@@ -83,21 +73,13 @@ export default {
           })
         }
       })
-    }
   },
   beforeDestroy () {
     this.$store.dispatch('checkout/setSections')
     this.$store.dispatch('checkout/setModifiedAt', 0)
-    this.$bus.$off('checkout-after-paymentDetails', this.onAfterPaymentDetails)
-    this.$bus.$off('checkout-after-cartSummary', this.onAfterCartSummary)
-    this.$bus.$off('checkout-before-placeOrder', this.onBeforePlaceOrder)
+
     this.$bus.$off('checkout-do-placeOrder', this.onDoPlaceOrder)
     this.$bus.$off('order-after-placed', this.onAfterPlaceOrder)
-    this.$bus.$off('checkout-before-shippingMethods', this.onBeforeShippingMethods)
-    this.$bus.$off('checkout-after-shippingMethodChanged', this.onAfterShippingMethodChanged)
-  },
-  watch: {
-    'OnlineOnly': 'onNetworkStatusCheck'
   },
   methods: {
     registerSections () {
@@ -111,30 +93,11 @@ export default {
 
       this.$store.dispatch('checkout/setSections', sections)
     },
-    async onAfterShippingMethodChanged (payload) {
-      await this.$store.dispatch('cart/syncTotals', { forceServerSync: true, methodsData: payload })
-      this.shippingMethod = payload
-    },
-    onBeforeShippingMethods (country) {
-      this.$store.dispatch('checkout/updatePropValue', ['country', country])
-      this.$store.dispatch('cart/syncTotals', { forceServerSync: true })
-      this.$forceUpdate()
-    },
     async onAfterPlaceOrder (payload) {
-      this.confirmation = payload.confirmation
-      this.$store.dispatch('checkout/setThankYouPage', true)
       this.$store.dispatch('user/getOrdersHistory', { refresh: true, useCache: true })
-      Logger.debug(payload.order)()
-    },
-    onBeforePlaceOrder (payload) {
-    },
-    onAfterCartSummary (receivedData) {
-      this.cartSummary = receivedData
-    },
-    onAfterPaymentDetails (receivedData) {
-      this.payment = receivedData
-      this.activateSection('review')
-      this.savePaymentDetails()
+      this.$router.push(this.localizedRoute('/order-success'))
+
+      Logger.debug('Order has been placed', 'checkout', payload.order)()
     },
     onDoPlaceOrder (additionalPayload) {
       if (this.$store.state.cart.cartItems.length === 0) {
@@ -145,29 +108,8 @@ export default {
         this.placeOrder()
       }
     },
-    onNetworkStatusCheck (isOnline) {
-      this.checkConnection(isOnline)
-    },
     checkStocks () {
       let isValid = true
-      for (let child of this.$children) {
-        if (child.hasOwnProperty('$v')) {
-          if (child.$v.$invalid) {
-            // Check if child component is Personal Details.
-            // If so, then ignore validation of account creation fields.
-            if (child.$v.hasOwnProperty('personalDetails')) {
-              if (child.$v.personalDetails.$invalid) {
-                isValid = false
-                break
-              }
-            } else {
-              isValid = false
-              break
-            }
-          }
-        }
-      }
-
       if (typeof navigator !== 'undefined' && navigator.onLine) {
         if (this.stockCheckCompleted) {
           if (!this.stockCheckOK) {
@@ -175,26 +117,17 @@ export default {
             this.notifyNotAvailable()
           }
         } else {
-          this.notifyStockCheck()
           isValid = false
+          this.notifyStockCheck()
         }
       }
+
       return isValid
     },
     checkConnection (isOnline) {
       if (!isOnline) {
         this.notifyNoConnection()
       }
-    },
-    activateSection (sectionToActivate) {
-      let currentIndex = false
-      for (let section in this.activeSection) {
-        this.activeSection[section] = false
-        if (section === sectionToActivate) currentIndex = true
-        if (currentIndex) this.doneSection[section] = false
-      }
-
-      this.activeSection[sectionToActivate] = true
     },
     // This method checks if there exists a mapping of chosen payment method to one of Magento's payment methods.
     getPaymentMethod () {
@@ -257,9 +190,6 @@ export default {
       } else {
         this.notifyNotAvailable()
       }
-    },
-    savePaymentDetails () {
-      this.$store.dispatch('checkout/savePaymentDetails', this.payment)
     }
   },
   metaInfo () {

@@ -21,7 +21,9 @@ export default {
     ...mapGetters({
     })
   },
-  mounted () {
-
+  methods: {
+    submit () {
+      this.$store.dispatch('cart/syncTotals', { forceServerSync: true, methodsData: 'SELECTED-METHOD' })
+    }
   }
 }
