@@ -65,7 +65,7 @@ export default {
       })
 
       addresses.unshift({
-        label: i18n.t('Add new address'), value: 0
+        label: i18n.t('New address'), value: 0
       })
 
       return addresses
