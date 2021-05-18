@@ -1,3 +1,4 @@
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'Addresses',
@@ -24,10 +25,16 @@ export default {
     }
   },
   computed: {
-
-  },
-  mounted () {
-
+    ...mapGetters({
+      addresses: 'user/getAddresses',
+      getCountryNameByCode: 'icmaaConfig/getCountryNameByCode'
+    }),
+    previewShippingAddress () {
+      return this.getPreviewAddress(this.shippingAddress)
+    },
+    previewBillingAddress () {
+      return this.getPreviewAddress(this.billingAddress)
+    }
   },
   methods: {
     submit () {
@@ -38,11 +45,21 @@ export default {
         if (billing.$invalid) return false
       }
 
-      console.error(shipping)
       if (shipping.$invalid) return false
-      console.error('VALID', shipping)
 
       return this.$store.dispatch('checkout/activateSection', 'shipping')
+    },
+    getPreviewAddress (address): string | false {
+      if (!address) return false
+
+      if (typeof address === 'number') {
+        address = this.addresses.find(a => a.id === address)
+      }
+
+      const { country_id } = address
+      address.country = this.getCountryNameByCode(country_id)
+
+      return address
     }
   }
 }
