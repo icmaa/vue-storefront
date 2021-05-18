@@ -43,7 +43,7 @@
                 v-model="orderReview.terms"
                 :validations="[{
                   condition: !$v.orderReview.terms.required && $v.orderReview.terms.$error,
-                  text: $t('Field is required')
+                  text: $t('Field is required.')
                 }]"
               >
                 {{ $t('I agree to') }}

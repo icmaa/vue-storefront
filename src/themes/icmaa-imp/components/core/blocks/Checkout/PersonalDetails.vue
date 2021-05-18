@@ -26,7 +26,7 @@
           :validations="[
             {
               condition: $v.details.emailAddress.$error && !$v.details.emailAddress.required,
-              text: $t('Field is required')
+              text: $t('Field is required.')
             },
             {
               condition: $v.details.emailAddress.$error && !$v.details.emailAddress.email,
@@ -45,7 +45,7 @@
           :validations="[
             {
               condition: $v.details.firstName.$error && !$v.details.firstName.required,
-              text: $t('Field is required')
+              text: $t('Field is required.')
             },
             {
               condition: $v.details.firstName.$error && !$v.details.firstName.latin,
@@ -64,7 +64,7 @@
           :validations="[
             {
               condition: $v.details.lastName.$error && !$v.details.lastName.required,
-              text: $t('Field is required')
+              text: $t('Field is required.')
             },
             {
               condition: $v.details.lastName.$error && !$v.details.lastName.latin,

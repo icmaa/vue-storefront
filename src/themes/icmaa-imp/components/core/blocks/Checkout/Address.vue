@@ -10,7 +10,7 @@
         :validations="[
           {
             condition: $v.selectedAddress.$error && !$v.selectedAddress.required,
-            text: $t('Field is required')
+            text: $t('Field is required.')
           }
         ]"
         v-if="hasAddresses"
@@ -40,7 +40,7 @@
           :validations="[
             {
               condition: $v.address.firstname.$error && !$v.address.firstname.required,
-              text: $t('Field is required')
+              text: $t('Field is required.')
             },
             {
               condition: $v.address.firstname.$error && !$v.address.firstname.latin,
@@ -58,7 +58,7 @@
           :validations="[
             {
               condition: $v.address.lastname.$error && !$v.address.lastname.required,
-              text: $t('Field is required')
+              text: $t('Field is required.')
             },
             {
               condition: $v.address.lastname.$error && !$v.address.lastname.latin,
@@ -106,7 +106,7 @@
           :validations="[
             {
               condition: $v.address.city.$error && !$v.address.city.required,
-              text: $t('Field is required')
+              text: $t('Field is required.')
             },
             {
               condition: $v.address.city.$error && !$v.address.city.latin,
@@ -124,7 +124,7 @@
           :validations="[
             {
               condition: $v.address.postcode.$error && !$v.address.postcode.required,
-              text: $t('Field is required')
+              text: $t('Field is required.')
             },
             {
               condition: $v.address.postcode.$error && !$v.address.postcode.postcode,
@@ -155,7 +155,7 @@
           :validations="[
             {
               condition: $v.address.country_id.$error && !$v.address.country_id.required,
-              text: $t('Field is required')
+              text: $t('Field is required.')
             }
           ]"
         />
