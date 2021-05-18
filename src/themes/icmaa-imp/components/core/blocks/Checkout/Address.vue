@@ -93,7 +93,6 @@
               }
             ]"
             class="t-w-full"
-            :class="{ 't-mb-4': i === street.length - 1 }"
           />
         </div>
         <base-input

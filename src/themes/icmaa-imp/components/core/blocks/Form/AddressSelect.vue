@@ -21,7 +21,7 @@ export default {
   },
   props: {
     value: {
-      type: [Boolean, String, Number],
+      type: [ Boolean, String, Number, null ],
       default: false
     },
     type: {
@@ -31,11 +31,16 @@ export default {
   },
   data () {
     return {
-      addressId: this.value || ''
+      addressId: ''
     }
   },
   mounted () {
-    if (!this.hasAddresses) return
+    if (!this.hasAddresses || this.addressId) return
+
+    if (this.value || this.value === 0) {
+      this.addressId = this.value
+      return
+    }
 
     const defaultAddress = this.addresses.find(a => a['is_default_' + this.type])
     if (defaultAddress) {

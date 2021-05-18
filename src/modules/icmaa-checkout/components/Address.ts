@@ -5,6 +5,9 @@ export default {
   name: 'Address',
   mixins: [ AddressMixin ],
   props: {
+    value: {
+      required: true
+    },
     type: {
       type: String,
       default: 'shipping'
@@ -47,6 +50,7 @@ export default {
   },
   computed: {
     ...mapGetters({
+      personalDetails: 'checkout/getPersonalDetails',
       addresses: 'user/getAddresses'
     }),
     isNewAddress () {
@@ -65,6 +69,21 @@ export default {
       this.$nextTick(() => {
         this.$v.$reset()
       })
+    }
+  },
+  beforeMount () {
+    if (typeof this.value === 'number') {
+      this.selectedAddress = this.value
+    } else if (this.value) {
+      this.selectedAddress = this.value ? this.value.id || 0 : 0
+      this.address = Object.assign({}, { street: [''] }, this.value)
+    }
+
+    if (!this.address.firstname) {
+      this.address.firstname = this.personalDetails.firstName || ''
+    }
+    if (!this.address.lastname) {
+      this.address.lastname = this.personalDetails.lastName || ''
     }
   },
   unmounted () {

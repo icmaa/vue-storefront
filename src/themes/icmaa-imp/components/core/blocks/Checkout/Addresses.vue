@@ -37,8 +37,8 @@
           class="t-font-light t-text-xs t-text-base-light"
         />
         <address-preview
-          v-if="previewShippingAddress"
-          :address="previewShippingAddress"
+          v-if="shippingAddressDTO"
+          :address="shippingAddressDTO"
         />
         <checkbox-component
           v-if="billingAddressIsSameAsShipping"
@@ -52,11 +52,11 @@
         </checkbox-component>
       </div>
       <div
-        v-if="!billingAddressIsSameAsShipping && previewShippingAddress"
+        v-if="!billingAddressIsSameAsShipping && billingAddressDTO"
         class="billing-address t-mt-4"
       >
         <h3 v-text="$t('Billing address')" class="t-font-light t-text-xs t-text-base-light" />
-        <address-preview :address="previewBillingAddress" />
+        <address-preview :address="billingAddressDTO" />
       </div>
     </div>
   </div>

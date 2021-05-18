@@ -26,14 +26,28 @@ export default {
   },
   computed: {
     ...mapGetters({
-      addresses: 'user/getAddresses',
-      getCountryNameByCode: 'icmaaConfig/getCountryNameByCode'
+      getAddressbyId: 'user/getAddressbyId',
+      getCountryNameByCode: 'icmaaConfig/getCountryNameByCode',
+      getShippingDetails: 'checkout/getShippingDetails',
+      getPaymentDetails: 'checkout/getPaymentDetails'
     }),
-    previewShippingAddress () {
-      return this.getPreviewAddress(this.shippingAddress)
+    shippingAddressDTO () {
+      return this.getAddress(this.shippingAddress)
     },
-    previewBillingAddress () {
-      return this.getPreviewAddress(this.billingAddress)
+    billingAddressDTO () {
+      return this.getAddress(this.billingAddress || this.shippingAddress)
+    }
+  },
+  beforeMount () {
+    if (this.getShippingDetails) {
+      this.shippingAddress = this.getShippingDetails.id || this.getShippingDetails
+      if (this.getShippingDetails.useForBilling !== undefined) {
+        this.billingAddressIsSameAsShipping = this.getShippingDetails.useForBilling
+      }
+    }
+
+    if (this.getPaymentDetails && !this.billingAddressIsSameAsShipping) {
+      this.billingAddress = this.getPaymentDetails.id || this.getPaymentDetails
     }
   },
   methods: {
@@ -47,13 +61,19 @@ export default {
 
       if (shipping.$invalid) return false
 
+      this.$store.dispatch(
+        'checkout/saveShippingDetails',
+        Object.assign({}, this.shippingAddressDTO, { useForBilling: this.billingAddressIsSameAsShipping })
+      )
+
+      this.$store.dispatch('checkout/savePaymentDetails', this.billingAddressDTO)
+
       return this.$store.dispatch('checkout/activateSection', 'shipping')
     },
-    getPreviewAddress (address): string | false {
+    getAddress (address): string | false {
       if (!address) return false
-
       if (typeof address === 'number') {
-        address = this.addresses.find(a => a.id === address)
+        address = this.getAddressbyId(address)
       }
 
       const { country_id } = address

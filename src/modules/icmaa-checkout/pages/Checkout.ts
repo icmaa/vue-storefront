@@ -36,7 +36,6 @@ export default {
     this.$bus.$emit('checkout-after-load')
     this.$store.dispatch('checkout/setModifiedAt', Date.now())
 
-    this.$bus.$on('checkout-after-shippingDetails', this.onAfterShippingDetails)
     this.$bus.$on('checkout-after-paymentDetails', this.onAfterPaymentDetails)
     this.$bus.$on('checkout-before-shippingMethods', this.onBeforeShippingMethods)
     this.$bus.$on('checkout-after-shippingMethodChanged', this.onAfterShippingMethodChanged)
@@ -85,15 +84,10 @@ export default {
         }
       })
     }
-    const storeView = currentStoreView()
-    let country = this.$store.state.checkout.shippingDetails.country
-    if (!country) country = storeView.i18n.defaultCountry
-    this.$bus.$emit('checkout-before-shippingMethods', country)
   },
   beforeDestroy () {
     this.$store.dispatch('checkout/setSections')
     this.$store.dispatch('checkout/setModifiedAt', 0)
-    this.$bus.$off('checkout-after-shippingDetails', this.onAfterShippingDetails)
     this.$bus.$off('checkout-after-paymentDetails', this.onAfterPaymentDetails)
     this.$bus.$off('checkout-after-cartSummary', this.onAfterCartSummary)
     this.$bus.$off('checkout-before-placeOrder', this.onBeforePlaceOrder)
@@ -141,14 +135,6 @@ export default {
       this.payment = receivedData
       this.activateSection('review')
       this.savePaymentDetails()
-    },
-    onAfterShippingDetails (receivedData) {
-      this.shipping = receivedData
-      this.activateSection('payment')
-      this.saveShippingDetails()
-
-      const storeView = currentStoreView()
-      storeView.tax.defaultCountry = this.shipping.country
     },
     onDoPlaceOrder (additionalPayload) {
       if (this.$store.state.cart.cartItems.length === 0) {
@@ -271,9 +257,6 @@ export default {
       } else {
         this.notifyNotAvailable()
       }
-    },
-    saveShippingDetails () {
-      this.$store.dispatch('checkout/saveShippingDetails', this.shipping)
     },
     savePaymentDetails () {
       this.$store.dispatch('checkout/savePaymentDetails', this.payment)

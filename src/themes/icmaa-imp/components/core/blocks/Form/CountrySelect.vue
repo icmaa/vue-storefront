@@ -24,7 +24,7 @@ export default {
   },
   props: {
     value: {
-      type: [Object, String],
+      type: [Object, String, null],
       required: true
     },
     preselectStoreViewLanguage: {

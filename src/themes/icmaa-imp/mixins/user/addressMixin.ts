@@ -17,7 +17,10 @@ export default {
       countries: 'icmaaConfig/getCountries'
     }),
     countryId () {
-      return this.address.country_id.length > 0 ? this.address.country_id : undefined
+      if (!this.address || !this.address.country_id || this.address.country_id.length === 0) {
+        return undefined
+      }
+      return this.address.country_id
     },
     postCodeFormat () {
       return getPostcodeRegex(this.address.country_id)[1]

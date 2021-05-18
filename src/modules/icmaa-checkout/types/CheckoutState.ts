@@ -11,4 +11,14 @@ export interface ExtendedCheckoutState {
   }
 }
 
-export default interface State extends ExtendedCheckoutState, CheckoutState { }
+export interface OverwriteCheckoutState {
+  shippingDetails: {
+    [key: string]: Section
+  },
+  paymentDetails: {
+    [key: string]: Section
+  }
+}
+
+export default interface State
+  extends ExtendedCheckoutState, OverwriteCheckoutState, Omit<CheckoutState, 'shippingDetails' | 'paymentDetails'> { }
