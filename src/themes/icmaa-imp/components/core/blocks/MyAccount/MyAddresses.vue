@@ -271,8 +271,6 @@ import ButtonComponent from 'theme/components/core/blocks/Button'
 import CountrySelect from 'theme/components/core/blocks/Form/CountrySelect'
 import MaterialIcon from 'theme/components/core/blocks/MaterialIcon'
 
-import { getTranslatedCountries } from 'icmaa-config/helpers/i18n/countries'
-
 export default {
   name: 'MyAdresses',
   mixins: [ AddressMixin ],
@@ -281,8 +279,7 @@ export default {
       edit: false,
       isNewAddress: false,
       isDelete: false,
-      address: {},
-      countries: getTranslatedCountries()
+      address: {}
     }
   },
   components: {

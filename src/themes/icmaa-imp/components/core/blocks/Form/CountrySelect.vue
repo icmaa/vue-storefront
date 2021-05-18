@@ -10,9 +10,10 @@
 
 <script>
 import config from 'config'
-import BaseSelect from 'theme/components/core/blocks/Form/BaseSelect'
+import { mapGetters } from 'vuex'
 import { currentStoreView } from '@vue-storefront/core/lib/multistore'
-import { getTranslatedCountries } from 'icmaa-config/helpers/i18n/countries'
+
+import BaseSelect from 'theme/components/core/blocks/Form/BaseSelect'
 
 import get from 'lodash-es/get'
 
@@ -37,11 +38,13 @@ export default {
   },
   data () {
     return {
-      country: this.value || '',
-      countries: getTranslatedCountries()
+      country: this.value || ''
     }
   },
   computed: {
+    ...mapGetters({
+      countries: 'icmaaConfig/getCountries'
+    }),
     allowedCountries () {
       /**
        * We can't just use the values from `currentStoreView()`, because they are concatenated by

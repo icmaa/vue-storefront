@@ -45,7 +45,8 @@ export default {
   },
   computed: {
     ...mapGetters({
-      addresses: 'user/getAddresses'
+      addresses: 'user/getAddresses',
+      getCountryNameByCode: 'icmaaConfig/getCountryNameByCode'
     }),
     hasAddresses () {
       return this.addresses && this.addresses.length > 0
@@ -57,7 +58,7 @@ export default {
           a.company || `${a.firstname} ${a.lastname}`,
           a.street,
           `${a.postcode} ${a.city}`,
-          a.country_id
+          this.getCountryNameByCode(a.country_id)
         ].join(', ')
 
         return { value, label }

@@ -3,19 +3,18 @@ import { currentStoreView } from '@vue-storefront/core/lib/multistore'
 
 import { getPostcodeRegex } from 'icmaa-config/helpers/validators'
 
-import { getTranslatedCountries } from 'icmaa-config/helpers/i18n/countries'
 import { getStates } from 'icmaa-config/helpers/i18n/states'
 
 export default {
   data () {
     return {
-      address: {},
-      countries: getTranslatedCountries()
+      address: {}
     }
   },
   computed: {
     ...mapGetters({
-      customer: 'user/getCustomer'
+      customer: 'user/getCustomer',
+      countries: 'icmaaConfig/getCountries'
     }),
     countryId () {
       return this.address.country_id.length > 0 ? this.address.country_id : undefined

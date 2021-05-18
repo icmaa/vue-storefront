@@ -271,7 +271,7 @@ export default {
     let selectedAddress = this.hasAddresses ? { required } : {}
 
     return {
-      ...selectedAddress,
+      selectedAddress,
       address
     }
   }
