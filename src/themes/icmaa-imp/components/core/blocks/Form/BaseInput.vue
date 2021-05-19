@@ -24,6 +24,7 @@
         :value="value"
         :autofocus="autofocus"
         :disabled="disabled"
+        :maxlength="maxLength"
         :ref="name"
         v-mask="maskSettings"
         @input="$emit('input', $event.target.value)"
@@ -116,6 +117,10 @@ export default {
     },
     mask: {
       type: [String, Object, Boolean],
+      default: false
+    },
+    maxLength: {
+      type: [Number, String, Boolean],
       default: false
     }
   },

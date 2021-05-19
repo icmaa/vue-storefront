@@ -30,9 +30,11 @@
             class="t-w-full t-px-2 t-mb-4"
             type="text"
             name="company"
+            id="company"
             autocomplete="company"
             :placeholder="'Postnummer *'"
             v-model.trim="address.company"
+            max-length="30"
             :validations="[
               {
                 condition: $v.address.company.$error && !$v.address.company.required,
@@ -50,8 +52,9 @@
               :name="`street[${i}]`"
               :id="`street-${i}`"
               autocomplete="street"
+              max-length="30"
+              :placeholder="i === 0 ? 'Packstation *' : false"
               v-model="address.street[i]"
-              :placeholder="i === 0 ? (address.poststation ? 'Packstation *' : $t('Street') + ' *') : false"
               :validations="[
                 {
                   condition: $v.address.street.$error && !$v.address.street.$each[i].required,
@@ -70,8 +73,10 @@
           class="t-w-full t-px-2 t-mb-4"
           type="text"
           name="company"
+          id="company"
           autocomplete="company"
           :placeholder="$t('Company name')"
+          max-length="30"
           v-model.trim="address.company"
           :validations="[
             {
@@ -85,8 +90,10 @@
           class="t-w-full lg:t-w-1/2 t-px-2 t-mb-4"
           type="text"
           name="firstname"
+          id="firstname"
           :placeholder="$t('First name') + ' *'"
           autocomplete="given-name"
+          max-length="30"
           v-model.trim="address.firstname"
           :validations="[
             {
@@ -103,8 +110,10 @@
           class="t-w-full lg:t-w-1/2 t-px-2 t-mb-4"
           type="text"
           name="lastname"
-          autocomplete="family-name"
+          id="lastname"
           :placeholder="$t('Last name') + ' *'"
+          autocomplete="family-name"
+          max-length="30"
           v-model.trim="address.lastname"
           :validations="[
             {
@@ -122,9 +131,10 @@
             v-for="(street,i) in address.street" :key="i"
             :name="`street[${i}]`"
             :id="`street-${i}`"
-            autocomplete="street"
-            v-model="address.street[i]"
             :placeholder="i === 0 ? $t('Street') + ' *' : false"
+            autocomplete="street"
+            max-length="30"
+            v-model="address.street[i]"
             :validations="[
               {
                 condition: houseNumberAdvice,
@@ -150,8 +160,10 @@
           class="t-w-full lg:t-w-2/3 t-px-2 t-mb-4"
           type="text"
           name="city"
-          autocomplete="city"
+          id="city"
           :placeholder="$t('City') + ' *'"
+          autocomplete="city"
+          max-length="30"
           v-model.trim="address.city"
           :validations="[
             {
@@ -168,8 +180,9 @@
           class="t-w-full lg:t-w-1/3 t-px-2 t-mb-4"
           type="text"
           name="postcode"
-          autocomplete="postal-code"
+          id="postcode"
           :placeholder="$t('Postcode') + ' *'"
+          autocomplete="postal-code"
           v-model.trim="address.postcode"
           :validations="[
             {
@@ -213,8 +226,10 @@
           <base-input
             type="text"
             name="telephone"
-            autocomplete="tel"
+            id="telephone"
             :placeholder="$t('Telephone')"
+            autocomplete="tel"
+            max-length="30"
             v-model.trim="address.telephone"
             :validations="[
               {
@@ -231,9 +246,9 @@
           <base-input
             name="vat_id"
             id="vat_id"
+            :placeholder="$t('VAT number') + ' *'"
             autocomplete="vat_id"
             v-model="address.vat_id"
-            :placeholder="$t('VAT number') + ' *'"
             :validations="[
               {
                 condition: !$v.address.vat_id.required && $v.address.vat_id.$error,
