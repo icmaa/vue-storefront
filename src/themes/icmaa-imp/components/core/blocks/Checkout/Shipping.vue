@@ -8,7 +8,7 @@
         <base-checkbox
           :name="method.code"
           :id="method.code"
-          :value-prop="method.code"
+          :input-value="method.code"
           v-model="selectedMethod"
         >
           <h3>{{ method.title }}</h3>

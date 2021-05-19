@@ -6,19 +6,19 @@
         type="checkbox"
         :id="id"
         :name="name"
-        :checked="value === true"
+        :checked="checked"
         @keyup.enter="$emit('click')"
         @click="$emit('click')"
         @blur="$emit('blur')"
-        @change="$emit('change', $event.target.checked)"
+        @change="onChange"
         :disabled="disabled"
-        :value="value"
+        :value="inputValue"
       >
       <div
         class="t-flex t-flex-fix t-items-center t-justify-center t-h-6 t-w-6 t-my-2 t-mr-2 t-bg-white t-border t-rounded-sm t-appearance-none t-text-sm t-leading-tight"
-        :class="[ invalid ? 't-border-alert' : 't-border-base-light', { 't-opacity-75': disabled } ]"
+        :class="[ invalid ? 't-border-alert' : 't-border-base-light', { 't-opacity-75': disabled }, radio ? 't-rounded-full' : 't-rounded-sm' ]"
       >
-        <material-icon icon="check" size="sm" v-if="value" />
+        <material-icon icon="check" size="sm" v-if="checked" />
       </div>
       <div class="checkbox-label t-text-sm t-leading-tight" :class="{ 't-text-alert': invalid }">
         <slot />
@@ -52,8 +52,12 @@ export default {
       required: true
     },
     value: {
-      type: Boolean,
+      type: [Boolean, Array, String, Number],
       default: false
+    },
+    inputValue: {
+      type: [String, Number, Boolean],
+      default: true
     },
     validations: {
       type: Array,
@@ -67,11 +71,41 @@ export default {
       type: Boolean,
       required: false,
       default: false
+    },
+    radio: {
+      type: Boolean,
+      default: false
     }
   },
   computed: {
     invalid () {
       return this.validations.filter(v => v.condition).length > 0
+    },
+    isSingleValue () {
+      return !Array.isArray(this.value) || this.radio
+    },
+    checked () {
+      if (this.isSingleValue) {
+        return this.value === this.inputValue
+      }
+
+      return this.value.includes(this.inputValue)
+    }
+  },
+  methods: {
+    onChange (e) {
+      if (this.isSingleValue) {
+        this.$emit('change', e.target.checked ? this.inputValue : e.target.checked)
+      } else {
+        let currentValue = [...this.value]
+        if (e.target.checked) {
+          currentValue.push(e.target.value)
+        } else {
+          currentValue = currentValue.filter(item => item !== e.target.value)
+        }
+
+        this.$emit('change', currentValue)
+      }
     }
   }
 }
