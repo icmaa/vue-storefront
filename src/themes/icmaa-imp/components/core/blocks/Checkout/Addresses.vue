@@ -6,14 +6,14 @@
         :enable-poststation="true"
         ref="shippingAddress"
       />
-      <checkbox-component
+      <base-checkbox
         class="t-w-full t-mb-4"
         name="use-for-billing"
         id="use-for-billing"
         v-model="billingAddressIsSameAsShipping"
       >
         {{ $t('Use also as billing address') }}
-      </checkbox-component>
+      </base-checkbox>
       <address-component
         type="billing"
         :label="$t('Billing address')"
@@ -41,7 +41,7 @@
           v-if="shippingAddressDTO"
           :address="shippingAddressDTO"
         />
-        <checkbox-component
+        <base-checkbox
           v-if="billingAddressIsSameAsShipping"
           class="t-w-full t-mt-4"
           name="use-for-billing-read-only"
@@ -50,7 +50,7 @@
           disabled
         >
           {{ $t('Use also as billing address') }}
-        </checkbox-component>
+        </base-checkbox>
       </div>
       <div
         v-if="!billingAddressIsSameAsShipping && billingAddressDTO"
@@ -68,14 +68,14 @@
 import Addresses from 'icmaa-checkout/components/Addresses'
 import AddressComponent from 'theme/components/core/blocks/Checkout/Address'
 import AddressPreview from 'theme/components/core/blocks/Checkout/Addresses/AddressPreview'
-import CheckboxComponent from 'theme/components/core/blocks/Form/BaseCheckbox'
+import BaseCheckbox from 'theme/components/core/blocks/Form/BaseCheckbox'
 import ButtonComponent from 'theme/components/core/blocks/Button'
 
 export default {
   name: 'Addresses',
   components: {
     AddressComponent,
-    CheckboxComponent,
+    BaseCheckbox,
     ButtonComponent,
     AddressPreview
   },

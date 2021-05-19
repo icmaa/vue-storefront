@@ -4,6 +4,7 @@ import CartState from '@vue-storefront/core/modules/cart/types/CartState'
 import { CartService } from '@vue-storefront/core/data-resolver'
 import { cartHooksExecutors } from '@vue-storefront/core/modules/cart/hooks'
 import { createDiffLog, productsEquals } from '@vue-storefront/core/modules/cart/helpers'
+import { currentStoreView } from '@vue-storefront/core/lib/multistore'
 import { Logger } from '@vue-storefront/core/lib/logger'
 import { notifications } from '../helpers'
 import config from 'config'
@@ -178,6 +179,25 @@ const actions: ActionTree<CartState, RootState> = {
     const record = getters.getCartItems.find(p => productsEquals(p, product))
     const qty = record ? record.qty + 1 : (product.qty ? product.qty : 1)
     return dispatch('stock/check', { product, qty }, { root: true })
+  },
+  /**
+   * Clone of originial `cart/syncShippingMethods`
+   *
+   * Changes:
+   * * Use our object-key mapping from changes of `icmaa-checkout` and our custom checkout
+   */
+  async syncShippingMethods ({ getters, rootGetters, dispatch }, { forceServerSync = false }) {
+    if (getters.canUpdateMethods && (getters.isTotalsSyncRequired || forceServerSync)) {
+      const storeView = currentStoreView()
+      const shippingDetails = rootGetters['checkout/getShippingDetails']
+      const address = Object.assign({}, { country_id: storeView.tax.defaultCountry }, shippingDetails)
+
+      Logger.debug('Refreshing shipping methods', 'cart', address)()
+      const { result } = await CartService.getShippingMethods(address)
+      await dispatch('updateShippingMethods', { shippingMethods: result })
+    } else {
+      Logger.debug('Shipping methods does not need to be updated', 'cart')()
+    }
   }
 }
 
