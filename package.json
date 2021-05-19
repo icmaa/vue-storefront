@@ -4,7 +4,7 @@
   "description": "A Vue.js, PWA eCommerce frontend",
   "private": true,
   "engines": {
-    "node": "14.16.x",
+    "node": "^14",
     "yarn": "^1"
   },
   "repository": {
