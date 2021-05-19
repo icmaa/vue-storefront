@@ -16,7 +16,7 @@
             :validations="[
               {
                 condition: !$v.password.required && $v.password.$error,
-                text: $t('Field is required.')
+                text: $t('Field is required')
               },
               {
                 condition: !$v.password.minLength && $v.password.$error,
@@ -36,7 +36,7 @@
             :validations="[
               {
                 condition: !$v.rPassword.required && $v.rPassword.$error,
-                text: $t('Field is required.')
+                text: $t('Field is required')
               },
               {
                 condition: !$v.rPassword.sameAsPassword && $v.rPassword.$error,

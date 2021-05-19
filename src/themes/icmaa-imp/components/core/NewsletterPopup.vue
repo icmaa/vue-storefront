@@ -14,7 +14,7 @@
         :validations="[
           {
             condition: $v.email.$error && !$v.email.required,
-            text: $t('Field is required.')
+            text: $t('Field is required')
           },
           {
             condition: !$v.email.email && $v.email.$error,

@@ -15,7 +15,7 @@
         :validations="[
           {
             condition: !validation.email.required && validation.email.$error,
-            text: $t('Field is required.')
+            text: $t('Field is required')
           },
           {
             condition: !validation.email.email && validation.email.$error,
@@ -33,7 +33,7 @@
         :validations="[
           {
             condition: !validation.firstname.required && validation.firstname.$error,
-            text: $t('Field is required.')
+            text: $t('Field is required')
           }
         ]"
         class="t-w-full lg:t-w-1/2 t-px-2 t-mb-4"
@@ -46,7 +46,7 @@
         :label="$t('Last name') + ' *'"
         :validations="[{
           condition: !validation.lastname.required && validation.lastname.$error,
-          text: $t('Field is required.')
+          text: $t('Field is required')
         }]"
         class="t-w-full lg:t-w-1/2 t-px-2 t-mb-4"
       />
@@ -58,7 +58,7 @@
         :label="$t('Gender') + ' *'"
         :validations="[{
           condition: !validation.gender.required && validation.gender.$error,
-          text: $t('Field is required.')
+          text: $t('Field is required')
         }]"
         class="t-w-full lg:t-w-1/2 t-px-2 t-mb-4"
       />
@@ -73,7 +73,7 @@
         :validations="[
           {
             condition: !validation.dob.required && validation.dob.$error,
-            text: $t('Field is required.')
+            text: $t('Field is required')
           },
           {
             condition: !validation.dob.date && validation.dob.$error,
@@ -102,7 +102,7 @@
           :validations="[
             {
               condition: !validation.oldPassword.required && validation.oldPassword.$error,
-              text: $t('Field is required.')
+              text: $t('Field is required')
             },
             {
               condition: !validation.oldPassword.minLength && validation.oldPassword.$error,
@@ -123,7 +123,7 @@
           :validations="[
             {
               condition: !validation.password.required && validation.password.$error,
-              text: $t('Field is required.')
+              text: $t('Field is required')
             },
             {
               condition: !validation.password.minLength && validation.password.$error,
@@ -142,7 +142,7 @@
           :validations="[
             {
               condition: !validation.rPassword.required && validation.rPassword.$error,
-              text: $t('Field is required.')
+              text: $t('Field is required')
             },
             {
               condition: !validation.rPassword.sameAsPassword && validation.rPassword.$error,

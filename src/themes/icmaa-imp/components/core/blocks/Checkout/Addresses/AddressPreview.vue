@@ -1,10 +1,17 @@
 <template>
   <div>
-    <template v-if="address.company">
+    <template v-if="address.poststation">
+      {{ address.firstname }} {{ address.lastname }}<br>
       {{ address.company }} <br>
+      {{ street }}<br>
     </template>
-    {{ address.firstname }} {{ address.lastname }}<br>
-    {{ street }}<br>
+    <template v-else>
+      <template v-if="address.company">
+        {{ address.company }} <br>
+      </template>
+      {{ address.firstname }} {{ address.lastname }}<br>
+      {{ street }}<br>
+    </template>
     {{ address.postcode }} {{ address.city }}<br>
     <template v-if="address.region">
       {{ address.region }},

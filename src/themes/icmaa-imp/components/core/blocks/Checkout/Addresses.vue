@@ -3,6 +3,7 @@
     <form v-if="active">
       <address-component
         v-model="shippingAddress"
+        :enable-poststation="true"
         ref="shippingAddress"
       />
       <checkbox-component

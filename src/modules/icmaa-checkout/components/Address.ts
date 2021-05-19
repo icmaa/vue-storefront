@@ -1,9 +1,10 @@
 import { mapGetters } from 'vuex'
 import AddressMixin from 'theme/mixins/user/addressMixin'
+import PoststationMixin from 'theme/mixins/user/poststationMixin'
 
 export default {
   name: 'Address',
-  mixins: [ AddressMixin ],
+  mixins: [ AddressMixin, PoststationMixin ],
   props: {
     value: {
       required: true

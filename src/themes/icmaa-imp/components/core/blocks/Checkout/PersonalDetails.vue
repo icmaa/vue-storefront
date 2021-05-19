@@ -26,7 +26,7 @@
           :validations="[
             {
               condition: $v.details.emailAddress.$error && !$v.details.emailAddress.required,
-              text: $t('Field is required.')
+              text: $t('Field is required')
             },
             {
               condition: $v.details.emailAddress.$error && !$v.details.emailAddress.email,
@@ -45,11 +45,11 @@
           :validations="[
             {
               condition: $v.details.firstName.$error && !$v.details.firstName.required,
-              text: $t('Field is required.')
+              text: $t('Field is required')
             },
             {
               condition: $v.details.firstName.$error && !$v.details.firstName.latin,
-              text: $t('Invalid characters.')
+              text: $t('Invalid characters')
             }
           ]"
         />
@@ -64,11 +64,11 @@
           :validations="[
             {
               condition: $v.details.lastName.$error && !$v.details.lastName.required,
-              text: $t('Field is required.')
+              text: $t('Field is required')
             },
             {
               condition: $v.details.lastName.$error && !$v.details.lastName.latin,
-              text: $t('Invalid characters.')
+              text: $t('Invalid characters')
             }
           ]"
         />
@@ -89,7 +89,7 @@
             v-model="details.gender"
             :validations="[{
               condition: !$v.details.gender.required && $v.details.gender.$error,
-              text: $t('Field is required.')
+              text: $t('Field is required')
             }]"
           />
           <base-input
@@ -102,7 +102,7 @@
             v-model="details.dob"
             :validations="[{
               condition: !$v.details.dob.required && $v.details.dob.$error,
-              text: $t('Field is required.')
+              text: $t('Field is required')
             }, {
               condition: !$v.details.dob.date && $v.details.dob.$error,
               text: $t('Use a valid date.')
@@ -120,7 +120,7 @@
             :validations="[
               {
                 condition: $v.details.password.$error && !$v.details.password.required,
-                text: $t('Field is required.')
+                text: $t('Field is required')
               },{
                 condition: $v.details.password.$error && !$v.details.password.minLength,
                 text: $t('Password must have at least 8 letters.')
@@ -138,7 +138,7 @@
             :validations="[
               {
                 condition: $v.rPassword.$error && !$v.rPassword.required,
-                text: $t('Field is required.')
+                text: $t('Field is required')
               },
               {
                 condition: $v.rPassword.$error && !$v.rPassword.sameAsPassword,

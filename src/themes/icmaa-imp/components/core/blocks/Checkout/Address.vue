@@ -10,12 +10,62 @@
         :validations="[
           {
             condition: $v.selectedAddress.$error && !$v.selectedAddress.required,
-            text: $t('Field is required.')
+            text: $t('Field is required')
           }
         ]"
         v-if="hasAddresses"
       />
       <template v-if="isNewAddress">
+        <base-checkbox
+          class="t-w-full t-px-2 t-mb-4"
+          name="poststation"
+          id="poststation"
+          v-model="address.poststation"
+          v-if="hasPoststation"
+        >
+          {{ $t('Send to post station?') }}
+        </base-checkbox>
+        <template v-if="address.poststation">
+          <base-input
+            class="t-w-full t-px-2 t-mb-4"
+            type="text"
+            name="company"
+            autocomplete="company"
+            :placeholder="'Postnummer *'"
+            v-model.trim="address.company"
+            :validations="[
+              {
+                condition: $v.address.company.$error && !$v.address.company.required,
+                text: $t('Field is required')
+              },
+              {
+                condition: $v.address.company.$error && !$v.address.company.numeric,
+                text: $t('Invalid characters')
+              }
+            ]"
+          />
+          <div class="t-w-full t-px-2 t-mb-4">
+            <base-input
+              v-for="(street,i) in address.street" :key="i"
+              :name="`street[${i}]`"
+              :id="`street-${i}`"
+              autocomplete="street"
+              v-model="address.street[i]"
+              :placeholder="i === 0 ? (address.poststation ? 'Packstation *' : $t('Street') + ' *') : false"
+              :validations="[
+                {
+                  condition: $v.address.street.$error && !$v.address.street.$each[i].required,
+                  text: $t('Field is required')
+                },
+                {
+                  condition: $v.address.street.$error && !$v.address.street.$each[i].poststation,
+                  text: $t('Format: Packstation 000')
+                }
+              ]"
+              class="t-w-full"
+            />
+          </div>
+        </template>
         <base-input
           class="t-w-full t-px-2 t-mb-4"
           type="text"
@@ -26,9 +76,10 @@
           :validations="[
             {
               condition: $v.address.company.$error && !$v.address.company.latin,
-              text: $t('Invalid characters.')
+              text: $t('Invalid characters')
             }
           ]"
+          v-if="!address.poststation"
         />
         <base-input
           class="t-w-full lg:t-w-1/2 t-px-2 t-mb-4"
@@ -40,11 +91,11 @@
           :validations="[
             {
               condition: $v.address.firstname.$error && !$v.address.firstname.required,
-              text: $t('Field is required.')
+              text: $t('Field is required')
             },
             {
               condition: $v.address.firstname.$error && !$v.address.firstname.latin,
-              text: $t('Invalid characters.')
+              text: $t('Invalid characters')
             }
           ]"
         />
@@ -58,15 +109,15 @@
           :validations="[
             {
               condition: $v.address.lastname.$error && !$v.address.lastname.required,
-              text: $t('Field is required.')
+              text: $t('Field is required')
             },
             {
               condition: $v.address.lastname.$error && !$v.address.lastname.latin,
-              text: $t('Invalid characters.')
+              text: $t('Invalid characters')
             }
           ]"
         />
-        <div class="t-w-full t-px-2 t-mb-4">
+        <div class="t-w-full t-px-2 t-mb-4" v-if="!address.poststation">
           <base-input
             v-for="(street,i) in address.street" :key="i"
             :name="`street[${i}]`"
@@ -81,7 +132,7 @@
               },
               {
                 condition: $v.address.street.$error && !$v.address.street.$each[i].required,
-                text: $t('Field is required.')
+                text: $t('Field is required')
               },
               {
                 condition: $v.address.street.$error && !$v.address.street.$each[i].housenumber,
@@ -89,7 +140,7 @@
               },
               {
                 condition: $v.address.street.$error && (!$v.address.street.$each[i].latin || !$v.address.street.$each[i].streetname),
-                text: $t('Invalid characters.')
+                text: $t('Invalid characters')
               }
             ]"
             class="t-w-full"
@@ -105,11 +156,11 @@
           :validations="[
             {
               condition: $v.address.city.$error && !$v.address.city.required,
-              text: $t('Field is required.')
+              text: $t('Field is required')
             },
             {
               condition: $v.address.city.$error && !$v.address.city.latin,
-              text: $t('Invalid characters.')
+              text: $t('Invalid characters')
             }
           ]"
         />
@@ -123,7 +174,7 @@
           :validations="[
             {
               condition: $v.address.postcode.$error && !$v.address.postcode.required,
-              text: $t('Field is required.')
+              text: $t('Field is required')
             },
             {
               condition: $v.address.postcode.$error && !$v.address.postcode.postcode,
@@ -139,7 +190,7 @@
           :options="states"
           :validations="[{
             condition: $v.address.region_id.$error && !$v.address.region_id.required,
-            text: $t('Field is required.')
+            text: $t('Field is required')
           }]"
           class="t-w-full lg:t-w-1/2 t-px-2 t-mb-4"
           v-if="hasState"
@@ -154,7 +205,7 @@
           :validations="[
             {
               condition: $v.address.country_id.$error && !$v.address.country_id.required,
-              text: $t('Field is required.')
+              text: $t('Field is required')
             }
           ]"
         />
@@ -186,7 +237,7 @@
             :validations="[
               {
                 condition: !$v.address.vat_id.required && $v.address.vat_id.$error,
-                text: $t('Field is required.')
+                text: $t('Field is required')
               }
             ]"
           />
@@ -197,8 +248,8 @@
 </template>
 
 <script>
-import { required } from 'vuelidate/lib/validators'
-import { latin, postcode, streetname, housenumber, unicodeAlphaNum } from 'icmaa-config/helpers/validators'
+import { required, numeric } from 'vuelidate/lib/validators'
+import { latin, postcode, streetname, housenumber, unicodeAlphaNum, poststation } from 'icmaa-config/helpers/validators'
 
 import Address from 'icmaa-checkout/components/Address'
 
@@ -206,13 +257,15 @@ import CountrySelect from 'theme/components/core/blocks/Form/CountrySelect'
 import AddressSelect from 'theme/components/core/blocks/Form/AddressSelect'
 import BaseSelect from 'theme/components/core/blocks/Form/BaseSelect'
 import BaseInput from 'theme/components/core/blocks/Form/BaseInput'
+import BaseCheckbox from 'theme/components/core/blocks/Form/BaseCheckbox'
 
 export default {
   components: {
     AddressSelect,
     CountrySelect,
     BaseSelect,
-    BaseInput
+    BaseInput,
+    BaseCheckbox
   },
   mixins: [ Address ],
   validations () {
@@ -229,7 +282,9 @@ export default {
 
       address = {
         company: {
-          latin
+          ...this.address.poststation
+            ? { required, numeric }
+            : { latin }
         },
         firstname: {
           required,
@@ -245,7 +300,10 @@ export default {
             required,
             streetname,
             housenumber,
-            latin
+            latin,
+            ...this.address.poststation
+              ? { poststation }
+              : { streetname, housenumber }
           }
         },
         postcode: {

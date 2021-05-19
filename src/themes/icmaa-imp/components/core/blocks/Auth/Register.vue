@@ -14,7 +14,7 @@
           :validations="[
             {
               condition: !$v.email.required && $v.email.$error,
-              text: $t('Field is required.')
+              text: $t('Field is required')
             },
             {
               condition: !$v.email.email && $v.email.$error,
@@ -32,7 +32,7 @@
           :validations="[
             {
               condition: !$v.firstName.required && $v.firstName.$error,
-              text: $t('Field is required.')
+              text: $t('Field is required')
             }
           ]"
           class="t-w-full sm:t-w-1/2 t-px-2 t-mb-4"
@@ -45,7 +45,7 @@
           :placeholder="$t('Last name') + ' *'"
           :validations="[{
             condition: !$v.lastName.required && $v.lastName.$error,
-            text: $t('Field is required.')
+            text: $t('Field is required')
           }]"
           class="t-w-full sm:t-w-1/2 t-px-2 t-mb-4"
         />
@@ -56,7 +56,7 @@
           :initial-option-text="$t('Gender') + ' *'"
           :validations="[{
             condition: !$v.gender.required && $v.gender.$error,
-            text: $t('Field is required.')
+            text: $t('Field is required')
           }]"
           class="t-w-full sm:t-w-1/2 t-px-2 t-mb-4"
         />
@@ -70,7 +70,7 @@
           :validations="[
             {
               condition: !$v.dob.required && $v.dob.$error,
-              text: $t('Field is required.')
+              text: $t('Field is required')
             },
             {
               condition: !$v.dob.date && $v.dob.$error,
@@ -90,7 +90,7 @@
           :validations="[
             {
               condition: !$v.password.required && $v.password.$error,
-              text: $t('Field is required.')
+              text: $t('Field is required')
             },
             {
               condition: !$v.password.minLength && $v.password.$error,
@@ -109,7 +109,7 @@
           :validations="[
             {
               condition: !$v.rPassword.required && $v.rPassword.$error,
-              text: $t('Field is required.')
+              text: $t('Field is required')
             },
             {
               condition: !$v.rPassword.sameAsPassword && $v.rPassword.$error,

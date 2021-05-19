@@ -52,11 +52,11 @@
           :validations="[
             {
               condition: !validation.firstname.required && validation.firstname.$error,
-              text: $t('Field is required.')
+              text: $t('Field is required')
             },
             {
               condition: !validation.firstname.latin && validation.firstname.$error,
-              text: $t('Invalid characters.')
+              text: $t('Invalid characters')
             }
           ]"
           class="t-w-1/2 lg:t-w-1/4 t-px-2 t-mb-4"
@@ -70,11 +70,11 @@
           :validations="[
             {
               condition: !validation.lastname.required && validation.lastname.$error,
-              text: $t('Field is required.')
+              text: $t('Field is required')
             },
             {
               condition: !validation.lastname.latin && validation.lastname.$error,
-              text: $t('Invalid characters.')
+              text: $t('Invalid characters')
             }
           ]"
           class="t-w-1/2 lg:t-w-1/4 t-px-2 t-mb-4"
@@ -87,7 +87,7 @@
           :label="$t('Company name')"
           :validations="[{
             condition: !validation.company.latin && validation.company.$error,
-            text: $t('Invalid characters.')
+            text: $t('Invalid characters')
           }]"
           class="t-w-full lg:t-w-1/2 t-px-2 t-mb-4"
         />
@@ -106,7 +106,7 @@
               },
               {
                 condition: !validation.street.$each[i].required && validation.street.$error,
-                text: $t('Field is required.')
+                text: $t('Field is required')
               },
               {
                 condition: !validation.street.$each[i].housenumber && validation.street.$error,
@@ -114,7 +114,7 @@
               },
               {
                 condition: (!validation.street.$each[i].latin || !validation.street.$each[i].streetname) && validation.street.$error,
-                text: $t('Invalid characters.')
+                text: $t('Invalid characters')
               }
             ]"
             class="t-w-full"
@@ -130,11 +130,11 @@
           :validations="[
             {
               condition: !validation.city.required && validation.city.$error,
-              text: $t('Field is required.')
+              text: $t('Field is required')
             },
             {
               condition: !validation.city.latin && validation.city.$error,
-              text: $t('Invalid characters.')
+              text: $t('Invalid characters')
             }
           ]"
           class="t-w-full lg:t-w-1/2 t-px-2 t-mb-4"
@@ -148,7 +148,7 @@
           :validations="[
             {
               condition: !validation.postcode.required && validation.postcode.$error,
-              text: $t('Field is required.')
+              text: $t('Field is required')
             },{
               condition: !validation.postcode.postcode && validation.postcode.$error,
               text: $t('This is not a valid postcode. Format: {code}', { code: postCodeFormat})
@@ -166,7 +166,7 @@
           :options="states"
           :validations="[{
             condition: !validation.region_id.required && validation.region_id.$error,
-            text: $t('Field is required.')
+            text: $t('Field is required')
           }]"
           class="t-w-1/2 lg:t-w-1/4 t-px-2 t-mb-4"
           v-if="hasState"
@@ -178,7 +178,7 @@
           :label="$t('Country') + ' *'"
           :validations="[{
             condition: !validation.country_id.required && validation.country_id.$error,
-            text: $t('Field is required.')
+            text: $t('Field is required')
           }]"
           class="t-w-1/2 lg:t-w-1/4 t-px-2 t-mb-4"
         />
@@ -208,7 +208,7 @@
             :validations="[
               {
                 condition: !validation.vat_id.required && validation.vat_id.$error,
-                text: $t('Field is required.')
+                text: $t('Field is required')
               }
             ]"
             class="t-w-full lg:t-w-1/2 t-px-2"

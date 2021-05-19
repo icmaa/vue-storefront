@@ -35,7 +35,7 @@ export const housenumber = (v: string): boolean => {
 }
 
 export const poststation = (v: string): boolean => {
-  return !helpers.req(v) || !/^Packstation\s[0-9]{3,}$/.test(v)
+  return !helpers.req(v) || /^Packstation\s\d{3,}$/.test(v)
 }
 
 export const getPostcodeRegex = (code: string = 'XX') => {

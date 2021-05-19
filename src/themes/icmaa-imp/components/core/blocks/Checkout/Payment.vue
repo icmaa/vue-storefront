@@ -62,7 +62,7 @@
             :validations="[
               {
                 condition: $v.payment.firstName.$error && !$v.payment.firstName.required,
-                text: $t('Field is required.')
+                text: $t('Field is required')
               },
               {
                 condition: !$v.payment.firstName.minLength,
@@ -81,7 +81,7 @@
             autocomplete="family-name"
             :validations="[{
               condition: $v.payment.lastName.$error && !$v.payment.lastName.required,
-              text: $t('Field is required.')
+              text: $t('Field is required')
             }]"
           />
 
@@ -95,7 +95,7 @@
             autocomplete="address-line1"
             :validations="[{
               condition: $v.payment.streetAddress.$error && !$v.payment.streetAddress.required,
-              text: $t('Field is required.')
+              text: $t('Field is required')
             }]"
           />
 
@@ -109,7 +109,7 @@
             autocomplete="address-line2"
             :validations="[{
               condition: $v.payment.apartmentNumber.$error && !$v.payment.apartmentNumber.required,
-              text: $t('Field is required.')
+              text: $t('Field is required')
             }]"
           />
 
@@ -124,7 +124,7 @@
             :validations="[
               {
                 condition: $v.payment.city.$error && !$v.payment.city.required,
-                text: $t('Field is required.')
+                text: $t('Field is required')
               },
               {
                 condition: $v.payment.city.$error && $v.payment.city.required,
@@ -153,7 +153,7 @@
             :validations="[
               {
                 condition: $v.payment.zipCode.$error && !$v.payment.zipCode.required,
-                text: $t('Field is required.')
+                text: $t('Field is required')
               },
               {
                 condition: !$v.payment.zipCode.minLength,
@@ -171,7 +171,7 @@
             :validations="[
               {
                 condition: $v.payment.country.$error && !$v.payment.country.required,
-                text: $t('Field is required.')
+                text: $t('Field is required')
               }
             ]"
             v-model="payment.country"
@@ -208,7 +208,7 @@
               autocomplete="organization"
               :validations="[{
                 condition: $v.payment.company.$error && !$v.payment.company.required,
-                text: $t('Field is required.')
+                text: $t('Field is required')
               }]"
             />
 
@@ -223,7 +223,7 @@
               :validations="[
                 {
                   condition: $v.payment.taxId.$error && !$v.payment.taxId.required,
-                  text: $t('Field is required.')
+                  text: $t('Field is required')
                 },
                 {
                   condition: !$v.payment.taxId.minLength,
@@ -256,7 +256,7 @@
               <span class="checkmark" />
             </label>
           </div>
-          <span class="validation-error" v-if="!$v.payment.paymentMethod.required">{{ $t('Field is required.') }}</span>
+          <span class="validation-error" v-if="!$v.payment.paymentMethod.required">{{ $t('Field is required') }}</span>
         </div>
       </div>
     </div>

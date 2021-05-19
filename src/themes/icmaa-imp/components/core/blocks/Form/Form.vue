@@ -134,7 +134,7 @@ export default {
       messages: {
         default: 'This isn\'t a valid field value.',
         email: 'Please provide valid e-mail address.',
-        required: 'Field is required.'
+        required: 'Field is required'
       }
     }
   },
