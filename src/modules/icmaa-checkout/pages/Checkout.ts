@@ -31,9 +31,14 @@ export default {
       this.$store.dispatch('ui/loader', active)
     }
   },
-  async beforeMount () {
+  created () {
+    /**
+     * Load this here to prevent virtual DOM tree mismatching:
+     * `The client-side rendered virtual DOM tree is not matching server-rendered content.`
+     */
     this.registerSections()
-
+  },
+  async beforeMount () {
     await this.$store.dispatch('checkout/load')
     this.$bus.$emit('checkout-after-load')
     this.$store.dispatch('checkout/setModifiedAt', Date.now())

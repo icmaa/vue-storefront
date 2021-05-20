@@ -17,19 +17,23 @@
         </slot>
       </h2>
     </div>
-    <div v-if="active || done" class="t-pl-12 t-pt-4 t-pb-8">
-      <slot />
-    </div>
+    <no-ssr>
+      <div v-if="active || done" class="t-pl-12 t-pt-4 t-pb-8">
+        <slot />
+      </div>
+    </no-ssr>
   </div>
 </template>
 
 <script>
 
+import NoSsr from 'vue-no-ssr'
 import MaterialIcon from 'theme/components/core/blocks/MaterialIcon'
 
 export default {
   name: 'CheckoutStep',
   components: {
+    NoSsr,
     MaterialIcon
   },
   props: {
