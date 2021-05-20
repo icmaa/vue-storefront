@@ -42,6 +42,9 @@ export default {
     },
     selectedMethod () {
       return this.shippingMethods.find(m => m.code === this.selected)
+    },
+    rawSelectedMethod () {
+      return this.getShippingMethods.find(m => m.code === this.selected)
     }
   },
   async beforeMount () {
@@ -58,7 +61,7 @@ export default {
 
         this.$store.dispatch(
           'checkout/saveShippingDetails',
-          Object.assign({}, this.shippingDetails)
+          Object.assign({}, this.shippingDetails, { shippingMethod: this.rawSelectedMethod })
         )
 
         await this.$store.dispatch('cart/syncTotals', { forceServerSync: true })

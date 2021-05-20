@@ -31,7 +31,9 @@
       </button-component>
     </template>
     <template v-else-if="!active && done">
-      {{ payment }}
+      <div class="t-text-sm" v-if="selectedMethod">
+        {{ selectedMethod.title || selectedMethod.name }}
+      </div>
     </template>
   </div>
 </template>
