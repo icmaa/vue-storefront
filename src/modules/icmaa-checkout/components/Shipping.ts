@@ -1,5 +1,4 @@
 import { mapGetters } from 'vuex'
-import { price } from 'icmaa-config/helpers/price'
 
 export default {
   name: 'Shipping',
@@ -15,7 +14,7 @@ export default {
   },
   data () {
     return {
-      selectedMethod: false
+      selected: false
     }
   },
   computed: {
@@ -28,18 +27,36 @@ export default {
     shippingMethods () {
       const methods = this.getShippingMethods
       return methods.map(method => {
-        const { code, method_title: title, method_description: description, amount } = method
-        return { code, title, description, amount }
+        const { code, method_title: title, method_description: description, carrier_code: carrierCode, amount } = method
+
+        let image
+        try {
+          image = require(`theme/assets/logos/shipping/checkout/${carrierCode}.png`)
+        } catch (e) {
+          image = false
+        }
+
+        return { code, title, description, amount, image }
       })
+    },
+    selectedMethod () {
+      return this.shippingMethods.find(m => m.code === this.selected)
     }
   },
-  beforeMount () {
-    this.$store.dispatch('cart/syncShippingMethods', { forceServerSync: true })
+  async beforeMount () {
+    await this.$store.dispatch('cart/syncShippingMethods', { forceServerSync: true })
+    if (this.shippingMethods.length > 0) {
+      const firstMethod = this.shippingMethods.slice(0, 1).pop()
+      this.selected = firstMethod.code
+    }
   },
   methods: {
-    price,
-    submit () {
-      this.$store.dispatch('cart/syncTotals', { forceServerSync: true, methodsData: 'SELECTED-METHOD' })
+    async submit () {
+      this.$v.$touch()
+      if (!this.$v.$invalid) {
+        await this.$store.dispatch('cart/syncTotals', { forceServerSync: true, methodsData: 'SELECTED-METHOD' })
+        this.$store.dispatch('checkout/activateSection', 'payment')
+      }
     }
   }
 }

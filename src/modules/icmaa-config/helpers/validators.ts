@@ -112,4 +112,6 @@ export const postcode = (code: string = 'XX') => (v) => {
 
 export const isTrue = (v: any): boolean => v === true
 
+export const notFalse = (v: any): boolean => v !== false
+
 export const regex = (regex: string) => helpers.regex('regex', new RegExp(regex))
