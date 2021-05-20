@@ -157,7 +157,26 @@
           />
         </div>
         <base-input
-          class="t-w-full lg:t-w-2/3 t-px-2 t-mb-4"
+          class="t-w-full lg:t-w-1/2 t-px-2 t-mb-4"
+          type="text"
+          name="postcode"
+          id="postcode"
+          :placeholder="$t('Postcode') + ' *'"
+          autocomplete="postal-code"
+          v-model.trim="address.postcode"
+          :validations="[
+            {
+              condition: $v.address.postcode.$error && !$v.address.postcode.required,
+              text: $t('Field is required')
+            },
+            {
+              condition: $v.address.postcode.$error && !$v.address.postcode.postcode,
+              text: $t('This is not a valid postcode. Format: {code}', { code: postCodeFormat})
+            }
+          ]"
+        />
+        <base-input
+          class="t-w-full lg:t-w-1/2 t-px-2 t-mb-4"
           type="text"
           name="city"
           id="city"
@@ -173,25 +192,6 @@
             {
               condition: $v.address.city.$error && !$v.address.city.latin,
               text: $t('Invalid characters')
-            }
-          ]"
-        />
-        <base-input
-          class="t-w-full lg:t-w-1/3 t-px-2 t-mb-4"
-          type="text"
-          name="postcode"
-          id="postcode"
-          :placeholder="$t('Postcode') + ' *'"
-          autocomplete="postal-code"
-          v-model.trim="address.postcode"
-          :validations="[
-            {
-              condition: $v.address.postcode.$error && !$v.address.postcode.required,
-              text: $t('Field is required')
-            },
-            {
-              condition: $v.address.postcode.$error && !$v.address.postcode.postcode,
-              text: $t('This is not a valid postcode. Format: {code}', { code: postCodeFormat})
             }
           ]"
         />
