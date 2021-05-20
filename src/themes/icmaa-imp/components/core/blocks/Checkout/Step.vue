@@ -17,11 +17,11 @@
         </slot>
       </h2>
     </div>
-    <no-ssr>
-      <div v-if="active || done" class="t-pl-12 t-pt-4 t-pb-8">
+    <div v-if="active || done" class="t-pl-12 t-pt-4 t-pb-8">
+      <no-ssr>
         <slot />
-      </div>
-    </no-ssr>
+      </no-ssr>
+    </div>
   </div>
 </template>
 
