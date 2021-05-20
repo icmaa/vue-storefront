@@ -64,8 +64,6 @@ const SearchPanel = () => import(/* webpackChunkName: "vsf-search-panel" */ 'the
 export default {
   data () {
     return {
-      loadOrderConfirmation: false,
-      ordersData: [],
       Microcart,
       Wishlist,
       SearchPanel,
@@ -130,7 +128,6 @@ export default {
     MainHeader,
     Advice,
     MainFooter,
-    NavigationSidebar, // eslint-disable-line vue/no-unused-components
     Overlay,
     Loader,
     Notifications,
