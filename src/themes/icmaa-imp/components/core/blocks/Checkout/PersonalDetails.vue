@@ -158,7 +158,7 @@
         </div>
       </div>
     </form>
-    <div class="" v-if="!active && done">
+    <div v-if="!active && done">
       <div class="t-text-sm">
         {{ details.firstName }} {{ details.lastName }}<br>
         {{ details.emailAddress }}

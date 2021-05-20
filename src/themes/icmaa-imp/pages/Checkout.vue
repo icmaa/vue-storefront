@@ -80,7 +80,7 @@ export default {
       return [
         {
           name: 'personal',
-          title: this.isLoggedIn ? 'Personal Details' : 'Login / Personal Details',
+          title: this.isLoggedIn ? 'Personal Details' : 'Sign-in',
           component: PersonalDetails
         },
         {
