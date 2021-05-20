@@ -106,7 +106,7 @@ export default {
     callLogin () {
       this.$store.dispatch('ui/loader', { message: i18n.t('Please wait') })
       this.$store.dispatch('user/login', { username: this.email, password: this.password }).then((result) => {
-        this.$bus.$emit('notification-progress-stop', {})
+        this.$store.dispatch('ui/loader', false)
 
         if (result.code !== 200) {
           this.onFailure(result)
