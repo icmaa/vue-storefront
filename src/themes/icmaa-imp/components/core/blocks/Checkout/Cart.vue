@@ -12,6 +12,13 @@
         />
       </ul>
       <totals />
+      <button-component
+        class="t-mt-6"
+        size="sm"
+        @click="editCart"
+      >
+        {{ $t('Edit your cart') }}
+      </button-component>
     </div>
   </div>
 </template>
@@ -19,18 +26,26 @@
 <script>
 import { mapGetters } from 'vuex'
 
-import Product from 'theme/components/core/blocks/Microcart/Product'
+import Product from 'theme/components/core/blocks/Checkout/Cart/Product'
 import Totals from 'theme/components/core/blocks/Microcart/Totals'
+import ButtonComponent from 'theme/components/core/blocks/Button'
+import { localizedRoute } from '@vue-storefront/core/lib/multistore'
 
 export default {
   components: {
     Product,
-    Totals
+    Totals,
+    ButtonComponent
   },
   computed: {
     ...mapGetters({
       productsInCart: 'cart/getCartItems'
     })
+  },
+  methods: {
+    editCart () {
+      this.$router.push(localizedRoute('/'))
+    }
   }
 }
 </script>

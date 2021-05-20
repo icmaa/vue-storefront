@@ -32,7 +32,7 @@
       </div>
       <div class="t-hidden md:t-block md:t-w-1/2 xl:t-w-2/5 t-pl-8">
         <div class="t-min-h-full t-bg-base-lightest t-p-8">
-          <cart-summary />
+          <cart />
         </div>
       </div>
     </div>
@@ -47,7 +47,7 @@ import { OrderModule } from '@vue-storefront/core/modules/order'
 import Checkout from 'icmaa-checkout/pages/Checkout'
 import Logo from 'theme/components/core/blocks/Header/Logo'
 import Step from 'theme/components/core/blocks/Checkout/Step'
-import CartSummary from 'theme/components/core/blocks/Checkout/CartSummary'
+import Cart from 'theme/components/core/blocks/Checkout/Cart'
 import MaterialIcon from 'theme/components/core/blocks/MaterialIcon'
 
 const PersonalDetails = () => import(/* webpackChunkName: "vsf-checkout-personal-details" */ 'theme/components/core/blocks/Checkout/PersonalDetails')
@@ -61,7 +61,7 @@ export default {
   components: {
     Logo,
     Step,
-    CartSummary,
+    Cart,
     MaterialIcon
   },
   mixins: [ Checkout ],
