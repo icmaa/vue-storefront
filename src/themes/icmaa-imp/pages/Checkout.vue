@@ -100,7 +100,7 @@ export default {
         },
         {
           name: 'review',
-          title: 'Review',
+          title: 'Order Review',
           component: Review
         }
       ].map(step => Object.assign(step, this.sections[step.name]))

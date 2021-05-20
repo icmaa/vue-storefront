@@ -3,7 +3,7 @@
     <div class="t-absolute t-h-full t-w-8" v-if="!last">
       <div class="t-w-px t-bg-base-lightest t-h-full t-mx-auto" />
     </div>
-    <div class="t-flex t-items-center t-relative" :class="{ 't-pb-4': !last }">
+    <div class="t-flex t-items-center t-relative" :class="{ 't-pb-4': !last && !active && !done }">
       <div
         class="t-flex t-items-center t-justify-center t-h-8 t-w-8 t-mr-4 t-rounded-full t-bg-base-lightest t-text-white t-font-mono t-font-bold t-text-sm t-leading-1-em"
         :class="{ 't-text-base-tone': active || done }"
@@ -17,7 +17,7 @@
         </slot>
       </h2>
     </div>
-    <div v-if="active || done" class="t-pl-12 t-pb-8">
+    <div v-if="active || done" class="t-pl-12 t-pt-4 t-pb-8">
       <slot />
     </div>
   </div>

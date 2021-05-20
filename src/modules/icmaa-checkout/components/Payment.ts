@@ -38,12 +38,6 @@ export default {
           Object.assign({}, this.paymentDetails, { paymentMethod: this.selectedMethod })
         )
 
-        this.$store.dispatch('notification/spawnNotification', {
-          type: 'success',
-          message: 'This is work-in-progress 🤙',
-          action1: { label: this.$t('OK') }
-        })
-
         this.$store.dispatch('checkout/activateSection', 'review')
       }
     }
