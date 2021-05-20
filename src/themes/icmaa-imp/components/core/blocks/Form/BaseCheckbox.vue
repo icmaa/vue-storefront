@@ -95,6 +95,7 @@ export default {
   methods: {
     onChange (e) {
       if (this.isSingleValue) {
+        if (this.radio && !e.target.checked) return
         this.$emit('change', e.target.checked ? this.inputValue : e.target.checked)
       } else {
         let currentValue = [...this.value]
