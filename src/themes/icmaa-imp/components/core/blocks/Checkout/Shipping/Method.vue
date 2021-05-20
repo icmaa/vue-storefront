@@ -9,6 +9,7 @@
       :placeholder="true"
       ratio="70:32"
       class="t-mr-2"
+      :class="{ 't-grayscale t-opacity-75': !active }"
       v-if="method.image"
     />
     <div class="t-leading-4">

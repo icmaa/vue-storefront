@@ -19,7 +19,8 @@ export default {
   },
   computed: {
     ...mapGetters({
-      getShippingMethods: 'checkout/getShippingMethods'
+      getShippingMethods: 'checkout/getShippingMethods',
+      shippingDetails: 'checkout/getShippingDetails'
     }),
     hasShippingMethod () {
       return this.getShippingMethods.length > 0
@@ -52,9 +53,15 @@ export default {
   methods: {
     async submit () {
       this.$v.$touch()
-      if (!this.$v.$invalid) {
+      if (!this.$v.$invalid && this.selectedMethod) {
         this.$store.dispatch('checkout/loading')
-        await this.$store.dispatch('cart/syncTotals', { forceServerSync: true, methodsData: 'SELECTED-METHOD' })
+
+        this.$store.dispatch(
+          'checkout/saveShippingDetails',
+          Object.assign({}, this.shippingDetails)
+        )
+
+        await this.$store.dispatch('cart/syncTotals', { forceServerSync: true })
         this.$store.dispatch('checkout/activateSection', 'payment')
       }
     }
