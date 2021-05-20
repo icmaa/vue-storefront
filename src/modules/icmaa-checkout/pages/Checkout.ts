@@ -20,10 +20,20 @@ export default {
   },
   computed: {
     ...mapGetters({
+      isLoading: 'checkout/isLoading',
       isVirtualCart: 'cart/isVirtualCart',
       sections: 'checkout/getSections',
       isThankYouPage: 'checkout/isThankYouPage'
     })
+  },
+  watch: {
+    isLoading (v) {
+      if (v === true) {
+        this.$bus.$emit('notification-progress-start', i18n.t('Please wait'))
+      } else {
+        this.$bus.$emit('notification-progress-stop')
+      }
+    }
   },
   async beforeMount () {
     this.registerSections()

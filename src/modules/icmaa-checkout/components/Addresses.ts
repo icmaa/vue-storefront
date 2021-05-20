@@ -51,7 +51,7 @@ export default {
     }
   },
   methods: {
-    submit () {
+    async submit () {
       const shipping = this.$refs.shippingAddress.submit()
 
       if (!this.billingAddressIsSameAsShipping) {
@@ -67,6 +67,9 @@ export default {
       )
 
       this.$store.dispatch('checkout/savePaymentDetails', this.billingAddressDTO)
+
+      this.$store.dispatch('checkout/loading')
+      await this.$store.dispatch('cart/syncShippingMethods', { forceServerSync: true })
 
       return this.$store.dispatch('checkout/activateSection', 'shipping')
     },

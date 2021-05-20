@@ -16,7 +16,7 @@
           class="t-mb-4"
         />
         <button-component
-          class="t-w-full lg:t-w-auto t-mt-4"
+          class="t-w-full lg:t-w-auto t-mt-8"
           type="primary"
           @click.native.stop="submit"
         >

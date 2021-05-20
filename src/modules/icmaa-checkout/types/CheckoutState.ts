@@ -6,6 +6,7 @@ export interface Section {
 }
 
 export interface ExtendedCheckoutState {
+  loading: boolean,
   sections: {
     [key: string]: Section
   }

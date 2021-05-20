@@ -3,6 +3,9 @@ import * as types from './mutation-types'
 import CheckoutState from '../../types/CheckoutState'
 
 const mutations: MutationTree<CheckoutState> = {
+  [types.SET_LOADING] (state, status) {
+    state.loading = status
+  },
   [types.SET_SECTIONS] (state, sections = {}) {
     state.sections = sections
   },

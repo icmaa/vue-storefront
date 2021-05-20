@@ -33,6 +33,7 @@
       <div class="t-hidden lg:t-block lg:t-w-3/5 t-pl-8">
         <div class="t-min-h-full t-bg-base-lightest t-p-8">
           <div>
+            {{ isLoading }}
             Cart summary comes here …
             <!-- <cart-summary /> -->
           </div>
@@ -73,7 +74,7 @@ export default {
   },
   computed: {
     ...mapGetters({
-      'isLoggedIn': 'user/isLoggedIn'
+      isLoggedIn: 'user/isLoggedIn'
     }),
     steps () {
       return [

@@ -1,5 +1,6 @@
 <template>
   <div class="minimal-layout">
+    <loader />
     <div id="viewport" class="t-w-full">
       <minimal-header />
       <slot />
@@ -12,6 +13,7 @@
 import { mapGetters } from 'vuex'
 import MinimalHeader from 'theme/components/core/blocks/Header/MinimalHeader.vue'
 import MinimalFooter from 'theme/components/core/blocks/Footer/MinimalFooter.vue'
+import Loader from 'theme/components/core/Loader'
 
 export default {
   methods: {
@@ -30,7 +32,8 @@ export default {
   },
   components: {
     MinimalHeader,
-    MinimalFooter
+    MinimalFooter,
+    Loader
   }
 }
 </script>

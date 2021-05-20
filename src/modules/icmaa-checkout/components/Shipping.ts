@@ -44,7 +44,6 @@ export default {
     }
   },
   async beforeMount () {
-    await this.$store.dispatch('cart/syncShippingMethods', { forceServerSync: true })
     if (this.shippingMethods.length > 0) {
       const firstMethod = this.shippingMethods.slice(0, 1).pop()
       this.selected = firstMethod.code
@@ -54,6 +53,7 @@ export default {
     async submit () {
       this.$v.$touch()
       if (!this.$v.$invalid) {
+        this.$store.dispatch('checkout/loading')
         await this.$store.dispatch('cart/syncTotals', { forceServerSync: true, methodsData: 'SELECTED-METHOD' })
         this.$store.dispatch('checkout/activateSection', 'payment')
       }

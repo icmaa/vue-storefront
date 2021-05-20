@@ -8,6 +8,7 @@ import getters from './getters'
 import merge from 'lodash-es/merge'
 
 const extendedState: ExtendedCheckoutState = {
+  loading: false,
   sections: {}
 }
 
