@@ -99,7 +99,7 @@ export default {
       }
 
       try {
-        this.$bus.$emit('notification-progress-start', i18n.t('Please wait'))
+        this.$store.dispatch('ui/loader', { message: i18n.t('Please wait') })
 
         let response = await this.$store.dispatch('user/createPassword', {
           email: this.email,
@@ -114,7 +114,7 @@ export default {
               password: this.password
             })
 
-            this.$bus.$emit('notification-progress-stop')
+            this.$store.dispatch('ui/loader', false)
 
             if (loginResult.code !== 200) {
               this.$store.dispatch('notification/spawnNotification', {
@@ -133,7 +133,7 @@ export default {
             }
           }
         } else {
-          this.$bus.$emit('notification-progress-stop')
+          this.$store.dispatch('ui/loader', false)
 
           const responseMessage = response.result && response.result.errorMessage && response.result.errorMessage.includes('No such entity with email')
             ? i18n.t('Provided email does not exist')
@@ -146,7 +146,7 @@ export default {
           })
         }
       } catch (err) {
-        this.$bus.$emit('notification-progress-stop')
+        this.$store.dispatch('ui/loader', false)
 
         await this.$store.dispatch('notification/spawnNotification', {
           action1: { label: i18n.t('OK') },

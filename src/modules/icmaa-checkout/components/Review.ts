@@ -38,7 +38,7 @@ export default {
       }
     },
     async register () {
-      this.$bus.$emit('notification-progress-start', i18n.t('Registering the account ...'))
+      this.$store.dispatch('ui/loader', { message: i18n.t('Registering the account ... ') })
 
       try {
         const result = await this.$store.dispatch('user/register', {
@@ -60,7 +60,7 @@ export default {
         })
 
         if (result.code !== 200) {
-          this.$bus.$emit('notification-progress-stop')
+          this.$store.dispatch('ui/loader', false)
           this.onFailure(result)
           // If error includes a word 'password', emit event that eventually focuses on a corresponding field
           if (result.result.includes(i18n.t('password'))) {
@@ -76,12 +76,12 @@ export default {
             username: this.getPersonalDetails.emailAddress,
             password: this.getPersonalDetails.password
           })
-          this.$bus.$emit('notification-progress-stop')
+          this.$store.dispatch('ui/loader', false)
           this.$bus.$emit('checkout-before-placeOrder', result.result.id)
           this.onSuccess()
         }
       } catch (err) {
-        this.$bus.$emit('notification-progress-stop')
+        this.$store.dispatch('ui/loader', false)
         Logger.error(err, 'checkout')()
       }
     }

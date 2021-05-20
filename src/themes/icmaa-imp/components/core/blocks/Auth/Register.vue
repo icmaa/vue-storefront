@@ -242,7 +242,7 @@ export default {
       this.$store.dispatch('ui/hideModal', 'modal-signup')
     },
     callRegister () {
-      this.$bus.$emit('notification-progress-start', i18n.t('Registering the account ...'))
+      this.$store.dispatch('ui/loader', { message: i18n.t('Registering the account ... ') })
 
       const formData = {
         email: this.email,
@@ -261,7 +261,7 @@ export default {
 
       this.$store.dispatch('user/register', formData).then((result) => {
         Logger.debug(result, 'user')()
-        this.$bus.$emit('notification-progress-stop')
+        this.$store.dispatch('ui/loader', false)
         if (result.code !== 200) {
           this.onFailure(result)
           // If error includes a word 'password', focus on a corresponding field
@@ -283,7 +283,7 @@ export default {
         }
 
         this.onFailure({ result: message })
-        this.$bus.$emit('notification-progress-stop')
+        this.$store.dispatch('ui/loader', false)
         Logger.error(err, 'user')()
       })
     },

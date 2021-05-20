@@ -9,7 +9,10 @@ export const uiStore = {
   state: {
     viewport: false,
     isTouchDevice: false,
-    loader: false,
+    loader: {
+      active: false,
+      message: false
+    },
     authElem: 'login',
     /** Sidebar and modal type states: */
     modals: {},
@@ -60,8 +63,9 @@ export const uiStore = {
     setOverlay (state, action: boolean) {
       state.overlay = action === true
     },
-    setLoader (state, action: boolean) {
-      state.loader = action === true
+    setLoader (state, { active = true, message }: { active: boolean, message?: string | boolean }) {
+      message = active === false ? false : message || false
+      state.loader = { active, message }
     },
     setAuthElem (state, action: boolean) {
       state.authElem = action
@@ -112,6 +116,13 @@ export const uiStore = {
     closeAll ({ commit }) {
       commit('setCloseAll')
       clearAllBodyScrollLocks()
+    },
+    loader ({ commit }, payload) {
+      if (typeof payload === 'boolean') {
+        payload = { active: payload }
+      }
+
+      commit('setLoader', payload)
     },
     setSidebar ({ commit }, { key, status }) {
       commit('toggleSidebar', { key, action: status })

@@ -27,12 +27,8 @@ export default {
     })
   },
   watch: {
-    isLoading (v) {
-      if (v === true) {
-        this.$bus.$emit('notification-progress-start', i18n.t('Please wait'))
-      } else {
-        this.$bus.$emit('notification-progress-stop')
-      }
+    isLoading (active) {
+      this.$store.dispatch('ui/loader', active)
     }
   },
   async beforeMount () {
