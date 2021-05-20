@@ -31,11 +31,10 @@
         <div class="t-clearfix" />
       </main>
       <main-footer />
-      <notifications />
       <sign-up />
+      <notifications />
       <cookie-notification />
       <offline-badge />
-      <order-confirmation :orders-data="ordersData" v-if="loadOrderConfirmation" />
     </div>
     <vue-progress-bar />
   </div>
@@ -61,7 +60,6 @@ const NavigationSidebar = () => import(/* webpackPreload: true */ /* webpackChun
 const Microcart = () => import(/* webpackPreload: true */ /* webpackChunkName: "vsf-microcart" */ 'theme/components/core/blocks/Microcart/Microcart')
 const Wishlist = () => import(/* webpackPreload: true */ /* webpackChunkName: "vsf-wishlist" */ 'theme/components/core/blocks/Wishlist/Wishlist')
 const SearchPanel = () => import(/* webpackChunkName: "vsf-search-panel" */ 'theme/components/core/blocks/SearchPanel/SearchPanel')
-const OrderConfirmation = () => import(/* webpackChunkName: "vsf-order-confirmation" */ 'theme/components/core/blocks/Checkout/OrderConfirmation')
 
 export default {
   data () {
@@ -82,11 +80,6 @@ export default {
   },
   methods: {
     ...mapGetters({ getMetaData: 'icmaaMeta/getData' }),
-    onOrderConfirmation (payload) {
-      this.loadOrderConfirmation = true
-      this.ordersData = payload
-      this.$store.dispatch('ui/showModal', 'modal-order-confirmation')
-    },
     fetchMetaData () {
       return this.$store.dispatch('icmaaMeta/load')
     },
@@ -110,13 +103,9 @@ export default {
     this.$router.afterEach((to, from) => {
       this.$Progress.finish()
     })
-    this.$bus.$on('offline-order-confirmation', this.onOrderConfirmation)
   },
   mounted () {
     this.fetchCmsData()
-  },
-  beforeDestroy () {
-    this.$bus.$off('offline-order-confirmation', this.onOrderConfirmation)
   },
   metaInfo () {
     let metaData = this.getMetaData()
@@ -148,7 +137,6 @@ export default {
     SignUp,
     CookieNotification,
     OfflineBadge,
-    OrderConfirmation,
     AsyncSidebar,
     'no-ssr': NoSSR
   }
