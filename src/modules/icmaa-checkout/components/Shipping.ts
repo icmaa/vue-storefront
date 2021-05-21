@@ -65,6 +65,8 @@ export default {
         )
 
         await this.$store.dispatch('cart/syncTotals', { forceServerSync: true })
+        await this.$store.dispatch('cart/syncPaymentMethods', { forceServerSync: true })
+
         this.$store.dispatch('checkout/activateSection', 'payment')
       }
     }

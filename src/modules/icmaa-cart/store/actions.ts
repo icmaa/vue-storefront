@@ -1,9 +1,11 @@
 import { ActionTree } from 'vuex'
 import RootState from '@vue-storefront/core/types/RootState'
 import CartState from '@vue-storefront/core/modules/cart/types/CartState'
+import PaymentMethod from '@vue-storefront/core/modules/cart/types/PaymentMethod'
+import EventBus from '@vue-storefront/core/compatibility/plugins/event-bus'
 import { CartService } from '@vue-storefront/core/data-resolver'
 import { cartHooksExecutors } from '@vue-storefront/core/modules/cart/hooks'
-import { createDiffLog, productsEquals } from '@vue-storefront/core/modules/cart/helpers'
+import { createDiffLog, productsEquals, preparePaymentMethodsToSync, createShippingInfoData } from '@vue-storefront/core/modules/cart/helpers'
 import { currentStoreView } from '@vue-storefront/core/lib/multistore'
 import { Logger } from '@vue-storefront/core/lib/logger'
 import { notifications } from '../helpers'
@@ -11,9 +13,13 @@ import config from 'config'
 import * as types from '../store/mutation-types'
 import * as orgTypes from '@vue-storefront/core/modules/cart/store/mutation-types'
 
+import omit from 'lodash-es/omit'
+
 const actions: ActionTree<CartState, RootState> = {
   /**
-   * Things we changed:
+   * Clone of originial `cart/authorize`
+   *
+   * Changes:
    * * There is a bug in the original method where the method assumes that `getCoupon` always returns an object.
    *   This sometimes leads to an exception during the login if a cart exists and the user wants to login into
    *   a customer account with a exsisting quote.
@@ -31,7 +37,9 @@ const actions: ActionTree<CartState, RootState> = {
     }
   },
   /**
-   * Things we changed:
+   * Clone of originial `cart/sync`
+   *
+   * Changes:
    * * Update the cart-token after `CartService.getItems()` to extend JWT lifetime on each pull.
    */
   async sync ({ getters, rootGetters, commit, dispatch }, { forceClientState = false, dryRun = false, mergeQty = false, forceSync = false }) {
@@ -80,6 +88,12 @@ const actions: ActionTree<CartState, RootState> = {
 
     return errorDiffLog
   },
+  /**
+   * Clone of originial `cart/removeCoupon`
+   *
+   * Changes:
+   * * Add callback function
+   */
   async removeCoupon ({ getters, dispatch, commit }, { sync = true } = {}) {
     if (getters.canSyncTotals) {
       const { result } = await CartService.removeCoupon()
@@ -93,6 +107,13 @@ const actions: ActionTree<CartState, RootState> = {
       }
     }
   },
+  /**
+   * Clone of originial `cart/applyCoupon`
+   *
+   * Changes:
+   * * Add callback function
+   * * Update cart-hash after apply
+   */
   async applyCoupon ({ getters, dispatch, commit }, couponCode) {
     if (couponCode && getters.canSyncTotals) {
       const { result } = await CartService.applyCoupon(couponCode)
@@ -110,7 +131,6 @@ const actions: ActionTree<CartState, RootState> = {
    * We need to update/sync the cart after the coupon is applied to update cart for insentive products.
    * There is already an up-to-date representation of the cart in `cart/shipping-information` request
    * of `syncTotals` but this isn't returned so we can't use it without extending the core excessivly.
-   * @param param
    */
   async couponCallback ({ getters, dispatch, commit }) {
     const { getCartItems, isTotalsSyncRequired } = getters
@@ -203,6 +223,63 @@ const actions: ActionTree<CartState, RootState> = {
     }
 
     Logger.debug('Shipping methods does not need to be updated', 'cart')()
+  },
+  /**
+   * Clone of originial `cart/syncPaymentMethods`
+   *
+   * Changes:
+   * * Change logic to only sync stuff we need: the available payment-methods
+   */
+  async syncPaymentMethods ({ getters, rootGetters, dispatch }, { forceServerSync = false }) {
+    if (getters.canUpdateMethods && (getters.isTotalsSyncRequired || forceServerSync)) {
+      Logger.debug('Refreshing payment methods', 'cart')()
+
+      const { result } = await CartService.getPaymentMethods()
+      let backendPaymentMethods: PaymentMethod[] = result
+
+      const { uniqueBackendMethods, paymentMethods } = preparePaymentMethodsToSync(
+        backendPaymentMethods,
+        rootGetters['checkout/getNotServerPaymentMethods']
+      )
+
+      await dispatch('checkout/replacePaymentMethods', paymentMethods, { root: true })
+
+      EventBus.$emit('set-unique-payment-methods', uniqueBackendMethods)
+    } else {
+      Logger.debug('Payment methods does not need to be updated', 'cart')()
+    }
+  },
+  /**
+   * Clone of originial `cart/syncTotals`
+   *
+   * Changes:
+   * * Simplify data-structure and logic
+   */
+  async syncTotals ({ dispatch, getters, rootGetters }, { forceServerSync = false, methodsData }: { forceServerSync: boolean, methodsData?: any }) {
+    if (getters.canSyncTotals && (getters.isTotalsSyncRequired || forceServerSync)) {
+      const shippingDetails = rootGetters['checkout/getShippingDetails']
+      const { shippingMethod } = shippingDetails
+
+      const billingDetails = rootGetters['checkout/getPaymentDetails']
+      const { billingMethod } = billingDetails
+
+      const addressInformation = methodsData || {
+        shippingAddress: omit(shippingDetails, ['shippingMethod']),
+        billingAddress: omit(billingDetails, ['billingMethod']),
+        shippingMethod,
+        billingMethod
+      }
+
+      if (shippingDetails.country_id) {
+        await dispatch('overrideServerTotals', {
+          hasShippingInformation: shippingDetails.shippingMethod || false,
+          addressInformation
+        })
+        return
+      }
+
+      Logger.error('Please do set the tax.defaultCountry in order to calculate totals', 'cart')()
+    }
   }
 }
 
