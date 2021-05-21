@@ -33,7 +33,7 @@ let routes = [
   { name: 'create-password', path: '/create-password', component: ResetPassword },
   { name: 'create-password-old-rewrite', path: '/customer/account/resetpassword', component: ResetPassword },
   { name: 'error', path: '/error', component: ErrorPage, meta: { layout: 'minimal' } },
-  { name: 'page-not-found', path: '*', component: PageNotFound }
+  { name: 'page-not-found', path: '*', component: PageNotFound, meta: { gtm: 'page-not-found' } }
 ]
 
 /** ICMAA / Custom cms routes */
