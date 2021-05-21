@@ -193,11 +193,16 @@ const actions: ActionTree<CartState, RootState> = {
       const address = Object.assign({}, { country_id: storeView.tax.defaultCountry }, shippingDetails)
 
       Logger.debug('Refreshing shipping methods', 'cart', address)()
+
       const { result } = await CartService.getShippingMethods(address)
-      await dispatch('updateShippingMethods', { shippingMethods: result })
-    } else {
-      Logger.debug('Shipping methods does not need to be updated', 'cart')()
+      if (result !== false) {
+        return dispatch('updateShippingMethods', { shippingMethods: result })
+      }
+
+      Logger.debug('Shipping methods request was empty', 'cart')()
     }
+
+    Logger.debug('Shipping methods does not need to be updated', 'cart')()
   }
 }
 
