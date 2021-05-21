@@ -54,10 +54,17 @@ jobs:
           NODE_CONFIG_ENV: ${{ env.ENV }}
           NODE_APP_INSTANCE: ${{ matrix.env.MANDANT }}
 
+      # The newest NodeJS LTS version isn't supported by GAE flex engine
+      # @see https://github.com/GoogleCloudPlatform/nodejs-docker/issues/214
+      - name: Hotfix for new NodeJS 14.17.* LTS version
+        if: ${{ env.ENV == 'production' }}
+        run: |
+          sed -i 's/"node": "^14"/"node": "14.16.x"/' package.json
+
       - id: deploy
         uses: google-github-actions/deploy-appengine@main
         with:
           credentials: ${{ env.ENV == 'production' && secrets.GCP_VSF_SA_KEY_PROD || secrets.GCP_VSF_SA_KEY_TEST }}
           deliverables: app-${{ matrix.env.MANDANT }}-${{ env.ENV == 'production' && 'prod' || 'test' }}.yaml
           version: ${{ env.VERSION_NAME }}
-          promote: ${{ env.ENV == 'production' && 'false' || 'true' }}
+          # promote: ${{ env.ENV == 'production' && 'false' || 'true' }}
