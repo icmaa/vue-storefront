@@ -9,11 +9,8 @@ import { NotificationModule } from '@vue-storefront/core/modules/notification'
 import { UrlModule } from '@vue-storefront/core/modules/url'
 import { BreadcrumbsModule } from '@vue-storefront/core/modules/breadcrumbs'
 import { UserModule } from '@vue-storefront/core/modules/user'
-import { PaymentBackendMethodsModule } from './payment-backend-methods'
-import { PaymentCashOnDeliveryModule } from './payment-cash-on-delivery'
 import { NewsletterModule } from '@vue-storefront/core/modules/newsletter'
 import { InitialResourcesModule } from '@vue-storefront/core/modules/initial-resources'
-// import { DeviceModule } from './device/index'
 import { registerModule } from '@vue-storefront/core/lib/modules'
 
 // ICMAA Modules
@@ -50,8 +47,6 @@ export function registerClientModules () {
   registerModule(CatalogModule)
   registerModule(CheckoutModule) // To Checkout
   registerModule(CartModule)
-  registerModule(PaymentBackendMethodsModule)
-  registerModule(PaymentCashOnDeliveryModule)
   registerModule(WishlistModule) // Trigger on wishlist icon click
   registerModule(NotificationModule)
   registerModule(UserModule) // Trigger on user icon click
