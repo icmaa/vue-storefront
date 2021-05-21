@@ -19,13 +19,13 @@
         </div>
         <div class="t-w-full lg:t-w-1/2 t-pt-px lg:t-pl-px lg:t-pt-0 t-flex">
           <div class="t-relative t-flex-1 t-bg-white">
-            <router-link :to="competition.bannerLink" class="t-flex">
+            <universal-link :to="competition.bannerLink" class="t-flex">
               <picture-component :alt="competition.bannerLinkText | stripHTML" :src="bannerImage" :width="624" :height="312" :placeholder="true" :sizes="sizes" ratio="1:1" class="t-flex-1 t-self-start" />
-            </router-link>
-            <router-link :to="competition.bannerLink" class="t-flex t-items-center t-w-full lg:t-absolute lg:t-bottom-0 t-bg-white t-p-4 lg:t-px-6 lg:t-py-8 t-text-primary t-text-xl">
+            </universal-link>
+            <universal-link :to="competition.bannerLink" class="t-flex t-items-center t-w-full lg:t-absolute lg:t-bottom-0 t-bg-white t-p-4 lg:t-px-6 lg:t-py-8 t-text-primary t-text-xl">
               <span v-text="competition.bannerLinkText" class="t-flex-1" />
               <material-icon icon="keyboard_arrow_right" size="lg" class="t-text-base-lighter t-ml-2" />
-            </router-link>
+            </universal-link>
           </div>
         </div>
       </div>
@@ -70,6 +70,7 @@ import { Logger } from '@vue-storefront/core/lib/logger'
 import FormComponent from 'theme/components/core/blocks/Form/Form'
 import PictureComponent from 'theme/components/core/blocks/Picture'
 import ButtonComponent from 'theme/components/core/blocks/Button'
+import UniversalLink from 'theme/components/core/blocks/Link'
 import MaterialIcon from 'theme/components/core/blocks/MaterialIcon'
 
 export default {
@@ -78,6 +79,7 @@ export default {
     FormComponent,
     ButtonComponent,
     PictureComponent,
+    UniversalLink,
     MaterialIcon
   },
   data () {
