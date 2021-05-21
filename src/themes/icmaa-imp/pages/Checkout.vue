@@ -31,8 +31,8 @@
         </step>
       </div>
       <div class="t-hidden md:t-block md:t-w-1/2 xl:t-w-2/5 t-pl-8">
-        <div class="t-min-h-full t-bg-base-lightest t-p-8">
-          <cart />
+        <div class="t-min-h-full t-flex t-items-stretch t-bg-base-lightest t-p-4">
+          <cart class="t-bg-white t-w-full t-p-4" />
         </div>
       </div>
     </div>
