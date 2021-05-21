@@ -35,7 +35,7 @@ let routes = [
   { name: 'search', path: '/search/:term', component: SearchResult, meta: { gtm: 'search' } },
   { name: 'create-password', path: '/create-password', component: ResetPassword },
   { name: 'create-password-old-rewrite', path: '/customer/account/resetpassword', component: ResetPassword },
-  { name: 'page-not-found', path: '*', component: PageNotFound }
+  { name: 'page-not-found', path: '*', component: PageNotFound, meta: { gtm: 'page-not-found' } }
 ]
 
 /** ICMAA / Custom cms routes */

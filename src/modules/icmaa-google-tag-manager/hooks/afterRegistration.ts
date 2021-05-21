@@ -24,6 +24,14 @@ export const registerCustomPageEvents = () => {
     const event = rootStore.getters['icmaaGoogleTagManager/gtmEventPayload']('search')
     IcmaaGoogleTagManagerExecutors.onGtmPageView({ type: event.event, event })
   })
+
+  EventHooks.pageNotFound(() => {
+    const event = Object.assign(
+      rootStore.getters['icmaaGoogleTagManager/gtmEventPayload'](),
+      { event: 'icmaa-page-not-found' }
+    )
+    IcmaaGoogleTagManagerExecutors.onGtmPageView({ type: event.event, event })
+  })
 }
 
 export function afterRegistration () {
