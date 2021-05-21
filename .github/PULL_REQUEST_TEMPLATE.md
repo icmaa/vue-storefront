@@ -1,7 +1,7 @@
 … Short description of your changes with links to related PR's of other repos.
 
 ## Related ticket
-<!--  Put related Redmin issue number prefixed with `TCK-` which this PR is closing. For example TCK-12345 -->
+<!--  Put related Redmine issue number prefixed with `TCK-` which this PR is closing. For example TCK-12345 -->
 
 TCK-
 
