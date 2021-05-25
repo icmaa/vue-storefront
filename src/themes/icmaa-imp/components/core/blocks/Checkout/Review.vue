@@ -7,11 +7,11 @@
       <template v-if="hasAgreements">
         <base-checkbox
           v-for="agreement in agreements"
-          :key="agreement.agreementId"
+          :key="agreement.id"
           name="terms"
-          :id="`terms-${agreement.agreementId}`"
+          :id="`terms-${agreement.id}`"
           v-model="terms"
-          :input-value="String(agreement.agreementId)"
+          :input-value="String(agreement.id)"
           :validations="[{
             condition: $v.terms.$error && (!$v.terms.required || !$v.terms.notFalse),
             text: $t('Field is required')
