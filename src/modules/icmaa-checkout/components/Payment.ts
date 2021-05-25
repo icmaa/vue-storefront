@@ -26,9 +26,6 @@ export default {
       return this.paymentMethods.find(m => m.code === this.selected)
     }
   },
-  beforeMount () {
-    this.$bus.$on('checkout-after-load', this.onCheckoutLoad)
-  },
   methods: {
     submit () {
       this.$v.$touch()

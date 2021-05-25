@@ -236,7 +236,7 @@
           {{ $t('Use as my default shipping address') }}
         </base-checkbox>
         <div class="t-px-2 t-w-full t-flex t-flex-wrap t-justify-between">
-          <button-component :submit="true" type="primary" size="lg" class="t-w-full lg:t-w-auto lg:t-order-3" data-test-id="SubmitButton">
+          <button-component :submit="true" type="primary" class="t-w-full lg:t-w-auto lg:t-order-3" data-test-id="SubmitButton">
             {{ $t('Save address') }}
           </button-component>
           <button-component type="ghost" icon="keyboard_arrow_left" icon-position="left" class="t-flex-1 lg:t-flex-fix t-w-1/2 t-mt-4 lg:t-mt-0 lg:t-w-auto lg:t-order-1" @click="back" data-test-id="BackButton">

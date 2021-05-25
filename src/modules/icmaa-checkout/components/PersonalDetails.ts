@@ -70,7 +70,7 @@ export default {
       }
     }
   },
-  beforeDestroy () {
+  destroyed () {
     this.$bus.$off('checkout-after-load', this.onCheckoutLoad)
     this.$bus.$off('user-after-loggedin', this.onLoggedIn)
   },

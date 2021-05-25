@@ -99,7 +99,7 @@ export default {
             })
 
           if (!passwordData) {
-            this.$bus.$emit('notification-progress-stop', {})
+            this.$store.dispatch('ui/loader', false)
             return
           }
         }
@@ -121,7 +121,7 @@ export default {
             this.showNotification(i18n.t('An error occured: ') + err.message, 'error')
           })
 
-        this.$bus.$emit('notification-progress-stop', {})
+        this.$store.dispatch('ui/loader', false)
       }
     },
     async showNotification (message, type) {
