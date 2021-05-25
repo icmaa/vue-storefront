@@ -19,6 +19,7 @@ export default {
   },
   computed: {
     ...mapGetters({
+      isLoading: 'checkout/isLoading',
       getShippingMethods: 'checkout/getShippingMethods',
       shippingDetails: 'checkout/getShippingDetails'
     }),

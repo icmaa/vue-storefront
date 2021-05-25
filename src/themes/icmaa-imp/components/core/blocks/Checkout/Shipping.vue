@@ -19,6 +19,7 @@
           class="t-w-full lg:t-w-auto t-mt-8"
           type="primary"
           @click.native.stop="submit"
+          v-if="!isLoading"
         >
           {{ $t(('Continue to payment')) }}
         </button-component>
