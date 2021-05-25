@@ -14,14 +14,18 @@ export default {
   },
   data () {
     return {
-      terms: false
+      terms: []
     }
   },
   computed: {
     ...mapGetters({
       shippingDetails: 'checkout/getShippingDetails',
-      personalDetails: 'checkout/getPersonalDetails'
-    })
+      personalDetails: 'checkout/getPersonalDetails',
+      agreements: 'checkout/getAgreements'
+    }),
+    hasAgreements () {
+      return this.agreements.length > 0
+    }
   },
   methods: {
     submit () {

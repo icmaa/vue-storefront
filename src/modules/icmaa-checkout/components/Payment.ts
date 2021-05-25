@@ -27,13 +27,17 @@ export default {
     }
   },
   methods: {
-    submit () {
+    async submit () {
       this.$v.$touch()
       if (!this.$v.$invalid && this.selectedMethod) {
+        this.$store.dispatch('checkout/loading')
+
         this.$store.dispatch(
           'checkout/savePaymentDetails',
           Object.assign({}, this.paymentDetails, { paymentMethod: this.selectedMethod })
         )
+
+        await this.$store.dispatch('checkout/getAgreements')
 
         this.$store.dispatch('checkout/activateSection', 'review')
       }
