@@ -16,6 +16,7 @@
             condition: $v.terms.$error && (!$v.terms.required || !$v.terms.notFalse),
             text: $t('Field is required')
           }]"
+          checkbox-class="t-self-start"
         >
           {{ agreement.checkboxText }}
         </base-checkbox>

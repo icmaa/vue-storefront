@@ -6,7 +6,7 @@ export interface Section {
 }
 
 export interface Agreement {
-  agreementId: number,
+  id: number,
   name: string,
   content: string,
   checkboxText: string,
