@@ -257,7 +257,10 @@ const actions: ActionTree<CartState, RootState> = {
    */
   async syncTotals ({ dispatch, getters, rootGetters }, { forceServerSync = false, methodsData }: { forceServerSync: boolean, methodsData?: any }) {
     if (getters.canSyncTotals && (getters.isTotalsSyncRequired || forceServerSync)) {
-      const shippingDetails = rootGetters['checkout/getShippingDetails']
+      const shippingDetails = Object.assign(
+        { country_id: rootGetters['icmaaConfig/getCurrentStoreConfig'].tax.defaultCountry },
+        rootGetters['checkout/getShippingDetails']
+      )
       const { shippingMethod } = shippingDetails
 
       const billingDetails = rootGetters['checkout/getPaymentDetails']
