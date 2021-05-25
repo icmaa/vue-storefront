@@ -264,13 +264,13 @@ const actions: ActionTree<CartState, RootState> = {
       const { shippingMethod } = shippingDetails
 
       const billingDetails = rootGetters['checkout/getPaymentDetails']
-      const { billingMethod } = billingDetails
+      const { paymentMethod } = billingDetails
 
       const addressInformation = methodsData || {
         shippingAddress: omit(shippingDetails, ['shippingMethod']),
-        billingAddress: omit(billingDetails, ['billingMethod']),
+        billingAddress: omit(billingDetails, ['paymentMethod']),
         shippingMethod,
-        billingMethod
+        paymentMethod
       }
 
       if (shippingDetails.country_id) {
