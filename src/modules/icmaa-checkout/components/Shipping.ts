@@ -51,6 +51,7 @@ export default {
     if (this.shippingMethods.length > 0) {
       const firstMethod = this.shippingMethods.slice(0, 1).pop()
       this.selected = firstMethod.code
+      this.submit()
     }
   },
   methods: {
