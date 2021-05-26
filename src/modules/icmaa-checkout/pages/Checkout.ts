@@ -115,8 +115,7 @@ export default {
         this.notifyEmptyCart()
         this.$router.push(this.localizedRoute('/'))
       } else {
-        this.payment.paymentMethodAdditional = additionalPayload
-        this.placeOrder()
+        this.placeOrder(additionalPayload)
       }
     },
     checkStocks () {
@@ -194,10 +193,10 @@ export default {
       }
       return this.order
     },
-    placeOrder () {
+    placeOrder (additionalPaymentData) {
       this.checkConnection({ online: typeof navigator !== 'undefined' ? navigator.onLine : true })
       if (this.checkStocks()) {
-        this.$store.dispatch('checkout/placeOrder', { order: this.prepareOrder() })
+        this.$store.dispatch('checkout/prepareAndPlaceOrder', additionalPaymentData)
       } else {
         this.notifyNotAvailable()
       }
@@ -208,6 +207,11 @@ export default {
       title: i18n.t('Checkout'),
       meta: [
         { vmid: 'robots', name: 'robots', content: 'noindex, nofollow' }
+      ],
+      script: [
+        {
+          src: '//cdn.checkout.com/js/framesv2.min.js'
+        }
       ]
     }
   }

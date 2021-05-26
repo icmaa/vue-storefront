@@ -32,6 +32,7 @@ export default {
       if (!this.$v.$invalid && this.selectedMethod) {
         this.$store.dispatch('checkout/loading')
 
+        this.$bus.$emit('checkout-payment-method-changed', this.selectedMethod)
         this.$store.dispatch(
           'checkout/savePaymentDetails',
           Object.assign({}, this.paymentDetails, { paymentMethod: this.selectedMethod })

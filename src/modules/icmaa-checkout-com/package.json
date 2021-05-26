@@ -1,0 +1,10 @@
+{
+  "name": "icmaa-checkout-com",
+  "version": "1.0.0",
+  "description": "Checkout.Com module for Vue Storefront",
+  "main": "index.ts",
+  "contributors": [
+    "Kristofers Ozolins <kristofers.ozolins@magebit.com>"
+  ],
+  "license": "MIT"
+}
