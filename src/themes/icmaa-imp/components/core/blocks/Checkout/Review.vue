@@ -17,15 +17,13 @@
         >
           <i18n path="I have read and agree with the {toc}, {privacy-policy} and {return-instructions}." tag="p">
             <template v-slot:toc>
-              <a :href="localizedRoutePath('/service-conditions')" target="_blank" class="t-text-base-tone t-underline">{{ $t('Terms and Conditions') }}
-              </a>
+              <a :href="localizedRoutePath('/service-conditions')" target="_blank" class="t-text-base-tone t-underline" v-text="$t('Terms and Conditions')" />
             </template>
             <template v-slot:privacy-policy>
-              <a :href="localizedRoutePath('/service-privacy')" target="_blank" class="t-text-base-tone t-underline">{{ $t('Privacy Policy') }}
-              </a>
+              <a :href="localizedRoutePath('/service-privacy')" target="_blank" class="t-text-base-tone t-underline" v-text="$t('Privacy Policy')" />
             </template>
             <template v-slot:return-instructions>
-              <a :href="localizedRoutePath('/service-conditions')" target="_blank" class="t-text-base-tone t-underline">{{ $t('Return instructions') }}</a>
+              <a :href="localizedRoutePath('/service-conditions')" target="_blank" class="t-text-base-tone t-underline" v-text="$t('Return instructions')" />
             </template>
           </i18n>
         </base-checkbox>
