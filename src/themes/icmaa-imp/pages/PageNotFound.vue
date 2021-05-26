@@ -34,12 +34,18 @@
 <script>
 import i18n from '@vue-storefront/i18n'
 import { Logger } from '@vue-storefront/core/lib/logger'
+import { IcmaaGoogleTagManagerExecutors } from 'icmaa-google-tag-manager/hooks'
 import ButtonComponent from 'theme/components/core/blocks/Button'
 
 export default {
   name: 'PageNotFound',
   components: {
     ButtonComponent
+  },
+  methods: {
+    toggleSearchpanel () {
+      this.$store.dispatch('ui/setSidebar', { key: 'searchpanel' })
+    }
   },
   async asyncData ({ store, route, context }) {
     Logger.log('Entering asyncData for PageNotFound ' + new Date())()
@@ -48,10 +54,8 @@ export default {
       context.server.response.statusCode = 404
     }
   },
-  methods: {
-    toggleSearchpanel () {
-      this.$store.dispatch('ui/setSidebar', { key: 'searchpanel' })
-    }
+  mounted () {
+    IcmaaGoogleTagManagerExecutors.pageNotFound()
   },
   metaInfo () {
     const description = this.$route.meta.description ? [{ vmid: 'description', name: 'description', content: this.$route.meta.description }] : []
