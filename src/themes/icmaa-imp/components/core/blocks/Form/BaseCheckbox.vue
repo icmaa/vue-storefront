@@ -120,7 +120,7 @@ export default {
 @import '~theme/css/base/global_vars';
 
 .checkbox-label {
-  >>> a {
+  >>> a:not([class*='t-']) {
     color: $color-primary;
     text-decoration: underline;
   }
