@@ -9,8 +9,7 @@ import merge from 'lodash-es/merge'
 
 const extendedState: ExtendedCheckoutState = {
   loading: false,
-  sections: {},
-  agreements: []
+  sections: {}
 }
 
 const overwriteState: OverwriteCheckoutState = {

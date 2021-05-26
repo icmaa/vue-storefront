@@ -14,18 +14,15 @@ export default {
   },
   data () {
     return {
-      terms: []
+      terms: false
     }
   },
   computed: {
     ...mapGetters({
       shippingDetails: 'checkout/getShippingDetails',
       personalDetails: 'checkout/getPersonalDetails',
-      agreements: 'checkout/getAgreements'
-    }),
-    hasAgreements () {
-      return this.agreements.length > 0
-    }
+      hasAgreements: 'checkout/hasAgreements'
+    })
   },
   methods: {
     submit () {

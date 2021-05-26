@@ -5,21 +5,11 @@ export interface Section {
   done: boolean
 }
 
-export interface Agreement {
-  id: number,
-  name: string,
-  content: string,
-  checkboxText: string,
-  isActive: boolean,
-  isHtml: boolean
-}
-
 export interface ExtendedCheckoutState {
   loading: boolean,
   sections: {
     [key: string]: Section
-  },
-  agreements: Agreement[]
+  }
 }
 
 export interface OverwriteCheckoutState {

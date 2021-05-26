@@ -6,19 +6,28 @@
       </p>
       <template v-if="hasAgreements">
         <base-checkbox
-          v-for="agreement in agreements"
-          :key="agreement.id"
           name="terms"
-          :id="`terms-${agreement.id}`"
+          id="terms"
           v-model="terms"
-          :input-value="String(agreement.id)"
           :validations="[{
             condition: $v.terms.$error && (!$v.terms.required || !$v.terms.notFalse),
             text: $t('Field is required')
           }]"
           checkbox-class="t-self-start"
         >
-          {{ agreement.checkboxText }}
+          <i18n path="I have read and agree with the {toc}, {privacy-policy} and {return-instructions}." tag="p">
+            <template v-slot:toc>
+              <a :href="localizedRoutePath('/service-conditions')" target="_blank" class="t-text-base-tone t-underline">{{ $t('Terms and Conditions') }}
+              </a>
+            </template>
+            <template v-slot:privacy-policy>
+              <a :href="localizedRoutePath('/service-privacy')" target="_blank" class="t-text-base-tone t-underline">{{ $t('Privacy Policy') }}
+              </a>
+            </template>
+            <template v-slot:return-instructions>
+              <a :href="localizedRoutePath('/service-conditions')" target="_blank" class="t-text-base-tone t-underline">{{ $t('Return instructions') }}</a>
+            </template>
+          </i18n>
         </base-checkbox>
       </template>
       <button-component
@@ -34,7 +43,9 @@
 </template>
 
 <script>
-import { required, minLength } from 'vuelidate/lib/validators'
+import { required } from 'vuelidate/lib/validators'
+import { notFalse } from 'icmaa-config/helpers/validators'
+import { localizedRoutePath } from '@vue-storefront/core/lib/multistore'
 
 import Review from 'icmaa-checkout/components/Review'
 import BaseCheckbox from 'theme/components/core/blocks/Form/BaseCheckbox'
@@ -52,7 +63,7 @@ export default {
       agreements = {
         terms: {
           required,
-          minLength: minLength(this.agreements.length)
+          notFalse
         }
       }
     }
@@ -60,6 +71,9 @@ export default {
     return {
       ...agreements
     }
+  },
+  methods: {
+    localizedRoutePath
   }
 }
 </script>

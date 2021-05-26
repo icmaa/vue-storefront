@@ -1,6 +1,6 @@
 import { MutationTree } from 'vuex'
 import * as types from './mutation-types'
-import CheckoutState, { Agreement } from '../../types/CheckoutState'
+import CheckoutState from '../../types/CheckoutState'
 
 const mutations: MutationTree<CheckoutState> = {
   [types.SET_LOADING] (state, status) {
@@ -18,9 +18,6 @@ const mutations: MutationTree<CheckoutState> = {
     }
 
     state.sections[key].active = true
-  },
-  [types.SET_AGREEMENTS] (state, agreements: Agreement[] = []) {
-    state.agreements = agreements
   }
 }
 

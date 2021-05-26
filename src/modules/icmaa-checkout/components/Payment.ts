@@ -37,8 +37,6 @@ export default {
           Object.assign({}, this.paymentDetails, { paymentMethod: this.selectedMethod })
         )
 
-        await this.$store.dispatch('checkout/getAgreements')
-
         this.$store.dispatch('checkout/activateSection', 'review')
       }
     }
