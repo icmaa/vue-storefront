@@ -22,8 +22,7 @@ export default {
     ...mapGetters({
       isLoading: 'checkout/isLoading',
       isVirtualCart: 'cart/isVirtualCart',
-      sections: 'checkout/getSections',
-      isThankYouPage: 'checkout/isThankYouPage'
+      sections: 'checkout/getSections'
     })
   },
   watch: {
