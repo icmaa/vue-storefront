@@ -12,7 +12,7 @@
       <template v-if="productsInCart.length">
         <coupon />
         <ul class="t-mb-4">
-          <product v-for="product in productsInCart" :key="product.checksum || product.sku" :product="product" />
+          <product v-for="(product, i) in productsInCart" :key="`cart-${i}-${product.checksum || product.sku}`" :product="product" />
         </ul>
         <totals class="t-mb-4" />
         <template v-if="!isCheckoutMode">

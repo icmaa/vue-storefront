@@ -24,7 +24,7 @@
           {{ $t(('Continue to payment')) }}
         </button-component>
       </div>
-      <div v-else>
+      <div v-else class="t-mb-4 t-text-sm">
         {{ $t('There are currently no shipping options available for your shipping address.') }}
       </div>
     </template>

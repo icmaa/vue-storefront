@@ -1,4 +1,6 @@
 import { mapGetters } from 'vuex'
+import { registerModule } from '@vue-storefront/core/lib/modules'
+import { IcmaaPaymentModule } from 'icmaa-payment'
 
 export default {
   name: 'Payment',
@@ -20,10 +22,20 @@ export default {
   computed: {
     ...mapGetters({
       paymentMethods: 'checkout/getPaymentMethods',
-      paymentDetails: 'checkout/getPaymentDetails'
+      paymentDetails: 'checkout/getPaymentDetails',
+      infoComponentByCode: 'payment/getInfoComponentByCode'
     }),
     selectedMethod () {
       return this.paymentMethods.find(m => m.code === this.selected)
+    },
+    infoComponent () {
+      if (!this.selected) return false
+      return this.infoComponentByCode(this.selected)
+    }
+  },
+  watch: {
+    'selected': function (code) {
+      this.$store.dispatch('payment/initMethod', code)
     }
   },
   methods: {
@@ -37,8 +49,17 @@ export default {
           Object.assign({}, this.paymentDetails, { paymentMethod: this.selectedMethod })
         )
 
+        const paymentHandler = await this.$store.dispatch('payment/saveMethod', this.selectedMethod.code)
+        if (!paymentHandler) {
+          this.$store.dispatch('checkout/loading', false)
+          return
+        }
+
         this.$store.dispatch('checkout/activateSection', 'review')
       }
     }
+  },
+  created () {
+    registerModule(IcmaaPaymentModule)
   }
 }

@@ -33,7 +33,7 @@ export default {
   },
   created () {
     /**
-     * Load this here to prevent virtual DOM tree mismatching:
+     * Load this here to prevent virtual DOM tree mismatching warning:
      * `The client-side rendered virtual DOM tree is not matching server-rendered content.`
      */
     this.registerSections()
