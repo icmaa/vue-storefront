@@ -1,6 +1,6 @@
 # `icmaa-checkout` module
 
-Add our custom functionality for the original `checkout` module and separate logic from theme as far as possible.
+This module is a copy of the original `checkout` module extended by our functionality.
 
 # Config
 
