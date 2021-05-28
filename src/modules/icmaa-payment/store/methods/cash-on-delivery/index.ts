@@ -4,6 +4,12 @@ import State from '../../../types/methods/CashOnDeliveryState'
 
 const CashOnDeliveryStore: PaymentStore<State, RootState> = {
   namespaced: true,
+  state: {
+    infoComponent: () => import(
+      /* webpackChunkName: "icmaa-payment-cashondelivery-info" */
+      'icmaa-payment/components/methods/cash-on-delivery/Info.vue'
+    )
+  },
   actions: {
     init () {
       console.error('Cash-on-delivery has been initialized')
@@ -13,7 +19,7 @@ const CashOnDeliveryStore: PaymentStore<State, RootState> = {
     }
   },
   getters: {
-    getInfoComponent: () => false
+    getInfoComponent: (state) => state.infoComponent
   }
 }
 

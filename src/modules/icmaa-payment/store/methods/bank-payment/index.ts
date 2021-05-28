@@ -15,7 +15,7 @@ const PrepaymentStore: PaymentStore<State, RootState> = {
       console.error('Bank-payment has been initialized')
     },
     save () {
-      console.error('Bank-payment has been saved')
+      console.error('Bank-payment has been saved but will fail because it is returning false')
       return false
     }
   },

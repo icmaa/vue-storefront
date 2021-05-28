@@ -11,9 +11,12 @@ const getters: GetterTree<CheckoutState, RootState> = {
   getPaymentDetails: state => Object.keys(state.paymentDetails).length === 0 ? false : state.paymentDetails,
   getPaymentMethods: (state, getters, rootState, rootGetters) => {
     const isVirtualCart = rootGetters['cart/isVirtualCart']
-    return state.paymentMethods.filter(method => !isVirtualCart || method.code !== 'cashondelivery')
+    return state.paymentMethods.filter(method => !isVirtualCart)
   },
-  getDefaultPaymentMethod: (state, getters) => getters.getPaymentMethods.find(item => item.default),
+  getPaymentMethodByCode: (state, getters) => (code: string): any => {
+    return getters.getPaymentMethods.find(m => m.code === code) || false
+  },
+  getDefaultPaymentMethod: (state, getters) => getters.getPaymentMethods[0],
   getNotServerPaymentMethods: (state, getters) =>
     getters.getPaymentMethods.filter((itm) =>
       (typeof itm !== 'object' || !itm.is_server_method)
