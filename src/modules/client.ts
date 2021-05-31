@@ -2,7 +2,6 @@ import { VueStorefrontModule } from '@vue-storefront/core/lib/module'
 import { CatalogModule } from '@vue-storefront/core/modules/catalog'
 import { CatalogNextModule } from '@vue-storefront/core/modules/catalog-next'
 import { CartModule } from '@vue-storefront/core/modules/cart'
-import { CheckoutModule } from '@vue-storefront/core/modules/checkout'
 import { CompareModule } from '@vue-storefront/core/modules/compare'
 import { WishlistModule } from '@vue-storefront/core/modules/wishlist'
 import { NotificationModule } from '@vue-storefront/core/modules/notification'
@@ -46,7 +45,9 @@ import { IcmaaCheckoutComPaymentModule } from 'icmaa-checkout-com'
 export function registerClientModules () {
   registerModule(UrlModule)
   registerModule(CatalogModule)
-  registerModule(CheckoutModule) // To Checkout
+  // Replaced by our module (order is important)
+  // registerModule(CheckoutModule)
+  registerModule(IcmaaCheckoutModule)
   registerModule(CartModule)
   registerModule(WishlistModule) // Trigger on wishlist icon click
   registerModule(NotificationModule)
@@ -56,7 +57,6 @@ export function registerClientModules () {
   registerModule(BreadcrumbsModule)
   registerModule(NewsletterModule)
   registerModule(InitialResourcesModule)
-  // registerModule(DeviceModule)
   // ICMAA Modules
   registerModule(IcmaaExtendedConfigModule)
   registerModule(IcmaaExtendedUrlModule)
@@ -83,7 +83,6 @@ export function registerClientModules () {
   registerModule(IcmaaGiftcertModule)
   registerModule(IcmaaTrackingModule)
   registerModule(IcmaaLooksModule)
-  registerModule(IcmaaCheckoutModule)
   registerModule(IcmaaLogsModule)
 }
 

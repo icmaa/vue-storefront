@@ -259,11 +259,11 @@ const actions: ActionTree<CartState, RootState> = {
     if (getters.canSyncTotals && (getters.isTotalsSyncRequired || forceServerSync)) {
       const shippingDetails = Object.assign(
         { country_id: rootGetters['icmaaConfig/getCurrentStoreConfig'].tax.defaultCountry },
-        rootGetters['checkout/getShippingDetails']
+        rootGetters['checkout/getShippingDetails'] || { shippingMethod: false }
       )
       const { shippingMethod } = shippingDetails
 
-      const billingDetails = rootGetters['checkout/getPaymentDetails']
+      const billingDetails = rootGetters['checkout/getPaymentDetails'] || { paymentMethod: false }
       const { paymentMethod } = billingDetails
 
       const addressInformation = methodsData || {

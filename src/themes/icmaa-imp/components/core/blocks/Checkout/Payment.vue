@@ -11,6 +11,7 @@
         v-for="(method, index) in paymentMethods"
         :key="index"
         class="col-md-6"
+        :class="[ method.code ]"
       >
         <base-checkbox
           :name="`paymentMethod[${method.code}]`"
@@ -21,8 +22,12 @@
         >
           {{ method.title || method.name }}
         </base-checkbox>
-
-        <checkout-com-payment :method="selected" />
+        <div
+          v-if="method.code === selected && infoComponent"
+          class="t-ml-8 t-mb-4"
+        >
+          <component :is="infoComponent" :code="method.code" />
+        </div>
       </div>
       <button-component
         class="t-w-full lg:t-w-auto t-mt-8"

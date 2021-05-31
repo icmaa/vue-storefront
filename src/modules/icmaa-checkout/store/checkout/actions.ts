@@ -1,18 +1,19 @@
 import { ActionTree } from 'vuex'
 import RootState from '@vue-storefront/core/types/RootState'
 import CheckoutState from '../../types/CheckoutState'
+import checkoutActions from './actions/checkout'
 import * as types from './mutation-types'
 
 const actions: ActionTree<CheckoutState, RootState> = {
   loading ({ commit }, status = true) {
-    commit(types.SET_LOADING, status)
+    commit(types.CHECKOUT_SET_LOADING, status)
   },
   setSections ({ commit }, sections) {
-    commit(types.SET_SECTIONS, sections)
+    commit(types.CHECKOUT_SET_SECTIONS, sections)
   },
   activateSection ({ commit, dispatch }, section) {
     dispatch('loading', false)
-    commit(types.ACTIVATE_SECTION, section)
+    commit(types.CHECKOUT_ACTIVATE_SECTION, section)
   },
   prepareAndPlaceOrder ({ dispatch, rootState, state, rootGetters }, additionalPaymentData) {
     const shippingeMethod: any = state.shippingDetails.shippingMethod
@@ -35,7 +36,8 @@ const actions: ActionTree<CheckoutState, RootState> = {
     }
 
     dispatch('placeOrder', { order })
-  }
+  },
+  ...checkoutActions
 }
 
 export default actions

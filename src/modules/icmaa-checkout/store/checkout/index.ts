@@ -1,26 +1,32 @@
 import { Module } from 'vuex'
-import { checkoutModule } from '@vue-storefront/core/modules/checkout/store/checkout'
-import CheckoutState, { ExtendedCheckoutState, OverwriteCheckoutState } from '../../types/CheckoutState'
+import config from 'config'
+import CheckoutState from '../../types/CheckoutState'
 import actions from './actions'
 import mutations from './mutations'
 import getters from './getters'
 
-import merge from 'lodash-es/merge'
-
-const extendedState: ExtendedCheckoutState = {
+const state = {
   loading: false,
-  sections: {}
-}
-
-const overwriteState: OverwriteCheckoutState = {
+  sections: {},
+  personalDetails: {
+    emailAddress: '',
+    firstName: '',
+    lastName: '',
+    password: '',
+    createAccount: false
+  },
   shippingDetails: {},
-  paymentDetails: {}
+  paymentDetails: {},
+  shippingMethods: config.shipping.methods || [],
+  paymentMethods: [],
+  isThankYouPage: false,
+  modifiedAt: 0,
+  order: {}
 }
 
-const state = Object.assign({}, checkoutModule.state, overwriteState)
-
-export const IcmaaExtendedCheckoutStore: Module<CheckoutState, any> = {
-  state: merge(state, extendedState),
+export const checkoutStore: Module<CheckoutState, any> = {
+  namespaced: true,
+  state,
   getters,
   actions,
   mutations

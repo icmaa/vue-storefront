@@ -22,8 +22,7 @@ export default {
     ...mapGetters({
       isLoading: 'checkout/isLoading',
       isVirtualCart: 'cart/isVirtualCart',
-      sections: 'checkout/getSections',
-      isThankYouPage: 'checkout/isThankYouPage'
+      sections: 'checkout/getSections'
     })
   },
   watch: {
@@ -33,7 +32,7 @@ export default {
   },
   created () {
     /**
-     * Load this here to prevent virtual DOM tree mismatching:
+     * Load this here to prevent virtual DOM tree mismatching warning:
      * `The client-side rendered virtual DOM tree is not matching server-rendered content.`
      */
     this.registerSections()
