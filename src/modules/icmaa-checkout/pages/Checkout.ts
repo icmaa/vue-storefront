@@ -1,6 +1,8 @@
 import i18n from '@vue-storefront/i18n'
 import VueOfflineMixin from 'vue-offline/mixin'
 import { mapGetters } from 'vuex'
+import { registerModule } from '@vue-storefront/core/lib/modules'
+import { OrderModule } from '@vue-storefront/core/modules/order'
 import { StorageManager } from '@vue-storefront/core/lib/storage-manager'
 import { Logger } from '@vue-storefront/core/lib/logger'
 
@@ -19,6 +21,7 @@ export default {
   },
   computed: {
     ...mapGetters({
+      cartItems: 'cart/getCartItems',
       isLoading: 'checkout/isLoading',
       isVirtualCart: 'cart/isVirtualCart',
       sections: 'checkout/getSections'
@@ -28,6 +31,9 @@ export default {
     isLoading (active) {
       this.$store.dispatch('ui/loader', active)
     }
+  },
+  beforeCreate () {
+    registerModule(OrderModule)
   },
   created () {
     /**
@@ -43,40 +49,11 @@ export default {
 
     this.$store.dispatch('cart/load', { forceClientState: true })
       .then(() => {
-        if (this.$store.state.cart.cartItems.length === 0) {
+        if (this.cartItems.length === 0) {
           this.notifyEmptyCart()
-          this.$router.push(this.localizedRoute('/'))
+          this.$router.push(this.localizedHomeRoute)
         } else {
-          this.stockCheckCompleted = false
-          const checkPromises = []
-          for (let product of this.$store.state.cart.cartItems) { // check the results of online stock check
-            if (product.onlineStockCheckid) {
-              checkPromises.push(new Promise((resolve, reject) => {
-                StorageManager.get('syncTasks').getItem(product.onlineStockCheckid, (err, item) => {
-                  if (err || !item) {
-                    if (err) Logger.error(err)()
-                    resolve(null)
-                  } else {
-                    product.stock = item.result
-                    resolve(product)
-                  }
-                })
-              }))
-            }
-          }
-          Promise.all(checkPromises).then((checkedProducts) => {
-            this.stockCheckCompleted = true
-            this.stockCheckOK = true
-            for (let chp of checkedProducts) {
-              if (chp && chp.stock) {
-                if (!chp.stock.is_in_stock) {
-                  this.stockCheckOK = false
-                  chp.errors.stock = i18n.t('Out of stock!')
-                  this.notifyOutStock(chp)
-                }
-              }
-            }
-          })
+          this.checkCart()
         }
       })
   },
@@ -95,6 +72,40 @@ export default {
       })
 
       this.$store.dispatch('checkout/setSections', sections)
+    },
+    checkCart () {
+      this.stockCheckCompleted = false
+
+      const checkPromises = []
+      for (let product of this.cartItems) {
+        if (product.onlineStockCheckid) {
+          checkPromises.push(new Promise(resolve => {
+            StorageManager.get('syncTasks').getItem(product.onlineStockCheckid, (err, item) => {
+              if (err || !item) {
+                if (err) Logger.error(err)()
+                resolve(null)
+              } else {
+                product.stock = item.result
+                resolve(product)
+              }
+            })
+          }))
+        }
+      }
+
+      Promise.all(checkPromises).then((checkedProducts) => {
+        this.stockCheckCompleted = true
+        this.stockCheckOK = true
+        for (let chp of checkedProducts) {
+          if (chp && chp.stock) {
+            if (!chp.stock.is_in_stock) {
+              this.stockCheckOK = false
+              chp.errors.stock = i18n.t('Out of stock!')
+              this.notifyOutStock(chp)
+            }
+          }
+        }
+      })
     },
     checkStocks () {
       let isValid = true

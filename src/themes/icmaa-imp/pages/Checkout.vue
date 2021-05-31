@@ -41,8 +41,6 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { registerModule } from '@vue-storefront/core/lib/modules'
-import { OrderModule } from '@vue-storefront/core/modules/order'
 
 import Checkout from 'icmaa-checkout/pages/Checkout'
 import Logo from 'theme/components/core/blocks/Header/Logo'
@@ -65,9 +63,6 @@ export default {
     MaterialIcon
   },
   mixins: [ Checkout ],
-  beforeCreate () {
-    registerModule(OrderModule)
-  },
   computed: {
     ...mapGetters({
       isLoggedIn: 'user/isLoggedIn'

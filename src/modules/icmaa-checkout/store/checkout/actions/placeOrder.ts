@@ -4,7 +4,7 @@ import CheckoutState from '../../../types/CheckoutState'
 import { Logger } from '@vue-storefront/core/lib/logger'
 
 const actions: ActionTree<CheckoutState, RootState> = {
-  collectOrderData ({ getters }) {
+  async collectOrderData ({ getters }) {
     // const order: any = {
     //   user_id: this.$store.state.user.current ? this.$store.state.user.current.id.toString() : '',
     //   cart_id: this.$store.state.cart.cartServerToken ? this.$store.state.cart.cartServerToken.toString() : '',
@@ -53,11 +53,11 @@ const actions: ActionTree<CheckoutState, RootState> = {
   },
   async placeOrder ({ dispatch }) {
     try {
-      const order = dispatch('collectOrderData')
+      const order = await dispatch('collectOrderData')
       const result = await dispatch('order/placeOrder', order, { root: true })
       if (!result.resultCode || result.resultCode === 200) {
         await dispatch('updateOrderTimestamp')
-        // clear cart without sync, because after order cart will be already cleared on backend
+
         await dispatch('cart/clear', { sync: false }, { root: true })
         await dispatch('dropPassword')
       }
