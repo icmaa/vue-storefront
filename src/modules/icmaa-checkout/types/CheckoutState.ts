@@ -4,17 +4,17 @@ export interface Section {
 }
 
 export interface PersonalDetails {
-  emailAddress: string,
-  firstName: string,
-  lastName: string,
+  email: string,
+  firstname: string,
+  lastname: string,
   password: string,
   createAccount: boolean
 }
 
 export interface PaymentDetails {
   company: string,
-  firstName: string,
-  lastName: string,
+  firstname: string,
+  lastname: string,
   streetAddress: string,
   city: string,
   country: string,
@@ -30,8 +30,8 @@ export interface PaymentDetails {
 
 export interface ShippingDetails {
   company: string,
-  firstName: string,
-  lastName: string,
+  firstname: string,
+  lastname: string,
   streetAddress: string,
   city: string,
   country: string,

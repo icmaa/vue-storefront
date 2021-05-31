@@ -80,11 +80,11 @@ export default {
       this.address = Object.assign({}, { street: [''] }, this.value)
     }
 
-    if (!this.address.firstname) {
-      this.address.firstname = this.personalDetails.firstName || ''
+    if (!this.address.firstname || this.address.firstname === '') {
+      this.address.firstname = this.personalDetails.firstname || ''
     }
-    if (!this.address.lastname) {
-      this.address.lastname = this.personalDetails.lastName || ''
+    if (!this.address.lastname || this.address.lastname === '') {
+      this.address.lastname = this.personalDetails.lastname || ''
     }
   },
   unmounted () {

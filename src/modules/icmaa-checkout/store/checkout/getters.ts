@@ -14,7 +14,7 @@ const getters: GetterTree<CheckoutState, RootState> = {
     const personalDetails = getters.getPersonalDetails
     return {
       country_id: storeView.tax.defaultCountry,
-      email: personalDetails.emailAddress,
+      email: personalDetails.email,
       gender: personalDetails.gender || 'false',
       dob: personalDetails.dob || false
     }

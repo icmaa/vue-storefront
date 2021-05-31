@@ -38,9 +38,9 @@ export default {
     },
     onLoggedIn () {
       this.details = {
-        firstName: this.currentUser.firstname,
-        lastName: this.currentUser.lastname,
-        emailAddress: this.currentUser.email
+        firstname: this.currentUser.firstname,
+        lastname: this.currentUser.lastname,
+        email: this.currentUser.email
       }
 
       this.submit()
@@ -63,7 +63,7 @@ export default {
   mounted () {
     this.onCheckoutLoad()
     if (this.isLoggedIn) {
-      if (this.details.emailAddress && this.details.emailAddress !== '') {
+      if (this.details.email && this.details.email !== '') {
         this.submit()
       } else {
         this.onLoggedIn()
@@ -77,15 +77,15 @@ export default {
   validations () {
     let val: any = {
       details: {
-        emailAddress: {
+        email: {
           required,
           email
         },
-        firstName: {
+        firstname: {
           required,
           latin
         },
-        lastName: {
+        lastname: {
           required,
           latin
         }
