@@ -1,6 +1,7 @@
 import { ActionTree } from 'vuex'
 import RootState from '@vue-storefront/core/types/RootState'
 import CheckoutState from '../../types/CheckoutState'
+import placeOrderActions from './actions/placeOrder'
 import checkoutActions from './actions/checkout'
 import * as types from './mutation-types'
 
@@ -15,7 +16,8 @@ const actions: ActionTree<CheckoutState, RootState> = {
     dispatch('loading', false)
     commit(types.CHECKOUT_ACTIVATE_SECTION, section)
   },
-  ...checkoutActions
+  ...checkoutActions,
+  ...placeOrderActions
 }
 
 export default actions

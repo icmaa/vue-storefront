@@ -2,23 +2,9 @@ import { ActionTree } from 'vuex'
 import * as types from '../mutation-types'
 import RootState from '@vue-storefront/core/types/RootState'
 import CheckoutState from '../../../types/CheckoutState'
-import { Logger } from '@vue-storefront/core/lib/logger'
 import { StorageManager } from '@vue-storefront/core/lib/storage-manager'
 
 const actions: ActionTree<CheckoutState, RootState> = {
-  async placeOrder ({ dispatch }, { order }) {
-    try {
-      const result = await dispatch('order/placeOrder', order, { root: true })
-      if (!result.resultCode || result.resultCode === 200) {
-        await dispatch('updateOrderTimestamp')
-        // clear cart without sync, because after order cart will be already cleared on backend
-        await dispatch('cart/clear', { sync: false }, { root: true })
-        await dispatch('dropPassword')
-      }
-    } catch (e) {
-      Logger.error(e, 'checkout')()
-    }
-  },
   async updateOrderTimestamp () {
     const userStorage = StorageManager.get('user')
     await userStorage.setItem('last-cart-bypass-ts', new Date().getTime())
