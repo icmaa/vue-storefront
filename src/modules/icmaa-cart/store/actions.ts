@@ -271,7 +271,9 @@ const actions: ActionTree<CartState, RootState> = {
       )
       const { shippingMethod } = shippingDetails
 
-      const billingDetails = rootGetters['checkout/getPaymentDetails'] || { paymentMethod: false }
+      const addressDefaults = rootGetters['checkout/getAddressDefaults']
+      let billingDetails = rootGetters['checkout/getPaymentDetails'] || { paymentMethod: false }
+      billingDetails = Object.assign({}, addressDefaults, billingDetails)
       const { paymentMethod } = billingDetails
 
       const addressInformation = methodsData || {

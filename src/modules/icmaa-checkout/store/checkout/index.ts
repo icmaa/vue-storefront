@@ -12,6 +12,8 @@ const state = {
     email: '',
     firstname: '',
     lastname: '',
+    gender: '',
+    dob: '',
     password: '',
     createAccount: false
   },

@@ -8,6 +8,8 @@ export interface PersonalDetails {
   firstname: string,
   lastname: string,
   password: string,
+  gender: string,
+  dob: string,
   createAccount: boolean
 }
 

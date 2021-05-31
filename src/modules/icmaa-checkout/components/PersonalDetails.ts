@@ -48,8 +48,8 @@ export default {
     submit () {
       this.$v.$touch()
       if (!this.$v.$invalid) {
-        this.$store.dispatch('checkout/activateSection', 'addresses')
         this.$store.dispatch('checkout/savePersonalDetails', this.details)
+        this.$store.dispatch('checkout/activateSection', 'addresses')
       }
     },
     openLoginModal () {
