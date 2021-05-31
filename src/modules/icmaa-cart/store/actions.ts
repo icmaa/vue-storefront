@@ -215,6 +215,13 @@ const actions: ActionTree<CartState, RootState> = {
       Logger.debug('Refreshing shipping methods', 'cart', address)()
 
       const { result } = await CartService.getShippingMethods(address)
+        .then(resp => {
+          if (resp.resultCode === 500 && resp.result.error) {
+            throw new Error(resp.result.message)
+          }
+          return result
+        })
+
       if (result !== false) {
         return dispatch('updateShippingMethods', { shippingMethods: result })
       }

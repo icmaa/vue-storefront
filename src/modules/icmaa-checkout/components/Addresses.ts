@@ -1,4 +1,5 @@
 import { mapGetters } from 'vuex'
+import { Logger } from '@vue-storefront/core/lib/logger'
 
 export default {
   name: 'Addresses',
@@ -69,7 +70,14 @@ export default {
       this.$store.dispatch('checkout/savePaymentDetails', this.billingAddressDTO)
 
       this.$store.dispatch('checkout/loading')
-      await this.$store.dispatch('cart/syncShippingMethods', { forceServerSync: true })
+      const saveShipping = await this.$store.dispatch('cart/syncShippingMethods', { forceServerSync: true })
+        .catch(error => {
+          this.$store.dispatch('checkout/loading', false)
+          Logger.error('Exception while saving addresses to quote:', 'icmaa-checkout', error)()
+          return false
+        })
+
+      if (!saveShipping) return
 
       return this.$store.dispatch('checkout/activateSection', 'shipping')
     },
