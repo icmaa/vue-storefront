@@ -149,6 +149,7 @@
 "I want to generate an invoice for the company","I want to generate an invoice for the company"
 "I want to receive a newsletter","I want to receive a newsletter"
 "I want to receive a newsletter, and agree to its terms","I want to receive a newsletter, and agree to its terms"
+"I would like to receive the newsletter as well as a {value} voucher.","I would like to receive the newsletter as well as a {value} voucher."
 "If you need assistance you can drop {link}.","If you need assistance you can drop {link}."
 "In sale","In sale"
 "In stock & shippable","In stock & shippable"

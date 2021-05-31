@@ -28,6 +28,16 @@
           </i18n>
         </base-checkbox>
       </template>
+      <base-checkbox
+        name="newsletter"
+        id="newsletter"
+        v-model="newsletter"
+        checkbox-class="t-self-start"
+        class="t-mt-2"
+        v-if="!isSubscribedToNewsletter"
+      >
+        {{ $t("I would like to receive the newsletter as well as a {value} voucher.", { value: newsletterVoucherValue }) }}
+      </base-checkbox>
       <button-component
         class="t-w-full lg:t-w-auto t-mt-8"
         :class="{ 't-opacity-50': $v.$dirty && $v.$invalid }"

@@ -1,7 +1,7 @@
 import { setupMultistoreRoutes } from '@vue-storefront/core/lib/multistore'
 import App from './App.vue'
 import routes from './router'
-import mixins from './mixins/defaultMixins'
+import mixins from './mixins/defaultMixin'
 import Vue from 'vue'
 import VueProgressBar from 'vue-progressbar'
 import VueScrollTo from 'vue-scrollto'

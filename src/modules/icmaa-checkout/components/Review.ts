@@ -1,7 +1,9 @@
 import { mapGetters } from 'vuex'
+import NewsletterMixin from 'theme/mixins/newsletterMixin'
 
 export default {
   name: 'OrderReview',
+  mixins: [ NewsletterMixin ],
   props: {
     active: {
       type: Boolean,
@@ -14,7 +16,8 @@ export default {
   },
   data () {
     return {
-      terms: false
+      terms: false,
+      newsletter: false
     }
   },
   computed: {
