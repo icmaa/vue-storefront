@@ -9,9 +9,11 @@ const state = {
   loading: false,
   sections: {},
   personalDetails: {
-    emailAddress: '',
-    firstName: '',
-    lastName: '',
+    email: '',
+    firstname: '',
+    lastname: '',
+    gender: '',
+    dob: '',
     password: '',
     createAccount: false
   },

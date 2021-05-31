@@ -161,9 +161,9 @@ export default {
             telephone: this.payment.phoneNumber,
             postcode: this.payment.zipCode,
             city: this.payment.city,
-            firstname: this.payment.firstName,
-            lastname: this.payment.lastName,
-            email: this.personalDetails.emailAddress,
+            firstname: this.payment.firstname,
+            lastname: this.payment.lastname,
+            email: this.personalDetails.email,
             region_code: this.payment.region_code ? this.payment.region_code : '',
             vat_id: this.payment.taxId
           },
@@ -184,9 +184,9 @@ export default {
           telephone: this.shipping.phoneNumber,
           postcode: this.shipping.zipCode,
           city: this.shipping.city,
-          firstname: this.shipping.firstName,
-          lastname: this.shipping.lastName,
-          email: this.personalDetails.emailAddress,
+          firstname: this.shipping.firstname,
+          lastname: this.shipping.lastname,
+          email: this.personalDetails.email,
           region_code: this.shipping.region_code ? this.shipping.region_code : ''
         }
       }

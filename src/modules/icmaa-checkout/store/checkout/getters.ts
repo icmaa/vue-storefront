@@ -9,6 +9,16 @@ const getters: GetterTree<CheckoutState, RootState> = {
   getPersonalDetails: state => state.personalDetails,
   getShippingDetails: state => Object.keys(state.shippingDetails).length === 0 ? false : state.shippingDetails,
   getPaymentDetails: state => Object.keys(state.paymentDetails).length === 0 ? false : state.paymentDetails,
+  getAddressDefaults: (state, getters, rootState, rootGetters) => {
+    const storeView = rootGetters['icmaaConfig/getCurrentStoreConfig']
+    const personalDetails = getters.getPersonalDetails
+    return {
+      country_id: storeView.tax.defaultCountry,
+      email: personalDetails.email,
+      gender: personalDetails.gender || false,
+      dob: personalDetails.dob || false
+    }
+  },
   getPaymentMethods: (state, getters, rootState, rootGetters) => {
     const isVirtualCart = rootGetters['cart/isVirtualCart']
     return state.paymentMethods.filter(method => !isVirtualCart)

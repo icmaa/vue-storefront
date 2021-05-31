@@ -21,15 +21,15 @@
           id="email"
           name="email"
           :placeholder="$t('Email address')"
-          v-model="details.emailAddress"
+          v-model="details.email"
           :disabled="isLoggedIn"
           :validations="[
             {
-              condition: $v.details.emailAddress.$error && !$v.details.emailAddress.required,
+              condition: $v.details.email.$error && !$v.details.email.required,
               text: $t('Field is required')
             },
             {
-              condition: $v.details.emailAddress.$error && !$v.details.emailAddress.email,
+              condition: $v.details.email.$error && !$v.details.email.email,
               text: $t('Please provide valid e-mail address.')
             }
           ]"
@@ -41,14 +41,14 @@
           id="first-name"
           name="first-name"
           :placeholder="$t('First name')"
-          v-model.trim="details.firstName"
+          v-model.trim="details.firstname"
           :validations="[
             {
-              condition: $v.details.firstName.$error && !$v.details.firstName.required,
+              condition: $v.details.firstname.$error && !$v.details.firstname.required,
               text: $t('Field is required')
             },
             {
-              condition: $v.details.firstName.$error && !$v.details.firstName.latin,
+              condition: $v.details.firstname.$error && !$v.details.firstname.latin,
               text: $t('Invalid characters')
             }
           ]"
@@ -60,14 +60,14 @@
           id="last-name"
           name="last-name"
           :placeholder="$t('Last name')"
-          v-model.trim="details.lastName"
+          v-model.trim="details.lastname"
           :validations="[
             {
-              condition: $v.details.lastName.$error && !$v.details.lastName.required,
+              condition: $v.details.lastname.$error && !$v.details.lastname.required,
               text: $t('Field is required')
             },
             {
-              condition: $v.details.lastName.$error && !$v.details.lastName.latin,
+              condition: $v.details.lastname.$error && !$v.details.lastname.latin,
               text: $t('Invalid characters')
             }
           ]"
@@ -160,8 +160,8 @@
     </form>
     <div v-if="!active && done">
       <div class="t-text-sm">
-        {{ details.firstName }} {{ details.lastName }}<br>
-        {{ details.emailAddress }}
+        {{ details.firstname }} {{ details.lastname }}<br>
+        {{ details.email }}
       </div>
       <div v-if="details.createAccount && !isLoggedIn" class="t-mt-2">
         <base-checkbox
