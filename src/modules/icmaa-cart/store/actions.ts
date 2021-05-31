@@ -208,28 +208,29 @@ const actions: ActionTree<CartState, RootState> = {
    */
   async syncShippingMethods ({ getters, rootGetters, dispatch }, { forceServerSync = false }) {
     if (getters.canUpdateMethods && (getters.isTotalsSyncRequired || forceServerSync)) {
-      const storeView = currentStoreView()
       const shippingDetails = rootGetters['checkout/getShippingDetails']
-      const address = Object.assign({}, { country_id: storeView.tax.defaultCountry }, shippingDetails)
+      const addressDefaults = rootGetters['checkout/getAddressDefaults']
+      const address = Object.assign({}, addressDefaults, shippingDetails)
 
       Logger.debug('Refreshing shipping methods', 'cart', address)()
-
       const { result } = await CartService.getShippingMethods(address)
         .then(resp => {
           if (resp.resultCode === 500 && resp.result.error) {
             throw new Error(resp.result.message)
           }
-          return result
+          return resp
         })
 
       if (result !== false) {
-        return dispatch('updateShippingMethods', { shippingMethods: result })
+        await dispatch('updateShippingMethods', { shippingMethods: result })
+        return true
       }
 
       Logger.debug('Shipping methods request was empty', 'cart')()
     }
 
     Logger.debug('Shipping methods does not need to be updated', 'cart')()
+    return true
   },
   /**
    * Clone of originial `cart/syncPaymentMethods`
@@ -274,6 +275,7 @@ const actions: ActionTree<CartState, RootState> = {
       const { paymentMethod } = billingDetails
 
       const addressInformation = methodsData || {
+        personalDetails: rootGetters['checkout/getPersonalDetails'],
         shippingAddress: omit(shippingDetails, ['shippingMethod']),
         billingAddress: omit(billingDetails, ['paymentMethod']),
         shippingMethod,
