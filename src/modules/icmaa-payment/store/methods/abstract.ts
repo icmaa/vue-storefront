@@ -13,14 +13,9 @@ const AbstractPaymentStore: Module<State, RootState> = {
       /**
        * If you return false the process will be stalled
        */
-      console.error('Payment has been saved')
     },
-    beforePlaceOrder () {
-      console.error('Payment before place order')
-    },
-    afterPlaceOrder () {
-      console.error('Payment after place order')
-    }
+    beforePlaceOrder () { },
+    afterPlaceOrder () { }
   },
   getters: {
     getInfoComponent: () => false
