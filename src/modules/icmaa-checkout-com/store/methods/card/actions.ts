@@ -1,6 +1,9 @@
 import { ActionTree } from 'vuex'
 import RootState from '@vue-storefront/core/types/RootState'
 import { CardState } from 'icmaa-checkout-com/types'
+import { CheckoutComService } from 'src/modules/icmaa-checkout-com/data-resolver/CheckoutComService'
+import OrderState from '@vue-storefront/core/modules/order/types/OrderState'
+import i18n from '@vue-storefront/core/i18n'
 
 const actions: ActionTree<CardState, RootState> = {
   init () {
@@ -21,8 +24,27 @@ const actions: ActionTree<CardState, RootState> = {
       { root: true }
     )
   },
-  afterPlaceOrder () {
-    console.error('Payment after place order')
+  async afterPlaceOrder ({ dispatch, getters, rootState }) {
+    const lastOrder = (rootState as RootState & { order: OrderState }).order.last_order_confirmation
+
+    if (!lastOrder) {
+      return console.error('Could not find last order')
+    }
+
+    const paymentDetails = await CheckoutComService.getPaymentDetails(
+      getters.getToken,
+      lastOrder.confirmation.magentoOrderId
+    )
+
+    if (paymentDetails.result && paymentDetails.result.success === true) {
+      window.location.href = paymentDetails.result.url
+    } else {
+      dispatch('notification/spawnNotification', {
+        type: 'error',
+        message: i18n.t('Payment was not successful.'),
+        action1: { label: i18n.t('OK') }
+      }, { root: true })
+    }
   }
 }
 
