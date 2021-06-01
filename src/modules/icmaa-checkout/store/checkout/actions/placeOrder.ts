@@ -1,7 +1,7 @@
 import { ActionTree } from 'vuex'
 import RootState from '@vue-storefront/core/types/RootState'
 import CheckoutState from '../../../types/CheckoutState'
-import { OrderService } from '@vue-storefront/core/data-resolver'
+import { OrderService } from '../../../data-resolver/OrderService'
 import { orderHooksExecutors } from '@vue-storefront/core/modules/order/hooks'
 import { Logger } from '@vue-storefront/core/lib/logger'
 
