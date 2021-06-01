@@ -41,8 +41,6 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { registerModule } from '@vue-storefront/core/lib/modules'
-import { OrderModule } from '@vue-storefront/core/modules/order'
 
 import Checkout from 'icmaa-checkout/pages/Checkout'
 import Logo from 'theme/components/core/blocks/Header/Logo'
@@ -65,9 +63,6 @@ export default {
     MaterialIcon
   },
   mixins: [ Checkout ],
-  beforeCreate () {
-    registerModule(OrderModule)
-  },
   computed: {
     ...mapGetters({
       isLoggedIn: 'user/isLoggedIn'
@@ -114,27 +109,6 @@ export default {
       this.$store.dispatch('notification/spawnNotification', {
         type: 'error',
         message: chp.name + this.$t(' is out of stock!'),
-        action1: { label: this.$t('OK') }
-      })
-    },
-    notifyNotAvailable () {
-      this.$store.dispatch('notification/spawnNotification', {
-        type: 'error',
-        message: this.$t('Some of the ordered products are not available!'),
-        action1: { label: this.$t('OK') }
-      })
-    },
-    notifyStockCheck () {
-      this.$store.dispatch('notification/spawnNotification', {
-        type: 'warning',
-        message: this.$t('Stock check in progress, please wait while available stock quantities are checked'),
-        action1: { label: this.$t('OK') }
-      })
-    },
-    notifyNoConnection () {
-      this.$store.dispatch('notification/spawnNotification', {
-        type: 'warning',
-        message: this.$t('There is no Internet connection. You can still place your order. We will notify you if any of ordered products is not available because we cannot check it right now.'),
         action1: { label: this.$t('OK') }
       })
     }

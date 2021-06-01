@@ -26,12 +26,30 @@ const actions: ActionTree<PaymentState, RootState> = {
       Logger.error('Couldn\'t register payment vuex store:', 'icmaa-payment', err)()
     }
   },
-  saveMethod: async ({ getters, dispatch }, code: string): Promise<boolean> => {
+  dispatchPaymentAction: async ({ getters, dispatch }, { code, action }: { code: string, action: string }): Promise<boolean|any> => {
     if (!getters.isMethod(code) || !getters.isRegistered(code)) return true
-    return dispatch(`${code}/save`, undefined, { root: true })
+    return dispatch(`${code}/${action}`, undefined, { root: true })
+      .then(result => (result !== undefined) ? result : true)
+  },
+  saveMethod: async ({ dispatch }, code: string): Promise<boolean|any> => {
+    return dispatch('dispatchPaymentAction', { code, action: 'save' })
       .then(result => (result !== undefined) ? result : true)
       .catch(err => {
         Logger.error('Couldn\'t save payment store:', 'icmaa-payment', err)()
+        return false
+      })
+  },
+  beforePlaceOrder: async ({ dispatch }, code: string): Promise<boolean|any> => {
+    return dispatch('dispatchPaymentAction', { code, action: 'beforePlaceOrder' })
+      .catch(err => {
+        Logger.error('Error during "beforePlaceOrder" in store:', 'icmaa-payment', err)()
+        return false
+      })
+  },
+  afterPlaceOrder: async ({ dispatch }, code: string): Promise<boolean|any> => {
+    return dispatch('dispatchPaymentAction', { code, action: 'afterPlaceOrder' })
+      .catch(err => {
+        Logger.error('Error during "beforePlaceOrder" in store:', 'icmaa-payment', err)()
         return false
       })
   }

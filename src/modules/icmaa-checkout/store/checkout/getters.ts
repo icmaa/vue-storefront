@@ -9,6 +9,9 @@ const getters: GetterTree<CheckoutState, RootState> = {
   getPersonalDetails: state => state.personalDetails,
   getShippingDetails: state => Object.keys(state.shippingDetails).length === 0 ? false : state.shippingDetails,
   getPaymentDetails: state => Object.keys(state.paymentDetails).length === 0 ? false : state.paymentDetails,
+  getPaymentMethod: (state, getters) => getters.getPaymentDetails.paymentMethod || false,
+  getPaymentMethodCode: (state, getters) => getters.getPaymentMethod.code || false,
+  getShippingMethod: (state, getters) => getters.getShippingDetails.shippingMethod || false,
   getAddressDefaults: (state, getters, rootState, rootGetters) => {
     const storeView = rootGetters['icmaaConfig/getCurrentStoreConfig']
     const personalDetails = getters.getPersonalDetails
@@ -33,7 +36,6 @@ const getters: GetterTree<CheckoutState, RootState> = {
     ),
   getShippingMethods: state => state.shippingMethods,
   getDefaultShippingMethod: state => state.shippingMethods.find(item => item.default),
-  isThankYouPage: state => state.isThankYouPage,
   getModifiedAt: state => state.modifiedAt,
   isUserInCheckout: state => ((Date.now() - state.modifiedAt) <= (60 * 30 * 1000)),
   hasAgreements: (state, getters, rootState, rootGetters): boolean => {

@@ -1,7 +1,9 @@
 import { mapGetters } from 'vuex'
+import NewsletterMixin from 'theme/mixins/newsletterMixin'
 
 export default {
   name: 'OrderReview',
+  mixins: [ NewsletterMixin ],
   props: {
     active: {
       type: Boolean,
@@ -14,7 +16,8 @@ export default {
   },
   data () {
     return {
-      terms: false
+      terms: false,
+      newsletter: false
     }
   },
   computed: {
@@ -35,7 +38,11 @@ export default {
         action1: { label: this.$t('OK') }
       })
 
-      this.$bus.$emit('checkout-before-placeOrder')
+      this.$store.dispatch('ui/loader', true)
+
+      this.$store.dispatch('checkout/placeOrder')
+        .then(() => this.$store.dispatch('ui/loader', false))
+        .catch(() => this.$store.dispatch('ui/loader', false))
     }
   }
 }

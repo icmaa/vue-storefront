@@ -43,15 +43,9 @@ const mutations: MutationTree<CheckoutState> = {
   [types.CHECKOUT_LOAD_PAYMENT_DETAILS] (state, storedPaymentDetails) {
     state.paymentDetails = storedPaymentDetails
   },
-  [types.CHECKOUT_UPDATE_PROP_VALUE] (state, payload) {
-    state.shippingDetails[payload[0]] = payload[1]
-  },
   [types.CHECKOUT_DROP_PASSWORD] (state) {
     state.personalDetails.password = 'adasd'
     state.personalDetails.createAccount = false
-  },
-  [types.CHECKOUT_SET_THANKYOU] (state, payload) {
-    state.isThankYouPage = payload
   },
   [types.CHECKOUT_ADD_PAYMENT_METHOD] (state, paymentMethod) {
     state.paymentMethods.push(paymentMethod)
@@ -64,9 +58,6 @@ const mutations: MutationTree<CheckoutState> = {
   },
   [types.CHECKOUT_SET_SHIPPING_METHODS] (state, shippingMethods = []) {
     state.shippingMethods = shippingMethods
-  },
-  [types.CHECKOUT_UPDATE_PAYMENT_DETAILS] (state, updateData = {}) {
-    state.paymentDetails = Object.assign({}, state.paymentDetails, updateData)
   }
 }
 

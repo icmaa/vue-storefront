@@ -32,13 +32,21 @@ import { mapGetters } from 'vuex'
 
 export default {
   name: 'MicroCartTotals',
+  props: {
+    rows: {
+      type: Array,
+      default: () => [ 'subtotal', 'tax', 'shipping' ]
+    }
+  },
   computed: {
     ...mapGetters({
       totals: 'cart/getTotals'
     }),
     filteredTotals () {
       const totals = this.totals
-      return totals.filter(segment => segment.code !== 'grand_total')
+      return totals
+        .filter(segment => this.rows.includes(segment.code))
+        .sort((a, b) => this.rows.findIndex(c => c === a.code) - this.rows.findIndex(c => c === b.code))
     },
     grandTotals () {
       const totals = this.totals

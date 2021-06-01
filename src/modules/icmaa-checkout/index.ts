@@ -25,7 +25,7 @@ export const IcmaaCheckoutModule: StorefrontModule = function ({ store, router, 
     }
 
     if (
-      type.endsWith(types.CHECKOUT_SAVE_SHIPPING_DETAILS) || type.endsWith(types.CHECKOUT_UPDATE_PROP_VALUE)
+      type.endsWith(types.CHECKOUT_SAVE_SHIPPING_DETAILS)
     ) {
       StorageManager.get('checkout').setItem('shipping-details', state.checkout.shippingDetails).catch((reason) => {
         Logger.error(reason)()

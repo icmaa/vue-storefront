@@ -22,11 +22,12 @@ export default {
   computed: {
     ...mapGetters({
       paymentMethods: 'checkout/getPaymentMethods',
+      paymentMethodByCode: 'checkout/getPaymentMethodByCode',
       paymentDetails: 'checkout/getPaymentDetails',
       infoComponentByCode: 'payment/getInfoComponentByCode'
     }),
     selectedMethod () {
-      return this.paymentMethods.find(m => m.code === this.selected)
+      return this.paymentMethodByCode(this.selected)
     },
     infoComponent () {
       if (!this.selected) return false

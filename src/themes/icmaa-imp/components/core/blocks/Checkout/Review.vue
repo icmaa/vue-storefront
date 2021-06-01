@@ -4,6 +4,16 @@
       <p class="t-mb-4 t-text-sm">
         {{ $t('Please check if your order data is correct.') }}
       </p>
+      <base-checkbox
+        name="newsletter"
+        id="newsletter"
+        v-model="newsletter"
+        checkbox-class="t-self-start"
+        class="t-mb-2"
+        v-if="!isSubscribedToNewsletter"
+      >
+        {{ $t("I would like to receive the newsletter as well as a {value} voucher.", { value: newsletterVoucherValue }) }}
+      </base-checkbox>
       <template v-if="hasAgreements">
         <base-checkbox
           name="terms"

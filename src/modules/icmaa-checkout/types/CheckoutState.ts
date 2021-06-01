@@ -56,6 +56,5 @@ export default interface CheckoutState {
   order: any,
   paymentMethods: any[],
   shippingMethods: any[],
-  isThankYouPage: boolean,
   modifiedAt: number
 }
