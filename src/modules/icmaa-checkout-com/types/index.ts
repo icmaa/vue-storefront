@@ -1,4 +1,5 @@
-export interface State {
+export interface CardState {
   token?: string,
-  isValid: boolean
+  isValid: boolean,
+  infoComponent: any
 }

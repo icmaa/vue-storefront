@@ -17,11 +17,12 @@ const actions: ActionTree<CheckoutState, RootState> = {
       cart_id: rootGetters['cart/getCartToken'] || '',
       products: rootGetters['cart/getCartItems'],
       addressInformation: {
-        personalDetails: rootGetters['checkout/getPersonalDetails'],
         billingAddress: omit(billingDetails, ['paymentMethod']),
         shippingAddress: omit(shippingDetails, ['shippingMethod']),
-        shippingMethod,
-        paymentMethod
+        shipping_method_code: shippingMethod.method_code,
+        shipping_carrier_code: shippingMethod.carrier_code,
+        payment_method_code: paymentMethod.code,
+        payment_method_additional: paymentMethod.additional_data
       }
     }
 

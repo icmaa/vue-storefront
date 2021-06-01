@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import CardPaymentMethod from 'icmaa-checkout-com/mixins/CardPaymentMethod'
+import CardPaymentMethod from 'icmaa-checkout-com/mixins/methods/CardPaymentMethod'
 
 export default {
   mixins: [
