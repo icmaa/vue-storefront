@@ -44,16 +44,24 @@
 <script>
 import { mapGetters } from 'vuex'
 import Headline from 'theme/components/core/blocks/MyAccount/Headline'
-import UserOrder from '@vue-storefront/core/modules/order/components/UserOrdersHistory'
 import MaterialIcon from 'theme/components/core/blocks/MaterialIcon'
 import StatusIcon from 'theme/components/core/blocks/MyAccount/MyOrders/StatusIcon'
 
 export default {
-  mixins: [UserOrder],
+  name: 'MyOrders',
   components: {
     Headline,
     MaterialIcon,
     StatusIcon
+  },
+  computed: {
+    ...mapGetters('user', ['getOrdersHistory']),
+    ordersHistory () {
+      return this.getOrdersHistory
+    },
+    isHistoryEmpty () {
+      return this.getOrdersHistory.length < 1
+    }
   }
 }
 </script>

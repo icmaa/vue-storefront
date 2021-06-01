@@ -1,8 +1,6 @@
 import i18n from '@vue-storefront/i18n'
 import VueOfflineMixin from 'vue-offline/mixin'
 import { mapGetters } from 'vuex'
-import { registerModule } from '@vue-storefront/core/lib/modules'
-import { OrderModule } from '@vue-storefront/core/modules/order'
 import { StorageManager } from '@vue-storefront/core/lib/storage-manager'
 import { Logger } from '@vue-storefront/core/lib/logger'
 
@@ -31,9 +29,6 @@ export default {
     isLoading (active) {
       this.$store.dispatch('ui/loader', active)
     }
-  },
-  beforeCreate () {
-    registerModule(OrderModule)
   },
   created () {
     /**
