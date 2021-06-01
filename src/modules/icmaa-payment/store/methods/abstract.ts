@@ -28,6 +28,6 @@ const AbstractPaymentStore: Module<State, RootState> = {
 }
 
 export const createPaymentStore = <S>(store: PaymentStore<S, RootState>): PaymentStore<S, RootState> =>
-  merge(AbstractPaymentStore, store)
+  merge({}, AbstractPaymentStore, store)
 
 export default AbstractPaymentStore
