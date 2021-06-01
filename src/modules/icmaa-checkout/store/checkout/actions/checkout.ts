@@ -50,12 +50,6 @@ const actions: ActionTree<CheckoutState, RootState> = {
       commit(types.CHECKOUT_LOAD_PAYMENT_DETAILS, paymentDetails)
     }
   },
-  async updatePropValue ({ commit }, payload) {
-    commit(types.CHECKOUT_UPDATE_PROP_VALUE, payload)
-  },
-  async setThankYouPage ({ commit }, payload) {
-    commit(types.CHECKOUT_SET_THANKYOU, payload)
-  },
   async addPaymentMethod ({ commit }, paymentMethod) {
     commit(types.CHECKOUT_ADD_PAYMENT_METHOD, paymentMethod)
   },
@@ -67,9 +61,6 @@ const actions: ActionTree<CheckoutState, RootState> = {
   },
   async replaceShippingMethods ({ commit }, shippingMethods) {
     commit(types.CHECKOUT_SET_SHIPPING_METHODS, shippingMethods)
-  },
-  async updatePaymentDetails ({ commit }, updateData) {
-    commit(types.CHECKOUT_UPDATE_PAYMENT_DETAILS, updateData)
   }
 }
 
