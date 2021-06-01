@@ -50,9 +50,6 @@ const mutations: MutationTree<CheckoutState> = {
     state.personalDetails.password = 'adasd'
     state.personalDetails.createAccount = false
   },
-  [types.CHECKOUT_SET_THANKYOU] (state, payload) {
-    state.isThankYouPage = payload
-  },
   [types.CHECKOUT_ADD_PAYMENT_METHOD] (state, paymentMethod) {
     state.paymentMethods.push(paymentMethod)
   },

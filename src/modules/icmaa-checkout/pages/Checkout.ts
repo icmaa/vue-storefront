@@ -45,6 +45,7 @@ export default {
   async beforeMount () {
     await this.$store.dispatch('checkout/load')
     this.$bus.$emit('checkout-after-load')
+
     this.$store.dispatch('checkout/setModifiedAt', Date.now())
 
     this.$store.dispatch('cart/load', { forceClientState: true })
@@ -106,29 +107,6 @@ export default {
           }
         }
       })
-    },
-    checkStocks () {
-      let isValid = true
-      if (typeof navigator !== 'undefined' && navigator.onLine) {
-        if (this.stockCheckCompleted) {
-          if (!this.stockCheckOK) {
-            isValid = false
-            this.notifyNotAvailable()
-          }
-        } else {
-          isValid = false
-          this.notifyStockCheck()
-        }
-      }
-
-      return isValid
-    },
-    placeOrder () {
-      if (this.checkStocks()) {
-        this.$store.dispatch('checkout/placeOrder')
-      } else {
-        this.notifyNotAvailable()
-      }
     }
   },
   metaInfo () {

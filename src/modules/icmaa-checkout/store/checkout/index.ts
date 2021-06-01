@@ -21,7 +21,6 @@ const state = {
   paymentDetails: {},
   shippingMethods: config.shipping.methods || [],
   paymentMethods: [],
-  isThankYouPage: false,
   modifiedAt: 0,
   order: {}
 }
