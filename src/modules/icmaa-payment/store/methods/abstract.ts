@@ -6,9 +6,7 @@ import merge from 'lodash-es/merge'
 
 const AbstractPaymentStore: Module<State, RootState> = {
   actions: {
-    init () {
-      console.error('Payment has been initialized')
-    },
+    init () { },
     save () {
       /**
        * If you return false the process will be stalled
