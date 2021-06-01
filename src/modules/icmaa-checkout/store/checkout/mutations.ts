@@ -19,9 +19,6 @@ const mutations: MutationTree<CheckoutState> = {
 
     state.sections[key].active = true
   },
-  [types.CHECKOUT_PLACE_ORDER] (state, order) {
-    state.order = order
-  },
   [types.CHECKOUT_SET_MODIFIED_AT] (state, timestamp) {
     state.modifiedAt = timestamp
   },
