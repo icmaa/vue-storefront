@@ -40,7 +40,9 @@ export default {
       this.details = {
         firstname: this.currentUser.firstname,
         lastname: this.currentUser.lastname,
-        email: this.currentUser.email
+        email: this.currentUser.email,
+        gender: this.currentUser.gender,
+        dob: this.currentUser.dob
       }
 
       this.submit()
