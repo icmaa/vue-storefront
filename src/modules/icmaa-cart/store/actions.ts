@@ -4,8 +4,9 @@ import CartState from '@vue-storefront/core/modules/cart/types/CartState'
 import PaymentMethod from '@vue-storefront/core/modules/cart/types/PaymentMethod'
 import EventBus from '@vue-storefront/core/compatibility/plugins/event-bus'
 import { CartService } from '@vue-storefront/core/data-resolver'
+import { CartService as IcmaaCartService } from 'icmaa-cart/data-resolver/CartService'
 import { cartHooksExecutors } from '@vue-storefront/core/modules/cart/hooks'
-import { createDiffLog, productsEquals, preparePaymentMethodsToSync, createShippingInfoData } from '@vue-storefront/core/modules/cart/helpers'
+import { createDiffLog, productsEquals, preparePaymentMethodsToSync } from '@vue-storefront/core/modules/cart/helpers'
 import { Logger } from '@vue-storefront/core/lib/logger'
 import { notifications } from '../helpers'
 import config from 'config'
@@ -203,16 +204,23 @@ const actions: ActionTree<CartState, RootState> = {
    * Clone of originial `cart/syncShippingMethods`
    *
    * Changes:
-   * * Use our object-key mapping from changes of `icmaa-checkout` and our custom checkout
+   * * Use our object-key mapping from changes of `icmaa-checkout`
+   * * Use our custom checkout data-resolver service to also attach the personal-details to the address.
+   *   This way we can make this request more versataile and remove the validation in the original endpoint
+   *   which might cause an error if we don't use their data-structure.
    */
   async syncShippingMethods ({ getters, rootGetters, dispatch }, { forceServerSync = false }) {
     if (getters.canUpdateMethods && (getters.isTotalsSyncRequired || forceServerSync)) {
-      const shippingDetails = rootGetters['checkout/getShippingDetails']
-      const accountDefaults = rootGetters['checkout/getAccountDefaults']
-      const address = Object.assign({}, accountDefaults, shippingDetails)
+      const personalDetails = rootGetters['checkout/getPersonalDetails']
+      const addressDefaults = rootGetters['checkout/getAddressDefaults']
+      const shippingDetails = Object.assign(
+        {},
+        addressDefaults,
+        omit(rootGetters['checkout/getShippingDetails'], ['shippingMethod'])
+      )
 
-      Logger.debug('Refreshing shipping methods', 'cart', address)()
-      const { result } = await CartService.getShippingMethods(address)
+      Logger.debug('Refreshing shipping methods', 'cart', shippingDetails)()
+      const { result } = await IcmaaCartService.getShippingMethods({ personalDetails, shippingDetails })
         .then(resp => {
           if (resp.resultCode === 500 && resp.result.error) {
             throw new Error(resp.result.message)
@@ -235,7 +243,7 @@ const actions: ActionTree<CartState, RootState> = {
    * Clone of originial `cart/syncPaymentMethods`
    *
    * Changes:
-   * * Change logic to only sync stuff we need: the available payment-methods
+   * * Change logic to only sync stuff we need: to get available payment-methods
    */
   async syncPaymentMethods ({ getters, rootGetters, dispatch }, { forceServerSync = false }) {
     if (getters.canUpdateMethods && (getters.isTotalsSyncRequired || forceServerSync)) {
@@ -260,7 +268,7 @@ const actions: ActionTree<CartState, RootState> = {
    * Clone of originial `cart/syncTotals`
    *
    * Changes:
-   * * Simplify data-structure and logic
+   * * Simplify data-structure and logic and make the object more readable
    */
   async syncTotals ({ dispatch, getters, rootGetters }, { forceServerSync = false, methodsData }: { forceServerSync: boolean, methodsData?: any }) {
     if (getters.canSyncTotals && (getters.isTotalsSyncRequired || forceServerSync)) {
@@ -270,9 +278,9 @@ const actions: ActionTree<CartState, RootState> = {
       )
       const { shippingMethod } = shippingDetails
 
-      const accountDefaults = rootGetters['checkout/getAccountDefaults']
+      const addressDefaults = rootGetters['checkout/getAddressDefaults']
       let billingDetails = rootGetters['checkout/getPaymentDetails'] || { paymentMethod: false }
-      billingDetails = Object.assign({}, accountDefaults, billingDetails)
+      billingDetails = Object.assign({}, addressDefaults, billingDetails)
       const { paymentMethod } = billingDetails
 
       const addressInformation = methodsData || {
@@ -293,6 +301,20 @@ const actions: ActionTree<CartState, RootState> = {
 
       Logger.error('Please do set the tax.defaultCountry in order to calculate totals', 'cart')()
     }
+  },
+  /**
+   * Clone of originial `cart/getTotals`
+   *
+   * Changes:
+   * * Use our custom service to have a more clean and readable quote-sync. Originally it's called totalSync but
+   *   in fact we are setting all necessary informations for the whole quote and just respond the totals. Also
+   *   there originally is a validation for the object that is passed which we don't need.
+   */
+  async getTotals (_, { addressInformation, hasShippingInformation }) {
+    if (hasShippingInformation) {
+      return IcmaaCartService.syncQuote(addressInformation)
+    }
+    return IcmaaCartService.getTotals()
   }
 }
 
