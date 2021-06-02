@@ -97,7 +97,7 @@ export default {
       return this.mainNavigation.genderNavigation || false
     },
     mainNavigationItems () {
-      return this.mainNavigation.mainNavigation.slice(0, 2) || false
+      return this.tiles || this.mainNavigation.mainNavigation.slice(0, 2)
     },
     navigation () {
       return this.sub.navigation || false
@@ -124,6 +124,9 @@ export default {
     },
     logos () {
       return this.sub.logos || false
+    },
+    tiles () {
+      return this.sub.tiles || false
     },
     logoLineProps () {
       if (Array.isArray(this.logos)) {
