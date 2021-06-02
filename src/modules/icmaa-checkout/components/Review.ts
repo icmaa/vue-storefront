@@ -41,10 +41,13 @@ export default {
 
       this.$store.dispatch('ui/loader', true)
 
-      await this.$store.dispatch('checkout/placeOrder')
+      const result = await this.$store.dispatch('checkout/placeOrder')
         .finally(() => this.$store.dispatch('ui/loader', false))
 
-      this.$router.push(localizedRoute('checkout-success'))
+      console.error(result)
+      if (result) {
+        this.$router.push(localizedRoute('checkout-success'))
+      }
     }
   }
 }
