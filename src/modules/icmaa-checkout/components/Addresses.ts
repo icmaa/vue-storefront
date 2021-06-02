@@ -15,6 +15,7 @@ export default {
   },
   data () {
     return {
+      error: null,
       shippingAddress: null,
       billingAddress: null,
       billingAddressIsSameAsShipping: true
@@ -74,10 +75,13 @@ export default {
         .catch(error => {
           this.$store.dispatch('checkout/loading', false)
           Logger.error('Exception while saving addresses to quote:', 'icmaa-checkout', error)()
+          this.error = error.message
           return false
         })
 
       if (!saveShipping) return
+
+      this.error = null
 
       return this.$store.dispatch('checkout/activateSection', 'shipping')
     },

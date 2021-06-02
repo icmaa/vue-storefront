@@ -12,14 +12,16 @@ const getters: GetterTree<CheckoutState, RootState> = {
   getPaymentMethod: (state, getters) => getters.getPaymentDetails.paymentMethod || false,
   getPaymentMethodCode: (state, getters) => getters.getPaymentMethod.code || false,
   getShippingMethod: (state, getters) => getters.getShippingDetails.shippingMethod || false,
-  getAddressDefaults: (state, getters, rootState, rootGetters) => {
+  getAccountDefaults: (state, getters, rootState, rootGetters) => {
     const storeView = rootGetters['icmaaConfig/getCurrentStoreConfig']
     const personalDetails = getters.getPersonalDetails
     return {
       country_id: storeView.tax.defaultCountry,
       email: personalDetails.email,
       gender: personalDetails.gender || false,
-      dob: personalDetails.dob || false
+      dob: personalDetails.dob || false,
+      password: personalDetails.password || false,
+      createAccount: personalDetails.createAccount || false
     }
   },
   getPaymentMethods: (state, getters, rootState, rootGetters) => {

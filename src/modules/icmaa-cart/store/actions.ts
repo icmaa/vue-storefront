@@ -208,8 +208,8 @@ const actions: ActionTree<CartState, RootState> = {
   async syncShippingMethods ({ getters, rootGetters, dispatch }, { forceServerSync = false }) {
     if (getters.canUpdateMethods && (getters.isTotalsSyncRequired || forceServerSync)) {
       const shippingDetails = rootGetters['checkout/getShippingDetails']
-      const addressDefaults = rootGetters['checkout/getAddressDefaults']
-      const address = Object.assign({}, addressDefaults, shippingDetails)
+      const accountDefaults = rootGetters['checkout/getAccountDefaults']
+      const address = Object.assign({}, accountDefaults, shippingDetails)
 
       Logger.debug('Refreshing shipping methods', 'cart', address)()
       const { result } = await CartService.getShippingMethods(address)
@@ -270,9 +270,9 @@ const actions: ActionTree<CartState, RootState> = {
       )
       const { shippingMethod } = shippingDetails
 
-      const addressDefaults = rootGetters['checkout/getAddressDefaults']
+      const accountDefaults = rootGetters['checkout/getAccountDefaults']
       let billingDetails = rootGetters['checkout/getPaymentDetails'] || { paymentMethod: false }
-      billingDetails = Object.assign({}, addressDefaults, billingDetails)
+      billingDetails = Object.assign({}, accountDefaults, billingDetails)
       const { paymentMethod } = billingDetails
 
       const addressInformation = methodsData || {
