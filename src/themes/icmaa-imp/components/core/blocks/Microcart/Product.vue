@@ -58,7 +58,6 @@
 <script>
 
 import { IcmaaGoogleTagManagerExecutors } from 'icmaa-google-tag-manager/hooks'
-import Product from '@vue-storefront/core/compatibility/components/blocks/Microcart/Product'
 import ProductMixin from 'theme/mixins/cart/productMixin'
 import ProductPrice from 'theme/components/core/blocks/Microcart/Product/Price'
 import ProductImage from 'theme/components/core/ProductImage'
@@ -73,7 +72,7 @@ export default {
     ProductImage,
     ProductPrice
   },
-  mixins: [ Product, ProductMixin ],
+  mixins: [ ProductMixin ],
   data () {
     return {
       loading: false
