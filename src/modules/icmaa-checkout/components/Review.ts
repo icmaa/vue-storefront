@@ -1,5 +1,6 @@
 import { mapGetters } from 'vuex'
 import NewsletterMixin from 'theme/mixins/newsletterMixin'
+import { localizedRoute } from '@vue-storefront/core/lib/multistore'
 
 export default {
   name: 'OrderReview',
@@ -28,7 +29,7 @@ export default {
     })
   },
   methods: {
-    submit () {
+    async submit () {
       this.$v.$touch()
       if (this.$v.$invalid) return
 
@@ -40,9 +41,10 @@ export default {
 
       this.$store.dispatch('ui/loader', true)
 
-      this.$store.dispatch('checkout/placeOrder')
-        .then(() => this.$store.dispatch('ui/loader', false))
-        .catch(() => this.$store.dispatch('ui/loader', false))
+      await this.$store.dispatch('checkout/placeOrder')
+        .finally(() => this.$store.dispatch('ui/loader', false))
+
+      this.$router.push(localizedRoute('checkout-success'))
     }
   }
 }

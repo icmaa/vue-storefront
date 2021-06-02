@@ -55,5 +55,5 @@ export default interface CheckoutState {
   paymentDetails: PaymentDetails | {},
   paymentMethods: any[],
   shippingMethods: any[],
-  modifiedAt: number
+  lastOrderId: number
 }

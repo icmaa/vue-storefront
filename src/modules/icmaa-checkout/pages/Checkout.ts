@@ -39,7 +39,6 @@ export default {
   },
   async beforeMount () {
     await this.$store.dispatch('checkout/load')
-    this.$store.dispatch('checkout/setModifiedAt', Date.now())
 
     this.$store.dispatch('cart/load', { forceClientState: true })
       .then(() => {
@@ -53,7 +52,6 @@ export default {
   },
   beforeDestroy () {
     this.$store.dispatch('checkout/setSections')
-    this.$store.dispatch('checkout/setModifiedAt', 0)
   },
   methods: {
     registerSections () {

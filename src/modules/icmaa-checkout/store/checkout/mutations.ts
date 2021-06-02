@@ -19,9 +19,6 @@ const mutations: MutationTree<CheckoutState> = {
 
     state.sections[key].active = true
   },
-  [types.CHECKOUT_SET_MODIFIED_AT] (state, timestamp) {
-    state.modifiedAt = timestamp
-  },
   [types.CHECKOUT_SAVE_PERSONAL_DETAILS] (state, personalDetails) {
     state.personalDetails = personalDetails
   },
@@ -40,10 +37,6 @@ const mutations: MutationTree<CheckoutState> = {
   [types.CHECKOUT_LOAD_PAYMENT_DETAILS] (state, storedPaymentDetails) {
     state.paymentDetails = storedPaymentDetails
   },
-  [types.CHECKOUT_DROP_PASSWORD] (state) {
-    state.personalDetails.password = 'adasd'
-    state.personalDetails.createAccount = false
-  },
   [types.CHECKOUT_ADD_PAYMENT_METHOD] (state, paymentMethod) {
     state.paymentMethods.push(paymentMethod)
   },
@@ -55,6 +48,13 @@ const mutations: MutationTree<CheckoutState> = {
   },
   [types.CHECKOUT_SET_SHIPPING_METHODS] (state, shippingMethods = []) {
     state.shippingMethods = shippingMethods
+  },
+  [types.CHECKOUT_DROP_PASSWORD] (state) {
+    state.personalDetails.password = ''
+    state.personalDetails.createAccount = false
+  },
+  [types.CHECKOUT_SET_LAST_ORDER_ID] (state, id) {
+    state.lastOrderId = id
   }
 }
 

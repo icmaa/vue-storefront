@@ -10,7 +10,7 @@ const actions: ActionTree<CheckoutState, RootState> = {
     // ... Add additional data we need here
     // Stuff like address and quote should already be saved in the quote
   },
-  async placeOrder ({ dispatch, getters }) {
+  async placeOrder ({ getters, dispatch }) {
     try {
       /**
        * @todo Validate stock for cart items before anything is happening
@@ -21,15 +21,14 @@ const actions: ActionTree<CheckoutState, RootState> = {
       let order = await dispatch('prepareOrderData')
       order = await orderHooksExecutors.beforePlaceOrder(order)
 
-      const result = await OrderService.placeOrder(order)
+      const response = await OrderService.placeOrder(order)
 
       await dispatch('payment/afterPlaceOrder', getters.getPaymentMethodCode, { root: true })
-      orderHooksExecutors.afterPlaceOrder({ order, task: result })
+      orderHooksExecutors.afterPlaceOrder({ order, task: response })
 
-      if (!result.resultCode || result.resultCode === 200) {
-        await dispatch('updateOrderTimestamp')
-        await dispatch('cart/clear', { sync: false }, { root: true })
-        await dispatch('dropPassword')
+      if (!response.resultCode || response.resultCode === 200) {
+        dispatch('setLastOrderId', response.result)
+        await dispatch('reset')
       }
     } catch (err) {
       Logger.error('Couldn\'t place order:', 'icmaa-checkout', err)()

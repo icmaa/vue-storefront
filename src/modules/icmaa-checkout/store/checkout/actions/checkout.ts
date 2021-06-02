@@ -9,21 +9,13 @@ const actions: ActionTree<CheckoutState, RootState> = {
     const userStorage = StorageManager.get('user')
     await userStorage.setItem('last-cart-bypass-ts', new Date().getTime())
   },
-  async dropPassword ({ commit, state }) {
-    if (state.personalDetails.createAccount) {
-      commit(types.CHECKOUT_DROP_PASSWORD)
-    }
-  },
-  async setModifiedAt ({ commit }, timestamp) {
-    commit(types.CHECKOUT_SET_MODIFIED_AT, timestamp)
-  },
-  async savePersonalDetails ({ commit }, personalDetails) {
+  savePersonalDetails ({ commit }, personalDetails) {
     commit(types.CHECKOUT_SAVE_PERSONAL_DETAILS, personalDetails)
   },
-  async saveShippingDetails ({ commit }, shippingDetails) {
+  saveShippingDetails ({ commit }, shippingDetails) {
     commit(types.CHECKOUT_SAVE_SHIPPING_DETAILS, shippingDetails)
   },
-  async savePaymentDetails ({ commit }, paymentDetails) {
+  savePaymentDetails ({ commit }, paymentDetails) {
     commit(types.CHECKOUT_SAVE_PAYMENT_DETAILS, paymentDetails)
   },
   async load ({ commit }) {
@@ -50,17 +42,33 @@ const actions: ActionTree<CheckoutState, RootState> = {
       commit(types.CHECKOUT_LOAD_PAYMENT_DETAILS, paymentDetails)
     }
   },
-  async addPaymentMethod ({ commit }, paymentMethod) {
+  addPaymentMethod ({ commit }, paymentMethod) {
     commit(types.CHECKOUT_ADD_PAYMENT_METHOD, paymentMethod)
   },
-  async replacePaymentMethods ({ commit }, paymentMethods) {
+  replacePaymentMethods ({ commit }, paymentMethods) {
     commit(types.CHECKOUT_SET_PAYMENT_METHODS, paymentMethods)
   },
-  async addShippingMethod ({ commit }, shippingMethod) {
+  addShippingMethod ({ commit }, shippingMethod) {
     commit(types.CHECKOUT_ADD_SHIPPING_METHOD, shippingMethod)
   },
-  async replaceShippingMethods ({ commit }, shippingMethods) {
+  replaceShippingMethods ({ commit }, shippingMethods) {
     commit(types.CHECKOUT_SET_SHIPPING_METHODS, shippingMethods)
+  },
+  setLastOrderId ({ commit }, id) {
+    commit(types.CHECKOUT_SET_LAST_ORDER_ID, id)
+  },
+  dropPassword ({ commit, state }) {
+    if (state.personalDetails.createAccount) {
+      commit(types.CHECKOUT_DROP_PASSWORD)
+    }
+  },
+  async reset ({ dispatch }) {
+    await dispatch('updateOrderTimestamp')
+    await dispatch('cart/clear', { sync: false }, { root: true })
+    dispatch('savePersonalDetails', {})
+    dispatch('savePaymentDetails', {})
+    dispatch('saveShippingDetails', {})
+    dispatch('dropPassword')
   }
 }
 

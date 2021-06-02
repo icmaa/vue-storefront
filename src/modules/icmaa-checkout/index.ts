@@ -16,28 +16,24 @@ export const IcmaaCheckoutModule: StorefrontModule = function ({ store, router, 
   store.subscribe((mutation, state) => {
     const type = mutation.type
 
-    if (
-      type.endsWith(types.CHECKOUT_SAVE_PERSONAL_DETAILS)
-    ) {
-      StorageManager.get('checkout').setItem('personal-details', state.checkout.personalDetails).catch((reason) => {
-        Logger.error(reason)()
-      })
+    const setStorage = (key: string, value: any): Promise<any> => StorageManager.get('checkout')
+      .setItem(key, value)
+      .catch((reason) => { Logger.error(reason)() })
+
+    if (type.endsWith(types.CHECKOUT_SAVE_PERSONAL_DETAILS)) {
+      setStorage('personal-details', state.checkout.personalDetails)
     }
 
-    if (
-      type.endsWith(types.CHECKOUT_SAVE_SHIPPING_DETAILS)
-    ) {
-      StorageManager.get('checkout').setItem('shipping-details', state.checkout.shippingDetails).catch((reason) => {
-        Logger.error(reason)()
-      })
+    if (type.endsWith(types.CHECKOUT_SAVE_SHIPPING_DETAILS)) {
+      setStorage('shipping-details', state.checkout.shippingDetails)
     }
 
-    if (
-      type.endsWith(types.CHECKOUT_SAVE_PAYMENT_DETAILS)
-    ) {
-      StorageManager.get('checkout').setItem('payment-details', state.checkout.paymentDetails).catch((reason) => {
-        Logger.error(reason)()
-      })
+    if (type.endsWith(types.CHECKOUT_SAVE_PAYMENT_DETAILS)) {
+      setStorage('payment-details', state.checkout.paymentDetails)
+    }
+
+    if (type.endsWith(types.CHECKOUT_SET_LAST_ORDER_ID)) {
+      setStorage('last-order-id', state.checkout.lastOrderId)
     }
   })
 }
