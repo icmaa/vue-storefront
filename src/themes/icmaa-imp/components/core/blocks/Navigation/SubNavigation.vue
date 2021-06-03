@@ -97,7 +97,7 @@ export default {
       return this.mainNavigation.genderNavigation || false
     },
     mainNavigationItems () {
-      return this.mainNavigation.mainNavigation.slice(0, 2) || false
+      return this.tiles || this.mainNavigation.mainNavigation.slice(0, 2) || false
     },
     navigation () {
       return this.sub.navigation || false
@@ -110,6 +110,9 @@ export default {
       }
 
       return this.navigation.filter(n => !n.gender || n.gender === this.currentGender)
+    },
+    tiles () {
+      return this.sub.tiles || false
     },
     teaser () {
       return this.sub.teaser || false
