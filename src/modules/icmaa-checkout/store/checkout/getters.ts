@@ -14,13 +14,7 @@ const getters: GetterTree<CheckoutState, RootState> = {
   getShippingMethod: (state, getters) => getters.getShippingDetails.shippingMethod || false,
   getAddressDefaults: (state, getters, rootState, rootGetters) => {
     const storeView = rootGetters['icmaaConfig/getCurrentStoreConfig']
-    const personalDetails = getters.getPersonalDetails
-    return {
-      country_id: storeView.tax.defaultCountry,
-      email: personalDetails.email,
-      gender: personalDetails.gender || false,
-      dob: personalDetails.dob || false
-    }
+    return { country_id: storeView.tax.defaultCountry }
   },
   getPaymentMethods: (state, getters, rootState, rootGetters) => {
     const isVirtualCart = rootGetters['cart/isVirtualCart']
@@ -36,8 +30,7 @@ const getters: GetterTree<CheckoutState, RootState> = {
     ),
   getShippingMethods: state => state.shippingMethods,
   getDefaultShippingMethod: state => state.shippingMethods.find(item => item.default),
-  getModifiedAt: state => state.modifiedAt,
-  isUserInCheckout: state => ((Date.now() - state.modifiedAt) <= (60 * 30 * 1000)),
+  isUserInCheckout: state => false, // Compatibility
   hasAgreements: (state, getters, rootState, rootGetters): boolean => {
     const countryId = getters.getPaymentDetails.country_id || rootGetters['icmaaConfig/getCurrentStore'].storeCode
     return icmaa_checkout.agreements.countryAllowlist.includes(countryId.toLowerCase())

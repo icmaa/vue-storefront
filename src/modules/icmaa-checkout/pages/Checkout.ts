@@ -1,8 +1,6 @@
 import i18n from '@vue-storefront/i18n'
 import VueOfflineMixin from 'vue-offline/mixin'
 import { mapGetters } from 'vuex'
-import { registerModule } from '@vue-storefront/core/lib/modules'
-import { OrderModule } from '@vue-storefront/core/modules/order'
 import { StorageManager } from '@vue-storefront/core/lib/storage-manager'
 import { Logger } from '@vue-storefront/core/lib/logger'
 
@@ -32,21 +30,15 @@ export default {
       this.$store.dispatch('ui/loader', active)
     }
   },
-  beforeCreate () {
-    registerModule(OrderModule)
-  },
   created () {
     /**
-     * Load this here to prevent virtual DOM tree mismatching warning:
+     * Load this here to prevent virtual DOM tree mismatching warnings like:
      * `The client-side rendered virtual DOM tree is not matching server-rendered content.`
      */
     this.registerSections()
   },
   async beforeMount () {
     await this.$store.dispatch('checkout/load')
-    this.$bus.$emit('checkout-after-load')
-
-    this.$store.dispatch('checkout/setModifiedAt', Date.now())
 
     this.$store.dispatch('cart/load', { forceClientState: true })
       .then(() => {
@@ -60,7 +52,6 @@ export default {
   },
   beforeDestroy () {
     this.$store.dispatch('checkout/setSections')
-    this.$store.dispatch('checkout/setModifiedAt', 0)
   },
   methods: {
     registerSections () {

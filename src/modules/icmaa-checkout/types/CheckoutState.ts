@@ -53,8 +53,7 @@ export default interface CheckoutState {
   personalDetails: PersonalDetails,
   shippingDetails: ShippingDetails | {},
   paymentDetails: PaymentDetails | {},
-  order: any,
   paymentMethods: any[],
   shippingMethods: any[],
-  modifiedAt: number
+  lastOrderId: number
 }

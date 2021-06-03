@@ -57,8 +57,8 @@
 
 <script>
 
+import i18n from '@vue-storefront/i18n'
 import { IcmaaGoogleTagManagerExecutors } from 'icmaa-google-tag-manager/hooks'
-import Product from '@vue-storefront/core/compatibility/components/blocks/Microcart/Product'
 import ProductMixin from 'theme/mixins/cart/productMixin'
 import ProductPrice from 'theme/components/core/blocks/Microcart/Product/Price'
 import ProductImage from 'theme/components/core/ProductImage'
@@ -73,7 +73,7 @@ export default {
     ProductImage,
     ProductPrice
   },
-  mixins: [ Product, ProductMixin ],
+  mixins: [ ProductMixin ],
   data () {
     return {
       loading: false
@@ -92,6 +92,16 @@ export default {
 
           this.loading = false
         })
+    },
+    removeItem () {
+      this.$store.dispatch('notification/spawnNotification', {
+        type: 'warning',
+        item: this.product,
+        message: i18n.t('Are you sure you would like to remove this item from the shopping cart?'),
+        action2: { label: i18n.t('OK'), action: this.removeFromCart },
+        action1: { label: i18n.t('Cancel'), action: 'close' },
+        hasNoTimeout: true
+      })
     },
     async removeFromCart () {
       await this.$store.dispatch('cart/removeItem', { product: this.product })

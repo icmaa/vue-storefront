@@ -33,14 +33,24 @@ export default {
     }
   },
   methods: {
-    onCheckoutLoad () {
+    onCheckoutAfterLoad () {
       this.details = this.personalDetails
+
+      if (this.details.email && this.details.email !== '') {
+        this.submit()
+      } else {
+        if (this.isLoggedIn) {
+          this.onLoggedIn()
+        }
+      }
     },
     onLoggedIn () {
       this.details = {
         firstname: this.currentUser.firstname,
         lastname: this.currentUser.lastname,
-        email: this.currentUser.email
+        email: this.currentUser.email,
+        gender: this.currentUser.gender,
+        dob: this.currentUser.dob
       }
 
       this.submit()
@@ -56,22 +66,11 @@ export default {
       this.$store.dispatch('ui/showModal', 'modal-signup')
     }
   },
-  beforeMount () {
-    this.$bus.$on('checkout-after-load', this.onCheckoutLoad)
-    this.$bus.$on('user-after-loggedin', this.onLoggedIn)
-  },
   mounted () {
-    this.onCheckoutLoad()
-    if (this.isLoggedIn) {
-      if (this.details.email && this.details.email !== '') {
-        this.submit()
-      } else {
-        this.onLoggedIn()
-      }
-    }
+    this.$bus.$on('user-after-loggedin', this.onLoggedIn)
+    this.onCheckoutAfterLoad()
   },
   destroyed () {
-    this.$bus.$off('checkout-after-load', this.onCheckoutLoad)
     this.$bus.$off('user-after-loggedin', this.onLoggedIn)
   },
   validations () {

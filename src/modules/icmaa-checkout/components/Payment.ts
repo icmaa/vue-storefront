@@ -57,6 +57,8 @@ export default {
           return
         }
 
+        await this.$store.dispatch('cart/syncTotals', { forceServerSync: true })
+
         this.$store.dispatch('checkout/activateSection', 'review')
       }
     }
