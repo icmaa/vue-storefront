@@ -44,7 +44,6 @@ export default {
       const result = await this.$store.dispatch('checkout/placeOrder')
         .finally(() => this.$store.dispatch('ui/loader', false))
 
-      console.error(result)
       if (result) {
         this.$router.push(localizedRoute('checkout-success'))
       }
