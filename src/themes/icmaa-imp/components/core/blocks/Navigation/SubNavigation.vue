@@ -19,33 +19,6 @@
       />
     </div>
     <div
-      v-if="teaser && teaser.length > 0"
-      class="t-flex t-flex-wrap"
-    >
-      <div
-        v-for="(t, i) in teaser"
-        :key="`${t.route}-${i}`"
-        class="t-relative t-w-full t-mb-4 t-overflow-hidden t-rounded-sm"
-      >
-        <router-link
-          :to="t.route"
-          v-text="t.name"
-          class="t-absolute t-flex t-h-full t-items-center t-justify-center t-text-sm t-text-white t-w-full"
-          @click.native="closeMenu"
-        />
-        <picture-component
-          :alt="t.name"
-          :src="t.image"
-          :width="436"
-          :height="228"
-          :placeholder="true"
-          :sizes="teaserSizes"
-          ratio="109:57"
-          class="t-flex-1 t-self-start"
-        />
-      </div>
-    </div>
-    <div
       v-if="logos"
       class="t-flex t-flex-wrap"
       @click="closeMenu"
@@ -66,15 +39,13 @@ import { mapGetters } from 'vuex'
 import NavigationItem from 'theme/components/core/blocks/Navigation/Item'
 import GenderNavigation from 'theme/components/core/blocks/Navigation/ClusterNavigation'
 import LogoLine from 'theme/components/core/blocks/CategoryExtras/LogoLine'
-import PictureComponent from 'theme/components/core/blocks/Picture'
 
 export default {
   name: 'SubNavigation',
   components: {
     NavigationItem,
     GenderNavigation,
-    LogoLine,
-    PictureComponent
+    LogoLine
   },
   props: {
     subNavigationKey: {
@@ -113,17 +84,6 @@ export default {
     },
     tiles () {
       return this.sub.tiles || false
-    },
-    teaser () {
-      return this.sub.teaser || false
-    },
-    teaserSizes () {
-      return [
-        // Order high-to-low is important
-        { media: '(min-width: 768px)', width: 428 },
-        { media: '(max-width: 768px)', width: 768 },
-        { media: '(max-width: 415px)', width: 415 }
-      ]
     },
     logos () {
       return this.sub.logos || false
