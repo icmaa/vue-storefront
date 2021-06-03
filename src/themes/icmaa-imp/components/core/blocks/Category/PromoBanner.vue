@@ -1,6 +1,6 @@
 <template>
-  <div v-if="promo" class="t-flex t-items-center t-h-6 t-text-xxs t-uppercase t-text-white lg:t-h-8 lg:t-text-xs" :class="[ background ? ' t-px-2' : 't-font-bold t-bg-base-light' ]" :style="background">
-    <template v-if="!background">
+  <div v-if="promo" class="t-flex t-items-center t-h-6 t-text-xxs t-uppercase t-text-white lg:t-h-8 lg:t-text-xs" :class="[ background, hasBackground ? ' t-px-2' : 't-font-bold t-bg-base-light' ]" :style="backgroundStyle">
+    <template v-if="!hasBackground">
       <retina-image :image="`/assets/catalog/promo-flags/${promo.key}.png`" :alt="promo.label" class="t-blend-hard-light" />
     </template>
     <template v-else>
@@ -40,8 +40,8 @@ export default {
         { id: '12', key: 'purenoise', label: 'Pure Noise', background: null },
         { id: '13', key: 'limited', label: i18n.t('Limited'), background: '#023AE1' },
         { id: '14', key: 'backprint', label: i18n.t('Backprint'), background: '#551D99' },
-        { id: '', key: 'sale', label: i18n.t('Sale'), background: '#006EA1' },
-        { id: '', key: 'new', label: i18n.t('New'), background: '#1AC759' }
+        { id: '', key: 'sale', label: i18n.t('Sale'), background: 't-bg-sale' },
+        { id: '', key: 'new', label: i18n.t('New'), background: 't-bg-new' }
       ]
     }
   },
@@ -72,9 +72,20 @@ export default {
 
       return false
     },
+    isBackgroundHexColor () {
+      let { background } = this.promo
+      return background && background.startsWith('#')
+    },
+    hasBackground () {
+      return this.background || this.backgroundStyle
+    },
     background () {
       let { background } = this.promo
-      return background && background.startsWith('#') ? { background } : false
+      return !this.isBackgroundHexColor ? background : false
+    },
+    backgroundStyle () {
+      let { background } = this.promo
+      return this.isBackgroundHexColor ? { background } : false
     }
   }
 }
