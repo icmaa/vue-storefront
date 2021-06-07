@@ -62,9 +62,13 @@ const actions: ActionTree<CheckoutState, RootState> = {
       commit(types.CHECKOUT_DROP_PASSWORD)
     }
   },
-  async reset ({ dispatch }) {
+  async reset ({ dispatch }, { clearCart = true }: { clearCart?: boolean }) {
     await dispatch('updateOrderTimestamp')
-    await dispatch('cart/clear', { sync: false }, { root: true })
+
+    if (clearCart) {
+      await dispatch('cart/clear', { sync: false }, { root: true })
+    }
+
     dispatch('savePersonalDetails', {})
     dispatch('savePaymentDetails', {})
     dispatch('saveShippingDetails', {})

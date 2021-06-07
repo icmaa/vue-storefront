@@ -28,7 +28,7 @@ const actions: ActionTree<CheckoutState, RootState> = {
 
       if (!response.resultCode || response.resultCode === 200) {
         dispatch('setLastOrderId', response.result)
-        await dispatch('reset')
+        await dispatch('reset', {})
       } else {
         Logger.error('Couldn\'t place order:', 'icmaa-checkout', response.result)()
         return false

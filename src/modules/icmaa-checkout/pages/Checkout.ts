@@ -40,6 +40,9 @@ export default {
   async beforeMount () {
     await this.$store.dispatch('checkout/load')
 
+    this.$bus.$on('user-after-logout', this.afterUserLogout)
+    this.$bus.$on('cart-after-cleared', this.afterCartCleared)
+
     this.$store.dispatch('cart/load', { forceClientState: true })
       .then(() => {
         if (this.cartItems.length === 0) {
@@ -52,6 +55,8 @@ export default {
   },
   beforeDestroy () {
     this.$store.dispatch('checkout/setSections')
+    this.$bus.$off('user-after-logout', this.afterUserLogout)
+    this.$bus.$off('cart-after-cleared', this.afterCartCleared)
   },
   methods: {
     registerSections () {
@@ -98,6 +103,23 @@ export default {
           }
         }
       })
+    },
+    afterCartCleared () {
+      this.$store.dispatch('notification/spawnNotification', {
+        type: 'error',
+        message: this.$t('The checkout couldn\'t be continued because you cart has been expired. Please try again.'),
+        action1: { label: this.$t('OK') }
+      })
+
+      this.$store.dispatch('checkout/loading', false)
+      this.$router.push(this.localizedHomeRoute)
+    },
+    afterUserLogout () {
+      // This prevents the "cart has been expired message" because it's emptied on logout
+      this.$bus.$off('cart-after-cleared', this.afterCartCleared)
+
+      this.$store.dispatch('checkout/loading', false)
+      this.$router.push(this.localizedHomeRoute)
     }
   },
   metaInfo () {

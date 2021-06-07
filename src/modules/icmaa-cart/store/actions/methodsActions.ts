@@ -33,8 +33,8 @@ const actions: ActionTree<CartState, RootState> = {
       Logger.debug('Refreshing shipping methods', 'cart', shippingDetails)()
       const { result } = await IcmaaCartService.getShippingMethods({ personalDetails, shippingDetails })
         .then(resp => {
-          if (resp.resultCode === 500 && resp.result.error) {
-            throw new Error(resp.result.message)
+          if (resp.resultCode === 500) {
+            throw new Error(resp.result.message || resp.result)
           }
           return resp
         })
