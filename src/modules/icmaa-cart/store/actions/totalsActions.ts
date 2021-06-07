@@ -2,8 +2,10 @@ import { ActionTree } from 'vuex'
 import RootState from '@vue-storefront/core/types/RootState'
 import CartState from '@vue-storefront/core/modules/cart/types/CartState'
 import Task from 'core/lib/sync/types/Task'
-import { CartService as IcmaaCartService } from 'icmaa-cart/data-resolver/CartService'
+import * as types from '@vue-storefront/core/modules/cart/store/mutation-types'
+import { prepareShippingInfoForUpdateTotals } from '@vue-storefront/core/modules/cart/helpers'
 import { Logger } from '@vue-storefront/core/lib/logger'
+import { CartService as IcmaaCartService } from 'icmaa-cart/data-resolver/CartService'
 import { notifications } from 'icmaa-cart/helpers'
 
 import omit from 'lodash-es/omit'
@@ -38,11 +40,10 @@ const actions: ActionTree<CartState, RootState> = {
       }
 
       if (shippingDetails.country_id) {
-        await dispatch('overrideServerTotals', {
+        return dispatch('overrideServerTotals', {
           hasShippingInformation: shippingDetails.shippingMethod || false,
           addressInformation
         })
-        return
       }
 
       Logger.error('Please do set the tax.defaultCountry in order to calculate totals', 'cart')()
@@ -77,6 +78,42 @@ const actions: ActionTree<CartState, RootState> = {
     }
 
     return response
+  },
+  /**
+   * Clone of originial `cart/overrideServerTotals`
+   *
+   * Changes:
+   * * Return data or throw an error to be able to handle the result in a dispatch
+   */
+  async overrideServerTotals ({ commit, getters, dispatch }, { addressInformation, hasShippingInformation }) {
+    const getTotalsTask = await dispatch('getTotals', { addressInformation, hasShippingInformation })
+    const { resultCode, result } = getTotalsTask
+
+    if (resultCode === 200) {
+      const totals = result.totals || result
+      Logger.log('Overriding server totals. ', 'cart', totals)()
+      const itemsAfterTotal = prepareShippingInfoForUpdateTotals(totals.items)
+
+      for (let key of Object.keys(itemsAfterTotal)) {
+        const item = itemsAfterTotal[key]
+        const product = { server_item_id: item.item_id, totals: item, qty: item.qty }
+        await dispatch('updateItem', { product })
+      }
+
+      commit(types.CART_UPD_TOTALS, { itemsAfterTotal, totals, platformTotalSegments: totals.total_segments })
+      commit(types.CART_SET_TOTALS_SYNC)
+
+      // we received payment methods as a result of this call, updating state
+      if (result.payment_methods && getters.canUpdateMethods) {
+        const paymentMethods = result.payment_methods.map(method => ({ ...method, is_server_method: true }))
+        dispatch('checkout/replacePaymentMethods', paymentMethods, { root: true })
+      }
+
+      return { resultCode, result }
+    }
+
+    Logger.error('Error during "overrideServerTotals" action: ', 'cart', result)()
+    throw Error(result)
   }
 }
 

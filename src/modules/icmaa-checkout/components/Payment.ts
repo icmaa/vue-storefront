@@ -57,14 +57,11 @@ export default {
         }
 
         const sync = await this.$store.dispatch('cart/syncTotals', { forceServerSync: true })
-          .then(response => {
-            if (response.code === 500) {
-              this.$store.dispatch('checkout/loading', false)
-              return false
-            }
-            return true
+          .then(() => true)
+          .catch(() => {
+            this.$store.dispatch('checkout/loading', false)
+            return false
           })
-          .catch(() => false)
 
         if (!sync) return
 
