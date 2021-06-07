@@ -21,7 +21,8 @@ const state = {
   paymentDetails: {},
   shippingMethods: config.shipping.methods || [],
   paymentMethods: [],
-  lastOrderId: null
+  lastOrderId: null,
+  lastOrderResponse: {}
 }
 
 export const checkoutStore: Module<CheckoutState, any> = {

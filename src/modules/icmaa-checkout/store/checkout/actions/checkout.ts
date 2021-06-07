@@ -57,6 +57,9 @@ const actions: ActionTree<CheckoutState, RootState> = {
   setLastOrderId ({ commit }, id) {
     commit(types.CHECKOUT_SET_LAST_ORDER_ID, id)
   },
+  setLastOrderResponse ({ commit }, response) {
+    commit(types.CHECKOUT_SET_LAST_ORDER_RESPONSE, response)
+  },
   dropPassword ({ commit, state }) {
     if (state.personalDetails.createAccount) {
       commit(types.CHECKOUT_DROP_PASSWORD)

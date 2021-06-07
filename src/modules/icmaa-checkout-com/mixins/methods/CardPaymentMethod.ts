@@ -14,7 +14,6 @@ export default {
         Frames.Events.CARD_VALIDATION_CHANGED,
         (event: any) => {
           const isCardValid = Frames.isCardValid();
-          console.log('CARD_VALIDATION_CHANGED: %o', event);
           this.$store.commit(METHOD_CARD + '/' + types.SET_IS_VALID, Frames.isCardValid())
 
           if (isCardValid) {

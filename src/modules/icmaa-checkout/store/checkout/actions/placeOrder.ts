@@ -23,11 +23,13 @@ const actions: ActionTree<CheckoutState, RootState> = {
 
       const response = await OrderService.placeOrder(order)
 
+      dispatch('setLastOrderResponse', response.result)
+
       await dispatch('payment/afterPlaceOrder', getters.getPaymentMethodCode, { root: true })
       orderHooksExecutors.afterPlaceOrder({ order, task: response })
 
       if (!response.resultCode || response.resultCode === 200) {
-        dispatch('setLastOrderId', response.result)
+        dispatch('setLastOrderId', response.result.orderId)
         await dispatch('reset')
       } else {
         Logger.error('Couldn\'t place order:', 'icmaa-checkout', response.result)()

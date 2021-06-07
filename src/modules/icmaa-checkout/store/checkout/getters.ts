@@ -34,7 +34,8 @@ const getters: GetterTree<CheckoutState, RootState> = {
   hasAgreements: (state, getters, rootState, rootGetters): boolean => {
     const countryId = getters.getPaymentDetails.country_id || rootGetters['icmaaConfig/getCurrentStore'].storeCode
     return icmaa_checkout.agreements.countryAllowlist.includes(countryId.toLowerCase())
-  }
+  },
+  getLastOrderResponse: state => state.lastOrderResponse
 }
 
 export default getters

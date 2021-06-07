@@ -45,6 +45,12 @@ export interface ShippingDetails {
   [key: string]: any
 }
 
+export interface OrderResponse {
+  orderId: number,
+  orderIncrement: string,
+  paymentDetails: any
+}
+
 export default interface CheckoutState {
   loading: boolean,
   sections: {
@@ -55,5 +61,6 @@ export default interface CheckoutState {
   paymentDetails: PaymentDetails | {},
   paymentMethods: any[],
   shippingMethods: any[],
-  lastOrderId: number
+  lastOrderId: number,
+  lastOrderResponse: OrderResponse | {}
 }

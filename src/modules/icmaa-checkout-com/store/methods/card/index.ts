@@ -19,7 +19,6 @@ const CheckoutComCardStore: Module<CardState, any> = {
       state.token = token
     },
     [types.SET_IS_VALID] (state, valid: boolean) {
-      console.log('aaaaaaaaaa')
       state.isValid = valid === true
     }
   },
