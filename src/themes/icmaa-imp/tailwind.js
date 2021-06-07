@@ -13,6 +13,7 @@ module.exports = {
       colors: {
         'primary': '#611122',
         'sale': '#006EA1',
+        'new': '#1AC759',
         'alt-1': '#3D9FA5',
         'alt-2': '#CE8F4B',
         'alt-3': '#65BD82',

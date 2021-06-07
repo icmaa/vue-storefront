@@ -8,7 +8,7 @@
         class="t-flex t-items-center t-justify-center t-h-8 t-w-8 t-mr-4 t-rounded-full t-bg-base-lightest t-text-white t-font-mono t-font-bold t-text-sm t-leading-1-em"
         :class="{ 't-text-base-tone': active || done }"
       >
-        <material-icon v-if="done" icon="check" size="sm" class="t-text-alt-1" />
+        <material-icon v-if="done" icon="check" size="sm" class="t-text-alt-3" />
         <span v-else v-text="index" />
       </div>
       <h2 class="t-self-center t-flex-auto t-font-light t-text-xl" :class="{ 't-text-base-lighter': !active && !done }">
