@@ -5,7 +5,8 @@ import config from 'config'
 
 const getWishlist = async (): Promise<Task> =>
   TaskQueue.execute({
-    url: processLocalizedURLAddress(config.icmaa_wishlist.endpoint + '/index?token={{token}}')
+    url: processLocalizedURLAddress(config.icmaa_wishlist.endpoint + '/index?token={{token}}'),
+    silent: true
   })
 
 const addWishlistItems = async (productIds: string[]): Promise<Task> =>
