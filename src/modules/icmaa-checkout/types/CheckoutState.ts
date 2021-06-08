@@ -45,6 +45,13 @@ export interface ShippingDetails {
   [key: string]: any
 }
 
+export interface PriorityHandling {
+  title: string,
+  description: string,
+  fee: number,
+  enabled: boolean
+}
+
 export default interface CheckoutState {
   loading: boolean,
   sections: {
@@ -55,5 +62,6 @@ export default interface CheckoutState {
   paymentDetails: PaymentDetails | {},
   paymentMethods: any[],
   shippingMethods: any[],
+  priorityHandling: PriorityHandling,
   lastOrderId: number
 }

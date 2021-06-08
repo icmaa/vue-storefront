@@ -29,6 +29,8 @@ const getters: GetterTree<CheckoutState, RootState> = {
       (typeof itm !== 'object' || !itm.is_server_method)
     ),
   getShippingMethods: state => state.shippingMethods,
+  getPriorityHandling: state => state.priorityHandling || false,
+  isPriorityHandlingEnabled: (state, getters) => getters.getPriorityHandling.enabled || false,
   getDefaultShippingMethod: state => state.shippingMethods.find(item => item.default),
   isUserInCheckout: state => false, // Compatibility
   hasAgreements: (state, getters, rootState, rootGetters): boolean => {

@@ -1,6 +1,6 @@
 <template>
   <div class="addresses">
-    <div class="t-text-sm t-text-alert t-mb-2" v-text="error" v-if="error" />
+    <div class="t-text-sm t-text-alert t-mb-4" v-text="error" v-if="error" />
     <form v-if="active">
       <address-component
         v-model="shippingAddress"

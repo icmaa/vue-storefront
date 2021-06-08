@@ -21,6 +21,7 @@ const state = {
   paymentDetails: {},
   shippingMethods: config.shipping.methods || [],
   paymentMethods: [],
+  priorityHandling: null,
   lastOrderId: null
 }
 

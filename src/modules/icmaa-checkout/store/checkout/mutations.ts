@@ -49,6 +49,9 @@ const mutations: MutationTree<CheckoutState> = {
   [types.CHECKOUT_SET_SHIPPING_METHODS] (state, shippingMethods = []) {
     state.shippingMethods = shippingMethods
   },
+  [types.CHECKOUT_SET_PRIORITY_HANDLING] (state, payload) {
+    state.priorityHandling = payload
+  },
   [types.CHECKOUT_DROP_PASSWORD] (state) {
     state.personalDetails.password = ''
     state.personalDetails.createAccount = false

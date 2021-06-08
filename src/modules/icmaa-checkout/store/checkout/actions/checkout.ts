@@ -54,6 +54,13 @@ const actions: ActionTree<CheckoutState, RootState> = {
   replaceShippingMethods ({ commit }, shippingMethods) {
     commit(types.CHECKOUT_SET_SHIPPING_METHODS, shippingMethods)
   },
+  updateAdditionalShippingInformation ({ commit }, additional) {
+    if (additional && Object.keys(additional).length > 0) {
+      if (additional['priorityHandling']) {
+        commit(types.CHECKOUT_SET_PRIORITY_HANDLING, additional['priorityHandling'])
+      }
+    }
+  },
   setLastOrderId ({ commit }, id) {
     commit(types.CHECKOUT_SET_LAST_ORDER_ID, id)
   },

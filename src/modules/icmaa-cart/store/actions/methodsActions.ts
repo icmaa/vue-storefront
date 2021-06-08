@@ -19,6 +19,7 @@ const actions: ActionTree<CartState, RootState> = {
    * * Use our custom checkout data-resolver service to also attach the personal-details to the address.
    *   This way we can make this request more versataile and remove the validation in the original endpoint
    *   which might cause an error if we don't use their data-structure.
+   * * Add aditional data to getShippingMethods request
    */
   async syncShippingMethods ({ getters, rootGetters, dispatch }, { forceServerSync = false }) {
     if (getters.canUpdateMethods && (getters.isTotalsSyncRequired || forceServerSync)) {
@@ -40,7 +41,8 @@ const actions: ActionTree<CartState, RootState> = {
         })
 
       if (result !== false) {
-        await dispatch('updateShippingMethods', { shippingMethods: result })
+        await dispatch('updateShippingMethods', { shippingMethods: result.methods || result })
+        await dispatch('checkout/updateAdditionalShippingInformation', result.additional || false, { root: true })
         return true
       }
 
