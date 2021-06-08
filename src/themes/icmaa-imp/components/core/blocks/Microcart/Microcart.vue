@@ -75,8 +75,7 @@ export default {
         action2: {
           label: i18n.t('OK'),
           action: async () => {
-            await this.$store.dispatch('cart/clear')
-            await this.$store.dispatch('cart/sync', { forceClientState: true })
+            await this.$store.dispatch('cart/clear', { sync: true })
           }
         },
         hasNoTimeout: true

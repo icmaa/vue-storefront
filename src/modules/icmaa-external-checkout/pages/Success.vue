@@ -50,8 +50,7 @@ export default {
   methods: {
     async clearCart () {
       if (this.cartIsNotEmpty) {
-        await this.$store.dispatch('cart/clear', {})
-        await this.$store.dispatch('cart/sync', { forceClientState: true })
+        await this.$store.dispatch('cart/clear', { sync: true })
       }
     }
   },
