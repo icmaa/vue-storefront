@@ -8,8 +8,6 @@ import { Logger } from '@vue-storefront/core/lib/logger'
 import { CartService as IcmaaCartService } from 'icmaa-cart/data-resolver/CartService'
 import { notifications } from 'icmaa-cart/helpers'
 
-import omit from 'lodash-es/omit'
-
 const actions: ActionTree<CartState, RootState> = {
   /**
    * Clone of originial `cart/syncTotals`
@@ -37,9 +35,8 @@ const actions: ActionTree<CartState, RootState> = {
         billingAddress: billingDetails,
         shippingMethod,
         paymentMethod
-      }
 
-      console.error(addressInformation)
+      }
 
       if (shippingDetails.country_id) {
         return dispatch('overrideServerTotals', {

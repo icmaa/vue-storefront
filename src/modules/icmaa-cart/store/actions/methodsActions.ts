@@ -8,8 +8,6 @@ import { CartService as IcmaaCartService } from 'icmaa-cart/data-resolver/CartSe
 import { preparePaymentMethodsToSync } from '@vue-storefront/core/modules/cart/helpers'
 import { Logger } from '@vue-storefront/core/lib/logger'
 
-import omit from 'lodash-es/omit'
-
 const actions: ActionTree<CartState, RootState> = {
   /**
    * Clone of originial `cart/syncShippingMethods`
@@ -25,11 +23,7 @@ const actions: ActionTree<CartState, RootState> = {
     if (getters.canUpdateMethods && (getters.isTotalsSyncRequired || forceServerSync)) {
       const personalDetails = rootGetters['checkout/getPersonalDetails']
       const addressDefaults = rootGetters['checkout/getAddressDefaults']
-      const shippingDetails = Object.assign(
-        {},
-        addressDefaults,
-        omit(rootGetters['checkout/getShippingDetails'], ['shippingMethod'])
-      )
+      const shippingDetails = Object.assign({}, addressDefaults, rootGetters['checkout/getShippingDetails'])
 
       Logger.debug('Refreshing shipping methods', 'cart', shippingDetails)()
       const { result } = await IcmaaCartService.getShippingMethods({ personalDetails, shippingDetails })
