@@ -7,6 +7,7 @@ export default {
   mixins: [ AddressMixin, PoststationMixin ],
   props: {
     value: {
+      type: [Object, Number, null],
       required: true
     },
     type: {
@@ -75,9 +76,9 @@ export default {
   beforeMount () {
     if (typeof this.value === 'number') {
       this.selectedAddress = this.value
-    } else if (this.value) {
+    } else if (this.value && Object.keys(this.value).length > 0) {
       this.selectedAddress = this.value ? this.value.id || 0 : 0
-      this.address = Object.assign({}, { street: [''] }, this.value)
+      this.address = Object.assign({}, this.address, this.value)
     }
 
     if (!this.address.firstname || this.address.firstname === '') {

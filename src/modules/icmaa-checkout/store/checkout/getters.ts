@@ -6,9 +6,9 @@ import CheckoutState from '../../types/CheckoutState'
 const getters: GetterTree<CheckoutState, RootState> = {
   isLoading: state => state.loading,
   getSections: state => state.sections,
-  getPersonalDetails: state => state.personalDetails,
-  getShippingDetails: state => Object.keys(state.shippingDetails).length === 0 ? false : state.shippingDetails,
-  getPaymentDetails: state => Object.keys(state.paymentDetails).length === 0 ? false : state.paymentDetails,
+  getPersonalDetails: state => state.personalDetails || {},
+  getShippingDetails: state => state.shippingDetails || {},
+  getPaymentDetails: state => state.paymentDetails || {},
   getPaymentMethod: (state) => state.paymentMethod || false,
   getPaymentMethodCode: (state, getters) => getters.getPaymentMethod.code || false,
   getShippingMethod: (state) => state.shippingMethod || false,

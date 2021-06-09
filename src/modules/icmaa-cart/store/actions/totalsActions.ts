@@ -20,25 +20,25 @@ const actions: ActionTree<CartState, RootState> = {
     if (getters.canSyncTotals && (getters.isTotalsSyncRequired || forceServerSync)) {
       const addressDefaults = rootGetters['checkout/getAddressDefaults']
 
-      let shippingDetails = rootGetters['checkout/getShippingDetails']
-      shippingDetails = Object.assign({}, addressDefaults, shippingDetails)
+      let shippingAddress = rootGetters['checkout/getShippingDetails']
+      shippingAddress = Object.assign({}, addressDefaults, shippingAddress)
 
-      let billingDetails = rootGetters['checkout/getPaymentDetails']
-      billingDetails = Object.assign({}, addressDefaults, billingDetails)
+      let billingAddress = rootGetters['checkout/getPaymentDetails']
+      billingAddress = Object.assign({}, addressDefaults, billingAddress)
 
+      const personalDetails = rootGetters['checkout/getPersonalDetails']
       const shippingMethod = rootGetters['checkout/getShippingMethod']
       const paymentMethod = rootGetters['checkout/getPaymentMethod']
 
       const addressInformation = methodsData || {
-        personalDetails: rootGetters['checkout/getPersonalDetails'],
-        shippingAddress: shippingDetails,
-        billingAddress: billingDetails,
+        personalDetails,
+        shippingAddress,
+        billingAddress,
         shippingMethod,
         paymentMethod
-
       }
 
-      if (shippingDetails.country_id) {
+      if (shippingAddress.country_id) {
         return dispatch('overrideServerTotals', {
           hasShippingInformation: shippingMethod || false,
           addressInformation

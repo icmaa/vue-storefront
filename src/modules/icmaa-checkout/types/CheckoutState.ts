@@ -58,9 +58,9 @@ export default interface CheckoutState {
     [key: string]: Section
   },
   personalDetails: PersonalDetails,
-  shippingDetails: ShippingDetails | {},
+  shippingDetails: ShippingDetails,
   shippingMethod: any,
-  paymentDetails: PaymentDetails | {},
+  paymentDetails: PaymentDetails,
   paymentMethod: any,
   paymentMethods: any[],
   shippingMethods: any[],

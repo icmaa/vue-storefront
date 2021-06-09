@@ -86,7 +86,7 @@ export default {
       return this.$store.dispatch('checkout/activateSection', 'shipping')
     },
     getAddress (address): string | false {
-      if (!address) return false
+      if (!address || address === null) return false
       if (typeof address === 'number') {
         address = this.getAddressbyId(address)
       }
