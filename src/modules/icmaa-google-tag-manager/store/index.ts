@@ -132,7 +132,7 @@ export const icmaaGoogleTagManagerModule: Module<GoogleTagManagerState, any> = {
           break
 
         case 'checkout':
-          DTO = { event: 'icmaa-search-results' }
+          DTO = { event: 'icmaa-checkout' }
 
           break
       }
