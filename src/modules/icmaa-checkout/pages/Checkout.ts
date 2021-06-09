@@ -3,6 +3,7 @@ import VueOfflineMixin from 'vue-offline/mixin'
 import { mapGetters } from 'vuex'
 import { StorageManager } from '@vue-storefront/core/lib/storage-manager'
 import { Logger } from '@vue-storefront/core/lib/logger'
+import { IcmaaGoogleTagManagerExecutors } from 'icmaa-google-tag-manager/hooks'
 
 export default {
   mixins: [ VueOfflineMixin ],
@@ -31,6 +32,8 @@ export default {
      * `The client-side rendered virtual DOM tree is not matching server-rendered content.`
      */
     this.registerSections()
+
+    IcmaaGoogleTagManagerExecutors.checkoutVisited()
   },
   async beforeMount () {
     await this.$store.dispatch('checkout/load')

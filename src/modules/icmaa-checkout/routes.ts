@@ -8,6 +8,6 @@ const SuccessPage = () => import(/* webpackChunkName: "vsf-checkout-success" */ 
  * the ìcmaa-checkout` module as it was registered afterwards. So, keep that in mind.
  */
 export default [
-  { name: 'checkout', path: '/checkout', component: CheckoutPage, meta: { layout: 'empty' } },
+  { name: 'checkout', path: '/checkout', component: CheckoutPage, meta: { layout: 'empty', gtm: 'checkout' } },
   { name: 'checkout-success', path: '/(checkout|order)-success', component: SuccessPage }
 ]
