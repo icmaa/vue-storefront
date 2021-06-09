@@ -7,7 +7,8 @@ export default {
   mixins: [ AddressMixin, PoststationMixin ],
   props: {
     value: {
-      type: [Object, Number, null],
+      // It's important we leave no type
+      // here because it can be anything
       required: true
     },
     type: {
