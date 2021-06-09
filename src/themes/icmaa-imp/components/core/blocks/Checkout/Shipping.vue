@@ -39,6 +39,7 @@
         :disabled="true"
       />
       <priority-handling
+        v-if="priorityHandling"
         v-model="priorityHandling"
         :disabled="true"
         class="t-mt-6"

@@ -9,12 +9,7 @@ export default {
   data () {
     return {
       stockCheckCompleted: false,
-      stockCheckOK: false,
-      order: {},
-      personalDetails: {},
-      shipping: {},
-      shippingMethod: {},
-      payment: {}
+      stockCheckOK: false
     }
   },
   computed: {

@@ -48,7 +48,8 @@ export default {
   },
   computed: {
     ...mapGetters({
-      priorityHandling: 'checkout/getPriorityHandling'
+      priorityHandling: 'checkout/getPriorityHandling',
+      hasPriorityHandling: 'checkout/hasPriorityHandling'
     }),
     active () {
       return this.priorityHandling && this.priorityHandling.enabled
@@ -64,8 +65,7 @@ export default {
     }
   },
   beforeMount () {
-    // Initial value here
-    // this.selected = this.priorityHandling.selected
+    this.selected = this.hasPriorityHandling
   }
 }
 </script>
