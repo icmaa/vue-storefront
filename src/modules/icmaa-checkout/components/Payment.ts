@@ -46,8 +46,8 @@ export default {
         this.$store.dispatch('checkout/loading')
 
         this.$store.dispatch(
-          'checkout/savePaymentDetails',
-          Object.assign({}, this.paymentDetails, { paymentMethod: this.selectedMethod })
+          'checkout/savePaymentMethod',
+          this.selectedMethod
         )
 
         const paymentHandler = await this.$store.dispatch('payment/saveMethod', this.selectedMethod.code)

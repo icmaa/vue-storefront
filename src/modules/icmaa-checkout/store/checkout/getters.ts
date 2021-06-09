@@ -9,9 +9,9 @@ const getters: GetterTree<CheckoutState, RootState> = {
   getPersonalDetails: state => state.personalDetails,
   getShippingDetails: state => Object.keys(state.shippingDetails).length === 0 ? false : state.shippingDetails,
   getPaymentDetails: state => Object.keys(state.paymentDetails).length === 0 ? false : state.paymentDetails,
-  getPaymentMethod: (state, getters) => getters.getPaymentDetails.paymentMethod || false,
+  getPaymentMethod: (state) => state.paymentMethod || false,
   getPaymentMethodCode: (state, getters) => getters.getPaymentMethod.code || false,
-  getShippingMethod: (state, getters) => getters.getShippingDetails.shippingMethod || false,
+  getShippingMethod: (state) => state.shippingMethod || false,
   getAddressDefaults: (state, getters, rootState, rootGetters) => {
     const storeView = rootGetters['icmaaConfig/getCurrentStoreConfig']
     return { country_id: storeView.tax.defaultCountry }
@@ -34,7 +34,7 @@ const getters: GetterTree<CheckoutState, RootState> = {
   isPriorityHandlingEnabled: (state, getters): boolean => getters.getPriorityHandling.enabled || false,
   hasPriorityHandling: (state, getters, RootState, rootGetters): boolean => {
     if (!getters.isPriorityHandlingEnabled) return false
-    if (getters.getShippingDetails.shippingMethod.priorityHandling === true) return true
+    if (getters.getShippingMethod.priorityHandling === true) return true
     const totals = rootGetters['cart/getTotals']
     return totals.some(t => t.code === 'priority_handling')
   },

@@ -25,17 +25,14 @@ const mutations: MutationTree<CheckoutState> = {
   [types.CHECKOUT_SAVE_SHIPPING_DETAILS] (state, shippingDetails) {
     state.shippingDetails = shippingDetails
   },
+  [types.CHECKOUT_SAVE_SHIPPING_METHOD] (state, method) {
+    state.shippingMethod = method
+  },
   [types.CHECKOUT_SAVE_PAYMENT_DETAILS] (state, paymentDetails) {
     state.paymentDetails = paymentDetails
   },
-  [types.CHECKOUT_LOAD_PERSONAL_DETAILS] (state, storedPersonalDetails) {
-    state.personalDetails = storedPersonalDetails
-  },
-  [types.CHECKOUT_LOAD_SHIPPING_DETAILS] (state, storedShippingDetails) {
-    state.shippingDetails = storedShippingDetails
-  },
-  [types.CHECKOUT_LOAD_PAYMENT_DETAILS] (state, storedPaymentDetails) {
-    state.paymentDetails = storedPaymentDetails
+  [types.CHECKOUT_SAVE_PAYMENT_METHOD] (state, method) {
+    state.paymentMethod = method
   },
   [types.CHECKOUT_ADD_PAYMENT_METHOD] (state, paymentMethod) {
     state.paymentMethods.push(paymentMethod)

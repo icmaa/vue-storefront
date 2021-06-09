@@ -76,8 +76,8 @@ export default {
         }
 
         this.$store.dispatch(
-          'checkout/saveShippingDetails',
-          Object.assign({}, this.shippingDetails, { shippingMethod })
+          'checkout/saveShippingMethod',
+          shippingMethod
         )
 
         await this.$store.dispatch('cart/syncTotals', { forceServerSync: true })

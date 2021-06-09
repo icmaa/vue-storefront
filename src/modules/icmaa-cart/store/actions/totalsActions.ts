@@ -20,28 +20,30 @@ const actions: ActionTree<CartState, RootState> = {
    */
   async syncTotals ({ dispatch, getters, rootGetters }, { forceServerSync = false, methodsData }: { forceServerSync: boolean, methodsData?: any }) {
     if (getters.canSyncTotals && (getters.isTotalsSyncRequired || forceServerSync)) {
-      const shippingDetails = Object.assign(
-        { country_id: rootGetters['icmaaConfig/getCurrentStoreConfig'].tax.defaultCountry },
-        rootGetters['checkout/getShippingDetails'] || { shippingMethod: false }
-      )
-      const { shippingMethod } = shippingDetails
-
       const addressDefaults = rootGetters['checkout/getAddressDefaults']
-      let billingDetails = rootGetters['checkout/getPaymentDetails'] || { paymentMethod: false }
+
+      let shippingDetails = rootGetters['checkout/getShippingDetails']
+      shippingDetails = Object.assign({}, addressDefaults, shippingDetails)
+
+      let billingDetails = rootGetters['checkout/getPaymentDetails']
       billingDetails = Object.assign({}, addressDefaults, billingDetails)
-      const { paymentMethod } = billingDetails
+
+      const shippingMethod = rootGetters['checkout/getShippingMethod']
+      const paymentMethod = rootGetters['checkout/getPaymentMethod']
 
       const addressInformation = methodsData || {
         personalDetails: rootGetters['checkout/getPersonalDetails'],
-        shippingAddress: omit(shippingDetails, ['shippingMethod']),
-        billingAddress: omit(billingDetails, ['paymentMethod']),
+        shippingAddress: shippingDetails,
+        billingAddress: billingDetails,
         shippingMethod,
         paymentMethod
       }
 
+      console.error(addressInformation)
+
       if (shippingDetails.country_id) {
         return dispatch('overrideServerTotals', {
-          hasShippingInformation: shippingDetails.shippingMethod || false,
+          hasShippingInformation: shippingMethod || false,
           addressInformation
         })
       }

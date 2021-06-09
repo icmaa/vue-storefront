@@ -18,7 +18,9 @@ const state = {
     createAccount: false
   },
   shippingDetails: {},
+  shippingMethod: {},
   paymentDetails: {},
+  paymentMethod: {},
   shippingMethods: config.shipping.methods || [],
   paymentMethods: [],
   priorityHandling: null,
