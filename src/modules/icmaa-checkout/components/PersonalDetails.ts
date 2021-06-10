@@ -1,6 +1,8 @@
+import config from 'config'
 import { mapGetters } from 'vuex'
 import { required, email, minLength, sameAs } from 'vuelidate/lib/validators'
 import { date, latin } from 'icmaa-config/helpers/validators'
+import { toDate } from 'icmaa-config/helpers/datetime'
 import merge from 'lodash-es/merge'
 
 export default {
@@ -58,6 +60,15 @@ export default {
     submit () {
       this.$v.$touch()
       if (!this.$v.$invalid) {
+        if (this.details.gender) {
+          const gender = config.icmaa.user.genderMap[this.details.gender]
+          this.details.gender = gender
+        }
+
+        if (this.details.dob) {
+          this.details.dob = toDate(this.details.dob, 'YYYY-MM-DD', this.dateFormat)
+        }
+
         this.$store.dispatch('checkout/savePersonalDetails', this.details)
         this.$store.dispatch('checkout/activateSection', 'addresses')
       }
