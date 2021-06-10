@@ -33,12 +33,6 @@ export default {
       this.$v.$touch()
       if (this.$v.$invalid) return
 
-      this.$store.dispatch('notification/spawnNotification', {
-        type: 'success',
-        message: 'This is work-in-progress 🤙',
-        action1: { label: this.$t('OK') }
-      })
-
       this.$store.dispatch('ui/loader', true)
 
       const result = await this.$store.dispatch('checkout/placeOrder')

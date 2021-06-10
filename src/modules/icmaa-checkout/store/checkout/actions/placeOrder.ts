@@ -6,28 +6,29 @@ import { orderHooksExecutors } from '@vue-storefront/core/modules/order/hooks'
 import { Logger } from '@vue-storefront/core/lib/logger'
 
 const actions: ActionTree<CheckoutState, RootState> = {
-  async prepareOrderData ({ getters, rootGetters }) {
-    // ... Add additional data we need here
-    // Stuff like address and quote should already be saved in the quote
-  },
   async placeOrder ({ getters, dispatch }) {
     try {
-      /**
-       * @todo Validate stock for cart items before anything is happening
-       */
-
       await dispatch('payment/beforePlaceOrder', getters.getPaymentMethodCode, { root: true })
+      await orderHooksExecutors.beforePlaceOrder({ order: {}, task: { resultCode: 200 } })
 
-      let order = await dispatch('prepareOrderData')
-      order = await orderHooksExecutors.beforePlaceOrder(order)
+      const response = await OrderService.placeOrder()
 
-      const response = await OrderService.placeOrder(order)
+      if (response.resultCode && response.resultCode === 200 && !!response.result) {
+        await dispatch(
+          'payment/afterPlaceOrder',
+          {
+            code: getters.getPaymentMethodCode,
+            payload: response.result.paymentData || response.result
+          },
+          { root: true }
+        )
 
-      await dispatch('payment/afterPlaceOrder', getters.getPaymentMethodCode, { root: true })
-      orderHooksExecutors.afterPlaceOrder({ order, task: response })
+        orderHooksExecutors.afterPlaceOrder({
+          order: { id: response.result.orderId },
+          task: response
+        })
 
-      if (!response.resultCode || response.resultCode === 200) {
-        dispatch('setLastOrderId', response.result)
+        dispatch('setLastOrderId', response.result.orderId)
         await dispatch('reset', {})
       } else {
         Logger.error('Couldn\'t place order:', 'icmaa-checkout', response.result)()
