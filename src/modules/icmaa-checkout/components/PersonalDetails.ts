@@ -82,6 +82,8 @@ export default {
       }
 
       if (data.dob) {
+        // The date is comming in 'YYYY-MM-DD HH:mm:ss' from backend initially
+        // after login so we need to transform it into our short-date.
         if (isValid(data.dob, 'YYYY-MM-DD HH:mm:ss')) {
           data.dob = toDate(data.dob, this.dateFormat, 'YYYY-MM-DD HH:mm:ss')
         } else if (isValid(data.dob, 'YYYY-MM-DD')) {
