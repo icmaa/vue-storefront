@@ -1,6 +1,6 @@
 <template>
   <div
-    class="t-flex t-items-center t-flex-wrap t-cursor-pointer"
+    class="t-flex t-items-center t-cursor-pointer"
     :class="{ 't-opacity-50': !active }"
     @click="onClick"
   >
