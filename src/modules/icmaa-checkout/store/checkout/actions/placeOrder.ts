@@ -4,6 +4,7 @@ import CheckoutState from '../../../types/CheckoutState'
 import { OrderService } from '../../../data-resolver/OrderService'
 import { orderHooksExecutors } from '@vue-storefront/core/modules/order/hooks'
 import { Logger } from '@vue-storefront/core/lib/logger'
+import EventBus from '@vue-storefront/core/compatibility/plugins/event-bus'
 
 const actions: ActionTree<CheckoutState, RootState> = {
   async placeOrder ({ getters, dispatch }) {
@@ -25,6 +26,7 @@ const actions: ActionTree<CheckoutState, RootState> = {
 
         const order = { orderId: response.result.orderId, ...getters.getOrderData }
         orderHooksExecutors.afterPlaceOrder({ order, task: response })
+        EventBus.$emit('checkout-after-place-order', { order, task: response })
 
         dispatch('setLastOrderId', response.result.orderId)
         await dispatch('reset', {})

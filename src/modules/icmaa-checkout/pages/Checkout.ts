@@ -40,6 +40,7 @@ export default {
 
     this.$bus.$on('user-after-logout', this.afterUserLogout)
     this.$bus.$on('cart-after-cleared', this.afterCartCleared)
+    this.$bus.$on('checkout-after-place-order', this.afterPlaceOrder)
 
     this.$store.dispatch('cart/load', { forceClientState: true })
       .then(() => {
@@ -55,6 +56,7 @@ export default {
     this.$store.dispatch('checkout/setSections')
     this.$bus.$off('user-after-logout', this.afterUserLogout)
     this.$bus.$off('cart-after-cleared', this.afterCartCleared)
+    this.$bus.$off('checkout-after-place-order', this.afterPlaceOrder)
   },
   methods: {
     registerSections () {
@@ -118,6 +120,10 @@ export default {
 
       this.$store.dispatch('checkout/loading', false)
       this.$router.push(this.localizedHomeRoute)
+    },
+    afterPlaceOrder () {
+      // This prevents the "cart has been expired message" because it's emptied on logout
+      this.$bus.$off('cart-after-cleared', this.afterCartCleared)
     }
   },
   metaInfo () {

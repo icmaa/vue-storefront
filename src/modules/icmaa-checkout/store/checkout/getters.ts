@@ -39,7 +39,7 @@ const getters: GetterTree<CheckoutState, RootState> = {
     const totals = rootGetters['cart/getTotals']
     return totals.some(t => t.code === 'priority_handling')
   },
-  isUserInCheckout: state => false, // Compatibility
+  isUserInCheckout: () => false, // Compatibility
   hasAgreements: (state, getters, rootState, rootGetters): boolean => {
     const countryId = getters.getPaymentDetails.country_id || rootGetters['icmaaConfig/getCurrentStore'].storeCode
     return icmaa_checkout.agreements.countryAllowlist.includes(countryId.toLowerCase())
