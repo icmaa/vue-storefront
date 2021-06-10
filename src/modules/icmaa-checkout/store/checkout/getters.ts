@@ -7,6 +7,7 @@ const getters: GetterTree<CheckoutState, RootState> = {
   isLoading: state => state.loading,
   getSections: state => state.sections,
   getPersonalDetails: state => state.personalDetails || {},
+  getCreateAccount: (state, getters) => getters.getPersonalDetails.createAccount || false,
   getShippingDetails: state => state.shippingDetails || {},
   getPaymentDetails: state => state.paymentDetails || {},
   getPaymentMethod: (state) => state.paymentMethod || false,
@@ -42,7 +43,15 @@ const getters: GetterTree<CheckoutState, RootState> = {
   hasAgreements: (state, getters, rootState, rootGetters): boolean => {
     const countryId = getters.getPaymentDetails.country_id || rootGetters['icmaaConfig/getCurrentStore'].storeCode
     return icmaa_checkout.agreements.countryAllowlist.includes(countryId.toLowerCase())
-  }
+  },
+  getOrderData: (state, getters) => ({
+    createAccount: getters.getCreateAccount,
+    personalDetails: getters.getPersonalDetails,
+    shippingDetails: getters.getShippingDetails,
+    shippingMethod: getters.getShippingMethod,
+    paymentDetails: getters.getPaymentDetails,
+    paymentMethod: getters.getPaymentMethod
+  })
 }
 
 export default getters

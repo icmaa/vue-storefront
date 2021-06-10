@@ -62,13 +62,14 @@ export default {
     submit () {
       this.$v.$touch()
       if (!this.$v.$invalid) {
-        if (this.details.gender) {
-          const gender = config.icmaa.user.genderMap[this.details.gender]
-          this.details.gender = gender
+        const gender = this.details.gender
+        if (gender) {
+          this.details.gender = config.icmaa.user.genderMap[gender]
         }
 
-        if (this.details.dob && isValid(this.details.dob, this.dateFormat)) {
-          this.details.dob = toDate(this.details.dob, 'YYYY-MM-DD', this.dateFormat)
+        const dob = this.details.dob
+        if (dob && isValid(dob, this.dateFormat)) {
+          this.details.dob = toDate(dob, 'YYYY-MM-DD', this.dateFormat)
         }
 
         this.$store.dispatch('checkout/savePersonalDetails', this.details)

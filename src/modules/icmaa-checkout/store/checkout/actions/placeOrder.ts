@@ -23,19 +23,22 @@ const actions: ActionTree<CheckoutState, RootState> = {
           { root: true }
         )
 
-        orderHooksExecutors.afterPlaceOrder({
-          order: { id: response.result.orderId },
-          task: response
-        })
+        const order = { orderId: response.result.orderId, ...getters.getOrderData }
+        orderHooksExecutors.afterPlaceOrder({ order, task: response })
 
         dispatch('setLastOrderId', response.result.orderId)
         await dispatch('reset', {})
+
+        if (order.createAccount) {
+          const { email: username, password } = order.personalDetails
+          await dispatch('user/login', { username, password }, { root: true })
+        }
+
+        return order
       } else {
         Logger.error('Couldn\'t place order:', 'icmaa-checkout', response.result)()
         return false
       }
-
-      return response
     } catch (err) {
       Logger.error('Couldn\'t place order:', 'icmaa-checkout', err)()
       return false
