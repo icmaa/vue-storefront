@@ -1,4 +1,5 @@
 import { mapGetters } from 'vuex'
+import i18n from '@vue-storefront/i18n'
 import NewsletterMixin from 'theme/mixins/newsletterMixin'
 import { Logger } from '@vue-storefront/core/lib/logger'
 import { localizedRoute } from '@vue-storefront/core/lib/multistore'
@@ -34,7 +35,7 @@ export default {
       this.$v.$touch()
       if (this.$v.$invalid) return
 
-      this.$store.dispatch('ui/loader', true)
+      this.$store.dispatch('ui/loader', { active: true, message: i18n.t('Submitting order') })
 
       const order = await this.$store.dispatch('checkout/placeOrder')
         .finally(result => {

@@ -5,6 +5,7 @@ import { OrderService } from '../../../data-resolver/OrderService'
 import { orderHooksExecutors } from '@vue-storefront/core/modules/order/hooks'
 import { Logger } from '@vue-storefront/core/lib/logger'
 import EventBus from '@vue-storefront/core/compatibility/plugins/event-bus'
+import i18n from '@vue-storefront/i18n'
 
 const actions: ActionTree<CheckoutState, RootState> = {
   async placeOrder ({ getters, dispatch }) {
@@ -32,6 +33,11 @@ const actions: ActionTree<CheckoutState, RootState> = {
         await dispatch('reset', {})
 
         if (order.createAccount) {
+          dispatch(
+            'ui/loader',
+            { active: true, message: i18n.t('Login to your new account') }
+          )
+
           const { email: username, password } = order.personalDetails
           await dispatch('user/login', { username, password }, { root: true })
         }
