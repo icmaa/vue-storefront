@@ -175,9 +175,7 @@ const actions: ActionTree<UserState, RootState> = {
     let query = new SearchQuery()
     query.applyFilter({ key: 'id', value: { 'eq': order.items.map(oi => oi.product_id) } })
 
-    let { includeFields, excludeFields } = entities.productList
-    excludeFields = excludeFields.filter(f => f !== 'configurable_options')
-    includeFields.push('configurable_options.*')
+    const { includeFields, excludeFields } = entities.productList
 
     return dispatch('product/findProducts', { query, includeFields, excludeFields }, { root: true })
       .then(products => {
