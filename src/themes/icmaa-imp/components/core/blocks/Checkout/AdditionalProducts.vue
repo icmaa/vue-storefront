@@ -76,20 +76,23 @@ export default {
   },
   async mounted () {
     await this.$store.dispatch('icmaaCmsBlock/list', 'checkout-additional-products')
+    const skus = this.productsConfigArray.map(p => p.sku)
 
     const query = new SearchQuery()
+    addDefaultProductFilter(query, true)
+    query.applyFilter({ key: 'sku', value: { 'in': skus } })
 
     const options = { separateSelectedVariant: this.separateSelectedVariant }
     const { includeFields, excludeFields } = config.entities.productList
-    addDefaultProductFilter(query, true)
-    query.applyFilter({ key: 'sku', value: { 'in': this.productsConfigArray.map(p => p.sku) } })
-
-    const products = await this.$store.dispatch(
+    let products = await this.$store.dispatch(
       'product/findProducts',
       { query, includeFields, excludeFields, options }
     )
 
-    this.products = products.items || []
+    products = products.items || []
+    products = products.sort((a, b) => skus.indexOf(a.sku) - skus.indexOf(b.sku))
+
+    this.products = products
   }
 }
 </script>
