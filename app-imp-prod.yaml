@@ -15,7 +15,7 @@ automatic_scaling:
   max_num_instances: 10
   cool_down_period_sec: 60
   cpu_utilization:
-    target_utilization: 0.90
+    target_utilization: 0.85
 readiness_check:
   path: "/_ah/readiness_check"
 liveness_check:
