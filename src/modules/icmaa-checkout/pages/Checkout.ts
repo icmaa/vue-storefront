@@ -3,18 +3,14 @@ import VueOfflineMixin from 'vue-offline/mixin'
 import { mapGetters } from 'vuex'
 import { StorageManager } from '@vue-storefront/core/lib/storage-manager'
 import { Logger } from '@vue-storefront/core/lib/logger'
+import { IcmaaGoogleTagManagerExecutors } from 'icmaa-google-tag-manager/hooks'
 
 export default {
   mixins: [ VueOfflineMixin ],
   data () {
     return {
       stockCheckCompleted: false,
-      stockCheckOK: false,
-      order: {},
-      personalDetails: {},
-      shipping: {},
-      shippingMethod: {},
-      payment: {}
+      stockCheckOK: false
     }
   },
   computed: {
@@ -36,9 +32,15 @@ export default {
      * `The client-side rendered virtual DOM tree is not matching server-rendered content.`
      */
     this.registerSections()
+
+    IcmaaGoogleTagManagerExecutors.checkoutVisited()
   },
   async beforeMount () {
     await this.$store.dispatch('checkout/load')
+
+    this.$bus.$on('user-after-logout', this.afterUserLogout)
+    this.$bus.$on('cart-after-cleared', this.afterCartCleared)
+    this.$bus.$on('checkout-after-place-order', this.afterPlaceOrder)
 
     this.$store.dispatch('cart/load', { forceClientState: true })
       .then(() => {
@@ -52,6 +54,9 @@ export default {
   },
   beforeDestroy () {
     this.$store.dispatch('checkout/setSections')
+    this.$bus.$off('user-after-logout', this.afterUserLogout)
+    this.$bus.$off('cart-after-cleared', this.afterCartCleared)
+    this.$bus.$off('checkout-after-place-order', this.afterPlaceOrder)
   },
   methods: {
     registerSections () {
@@ -98,6 +103,27 @@ export default {
           }
         }
       })
+    },
+    afterCartCleared () {
+      this.$store.dispatch('notification/spawnNotification', {
+        type: 'error',
+        message: this.$t('The checkout couldn\'t be continued because you cart has been expired. Please try again.'),
+        action1: { label: this.$t('OK') }
+      })
+
+      this.$store.dispatch('checkout/loading', false)
+      this.$router.push(this.localizedHomeRoute)
+    },
+    afterUserLogout () {
+      // This prevents the "cart has been expired message" because it's emptied on logout
+      this.$bus.$off('cart-after-cleared', this.afterCartCleared)
+
+      this.$store.dispatch('checkout/loading', false)
+      this.$router.push(this.localizedHomeRoute)
+    },
+    afterPlaceOrder () {
+      // This prevents the "cart has been expired message" because it's emptied on logout
+      this.$bus.$off('cart-after-cleared', this.afterCartCleared)
     }
   },
   metaInfo () {

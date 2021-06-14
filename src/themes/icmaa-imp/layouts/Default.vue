@@ -31,7 +31,7 @@
         <div class="t-clearfix" />
       </main>
       <main-footer />
-      <sign-up />
+      <auth-modal />
       <notifications />
       <cookie-notification />
       <offline-badge />
@@ -49,7 +49,7 @@ import MainFooter from 'theme/components/core/blocks/Footer/Footer'
 import Overlay from 'theme/components/core/Overlay'
 import Loader from 'theme/components/core/Loader'
 import Notifications from 'theme/components/core/blocks/Notification/Notifications'
-import SignUp from 'theme/components/core/blocks/Auth/SignUp'
+import AuthModal from 'theme/components/core/blocks/Auth/Modal'
 import CookieNotification from 'theme/components/core/CookieNotification'
 import OfflineBadge from 'theme/components/core/OfflineBadge'
 import { isServer } from '@vue-storefront/core/helpers'
@@ -132,7 +132,7 @@ export default {
     Overlay,
     Loader,
     Notifications,
-    SignUp,
+    AuthModal,
     CookieNotification,
     OfflineBadge,
     AsyncSidebar,

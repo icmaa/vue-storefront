@@ -1,6 +1,7 @@
 <template>
   <div class="order-review">
     <div v-if="active">
+      <additional-products class="t-mb-6" />
       <p class="t-mb-4 t-text-sm">
         {{ $t('Please check if your order data is correct.') }}
       </p>
@@ -56,12 +57,14 @@ import { notFalse } from 'icmaa-config/helpers/validators'
 import { localizedRoutePath } from '@vue-storefront/core/lib/multistore'
 
 import Review from 'icmaa-checkout/components/Review'
+import AdditionalProducts from 'theme/components/core/blocks/Checkout/AdditionalProducts'
 import BaseCheckbox from 'theme/components/core/blocks/Form/BaseCheckbox'
 import ButtonComponent from 'theme/components/core/blocks/Button'
 
 export default {
   mixins: [ Review ],
   components: {
+    AdditionalProducts,
     BaseCheckbox,
     ButtonComponent
   },

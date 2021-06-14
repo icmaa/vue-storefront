@@ -5,6 +5,8 @@ import placeOrderActions from './actions/placeOrder'
 import checkoutActions from './actions/checkout'
 import * as types from './mutation-types'
 
+import { IcmaaGoogleTagManagerExecutors } from 'icmaa-google-tag-manager/hooks'
+
 const actions: ActionTree<CheckoutState, RootState> = {
   loading ({ commit }, status = true) {
     commit(types.CHECKOUT_SET_LOADING, status)
@@ -15,6 +17,8 @@ const actions: ActionTree<CheckoutState, RootState> = {
   activateSection ({ commit, dispatch }, section) {
     dispatch('loading', false)
     commit(types.CHECKOUT_ACTIVATE_SECTION, section)
+
+    IcmaaGoogleTagManagerExecutors.checkoutStep({ step: section })
   },
   ...checkoutActions,
   ...placeOrderActions

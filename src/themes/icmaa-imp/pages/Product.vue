@@ -115,6 +115,7 @@
     <async-sidebar
       :state-key="'addtocart'"
       :async-component="AddToCartSidebar"
+      :async-component-props="{ showAddToCartButton: true, closeOnSelect: false }"
     />
   </div>
 </template>

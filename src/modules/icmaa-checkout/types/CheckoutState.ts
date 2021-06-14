@@ -45,10 +45,11 @@ export interface ShippingDetails {
   [key: string]: any
 }
 
-export interface OrderResponse {
-  orderId: number,
-  orderIncrement: string,
-  paymentDetails: any
+export interface PriorityHandling {
+  title: string,
+  description: string,
+  fee: number,
+  enabled: boolean
 }
 
 export default interface CheckoutState {
@@ -57,10 +58,12 @@ export default interface CheckoutState {
     [key: string]: Section
   },
   personalDetails: PersonalDetails,
-  shippingDetails: ShippingDetails | {},
-  paymentDetails: PaymentDetails | {},
+  shippingDetails: ShippingDetails,
+  shippingMethod: any,
+  paymentDetails: PaymentDetails,
+  paymentMethod: any,
   paymentMethods: any[],
   shippingMethods: any[],
-  lastOrderId: number,
-  lastOrderResponse: OrderResponse | {}
+  priorityHandling: PriorityHandling,
+  lastOrderId: number
 }

@@ -28,8 +28,16 @@ export const IcmaaCheckoutModule: StorefrontModule = function ({ store, router, 
       setStorage('shipping-details', state.checkout.shippingDetails)
     }
 
+    if (type.endsWith(types.CHECKOUT_SAVE_SHIPPING_METHOD)) {
+      setStorage('shipping-method', state.checkout.shippingMethod)
+    }
+
     if (type.endsWith(types.CHECKOUT_SAVE_PAYMENT_DETAILS)) {
       setStorage('payment-details', state.checkout.paymentDetails)
+    }
+
+    if (type.endsWith(types.CHECKOUT_SAVE_PAYMENT_METHOD)) {
+      setStorage('payment-method', state.checkout.paymentMethod)
     }
 
     if (type.endsWith(types.CHECKOUT_SET_LAST_ORDER_ID)) {

@@ -6,12 +6,13 @@ import CheckoutState from '../../types/CheckoutState'
 const getters: GetterTree<CheckoutState, RootState> = {
   isLoading: state => state.loading,
   getSections: state => state.sections,
-  getPersonalDetails: state => state.personalDetails,
-  getShippingDetails: state => Object.keys(state.shippingDetails).length === 0 ? false : state.shippingDetails,
-  getPaymentDetails: state => Object.keys(state.paymentDetails).length === 0 ? false : state.paymentDetails,
-  getPaymentMethod: (state, getters) => getters.getPaymentDetails.paymentMethod || false,
+  getPersonalDetails: state => state.personalDetails || {},
+  getCreateAccount: (state, getters) => getters.getPersonalDetails.createAccount || false,
+  getShippingDetails: state => state.shippingDetails || {},
+  getPaymentDetails: state => state.paymentDetails || {},
+  getPaymentMethod: (state) => state.paymentMethod || false,
   getPaymentMethodCode: (state, getters) => getters.getPaymentMethod.code || false,
-  getShippingMethod: (state, getters) => getters.getShippingDetails.shippingMethod || false,
+  getShippingMethod: (state) => state.shippingMethod || false,
   getAddressDefaults: (state, getters, rootState, rootGetters) => {
     const storeView = rootGetters['icmaaConfig/getCurrentStoreConfig']
     return { country_id: storeView.tax.defaultCountry }
@@ -30,12 +31,28 @@ const getters: GetterTree<CheckoutState, RootState> = {
     ),
   getShippingMethods: state => state.shippingMethods,
   getDefaultShippingMethod: state => state.shippingMethods.find(item => item.default),
-  isUserInCheckout: state => false, // Compatibility
+  getPriorityHandling: state => state.priorityHandling || false,
+  isPriorityHandlingEnabled: (state, getters): boolean => getters.getPriorityHandling.enabled || false,
+  hasPriorityHandling: (state, getters, RootState, rootGetters): boolean => {
+    if (!getters.isPriorityHandlingEnabled) return false
+    if (getters.getShippingMethod.priorityHandling === true) return true
+    const totals = rootGetters['cart/getTotals']
+    return totals.some(t => t.code === 'priority_handling')
+  },
+  isUserInCheckout: () => false, // Compatibility
   hasAgreements: (state, getters, rootState, rootGetters): boolean => {
     const countryId = getters.getPaymentDetails.country_id || rootGetters['icmaaConfig/getCurrentStore'].storeCode
     return icmaa_checkout.agreements.countryAllowlist.includes(countryId.toLowerCase())
   },
-  getLastOrderResponse: state => state.lastOrderResponse
+  getLastOrderResponse: state => state.lastOrderResponse,
+  getOrderData: (state, getters) => ({
+    createAccount: getters.getCreateAccount,
+    personalDetails: getters.getPersonalDetails,
+    shippingDetails: getters.getShippingDetails,
+    shippingMethod: getters.getShippingMethod,
+    paymentDetails: getters.getPaymentDetails,
+    paymentMethod: getters.getPaymentMethod
+  })
 }
 
 export default getters

@@ -1,5 +1,7 @@
 import { mapGetters } from 'vuex'
+import i18n from '@vue-storefront/i18n'
 import NewsletterMixin from 'theme/mixins/newsletterMixin'
+import { Logger } from '@vue-storefront/core/lib/logger'
 import { localizedRoute } from '@vue-storefront/core/lib/multistore'
 
 export default {
@@ -33,20 +35,25 @@ export default {
       this.$v.$touch()
       if (this.$v.$invalid) return
 
-      this.$store.dispatch('notification/spawnNotification', {
-        type: 'success',
-        message: 'This is work-in-progress 🤙',
-        action1: { label: this.$t('OK') }
-      })
+      this.$store.dispatch('ui/loader', { active: true, message: i18n.t('Submitting order') })
 
-      this.$store.dispatch('ui/loader', true)
+      const order = await this.$store.dispatch('checkout/placeOrder')
+        .finally(result => {
+          this.$store.dispatch('ui/loader', false)
+          return result
+        })
 
-      const result = await this.$store.dispatch('checkout/placeOrder')
-        .finally(() => this.$store.dispatch('ui/loader', false))
-
-      if (result) {
+      if (order) {
+        this.subscribeNewsletter(order)
         this.$router.push(localizedRoute('checkout-success'))
       }
+    },
+    subscribeNewsletter (order) {
+      if (this.newsletter !== true || !order.personalDetails.email) return
+      return this.$store.dispatch('newsletter/subscribe', order.personalDetails.email)
+        .catch(err => {
+          Logger.error('Error during newsletter-subscription after order-submit:', 'checkout', err)()
+        })
     }
   }
 }

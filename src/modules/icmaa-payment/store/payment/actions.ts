@@ -26,9 +26,9 @@ const actions: ActionTree<PaymentState, RootState> = {
       Logger.error('Couldn\'t register payment vuex store:', 'icmaa-payment', err)()
     }
   },
-  dispatchPaymentAction: async ({ getters, dispatch }, { code, action }: { code: string, action: string }): Promise<boolean|any> => {
+  dispatchPaymentAction: async ({ getters, dispatch }, { code, action, payload = false }: { code: string, action: string, payload: any }): Promise<boolean|any> => {
     if (!getters.isMethod(code) || !getters.isRegistered(code)) return true
-    return dispatch(`${code}/${action}`, undefined, { root: true })
+    return dispatch(`${code}/${action}`, payload, { root: true })
       .then(result => (result !== undefined) ? result : true)
   },
   saveMethod: async ({ dispatch }, code: string): Promise<boolean|any> => {
@@ -46,8 +46,8 @@ const actions: ActionTree<PaymentState, RootState> = {
         return false
       })
   },
-  afterPlaceOrder: async ({ dispatch }, code: string): Promise<boolean|any> => {
-    return dispatch('dispatchPaymentAction', { code, action: 'afterPlaceOrder' })
+  afterPlaceOrder: async ({ dispatch }, { code, payload }: { code: string, payload: any }): Promise<boolean|any> => {
+    return dispatch('dispatchPaymentAction', { code, action: 'afterPlaceOrder', payload })
       .catch(err => {
         Logger.error('Error during "beforePlaceOrder" in store:', 'icmaa-payment', err)()
         return false

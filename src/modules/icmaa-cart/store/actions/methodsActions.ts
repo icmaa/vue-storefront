@@ -8,8 +8,6 @@ import { CartService as IcmaaCartService } from 'icmaa-cart/data-resolver/CartSe
 import { preparePaymentMethodsToSync } from '@vue-storefront/core/modules/cart/helpers'
 import { Logger } from '@vue-storefront/core/lib/logger'
 
-import omit from 'lodash-es/omit'
-
 const actions: ActionTree<CartState, RootState> = {
   /**
    * Clone of originial `cart/syncShippingMethods`
@@ -19,28 +17,26 @@ const actions: ActionTree<CartState, RootState> = {
    * * Use our custom checkout data-resolver service to also attach the personal-details to the address.
    *   This way we can make this request more versataile and remove the validation in the original endpoint
    *   which might cause an error if we don't use their data-structure.
+   * * Add aditional data to getShippingMethods request
    */
   async syncShippingMethods ({ getters, rootGetters, dispatch }, { forceServerSync = false }) {
     if (getters.canUpdateMethods && (getters.isTotalsSyncRequired || forceServerSync)) {
       const personalDetails = rootGetters['checkout/getPersonalDetails']
       const addressDefaults = rootGetters['checkout/getAddressDefaults']
-      const shippingDetails = Object.assign(
-        {},
-        addressDefaults,
-        omit(rootGetters['checkout/getShippingDetails'], ['shippingMethod'])
-      )
+      const shippingDetails = Object.assign({}, addressDefaults, rootGetters['checkout/getShippingDetails'])
 
       Logger.debug('Refreshing shipping methods', 'cart', shippingDetails)()
       const { result } = await IcmaaCartService.getShippingMethods({ personalDetails, shippingDetails })
         .then(resp => {
-          if (resp.resultCode === 500 && resp.result.error) {
-            throw new Error(resp.result.message)
+          if (resp.resultCode === 500) {
+            throw new Error(resp.result.message || resp.result)
           }
           return resp
         })
 
       if (result !== false) {
-        await dispatch('updateShippingMethods', { shippingMethods: result })
+        await dispatch('updateShippingMethods', { shippingMethods: result.methods || result })
+        await dispatch('checkout/updateAdditionalShippingInformation', result.additional || false, { root: true })
         return true
       }
 

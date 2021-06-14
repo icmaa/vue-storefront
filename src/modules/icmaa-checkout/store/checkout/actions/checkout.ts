@@ -15,31 +15,49 @@ const actions: ActionTree<CheckoutState, RootState> = {
   saveShippingDetails ({ commit }, shippingDetails) {
     commit(types.CHECKOUT_SAVE_SHIPPING_DETAILS, shippingDetails)
   },
+  saveShippingMethod ({ commit }, method) {
+    commit(types.CHECKOUT_SAVE_SHIPPING_METHOD, method)
+  },
   savePaymentDetails ({ commit }, paymentDetails) {
     commit(types.CHECKOUT_SAVE_PAYMENT_DETAILS, paymentDetails)
+  },
+  savePaymentMethod ({ commit }, method) {
+    commit(types.CHECKOUT_SAVE_PAYMENT_METHOD, method)
   },
   async load ({ commit }) {
     const checkoutStorage = StorageManager.get('checkout')
     const [
       personalDetails,
       shippingDetails,
-      paymentDetails
+      shippingMethod,
+      paymentDetails,
+      paymentMethod
     ] = await Promise.all([
       checkoutStorage.getItem('personal-details'),
       checkoutStorage.getItem('shipping-details'),
-      checkoutStorage.getItem('payment-details')
+      checkoutStorage.getItem('shipping-method'),
+      checkoutStorage.getItem('payment-details'),
+      checkoutStorage.getItem('payment-method')
     ])
 
     if (personalDetails) {
-      commit(types.CHECKOUT_LOAD_PERSONAL_DETAILS, personalDetails)
+      commit(types.CHECKOUT_SAVE_PERSONAL_DETAILS, personalDetails)
     }
 
     if (shippingDetails) {
-      commit(types.CHECKOUT_LOAD_SHIPPING_DETAILS, shippingDetails)
+      commit(types.CHECKOUT_SAVE_SHIPPING_DETAILS, shippingDetails)
+    }
+
+    if (shippingMethod) {
+      commit(types.CHECKOUT_SAVE_SHIPPING_METHOD, shippingMethod)
     }
 
     if (paymentDetails) {
-      commit(types.CHECKOUT_LOAD_PAYMENT_DETAILS, paymentDetails)
+      commit(types.CHECKOUT_SAVE_PAYMENT_DETAILS, paymentDetails)
+    }
+
+    if (paymentMethod) {
+      commit(types.CHECKOUT_SAVE_PAYMENT_METHOD, paymentMethod)
     }
   },
   addPaymentMethod ({ commit }, paymentMethod) {
@@ -54,6 +72,13 @@ const actions: ActionTree<CheckoutState, RootState> = {
   replaceShippingMethods ({ commit }, shippingMethods) {
     commit(types.CHECKOUT_SET_SHIPPING_METHODS, shippingMethods)
   },
+  updateAdditionalShippingInformation ({ commit }, additional) {
+    if (additional && Object.keys(additional).length > 0) {
+      if (additional['priorityHandling']) {
+        commit(types.CHECKOUT_SET_PRIORITY_HANDLING, additional['priorityHandling'])
+      }
+    }
+  },
   setLastOrderId ({ commit }, id) {
     commit(types.CHECKOUT_SET_LAST_ORDER_ID, id)
   },
@@ -65,12 +90,18 @@ const actions: ActionTree<CheckoutState, RootState> = {
       commit(types.CHECKOUT_DROP_PASSWORD)
     }
   },
-  async reset ({ dispatch }) {
+  async reset ({ dispatch }, { clearCart = true }: { clearCart?: boolean }) {
     await dispatch('updateOrderTimestamp')
-    await dispatch('cart/clear', { sync: false }, { root: true })
+
+    if (clearCart) {
+      await dispatch('cart/clear', { sync: false }, { root: true })
+    }
+
     dispatch('savePersonalDetails', {})
-    dispatch('savePaymentDetails', {})
     dispatch('saveShippingDetails', {})
+    dispatch('saveShippingMethod', {})
+    dispatch('savePaymentDetails', {})
+    dispatch('savePaymentMethod', {})
     dispatch('dropPassword')
   }
 }

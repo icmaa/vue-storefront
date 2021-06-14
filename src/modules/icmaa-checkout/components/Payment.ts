@@ -47,8 +47,8 @@ export default {
 
         this.$bus.$emit('checkout-payment-method-changed', this.selectedMethod)
         this.$store.dispatch(
-          'checkout/savePaymentDetails',
-          Object.assign({}, this.paymentDetails, { paymentMethod: this.selectedMethod })
+          'checkout/savePaymentMethod',
+          this.selectedMethod
         )
 
         const paymentHandler = await this.$store.dispatch('payment/saveMethod', this.selectedMethod.code)
@@ -57,7 +57,14 @@ export default {
           return
         }
 
-        await this.$store.dispatch('cart/syncTotals', { forceServerSync: true })
+        const sync = await this.$store.dispatch('cart/syncTotals', { forceServerSync: true })
+          .then(() => true)
+          .catch(() => {
+            this.$store.dispatch('checkout/loading', false)
+            return false
+          })
+
+        if (!sync) return
 
         this.$store.dispatch('checkout/activateSection', 'review')
       }

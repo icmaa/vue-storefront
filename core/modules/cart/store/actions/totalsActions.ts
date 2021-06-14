@@ -22,7 +22,7 @@ const totalsActions = {
 
     if (resultCode === 200) {
       const totals = result.totals || result
-      Logger.error('Overriding server totals. ', 'cart', totals)()
+      Logger.log('Overriding server totals. ', 'cart', totals)()
       const itemsAfterTotal = prepareShippingInfoForUpdateTotals(totals.items)
 
       for (let key of Object.keys(itemsAfterTotal)) {

@@ -14,14 +14,16 @@ export default {
   },
   data () {
     return {
-      selected: false
+      selected: false,
+      priorityHandling: false
     }
   },
   computed: {
     ...mapGetters({
       isLoading: 'checkout/isLoading',
       getShippingMethods: 'checkout/getShippingMethods',
-      shippingDetails: 'checkout/getShippingDetails'
+      shippingDetails: 'checkout/getShippingDetails',
+      isPriorityHandlingEnabled: 'checkout/isPriorityHandlingEnabled'
     }),
     hasShippingMethod () {
       return this.getShippingMethods.length > 0
@@ -52,6 +54,11 @@ export default {
     if (this.shippingMethods.length > 0) {
       const firstMethod = this.shippingMethods.slice(0, 1).pop()
       this.selected = firstMethod.code
+
+      if (this.isPriorityHandlingEnabled) {
+        return
+      }
+
       if (this.shippingMethods.length === 1) {
         this.submit()
       }
@@ -63,9 +70,14 @@ export default {
       if (!this.$v.$invalid && this.selectedMethod) {
         this.$store.dispatch('checkout/loading')
 
+        let shippingMethod = this.rawSelectedMethod
+        if (this.isPriorityHandlingEnabled && this.priorityHandling) {
+          shippingMethod = Object.assign({}, shippingMethod, { priorityHandling: true })
+        }
+
         this.$store.dispatch(
-          'checkout/saveShippingDetails',
-          Object.assign({}, this.shippingDetails, { shippingMethod: this.rawSelectedMethod })
+          'checkout/saveShippingMethod',
+          shippingMethod
         )
 
         await this.$store.dispatch('cart/syncTotals', { forceServerSync: true })

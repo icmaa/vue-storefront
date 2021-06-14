@@ -15,7 +15,7 @@ const Register = () => import(/* webpackChunkName: "vsf-register" */ 'theme/comp
 const ForgotPass = () => import(/* webpackChunkName: "vsf-forgotpass" */ 'theme/components/core/blocks/Auth/ForgotPass')
 
 export default {
-  name: 'SignUp',
+  name: 'AuthModal',
   computed: {
     ...mapState({
       activeElem: state => state.ui.authElem
@@ -27,7 +27,7 @@ export default {
         return 'Reset password'
       }
 
-      return 'Log in'
+      return 'Login'
     },
     width () {
       if (this.activeElem === 'register') {

@@ -4,7 +4,7 @@
     <loader />
     <div id="viewport" class="t-w-full">
       <slot />
-      <sign-up />
+      <auth-modal />
       <notifications />
       <cookie-notification />
     </div>
@@ -17,7 +17,7 @@ import { mapState, mapGetters } from 'vuex'
 import Overlay from 'theme/components/core/Overlay'
 import Loader from 'theme/components/core/Loader'
 import Notifications from 'theme/components/core/blocks/Notification/Notifications'
-import SignUp from 'theme/components/core/blocks/Auth/SignUp'
+import AuthModal from 'theme/components/core/blocks/Auth/Modal'
 import CookieNotification from 'theme/components/core/CookieNotification'
 
 export default {
@@ -25,7 +25,7 @@ export default {
     Overlay,
     Loader,
     Notifications,
-    SignUp,
+    AuthModal,
     CookieNotification
   },
   computed: {
