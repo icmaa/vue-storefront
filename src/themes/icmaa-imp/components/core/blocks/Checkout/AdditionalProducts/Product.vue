@@ -47,10 +47,11 @@ export default {
       cartItems: 'cart/getCartItems'
     }),
     active () {
-      return !!this.item || false
+      return !!this.item
     },
     item () {
-      return this.cartItems.find(i => productsEquals(i, this.product))
+      return this.cartItems
+        .find(i => productsEquals(i, this.product.selectedVariant || this.product)) || false
     }
   },
   methods: {

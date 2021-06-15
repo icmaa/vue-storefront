@@ -49,7 +49,21 @@ export default {
     async addToCart (product) {
       try {
         this.$store.dispatch('ui/loader', true)
-        await this.$store.dispatch('cart/addItem', { productToAdd: product })
+
+        /**
+         * To add a product to cart, its important to assign the `selectedVariant` to the `productToAdd`
+         * parameter. To have a ready configured product you'll need to fetch them using the `catalog/findProducts`
+         * action with the `separateSelectedVariant`, `assignProductConfiguration` & `setConfigurableProductOptions`
+         * parameters set to true. You could also set use `separateSelectedVariant` to false and use the returned
+         * product but this might lead into wrong data displayed as the product-data is the data for the child.
+         * `setConfigurableProductOptions` is defining the configurable options if it has some and
+         * `assignProductConfiguration` will assign this configs to the `configuration` property of the product DTO.
+         * You can find more info and logic inside the `configureProductAsync` method.
+         */
+        const { selectedVariant } = product
+        const productToAdd = Object.assign({}, product, selectedVariant)
+
+        await this.$store.dispatch('cart/addItem', { productToAdd })
       } catch (err) {
         this.$store.commit(
           types.SN_CART + '/' + types.CART_ADDING_ITEM,
@@ -82,8 +96,14 @@ export default {
     addDefaultProductFilter(query, true)
     query.applyFilter({ key: 'sku', value: { 'in': skus } })
 
-    const options = { separateSelectedVariant: this.separateSelectedVariant }
     const { includeFields, excludeFields } = config.entities.productList
+    const options = {
+      separateSelectedVariant: this.separateSelectedVariant,
+      assignProductConfiguration: true,
+      setConfigurableProductOptions: true,
+      filterUnavailableVariants: true
+    }
+
     let products = await this.$store.dispatch(
       'product/findProducts',
       { query, includeFields, excludeFields, options }
