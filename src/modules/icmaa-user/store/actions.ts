@@ -4,13 +4,13 @@ import UserState from '../types/UserState'
 import { UserService } from '@vue-storefront/core/data-resolver'
 import { UserService as IcmaaUserService } from '../data-resolver/UserService'
 import * as userTypes from '@vue-storefront/core/modules/user/store/mutation-types'
+import * as types from './mutation-types'
 import { StorageManager } from '@vue-storefront/core/lib/storage-manager'
 import { SearchQuery } from 'storefront-query-builder'
 import { isServer } from '@vue-storefront/core/helpers'
 import { Logger } from '@vue-storefront/core/lib/logger'
 import Task from '@vue-storefront/core/lib/sync/types/Task'
 import EventBus from '@vue-storefront/core/compatibility/plugins/event-bus'
-import asyncForEach from 'icmaa-config/helpers/asyncForEach'
 import { entities } from 'config'
 
 import { notifications } from 'icmaa-cart/helpers'
@@ -123,7 +123,7 @@ const actions: ActionTree<UserState, RootState> = {
         return resp
       })
   },
-  async refreshOrdersHistory ({ commit, dispatch }, { resolvedFromCache, loadProducts = true, pageSize = 5, currentPage = 1 }) {
+  async refreshOrdersHistory ({ commit, dispatch }, { resolvedFromCache, loadProducts = false, pageSize = 5, currentPage = 1 }) {
     const resp = await UserService.getOrdersHistory(pageSize, currentPage)
 
     if (resp.code === 200) {
@@ -194,6 +194,11 @@ const actions: ActionTree<UserState, RootState> = {
 
         return history
       })
+  },
+  async loadProductsForOrder ({ dispatch, commit }, { history }) {
+    history = history.filter(o => !o.products)
+    const updatedHistory = await dispatch('loadOrderHistoryProducts', { history })
+    commit(types.USER_ORDERS_HISTORY_UPD, updatedHistory)
   }
 }
 

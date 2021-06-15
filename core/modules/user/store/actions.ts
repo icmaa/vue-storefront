@@ -274,7 +274,7 @@ const actions: ActionTree<UserState, RootState> = {
   /**
    * Load user's orders history
    */
-  async getOrdersHistory ({ dispatch, getters }, { refresh = true, useCache = true, pageSize = 20, currentPage = 1 }) {
+  async getOrdersHistory ({ dispatch, getters }, { refresh = true, useCache = true, pageSize = 5, currentPage = 1 }) {
     if (!getters.getToken) {
       Logger.debug('No User token, user unauthorized', 'user')()
       return Promise.resolve(null)

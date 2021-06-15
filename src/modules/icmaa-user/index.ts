@@ -54,9 +54,17 @@ export const IcmaaExtendedUserModule: StorefrontModule = async function ({ store
   }
 
   store.subscribe((mutation, state) => {
-    if (mutation.type.endsWith(types.USER_ADD_SESSION_DATA) || mutation.type.endsWith(types.USER_RMV_SESSION_DATA)) {
-      StorageManager.get('user').setItem('session-data', state.user.sessionData)
+    const type = mutation.type
+    if (type.endsWith(types.USER_ADD_SESSION_DATA) || type.endsWith(types.USER_RMV_SESSION_DATA)) {
+      StorageManager.get('user')
+        .setItem('session-data', state.user.sessionData)
         .catch((reason) => { console.error(reason) })
+    } else if (type.endsWith(types.USER_ORDERS_HISTORY_UPD)) {
+      StorageManager.get('user')
+        .setItem('orders-history', state.user.orders_history)
+        .catch((reason) => {
+          Logger.error(reason)() // it doesn't work on SSR
+        })
     }
   })
 

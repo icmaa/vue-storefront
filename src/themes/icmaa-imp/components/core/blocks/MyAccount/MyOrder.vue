@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="t-p-4 t-bg-white t-mb-4" v-if="order && typeof order !== 'undefined'">
+    <div class="t-p-4 t-bg-white t-mb-4" v-if="order && (typeof order !== 'undefined')">
       <headline>
         {{ $t('Order') }}
         <span v-if="order" class="t-text-sm t-text-base-light t-flex-grow lg:t-flex-fix t-ml-4"># {{ order.increment_id }}</span>
@@ -22,7 +22,7 @@
           <router-link :to="localizedRoute('/service')" class="t-w-full t-mb-2 lg:t-w-auto lg:t-mb-0 lg:t-mr-4 t-font-light t-text-normal">
             {{ $t('Are there any questions left?') }}
           </router-link>
-          <button-component type="ghost" @click="$router.push(localizedRoute(`/my-account/order-review/${order.id}`))">
+          <button-component type="ghost" @click="goToReview">
             {{ $t('Review order') }}
           </button-component>
         </div>
@@ -152,19 +152,19 @@
 </template>
 
 <script>
-import Vue from 'vue'
 import { mapGetters } from 'vuex'
 import { currentStoreView } from '@vue-storefront/core/lib/multistore'
 import { formatProductLink } from 'icmaa-url/helpers'
 import i18n from '@vue-storefront/i18n'
 import Headline from 'theme/components/core/blocks/MyAccount/Headline'
-import MyOrder from '@vue-storefront/core/compatibility/components/blocks/MyAccount/MyOrder'
+import { UserSingleOrder } from '@vue-storefront/core/modules/order/components/UserSingleOrder'
 import TrackingLink from 'icmaa-tracking/components/TrackingLink'
 import StatusIcon from 'theme/components/core/blocks/MyAccount/MyOrders/StatusIcon'
 import ButtonComponent from 'theme/components/core/blocks/Button'
 
 export default {
-  mixins: [MyOrder],
+  name: 'MyOrder',
+  mixins: [ UserSingleOrder ],
   components: {
     Headline,
     StatusIcon,
@@ -237,10 +237,19 @@ export default {
       })
 
       return options
+    },
+    goToReview () {
+      this.$router.push(
+        this.localizedRoute(`/my-account/order-review/${this.order.id}`)
+      )
     }
   },
   async mounted () {
-    await this.$store.dispatch('attribute/list', { filterValues: this.attributeCodes })
+    if (!this.order.products) {
+      this.$store.dispatch('user/loadProductsForOrder', { history: [ this.order ] })
+    }
+
+    this.$store.dispatch('attribute/list', { filterValues: this.attributeCodes })
   }
 }
 </script>
