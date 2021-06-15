@@ -123,14 +123,14 @@ const actions: ActionTree<UserState, RootState> = {
         return resp
       })
   },
-  async refreshOrdersHistory ({ commit, dispatch }, { resolvedFromCache, pageSize = 20, currentPage = 1 }) {
+  async refreshOrdersHistory ({ commit, dispatch }, { resolvedFromCache, loadProducts = true, pageSize = 5, currentPage = 1 }) {
     const resp = await UserService.getOrdersHistory(pageSize, currentPage)
 
     if (resp.code === 200) {
       /** Load orders products to order state item and localstorage */
-      await asyncForEach(resp.result.items, async (order, index) => {
-        resp.result.items[index] = await dispatch('loadOrderProducts', { order, history: resp.result.items })
-      })
+      if (loadProducts) {
+        resp.result.items = await dispatch('loadOrderHistoryProducts', { history: resp.result.items })
+      }
 
       commit(userTypes.USER_ORDERS_HISTORY_LOADED, resp.result) // this also stores the current user to localForage
       EventBus.$emit('user-after-loaded-orders', resp.result)
@@ -146,7 +146,7 @@ const actions: ActionTree<UserState, RootState> = {
     const resp = await IcmaaUserService.getLastOrder(token)
 
     if (resp.code === 200) {
-      const order = await dispatch('loadOrderProducts', { order: resp.result, history: [ resp.result ] })
+      const order = await dispatch('loadOrderHistoryProducts', { history: [ resp.result ] })
 
       commit(userTypes.USER_ORDERS_HISTORY_LOADED, { items: [ order ] })
       EventBus.$emit('user-after-loaded-orders', resp.result)
@@ -166,21 +166,33 @@ const actions: ActionTree<UserState, RootState> = {
       Promise.resolve(null)
     }
   },
-  async loadOrderProducts ({ dispatch }, { order, history }) {
-    const index = history.findIndex(o => o.id === order.id)
-    if (history[index] && history[index].products) {
-      return history[index]
-    }
+  async loadOrderHistoryProducts ({ dispatch }, { history }) {
+    const missingOrders = history.filter(order => order.items && order.items.length > 0)
+    const productIds = missingOrders
+      .map(o => o.items.map(oi => oi.product_id))
+      .reduce((a, b) => a.concat(b), [])
 
     let query = new SearchQuery()
-    query.applyFilter({ key: 'id', value: { 'eq': order.items.map(oi => oi.product_id) } })
+    query.applyFilter({ key: 'id', value: { 'eq': productIds } })
 
     const { includeFields, excludeFields } = entities.productList
+    const options = {
+      separateSelectedVariant: true,
+      fallbackToDefaultWhenNoAvailable: false,
+      setConfigurableProductOptions: false
+    }
 
-    return dispatch('product/findProducts', { query, includeFields, excludeFields }, { root: true })
-      .then(products => {
-        history[index].products = products.items
-        return history[index]
+    return dispatch('product/findProducts', { query, options, includeFields, excludeFields }, { root: true })
+      .then(result => {
+        if (!result.items || result.items.length === 0) return history
+
+        const products = result.items
+        history.map(order => {
+          order.products = products.filter(p => order.items.map(i => i.product_id).includes(p.id))
+          return order
+        })
+
+        return history
       })
   }
 }
