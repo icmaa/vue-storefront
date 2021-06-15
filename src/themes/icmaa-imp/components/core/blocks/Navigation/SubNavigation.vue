@@ -20,7 +20,7 @@
     </div>
     <div
       v-if="logos"
-      class="t-flex t-flex-wrap"
+      class="t-flex t-flex-wrap t-pb-24"
       @click="closeMenu"
     >
       <logo-line

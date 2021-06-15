@@ -1,5 +1,5 @@
 <template>
-  <sidebar class="t-min-h-screen">
+  <sidebar class="t-min-h-screen t-pb-24">
     <template v-slot:top>
       <top-button icon="person" :text="loginButtonText" :tab-index="2" class="t-text-base-light" @click.native="login" />
     </template>
