@@ -18,7 +18,7 @@
           <p class="t-font-bold" v-text="content.voting_price" /><span v-text="category.price_voting" />
           <p class="t-font-bold" v-text="content.jury_price" /><span v-text="category.price_jury" />
           <universal-link :to="category.link" class="t-w-1/2 t-p-2 t-block t-text-center t-bg-base-dark t-container t-text-white t-px-4 t-my-4">
-              {{ content.button_text }}
+            {{ content.button_text }}
           </universal-link>
         </div>
       </div>
@@ -33,7 +33,6 @@
 <script>
 import Page from 'icmaa-cms/mixins/Page'
 import PictureComponent from 'theme/components/core/blocks/Picture'
-import ButtonComponent from 'theme/components/core/blocks/Button'
 import UniversalLink from 'theme/components/core/blocks/Link'
 
 export default {
@@ -41,7 +40,6 @@ export default {
   mixins: [ Page ],
   components: {
     PictureComponent,
-    ButtonComponent,
     UniversalLink
   },
   data () {
