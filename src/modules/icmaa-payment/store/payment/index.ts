@@ -12,7 +12,8 @@ export const PaymentStore: Module<PaymentState, RootState> = {
     methodsFactories: {
       'bankpayment': () => import(/* webpackChunkName: "icmaa-payment-method-bankpayment" */ '../methods/bank-payment'),
       'cashondelivery': () => import(/* webpackChunkName: "icmaa-payment-method-cashondelivery" */ '../methods/cash-on-delivery'),
-      'checkoutcom_card': () => import(/* webpackChunkName: "icmaa-payment-method-checkoutcom-card" */ 'icmaa-checkout-com/store/methods/card')
+      'checkoutcom_card': () => import(/* webpackChunkName: "icmaa-payment-method-checkoutcom-card" */ 'icmaa-checkout-com/store/methods/card'),
+      'checkoutcom_apm': () => import(/* webpackChunkName: "icmaa-payment-method-checkoutcom-apm" */ 'icmaa-checkout-com/store/methods/apm')
     }
   },
   actions,

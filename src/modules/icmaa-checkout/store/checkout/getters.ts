@@ -44,7 +44,6 @@ const getters: GetterTree<CheckoutState, RootState> = {
     const countryId = getters.getPaymentDetails.country_id || rootGetters['icmaaConfig/getCurrentStore'].storeCode
     return icmaa_checkout.agreements.countryAllowlist.includes(countryId.toLowerCase())
   },
-  getLastOrderResponse: state => state.lastOrderResponse,
   getOrderData: (state, getters) => ({
     createAccount: getters.getCreateAccount,
     personalDetails: getters.getPersonalDetails,

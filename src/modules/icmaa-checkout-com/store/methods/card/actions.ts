@@ -7,11 +7,14 @@ import i18n from '@vue-storefront/core/i18n'
 import get from 'lodash-es/get'
 
 const actions: ActionTree<CardState, RootState> = {
+  loadApmList () {
+
+  },
   init () {
   },
   async save ({ dispatch, rootGetters, getters }) {
-    const paymentDetails = rootGetters['checkout/getPaymentDetails'] || { paymentMethod: false }
-    const paymentMethod = paymentDetails.paymentMethod
+    const orderData = rootGetters['checkout/getOrderData'] || { paymentMethod: false }
+    const paymentMethod = orderData.paymentMethod
 
     paymentMethod.additional_data = {
       cardToken: getters.getToken
@@ -25,13 +28,12 @@ const actions: ActionTree<CardState, RootState> = {
   },
   beforePlaceOrder () {
   },
-  async afterPlaceOrder ({ dispatch, rootGetters }) {
-    const lastOrderResponse = rootGetters['checkout/getLastOrderResponse']
-    if (!lastOrderResponse) {
-      return console.error('Could not find last order')
+  async afterPlaceOrder ({ dispatch, rootGetters }, response) {
+    if (!response || (!response._links && !response.paymentData)) {
+      return console.error('Could not find last order payment data')
     }
 
-    const redirectUrl = get(lastOrderResponse, 'paymentData._links.redirect.href')
+    const redirectUrl = get(response, '_links.redirect.href') || get(response, 'paymentData._links.redirect.href')
 
     if (!redirectUrl) {
       return dispatch('notification/spawnNotification', {

@@ -39,7 +39,6 @@ import { IcmaaTrackingModule } from 'icmaa-tracking'
 import { IcmaaLooksModule } from 'icmaa-looks'
 import { IcmaaGoogleTagManagerModule } from 'icmaa-google-tag-manager'
 import { IcmaaLogsModule } from 'icmaa-logs'
-import { IcmaaCheckoutComPaymentModule } from 'icmaa-checkout-com'
 
 // TODO:distributed across proper pages BEFORE 1.11
 export function registerClientModules () {
@@ -66,7 +65,6 @@ export function registerClientModules () {
   registerModule(IcmaaExtendedNewsletterModule)
   registerModule(IcmaaExtendedWishlistModule)
   registerModule(IcmaaExtendedReviewRoutes)
-  registerModule(IcmaaCheckoutComPaymentModule)
   registerModule(IcmaaCategoryModule)
   registerModule(IcmaaCategoryExtrasModule)
   registerModule(IcmaaCdnModule)

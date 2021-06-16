@@ -16,8 +16,6 @@ const actions: ActionTree<CheckoutState, RootState> = {
       const response = await OrderService.placeOrder()
 
       if (response.resultCode && response.resultCode === 200 && !!response.result) {
-        dispatch('setLastOrderResponse', response.result)
-
         await dispatch(
           'payment/afterPlaceOrder',
           {

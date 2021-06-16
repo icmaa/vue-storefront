@@ -3,6 +3,8 @@ import { Module } from 'vuex'
 import actions from './actions'
 import { CardState } from 'icmaa-checkout-com/types'
 
+export const CODE = 'checkoutcom_card'
+
 const CheckoutComCardStore: Module<CardState, any> = {
   namespaced: true,
   state: {

@@ -55,9 +55,6 @@ const mutations: MutationTree<CheckoutState> = {
   },
   [types.CHECKOUT_SET_LAST_ORDER_ID] (state, id) {
     state.lastOrderId = id
-  },
-  [types.CHECKOUT_SET_LAST_ORDER_RESPONSE] (state, response) {
-    state.lastOrderResponse = response
   }
 }
 
