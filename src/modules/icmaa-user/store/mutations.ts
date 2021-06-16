@@ -15,9 +15,9 @@ const mutations: MutationTree<UserState> = {
     Vue.delete(state.sessionData, key)
   },
   [types.USER_ORDERS_HISTORY_UPD] (state, history = []) {
-    const [ updItems, newItems ] = partition(history, o => state.orders_history.items.find(ho => ho.id === o.id))
+    const [ updItems, newItems ] = partition(history, o => state.orders_history.find(ho => ho.id === o.id))
 
-    state.orders_history.items = state.orders_history.items.map(order => {
+    state.orders_history = state.orders_history.map(order => {
       const updatedOrder = updItems.find(o => o.id === order.id)
       if (updatedOrder) return updatedOrder
       return order

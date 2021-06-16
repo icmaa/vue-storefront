@@ -9,6 +9,7 @@ import invert from 'lodash-es/invert'
 const getters: GetterTree<UserState, RootState> = {
   isLoggedIn: (state): boolean => !isEmpty(state.current) && !isEmpty(state.token),
   getCustomer: (state): any => state.current,
+  getOrdersHistory: (state) => state.orders_history || [],
   getAddresses: (state): any => state.current ? state.current.addresses || [] : [],
   getAddressbyId: (state, getters): any => (id: number) => getters.getAddresses.find(a => a.id === id),
   getSessionData: (state) => (key: string) => (!isEmpty(state.sessionData) && state.sessionData[key])

@@ -132,13 +132,15 @@ const actions: ActionTree<UserState, RootState> = {
     const resp = await UserService.getOrdersHistory(pageSize, currentPage)
 
     if (resp.code === 200) {
+      let orders = resp.result.items
+
       /** Load orders products to order state item and localstorage */
       if (loadProducts) {
-        resp.result.items = await dispatch('loadOrderHistoryProducts', { history: resp.result.items })
+        orders = await dispatch('loadOrderHistoryProducts', { history: orders })
       }
 
-      commit(userTypes.USER_ORDERS_HISTORY_LOADED, resp.result) // this also stores the current user to localForage
-      EventBus.$emit('user-after-loaded-orders', resp.result)
+      commit(userTypes.USER_ORDERS_HISTORY_LOADED, orders) // this also stores the current user to localForage
+      EventBus.$emit('user-after-loaded-orders', orders)
     }
 
     if (!resolvedFromCache) {
@@ -151,16 +153,16 @@ const actions: ActionTree<UserState, RootState> = {
     const resp = await IcmaaUserService.getLastOrder(token)
 
     if (resp.code === 200) {
-      const order = await dispatch('loadOrderHistoryProducts', { history: [ resp.result ] })
+      const orders = await dispatch('loadOrderHistoryProducts', { history: [ resp.result ] })
 
-      commit(userTypes.USER_ORDERS_HISTORY_LOADED, { items: [ order ] })
-      EventBus.$emit('user-after-loaded-orders', resp.result)
+      commit(types.USER_ORDERS_HISTORY_UPD, orders)
+      EventBus.$emit('user-after-loaded-orders', orders)
     }
 
     return resp
   },
   async loadOrderHistoryProducts ({ dispatch }, { history }) {
-    const missingOrders = history.filter(order => order.items && order.items.length > 0)
+    const missingOrders = history.filter(order => !order.products || order.products.length === 0)
     const productIds = missingOrders
       .map(o => o.items.map(oi => oi.product_id))
       .reduce((a, b) => a.concat(b), [])

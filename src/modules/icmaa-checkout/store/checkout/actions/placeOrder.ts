@@ -39,7 +39,8 @@ const actions: ActionTree<CheckoutState, RootState> = {
         if (order.createAccount) {
           dispatch(
             'ui/loader',
-            { active: true, message: i18n.t('Login to your new account') }
+            { active: true, message: i18n.t('Login to your new account') },
+            { root: true }
           )
 
           const { email: username, password } = order.personalDetails
