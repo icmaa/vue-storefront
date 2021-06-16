@@ -82,9 +82,6 @@ const actions: ActionTree<UserState, RootState> = {
    * Copy of original – changes:
    * * Write updated user-token to store after profile is refreshed to extend JWT lifetime on each pull.
    * * Logout if 500er response is returned from '/me' request.
-   *
-   * @param any param0
-   * @param any param1
    */
   async refreshUserProfile ({ commit, dispatch }, { resolvedFromCache }) {
     const resp = await UserService.getProfile(true)
@@ -111,6 +108,10 @@ const actions: ActionTree<UserState, RootState> = {
       await dispatch('logout', { silent: true })
     }
   },
+  /**
+   * Copy of original – changes:
+   * * Add this feature, it's just a place holder in orginal action.
+   */
   async changePassword ({ dispatch, getters }, passwordData): Promise<Task> {
     return UserService.changePassword(passwordData)
       .then(async resp => {
@@ -123,6 +124,10 @@ const actions: ActionTree<UserState, RootState> = {
         return resp
       })
   },
+  /**
+   * Copy of original – changes:
+   * * Add `loadProducts` parameter to fetch products off all fetched orders
+   */
   async refreshOrdersHistory ({ commit, dispatch }, { resolvedFromCache, loadProducts = false, pageSize = 5, currentPage = 1 }) {
     const resp = await UserService.getOrdersHistory(pageSize, currentPage)
 
@@ -154,18 +159,6 @@ const actions: ActionTree<UserState, RootState> = {
 
     return resp
   },
-  async loadLastOrderFromCache ({ dispatch }) {
-    let resolvedFromCache = false
-    const ordersHistory = await dispatch('loadOrdersFromCache')
-    if (ordersHistory) {
-      Logger.log('Current user order history served from cache', 'user')()
-      resolvedFromCache = true
-    }
-
-    if (!resolvedFromCache) {
-      Promise.resolve(null)
-    }
-  },
   async loadOrderHistoryProducts ({ dispatch }, { history }) {
     const missingOrders = history.filter(order => order.items && order.items.length > 0)
     const productIds = missingOrders
@@ -195,7 +188,7 @@ const actions: ActionTree<UserState, RootState> = {
         return history
       })
   },
-  async loadProductsForOrder ({ dispatch, commit }, { history }) {
+  async loadProductsForOrders ({ dispatch, commit }, history) {
     history = history.filter(o => !o.products)
     const updatedHistory = await dispatch('loadOrderHistoryProducts', { history })
     commit(types.USER_ORDERS_HISTORY_UPD, updatedHistory)

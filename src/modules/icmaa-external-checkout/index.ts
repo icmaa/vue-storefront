@@ -68,7 +68,7 @@ export const IcmaaExternalCheckoutModule: StorefrontModule = function ({ router,
           }
         }
       } else if (!store.getters['user/isLoggedIn']) {
-        await store.dispatch('user/loadLastOrderFromCache', { resolvedFromCache: false })
+        await store.dispatch('user/loadOrdersFromCache')
         EventBus.$emit('icmaa-external-checkout-user-data-complete')
       }
     })
