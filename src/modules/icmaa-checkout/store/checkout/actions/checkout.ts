@@ -79,9 +79,6 @@ const actions: ActionTree<CheckoutState, RootState> = {
       }
     }
   },
-  setLastOrderId ({ commit }, id) {
-    commit(types.CHECKOUT_SET_LAST_ORDER_ID, id)
-  },
   dropPassword ({ commit, state }) {
     if (state.personalDetails.createAccount) {
       commit(types.CHECKOUT_DROP_PASSWORD)

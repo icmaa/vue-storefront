@@ -40,8 +40,8 @@ export const IcmaaCheckoutModule: StorefrontModule = function ({ store, router, 
       setStorage('payment-method', state.checkout.paymentMethod)
     }
 
-    if (type.endsWith(types.CHECKOUT_SET_LAST_ORDER_ID)) {
-      setStorage('last-order-id', state.checkout.lastOrderId)
+    if (type.endsWith(types.CHECKOUT_SET_LAST_ORDER_TOKEN)) {
+      setStorage('last-order-token', state.checkout.lastOrderToken)
     }
   })
 }

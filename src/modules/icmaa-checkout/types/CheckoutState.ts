@@ -65,5 +65,5 @@ export default interface CheckoutState {
   paymentMethods: any[],
   shippingMethods: any[],
   priorityHandling: PriorityHandling,
-  lastOrderId: number
+  lastOrderToken: string
 }

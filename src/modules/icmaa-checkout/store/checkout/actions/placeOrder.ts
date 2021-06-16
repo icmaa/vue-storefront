@@ -1,6 +1,7 @@
 import { ActionTree } from 'vuex'
 import RootState from '@vue-storefront/core/types/RootState'
 import CheckoutState from '../../../types/CheckoutState'
+import * as types from '../mutation-types'
 import { OrderService } from '../../../data-resolver/OrderService'
 import { orderHooksExecutors } from '@vue-storefront/core/modules/order/hooks'
 import { Logger } from '@vue-storefront/core/lib/logger'
@@ -8,6 +9,9 @@ import EventBus from '@vue-storefront/core/compatibility/plugins/event-bus'
 import i18n from '@vue-storefront/i18n'
 
 const actions: ActionTree<CheckoutState, RootState> = {
+  setLastOrderToken ({ commit }, token) {
+    commit(types.CHECKOUT_SET_LAST_ORDER_TOKEN, token)
+  },
   async placeOrder ({ getters, dispatch }) {
     try {
       await dispatch('payment/beforePlaceOrder', getters.getPaymentMethodCode, { root: true })
@@ -29,7 +33,7 @@ const actions: ActionTree<CheckoutState, RootState> = {
         orderHooksExecutors.afterPlaceOrder({ order, task: response })
         EventBus.$emit('checkout-after-place-order', { order, task: response })
 
-        dispatch('setLastOrderId', response.result.orderId)
+        dispatch('setLastOrderToken', response.result.lastOrderToken)
         await dispatch('reset', {})
 
         if (order.createAccount) {

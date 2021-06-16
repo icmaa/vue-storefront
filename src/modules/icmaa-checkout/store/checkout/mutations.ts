@@ -53,8 +53,8 @@ const mutations: MutationTree<CheckoutState> = {
     state.personalDetails.password = ''
     state.personalDetails.createAccount = false
   },
-  [types.CHECKOUT_SET_LAST_ORDER_ID] (state, id) {
-    state.lastOrderId = id
+  [types.CHECKOUT_SET_LAST_ORDER_TOKEN] (state, token) {
+    state.lastOrderToken = token
   }
 }
 
