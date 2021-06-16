@@ -1,8 +1,24 @@
 <template>
-  <div v-if="products && products.length > 0" data-test-id="AdditionalProducts">
+  <div v-if="loading || products && products.length > 0" data-test-id="AdditionalProducts">
     <h3 v-text="$t('Take me with you')" class="t-w-full t-mb-2 t-font-light" />
     <div class="t-overflow-auto t-scrolling-touch t-hide-scrollbar t--mr-6 md:t-mr-0">
       <div class="t-flex t--mx-1 lg:t--mx-2 t-webkit-tap-transparent">
+        <template v-if="loading">
+          <div
+            v-for="i in 4"
+            :key="`placeholder-${i}`"
+            class="t-flex-fix t-px-1 lg:t-px-2 t-w-32"
+          >
+            <placeholder
+              ratio="30:43"
+              :plain="false"
+              class="t-bg-base-lightest t-mb-3"
+            />
+            <div class="t-leading-tight t-w-10/12 t-h-2 t-my-2 t-bg-base-lightest" />
+            <div class="t-leading-tight t-w-2/3 t-h-2 t-my-2 t-bg-base-lightest" />
+            <div class="t-leading-tight t-w-1/3 t-h-2 t-my-2 t-mt-4 t-bg-base-lightest" />
+          </div>
+        </template>
         <additional-product
           class="product t-cursor-pointer t-flex-fix t-px-1 lg:t-px-2 t-w-32"
           v-for="(product, i) in products"
@@ -24,15 +40,18 @@ import { SearchQuery } from 'storefront-query-builder'
 import * as types from '@vue-storefront/core/modules/cart/store/mutation-types'
 import addDefaultProductFilter from 'icmaa-catalog/helpers/defaultProductFilter'
 
+import Placeholder from 'theme/components/core/blocks/Placeholder'
 import AdditionalProduct from 'theme/components/core/blocks/Checkout/AdditionalProducts/Product'
 
 export default {
   name: 'AdditionalProducts',
   components: {
+    Placeholder,
     AdditionalProduct
   },
   data () {
     return {
+      loading: true,
       products: []
     }
   },
@@ -113,6 +132,7 @@ export default {
     products = products.sort((a, b) => skus.indexOf(a.sku) - skus.indexOf(b.sku))
 
     this.products = products
+    this.loading = false
   }
 }
 </script>
