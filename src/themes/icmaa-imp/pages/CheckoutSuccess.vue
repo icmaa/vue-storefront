@@ -30,24 +30,13 @@ export default {
   mixins: [ CheckoutSuccessGtmMixin ],
   computed: {
     ...mapGetters({
-      lastOrderToken: 'checkout/getLastOrderToken',
       isLoggedIn: 'user/isLoggedIn'
     })
-  },
-  methods: {
-    async loadLastOrder () {
-      if (this.lastOrderToken) {
-        await this.$store.dispatch('user/loadOrderByToken', { token: this.lastOrderToken })
-        this.$bus.$emit('icmaa-checkout-user-data-complete', null)
-      }
-    }
   },
   async mounted () {
     if (!this.isLoggedIn && !this.lastOrderToken) {
       await this.$store.dispatch('user/loadOrdersFromCache')
     }
-
-    this.loadLastOrder()
   },
   metaInfo () {
     return {

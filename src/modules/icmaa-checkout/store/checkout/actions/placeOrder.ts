@@ -9,9 +9,6 @@ import EventBus from '@vue-storefront/core/compatibility/plugins/event-bus'
 import i18n from '@vue-storefront/i18n'
 
 const actions: ActionTree<CheckoutState, RootState> = {
-  setLastOrderToken ({ commit }, token) {
-    commit(types.CHECKOUT_SET_LAST_ORDER_TOKEN, token)
-  },
   async placeOrder ({ getters, dispatch }) {
     try {
       await dispatch('payment/beforePlaceOrder', getters.getPaymentMethodCode, { root: true })
@@ -33,7 +30,6 @@ const actions: ActionTree<CheckoutState, RootState> = {
         orderHooksExecutors.afterPlaceOrder({ order, task: response })
         EventBus.$emit('checkout-after-place-order', { order, task: response })
 
-        dispatch('setLastOrderToken', response.result.orderToken)
         await dispatch('reset', {})
 
         if (order.createAccount) {
@@ -46,6 +42,8 @@ const actions: ActionTree<CheckoutState, RootState> = {
           const { email: username, password } = order.personalDetails
           await dispatch('user/login', { username, password }, { root: true })
         }
+
+        await dispatch('user/loadOrderByToken', { token: response.result.orderToken }, { root: true })
 
         return order
       } else {

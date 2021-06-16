@@ -51,8 +51,7 @@ const getters: GetterTree<CheckoutState, RootState> = {
     shippingMethod: getters.getShippingMethod,
     paymentDetails: getters.getPaymentDetails,
     paymentMethod: getters.getPaymentMethod
-  }),
-  getLastOrderToken: (state): string | null => state.lastOrderToken
+  })
 }
 
 export default getters

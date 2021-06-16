@@ -44,7 +44,9 @@ export default {
         })
 
       if (order) {
+        this.$store.dispatch('icmaaGoogleTagManager/setLastOrderId', order.orderId)
         this.subscribeNewsletter(order)
+
         this.$router.push(localizedRoute('checkout-success'))
       }
     },

@@ -14,8 +14,7 @@ export default {
     ...mapGetters({
       orderHistory: 'user/getOrdersHistory',
       isGtmEnabled: 'icmaaGoogleTagManager/enabled',
-      getGTMProductDTO: 'icmaaGoogleTagManager/getProductDTO',
-      gtmLastOrderId: 'icmaaGoogleTagManager/getLastOrderId'
+      getGTMProductDTO: 'icmaaGoogleTagManager/getProductDTO'
     }),
     order () {
       return this.orderHistory && this.orderHistory.length > 0 ? this.orderHistory[0] : false
@@ -68,7 +67,7 @@ export default {
   },
   methods: {
     checkoutSuccessGtm () {
-      if (!this.isGtmEnabled || !this.order || this.gtmLastOrderId === this.orderId || !this.isRecentOrder()) {
+      if (!this.isGtmEnabled || !this.order || !this.isRecentOrder()) {
         this.removeRecentOrder()
         return
       }
@@ -100,8 +99,6 @@ export default {
           }
         }
       })
-
-      this.$store.dispatch('icmaaGoogleTagManager/setLastOrderId', this.orderId)
 
       this.removeRecentOrder()
     }

@@ -26,6 +26,8 @@ const mutations: MutationTree<UserState> = {
     if (newItems.length > 0) {
       state.orders_history.push(...newItems)
     }
+
+    state.orders_history.sort((a, b) => b.increment_id - a.increment_id)
   }
 }
 
