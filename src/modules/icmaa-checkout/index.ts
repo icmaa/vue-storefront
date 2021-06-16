@@ -3,15 +3,24 @@ import { setupMultistoreRoutes } from '@vue-storefront/core/lib/multistore'
 import { StorageManager } from '@vue-storefront/core/lib/storage-manager'
 import { Logger } from '@vue-storefront/core/lib/logger'
 import * as types from './store/checkout/mutation-types'
+import EventBus from '@vue-storefront/core/compatibility/plugins/event-bus'
 
 import { checkoutStore } from './store/checkout'
 import moduleRoutes from './routes'
 
 export const IcmaaCheckoutModule: StorefrontModule = function ({ store, router, appConfig }) {
   setupMultistoreRoutes(appConfig, router, moduleRoutes, 10)
+  store.registerModule('checkout', checkoutStore)
 
   StorageManager.init('checkout')
-  store.registerModule('checkout', checkoutStore)
+  const checkoutStorage = StorageManager.get('checkout')
+
+  EventBus.$once('session-after-started', async () => {
+    const token = await checkoutStorage.getItem('last-order-token')
+    if (token && token !== null) {
+      store.dispatch('checkout/setLastOrderToken', token)
+    }
+  })
 
   store.subscribe((mutation, state) => {
     const type = mutation.type

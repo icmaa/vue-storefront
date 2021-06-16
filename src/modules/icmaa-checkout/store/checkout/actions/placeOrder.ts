@@ -33,7 +33,7 @@ const actions: ActionTree<CheckoutState, RootState> = {
         orderHooksExecutors.afterPlaceOrder({ order, task: response })
         EventBus.$emit('checkout-after-place-order', { order, task: response })
 
-        dispatch('setLastOrderToken', response.result.lastOrderToken)
+        dispatch('setLastOrderToken', response.result.orderToken)
         await dispatch('reset', {})
 
         if (order.createAccount) {
