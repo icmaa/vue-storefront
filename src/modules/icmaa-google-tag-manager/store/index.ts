@@ -66,7 +66,7 @@ export const icmaaGoogleTagManagerModule: Module<GoogleTagManagerState, any> = {
               case 'category':
                 product[attributeName] = value.map(v => pick(v, ['name', 'category_id']))
                 break
-              case 'image':
+              case 'catalogImage':
                 product[attributeName] = getThumbnailPath(value)
                 break
               default:
