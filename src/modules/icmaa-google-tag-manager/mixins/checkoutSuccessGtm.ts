@@ -55,8 +55,8 @@ export default {
     singleOrderItems () {
       const itemAttributeMap = ['base_price', 'base_tax_amount']
       return this.order.items
-        .map(i => {
-          let product = this.order.products.find(p => p.sku === i.sku || (p.configurable_children && p.configurable_children.some(c => c.sku === i.sku))) || {}
+        ?.map(i => {
+          let product = this.order.products?.find(p => p.sku === i.sku || (p.configurable_children?.some(c => c.sku === i.sku))) || {}
           product = Object.assign(product, pick(i, itemAttributeMap))
           const productDTO = this.getGTMProductDTO(product)
           const additionalData = { sku: i.sku, quantity: round(i.qty_ordered), id: String(productDTO.id).toString() }
