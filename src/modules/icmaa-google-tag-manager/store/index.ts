@@ -5,6 +5,7 @@ import Product from '@vue-storefront/core/modules/catalog/types/Product'
 
 import GoogleTagManagerState, { AttributeMapItem } from '../types/GoogleTagManagerState'
 import { googleTagManager } from 'config'
+import { getThumbnailPath } from '@vue-storefront/core/helpers'
 
 import pick from 'lodash-es/pick'
 import isEmpty from 'lodash-es/isEmpty'
@@ -64,6 +65,9 @@ export const icmaaGoogleTagManagerModule: Module<GoogleTagManagerState, any> = {
                 break
               case 'category':
                 product[attributeName] = value.map(v => pick(v, ['name', 'category_id']))
+                break
+              case 'image':
+                product[attributeName] = getThumbnailPath(value)
                 break
               default:
                 product[attributeName] = value
