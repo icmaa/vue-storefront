@@ -38,24 +38,33 @@ export default {
       this.$store.dispatch('ui/loader', { active: true, message: i18n.t('Submitting order') })
 
       const order = await this.$store.dispatch('checkout/placeOrder')
-        .finally(result => {
+        .catch(e => {
+          Logger.error('Couldn\'t place order:', 'icmaa-checkout', e.message)()
           this.$store.dispatch('ui/loader', false)
-          return result
+          return false
         })
 
       if (order) {
         this.$store.dispatch('icmaaGoogleTagManager/setLastOrderId', order.orderId)
-        this.subscribeNewsletter(order)
+        await this.subscribeNewsletter(order)
 
         this.$router.push(localizedRoute('checkout-success'))
+      } else {
+        this.$store.dispatch('ui/loader', false)
       }
     },
-    subscribeNewsletter (order) {
+    async subscribeNewsletter (order) {
       if (this.newsletter !== true || !order.personalDetails.email) return
+
+      this.$store.dispatch('ui/loader', { active: true, message: i18n.t('Subscribe to newsletter') })
       return this.$store.dispatch('newsletter/subscribe', order.personalDetails.email)
         .catch(err => {
-          Logger.error('Error during newsletter-subscription after order-submit:', 'checkout', err)()
+          Logger.error('Error during newsletter-subscription after order-submit:', 'icmaa-checkout', err)()
         })
     }
+  },
+  destroyed () {
+    /** Unset loader after redirect to success-page */
+    this.$store.dispatch('ui/loader', false)
   }
 }

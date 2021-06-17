@@ -59,6 +59,9 @@ export default {
 
       this.submit()
     },
+    unsubscribeOnLoggedIn () {
+      this.$bus.$off('user-after-loggedin', this.onLoggedIn)
+    },
     submit () {
       this.$v.$touch()
       if (!this.$v.$invalid) {
@@ -100,10 +103,12 @@ export default {
   },
   mounted () {
     this.$bus.$on('user-after-loggedin', this.onLoggedIn)
+    this.$bus.$on('checkout-after-place-order', this.unsubscribeOnLoggedIn)
     this.onCheckoutAfterLoad()
   },
   destroyed () {
-    this.$bus.$off('user-after-loggedin', this.onLoggedIn)
+    this.unsubscribeOnLoggedIn()
+    this.$bus.$off('checkout-after-place-order', this.unsubscribeOnLoggedIn)
   },
   validations () {
     let val: any = {
