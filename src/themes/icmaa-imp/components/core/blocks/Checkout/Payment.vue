@@ -49,7 +49,6 @@
 import { required } from 'vuelidate/lib/validators'
 import { notFalse } from 'icmaa-config/helpers/validators'
 import Payment from 'icmaa-checkout/components/Payment'
-
 import BaseCheckbox from 'theme/components/core/blocks/Form/BaseCheckbox'
 import ButtonComponent from 'theme/components/core/blocks/Button'
 

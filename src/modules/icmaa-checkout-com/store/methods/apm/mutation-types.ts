@@ -1,0 +1,5 @@
+export const SET_APM_LIST = 'SET_APM_LIST'
+export const SET_LOADING = 'SET_LOADING'
+export const SET_SELECTED_APM = 'SET_SELECTED_APM'
+export const SET_SELECTED_APM_DATA = 'SET_SELECTED_APM_DATA'
+export const SET_ERROR_MSG = 'SET_ERROR_MSG'
