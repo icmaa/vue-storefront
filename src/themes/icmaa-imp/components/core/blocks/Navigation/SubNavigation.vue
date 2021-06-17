@@ -1,5 +1,8 @@
 <template>
-  <div v-if="navigation" class="t-pb-24">
+  <div v-if="loading">
+    <loading-spinner />
+  </div>
+  <div v-else-if="navigation" class="t-pb-24">
     <gender-navigation :items="genderNavigationItems" class="t--mx-4 t--mt-4 t-mb-4" v-if="genderNavigationItems" />
     <div class="t-flex t-flex-wrap t--mx-1">
       <navigation-item v-for="link in mainNavigationItems" v-bind="link" :key="link.id" />
@@ -39,18 +42,25 @@ import { mapGetters } from 'vuex'
 import NavigationItem from 'theme/components/core/blocks/Navigation/Item'
 import GenderNavigation from 'theme/components/core/blocks/Navigation/ClusterNavigation'
 import LogoLine from 'theme/components/core/blocks/CategoryExtras/LogoLine'
+import LoadingSpinner from 'theme/components/core/blocks/AsyncSidebar/LoadingSpinner'
 
 export default {
   name: 'SubNavigation',
   components: {
     NavigationItem,
     GenderNavigation,
-    LogoLine
+    LogoLine,
+    LoadingSpinner
   },
   props: {
     subNavigationKey: {
       type: String,
       required: true
+    }
+  },
+  data () {
+    return {
+      loading: true
     }
   },
   computed: {
@@ -107,8 +117,9 @@ export default {
       this.$store.dispatch('ui/closeAll')
     }
   },
-  mounted () {
-    this.$store.dispatch('icmaaCmsBlock/list', 'navigation-main-sub-' + this.subNavigationKey)
+  async mounted () {
+    await this.$store.dispatch('icmaaCmsBlock/list', 'navigation-main-sub-' + this.subNavigationKey)
+    this.loading = false
   }
 }
 
