@@ -168,7 +168,7 @@ export const uiStore = {
     isTouchDevice: state => state.isTouchDevice,
     getSidebarPath: state => state.sidebarPath,
     getSidebarStatus: (state) => (key: string) => state.sidebars.hasOwnProperty(key) ? state.sidebars[key] : false,
-    getSidebarNavigationGenderChange: (state): boolean => state.SidebarNavigationGenderChange,
+    getSidebarNavigationGenderChange: (state): boolean => state.sidebarNavigationGenderChange,
     getVisibleModals: state => {
       return Object.entries(state.modals)
         .map((m: any) => ({ ...m[1], name: m[0] }))
