@@ -13,8 +13,7 @@ export default {
       return !!this.gtmLastOrderId
     },
     removeRecentOrder (): Promise<void> {
-      // return this.$store.dispatch('icmaaGoogleTagManager/setLastOrderId', null)
-      return Promise.resolve()
+      return this.$store.dispatch('icmaaGoogleTagManager/setLastOrderId', null)
     }
   },
   mounted () {

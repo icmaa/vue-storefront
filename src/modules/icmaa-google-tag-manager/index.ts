@@ -5,7 +5,6 @@ import EventBus from '@vue-storefront/core/compatibility/plugins/event-bus'
 import { StorefrontModule } from '@vue-storefront/core/lib/modules'
 import { StorageManager } from '@vue-storefront/core/lib/storage-manager'
 import { coreHooks } from '@vue-storefront/core/hooks'
-import { Logger } from '@vue-storefront/core/lib/logger'
 
 import { icmaaGoogleTagManagerModule } from './store'
 import { IcmaaGoogleTagManagerExecutors } from './hooks'
@@ -23,17 +22,6 @@ export const IcmaaGoogleTagManagerModule: StorefrontModule = function ({ store, 
   })
 
   StorageManager.init('icmaa-gtm')
-
-  store.subscribe(mutation => {
-    const { payload, type } = mutation
-    const setStorage = (key: string, value: any): Promise<any> => StorageManager.get('icmaa-gtm')
-      .setItem(key, value)
-      .catch(reason => { Logger.error(reason)() })
-
-    if (type.endsWith('ICMAA_GTM/SET_LAST_ORDER_ID')) {
-      setStorage('last-order-id', payload)
-    }
-  })
 
   coreHooks.afterAppInit(() => {
     const config = appConfig.googleTagManager

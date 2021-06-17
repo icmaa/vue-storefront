@@ -7,6 +7,7 @@ import isEmpty from 'lodash-es/isEmpty'
 import invert from 'lodash-es/invert'
 
 const getters: GetterTree<UserState, RootState> = {
+  isSessionReady: (state): boolean => !!state.session_started,
   isLoggedIn: (state): boolean => !isEmpty(state.current) && !isEmpty(state.token),
   getCustomer: (state): any => state.current,
   getOrdersHistory: (state) => state.orders_history || [],

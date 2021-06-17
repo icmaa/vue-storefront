@@ -66,8 +66,6 @@ const actions: ActionTree<UserState, RootState> = {
     await dispatch('cart/clear', { sync: false }, { root: true })
     await dispatch('clearCurrentUser')
 
-    commit(userTypes.USER_START_SESSION)
-
     if (token) {
       commit(userTypes.USER_TOKEN_CHANGED, { newToken: token })
       await dispatch('sessionAfterAuthorized', {})
@@ -76,6 +74,7 @@ const actions: ActionTree<UserState, RootState> = {
       EventBus.$emit('session-after-nonauthorized')
     }
 
+    commit(userTypes.USER_START_SESSION)
     EventBus.$emit('session-after-started')
   },
   /**
