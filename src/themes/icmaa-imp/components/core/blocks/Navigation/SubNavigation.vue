@@ -1,5 +1,5 @@
 <template>
-  <div v-if="navigation">
+  <div v-if="navigation" class="t-pb-24">
     <gender-navigation :items="genderNavigationItems" class="t--mx-4 t--mt-4 t-mb-4" v-if="genderNavigationItems" />
     <div class="t-flex t-flex-wrap t--mx-1">
       <navigation-item v-for="link in mainNavigationItems" v-bind="link" :key="link.id" />

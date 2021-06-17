@@ -5,7 +5,7 @@
         {{ $t('Clear cart') }}
       </button-component>
     </template>
-    <div class="t-pb-20">
+    <div class="t-pb-24">
       <h4 v-if="!productsInCart.length" class="t-text-sm">
         {{ $t('Your shopping cart is empty.') }}
       </h4>
