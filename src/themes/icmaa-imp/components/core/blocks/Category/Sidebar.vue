@@ -8,7 +8,7 @@
         {{ $t('Clear filters') }}
       </button-component>
     </template>
-    <div class="t-pb-20">
+    <div class="t-pb-24">
       <button-component icon="arrow_forward" type="select" class="t-w-full t-mb-4" @click="openSortMenu()">
         {{ $t('Sorting') }}
       </button-component>

@@ -1,5 +1,8 @@
 <template>
-  <div v-if="navigation">
+  <div v-if="loading">
+    <loading-spinner />
+  </div>
+  <div v-else-if="navigation" class="t-pb-24">
     <gender-navigation :items="genderNavigationItems" class="t--mx-4 t--mt-4 t-mb-4" v-if="genderNavigationItems" />
     <div class="t-flex t-flex-wrap t--mx-1">
       <navigation-item v-for="link in mainNavigationItems" v-bind="link" :key="link.id" />
@@ -13,37 +16,10 @@
         :key="`nav-${i}`"
         :to="localizedRoute(item.route)"
         class="t-w-full t-py-3 t-px-4 t-border-base-lightest t-text-sm"
-        :class="{ 't-border-b': i !== (filteredNavigation.length - 1), 't-font-bold': item.bold }"
+        :class="{ 't-border-b': i !== (filteredNavigation.length - 1) }"
         @click.native="closeMenu"
         v-text="item.name"
       />
-    </div>
-    <div
-      v-if="teaser && teaser.length > 0"
-      class="t-flex t-flex-wrap"
-    >
-      <div
-        v-for="(t, i) in teaser"
-        :key="`${t.route}-${i}`"
-        class="t-relative t-w-full t-mb-4 t-overflow-hidden t-rounded-sm"
-      >
-        <router-link
-          :to="t.route"
-          v-text="t.name"
-          class="t-absolute t-flex t-h-full t-items-center t-justify-center t-text-sm t-text-white t-w-full"
-          @click.native="closeMenu"
-        />
-        <picture-component
-          :alt="t.name"
-          :src="t.image"
-          :width="436"
-          :height="228"
-          :placeholder="true"
-          :sizes="teaserSizes"
-          ratio="109:57"
-          class="t-flex-1 t-self-start"
-        />
-      </div>
     </div>
     <div
       v-if="logos"
@@ -66,7 +42,7 @@ import { mapGetters } from 'vuex'
 import NavigationItem from 'theme/components/core/blocks/Navigation/Item'
 import GenderNavigation from 'theme/components/core/blocks/Navigation/ClusterNavigation'
 import LogoLine from 'theme/components/core/blocks/CategoryExtras/LogoLine'
-import PictureComponent from 'theme/components/core/blocks/Picture'
+import LoadingSpinner from 'theme/components/core/blocks/AsyncSidebar/LoadingSpinner'
 
 export default {
   name: 'SubNavigation',
@@ -74,12 +50,17 @@ export default {
     NavigationItem,
     GenderNavigation,
     LogoLine,
-    PictureComponent
+    LoadingSpinner
   },
   props: {
     subNavigationKey: {
       type: String,
       required: true
+    }
+  },
+  data () {
+    return {
+      loading: true
     }
   },
   computed: {
@@ -114,17 +95,6 @@ export default {
     tiles () {
       return this.sub.tiles || false
     },
-    teaser () {
-      return this.sub.teaser || false
-    },
-    teaserSizes () {
-      return [
-        // Order high-to-low is important
-        { media: '(min-width: 768px)', width: 428 },
-        { media: '(max-width: 768px)', width: 768 },
-        { media: '(max-width: 415px)', width: 415 }
-      ]
-    },
     logos () {
       return this.sub.logos || false
     },
@@ -147,8 +117,9 @@ export default {
       this.$store.dispatch('ui/closeAll')
     }
   },
-  mounted () {
-    this.$store.dispatch('icmaaCmsBlock/list', 'navigation-main-sub-' + this.subNavigationKey)
+  async mounted () {
+    await this.$store.dispatch('icmaaCmsBlock/list', 'navigation-main-sub-' + this.subNavigationKey)
+    this.loading = false
   }
 }
 
