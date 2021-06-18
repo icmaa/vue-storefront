@@ -10,7 +10,7 @@
       </div>
     </template>
     <template v-slot:footer>
-      <div class="t-flex-expand t-bg-base-lightest t-p-4" data-test-id="SidebarMenuFooter">
+      <div class="t-flex-expand t-bg-base-lightest t-p-4 t-pb-24" data-test-id="SidebarMenuFooter">
         <div class="t-flex t-w-full t-justify-between">
           <div class="t-flex t-flex-wrap t-items-center" @click="closeMenu">
             <template v-for="(link, index) in metaNavigationItems">

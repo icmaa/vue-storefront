@@ -80,7 +80,7 @@ export default {
     }
   },
   mounted () {
-    const images = this.items.forEach(i => {
+    this.items.forEach(i => {
       const img = new Image()
       img.src = this.getMediaThumbnail(i.background, 920, 920)
       lozad(img).triggerLoad(img)

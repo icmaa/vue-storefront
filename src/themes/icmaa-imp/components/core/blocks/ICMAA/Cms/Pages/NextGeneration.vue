@@ -17,9 +17,9 @@
           <p class="t-font-bold t-my-4" v-text="category.text" />
           <p class="t-font-bold" v-text="content.voting_price" /><span v-text="category.price_voting" />
           <p class="t-font-bold" v-text="content.jury_price" /><span v-text="category.price_jury" />
-          <button-component type="primary" size="md" class="t-w-1/2 t-text-center t-bg-base-dark t-container t-text-white t-px-4 t-my-4" @click="$router.push(localizedRoute(category.link))">
+          <universal-link :to="category.link" class="t-w-1/2 t-p-2 t-block t-text-center t-bg-base-dark t-container t-text-white t-px-4 t-my-4">
             {{ content.button_text }}
-          </button-component>
+          </universal-link>
         </div>
       </div>
     </div>
@@ -33,15 +33,14 @@
 <script>
 import Page from 'icmaa-cms/mixins/Page'
 import PictureComponent from 'theme/components/core/blocks/Picture'
-import ButtonComponent from 'theme/components/core/blocks/Button'
-import { mapGetters } from 'vuex'
+import UniversalLink from 'theme/components/core/blocks/Link'
 
 export default {
   name: 'NextGeneration',
   mixins: [ Page ],
   components: {
     PictureComponent,
-    ButtonComponent
+    UniversalLink
   },
   data () {
     return {
