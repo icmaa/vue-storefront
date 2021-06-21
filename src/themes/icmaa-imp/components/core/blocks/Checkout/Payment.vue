@@ -26,7 +26,7 @@
           v-if="method.code === selected && infoComponent"
           class="t-ml-8 t-mb-4"
         >
-          <component :is="infoComponent" :code="method.code" />
+          <component :is="infoComponent" :code="method.code" :method="selectedMethod" />
         </div>
       </div>
       <button-component

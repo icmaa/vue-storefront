@@ -1,11 +1,11 @@
-import * as types from './mutation-types'
-import { Module } from 'vuex'
 import actions from './actions'
 import { CardState } from 'icmaa-checkout-com/types'
+import { createPaymentStore } from 'icmaa-payment/store/methods/abstract'
+import * as types from './mutation-types'
 
 export const CODE = 'checkoutcom_card'
 
-const CheckoutComCardStore: Module<CardState, any> = {
+const CheckoutComCardStore = createPaymentStore<CardState>({
   namespaced: true,
   state: {
     infoComponent: () => import(
@@ -28,6 +28,6 @@ const CheckoutComCardStore: Module<CardState, any> = {
     getToken: (state) => state.token,
     getInfoComponent: (state) => state.infoComponent
   }
-}
+})
 
 export default CheckoutComCardStore

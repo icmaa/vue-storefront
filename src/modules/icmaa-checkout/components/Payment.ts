@@ -26,16 +26,22 @@ export default {
       paymentDetails: 'checkout/getPaymentDetails',
       infoComponentByCode: 'payment/getInfoComponentByCode'
     }),
+    selectedCode () {
+      if (this.selected && this.selected.startsWith('checkoutcom_apm_')) {
+        return 'checkoutcom_apm'
+      }
+      return this.selected
+    },
     selectedMethod () {
       return this.paymentMethodByCode(this.selected)
     },
     infoComponent () {
-      if (!this.selected) return false
-      return this.infoComponentByCode(this.selected)
+      if (!this.selectedCode) return false
+      return this.infoComponentByCode(this.selectedCode)
     }
   },
   watch: {
-    'selected': function (code) {
+    'selectedCode': function (code) {
       this.$store.dispatch('payment/initMethod', code)
     }
   },
@@ -51,7 +57,7 @@ export default {
           this.selectedMethod
         )
 
-        const paymentHandler = await this.$store.dispatch('payment/saveMethod', this.selectedMethod.code)
+        const paymentHandler = await this.$store.dispatch('payment/saveMethod', this.selectedCode)
         if (!paymentHandler) {
           this.$store.dispatch('checkout/loading', false)
           return

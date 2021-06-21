@@ -3,40 +3,39 @@
     <div class="cl-error" v-if="error">
       {{ error }}
     </div>
-    <loader-background v-if="isLoading" />
-    <template v-else>
-      <div v-for="method in paymentMethods"
-           :key="method.id"
-      >
-        <base-checkbox
-          :name="`apm[${method.id}]`"
-          :id="`apm-${method.id}`"
-          :input-value="method.id"
-          :radio="true"
-          v-model="selected"
-        >
-          <span :class="`apm-icon apm-icon-${method.id}`" />
-          <span>{{ method.title }}</span>
-        </base-checkbox>
-        <component v-if="selected === method.id && method.component" :apm="method" :is="method.component" />
-      </div>
-    </template>
+    <span class="apm-icon" :class="[ 'apm-icon-' + apmMethodCode ]" />
+    {{ method.title }}
   </div>
 </template>
 
 <script>
-import ApmPaymentMethod from 'icmaa-checkout-com/mixins/methods/ApmPaymentMethod'
-import LoaderBackground from 'theme/components/core/LoaderBackground'
-import BaseCheckbox from 'theme/components/core/blocks/Form/BaseCheckbox'
+import { mapGetters } from 'vuex'
 
 export default {
-  components: {
-    BaseCheckbox,
-    LoaderBackground
+  name: 'CheckoutComApmInfo',
+  props: {
+    code: {
+      type: String,
+      required: true
+    },
+    method: {
+      type: [Object, Boolean],
+      required: true
+    }
   },
-  mixins: [
-    ApmPaymentMethod
-  ]
+  data () {
+    return {
+      error: null
+    }
+  },
+  computed: {
+    ...mapGetters({
+      getApmMethodCode: 'checkoutcom_apm/getApmCodeByMethodCode'
+    }),
+    apmMethodCode () {
+      return this.getApmMethodCode(this.code)
+    }
+  }
 }
 </script>
 
@@ -49,7 +48,7 @@ export default {
     display: inline-block;
     width: 45px;
     height: 30px;
-    margin: 0 10px 0 5px;
+    margin: 0 10px 0 0;
   }
 
   .apm-icon-alipay {

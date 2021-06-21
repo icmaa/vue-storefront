@@ -54,7 +54,7 @@ import CookieNotification from 'theme/components/core/CookieNotification'
 import OfflineBadge from 'theme/components/core/OfflineBadge'
 import { isServer } from '@vue-storefront/core/helpers'
 import viewportMixin from 'theme/mixins/viewportMixin.ts'
-import paymentErrorMixin from 'theme/mixins/paymentErrorMixin.ts'
+import paymentErrorMixin from 'theme/mixins/checkout/paymentErrorMixin.ts'
 import NoSSR from 'vue-no-ssr'
 
 const NavigationSidebar = () => import(/* webpackPreload: true */ /* webpackChunkName: "vsf-sidebar-navigation" */ 'theme/components/core/blocks/Navigation/Sidebar')
