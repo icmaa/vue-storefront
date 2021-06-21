@@ -10,8 +10,10 @@ import i18n from '@vue-storefront/i18n'
 const actions: ActionTree<CheckoutState, RootState> = {
   async placeOrder ({ getters, dispatch }) {
     try {
-      await dispatch('payment/beforePlaceOrder', getters.getPaymentMethodCode, { root: true })
+      const payment = await dispatch('payment/beforePlaceOrder', getters.getPaymentMethodCode, { root: true })
       await orderHooksExecutors.beforePlaceOrder({ order: {}, task: { resultCode: 200 } })
+
+      if (!payment) return false
 
       const response = await OrderService.placeOrder()
 
