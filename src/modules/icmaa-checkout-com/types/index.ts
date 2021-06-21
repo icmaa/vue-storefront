@@ -7,5 +7,6 @@ export interface CardState extends AbstractState {
 }
 
 export interface ApmState extends AbstractState {
-
+  additionalData: Record<string, any>|null,
+  validations: any
 }

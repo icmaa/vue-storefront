@@ -1,19 +1,34 @@
 <template>
   <div class="t-relative">
-    <div class="cl-error" v-if="error">
-      {{ error }}
+    <div>
+      <span class="apm-icon t-mr-2" :class="[ 'apm-icon-' + apmMethodCode ]" />
+      {{ method.title }}
     </div>
-    <span class="apm-icon" :class="[ 'apm-icon-' + apmMethodCode ]" />
-    {{ method.title }}
+    <div class="t-pt-4" v-if="methods[apmMethodCode]">
+      <component :code="apmMethodCode" :is="methods[apmMethodCode]" />
+    </div>
   </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
 import { CODE } from 'icmaa-checkout-com/store/methods/apm'
 
 export default {
   name: 'CheckoutComApmInfo',
+  data () {
+    return {
+      methods: {
+        giropay: () => import(
+          /* webpackChunkName: "icmaa-checkout-com-method-apm-giropay" */
+          'icmaa-checkout-com/components/methods/apm/Giropay.vue'
+        ),
+        sepa: () => import(
+          /* webpackChunkName: "icmaa-checkout-com-method-apm-sepa" */
+          'icmaa-checkout-com/components/methods/apm/Sepa.vue'
+        )
+      }
+    }
+  },
   props: {
     code: {
       type: String,
@@ -24,15 +39,7 @@ export default {
       required: true
     }
   },
-  data () {
-    return {
-      error: null
-    }
-  },
   computed: {
-    ...mapGetters({
-      getApmMethodCode: 'checkoutcom_apm/getApmCodeByMethodCode'
-    }),
     apmMethodCode () {
       const regexp = new RegExp(`${CODE}_(.*)`, 'gm')
       return this.code.replace(regexp, '$1')
@@ -50,7 +57,6 @@ export default {
     display: inline-block;
     width: 45px;
     height: 30px;
-    margin: 0 10px 0 0;
   }
 
   .apm-icon-alipay {
