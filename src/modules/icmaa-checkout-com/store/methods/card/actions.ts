@@ -20,7 +20,7 @@ const actions: ActionTree<CardState, RootState> = {
       { root: true }
     )
   },
-  async afterPlaceOrder ({ dispatch, rootGetters }, response) {
+  async afterPlaceOrder ({ dispatch }, response) {
     if (!response || !response._links) {
       Logger.error('Could not find payment data for last order', 'icmaa-checkout-com')()
       return false

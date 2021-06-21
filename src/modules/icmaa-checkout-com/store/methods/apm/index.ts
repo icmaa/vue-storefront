@@ -14,11 +14,7 @@ const CheckoutComApmStore = createPaymentStore<ApmState>({
   },
   actions,
   getters: {
-    getInfoComponent: (state) => state.infoComponent,
-    getApmCodeByMethodCode: () => (code: string): string | boolean => {
-      const regexp = new RegExp(`${CODE}_(.*)`, 'gm')
-      return code.replace(regexp, '$1')
-    }
+    getInfoComponent: (state) => state.infoComponent
   }
 })
 

@@ -10,6 +10,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import { CODE } from 'icmaa-checkout-com/store/methods/apm'
 
 export default {
   name: 'CheckoutComApmInfo',
@@ -33,7 +34,8 @@ export default {
       getApmMethodCode: 'checkoutcom_apm/getApmCodeByMethodCode'
     }),
     apmMethodCode () {
-      return this.getApmMethodCode(this.code)
+      const regexp = new RegExp(`${CODE}_(.*)`, 'gm')
+      return this.code.replace(regexp, '$1')
     }
   }
 }

@@ -7,19 +7,21 @@ import get from 'lodash-es/get'
 
 const actions: ActionTree<ApmState, RootState> = {
   async afterPlaceOrder ({ dispatch }, response) {
-    if (!response || (!response._links && !response.paymentData)) {
-      Logger.error('Could not find last order payment data:', 'icmaa-checkout-com', response)()
-      return
+    if (!response || !response._links) {
+      Logger.error('Could not find payment data for last order', 'icmaa-checkout-com')()
+      return false
     }
 
-    const redirectUrl = get(response, '_links.redirect.href') || get(response, 'paymentData._links.redirect.href')
+    const redirectUrl = get(response, '_links.redirect.href')
 
     if (!redirectUrl) {
-      return dispatch('notification/spawnNotification', {
+      dispatch('notification/spawnNotification', {
         type: 'error',
         message: i18n.t('Something went wrong. Payment was not successful.'),
         action1: { label: i18n.t('OK') }
       }, { root: true })
+
+      return false
     }
 
     window.location.href = redirectUrl
