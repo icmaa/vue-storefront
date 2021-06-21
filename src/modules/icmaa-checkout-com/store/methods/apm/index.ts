@@ -7,15 +7,9 @@ export const CODE = 'checkoutcom_apm'
 const CheckoutComApmStore = createPaymentStore<ApmState>({
   namespaced: true,
   state: {
-    infoComponent: () => import(
-      /* webpackChunkName: "icmaa-checkout-com-method-apm-info" */
-      'icmaa-checkout-com/components/methods/apm/Info.vue'
-    )
+    infoComponent: false
   },
-  actions,
-  getters: {
-    getInfoComponent: (state) => state.infoComponent
-  }
+  actions
 })
 
 export default CheckoutComApmStore

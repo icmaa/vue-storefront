@@ -5,6 +5,10 @@ export default {
     code: {
       type: String,
       required: true
+    },
+    method: {
+      type: [Object, Boolean],
+      required: true
     }
   },
   computed: {
