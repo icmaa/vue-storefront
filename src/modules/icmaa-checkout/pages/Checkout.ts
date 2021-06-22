@@ -5,6 +5,9 @@ import { StorageManager } from '@vue-storefront/core/lib/storage-manager'
 import { Logger } from '@vue-storefront/core/lib/logger'
 import { IcmaaGoogleTagManagerExecutors } from 'icmaa-google-tag-manager/hooks'
 
+import get from 'lodash-es/get'
+import omit from 'lodash-es/omit'
+
 export default {
   mixins: [ VueOfflineMixin ],
   data () {
@@ -36,6 +39,25 @@ export default {
     IcmaaGoogleTagManagerExecutors.checkoutVisited()
   },
   async beforeMount () {
+    if (this.$route.query && this.$route.query.paymentFailure) {
+      const errorMsg = get(this.$route, 'query.message', 'Something went wrong. Payment was not successful.')
+      this.$store.dispatch('notification/spawnNotification', {
+        type: 'error',
+        message: this.$t(errorMsg),
+        action1: { label: this.$t('OK') }
+      })
+
+      const query = omit(this.$route.query, ['paymentFailure', 'message'])
+      this.$router.replace({ ...this.$route, query })
+    } else if (this.$route.query && this.$route.query.paymentGatewaySuccess) {
+      this.$store.dispatch('notification/spawnNotification', {
+        type: 'success',
+        message: this.$t('PAYMENT SUCCESSFUL'),
+        action1: { label: this.$t('OK') }
+      })
+      return
+    }
+
     await this.$store.dispatch('checkout/load')
 
     this.$bus.$on('user-after-logout', this.afterUserLogout)

@@ -27,8 +27,6 @@ const actions: ActionTree<CheckoutState, RootState> = {
           { root: true }
         )
 
-        console.error(paymentHandler)
-
         if (paymentHandler?.redirectUrl) {
           window.location.href = paymentHandler?.redirectUrl
 
