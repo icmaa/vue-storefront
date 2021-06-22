@@ -39,7 +39,7 @@ export default {
     IcmaaGoogleTagManagerExecutors.checkoutVisited()
   },
   async beforeMount () {
-    if (this.$route.query && this.$route.query.paymentFailure) {
+    if (this.$route.query && this.$route.query.paymentGatewayFailure) {
       const errorMsg = get(this.$route, 'query.message', 'Something went wrong. Payment was not successful.')
       this.$store.dispatch('notification/spawnNotification', {
         type: 'error',
@@ -47,15 +47,8 @@ export default {
         action1: { label: this.$t('OK') }
       })
 
-      const query = omit(this.$route.query, ['paymentFailure', 'message'])
+      const query = omit(this.$route.query, ['paymentGatewayFailure', 'message'])
       this.$router.replace({ ...this.$route, query })
-    } else if (this.$route.query && this.$route.query.paymentGatewaySuccess) {
-      this.$store.dispatch('notification/spawnNotification', {
-        type: 'success',
-        message: this.$t('PAYMENT SUCCESSFUL'),
-        action1: { label: this.$t('OK') }
-      })
-      return
     }
 
     await this.$store.dispatch('checkout/load')
