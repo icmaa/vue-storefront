@@ -12,7 +12,7 @@ const actions: ActionTree<PaymentState, RootState> = {
     try {
       return getters.getMethodFactoryByCode(code)()
         .then(async method => {
-          rootStore.registerModule(code, method.default)
+          rootStore.registerModule(code, method.default())
           commit(types.ADD_METHOD, code)
 
           await dispatch(`${code}/init`, undefined, { root: true })
