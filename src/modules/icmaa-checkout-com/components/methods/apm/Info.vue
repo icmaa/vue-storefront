@@ -1,7 +1,17 @@
 <template>
   <div class="t-relative">
-    <div class="t-pt-4" v-if="methods[apmMethodCode]">
-      <component :code="apmMethodCode" :is="methods[apmMethodCode]" />
+    <div class="t-pt-4">
+      <div
+        class="t-text-sm"
+        v-text="info.description"
+        v-if="info.description"
+      />
+      <component
+        :code="apmMethodCode"
+        :is="methods[apmMethodCode]"
+        v-if="hasChildComponent"
+        :class="{ 't-mt-4': !!info.description }"
+      />
     </div>
   </div>
 </template>
@@ -28,17 +38,10 @@ export default {
       }
     }
   },
-  props: {
-    code: {
-      type: String,
-      required: true
-    },
-    method: {
-      type: [Object, Boolean],
-      required: true
-    }
-  },
   computed: {
+    hasChildComponent () {
+      return !!this.methods[this.apmMethodCode]
+    },
     apmMethodCode () {
       const regexp = new RegExp(`${CODE}_(.*)`, 'gm')
       return this.code.replace(regexp, '$1')
