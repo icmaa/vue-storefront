@@ -1,18 +1,16 @@
 <template>
-  <div class="t-relative">
-    <div class="t-pt-4">
-      <div
-        class="t-text-sm"
-        v-text="info.description"
-        v-if="info.description"
-      />
-      <component
-        :code="apmMethodCode"
-        :is="methods[apmMethodCode]"
-        v-if="hasChildComponent"
-        :class="{ 't-mt-4': !!info.description }"
-      />
-    </div>
+  <div :class="{ 't-pt-2': !!info.description }">
+    <div
+      class="t-text-sm"
+      v-text="info.description"
+      v-if="!!info.description"
+    />
+    <component
+      :code="apmMethodCode"
+      :is="methods[apmMethodCode]"
+      v-if="hasChildComponent"
+      :class="[ !!info.description ? 't-mt-4' : 't-mt-2' ]"
+    />
   </div>
 </template>
 

@@ -1,6 +1,11 @@
 <template>
-  <div class="card-frame">
-    <!-- form will be added here -->
+  <div class="t-pt-2">
+    <div
+      class="t-text-sm"
+      v-text="info.description"
+      v-if="info.description"
+    />
+    <div class="card-frame" />
   </div>
 </template>
 
