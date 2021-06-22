@@ -55,7 +55,7 @@ const actions: ActionTree<ApmState, RootState> = {
       return false
     }
 
-    window.location.href = redirectUrl
+    return { redirectUrl }
   }
 }
 

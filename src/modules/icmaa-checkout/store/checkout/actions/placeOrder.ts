@@ -18,7 +18,7 @@ const actions: ActionTree<CheckoutState, RootState> = {
       const response = await OrderService.placeOrder()
 
       if (response.resultCode && response.resultCode === 200 && !!response.result) {
-        await dispatch(
+        const paymentHandler = await dispatch(
           'payment/afterPlaceOrder',
           {
             code: getters.getPaymentMethodCode,
@@ -26,6 +26,20 @@ const actions: ActionTree<CheckoutState, RootState> = {
           },
           { root: true }
         )
+
+        console.error(paymentHandler)
+
+        if (paymentHandler?.redirectUrl) {
+          window.location.href = paymentHandler?.redirectUrl
+
+          dispatch(
+            'ui/loader',
+            { active: true, message: i18n.t('Redirect to payment gateway') },
+            { root: true }
+          )
+
+          return { redirectToPaymentGateway: true }
+        }
 
         const order = { orderId: response.result.orderId, ...getters.getOrderData }
         orderHooksExecutors.afterPlaceOrder({ order, task: response })

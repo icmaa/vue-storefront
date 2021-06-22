@@ -38,7 +38,7 @@ const actions: ActionTree<CardState, RootState> = {
       return false
     }
 
-    window.location.href = redirectUrl
+    return { redirectUrl }
   }
 }
 

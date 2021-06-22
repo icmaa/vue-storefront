@@ -49,6 +49,8 @@ export default {
         })
 
       if (order) {
+        if (order.redirectToPaymentGateway) return
+
         this.$store.dispatch('icmaaGoogleTagManager/setLastOrderId', order.orderId)
         await this.subscribeNewsletter(order)
 
