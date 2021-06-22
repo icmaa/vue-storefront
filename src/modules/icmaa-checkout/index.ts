@@ -39,5 +39,9 @@ export const IcmaaCheckoutModule: StorefrontModule = function ({ store, router, 
     if (type.endsWith(types.CHECKOUT_SAVE_PAYMENT_METHOD)) {
       setStorage('payment-method', state.checkout.paymentMethod)
     }
+
+    if (type.endsWith(types.CHECKOUT_SET_GATEWAY_ORDER)) {
+      setStorage('gateway-order', state.checkout.gatewayOrder)
+    }
   })
 }

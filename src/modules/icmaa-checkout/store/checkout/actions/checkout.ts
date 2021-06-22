@@ -31,13 +31,15 @@ const actions: ActionTree<CheckoutState, RootState> = {
       shippingDetails,
       shippingMethod,
       paymentDetails,
-      paymentMethod
+      paymentMethod,
+      gatewayOrder
     ] = await Promise.all([
       checkoutStorage.getItem('personal-details'),
       checkoutStorage.getItem('shipping-details'),
       checkoutStorage.getItem('shipping-method'),
       checkoutStorage.getItem('payment-details'),
-      checkoutStorage.getItem('payment-method')
+      checkoutStorage.getItem('payment-method'),
+      checkoutStorage.getItem('gateway-order')
     ])
 
     if (personalDetails) {
@@ -59,6 +61,10 @@ const actions: ActionTree<CheckoutState, RootState> = {
     if (paymentMethod) {
       commit(types.CHECKOUT_SAVE_PAYMENT_METHOD, paymentMethod)
     }
+
+    if (gatewayOrder) {
+      commit(types.CHECKOUT_SET_GATEWAY_ORDER, gatewayOrder)
+    }
   },
   addPaymentMethod ({ commit }, paymentMethod) {
     commit(types.CHECKOUT_ADD_PAYMENT_METHOD, paymentMethod)
@@ -79,11 +85,11 @@ const actions: ActionTree<CheckoutState, RootState> = {
       }
     }
   },
+  setGatewayOrder ({ commit }, order) {
+    commit(types.CHECKOUT_SET_GATEWAY_ORDER, order)
+  },
   setLastOrderId ({ commit }, id) {
     commit(types.CHECKOUT_SET_LAST_ORDER_ID, id)
-  },
-  setLastOrderResponse ({ commit }, response) {
-    commit(types.CHECKOUT_SET_LAST_ORDER_RESPONSE, response)
   },
   dropPassword ({ commit, state }) {
     if (state.personalDetails.createAccount) {

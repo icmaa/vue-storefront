@@ -27,8 +27,10 @@ const actions: ActionTree<CheckoutState, RootState> = {
           { root: true }
         )
 
+        const order = { orderId: response.result.orderId, ...getters.getOrderData }
+
         if (paymentHandler?.redirectUrl) {
-          window.location.href = paymentHandler?.redirectUrl
+          dispatch('setGatewayOrder', { order, response })
 
           dispatch(
             'ui/loader',
@@ -36,27 +38,12 @@ const actions: ActionTree<CheckoutState, RootState> = {
             { root: true }
           )
 
+          window.location.href = paymentHandler?.redirectUrl
+
           return { redirectToPaymentGateway: true }
         }
 
-        const order = { orderId: response.result.orderId, ...getters.getOrderData }
-        orderHooksExecutors.afterPlaceOrder({ order, task: response })
-        EventBus.$emit('checkout-after-place-order', { order, task: response })
-
-        await dispatch('reset', {})
-
-        if (order.createAccount) {
-          dispatch(
-            'ui/loader',
-            { active: true, message: i18n.t('Login to your new account') },
-            { root: true }
-          )
-
-          const { email: username, password } = order.personalDetails
-          await dispatch('user/login', { username, password }, { root: true })
-        }
-
-        await dispatch('user/loadOrderByToken', { token: response.result.orderToken }, { root: true })
+        await dispatch('finishPlaceOrder', { order, response })
 
         return order
       } else {
@@ -67,6 +54,25 @@ const actions: ActionTree<CheckoutState, RootState> = {
       Logger.error('Couldn\'t place order:', 'icmaa-checkout', err)()
       return false
     }
+  },
+  async finishPlaceOrder ({ dispatch }, { order, response }) {
+    orderHooksExecutors.afterPlaceOrder({ order, task: response })
+    EventBus.$emit('checkout-after-place-order', { order, task: response })
+
+    await dispatch('reset', {})
+
+    if (order.createAccount) {
+      dispatch(
+        'ui/loader',
+        { active: true, message: i18n.t('Login to your new account') },
+        { root: true }
+      )
+
+      const { email: username, password } = order.personalDetails
+      await dispatch('user/login', { username, password }, { root: true })
+    }
+
+    await dispatch('user/loadOrderByToken', { token: response.result.orderToken }, { root: true })
   }
 }
 

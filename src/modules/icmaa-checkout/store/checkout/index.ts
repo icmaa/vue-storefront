@@ -14,7 +14,8 @@ const state = {
   paymentMethod: null,
   shippingMethods: [],
   paymentMethods: [],
-  priorityHandling: null
+  priorityHandling: null,
+  gatewayOrder: null
 }
 
 export const checkoutStore: Module<CheckoutState, any> = {

@@ -1,5 +1,6 @@
 const CheckoutPage = () => import(/* webpackChunkName: "vsf-checkout" */ 'theme/pages/Checkout.vue')
 const SuccessPage = () => import(/* webpackChunkName: "vsf-checkout-success" */ 'theme/pages/CheckoutSuccess.vue')
+const CheckoutGatewaySuccess = () => import(/* webpackChunkName: "vsf-checkout-gateway-success" */ 'icmaa-checkout/pages/CheckoutGatewaySuccess.vue')
 
 /**
  * As we register this route dynamically using this module, it is important to consider the order of
@@ -9,5 +10,6 @@ const SuccessPage = () => import(/* webpackChunkName: "vsf-checkout-success" */ 
  */
 export default [
   { name: 'checkout', path: '/checkout', component: CheckoutPage, meta: { layout: 'empty', gtm: 'checkout' } },
-  { name: 'checkout-success', path: '/(checkout|order)-success', component: SuccessPage }
+  { name: 'checkout-success', path: '/(checkout|order)-success', component: SuccessPage },
+  { name: 'checkout-gateway-success', path: '/checkout-gateway-success', component: CheckoutGatewaySuccess, meta: { layout: 'empty' } }
 ]
