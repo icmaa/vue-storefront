@@ -27,8 +27,12 @@ export default {
     ...mapGetters({
       shippingDetails: 'checkout/getShippingDetails',
       personalDetails: 'checkout/getPersonalDetails',
-      hasAgreements: 'checkout/hasAgreements'
-    })
+      hasAgreements: 'checkout/hasAgreements',
+      viewport: 'ui/getViewport'
+    }),
+    isMobile () {
+      return ['xs', 'sm'].includes(this.viewport)
+    }
   },
   methods: {
     async submit () {

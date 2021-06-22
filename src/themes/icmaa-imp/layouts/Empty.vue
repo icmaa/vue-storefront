@@ -19,6 +19,7 @@ import Loader from 'theme/components/core/Loader'
 import Notifications from 'theme/components/core/blocks/Notification/Notifications'
 import AuthModal from 'theme/components/core/blocks/Auth/Modal'
 import CookieNotification from 'theme/components/core/CookieNotification'
+import viewportMixin from 'theme/mixins/viewportMixin.ts'
 
 export default {
   components: {
@@ -28,6 +29,7 @@ export default {
     AuthModal,
     CookieNotification
   },
+  mixins: [ viewportMixin ],
   computed: {
     ...mapState({
       overlayActive: state => state.ui.overlay

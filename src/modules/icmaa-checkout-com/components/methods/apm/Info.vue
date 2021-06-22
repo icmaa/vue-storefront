@@ -1,5 +1,5 @@
 <template>
-  <div class="t-relative" v-if="show">
+  <div class="t-relative">
     <div class="t-pt-4" v-if="methods[apmMethodCode]">
       <component :code="apmMethodCode" :is="methods[apmMethodCode]" />
     </div>

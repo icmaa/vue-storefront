@@ -1,6 +1,11 @@
 <template>
   <div class="order-review">
     <div v-if="active">
+      <cart class="t-mb-6" v-if="isMobile">
+        <template v-slot:headline>
+          <h3 v-text="$t('Shopping cart')" class="t-w-full t-mb-2 t-font-light" />
+        </template>
+      </cart>
       <additional-products class="t-mb-6" />
       <p class="t-mb-4 t-text-sm">
         {{ $t('Please check if your order data is correct.') }}
@@ -58,6 +63,7 @@ import { localizedRoutePath } from '@vue-storefront/core/lib/multistore'
 
 import Review from 'icmaa-checkout/components/Review'
 import AdditionalProducts from 'theme/components/core/blocks/Checkout/AdditionalProducts'
+import Cart from 'theme/components/core/blocks/Checkout/Cart'
 import BaseCheckbox from 'theme/components/core/blocks/Form/BaseCheckbox'
 import ButtonComponent from 'theme/components/core/blocks/Button'
 
@@ -66,7 +72,8 @@ export default {
   components: {
     AdditionalProducts,
     BaseCheckbox,
-    ButtonComponent
+    ButtonComponent,
+    Cart
   },
   validations () {
     let agreements = {}

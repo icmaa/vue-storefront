@@ -32,7 +32,7 @@
       </div>
       <div class="t-hidden md:t-block md:t-w-1/2 xl:t-w-2/5 t-pl-8">
         <div class="t-min-h-full t-flex t-items-stretch t-bg-base-lightest t-p-4">
-          <cart class="t-bg-white t-w-full t-p-4" />
+          <cart class="t-bg-white t-w-full t-p-4" v-if="!isMobile" />
         </div>
       </div>
     </div>
@@ -65,7 +65,8 @@ export default {
   mixins: [ Checkout ],
   computed: {
     ...mapGetters({
-      isLoggedIn: 'user/isLoggedIn'
+      isLoggedIn: 'user/isLoggedIn',
+      viewport: 'ui/getViewport'
     }),
     steps () {
       return [
@@ -95,6 +96,9 @@ export default {
           component: Review
         }
       ].map(step => Object.assign(step, this.sections[step.name]))
+    },
+    isMobile () {
+      return ['xs', 'sm'].includes(this.viewport)
     }
   },
   methods: {

@@ -1,8 +1,10 @@
 <template>
   <div>
-    <h2 class="t-font-light t-text-xl t-mb-4">
-      {{ $t('Shopping cart') }}
-    </h2>
+    <slot name="headline">
+      <h2 class="t-font-light t-text-xl t-mb-4">
+        {{ $t('Shopping cart') }}
+      </h2>
+    </slot>
     <no-ssr>
       <div v-if="productsInCart.length">
         <coupon />
@@ -17,6 +19,7 @@
         <button-component
           class="t-mt-6"
           size="sm"
+          type="ghost"
           @click="editCart"
         >
           {{ $t('Edit your cart') }}
