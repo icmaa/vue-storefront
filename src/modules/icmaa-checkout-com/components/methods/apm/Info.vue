@@ -1,6 +1,6 @@
 <template>
-  <div class="t-relative" v-if="show">
-    <div class="t-pt-4" v-if="methods[apmMethodCode]">
+  <div class="t-relative" v-if="methods[apmMethodCode]">
+    <div class="t-pt-4">
       <component :code="apmMethodCode" :is="methods[apmMethodCode]" />
     </div>
   </div>
@@ -17,6 +17,10 @@ export default {
   data () {
     return {
       methods: {
+        paypal: () => import(
+          /* webpackChunkName: "icmaa-checkout-com-method-apm-paypal" */
+          'icmaa-checkout-com/components/methods/apm/Paypal.vue'
+        ),
         giropay: () => import(
           /* webpackChunkName: "icmaa-checkout-com-method-apm-giropay" */
           'icmaa-checkout-com/components/methods/apm/Giropay.vue'
