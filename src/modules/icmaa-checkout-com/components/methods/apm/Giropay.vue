@@ -3,7 +3,8 @@
     <base-input
       type="text"
       v-model="additionalData.bic"
-      :placeholder="$t('BIC')" required :validations="[
+      :placeholder="$t('BIC')"
+      :validations="[
         {
           condition: $v.additionalData.bic.$error && !$v.additionalData.bic.required,
           text: $t('Field is required')
@@ -26,7 +27,8 @@ export default {
   data () {
     return {
       additionalData: {
-        bic: null
+        bic: null,
+        iban: null
       }
     }
   },

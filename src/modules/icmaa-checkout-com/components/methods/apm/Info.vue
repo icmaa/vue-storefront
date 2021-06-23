@@ -25,6 +25,10 @@ export default {
   data () {
     return {
       methods: {
+        paypal: () => import(
+          /* webpackChunkName: "icmaa-checkout-com-method-apm-paypal" */
+          'icmaa-checkout-com/components/methods/apm/Paypal.vue'
+        ),
         giropay: () => import(
           /* webpackChunkName: "icmaa-checkout-com-method-apm-giropay" */
           'icmaa-checkout-com/components/methods/apm/Giropay.vue'
