@@ -2,27 +2,31 @@
   <form>
     <base-input
       type="text"
-      class="t-mb-2"
-      v-model="additionalData.bic"
-      :placeholder="$t('BIC')"
+      v-model="additionalData.iban"
+      :placeholder="$t('IBAN')"
+      :validations="[
+        {
+          condition: $v.additionalData.iban.$error && !$v.additionalData.iban.required,
+          text: $t('Field is required')
+        },
+        {
+          condition: $v.additionalData.iban.$error && !$v.additionalData.iban.format,
+          text: $t('Wrong format for your IBAN')
+        }
+      ]"
+      class="t-mb-4"
     />
     <base-input
       type="text"
-      v-model="additionalData.account_iban"
-      :placeholder="$t('Account IBAN')"
+      v-model="additionalData.bic"
+      :placeholder="$t('BIC')"
       :validations="[
         {
-          condition: $v.additionalData.account_iban.$error && !$v.additionalData.account_iban.required,
-          text: $t('Field is required')
+          condition: $v.additionalData.bic.$error && !$v.additionalData.bic.format,
+          text: $t('Wrong format for your BIC')
         }
       ]"
     />
-    <button-component
-      class="t-w-full lg:t-w-auto t-mt-4"
-      @click.native.stop="submit"
-    >
-      {{ $t('Continue') }}
-    </button-component>
   </form>
 </template>
 
@@ -30,12 +34,10 @@
 import { required } from 'vuelidate/lib/validators'
 import ApmMethod from 'icmaa-checkout-com/mixins/methods/ApmMethod'
 import BaseInput from 'theme/components/core/blocks/Form/BaseInput.vue'
-import ButtonComponent from 'theme/components/core/blocks/Button'
 
 export default {
   components: {
-    BaseInput,
-    ButtonComponent
+    BaseInput
   },
   mixins: [ApmMethod],
   data () {
@@ -43,20 +45,23 @@ export default {
       additionalData: {
         task: 'mandate',
         bic: null,
-        account_iban: null
+        iban: null
       }
     }
   },
   validations: {
     additionalData: {
-      account_iban: {
-        required
+      iban: {
+        required,
+        format: (v) => {
+          return /[A-Z]{2}\d{2}\s?\d{4}\s?\d{4}\s?\d{4}\s?\d{4}\s?[\d]{0,2}/.test(v)
+        }
+      },
+      bic: {
+        format: (v) => {
+          return /([a-zA-Z]{4})([a-zA-Z]{2})(([2-9a-zA-Z]{1})([0-9a-np-zA-NP-Z]{1}))((([0-9a-wy-zA-WY-Z]{1})([0-9a-zA-Z]{2}))|([xX]{3})|)/.test(v)
+        }
       }
-    }
-  },
-  methods: {
-    submit () {
-      // console.log('FORM', form)
     }
   }
 }

@@ -5,7 +5,7 @@
       v-text="info.description"
       v-if="info.description"
     />
-    <div class="card-frame" />
+    <div class="card-frame t-mt-2 t-h-10" />
   </div>
 </template>
 
