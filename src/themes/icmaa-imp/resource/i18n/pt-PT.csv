@@ -32,6 +32,7 @@
 "Card number","Número de cartão"
 "Care instructions","Cuidados a ter"
 "Cash on delivery","Dinheiro na entrega"
+"Categories","Categoria"
 "Change my password","Alterar a minha password"
 "Check balance","Verificar saldo"
 "Checkout this out: {name} for {price}","Check this out: {name} por {price}"
@@ -115,7 +116,7 @@
 "Field is required","Preenchimento obrigatório"
 "Filter by categories","Filtrar por categorias"
 "Filter by categories","Filtrar por categorias"
-"Filter {label}","Filtro {label}"
+"Filter {label}","Filtrar {label}"
 "Filter","Filtro"
 "Filters","Filtros"
 "First name","Primeiro nome"
@@ -333,6 +334,7 @@
 "Sorry  but you don't have any orders yet.
 "Sorry but this competition is already over.
 "Sort by","Ordenar por"
+"Sorting", "Ordenar"
 "Special Offer","Oferta Especial"
 "State / Province","Cidade / Localidade"
 "Status","Estado"

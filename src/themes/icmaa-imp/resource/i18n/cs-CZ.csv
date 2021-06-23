@@ -32,6 +32,7 @@
 "Card number","číslo karty"
 "Care instructions","Pokyny k provedení"
 "Cash on delivery","Dobírka"
+"Categories","Kategorie"
 "Change my password","Změnit hesla"
 "Check balance","Zkontrolujte zůstatek"
 "Checkout this out: {name} for {price}","Pokladna to: {jméno} za {cena}"
@@ -115,7 +116,7 @@
 "Field is required","Políčko je vyžadováno"
 "Filter by categories","Filtrovat podle kategorií"
 "Filter by categories","Filtrovat podle kategorií"
-"Filter {label}","Filtrovat"
+"Filter {label}","Filtry {label}"
 "Filter","Filter"
 "Filters","Filtery"
 "First name","Křestní jméno"
@@ -334,6 +335,7 @@
 "Sorry  but you don't have any orders yet.
 "Sorry but this competition is already over.
 "Sort by","Seřazeno podle"
+"Sorting","Třídění"
 "Special Offer","Speciální nabídka"
 "State / Province","Stát / provincie"
 "Status","Status"
