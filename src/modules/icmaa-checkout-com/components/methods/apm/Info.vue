@@ -32,6 +32,10 @@ export default {
         sepa: () => import(
           /* webpackChunkName: "icmaa-checkout-com-method-apm-sepa" */
           'icmaa-checkout-com/components/methods/apm/Sepa.vue'
+        ),
+        ideal: () => import(
+          /* webpackChunkName: "icmaa-checkout-com-method-apm-ideal" */
+          'icmaa-checkout-com/components/methods/apm/Ideal.vue'
         )
       }
     }

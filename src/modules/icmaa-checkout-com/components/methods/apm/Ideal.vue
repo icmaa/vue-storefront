@@ -40,7 +40,7 @@ export default {
     additionalData: {
       bic: {
         required,
-        bic
+        format: bic
       }
     }
   }
