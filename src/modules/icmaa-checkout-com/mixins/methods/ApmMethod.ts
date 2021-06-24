@@ -1,16 +1,19 @@
+import MethodInfoBoxMixin from 'icmaa-payment/mixins/methods/InfoMixin'
+
 export default {
+  mixins: [ MethodInfoBoxMixin ],
   props: {
-    code: {
+    apmMethodCode: {
       type: String,
       required: true
     }
   },
   methods: {
     setAdditionalInformation (data: any) {
-      this.$store.dispatch(`checkoutcom_apm_${this.code}/setAdditionalInformation`, data)
+      this.$store.dispatch(`checkoutcom_apm_${this.apmMethodCode}/setAdditionalInformation`, data)
     },
     setValidations (data: any) {
-      this.$store.dispatch(`checkoutcom_apm_${this.code}/setValidations`, data)
+      this.$store.dispatch(`checkoutcom_apm_${this.apmMethodCode}/setValidations`, data)
     }
   },
   mounted () {

@@ -37,10 +37,11 @@ import ApmMethod from 'icmaa-checkout-com/mixins/methods/ApmMethod'
 import BaseInput from 'theme/components/core/blocks/Form/BaseInput.vue'
 
 export default {
+  name: 'CheckoutComSepaInfo',
+  mixins: [ ApmMethod ],
   components: {
     BaseInput
   },
-  mixins: [ApmMethod],
   data () {
     return {
       additionalData: {
