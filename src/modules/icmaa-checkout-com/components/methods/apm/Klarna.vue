@@ -7,6 +7,7 @@
 
 <script>
 
+import { mapGetters } from 'vuex'
 import ApmMethod from 'icmaa-checkout-com/mixins/methods/ApmMethod'
 
 export default {
@@ -20,11 +21,47 @@ export default {
     }
   },
   computed: {
+    ...mapGetters({
+      personalDetails: 'checkout/getPersonalDetails',
+      billingAddress: 'checkout/getPaymentDetails'
+    }),
     clientToken () {
       return this.info.clientToken
     },
     paymentMethods () {
       return this.info.paymentMethods
+    },
+    orderData () {
+      const {
+        firstname: given_name,
+        lastname: family_name,
+        street,
+        postcode: postal_code,
+        city,
+        region,
+        country_id: country,
+        telephone: phone
+      } = this.billingAddress
+
+      const billingAddress = {
+        given_name,
+        family_name,
+        email: this.personalDetails.email,
+        street_address: street.join(' '),
+        street_address2: '',
+        postal_code,
+        city,
+        region,
+        phone,
+        country
+      }
+
+      return {
+        billing_address: billingAddress,
+        customer: {
+          date_of_birth: this.personalDetails.dob || false
+        }
+      }
     }
   },
   async mounted () {
@@ -55,7 +92,7 @@ export default {
             payment_method_categories: this.paymentMethods.map(m => m.identifier),
             instance_id: 'icmaa-klarna-payments-instance'
           },
-          {},
+          this.orderData,
           () => {
             this.widgetLoaded = true
           }

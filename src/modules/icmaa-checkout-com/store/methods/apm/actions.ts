@@ -13,6 +13,22 @@ const actions: ActionTree<ApmState, RootState> = {
   setValidations ({ commit }, data) {
     commit(SET_VALIDATIONS, data)
   },
+  async authorizeKlarnaTransaction ({ dispatch }) {
+    return new Promise<void>(resolve => {
+      try {
+        (window as any).Klarna.Payments.authorize(
+          { instance_id: 'icmaa-klarna-payments-instance' },
+          {},
+          resp => {
+            dispatch('setAdditionalInformation', resp)
+            resolve()
+          }
+        )
+      } catch (err) {
+        resolve()
+      }
+    })
+  },
   async save ({ dispatch, rootGetters, getters }) {
     if (getters.getValidations) {
       getters.getValidations.$touch()
@@ -22,18 +38,21 @@ const actions: ActionTree<ApmState, RootState> = {
       }
     }
 
+    const paymentMethodCode = rootGetters['checkout/getPaymentMethodCode']
+    if (paymentMethodCode === 'checkoutcom_apm_klarna') {
+      await dispatch('authorizeKlarnaTransaction')
+    }
+
     if (!getters.getAdditionalData) {
       return true
     }
 
-    const orderData = rootGetters['checkout/getOrderData'] || { paymentMethod: false }
-    const paymentMethod = orderData.paymentMethod
-
+    const paymentMethod = rootGetters['checkout/getPaymentMethod']
     paymentMethod.additional_data = getters.getAdditionalData
 
     await dispatch(
-      'checkout/savePaymentDetails',
-      Object.assign({}, rootGetters['checkout/getPaymentDetails'], { paymentMethod }),
+      'checkout/savePaymentMethod',
+      paymentMethod,
       { root: true }
     )
   },
