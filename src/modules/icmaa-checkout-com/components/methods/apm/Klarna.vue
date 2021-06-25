@@ -1,10 +1,7 @@
 <template>
   <div class="t-text-sm">
-    <div v-text="error" v-if="error" />
+    <div v-text="error" v-if="error" class="t-text-sm t-text-alert t-mb-4" />
     <div id="klarna_container" />
-    <div v-text="'SDK is loaded and initialized'" v-if="sdkLoaded" />
-    <div v-text="'Widget is loaded'" v-if="widgetLoaded" />
-    <pre>{{ info }}</pre>
   </div>
 </template>
 
@@ -20,6 +17,14 @@ export default {
       sdkLoaded: false,
       widgetLoaded: false,
       error: null
+    }
+  },
+  computed: {
+    clientToken () {
+      return this.info.clientToken
+    },
+    paymentMethods () {
+      return this.info.paymentMethods
     }
   },
   async mounted () {
@@ -41,14 +46,14 @@ export default {
 
       try {
         const k = window.Klarna.Payments.init({
-          client_token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmb28iOiJiYXIifQ.dtxWM6MIcgoeMgH87tGvsNDY6cH'
+          client_token: this.clientToken
         });
 
         k.load(
           {
             container: '#klarna_container',
-            payment_method_categories: [],
-            instance_id: 'klarna-payments-instance'
+            payment_method_categories: this.paymentMethods.map(m => m.identifier),
+            instance_id: 'icmaa-klarna-payments-instance'
           },
           {},
           () => {
