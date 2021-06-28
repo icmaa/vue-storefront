@@ -26,28 +26,46 @@
           text: $t('Wrong format for your BIC')
         }
       ]"
+      class="t-mb-4"
     />
+    <base-checkbox
+      name="terms"
+      id="terms"
+      v-model="additionalData.terms"
+      :validations="[{
+        condition: $v.additionalData.terms.$error && (!$v.additionalData.terms.required || !$v.additionalData.terms.notFalse),
+        text: $t('Field is required')
+      }]"
+      checkbox-class="t-self-start"
+    >
+      {{ info.terms }}
+    </base-checkbox>
   </form>
 </template>
 
 <script>
 import { required } from 'vuelidate/lib/validators'
 import { iban, bic } from 'icmaa-checkout-com/helpers/validators'
+import { notFalse } from 'icmaa-config/helpers/validators'
+
 import ApmMethod from 'icmaa-checkout-com/mixins/methods/ApmMethod'
-import BaseInput from 'theme/components/core/blocks/Form/BaseInput.vue'
+import BaseInput from 'theme/components/core/blocks/Form/BaseInput'
+import BaseCheckbox from 'theme/components/core/blocks/Form/BaseCheckbox'
 
 export default {
   name: 'CheckoutComSepaInfo',
   mixins: [ ApmMethod ],
   components: {
-    BaseInput
+    BaseInput,
+    BaseCheckbox
   },
   data () {
     return {
       additionalData: {
         task: 'mandate',
         bic: null,
-        iban: null
+        iban: null,
+        terms: false
       }
     }
   },
@@ -59,6 +77,10 @@ export default {
       },
       bic: {
         format: bic
+      },
+      terms: {
+        required,
+        notFalse
       }
     }
   }
