@@ -2,21 +2,42 @@ import { ActionTree } from 'vuex'
 import RootState from '@vue-storefront/core/types/RootState'
 import { CardState } from 'icmaa-checkout-com/types'
 import { Logger } from '@vue-storefront/core/lib/logger'
+import * as types from './mutation-types'
 import i18n from '@vue-storefront/core/i18n'
 import get from 'lodash-es/get'
 
-const actions: ActionTree<CardState, RootState> = {
-  async save ({ dispatch, rootGetters, getters }) {
-    const orderData = rootGetters['checkout/getOrderData'] || { paymentMethod: false }
-    const paymentMethod = orderData.paymentMethod
+declare const Frames: any
 
-    if (!getters.getToken) {
+const actions: ActionTree<CardState, RootState> = {
+  setToken ({ commit }, token) {
+    commit(types.SET_TOKEN, token)
+  },
+  setValidations ({ commit }, data) {
+    commit(types.SET_VALIDATIONS, data)
+  },
+  async save ({ dispatch, rootGetters, getters }) {
+    if (getters.getValidations) {
+      getters.getValidations.$touch()
+
+      if (getters.getValidations.$invalid) {
+        return false
+      }
+    }
+
+    const paymentMethod = rootGetters['checkout/getPaymentMethod']
+
+    await Frames
+      .submitCard()
+      .catch(e => {
+        Logger.error('Couldn\'t fetch token for CC', 'icmaa-checkout-com', e)()
+      })
+
+    const cardToken = getters.getToken
+    if (!cardToken) {
       return false
     }
 
-    paymentMethod.additional_data = {
-      cardToken: getters.getToken
-    }
+    paymentMethod.additional_data = { cardToken }
 
     await dispatch(
       'checkout/savePaymentMethod',

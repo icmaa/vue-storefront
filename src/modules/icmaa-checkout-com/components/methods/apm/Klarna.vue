@@ -1,11 +1,18 @@
 <template>
   <div class="t-text-sm">
-    <div
-      v-text="$t('Please wait until Klarna is ready.')"
-      class="t-text-sm t-text-alert t-mb-4"
-      v-if="($v.sdkLoaded.$error && !$v.sdkLoaded.notFalse) || ($v.widgetLoaded.$error && !$v.widgetLoaded.notFalse)"
+    <validation-messages
+      class="t-mb-4"
+      :validations="[
+        {
+          condition: error,
+          text: error
+        },
+        {
+          condition: ($v.sdkLoaded.$error && !$v.sdkLoaded.notFalse) || ($v.widgetLoaded.$error && !$v.widgetLoaded.notFalse),
+          text: $t('Please wait until Klarna is ready.')
+        }
+      ]"
     />
-    <div v-text="error" v-if="error" class="t-text-sm t-text-alert t-mb-4" />
     <div id="klarna_container" />
   </div>
 </template>
@@ -16,10 +23,14 @@ import { mapGetters } from 'vuex'
 import { Logger } from '@vue-storefront/core/lib/logger'
 import { notFalse } from 'icmaa-config/helpers/validators'
 import ApmMethod from 'icmaa-checkout-com/mixins/methods/ApmMethod'
+import ValidationMessages from 'theme/components/core/blocks/Form/ValidationMessages.vue'
 
 export default {
   name: 'CheckoutComKlarnaInfo',
   mixins: [ ApmMethod ],
+  components: {
+    ValidationMessages
+  },
   data () {
     return {
       sdkLoaded: false,
