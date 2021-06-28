@@ -5,9 +5,6 @@ import { CODE } from 'icmaa-checkout-com/store/methods/card'
 declare const Frames: any
 
 export default {
-  computed: {
-
-  },
   methods: {
     loadSdkScript () {
       return new Promise<void>(resolve => {

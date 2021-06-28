@@ -54,6 +54,11 @@ export default {
       const regexp = new RegExp(`${CODE}_(.*)`, 'gm')
       return this.code.replace(regexp, '$1')
     }
+  },
+  mounted () {
+    if (!this.hasChildComponent) {
+      this.$store.dispatch(`checkoutcom_apm_${this.apmMethodCode}/setAdditionalInformation`, {})
+    }
   }
 }
 </script>
