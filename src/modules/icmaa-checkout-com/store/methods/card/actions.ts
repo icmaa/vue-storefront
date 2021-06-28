@@ -15,8 +15,8 @@ const actions: ActionTree<CardState, RootState> = {
     }
 
     await dispatch(
-      'checkout/savePaymentDetails',
-      Object.assign({}, rootGetters['checkout/getPaymentDetails'], { paymentMethod }),
+      'checkout/savePaymentMethod',
+      paymentMethod,
       { root: true }
     )
   },
