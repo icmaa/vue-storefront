@@ -40,11 +40,11 @@ export default {
     orderShippingAmount () {
       return formatValue(this.order.shipping_amount, 'en-US')
     },
-    orderShippingDescription () {
-      return this.order.shipping_description
+    shippingMethod () {
+      return this.order.shipping_method
     },
     paymentMethod () {
-      return this.order.payment.additional_information[0]
+      return this.order.payment.method
     },
     couponCode () {
       return this.order.coupon_code ? String(this.order.coupon_code) : null
@@ -90,7 +90,7 @@ export default {
               revenue: this.orderGrandTotal,
               tax: this.orderTaxAmount,
               shipping: this.orderShippingAmount,
-              shipping_method: this.orderShippingDescription,
+              shipping_method: this.shippingMethod,
               payment_method: this.paymentMethod,
               coupon: this.couponCode,
               couponrule: this.couponCodeRule
