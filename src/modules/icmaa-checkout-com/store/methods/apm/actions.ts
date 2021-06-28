@@ -25,6 +25,7 @@ const actions: ActionTree<ApmState, RootState> = {
           }
         )
       } catch (err) {
+        Logger.error('Couldn\'t authorize Klarna payment', 'icmaa-checkout-com', err)()
         resolve()
       }
     })

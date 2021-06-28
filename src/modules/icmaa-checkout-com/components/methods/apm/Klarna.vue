@@ -8,6 +8,7 @@
 <script>
 
 import { mapGetters } from 'vuex'
+import { Logger } from '@vue-storefront/core/lib/logger'
 import ApmMethod from 'icmaa-checkout-com/mixins/methods/ApmMethod'
 
 export default {
@@ -99,7 +100,7 @@ export default {
         )
       } catch (e) {
         this.error = e.message
-        console.error(e)
+        Logger.error('Couldn\'t init Klarna SDK', 'icmaa-checkout-com', e)()
       }
     }
   }
