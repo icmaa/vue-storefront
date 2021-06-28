@@ -1,11 +1,11 @@
 <template>
   <div class="t-text-sm">
-    <div v-text="error" v-if="error" class="t-text-sm t-text-alert t-mb-4" />
     <div
-      v-text="$t('Please wait until Klarna is loaded')"
+      v-text="$t('Please wait until Klarna is ready.')"
       class="t-text-sm t-text-alert t-mb-4"
       v-if="($v.sdkLoaded.$error && !$v.sdkLoaded.notFalse) || ($v.widgetLoaded.$error && !$v.widgetLoaded.notFalse)"
     />
+    <div v-text="error" v-if="error" class="t-text-sm t-text-alert t-mb-4" />
     <div id="klarna_container" />
   </div>
 </template>

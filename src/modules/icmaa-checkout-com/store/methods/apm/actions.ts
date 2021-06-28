@@ -5,9 +5,15 @@ import { Logger } from '@vue-storefront/core/lib/logger'
 import i18n from '@vue-storefront/core/i18n'
 import get from 'lodash-es/get'
 import { SET_ADDITIONAL_DATA, SET_VALIDATIONS } from './mutation-types'
+import { icmaa_checkoutcom } from 'config'
 
 const actions: ActionTree<ApmState, RootState> = {
-  setAdditionalInformation ({ commit }, data) {
+  setAdditionalInformation ({ commit, rootGetters }, data) {
+    if (icmaa_checkoutcom.sandbox) {
+      const storeCode = rootGetters['icmaaConfig/getCurrentStore'].storeCode
+      data.baseUrl = `${location.origin}/${storeCode}/`
+    }
+
     commit(SET_ADDITIONAL_DATA, data)
   },
   setValidations ({ commit }, data) {
