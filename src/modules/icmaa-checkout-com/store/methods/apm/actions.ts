@@ -57,10 +57,17 @@ const actions: ActionTree<ApmState, RootState> = {
       { root: true }
     )
   },
-  async afterPlaceOrder ({ dispatch }, response) {
+  async afterPlaceOrder ({ dispatch, rootGetters }, response) {
     if (!response || !response._links) {
       Logger.error('Could not find payment data for last order', 'icmaa-checkout-com')()
       return false
+    }
+
+    const paymentMethodCode = rootGetters['checkout/getPaymentMethodCode']
+
+    // SEPA doesn't need a redirect
+    if (paymentMethodCode === 'checkoutcom_apm_sepa') {
+      return true
     }
 
     const redirectUrl = get(response, '_links.redirect.href')
