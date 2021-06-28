@@ -10,6 +10,10 @@ const actions: ActionTree<CardState, RootState> = {
     const orderData = rootGetters['checkout/getOrderData'] || { paymentMethod: false }
     const paymentMethod = orderData.paymentMethod
 
+    if (!getters.getToken) {
+      return false
+    }
+
     paymentMethod.additional_data = {
       cardToken: getters.getToken
     }
