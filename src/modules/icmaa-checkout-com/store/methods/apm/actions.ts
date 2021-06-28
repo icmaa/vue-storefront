@@ -63,16 +63,14 @@ const actions: ActionTree<ApmState, RootState> = {
       return false
     }
 
-    const paymentMethodCode = rootGetters['checkout/getPaymentMethodCode']
-
-    // SEPA doesn't need a redirect
-    if (paymentMethodCode === 'checkoutcom_apm_sepa') {
-      return true
-    }
-
     const redirectUrl = get(response, '_links.redirect.href')
-
     if (!redirectUrl) {
+      const paymentMethodCode = rootGetters['checkout/getPaymentMethodCode']
+      if (paymentMethodCode === 'checkoutcom_apm_sepa') {
+        // SEPA don't need a redirect
+        return false
+      }
+
       dispatch('notification/spawnNotification', {
         type: 'error',
         message: i18n.t('Something went wrong. Payment was not successful.'),
