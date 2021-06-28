@@ -5,6 +5,18 @@ import { CODE } from 'icmaa-checkout-com/store/methods/card'
 declare const Frames: any
 
 export default {
+  data () {
+    return {
+      paymentMethod: 'card',
+      isDirty: false,
+      isValid: false
+    }
+  },
+  computed: {
+    paymentMethodIcon () {
+      return require(`icmaa-checkout-com/assets/card-icons/${this.paymentMethod}.svg`)
+    }
+  },
   methods: {
     loadSdkScript () {
       return new Promise<void>(resolve => {
@@ -22,17 +34,39 @@ export default {
       }
 
       Frames.removeAllEventHandlers()
-      Frames.init(this.info.publicKey)
+
+      Frames.init({
+        publicKey: this.info.publicKey,
+        localization: {
+          cardNumberPlaceholder: this.$t('Card number'),
+          expiryMonthPlaceholder: this.$t('MM'),
+          expiryYearPlaceholder: this.$t('YY'),
+          cvvPlaceholder: this.$t('CVV')
+        }
+      })
 
       Frames.addEventHandler(
         Frames.Events.CARD_VALIDATION_CHANGED,
         (event: any) => {
-          const isCardValid = Frames.isCardValid();
-          this.$store.commit(CODE + '/' + types.SET_IS_VALID, Frames.isCardValid())
+          this.isValid = event.isValid
 
-          if (isCardValid) {
+          if (event.isValid) {
             Frames.submitCard()
           }
+        }
+      );
+
+      Frames.addEventHandler(
+        Frames.Events.FRAME_BLUR,
+        () => {
+          this.isDirty = true
+        }
+      );
+
+      Frames.addEventHandler(
+        Frames.Events.PAYMENT_METHOD_CHANGED,
+        (event: any) => {
+          this.paymentMethod = event.paymentMethod ? event.paymentMethod.toLowerCase() : 'card'
         }
       );
 
@@ -42,6 +76,10 @@ export default {
           this.$store.commit(CODE + '/' + types.SET_TOKEN, event.token)
         }
       );
+    },
+    submit () {
+      this.hasSubmitted = true
+      Frames.submitCard()
     }
   },
   async mounted () {
