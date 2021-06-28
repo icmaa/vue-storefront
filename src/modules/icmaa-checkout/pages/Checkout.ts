@@ -146,11 +146,6 @@ export default {
       title: i18n.t('Checkout'),
       meta: [
         { vmid: 'robots', name: 'robots', content: 'noindex, nofollow' }
-      ],
-      script: [
-        {
-          src: '//cdn.checkout.com/js/framesv2.min.js'
-        }
       ]
     }
   }

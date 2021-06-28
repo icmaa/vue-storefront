@@ -1,14 +1,31 @@
-import { icmaa_checkoutcom } from 'config'
+import { Logger } from '@vue-storefront/core/lib/logger'
 import * as types from 'icmaa-checkout-com/store/methods/card/mutation-types'
 import { CODE } from 'icmaa-checkout-com/store/methods/card'
 
-declare const Frames: any;
+declare const Frames: any
 
 export default {
+  computed: {
+
+  },
   methods: {
+    loadSdkScript () {
+      return new Promise<void>(resolve => {
+        const script = document.createElement('script')
+        script.async = true
+        script.src = '//cdn.checkout.com/js/framesv2.min.js'
+        script.onload = () => { resolve() }
+        document.body.appendChild(script)
+      })
+    },
     initFrames () {
+      if (!this.info.publicKey) {
+        Logger.error('Can\'t init CC because of missing public-key', 'icmaa-checkout-com', this.info)()
+        return
+      }
+
       Frames.removeAllEventHandlers()
-      Frames.init(icmaa_checkoutcom.publicKey)
+      Frames.init(this.info.publicKey)
 
       Frames.addEventHandler(
         Frames.Events.CARD_VALIDATION_CHANGED,
@@ -30,7 +47,8 @@ export default {
       );
     }
   },
-  mounted () {
+  async mounted () {
+    await this.loadSdkScript()
     this.initFrames()
   },
   beforeDestroy () {

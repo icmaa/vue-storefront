@@ -74,7 +74,7 @@ export default {
       return new Promise(resolve => {
         const script = document.createElement('script')
         script.async = true
-        script.src = 'https://x.klarnacdn.net/kp/lib/v1/api.js'
+        script.src = '//x.klarnacdn.net/kp/lib/v1/api.js'
         script.onload = () => { resolve() }
         document.body.appendChild(script)
       })
