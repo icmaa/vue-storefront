@@ -1,6 +1,11 @@
 <template>
   <div class="t-text-sm">
     <div v-text="error" v-if="error" class="t-text-sm t-text-alert t-mb-4" />
+    <div
+      v-text="$t('Please wait until Klarna is loaded')"
+      class="t-text-sm t-text-alert t-mb-4"
+      v-if="($v.sdkLoaded.$error && !$v.sdkLoaded.notFalse) || ($v.widgetLoaded.$error && !$v.widgetLoaded.notFalse)"
+    />
     <div id="klarna_container" />
   </div>
 </template>
@@ -9,6 +14,7 @@
 
 import { mapGetters } from 'vuex'
 import { Logger } from '@vue-storefront/core/lib/logger'
+import { notFalse } from 'icmaa-config/helpers/validators'
 import ApmMethod from 'icmaa-checkout-com/mixins/methods/ApmMethod'
 
 export default {
@@ -102,6 +108,14 @@ export default {
         this.error = e.message
         Logger.error('Couldn\'t init Klarna SDK', 'icmaa-checkout-com', e)()
       }
+    }
+  },
+  validations: {
+    sdkLoaded: {
+      notFalse
+    },
+    widgetLoaded: {
+      notFalse
     }
   }
 }
