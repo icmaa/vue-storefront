@@ -13,23 +13,6 @@ const actions: ActionTree<ApmState, RootState> = {
   setValidations ({ commit }, data) {
     commit(SET_VALIDATIONS, data)
   },
-  async authorizeKlarnaTransaction ({ dispatch }) {
-    return new Promise<void>(resolve => {
-      try {
-        (window as any).Klarna.Payments.authorize(
-          { instance_id: 'icmaa-klarna-payments-instance' },
-          {},
-          resp => {
-            dispatch('setAdditionalInformation', resp)
-            resolve()
-          }
-        )
-      } catch (err) {
-        Logger.error('Couldn\'t authorize Klarna payment', 'icmaa-checkout-com', err)()
-        resolve()
-      }
-    })
-  },
   async save ({ dispatch, rootGetters, getters }) {
     if (getters.getValidations) {
       getters.getValidations.$touch()
@@ -81,6 +64,23 @@ const actions: ActionTree<ApmState, RootState> = {
     }
 
     return { redirectUrl }
+  },
+  async authorizeKlarnaTransaction ({ dispatch }) {
+    return new Promise<void>(resolve => {
+      try {
+        (window as any).Klarna.Payments.authorize(
+          { instance_id: 'icmaa-klarna-payments-instance' },
+          {},
+          resp => {
+            dispatch('setAdditionalInformation', resp)
+            resolve()
+          }
+        )
+      } catch (err) {
+        Logger.error('Couldn\'t authorize Klarna payment', 'icmaa-checkout-com', err)()
+        resolve()
+      }
+    })
   }
 }
 
