@@ -33,3 +33,11 @@ export default {
   ]
 }
 </script>
+
+<style lang="scss">
+
+.frame--invalid {
+  @apply t-border-alert;
+}
+
+</style>
