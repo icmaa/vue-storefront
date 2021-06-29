@@ -37,6 +37,12 @@
           <material-icon icon="chevron_right" size="lg" class="t-align-middle" />
         </router-link>
       </router-link>
+      <div class="t-flex t-items-center t-justify-center t-mt-4 t-mb-8" v-if="loadMoreEnabled">
+        <button-component type="ghost" @click.native="loadMore" :disabled="loading" class="t-w-full md:t-w-2/3 lg:t-w-1/4" :class="{ 't-relative t-opacity-60': loading }">
+          {{ $t('Load more') }}
+          <loader-background v-if="loading" bar="t-bg-base-darkest" class="t-bottom-0" />
+        </button-component>
+      </div>
     </template>
   </div>
 </template>
@@ -46,13 +52,24 @@ import { mapGetters } from 'vuex'
 import Headline from 'theme/components/core/blocks/MyAccount/Headline'
 import MaterialIcon from 'theme/components/core/blocks/MaterialIcon'
 import StatusIcon from 'theme/components/core/blocks/MyAccount/MyOrders/StatusIcon'
+import ButtonComponent from 'theme/components/core/blocks/Button'
+import LoaderBackground from 'theme/components/core/LoaderBackground'
 
 export default {
   name: 'MyOrders',
   components: {
     Headline,
     MaterialIcon,
-    StatusIcon
+    StatusIcon,
+    ButtonComponent,
+    LoaderBackground
+  },
+  data () {
+    return {
+      loadMoreEnabled: true,
+      loading: false,
+      page: 1
+    }
   },
   computed: {
     ...mapGetters('user', ['getOrdersHistory']),
@@ -61,6 +78,25 @@ export default {
     },
     isHistoryEmpty () {
       return this.getOrdersHistory.length < 1
+    }
+  },
+  methods: {
+    async loadMore () {
+      this.loading = true
+      this.page += 1
+
+      await this.$store.dispatch('user/refreshOrdersHistory', { currentPage: this.page })
+        .then(resp => {
+          if (!resp || resp.code !== 200 || resp.result?.items?.length < 5) {
+            this.loadMoreEnabled = false
+          }
+        })
+        .catch(() => {
+          this.page -= 1
+          this.loadMoreEnabled = false
+        })
+
+      this.loading = false
     }
   }
 }

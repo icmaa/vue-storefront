@@ -126,6 +126,7 @@ const actions: ActionTree<UserState, RootState> = {
   /**
    * Copy of original – changes:
    * * Add `loadProducts` parameter to fetch products off all fetched orders
+   * * If after page 1 update existing orders instead of replacing them.
    */
   async refreshOrdersHistory ({ commit, dispatch }, { resolvedFromCache, loadProducts = false, pageSize = 5, currentPage = 1 }) {
     const resp = await UserService.getOrdersHistory(pageSize, currentPage)
@@ -138,7 +139,13 @@ const actions: ActionTree<UserState, RootState> = {
         orders = await dispatch('loadOrderHistoryProducts', { history: orders })
       }
 
-      commit(userTypes.USER_ORDERS_HISTORY_LOADED, orders) // this also stores the current user to localForage
+      // this also stores the current user to localForage
+      if (currentPage > 1) {
+        commit(types.USER_ORDERS_HISTORY_UPD, orders)
+      } else {
+        commit(userTypes.USER_ORDERS_HISTORY_LOADED, orders)
+      }
+
       EventBus.$emit('user-after-loaded-orders', orders)
     }
 
