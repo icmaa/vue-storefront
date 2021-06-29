@@ -54,9 +54,10 @@ const actions: ActionTree<ApmState, RootState> = {
 
     const redirectUrl = get(response, '_links.redirect.href')
     if (!redirectUrl) {
+      // SEPA & Klarna don't need a redirect
       const paymentMethodCode = rootGetters['checkout/getPaymentMethodCode']
-      if (paymentMethodCode === 'checkoutcom_apm_sepa') {
-        // SEPA don't need a redirect
+      const methodsWithoutCapture = [ 'checkoutcom_apm_sepa', 'checkoutcom_apm_klarna' ]
+      if (methodsWithoutCapture.includes(paymentMethodCode)) {
         return false
       }
 
