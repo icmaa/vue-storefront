@@ -52,15 +52,15 @@ const actions: ActionTree<ApmState, RootState> = {
       return false
     }
 
+    // SEPA & Klarna don't need a redirect
+    const paymentMethodCode = rootGetters['checkout/getPaymentMethodCode']
+    const methodsWithoutCapture = [ 'checkoutcom_apm_sepa', 'checkoutcom_apm_klarna' ]
+    if (methodsWithoutCapture.includes(paymentMethodCode)) {
+      return false
+    }
+
     const redirectUrl = get(response, '_links.redirect.href')
     if (!redirectUrl) {
-      // SEPA & Klarna don't need a redirect
-      const paymentMethodCode = rootGetters['checkout/getPaymentMethodCode']
-      const methodsWithoutCapture = [ 'checkoutcom_apm_sepa', 'checkoutcom_apm_klarna' ]
-      if (methodsWithoutCapture.includes(paymentMethodCode)) {
-        return false
-      }
-
       dispatch('notification/spawnNotification', {
         type: 'error',
         message: i18n.t('Something went wrong. Payment was not successful.'),
