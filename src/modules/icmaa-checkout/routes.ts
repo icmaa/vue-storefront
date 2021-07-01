@@ -1,5 +1,5 @@
 const CheckoutPage = () => import(/* webpackChunkName: "vsf-checkout" */ 'theme/pages/Checkout.vue')
-const SuccessPage = () => import(/* webpackChunkName: "vsf-checkout-success" */ 'theme/pages/CheckoutSuccess.vue')
+const SuccessPage = () => import(/* webpackChunkName: "vsf-checkout-success" */ 'icmaa-checkout/pages/CheckoutSuccess.vue')
 const CheckoutGatewaySuccess = () => import(/* webpackChunkName: "vsf-checkout-gateway-success" */ 'icmaa-checkout/pages/CheckoutGatewaySuccess.vue')
 
 /**
