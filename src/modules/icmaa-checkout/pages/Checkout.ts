@@ -12,6 +12,7 @@ export default {
   mixins: [ VueOfflineMixin ],
   data () {
     return {
+      loaded: false,
       stockCheckCompleted: false,
       stockCheckOK: false
     }
@@ -52,6 +53,7 @@ export default {
     }
 
     await this.$store.dispatch('checkout/load')
+    this.loaded = true
 
     this.$bus.$on('user-after-logout', this.afterUserLogout)
     this.$bus.$on('cart-after-cleared', this.afterCartCleared)

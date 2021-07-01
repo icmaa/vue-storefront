@@ -24,6 +24,7 @@
           :last="(index + 1) === steps.length"
         >
           <component
+            v-if="loaded"
             :is="step.component"
             :active="step.active"
             :done="step.done"
