@@ -1,10 +1,10 @@
 <template>
   <div id="my_account" class="t-container t-px-4">
     <div class="t-flex t--mx-2 t-py-4">
-      <div class="t-hidden lg:t-flex t-w-1/4 t-px-2" v-if="!['xs','sm','md'].includes(viewport)">
+      <div class="t-hidden xl:t-flex t-w-1/4 t-px-2" v-if="!['xs','sm','md'].includes(viewport)">
         <navigation />
       </div>
-      <div class="t-w-full lg:t-w-3/4 t-px-2">
+      <div class="t-w-full xl:t-w-3/4 t-px-2">
         <no-ssr>
           <component :is="this.$props.activeBlock" v-if="isLoggedIn" />
           <div slot="placeholder">

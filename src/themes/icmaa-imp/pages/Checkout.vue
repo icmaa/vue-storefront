@@ -1,7 +1,7 @@
 <template>
   <div class="t-container" id="checkout">
     <div class="t-flex t-justify-center lg:t-px-4 lg:t-py-8">
-      <div class="t-w-full t-p-6 t-pt-4 md:t-w-1/2 xl:t-w-2/5 lg:t-p-0 lg:t-py-8">
+      <div class="t-w-full t-p-6 t-pt-4 sm:t-w-2/3 lg:t-w-1/2 xl:t-w-2/5 lg:t-p-0 lg:t-py-8">
         <div class="t-flex t-items-center t-justify-between t-mb-6 lg:t-mb-8">
           <h1 class="t-flex t-items-center t-text-1xl t-font-bold">
             <span class="t-flex t-items-center t-justify-center t-w-8 t-mr-4">
@@ -31,7 +31,7 @@
           />
         </step>
       </div>
-      <div class="t-hidden md:t-block md:t-w-1/2 xl:t-w-2/5 t-pl-8">
+      <div class="t-hidden lg:t-block lg:t-w-1/2 xl:t-w-2/5 t-pl-8">
         <div class="t-min-h-full t-flex t-items-stretch t-bg-base-lightest t-p-4">
           <cart class="t-bg-white t-w-full t-p-4" v-if="!isMobile" />
         </div>
@@ -99,7 +99,7 @@ export default {
       ].map(step => Object.assign(step, this.sections[step.name]))
     },
     isMobile () {
-      return ['xs', 'sm'].includes(this.viewport)
+      return ['xs', 'sm', 'md'].includes(this.viewport)
     }
   },
   methods: {

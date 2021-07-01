@@ -95,10 +95,10 @@ export const uiStore = {
        * @see https://tailwindcss.com/docs/breakpoints/#app
        */
       type viewport = [string, number]
-      const viewports: viewport[] = [ ['xs', 375], ['sm', 640], ['md', 768], ['lg', 1024], ['xl', 1280] ]
-      let viewport: viewport = viewports.find(vp => window.matchMedia(`(max-width: ${vp[1]}px)`).matches)
+      const viewports: viewport[] = [ ['xl', 1280], ['lg', 1024], ['md', 768], ['sm', 640], ['xs', 375] ]
+      let viewport: viewport = viewports.find(vp => window.matchMedia(`(min-width: ${vp[1]}px)`).matches)
 
-      /** If no viewport is found because its the largest viewport */
+      /** If no viewport is found because its the smallest viewport */
       if (!viewport) {
         viewport = viewports.slice(-1)[0]
       }

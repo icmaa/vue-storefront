@@ -31,7 +31,7 @@ export default {
       viewport: 'ui/getViewport'
     }),
     isMobile () {
-      return ['xs', 'sm'].includes(this.viewport)
+      return ['xs', 'sm', 'md'].includes(this.viewport)
     }
   },
   methods: {
