@@ -8,9 +8,9 @@ describe('Checkout', () => {
     cy.getCustomer().then(customer => {
       cy.get('#checkout .step-personal .personal-details').as('form')
 
-      cy.get('@form').find('input[name="email"]').focus().type(customer.email)
-      cy.get('@form').find('input[name="first-name"]').focus().type(customer.firstName)
-      cy.get('@form').find('input[name="last-name"]').focus().type(customer.lastName)
+      cy.get('@form').focusInput('email').type(customer.email)
+      cy.get('@form').focusInput('first-name').type(customer.firstName)
+      cy.get('@form').focusInput('last-name').type(customer.lastName)
 
       cy.get('@form').findByTestId('CreateAccountCheckbox')
         .should('be.visible')
@@ -20,9 +20,9 @@ describe('Checkout', () => {
         .should('be.visible')
         .selectRandomOption(true)
 
-      cy.get('@form').find('input[name="dob"]').focus().type(customer.dob)
-      cy.get('@form').find('input[name="password"]').focus().type(customer.password)
-      cy.get('@form').find('input[name="password-confirm"]').focus().type(customer.password)
+      cy.get('@form').focusInput('dob').type(customer.dob)
+      cy.get('@form').focusInput('password').type(customer.password)
+      cy.get('@form').focusInput('password-confirm').type(customer.password)
 
       cy.get('@form').findByTestId('NextStepButton').click()
     })
@@ -31,10 +31,10 @@ describe('Checkout', () => {
       cy.get('#checkout .step-addresses .addresses').as('addresses')
       cy.get('@addresses').get('.address-shipping').as('shipping-address')
 
-      cy.get('@shipping-address').find('input[name="street[0]"]').focus().type(customer.address.streetAddress())
-      cy.get('@shipping-address').find('input[name="postcode"]').focus().type(customer.address.zipCode())
-      cy.get('@shipping-address').find('input[name="city"]').focus().type(customer.address.city())
-      cy.get('@shipping-address').find('input[name="telephone"]').focus().type(customer.phone.phoneNumber())
+      cy.get('@shipping-address').focusInput('street[0]').type(customer.address.streetAddress())
+      cy.get('@shipping-address').focusInput('postcode').type(customer.address.zipCode())
+      cy.get('@shipping-address').focusInput('city').type(customer.address.city())
+      cy.get('@shipping-address').focusInput('telephone').type(customer.phone.phoneNumber())
 
       cy.get('@addresses').findByTestId('NextStepButton').click()
       cy.waitForLoader(1000)

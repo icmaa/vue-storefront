@@ -404,6 +404,8 @@ Cypress.Commands.add('addCurrentProductToCart', (checkAvailability = true, enter
         })
 
         cy.get('@sidebar').findByTestId('AddToCart').click()
+        cy.get('@sidebar')
+          .should('not.be.visible')
       } else {
         cy.getByTestId('AddToCart')
           .click()
@@ -411,12 +413,18 @@ Cypress.Commands.add('addCurrentProductToCart', (checkAvailability = true, enter
     })
 
   cy.checkNotification('success')
-
-  cy.getByTestId('Sidebar').should('be.visible')
+  cy.getByTestId('MicroCart')
+    .should('be.visible')
 
   if (enterCheckout) {
-    cy.getByTestId('Sidebar').findByTestId('GoToCheckout')
+    cy.getByTestId('MicroCart').findByTestId('GoToCheckout')
       .should('be.visible')
       .click()
   }
+})
+
+Cypress.Commands.add('focusInput', { prevSubject: 'element' }, (subject, id, options) => {
+  cy.wrap(subject)
+    .find('input[name="' + id + '"]', options)
+    .focus()
 })

@@ -322,6 +322,15 @@ declare namespace Cypress {
      * cy.addCurrentProductToCart()
      * cy.addCurrentProductToCart(false)
      */
-    addCurrentProductToCart(checkAvailability?: boolean, enterCheckout?: boolean): Chainable<Window>
+    addCurrentProductToCart(checkAvailability?: boolean, enterCheckout?: boolean): Chainable<Window>,
+
+    /**
+     * Get input by name and focus it
+     * @param name Name of input-field to focus
+     *
+     * @example
+     * cy.focusInput('Modal')
+     */
+    focusInput<E extends Node = HTMLElement>(name: string, options?: Partial<Loggable & Timeoutable & Shadow>): Chainable<JQuery<E>>
   }
 }
