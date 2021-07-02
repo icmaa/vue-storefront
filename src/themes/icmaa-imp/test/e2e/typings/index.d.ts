@@ -367,9 +367,18 @@ declare namespace Cypress {
      * Need @customer alias to be already defined
      *
      * @example
-     * cy.checkoutFillNewAdress()
+     * cy.checkoutFillAddress()
      */
-    checkoutFillNewAdress(): Chainable<Window>,
+    checkoutFillAddress(): Chainable<Window>,
+
+    /**
+     * Fills out parent address from in address checkout step
+     * Need @customer alias to be already defined
+     *
+     * @example
+     * cy.checkoutFillNewAddressForm()
+     */
+    checkoutFillNewAddressForm<E extends Node = HTMLElement>(waitForLoader?: boolean): Chainable<JQuery<E>>,
 
     /**
      * Fills out shipping step in checkout and randomly selects priority-handling.

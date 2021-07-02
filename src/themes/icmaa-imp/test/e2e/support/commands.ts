@@ -372,7 +372,7 @@ Cypress.Commands.add('addRandomProductToCart', (options?: { tries: number, enter
   cy.get<boolean>('@availability')
     .then(available => {
       if (!available) {
-        cy.addRandomProductToCart({ tries }, count + 1)
+        cy.addRandomProductToCart({ tries, enterCheckout }, count + 1)
       } else {
         cy.addCurrentProductToCart(false, enterCheckout)
       }
@@ -440,7 +440,7 @@ Cypress.Commands.add('checkoutGoToNextStep', { prevSubject: 'element' }, (subjec
     .findByTestId('NextStepButton').click()
 
   if (waitForLoader) {
-    cy.waitForLoader(1000)
+    cy.waitForLoader()
   }
 })
 
@@ -470,22 +470,28 @@ Cypress.Commands.add('checkoutFillPersonalDetails', (createNewAccount: boolean =
   })
 })
 
-Cypress.Commands.add('checkoutFillNewAdress', () => {
-  cy.getCustomer().then(customer => {
-    cy.get('#checkout .step-addresses .addresses').as('addresses')
-    cy.get('@addresses').get('.address-shipping').as('shipping-address')
+Cypress.Commands.add('checkoutFillAddress', () => {
+  cy.get('#checkout .step-addresses .addresses').as('addresses')
+  cy.get('@addresses').get('.address-shipping')
+    .should('be.visible')
+    .checkoutFillNewAddressForm()
 
-    cy.get('@shipping-address').focusInput('street[0]').type(customer.address.streetAddress())
-    cy.get('@shipping-address').focusInput('postcode').type(customer.address.zipCode())
-    cy.get('@shipping-address').focusInput('city').type(customer.address.city())
+  cy.get('@addresses').checkoutGoToNextStep()
+})
+
+Cypress.Commands.add('checkoutFillNewAddressForm', { prevSubject: 'element' }, (subject) => {
+  cy.wrap(subject).as('address')
+
+  cy.getCustomer().then(customer => {
+    cy.get('@address').focusInput('street[0]').type(customer.address.streetAddress())
+    cy.get('@address').focusInput('postcode').type(customer.address.zipCode())
+    cy.get('@address').focusInput('city').type(customer.address.city())
 
     cy.getStoreCode().then(storeCode => {
       if (storeCode === 'fr') {
-        cy.get('@shipping-address').focusInput('telephone').type(customer.phone.phoneNumber())
+        cy.get('@address').focusInput('telephone').type(customer.phone.phoneNumber())
       }
     })
-
-    cy.get('@addresses').checkoutGoToNextStep()
   })
 })
 

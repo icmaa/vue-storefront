@@ -4,7 +4,7 @@ describe('Checkout', () => {
 
     cy.checkoutFillPersonalDetails(true)
 
-    cy.checkoutFillNewAdress()
+    cy.checkoutFillAddress()
 
     cy.checkoutFillShipping()
 
