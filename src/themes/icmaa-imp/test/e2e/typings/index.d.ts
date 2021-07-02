@@ -8,7 +8,7 @@ declare namespace Cypress {
     categoryUrl: string
   }
 
-  interface Customer {
+  interface Customer extends Faker.FakerStatic {
     firstName: string,
     lastName: string,
     email: string,
@@ -74,7 +74,7 @@ declare namespace Cypress {
      * @example
      * cy.getByTestId('Modal')
      */
-    getByTestId(selector: string): Chainable<JQuery<any>>,
+    getByTestId(selector: string, options?: Partial<Loggable & Timeoutable & Withinable & Shadow>): Chainable<JQuery<any>>,
 
     /**
      * Find child items by data-test-id attribute.
@@ -253,8 +253,9 @@ declare namespace Cypress {
      *
      * @example
      * cy.waitForLoader()
+     * cy.waitForLoader(1000)
      */
-    waitForLoader(): Chainable<Window>,
+    waitForLoader(timeout?: number): Chainable<Window>,
 
     /**
      * Check for notification and its status and returns.
@@ -311,7 +312,7 @@ declare namespace Cypress {
      * cy.addRandomProductToCart()
      * cy.addRandomProductToCart({ tries: 10 })
      */
-    addRandomProductToCart(options?: { tries: number }, count?: number): Chainable<Window>,
+    addRandomProductToCart(options?: { tries?: number, enterCheckout?: boolean }, count?: number): Chainable<Window>,
 
     /**
      * Try to add the product you are currently viewing to cart.
@@ -321,6 +322,6 @@ declare namespace Cypress {
      * cy.addCurrentProductToCart()
      * cy.addCurrentProductToCart(false)
      */
-    addCurrentProductToCart(checkAvailability?: boolean): Chainable<Window>
+    addCurrentProductToCart(checkAvailability?: boolean, enterCheckout?: boolean): Chainable<Window>
   }
 }

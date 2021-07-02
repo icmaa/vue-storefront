@@ -37,13 +37,17 @@ Cypress.Commands.add('getFaker', () => {
 
 Cypress.Commands.add('createCustomerWithFaker', () => {
   cy.getFaker().then(faker => {
-    cy.wrap({
+    const data = {
       firstName: faker.name.firstName(),
       lastName: faker.name.lastName(),
       email: getIcmaaEmail(),
       password: faker.internet.password(10, true),
       dob: getBirthday()
-    }).as('customer')
+    }
+
+    Object.assign(faker, data)
+
+    cy.wrap(faker).as('customer')
   })
 })
 
@@ -90,8 +94,8 @@ Cypress.Commands.add('checkImage', { prevSubject: 'element' }, (subject) => {
     .and($img => expect($img[0].naturalWidth).to.be.greaterThan(0))
 })
 
-Cypress.Commands.add('getByTestId', { prevSubject: 'optional' }, (subject, id) => {
-  cy.get(`[data-test-id="${id}"]`)
+Cypress.Commands.add('getByTestId', { prevSubject: 'optional' }, (subject, id, options) => {
+  cy.get(`[data-test-id="${id}"]`, options)
 })
 
 Cypress.Commands.add('findByTestId', { prevSubject: 'element' }, (subject, id) => {
@@ -260,10 +264,11 @@ Cypress.Commands.add('hideLanguageModal', () => {
   })
 })
 
-Cypress.Commands.add('waitForLoader', () => {
+Cypress.Commands.add('waitForLoader', timeout => {
+  cy.wrap(`Wait for ${timeout / 1000}s until the loader disappears`).debug()
   cy.getByTestId('Loader')
     .should('be.visible')
-  cy.getByTestId('Loader')
+  cy.getByTestId('Loader', { timeout })
     .should('not.exist')
 })
 
@@ -346,9 +351,9 @@ Cypress.Commands.add('checkAvailabilityOfCurrentProduct', () => {
   })
 })
 
-Cypress.Commands.add('addRandomProductToCart', (options?: { tries: number }, count: number = 1) => {
-  options = Object.assign({ tries: 3 }, options)
-  let { tries } = options
+Cypress.Commands.add('addRandomProductToCart', (options?: { tries: number, enterCheckout?: boolean }, count: number = 1) => {
+  options = Object.assign({ tries: 3, enterCheckout: false }, options)
+  let { tries, enterCheckout } = options
 
   if (count > tries) {
     expect(true).to.be.equal(false, 'No buyable products found')
@@ -364,12 +369,12 @@ Cypress.Commands.add('addRandomProductToCart', (options?: { tries: number }, cou
       if (!available) {
         cy.addRandomProductToCart({ tries }, count + 1)
       } else {
-        cy.addCurrentProductToCart(false)
+        cy.addCurrentProductToCart(false, enterCheckout)
       }
     })
 })
 
-Cypress.Commands.add('addCurrentProductToCart', (checkAvailability = true) => {
+Cypress.Commands.add('addCurrentProductToCart', (checkAvailability = true, enterCheckout = false) => {
   if (checkAvailability) {
     cy.checkAvailabilityOfCurrentProduct()
   }
@@ -395,11 +400,18 @@ Cypress.Commands.add('addCurrentProductToCart', (checkAvailability = true) => {
 
         cy.get('@sidebar').findByTestId('AddToCart').click()
       } else {
-        cy.getByTestId('AddToCart').click()
+        cy.getByTestId('AddToCart')
+          .click()
       }
     })
 
   cy.checkNotification('success')
 
   cy.getByTestId('Sidebar').should('be.visible')
+
+  if (enterCheckout) {
+    cy.getByTestId('Sidebar').findByTestId('GoToCheckout')
+      .should('be.visible')
+      .click()
+  }
 })
