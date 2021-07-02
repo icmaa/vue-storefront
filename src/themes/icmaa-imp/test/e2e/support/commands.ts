@@ -111,11 +111,16 @@ Cypress.Commands.add('getFromLocalStorage', (key) => {
 
 Cypress.Commands.overwrite('visit', (originalFn, url, options?) => {
   let storeCode: string
-  if (options && options.hasOwnProperty('storeCode')) {
+  if (options?.hasOwnProperty('storeCode')) {
     storeCode = options.storeCode
+    cy.setStoreCode(storeCode)
   }
 
-  cy.setStoreCode(storeCode)
+  cy.getStoreCode().then(hasStoreCode => {
+    if (!hasStoreCode) {
+      cy.setStoreCode(storeCode)
+    }
+  })
 
   if (options && options.hasOwnProperty('returningVisitor')) {
     cy.hideLanguageModal()
@@ -152,7 +157,7 @@ Cypress.Commands.add('visitCategoryPage', (options?) => {
 })
 
 Cypress.Commands.add('visitProductDetailPage', (options?) => {
-  if (options && options.categoryUrl) {
+  if (options?.categoryUrl) {
     cy.wrap<string>(options.categoryUrl)
       .as('categoryEntryPointUrl')
     cy.visitAsRecurringUser(options.categoryUrl, _.omit(options, ['categoryUrl']))
@@ -176,9 +181,9 @@ Cypress.Commands.add('getStoreCode', () => {
   cy.get<string>('@storeCode')
 })
 
-Cypress.Commands.add('setStoreCode', (storeCode?) => {
+Cypress.Commands.add('setStoreCode', (storeCode?: string | boolean) => {
   const storeCodes: string[] = Settings.availableStoreViews
-  if (!storeCode || !storeCodes.includes(storeCode)) {
+  if (!storeCode || !storeCodes.includes(storeCode as string)) {
     storeCode = storeCodes[Math.floor(Math.random() * (storeCodes.length - 1))]
   }
 

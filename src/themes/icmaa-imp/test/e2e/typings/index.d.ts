@@ -174,7 +174,7 @@ declare namespace Cypress {
      * cy.setStoreCode()
      * cy.setStoreCode('de')
      */
-    setStoreCode(storeCode?: string): Chainable<Window>,
+    setStoreCode(storeCode?: string | boolean): Chainable<Window>,
 
     /**
      * Open sidebar.
