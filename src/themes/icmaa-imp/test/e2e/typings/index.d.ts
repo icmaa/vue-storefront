@@ -331,6 +331,47 @@ declare namespace Cypress {
      * @example
      * cy.focusInput('Modal')
      */
-    focusInput<E extends Node = HTMLElement>(name: string, options?: Partial<Loggable & Timeoutable & Shadow>): Chainable<JQuery<E>>
+    focusInput<E extends Node = HTMLElement>(name: string, options?: Partial<Loggable & Timeoutable & Shadow>): Chainable<JQuery<E>>,
+
+    /**
+     * Fills out personal-details step in checkout
+     * Need @customer alias to be already defined
+     *
+     * @example
+     * cy.checkoutFillPersonalDetails()
+     * cy.checkoutFillPersonalDetails(true)
+     */
+    checkoutFillPersonalDetails(createNewAccount?: boolean): Chainable<Window>,
+
+    /**
+     * Fills out shipping step in checkout and randomly selects priority-handling.
+     * By default all store-views only have one shipping-method and therefore prefill
+     * and "skip" this step. Only in the /de store you can select the prio-handling
+     * and an action will be required.
+     *
+     * @example
+     * cy.checkoutFillShipping()
+     */
+    checkoutFillShipping(): Chainable<Window>,
+
+    /**
+     * Fills out payment step in checkout.
+     * If `proceed` is true then it assumes that there are no inputs necessary and proceeds
+     * to the next step.
+     *
+     * @example
+     * cy.checkoutFillPayment('Bankpayment')
+     * cy.checkoutFillPayment('CheckoutcomApmGiropay', false)
+     */
+    checkoutFillPayment(method: string, proceed?: boolean): Chainable<Window>,
+
+    /**
+     * Ticks all necessary checkboxes inside the review-step and places the order.
+     *
+     * @example
+     * cy.checkoutPlaceOrder()
+     * cy.checkoutPlaceOrder(true)
+     */
+    checkoutPlaceOrder(isGateway?: boolean): Chainable<Window>
   }
 }
