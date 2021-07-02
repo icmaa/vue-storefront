@@ -389,14 +389,14 @@ Cypress.Commands.add('addCurrentProductToCart', (checkAvailability = true) => {
           })
           .click()
 
-        cy.get('@sidebar').should('not.exist')
-
         cy.get<string>('@optionLabel').then(label => {
           cy.getByTestId('AddToCartSize').contains(label)
         })
-      }
 
-      cy.getByTestId('AddToCart').click()
+        cy.get('@sidebar').findByTestId('AddToCart').click()
+      } else {
+        cy.getByTestId('AddToCart').click()
+      }
     })
 
   cy.checkNotification('success')
