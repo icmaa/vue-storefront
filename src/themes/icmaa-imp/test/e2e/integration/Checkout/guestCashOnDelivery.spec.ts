@@ -1,6 +1,6 @@
 describe('Checkout', () => {
-  it('as new user and create an account.', () => {
-    cy.visitAsRecurringUser('/')
+  it('as guest and use cash-on-delivery.', () => {
+    cy.visitAsRecurringUser('/', { storeCode: 'de' })
 
     cy.addRandomProductToCart({ enterCheckout: true })
 
@@ -12,18 +12,6 @@ describe('Checkout', () => {
       cy.get('@form').focusInput('first-name').type(customer.firstName)
       cy.get('@form').focusInput('last-name').type(customer.lastName)
 
-      cy.get('@form').findByTestId('CreateAccountCheckbox')
-        .should('be.visible')
-        .click()
-
-      cy.get('@form').find('select[name="gender"]')
-        .should('be.visible')
-        .selectRandomOption(true)
-
-      cy.get('@form').focusInput('dob').type(customer.dob)
-      cy.get('@form').focusInput('password').type(customer.password)
-      cy.get('@form').focusInput('password-confirm').type(customer.password)
-
       cy.get('@form').findByTestId('NextStepButton').click()
     })
 
@@ -34,7 +22,6 @@ describe('Checkout', () => {
       cy.get('@shipping-address').focusInput('street[0]').type(customer.address.streetAddress())
       cy.get('@shipping-address').focusInput('postcode').type(customer.address.zipCode())
       cy.get('@shipping-address').focusInput('city').type(customer.address.city())
-      cy.get('@shipping-address').focusInput('telephone').type(customer.phone.phoneNumber())
 
       cy.get('@addresses').findByTestId('NextStepButton').click()
       cy.waitForLoader(1000)
@@ -53,8 +40,8 @@ describe('Checkout', () => {
     cy.getCustomer().then(customer => {
       cy.get('#checkout .step-payment .payment').as('payment')
 
-      cy.get('@payment').findByTestId('BankpaymentCheckbox').click()
-      cy.get('@payment').findByTestId('BankpaymentForm').should('be.visible')
+      cy.get('@payment').findByTestId('CashondeliveryCheckbox').click()
+      cy.get('@payment').findByTestId('CashondeliveryForm').should('be.visible')
 
       cy.get('@payment').findByTestId('NextStepButton').click()
       cy.waitForLoader()
@@ -74,7 +61,7 @@ describe('Checkout', () => {
       cy.waitForLoader(30000)
       cy.url().should('include', `checkout-success`)
 
-      cy.isLoggedIn()
+      cy.isLoggedIn(false)
     })
   })
 })
