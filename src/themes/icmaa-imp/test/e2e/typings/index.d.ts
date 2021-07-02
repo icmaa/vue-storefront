@@ -334,6 +334,16 @@ declare namespace Cypress {
     focusInput<E extends Node = HTMLElement>(name: string, options?: Partial<Loggable & Timeoutable & Shadow>): Chainable<JQuery<E>>,
 
     /**
+     * Click on next-step button in checkout
+     * Need @customer alias to be already defined
+     *
+     * @example
+     * cy.checkoutGoToNextStep()
+     * cy.checkoutGoToNextStep(false)
+     */
+    checkoutGoToNextStep<E extends Node = HTMLElement>(waitForLoader?: boolean): Chainable<JQuery<E>>,
+
+    /**
      * Fills out personal-details step in checkout
      * Need @customer alias to be already defined
      *
@@ -342,6 +352,15 @@ declare namespace Cypress {
      * cy.checkoutFillPersonalDetails(true)
      */
     checkoutFillPersonalDetails(createNewAccount?: boolean): Chainable<Window>,
+
+    /**
+     * Fills out a new address in address step in checkout
+     * Need @customer alias to be already defined
+     *
+     * @example
+     * cy.checkoutFillNewAdress()
+     */
+    checkoutFillNewAdress(): Chainable<Window>,
 
     /**
      * Fills out shipping step in checkout and randomly selects priority-handling.

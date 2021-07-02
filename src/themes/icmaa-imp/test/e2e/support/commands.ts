@@ -429,29 +429,57 @@ Cypress.Commands.add('focusInput', { prevSubject: 'element' }, (subject, id, opt
     .focus()
 })
 
+Cypress.Commands.add('checkoutGoToNextStep', { prevSubject: 'element' }, (subject, waitForLoader = true) => {
+  cy.wrap(subject)
+    .findByTestId('NextStepButton').click()
+
+  if (waitForLoader) {
+    cy.waitForLoader(1000)
+  }
+})
+
 Cypress.Commands.add('checkoutFillPersonalDetails', (createNewAccount: boolean = false) => {
   cy.getCustomer().then(customer => {
-    cy.get('#checkout .step-personal .personal-details').as('form')
+    cy.get('#checkout .step-personal .personal-details').as('personal-details')
 
-    cy.get('@form').focusInput('email').type(customer.email)
-    cy.get('@form').focusInput('first-name').type(customer.firstName)
-    cy.get('@form').focusInput('last-name').type(customer.lastName)
+    cy.get('@personal-details').focusInput('email').type(customer.email)
+    cy.get('@personal-details').focusInput('first-name').type(customer.firstName)
+    cy.get('@personal-details').focusInput('last-name').type(customer.lastName)
 
     if (createNewAccount) {
-      cy.get('@form').findByTestId('CreateAccountCheckbox')
+      cy.get('@personal-details').findByTestId('CreateAccountCheckbox')
         .should('be.visible')
         .click()
 
-      cy.get('@form').find('select[name="gender"]')
+      cy.get('@personal-details').find('select[name="gender"]')
         .should('be.visible')
         .selectRandomOption(true)
 
-      cy.get('@form').focusInput('dob').type(customer.dob)
-      cy.get('@form').focusInput('password').type(customer.password)
-      cy.get('@form').focusInput('password-confirm').type(customer.password)
+      cy.get('@personal-details').focusInput('dob').type(customer.dob)
+      cy.get('@personal-details').focusInput('password').type(customer.password)
+      cy.get('@personal-details').focusInput('password-confirm').type(customer.password)
 
-      cy.get('@form').findByTestId('NextStepButton').click()
+      cy.get('@personal-details').checkoutGoToNextStep(false)
     }
+  })
+})
+
+Cypress.Commands.add('checkoutFillNewAdress', () => {
+  cy.getCustomer().then(customer => {
+    cy.get('#checkout .step-addresses .addresses').as('addresses')
+    cy.get('@addresses').get('.address-shipping').as('shipping-address')
+
+    cy.get('@shipping-address').focusInput('street[0]').type(customer.address.streetAddress())
+    cy.get('@shipping-address').focusInput('postcode').type(customer.address.zipCode())
+    cy.get('@shipping-address').focusInput('city').type(customer.address.city())
+
+    cy.getStoreCode().then(storeCode => {
+      if (storeCode === 'fr') {
+        cy.get('@shipping-address').focusInput('telephone').type(customer.phone.phoneNumber())
+      }
+    })
+
+    cy.get('@addresses').checkoutGoToNextStep()
   })
 })
 
@@ -461,8 +489,7 @@ Cypress.Commands.add('checkoutFillShipping', () => {
       cy.get('#checkout .step-shipping .shipping').as('shipping')
       cy.get('@shipping').find('label[for="priorityHandling"]').randomlyClickElement()
 
-      cy.get('@shipping').findByTestId('NextStepButton').click()
-      cy.waitForLoader()
+      cy.get('@shipping').checkoutGoToNextStep()
     }
   })
 })
@@ -474,8 +501,7 @@ Cypress.Commands.add('checkoutFillPayment', (method, proceed = true) => {
   cy.get('@payment').findByTestId(method + 'Form').should('be.visible')
 
   if (proceed) {
-    cy.get('@payment').findByTestId('NextStepButton').click()
-    cy.waitForLoader()
+    cy.get('@payment').checkoutGoToNextStep()
   }
 })
 
