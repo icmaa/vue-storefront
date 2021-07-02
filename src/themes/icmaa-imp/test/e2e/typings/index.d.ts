@@ -325,6 +325,15 @@ declare namespace Cypress {
     addCurrentProductToCart(checkAvailability?: boolean, enterCheckout?: boolean): Chainable<Window>,
 
     /**
+     * Create a new user-session, add a random product to cart and enter checkout.
+     * Adds alias `customer` for further use.
+     *
+     * @example
+     * cy.createACartAndGoToCheckout()
+     */
+    createCartAndGoToCheckout(storeCode?: string): Chainable<Window>,
+
+    /**
      * Get input by name and focus it
      * @param name Name of input-field to focus
      *

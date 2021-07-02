@@ -1,10 +1,6 @@
 describe('Checkout', () => {
   it('as new user, create an account and use prepayment.', () => {
-    cy.visitAsRecurringUser('/')
-
-    cy.addRandomProductToCart({ enterCheckout: true })
-
-    cy.createCustomerWithFaker()
+    cy.createCartAndGoToCheckout()
 
     cy.checkoutFillPersonalDetails(true)
 

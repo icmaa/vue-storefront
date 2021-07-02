@@ -1,10 +1,6 @@
 describe('Checkout', () => {
   it('as guest and use cash-on-delivery.', () => {
-    cy.visitAsRecurringUser('/', { storeCode: 'de' })
-
-    cy.addRandomProductToCart({ enterCheckout: true })
-
-    cy.createCustomerWithFaker()
+    cy.createCartAndGoToCheckout('de')
 
     cy.checkoutFillPersonalDetails()
 

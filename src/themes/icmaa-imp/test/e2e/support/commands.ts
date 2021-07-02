@@ -429,6 +429,12 @@ Cypress.Commands.add('focusInput', { prevSubject: 'element' }, (subject, id, opt
     .focus()
 })
 
+Cypress.Commands.add('createCartAndGoToCheckout', (storeCode) => {
+  cy.visitAsRecurringUser('/', { storeCode })
+  cy.addRandomProductToCart({ enterCheckout: true })
+  cy.createCustomerWithFaker()
+})
+
 Cypress.Commands.add('checkoutGoToNextStep', { prevSubject: 'element' }, (subject, waitForLoader = true) => {
   cy.wrap(subject)
     .findByTestId('NextStepButton').click()
@@ -458,9 +464,9 @@ Cypress.Commands.add('checkoutFillPersonalDetails', (createNewAccount: boolean =
       cy.get('@personal-details').focusInput('dob').type(customer.dob)
       cy.get('@personal-details').focusInput('password').type(customer.password)
       cy.get('@personal-details').focusInput('password-confirm').type(customer.password)
-
-      cy.get('@personal-details').checkoutGoToNextStep(false)
     }
+
+    cy.get('@personal-details').checkoutGoToNextStep(false)
   })
 })
 
