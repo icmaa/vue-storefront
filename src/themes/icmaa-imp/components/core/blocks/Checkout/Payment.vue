@@ -14,9 +14,10 @@
         :class="[ method.code ]"
       >
         <base-checkbox
-          :name="`paymentMethod[${method.code}]`"
-          :id="`payment-method-${method.code}`"
+          :name="`paymentMethod[${kebabCase(method.code)}]`"
+          :id="`payment-method-${kebabCase(method.code)}`"
           :input-value="method.code"
+          :data-test-id="upperCamelCase(method.code) + 'Checkbox'"
           :radio="true"
           v-model="selected"
         >
@@ -28,6 +29,7 @@
         <div
           v-if="method.code === selected && infoComponent"
           class="t-ml-8 t-mb-4"
+          :data-test-id="upperCamelCase(method.code) + 'Form'"
         >
           <component :is="infoComponent" :code="method.code" :method="selectedMethod" />
         </div>
@@ -36,6 +38,7 @@
         class="t-w-full lg:t-w-auto t-mt-8"
         type="primary"
         @click.native.stop="submit"
+        data-test-id="NextStepButton"
       >
         {{ $t(('Go review the order')) }}
       </button-component>
@@ -56,8 +59,10 @@ import Payment from 'icmaa-checkout/components/Payment'
 import BaseCheckbox from 'theme/components/core/blocks/Form/BaseCheckbox'
 import ButtonComponent from 'theme/components/core/blocks/Button'
 
+import caseFormatMixin from 'theme/mixins/caseFormatMixin'
+
 export default {
-  mixins: [ Payment ],
+  mixins: [ Payment, caseFormatMixin ],
   components: {
     BaseCheckbox,
     ButtonComponent

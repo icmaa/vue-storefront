@@ -27,6 +27,7 @@
         class="t-w-full lg:t-w-auto t-mt-4"
         type="primary"
         @click.native.stop="submit"
+        data-test-id="NextStepButton"
       >
         {{ $t(('Continue to shipping')) }}
       </button-component>

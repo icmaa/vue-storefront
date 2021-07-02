@@ -49,6 +49,7 @@
         :class="{ 't-opacity-50': $v.$dirty && $v.$invalid }"
         type="primary"
         @click.native.stop="submit"
+        data-test-id="PlaceOrderButton"
       >
         {{ $t(('Place order')) }}
       </button-component>

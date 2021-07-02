@@ -16,7 +16,7 @@
         </ul>
         <totals class="t-mb-4" />
         <template v-if="!isCheckoutMode">
-          <button-component type="primary" class="t-w-full" @click.native="continueShopping(true)">
+          <button-component type="primary" class="t-w-full" @click.native="continueShopping(true)" data-test-id="GoToCheckout">
             {{ $t('Go to checkout') }}
           </button-component>
           <button-component type="transparent" class="t-w-full t-mt-2" @click.native="continueShopping()">

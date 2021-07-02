@@ -78,6 +78,7 @@
           id="create-account"
           name="create-account"
           v-model="details.createAccount"
+          data-test-id="CreateAccountCheckbox"
         >
           {{ $t('I want to create an account') }}
         </base-checkbox>
@@ -152,6 +153,7 @@
             class="t-w-full lg:t-w-auto"
             type="primary"
             @click.native.stop="submit"
+            data-test-id="NextStepButton"
           >
             {{ $t(('Continue to address')) }}
           </button-component>

@@ -24,6 +24,7 @@
           type="primary"
           @click.native.stop="submit"
           v-if="!isLoading"
+          data-test-id="NextStepButton"
         >
           {{ $t(('Continue to payment')) }}
         </button-component>
