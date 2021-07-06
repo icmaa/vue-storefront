@@ -122,7 +122,7 @@ Cypress.Commands.overwrite('visit', (originalFn, url, options?) => {
     }
   })
 
-  if (options && options.hasOwnProperty('returningVisitor')) {
+  if (options?.returningVisitor) {
     cy.hideLanguageModal()
       .acceptCookieNotice()
   }
@@ -209,8 +209,9 @@ Cypress.Commands.add('openFilterSidebar', () => {
   cy.openSidebar('[data-test-id="ButtonFilter"]')
 })
 
-Cypress.Commands.add('registerCustomer', () => {
-  cy.visitAsRecurringUser('/')
+Cypress.Commands.add('registerCustomer', (options) => {
+  const { storeCode } = Object.assign({ storeCode: undefined }, options)
+  cy.visitAsRecurringUser('/', { storeCode })
   cy.createCustomerWithFaker()
 
   cy.openSidebar('[data-test-id="HeaderButtonAccount"]', '[data-test-id="Modal"]')
@@ -223,19 +224,57 @@ Cypress.Commands.add('registerCustomer', () => {
     .should('be.visible')
 
   cy.getCustomer().then(customer => {
-    cy.get('@form').find('input[name="email"]').type(customer.email)
-    cy.get('@form').find('input[name="first-name"]').type(customer.firstName)
-    cy.get('@form').find('input[name="last-name"]').type(customer.lastName)
+    cy.get('@form').focusInput('email').type(customer.email)
+    cy.get('@form').focusInput('first-name').type(customer.firstName)
+    cy.get('@form').focusInput('last-name').type(customer.lastName)
     cy.get('@form').find('select[name="gender"]').selectRandomOption(true)
-    cy.get('@form').find('input[name="dob"]').type(customer.dob)
-    cy.get('@form').find('input[name="password"]').type(customer.password)
-    cy.get('@form').find('input[name="password-confirm"]').type(customer.password)
+    cy.get('@form').focusInput('dob').type(customer.dob)
+    cy.get('@form').focusInput('password').type(customer.password)
+    cy.get('@form').focusInput('password-confirm').type(customer.password)
     cy.get('@form').findByTestId('newsletterCheckbox').randomlyClickElement()
     cy.get('@form').findByTestId('registerSubmit').click()
   })
 
   cy.waitForLoader()
     .checkNotification('success')
+})
+
+Cypress.Commands.add('registerCustomerWithAddress', (storeCode) => {
+  cy.registerCustomer({ storeCode })
+  cy.isLoggedIn()
+  cy.addCustomerAddress()
+})
+
+Cypress.Commands.add('addCustomerAddress', () => {
+  cy.openSidebar('[data-test-id="HeaderButtonAccount"]')
+  cy.get('@sidebar').findByTestId('MyAddressesButton').click()
+
+  cy.getByTestId('MyAddresses').should('be.visible')
+
+  cy.getByTestId('AddNewAddressButton').click()
+  cy.getByTestId('MyAddressesForm').as('form').should('be.visible')
+
+  cy.getFaker().then(faker => {
+    if (faker.random.number(1) > 0) {
+      cy.get('@form').focusInput('company').type(faker.company.companyName())
+    }
+
+    cy.get('@form').focusInput('street[0]').type(faker.address.streetAddress())
+    cy.get('@form').focusInput('city').type(faker.address.city())
+    cy.get('@form').focusInput('postcode').type(faker.address.zipCode())
+    cy.get('@form').focusInput('telephone').type(faker.phone.phoneNumber())
+    cy.get('@form').findByTestId('IsDefaultBillingCheckbox').randomlyClickElement()
+    cy.get('@form').findByTestId('IsDefaultShippingCheckbox').randomlyClickElement()
+    cy.get('@form').findByTestId('SubmitButton').click()
+
+    cy.waitForLoader().checkNotification('success')
+
+    cy.get('@form').findByTestId('BackButton').click()
+
+    cy.getByTestId('MyAddresses')
+      .should('be.visible')
+      .findByTestId('AddressBox')
+  })
 })
 
 Cypress.Commands.add('getCustomer', () => {
@@ -470,11 +509,17 @@ Cypress.Commands.add('checkoutFillPersonalDetails', (createNewAccount: boolean =
   })
 })
 
-Cypress.Commands.add('checkoutFillAddress', () => {
+Cypress.Commands.add('checkoutFillAddress', (selectExistingAddress = false) => {
   cy.get('#checkout .step-addresses .addresses').as('addresses')
-  cy.get('@addresses').get('.address-shipping')
-    .should('be.visible')
-    .checkoutFillNewAddressForm()
+
+  if (selectExistingAddress) {
+    cy.get('@addresses').get('.address-shipping')
+      .should('be.visible')
+  } else {
+    cy.get('@addresses').get('.address-shipping')
+      .should('be.visible')
+      .checkoutFillNewAddressForm()
+  }
 
   cy.get('@addresses').checkoutGoToNextStep()
 })
