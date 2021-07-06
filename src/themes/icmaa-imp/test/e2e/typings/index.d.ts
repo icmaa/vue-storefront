@@ -430,6 +430,22 @@ declare namespace Cypress {
      * cy.checkoutPlaceOrder()
      * cy.checkoutPlaceOrder(true)
      */
-    checkoutPlaceOrder(isGateway?: boolean): Chainable<Window>
+    checkoutPlaceOrder(isGateway?: boolean): Chainable<Window>,
+
+    /**
+     * Get child iframe
+     *
+     * @example
+     * cy.getFrame('Modal')
+     */
+    getFrame<E extends Node = HTMLElement>(options?: Partial<Loggable & Timeoutable & Shadow>): Chainable<JQuery<E>>,
+
+    /**
+     * Check if iframe is loaded
+     *
+     * @example
+     * cy.iframeLoaded('Modal')
+     */
+    iframeLoaded<E extends Node = HTMLElement>(options?: Partial<Loggable & Timeoutable & Shadow>): Chainable<JQuery<E>>
   }
 }

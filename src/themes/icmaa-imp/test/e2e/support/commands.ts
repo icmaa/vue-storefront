@@ -579,3 +579,29 @@ Cypress.Commands.add('checkoutPlaceOrder', (isGateway = false) => {
     cy.url().should('include', `checkout-success`)
   }
 })
+
+/**
+ * More infos about how to handle iframes
+ * @see https://www.cypress.io/blog/2020/02/12/working-with-iframes-in-cypress/
+ * @see https://medium.com/@michabahr/testing-stripe-elements-with-cypress-5a2fc17ab27b
+ */
+Cypress.Commands.add('getFrame', { prevSubject: 'element' }, (subject, options) => {
+  return cy.wrap(subject)
+    .find('iframe')
+    .iframeLoaded()
+    .then(cy.wrap)
+    .its('document.body').should('not.be.undefined')
+})
+
+Cypress.Commands.add('iframeLoaded', { prevSubject: 'element' }, ($iframe) => {
+  const contentWindow = $iframe.prop('contentWindow');
+  return new Promise(resolve => {
+    if (contentWindow?.document.readyState === 'complete') {
+      resolve(contentWindow)
+    } else {
+      $iframe.on('load', () => {
+        resolve(contentWindow)
+      })
+    }
+  })
+})
