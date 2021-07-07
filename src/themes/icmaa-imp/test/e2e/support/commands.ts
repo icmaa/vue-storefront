@@ -111,7 +111,7 @@ Cypress.Commands.add('getFromLocalStorage', (key) => {
 
 Cypress.Commands.overwrite('visit', (originalFn, url, options?) => {
   let storeCode: string
-  if (options?.hasOwnProperty('storeCode')) {
+  if (options?.hasOwnProperty('storeCode') && options?.storeCode !== undefined) {
     storeCode = options.storeCode
     cy.setStoreCode(storeCode)
   }
