@@ -262,7 +262,13 @@ Cypress.Commands.add('addCustomerAddress', () => {
     cy.get('@form').focusInput('street[0]').type(faker.address.streetAddress())
     cy.get('@form').focusInput('city').type(faker.address.city())
     cy.get('@form').focusInput('postcode').type(faker.address.zipCode())
-    cy.get('@form').focusInput('telephone').type(faker.phone.phoneNumber())
+
+    cy.getStoreCode().then(storeCode => {
+      if (storeCode === 'fr') {
+        cy.get('@form').focusInput('telephone').type(faker.phone.phoneNumber())
+      }
+    })
+
     cy.get('@form').findByTestId('IsDefaultBillingCheckbox').randomlyClickElement()
     cy.get('@form').findByTestId('IsDefaultShippingCheckbox').randomlyClickElement()
     cy.get('@form').findByTestId('SubmitButton').click()
@@ -590,7 +596,8 @@ Cypress.Commands.add('getFrame', { prevSubject: 'element' }, (subject, options) 
     .find('iframe')
     .iframeLoaded()
     .then(cy.wrap)
-    .its('document.body').should('not.be.undefined')
+    .its('document.body')
+    .should('not.be.undefined')
 })
 
 Cypress.Commands.add('iframeLoaded', { prevSubject: 'element' }, ($iframe) => {
