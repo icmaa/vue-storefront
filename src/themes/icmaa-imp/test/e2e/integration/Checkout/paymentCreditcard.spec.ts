@@ -36,11 +36,10 @@ describe('Checkout', () => {
       .should('contain', 'ckotech.co')
 
     cy.get('body')
-      .getFrame('.aut-iframe')
       .getFrame('[name="cko-3ds2-iframe"]')
       .as('3dsIframe')
       .then(() => {
-        cy.get('@3dsIframe').find('input[name="password"]').type('Checkout1!')
+        cy.get('@3dsIframe').find('input[name="login_email"]').type('Checkout1!')
         cy.get('@3dsIframe').find('#form input[type="submit"]').click()
       })
 
