@@ -8,7 +8,7 @@ describe('Checkout', () => {
     cy.checkoutFillShipping()
 
     cy.checkoutFillPayment('CheckoutcomApmKlarna', false)
-    cy.get('#klarna_container').getFrame().wait(3000) // Wait for iframe to be ready
+    cy.get('#klarna_container').getFrame().wait(5000) // Wait for iframe to be ready
     cy.get('@payment').checkoutGoToNextStep()
 
     cy.checkoutPlaceOrder()
