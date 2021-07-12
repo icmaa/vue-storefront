@@ -579,7 +579,7 @@ Cypress.Commands.add('checkoutPlaceOrder', (isGateway = false) => {
 
   cy.get('@review').findByTestId('PlaceOrderButton').click()
 
-  cy.waitForLoader(30000)
+  cy.waitForLoader(45000)
 
   if (!isGateway) {
     cy.url().should('include', `checkout-success`)

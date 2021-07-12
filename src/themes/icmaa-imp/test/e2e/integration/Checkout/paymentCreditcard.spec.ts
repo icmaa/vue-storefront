@@ -16,23 +16,34 @@ describe('Checkout', () => {
 
     const [ ccNumber, ccCVV ] = testNumbers[Math.floor(Math.random() * testNumbers.length)]
 
+    cy.intercept({ method: 'POST', pathname: '/framesv2/log*' })
+      .as('checkoutcomIframeReq')
+    cy.wait('@checkoutcomIframeReq')
+
     cy.get('@payment')
       .findByTestId('CheckoutcomCardForm')
-      .getFrame()
-      .as('ccIframe')
+      .getFrame().as('ccIframe')
       .then(() => {
         cy.get('@ccIframe').find('input[name="cardnumber"]').type(ccNumber)
+        cy.get('@ccIframe').find('input[name="exp-date"]').type('01/30')
         cy.get('@ccIframe').find('input[name="cvc"]').type(ccCVV)
-        cy.get('@ccIframe').find('input[name="exp-date"]').type('10/25')
       })
 
     cy.get('@payment').checkoutGoToNextStep()
 
     cy.checkoutPlaceOrder(true)
+    cy.location('host', { log: true })
+      .should('contain', 'ckotech.co')
 
-    cy.get('body').getFrame('.aut-iframe')
-      .find('')
+    cy.get('body')
+      .getFrame('.aut-iframe')
+      .getFrame('[name="cko-3ds2-iframe"]')
+      .as('3dsIframe')
+      .then(() => {
+        cy.get('@3dsIframe').find('input[name="password"]').type('Checkout1!')
+        cy.get('@3dsIframe').find('#form input[type="submit"]').click()
+      })
 
-    cy.isLoggedIn()
+    cy.isLoggedIn(false)
   })
 })
