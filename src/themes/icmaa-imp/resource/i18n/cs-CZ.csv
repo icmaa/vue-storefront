@@ -467,6 +467,6 @@
 "to find something beautiful for You!","najít pro vás něco krásného!"
 "us a line here","nám tu linku"
 "{count} items","{sčítání} položek"
-"{incl} {rate}% VAT","Bez lodní přepravy"
-"{incl} {rate}% VAT, Excl. shipping","{incl} a {rate}% DPH, bez Lodní doprava"
+"{incl} VAT","Bez lodní přepravy"
+"{incl} VAT, Excl. shipping","{incl} a DPH, bez Lodní doprava"
 "{name} is {height} tall and wears size {size}.","jméno} je {výška} vysoký a má velikost {velikost}."
