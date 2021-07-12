@@ -24,7 +24,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
         with:
-          node-version: '14.x'
+          node-version: '16.x'
 
       - name: Install
         uses: bahmutov/npm-install@v1
@@ -56,10 +56,10 @@ jobs:
 
       # The newest NodeJS LTS version isn't supported by GAE flex engine
       # @see https://github.com/GoogleCloudPlatform/nodejs-docker/issues/214
-      - name: Hotfix for new NodeJS 14.17.* LTS version
-        if: ${{ env.ENV == 'production' }}
-        run: |
-          sed -i 's/"node": "^14"/"node": "14.16.x"/' package.json
+      # - name: Hotfix for new NodeJS 14.17.* LTS version
+      #   if: ${{ env.ENV == 'production' }}
+      #   run: |
+      #     sed -i 's/"node": "^14"/"node": "14.16.x"/' package.json
 
       - id: deploy
         uses: google-github-actions/deploy-appengine@main
