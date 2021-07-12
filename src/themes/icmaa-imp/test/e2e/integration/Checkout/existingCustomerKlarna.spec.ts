@@ -8,16 +8,8 @@ describe('Checkout', () => {
     cy.checkoutFillShipping()
 
     cy.checkoutFillPayment('CheckoutcomApmKlarna', false)
-    // Wait for iframe to be ready
-    cy.get('#klarna_container').getFrame().wait(3000)
+    cy.get('#klarna_container').getFrame().wait(3000) // Wait for iframe to be ready
     cy.get('@payment').checkoutGoToNextStep()
-
-    // Some faker addresses wont work, like:
-    // Wimmer - Schellenbeck
-    // Rebecca Koszewski
-    // 8701 Nils Stravenue
-    // 40817 West Yusuf
-    // Deutschland
 
     cy.checkoutPlaceOrder()
     cy.isLoggedIn()
