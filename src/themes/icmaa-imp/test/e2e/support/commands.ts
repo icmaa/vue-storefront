@@ -591,23 +591,23 @@ Cypress.Commands.add('checkoutPlaceOrder', (isGateway = false) => {
  * @see https://www.cypress.io/blog/2020/02/12/working-with-iframes-in-cypress/
  * @see https://medium.com/@michabahr/testing-stripe-elements-with-cypress-5a2fc17ab27b
  */
-Cypress.Commands.add('getFrame', { prevSubject: 'element' }, (subject, options) => {
+Cypress.Commands.add('getFrame', { prevSubject: 'element' }, (subject, selector) => {
   return cy.wrap(subject)
     .find('iframe')
     .iframeLoaded()
     .then(cy.wrap)
-    .its('document.body')
+    .its('body')
     .should('not.be.undefined')
 })
 
 Cypress.Commands.add('iframeLoaded', { prevSubject: 'element' }, ($iframe) => {
-  const contentWindow = $iframe.prop('contentWindow');
+  const $contentWindow = () => $iframe[0]?.contentDocument || $iframe[0]?.contentWindow?.document
   return new Promise(resolve => {
-    if (contentWindow?.document.readyState === 'complete') {
-      resolve(contentWindow)
+    if ($contentWindow()?.readyState === 'complete') {
+      resolve($contentWindow())
     } else {
       $iframe.on('load', () => {
-        resolve(contentWindow)
+        resolve($contentWindow())
       })
     }
   })

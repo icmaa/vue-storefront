@@ -3,6 +3,7 @@ describe('Checkout', () => {
     cy.createCartAndGoToCheckout()
     cy.checkoutFillPersonalDetails()
     cy.checkoutFillAddress()
+    cy.checkoutFillShipping()
 
     cy.checkoutFillPayment('CheckoutcomCard', false)
 
@@ -15,24 +16,22 @@ describe('Checkout', () => {
 
     const [ ccNumber, ccCVV ] = testNumbers[Math.floor(Math.random() * testNumbers.length)]
 
-    cy.wrap(ccNumber).debug()
-    cy.wrap(ccCVV).debug()
-
     cy.get('@payment')
       .findByTestId('CheckoutcomCardForm')
-      .getFrame().as('ccIframe')
-
-    cy.wait(3000) // Wait for checkout.com iFrame to be loaded
-
-    cy.get('@ccIframe').find('input[name="cardnumber"]').type(ccNumber)
-    cy.get('@ccIframe').find('input[name="cvc"]').type(ccCVV)
-    cy.get('@ccIframe').find('input[name="exp-date"]').type('10/25')
+      .getFrame()
+      .as('ccIframe')
+      .then(() => {
+        cy.get('@ccIframe').find('input[name="cardnumber"]').type(ccNumber)
+        cy.get('@ccIframe').find('input[name="cvc"]').type(ccCVV)
+        cy.get('@ccIframe').find('input[name="exp-date"]').type('10/25')
+      })
 
     cy.get('@payment').checkoutGoToNextStep()
 
     cy.checkoutPlaceOrder(true)
 
-    // ... Checkout.com logic
+    cy.get('body').getFrame('.aut-iframe')
+      .find('')
 
     cy.isLoggedIn()
   })
