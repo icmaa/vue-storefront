@@ -465,6 +465,6 @@
 "to find something beautiful for You!","per trovare qualcosa di bello per te!"
 "us a line here","Scrivici qui"
 "{count} items","{count} articoli"
-"{incl} {rate}% VAT","{incl} {rate}% IVA"
-"{incl} {rate}% VAT, Excl. shipping","{incl} {rate} % IVA, Spedizione esclusa"
+"{incl} VAT","{incl} IVA"
+"{incl} VAT, Excl. shipping","{incl} IVA, Spedizione esclusa"
 "{name} is {height} tall and wears size {size}.","{name} è {height} e indossa una taglia {size}."

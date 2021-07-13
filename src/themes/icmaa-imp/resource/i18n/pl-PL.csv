@@ -466,6 +466,6 @@
 "to find something beautiful for You!","znaleźć coś pięknego dla Ciebie!"
 "us a line here","upuść linię tutaj"
 "{count} items","{liczyć} produkty"
-"{incl} {rate}% VAT","wył. wysyłkę"
-"{incl} {rate}% VAT, Excl. shipping","{incl} {rate}% VAT, bez wysyłki"
+"{incl} VAT","wył. wysyłkę"
+"{incl} VAT, Excl. shipping","{incl} VAT, bez wysyłki"
 "{name} is {height} tall and wears size {size}.","{imię} ma {wzrost} wzrostu i nosi rozmiar {rozmiar}"

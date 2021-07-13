@@ -286,14 +286,10 @@ export default {
     isOnline () {
       return onlineHelper.isOnline
     },
-    taxrate () {
-      const storeView = currentStoreView()
-      return storeView.tax.defaultRate
-    },
     taxDisclaimer () {
       return i18n.t(
-        '{incl} {rate}% VAT, Excl. shipping',
-        { rate: this.taxrate, incl: i18n.t('incl.') }
+        '{incl} VAT, Excl. shipping',
+        { incl: i18n.t('incl.') }
       )
     },
     spotifyLogoLimit () {

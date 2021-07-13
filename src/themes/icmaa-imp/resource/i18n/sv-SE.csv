@@ -466,6 +466,6 @@
 "to find something beautiful for You!","för att hitta något vackert till Dig!"
 "us a line here","använd en linje här"
 "{count} items","{count} varor"
-"{incl} {rate}% VAT","Exkl. frakt"
-"{incl} {rate}% VAT, Excl. shipping","{incl} {rate}% moms, exkl. frakt"
+"{incl} VAT","Exkl. frakt"
+"{incl} VAT, Excl. shipping","{incl} moms, exkl. frakt"
 "{name} is {height} tall and wears size {size}.","{name} är {height} lång och har på sig storlek {size}."
