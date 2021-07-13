@@ -539,6 +539,9 @@ Cypress.Commands.add('checkoutFillNewAddressForm', { prevSubject: 'element' }, (
     cy.get('@address').focusInput('city').type(customer.address.city())
 
     cy.getStoreCode().then(storeCode => {
+      if (['uk'].includes(storeCode)) {
+        cy.get('@address').find('select[name="region_id"]').selectRandomOption(true)
+      }
       if (storeCode === 'fr') {
         cy.get('@address').focusInput('telephone').type(customer.phone.phoneNumber())
       }
