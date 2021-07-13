@@ -374,6 +374,7 @@ Cypress.Commands.add('registerStockApiRequest', () => {
 
 Cypress.Commands.add('checkAvailabilityOfCurrentProduct', () => {
   cy.wait('@apiStockReq')
+  cy.wait(300) // Wait for DOM change
 
   cy.getByTestId('AddToCart').then($button => {
     if ($button.attr('disabled')) {
@@ -442,7 +443,7 @@ Cypress.Commands.add('addCurrentProductToCart', (checkAvailability = true, enter
             cy.wrap<string>($item.find('span').first().text().trim()).as('optionLabel')
             cy.wrap($item)
           })
-          .click()
+          .click({ force: true })
 
         cy.get<string>('@optionLabel').then(label => {
           cy.getByTestId('AddToCartSize').contains(label)
