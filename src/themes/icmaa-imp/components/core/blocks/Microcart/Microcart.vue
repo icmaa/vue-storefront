@@ -19,6 +19,7 @@
           <button-component type="primary" class="t-w-full" @click.native="continueShopping(true)" data-test-id="GoToCheckout">
             {{ $t('Go to checkout') }}
           </button-component>
+          <PayPalButton class="t-mt-2" />
           <button-component type="transparent" class="t-w-full t-mt-2" @click.native="continueShopping()">
             {{ $t('Continue shopping') }}
           </button-component>
@@ -37,6 +38,7 @@ import Sidebar from 'theme/components/core/blocks/AsyncSidebar/Sidebar'
 import Product from 'theme/components/core/blocks/Microcart/Product'
 import Totals from 'theme/components/core/blocks/Microcart/Totals'
 import Coupon from 'theme/components/core/blocks/Microcart/Coupon'
+import PayPalButton from 'icmaa-paypal/components/Button'
 
 export default {
   name: 'MicroCart',
@@ -45,7 +47,8 @@ export default {
     Coupon,
     Sidebar,
     Product,
-    Totals
+    Totals,
+    PayPalButton
   },
   mixins: [ VueOfflineMixin ],
   props: {
