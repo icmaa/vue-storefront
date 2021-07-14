@@ -7,9 +7,11 @@ export default {
   name: 'PayPalButton',
   data () {
     return {
+      sdkLoaded: false,
+      shippingMethodsLoaded: false,
       // @todo Put this into config file
       clientId: 'ARrpPCWTSMu9x6I48yQuhPCBvNgugYfe7Twegv1YSmHeqXJ5onmCZ5bK0umPGR4B61hMg5tl8UzyOjQx',
-      sdkLoaded: false
+      currency: 'EUR'
     }
   },
   async mounted () {
@@ -21,7 +23,7 @@ export default {
       return new Promise(resolve => {
         const script = document.createElement('script')
         script.async = true
-        script.src = 'https://www.paypal.com/sdk/js?client-id=' + this.clientId
+        script.src = `https://www.paypal.com/sdk/js?client-id=${this.clientId}&currency=${this.currency}`
         script.onload = () => {
           this.sdkLoaded = true
           resolve()
@@ -46,20 +48,114 @@ export default {
         })
         .render('#paypal-button-container')
     },
-    createOrder () {
+    createOrder (data, actions) {
       // ...
 
       console.error('PayPal', 'createOrder', arguments)
+
+      return actions.order.create({
+        application_context: {
+          brand_name: 'IC Music and Apparel GmbH',
+          locale: 'de-DE',
+          shipping_preference: 'GET_FROM_FILE'
+        },
+        purchase_units: [
+          {
+            amount: {
+              currency_code: this.currency,
+              value: '10'
+            },
+            soft_descriptor: 'soft_descriptor',
+            custom_id: 'custom_id',
+            invoice_id: 'invoice_id'
+          }
+        ]
+      })
     },
-    onShippingChange () {
+    async onShippingChange (data, actions) {
       // ...
 
       console.error('PayPal', 'onShippingChange', arguments)
+
+      const patchActions = []
+
+      const addMethods = this.shippingMethodsLoaded === false || !data?.selected_shipping_option
+
+      if (!data.selected_shipping_option) {
+        data.selected_shipping_option = {
+          id: 'UPS10',
+          label: 'UPS Label 100',
+          selected: true,
+          amount: {
+            value: '10.00',
+            currency_code: this.currency
+          }
+        }
+      }
+
+      if (data.selected_shipping_option) {
+        data.amount.value =
+              parseFloat(10) +
+              parseFloat(data.selected_shipping_option.amount.value);
+
+        patchActions.push({
+          op: 'replace',
+          path: "/purchase_units/@reference_id=='default'/amount",
+          value: {
+            currency_code: this.currency,
+            value: data.amount.value,
+            breakdown: {
+              item_total: {
+                currency_code: this.currency,
+                value: 10
+              },
+              shipping: {
+                currency_code: this.currency,
+                value: parseFloat(data.selected_shipping_option.amount.value)
+              }
+            }
+          }
+        })
+      }
+
+      patchActions.push({
+        op: addMethods ? 'add' : 'replace',
+        path: "/purchase_units/@reference_id=='default'/shipping/options",
+        value: [{
+          id: 'UPS10',
+          label: 'UPS Label 100',
+          selected: addMethods || data.selected_shipping_option.id === 'UPS10',
+          amount: {
+            value: '10.00',
+            currency_code: this.currency
+          }
+        },
+        {
+          id: 'UPS20',
+          label: 'UPS Label 200',
+          selected: !addMethods && data.selected_shipping_option.id === 'UPS20',
+          amount: {
+            value: '20.00',
+            currency_code: this.currency
+          }
+        }]
+      })
+
+      return actions.order
+        .patch(patchActions)
+        .then(() => {
+          this.shippingMethodsLoaded = true
+        })
     },
-    onApprove () {
+    onApprove (data, actions) {
       // ...
 
       console.error('PayPal', 'onApprove', arguments)
+
+      return actions.order.capture().then(details => {
+        console.error('PayPal', 'capured', details)
+        alert('Transaction completed by ' + details.payer.name.given_name);
+      });
     },
     onError () {
       // ...
