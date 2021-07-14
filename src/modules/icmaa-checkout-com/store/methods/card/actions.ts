@@ -2,6 +2,7 @@ import { ActionTree } from 'vuex'
 import RootState from '@vue-storefront/core/types/RootState'
 import { CardState } from 'icmaa-checkout-com/types'
 import { Logger } from '@vue-storefront/core/lib/logger'
+import { icmaa_checkoutcom } from 'config'
 import * as types from './mutation-types'
 import i18n from '@vue-storefront/core/i18n'
 import get from 'lodash-es/get'
@@ -38,6 +39,11 @@ const actions: ActionTree<CardState, RootState> = {
     }
 
     paymentMethod.additional_data = { cardToken }
+
+    if (icmaa_checkoutcom.sandbox) {
+      const storeCode = rootGetters['icmaaConfig/getCurrentStore'].storeCode
+      paymentMethod.additional_data.baseUrl = `${location.origin}/${storeCode}/`
+    }
 
     await dispatch(
       'checkout/savePaymentMethod',

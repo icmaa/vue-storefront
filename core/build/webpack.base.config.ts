@@ -180,7 +180,9 @@ export default {
           {
             loader: 'sass-loader',
             options: {
-              indentedSyntax: true
+              sassOptions: {
+                indentedSyntax: true
+              }
             }
           }
         ]

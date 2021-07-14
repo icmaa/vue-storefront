@@ -1,4 +1,4 @@
-import faker from 'faker'
+const faker = require('faker')
 
 /**
  * Example usage:
@@ -17,8 +17,13 @@ import faker from 'faker'
  * @param country
  */
 const Faker = (country?: string): Faker.FakerStatic => {
-  faker.locale = country || 'de'
-  return faker
+  country = country || 'de'
+  if (country === 'uk') {
+    country = 'en_GB'
+  }
+
+  const fakerLocale = require('faker/locale/' + country)
+  return fakerLocale
 }
 
 /**

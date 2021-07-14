@@ -12,8 +12,8 @@ describe('Customer', () => {
     cy.openSidebar('[data-test-id="HeaderButtonAccount"]', '[data-test-id="Modal"]')
 
     cy.getCustomer().then(customer => {
-      cy.get('@sidebar').find('input[name="email"]').type(customer.email)
-      cy.get('@sidebar').find('input[name="password"]').type(customer.password)
+      cy.get('@sidebar').focusInput('email').type(customer.email)
+      cy.get('@sidebar').focusInput('password').type(customer.password)
       cy.get('@sidebar').findByTestId('loginSubmit').click()
     })
 
