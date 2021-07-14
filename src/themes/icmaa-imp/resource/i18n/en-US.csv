@@ -486,6 +486,6 @@
 "to {price}","to {price}"
 "us a line here","us a line here"
 "{count} items","{count} items"
-"{incl} {rate}% VAT, Excl. shipping","{incl} {rate}% VAT, Excl. shipping"
+"{incl} VAT, Excl. shipping","{incl} VAT, Excl. shipping"
 "{name} is {height} tall and wears size {size}.","{name} is {height} tall and wears size {size}."
 "{price} and up","{price} and up"
