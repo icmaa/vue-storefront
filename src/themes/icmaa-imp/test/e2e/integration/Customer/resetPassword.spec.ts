@@ -6,6 +6,7 @@ describe('Resetpassword page', () => {
       cy.location('pathname').should('eq', `/${storeCode}`)
     })
   })
+
   it('Dont show forgot-password modal', () => {
     cy.visitAsRecurringUser('/customer/account/resetpassword?token=testtoken&email=testemail')
     cy.get('[data-test-id=Modal]').should('not.exist')

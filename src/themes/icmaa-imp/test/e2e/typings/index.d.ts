@@ -211,8 +211,28 @@ declare namespace Cypress {
      *
      * @example
      * cy.registerCustomer()
+     * cy.registerCustomer({ storeCode: 'de' })
      */
-    registerCustomer(): Chainable<Window>,
+    registerCustomer(options?: { storeCode?: string }): Chainable<Window>,
+
+    /**
+     * Register a new customer using the registration routine and create a default address.
+     * Adds alias `customer` for further use.
+     *
+     * @example
+     * cy.registerCustomerWithAddress()
+     * cy.registerCustomerWithAddress('fr')
+     */
+    registerCustomerWithAddress(storeCode?: string): Chainable<Window>,
+
+    /**
+     * Add an address to current customer. The customer must be already logged in.
+     * Adds alias `customer` for further use.
+     *
+     * @example
+     * cy.addCustomerAddress()
+     */
+    addCustomerAddress(): Chainable<Window>,
 
     /**
      * Get current customer object from `customer` alias.
@@ -363,13 +383,14 @@ declare namespace Cypress {
     checkoutFillPersonalDetails(createNewAccount?: boolean): Chainable<Window>,
 
     /**
-     * Fills out a new address in address step in checkout
-     * Need @customer alias to be already defined
+     * Fills out a new address in address step in checkout or select an existing address
+     * Need @customer alias to be already defined if you enter a new address
      *
      * @example
      * cy.checkoutFillAddress()
+     * cy.checkoutFillAddress(true)
      */
-    checkoutFillAddress(): Chainable<Window>,
+    checkoutFillAddress(selectExistingAddress?: boolean): Chainable<Window>,
 
     /**
      * Fills out parent address from in address checkout step
@@ -409,6 +430,23 @@ declare namespace Cypress {
      * cy.checkoutPlaceOrder()
      * cy.checkoutPlaceOrder(true)
      */
-    checkoutPlaceOrder(isGateway?: boolean): Chainable<Window>
+    checkoutPlaceOrder(isGateway?: boolean): Chainable<Window>,
+
+    /**
+     * Get and wait for child iframe
+     *
+     * @example
+     * cy.get('div').getFrame()
+     * cy.get('div').getFrame('.aut-iframe')
+     */
+    getFrame<E extends Node = HTMLElement>(selector?: string): Chainable<JQuery<E>>,
+
+    /**
+     * Check if iframe is loaded
+     *
+     * @example
+     * cy.iframeLoaded('Modal')
+     */
+    iframeLoaded<E extends Node = HTMLElement>(options?: Partial<Loggable & Timeoutable & Shadow>): Chainable<JQuery<E>>
   }
 }

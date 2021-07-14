@@ -2,6 +2,8 @@
   <div>
     <base-input
       type="text"
+      id="bic"
+      name="bic"
       v-model="additionalData.bic"
       :placeholder="$t('BIC')"
       :validations="[

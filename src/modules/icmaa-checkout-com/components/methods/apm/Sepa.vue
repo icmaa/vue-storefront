@@ -2,6 +2,8 @@
   <form>
     <base-input
       type="text"
+      id="iban"
+      name="iban"
       v-model="additionalData.iban"
       :placeholder="$t('IBAN')"
       :validations="[
@@ -18,6 +20,8 @@
     />
     <base-input
       type="text"
+      id="bic"
+      name="bic"
       v-model="additionalData.bic"
       :placeholder="$t('BIC')"
       :validations="[

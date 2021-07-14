@@ -111,7 +111,7 @@ Cypress.Commands.add('getFromLocalStorage', (key) => {
 
 Cypress.Commands.overwrite('visit', (originalFn, url, options?) => {
   let storeCode: string
-  if (options?.hasOwnProperty('storeCode')) {
+  if (options?.hasOwnProperty('storeCode') && options?.storeCode !== undefined) {
     storeCode = options.storeCode
     cy.setStoreCode(storeCode)
   }
@@ -122,7 +122,7 @@ Cypress.Commands.overwrite('visit', (originalFn, url, options?) => {
     }
   })
 
-  if (options && options.hasOwnProperty('returningVisitor')) {
+  if (options?.returningVisitor) {
     cy.hideLanguageModal()
       .acceptCookieNotice()
   }
@@ -209,8 +209,9 @@ Cypress.Commands.add('openFilterSidebar', () => {
   cy.openSidebar('[data-test-id="ButtonFilter"]')
 })
 
-Cypress.Commands.add('registerCustomer', () => {
-  cy.visitAsRecurringUser('/')
+Cypress.Commands.add('registerCustomer', (options) => {
+  const { storeCode } = Object.assign({ storeCode: undefined }, options)
+  cy.visitAsRecurringUser('/', { storeCode })
   cy.createCustomerWithFaker()
 
   cy.openSidebar('[data-test-id="HeaderButtonAccount"]', '[data-test-id="Modal"]')
@@ -223,19 +224,63 @@ Cypress.Commands.add('registerCustomer', () => {
     .should('be.visible')
 
   cy.getCustomer().then(customer => {
-    cy.get('@form').find('input[name="email"]').type(customer.email)
-    cy.get('@form').find('input[name="first-name"]').type(customer.firstName)
-    cy.get('@form').find('input[name="last-name"]').type(customer.lastName)
+    cy.get('@form').focusInput('email').type(customer.email)
+    cy.get('@form').focusInput('first-name').type(customer.firstName)
+    cy.get('@form').focusInput('last-name').type(customer.lastName)
     cy.get('@form').find('select[name="gender"]').selectRandomOption(true)
-    cy.get('@form').find('input[name="dob"]').type(customer.dob)
-    cy.get('@form').find('input[name="password"]').type(customer.password)
-    cy.get('@form').find('input[name="password-confirm"]').type(customer.password)
+    cy.get('@form').focusInput('dob').type(customer.dob)
+    cy.get('@form').focusInput('password').type(customer.password)
+    cy.get('@form').focusInput('password-confirm').type(customer.password)
     cy.get('@form').findByTestId('newsletterCheckbox').randomlyClickElement()
     cy.get('@form').findByTestId('registerSubmit').click()
   })
 
   cy.waitForLoader()
     .checkNotification('success')
+})
+
+Cypress.Commands.add('registerCustomerWithAddress', (storeCode) => {
+  cy.registerCustomer({ storeCode })
+  cy.isLoggedIn()
+  cy.addCustomerAddress()
+})
+
+Cypress.Commands.add('addCustomerAddress', () => {
+  cy.openSidebar('[data-test-id="HeaderButtonAccount"]')
+  cy.get('@sidebar').findByTestId('MyAddressesButton').click()
+
+  cy.getByTestId('MyAddresses').should('be.visible')
+
+  cy.getByTestId('AddNewAddressButton').click()
+  cy.getByTestId('MyAddressesForm').as('form').should('be.visible')
+
+  cy.getFaker().then(faker => {
+    if (faker.random.number(1) > 0) {
+      cy.get('@form').focusInput('company').type(faker.company.companyName())
+    }
+
+    cy.get('@form').focusInput('street[0]').type(faker.address.streetAddress())
+    cy.get('@form').focusInput('city').type(faker.address.city())
+    cy.get('@form').focusInput('postcode').type(faker.address.zipCode())
+
+    cy.getStoreCode().then(storeCode => {
+      if (storeCode === 'fr') {
+        cy.get('@form').focusInput('telephone').type(faker.phone.phoneNumber())
+      }
+    })
+
+    cy.get('@form').findByTestId('IsDefaultBillingCheckbox').randomlyClickElement()
+    cy.get('@form').findByTestId('IsDefaultShippingCheckbox').randomlyClickElement()
+    cy.get('@form').findByTestId('SubmitButton').click()
+
+    cy.waitForLoader().checkNotification('success')
+
+    cy.get('@form').findByTestId('BackButton').click()
+
+    cy.getByTestId('MyAddresses')
+      .should('be.visible')
+      .findByTestId('AddressBox')
+  })
 })
 
 Cypress.Commands.add('getCustomer', () => {
@@ -329,6 +374,7 @@ Cypress.Commands.add('registerStockApiRequest', () => {
 
 Cypress.Commands.add('checkAvailabilityOfCurrentProduct', () => {
   cy.wait('@apiStockReq')
+  cy.wait(300) // Wait for DOM change
 
   cy.getByTestId('AddToCart').then($button => {
     if ($button.attr('disabled')) {
@@ -397,7 +443,7 @@ Cypress.Commands.add('addCurrentProductToCart', (checkAvailability = true, enter
             cy.wrap<string>($item.find('span').first().text().trim()).as('optionLabel')
             cy.wrap($item)
           })
-          .click()
+          .click({ force: true })
 
         cy.get<string>('@optionLabel').then(label => {
           cy.getByTestId('AddToCartSize').contains(label)
@@ -470,11 +516,17 @@ Cypress.Commands.add('checkoutFillPersonalDetails', (createNewAccount: boolean =
   })
 })
 
-Cypress.Commands.add('checkoutFillAddress', () => {
+Cypress.Commands.add('checkoutFillAddress', (selectExistingAddress = false) => {
   cy.get('#checkout .step-addresses .addresses').as('addresses')
-  cy.get('@addresses').get('.address-shipping')
-    .should('be.visible')
-    .checkoutFillNewAddressForm()
+
+  if (selectExistingAddress) {
+    cy.get('@addresses').get('.address-shipping')
+      .should('be.visible')
+  } else {
+    cy.get('@addresses').get('.address-shipping')
+      .should('be.visible')
+      .checkoutFillNewAddressForm()
+  }
 
   cy.get('@addresses').checkoutGoToNextStep()
 })
@@ -488,6 +540,9 @@ Cypress.Commands.add('checkoutFillNewAddressForm', { prevSubject: 'element' }, (
     cy.get('@address').focusInput('city').type(customer.address.city())
 
     cy.getStoreCode().then(storeCode => {
+      if (['uk'].includes(storeCode)) {
+        cy.get('@address').find('select[name="region_id"]').selectRandomOption(true)
+      }
       if (storeCode === 'fr') {
         cy.get('@address').focusInput('telephone').type(customer.phone.phoneNumber())
       }
@@ -528,9 +583,36 @@ Cypress.Commands.add('checkoutPlaceOrder', (isGateway = false) => {
 
   cy.get('@review').findByTestId('PlaceOrderButton').click()
 
-  cy.waitForLoader(30000)
+  cy.waitForLoader(45000)
 
   if (!isGateway) {
     cy.url().should('include', `checkout-success`)
   }
+})
+
+/**
+ * More infos about how to handle iframes
+ * @see https://www.cypress.io/blog/2020/02/12/working-with-iframes-in-cypress/
+ * @see https://medium.com/@michabahr/testing-stripe-elements-with-cypress-5a2fc17ab27b
+ */
+Cypress.Commands.add('getFrame', { prevSubject: 'element' }, (subject, selector = '') => {
+  return cy.wrap(subject)
+    .find('iframe' + selector)
+    .iframeLoaded()
+    .then(cy.wrap)
+    .its('body')
+    .should('not.be.undefined')
+})
+
+Cypress.Commands.add('iframeLoaded', { prevSubject: 'element' }, ($iframe) => {
+  const $contentWindow = () => $iframe[0]?.contentDocument || $iframe[0]?.contentWindow?.document
+  return new Promise(resolve => {
+    if ($contentWindow()?.readyState === 'complete') {
+      resolve($contentWindow())
+    } else {
+      $iframe.on('load', () => {
+        resolve($contentWindow())
+      })
+    }
+  })
 })
