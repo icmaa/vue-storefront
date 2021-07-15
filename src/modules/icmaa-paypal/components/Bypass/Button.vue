@@ -23,7 +23,7 @@ export default {
       return new Promise(resolve => {
         const script = document.createElement('script')
         script.async = true
-        script.src = `https://www.paypal.com/sdk/js?client-id=${this.clientId}&currency=${this.currency}`
+        script.src = `//www.paypal.com/sdk/js?client-id=${this.clientId}&currency=${this.currency}`
         script.onload = () => {
           this.sdkLoaded = true
           resolve()
@@ -66,8 +66,8 @@ export default {
               value: '10'
             },
             soft_descriptor: 'soft_descriptor',
-            custom_id: 'custom_id',
-            invoice_id: 'invoice_id'
+            custom_id: '123123123',
+            invoice_id: '123123'
           }
         ]
       })
@@ -76,6 +76,26 @@ export default {
       // ...
 
       console.error('PayPal', 'onShippingChange', arguments)
+
+      const { shipping_address } = data
+      const {
+        city,
+        post_code: postcode,
+        country_code: country_id
+      } = shipping_address
+
+      const address = {
+        city,
+        street: [
+          'adsasd'
+        ],
+        postcode,
+        country_id,
+        useForBilling: true
+      }
+      this.$store.dispatch('checkout/saveShippingDetails', address)
+      // this.$store.dispatch('checkout/savePaymentDetails', address)
+      // await this.$store.dispatch('cart/syncShippingMethods', { forceServerSync: true })
 
       const patchActions = []
 
