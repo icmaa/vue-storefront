@@ -38,7 +38,7 @@ import Sidebar from 'theme/components/core/blocks/AsyncSidebar/Sidebar'
 import Product from 'theme/components/core/blocks/Microcart/Product'
 import Totals from 'theme/components/core/blocks/Microcart/Totals'
 import Coupon from 'theme/components/core/blocks/Microcart/Coupon'
-import PaypalBypassButton from 'icmaa-paypal/components/Bypass/Button'
+import PaypalBypassButton from 'icmaa-paypal/components/Bypass/ButtonWrapper'
 
 export default {
   name: 'MicroCart',

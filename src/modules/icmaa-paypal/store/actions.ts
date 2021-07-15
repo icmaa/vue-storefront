@@ -4,21 +4,25 @@ import PayPalState from '../type/PayPalState'
 import * as mutationTypes from './mutation-types'
 
 const actions: ActionTree<PayPalState, RootState> = {
-  async loadSdk ({ getters, commit }) {
+  async loadSdk ({ getters, commit }): Promise<boolean> {
     if (getters.isSdkLoaded === true) {
-      return true
+      return Promise.resolve(true)
     }
 
-    const clientId = getters.getClientId
+    const clientId = getters.getClientId || 'ARrpPCWTSMu9x6I48yQuhPCBvNgugYfe7Twegv1YSmHeqXJ5onmCZ5bK0umPGR4B61hMg5tl8UzyOjQx'
     const currency = getters.getCurrency
 
-    return new Promise<void>(resolve => {
+    return new Promise(resolve => {
       const script = document.createElement('script')
       script.async = true
       script.src = `//www.paypal.com/sdk/js?client-id=${clientId}&currency=${currency}`
       script.onload = () => {
         commit(mutationTypes.PAYPAL_SDK_LOADED)
-        resolve()
+        resolve(true)
+      }
+
+      script.onerror = (e) => {
+        resolve(false)
       }
 
       document.body.appendChild(script)

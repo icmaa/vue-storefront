@@ -38,7 +38,6 @@ import { IcmaaProductAlertModule } from 'icmaa-product-alert'
 import { IcmaaGiftcertModule } from 'icmaa-giftcert'
 import { IcmaaTrackingModule } from 'icmaa-tracking'
 import { IcmaaLooksModule } from 'icmaa-looks'
-import { IcmaaPayPalModule } from 'icmaa-paypal'
 import { IcmaaGoogleTagManagerModule } from 'icmaa-google-tag-manager'
 import { IcmaaLogsModule } from 'icmaa-logs'
 
@@ -84,7 +83,6 @@ export function registerClientModules () {
   registerModule(IcmaaGiftcertModule)
   registerModule(IcmaaTrackingModule)
   registerModule(IcmaaLooksModule)
-  registerModule(IcmaaPayPalModule)
   registerModule(IcmaaLogsModule)
 }
 

@@ -1,9 +1,8 @@
 <template>
-  <div id="paypal-button-container" class="t-flex" v-if="sdkLoaded" />
+  <div id="paypal-button-container" class="t-flex" />
 </template>
 
 <script>
-import initStore from 'icmaa-paypal/helpers/initStore'
 import { mapGetters } from 'vuex'
 
 export default {
@@ -15,12 +14,10 @@ export default {
   },
   computed: {
     ...mapGetters({
-      currency: 'icmaaPayPal/getCurrency',
-      sdkLoaded: 'icmaaPayPal/isSdkLoaded'
+      currency: 'icmaaPayPal/getCurrency'
     })
   },
-  async mounted () {
-    await initStore(this.$store)
+  mounted () {
     this.renderButton()
   },
   methods: {
