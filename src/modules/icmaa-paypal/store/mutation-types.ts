@@ -1,0 +1,2 @@
+export const PAYPAL_SDK_LOADED = 'SDK_LOADED'
+export const PAYPAL_SET_CLIENT_ID = 'SET_CLIENT_ID'

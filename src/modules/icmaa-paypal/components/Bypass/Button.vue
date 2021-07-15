@@ -3,34 +3,27 @@
 </template>
 
 <script>
+import initStore from 'icmaa-paypal/helpers/initStore'
+import { mapGetters } from 'vuex'
+
 export default {
   name: 'PayPalButton',
   data () {
     return {
-      sdkLoaded: false,
-      shippingMethodsLoaded: false,
-      // @todo Put this into config file
-      clientId: 'ARrpPCWTSMu9x6I48yQuhPCBvNgugYfe7Twegv1YSmHeqXJ5onmCZ5bK0umPGR4B61hMg5tl8UzyOjQx',
-      currency: 'EUR'
+      shippingMethodsLoaded: false
     }
   },
+  computed: {
+    ...mapGetters({
+      currency: 'icmaaPayPal/getCurrency',
+      sdkLoaded: 'icmaaPayPal/isSdkLoaded'
+    })
+  },
   async mounted () {
-    await this.loadSdkScript()
+    await initStore(this.$store)
     this.renderButton()
   },
   methods: {
-    loadSdkScript () {
-      return new Promise(resolve => {
-        const script = document.createElement('script')
-        script.async = true
-        script.src = `//www.paypal.com/sdk/js?client-id=${this.clientId}&currency=${this.currency}`
-        script.onload = () => {
-          this.sdkLoaded = true
-          resolve()
-        }
-        document.body.appendChild(script)
-      })
-    },
     renderButton () {
       window.paypal
         .Buttons({
