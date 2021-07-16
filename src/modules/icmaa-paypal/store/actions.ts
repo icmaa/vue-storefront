@@ -11,7 +11,7 @@ const actions: ActionTree<PayPalState, RootState> = {
       return Promise.resolve(true)
     }
 
-    const start = await dispatch('startBypass')
+    const start = await dispatch('start')
     if (!start) {
       return Promise.resolve(false)
     }
@@ -35,7 +35,7 @@ const actions: ActionTree<PayPalState, RootState> = {
       document.body.appendChild(script)
     })
   },
-  async startBypass ({ commit }) {
+  async start ({ commit }) {
     return PaypalBypassService.start()
       .then(resp => {
         if (resp?.code === 200) {
@@ -48,10 +48,25 @@ const actions: ActionTree<PayPalState, RootState> = {
           return result
         }
 
-        throw Error(resp?.result || 'Error during `startBypass`')
+        throw Error(resp?.result || 'Error during `start`')
       })
       .catch(e => {
         Logger.error('Can\'t start PayPal checkout:', 'icmaa-paypal', e.message)()
+        return false
+      })
+  },
+  async getBypassShipping (_, address) {
+    return PaypalBypassService.shipping(address)
+      .then(resp => {
+        if (resp?.code === 200) {
+          const { result } = resp
+          return result
+        }
+
+        throw Error(resp?.result || 'Error during `getBypassShipping`')
+      })
+      .catch(e => {
+        Logger.error('Can\'t fetch shipping-informations for PayPal checkout:', 'icmaa-paypal', e.message)()
         return false
       })
   }

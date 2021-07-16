@@ -71,11 +71,9 @@ export default {
       })
     },
     async onShippingChange (data, actions) {
-      // ...
-
-      console.error('PayPal', 'onShippingChange', arguments)
-
+      const patchActions = []
       const { shipping_address } = data
+
       let {
         city,
         postal_code: postcode,
@@ -94,31 +92,36 @@ export default {
         state
       }
 
-      const patchActions = []
+      let shippingMethods = await this.$store.dispatch('icmaaPayPal/getBypassShipping', address)
+      shippingMethods = shippingMethods.map(method => ({
+        id: method.code,
+        label: `${method.method_title} - ${method.method_description}`,
+        selected: data?.selected_shipping_option && data?.selected_shipping_option.id === method.code,
+        amount: {
+          value: round(method.price),
+          currency_code: this.currency
+        }
+      }))
 
       const addMethods = this.shippingMethodsLoaded === false || !data?.selected_shipping_option
 
-      if (!data.selected_shipping_option) {
-        data.selected_shipping_option = {
-          id: 'UPS10',
-          label: 'UPS Label 100',
-          selected: true,
-          amount: {
-            value: '10.00',
-            currency_code: this.currency
-          }
-        }
+      if (!data?.selected_shipping_option && shippingMethods.length > 0) {
+        data.selected_shipping_option = shippingMethods[0]
+        data.selected_shipping_option.selected = true
+      } else if (shippingMethods.length > 0) {
+        data.selected_shipping_option = shippingMethods.find(m => m.selected === true)
       }
 
-      if (data.selected_shipping_option) {
-        data.amount.value = this.grandTotal + parseFloat(data.selected_shipping_option.amount.value)
+      if (data?.selected_shipping_option) {
+        const shippingAmount = parseFloat(data.selected_shipping_option.amount.value)
+        const totalInclShipping = this.grandTotal + shippingAmount
 
         patchActions.push({
           op: 'replace',
           path: "/purchase_units/@reference_id=='default'/amount",
           value: {
             currency_code: this.currency,
-            value: round(data.amount.value),
+            value: round(totalInclShipping),
             breakdown: {
               item_total: {
                 currency_code: this.currency,
@@ -126,7 +129,7 @@ export default {
               },
               shipping: {
                 currency_code: this.currency,
-                value: round(parseFloat(data.selected_shipping_option.amount.value))
+                value: round(shippingAmount)
               }
             }
           }
@@ -136,24 +139,7 @@ export default {
       patchActions.push({
         op: addMethods ? 'add' : 'replace',
         path: "/purchase_units/@reference_id=='default'/shipping/options",
-        value: [{
-          id: 'UPS10',
-          label: 'UPS Label 100',
-          selected: addMethods || data.selected_shipping_option.id === 'UPS10',
-          amount: {
-            value: '10.00',
-            currency_code: this.currency
-          }
-        },
-        {
-          id: 'UPS20',
-          label: 'UPS Label 200',
-          selected: !addMethods && data.selected_shipping_option.id === 'UPS20',
-          amount: {
-            value: '20.00',
-            currency_code: this.currency
-          }
-        }]
+        value: shippingMethods
       })
 
       return actions.order
