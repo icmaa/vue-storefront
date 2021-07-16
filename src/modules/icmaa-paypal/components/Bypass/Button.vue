@@ -76,24 +76,23 @@ export default {
       console.error('PayPal', 'onShippingChange', arguments)
 
       const { shipping_address } = data
-      const {
+      let {
         city,
-        post_code: postcode,
-        country_code: country_id
+        postal_code: postcode,
+        country_code: country_id,
+        state
       } = shipping_address
+
+      if (['Empty', ''].includes(state)) {
+        state = null
+      }
 
       const address = {
         city,
-        street: [
-          'adsasd'
-        ],
         postcode,
         country_id,
-        useForBilling: true
+        state
       }
-      // this.$store.dispatch('checkout/saveShippingDetails', address)
-      // this.$store.dispatch('checkout/savePaymentDetails', address)
-      // await this.$store.dispatch('cart/syncShippingMethods', { forceServerSync: true })
 
       const patchActions = []
 
