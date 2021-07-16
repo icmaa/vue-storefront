@@ -2,14 +2,21 @@ import { ActionTree } from 'vuex'
 import RootState from '@vue-storefront/core/types/RootState'
 import PayPalState from '../type/PayPalState'
 import * as mutationTypes from './mutation-types'
+import { PaypalBypassService } from '../data-resolver/BypassService'
+import { Logger } from '@vue-storefront/core/lib/logger'
 
 const actions: ActionTree<PayPalState, RootState> = {
-  async loadSdk ({ getters, commit }): Promise<boolean> {
+  async loadSdk ({ dispatch, getters, commit }): Promise<boolean> {
     if (getters.isSdkLoaded === true) {
       return Promise.resolve(true)
     }
 
-    const clientId = 'ARrpPCWTSMu9x6I48yQuhPCBvNgugYfe7Twegv1YSmHeqXJ5onmCZ5bK0umPGR4B61hMg5tl8UzyOjQx'
+    const start = await dispatch('startBypass')
+    if (!start) {
+      return Promise.resolve(false)
+    }
+
+    const clientId = getters.getClientId
     const currency = getters.getCurrency
 
     return new Promise(resolve => {
@@ -27,6 +34,26 @@ const actions: ActionTree<PayPalState, RootState> = {
 
       document.body.appendChild(script)
     })
+  },
+  async startBypass ({ commit }) {
+    return PaypalBypassService.start()
+      .then(resp => {
+        if (resp?.code === 200) {
+          const { result } = resp
+          const { clientId, brandName, softDescriptor, referenceId } = result
+
+          commit(mutationTypes.PAYPAL_SET_CLIENT_ID, clientId)
+          commit(mutationTypes.PAYPAL_SET_CONFIGS, { brandName, softDescriptor, referenceId })
+
+          return result
+        }
+
+        throw Error(resp?.result || 'Error during `startBypass`')
+      })
+      .catch(e => {
+        Logger.error('Can\'t start PayPal checkout:', 'icmaa-paypal', e.message)()
+        return false
+      })
   }
 }
 

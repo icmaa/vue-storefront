@@ -8,6 +8,11 @@ const mutations: MutationTree<PayPalState> = {
   },
   [types.PAYPAL_SET_CLIENT_ID] (state, clientId) {
     state.clientId = clientId
+  },
+  [types.PAYPAL_SET_CONFIGS] (state, { referenceId, brandName, softDescriptor }) {
+    state.referenceId = referenceId
+    state.brandName = brandName
+    state.softDescriptor = softDescriptor
   }
 }
 

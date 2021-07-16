@@ -4,6 +4,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import { round } from 'icmaa-config/helpers/price'
 
 export default {
   name: 'PayPalButton',
@@ -14,8 +15,16 @@ export default {
   },
   computed: {
     ...mapGetters({
-      currency: 'icmaaPayPal/getCurrency'
-    })
+      currency: 'icmaaPayPal/getCurrency',
+      locale: 'icmaaPayPal/getLocale',
+      brandName: 'icmaaPayPal/getBrandName',
+      softDescriptor: 'icmaaPayPal/getSoftDescriptor',
+      referenceId: 'icmaaPayPal/getReferenceId',
+      totals: 'cart/getTotals'
+    }),
+    grandTotal () {
+      return this.totals.find(t => t.code === 'grand_total')?.value || 0
+    }
   },
   mounted () {
     this.renderButton()
@@ -45,19 +54,18 @@ export default {
 
       return actions.order.create({
         application_context: {
-          brand_name: 'IC Music and Apparel GmbH',
-          locale: 'de-DE',
+          brand_name: this.brandName,
+          locale: this.locale,
           shipping_preference: 'GET_FROM_FILE'
         },
         purchase_units: [
           {
             amount: {
               currency_code: this.currency,
-              value: '10'
+              value: round(this.grandTotal)
             },
-            soft_descriptor: 'soft_descriptor',
-            custom_id: '123123123',
-            invoice_id: '123123'
+            soft_descriptor: this.softDescriptor,
+            invoice_id: this.referenceId
           }
         ]
       })
@@ -83,7 +91,7 @@ export default {
         country_id,
         useForBilling: true
       }
-      this.$store.dispatch('checkout/saveShippingDetails', address)
+      // this.$store.dispatch('checkout/saveShippingDetails', address)
       // this.$store.dispatch('checkout/savePaymentDetails', address)
       // await this.$store.dispatch('cart/syncShippingMethods', { forceServerSync: true })
 
@@ -104,24 +112,22 @@ export default {
       }
 
       if (data.selected_shipping_option) {
-        data.amount.value =
-              parseFloat(10) +
-              parseFloat(data.selected_shipping_option.amount.value);
+        data.amount.value = this.grandTotal + parseFloat(data.selected_shipping_option.amount.value)
 
         patchActions.push({
           op: 'replace',
           path: "/purchase_units/@reference_id=='default'/amount",
           value: {
             currency_code: this.currency,
-            value: data.amount.value,
+            value: round(data.amount.value),
             breakdown: {
               item_total: {
                 currency_code: this.currency,
-                value: 10
+                value: round(this.grandTotal)
               },
               shipping: {
                 currency_code: this.currency,
-                value: parseFloat(data.selected_shipping_option.amount.value)
+                value: round(parseFloat(data.selected_shipping_option.amount.value))
               }
             }
           }

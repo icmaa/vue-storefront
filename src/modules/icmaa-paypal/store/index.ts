@@ -8,7 +8,10 @@ export const icmaaPayPalStore: Module<PayPalState, any> = {
   namespaced: true,
   state: {
     isSdkLoaded: false,
-    clientId: null
+    clientId: null,
+    brandName: null,
+    softDescriptor: null,
+    referenceId: null
   },
   actions,
   mutations,
