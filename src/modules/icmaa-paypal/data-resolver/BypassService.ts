@@ -11,6 +11,16 @@ const start = (): Promise<Task> =>
     }
   })
 
+const shipping = (address): Promise<Task> =>
+  TaskQueue.execute({
+    url: processLocalizedURLAddress(icmaa_paypal.endpoint + icmaa_paypal?.endpoints?.bypass_shipping),
+    payload: {
+      method: 'POST',
+      body: JSON.stringify(address)
+    }
+  })
+
 export const PaypalBypassService = {
-  start
+  start,
+  shipping
 }
