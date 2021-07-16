@@ -78,18 +78,18 @@ export default {
         city,
         postal_code: postcode,
         country_code: country_id,
-        state
+        state: region_id
       } = shipping_address
 
-      if (['Empty', ''].includes(state)) {
-        state = null
+      if (['Empty', ''].includes(region_id)) {
+        region_id = null
       }
 
       const address = {
         city,
         postcode,
         country_id,
-        state
+        region_id
       }
 
       let shippingMethods = await this.$store.dispatch('icmaaPayPal/getBypassShipping', address)
