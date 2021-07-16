@@ -9,13 +9,13 @@ const actions: ActionTree<PayPalState, RootState> = {
       return Promise.resolve(true)
     }
 
-    const clientId = getters.getClientId || 'ARrpPCWTSMu9x6I48yQuhPCBvNgugYfe7Twegv1YSmHeqXJ5onmCZ5bK0umPGR4B61hMg5tl8UzyOjQx'
+    const clientId = 'ARrpPCWTSMu9x6I48yQuhPCBvNgugYfe7Twegv1YSmHeqXJ5onmCZ5bK0umPGR4B61hMg5tl8UzyOjQx'
     const currency = getters.getCurrency
 
     return new Promise(resolve => {
       const script = document.createElement('script')
       script.async = true
-      script.src = `//www.paypal.com/sdk/js?client-id=${clientId}&currency=${currency}`
+      script.src = `https://www.paypal.com/sdk/js?client-id=${clientId}&currency=${currency}`
       script.onload = () => {
         commit(mutationTypes.PAYPAL_SDK_LOADED)
         resolve(true)
