@@ -55,8 +55,23 @@ const actions: ActionTree<PayPalState, RootState> = {
         return false
       })
   },
-  async getBypassShipping (_, address) {
-    return PaypalBypassService.shipping(address)
+  async getBypassShipping (_, { address, methodCode }) {
+    return PaypalBypassService.shipping({ address, methodCode })
+      .then(resp => {
+        if (resp?.code === 200) {
+          const { result } = resp
+          return result
+        }
+
+        throw Error(resp?.result || 'Error during `getBypassShipping`')
+      })
+      .catch(e => {
+        Logger.error('Can\'t fetch shipping-informations for PayPal checkout:', 'icmaa-paypal', e.message)()
+        return false
+      })
+  },
+  async bypassApprove (_, { payerId, orderId }) {
+    return PaypalBypassService.approve({ payerId, orderId })
       .then(resp => {
         if (resp?.code === 200) {
           const { result } = resp

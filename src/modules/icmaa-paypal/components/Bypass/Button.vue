@@ -43,15 +43,12 @@ export default {
           createOrder: this.createOrder,
           onShippingChange: this.onShippingChange,
           onApprove: this.onApprove,
+          onChancel: this.onChancel,
           onError: this.onError
         })
         .render('#paypal-button-container')
     },
     createOrder (data, actions) {
-      // ...
-
-      console.error('PayPal', 'createOrder', arguments)
-
       return actions.order.create({
         application_context: {
           brand_name: this.brandName,
@@ -65,7 +62,7 @@ export default {
               value: round(this.grandTotal)
             },
             soft_descriptor: this.softDescriptor,
-            invoice_id: this.referenceId
+            invoice_id: this.referenceId + Date.now()
           }
         ]
       })
@@ -92,7 +89,8 @@ export default {
         region_id
       }
 
-      let shippingMethods = await this.$store.dispatch('icmaaPayPal/getBypassShipping', address)
+      const methodCode = data?.selected_shipping_option?.id
+      let shippingMethods = await this.$store.dispatch('icmaaPayPal/getBypassShipping', { address, methodCode })
       shippingMethods = shippingMethods.map(method => ({
         id: method.code,
         label: `${method.method_title} - ${method.method_description}`,
@@ -148,15 +146,27 @@ export default {
           this.shippingMethodsLoaded = true
         })
     },
-    onApprove (data, actions) {
+    async onApprove (data, actions) {
       // ...
 
       console.error('PayPal', 'onApprove', arguments)
+
+      const { orderID: orderId, payerID: payerId } = data
+      const result = await this.$store.dispatch('icmaaPayPal/bypassApprove', { orderId, payerId })
+
+      // patchActions.push({
+      // ... Update increment ID
+      // })
 
       return actions.order.capture().then(details => {
         console.error('PayPal', 'capured', details)
         alert('Transaction completed by ' + details.payer.name.given_name);
       });
+    },
+    onChancel () {
+      // ...
+
+      console.error('PayPal', 'onChancel', arguments)
     },
     onError () {
       // ...
