@@ -84,6 +84,21 @@ const actions: ActionTree<PayPalState, RootState> = {
         Logger.error('Can\'t approve order:', 'icmaa-paypal', e.message)()
         return false
       })
+  },
+  async bypassCapture (_, { email, address, captureResponse }) {
+    return PaypalBypassService.capture({ email, address, captureResponse })
+      .then(resp => {
+        if (resp?.code === 200) {
+          const { result } = resp
+          return result
+        }
+
+        throw Error(resp?.result || 'Error during `bypassCapture`')
+      })
+      .catch(e => {
+        Logger.error('Can\'t capture order:', 'icmaa-paypal', e.message)()
+        return false
+      })
   }
 }
 

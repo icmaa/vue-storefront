@@ -29,11 +29,12 @@ const approve = ({ payerId, orderId }): Promise<Task> =>
     }
   })
 
-const capture = (): Promise<Task> =>
+const capture = ({ email, address, captureResponse }): Promise<Task> =>
   TaskQueue.execute({
     url: processLocalizedURLAddress(icmaa_paypal.endpoint + icmaa_paypal?.endpoints?.bypass_capture),
     payload: {
-      method: 'POST'
+      method: 'POST',
+      body: JSON.stringify({ email, address, captureResponse })
     }
   })
 

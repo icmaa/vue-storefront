@@ -62,7 +62,7 @@ export default {
               value: round(this.grandTotal)
             },
             soft_descriptor: this.softDescriptor,
-            invoice_id: this.referenceId + Date.now()
+            invoice_id: this.referenceId
           }
         ]
       })
@@ -158,8 +158,27 @@ export default {
         }
       ])
 
-      return actions.order.capture().then(details => {
-        console.error('PayPal', 'capured', details)
+      return actions.order.capture().then(async resp => {
+        const { payer, purchase_units } = resp
+        const { name, email_address: email } = payer
+        const { given_name: firstname, surname: lastname } = name
+        const { shipping } = purchase_units[0]
+        const {
+          address_line_1: street,
+          admin_area_1: state,
+          admin_area_2: city,
+          postal_code: postcode,
+          country_code: country_id
+        } = shipping.address
+
+        const address = { firstname, lastname, street, city, postcode, state, country_id }
+
+        const result = await this.$store.dispatch(
+          'icmaaPayPal/bypassCapture',
+          { email, address, captureResponse: resp }
+        )
+
+        console.error('PayPal', 'capured', { resp, result })
       });
     },
     onChancel () {
