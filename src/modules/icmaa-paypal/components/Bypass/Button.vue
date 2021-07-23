@@ -159,6 +159,9 @@ export default {
       ])
 
       return actions.order.capture().then(async resp => {
+        this.$store.dispatch('ui/closeAll')
+        await this.$store.dispatch('checkout/reset', {})
+
         const { payer, purchase_units } = resp
         const { name, email_address: email } = payer
         const { given_name: firstname, surname: lastname } = name
