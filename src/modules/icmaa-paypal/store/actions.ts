@@ -78,10 +78,10 @@ const actions: ActionTree<PayPalState, RootState> = {
           return result
         }
 
-        throw Error(resp?.result || 'Error during `getBypassShipping`')
+        throw Error(resp?.result || 'Error during `bypassApprove`')
       })
       .catch(e => {
-        Logger.error('Can\'t fetch shipping-informations for PayPal checkout:', 'icmaa-paypal', e.message)()
+        Logger.error('Can\'t approve order:', 'icmaa-paypal', e.message)()
         return false
       })
   }

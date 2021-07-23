@@ -147,20 +147,19 @@ export default {
         })
     },
     async onApprove (data, actions) {
-      // ...
-
-      console.error('PayPal', 'onApprove', arguments)
-
       const { orderID: orderId, payerID: payerId } = data
       const result = await this.$store.dispatch('icmaaPayPal/bypassApprove', { orderId, payerId })
 
-      // patchActions.push({
-      // ... Update increment ID
-      // })
+      await actions.order.patch([
+        {
+          op: 'replace',
+          path: "/purchase_units/@reference_id=='default'/invoice_id",
+          value: `${result.incrementId}`
+        }
+      ])
 
       return actions.order.capture().then(details => {
         console.error('PayPal', 'capured', details)
-        alert('Transaction completed by ' + details.payer.name.given_name);
       });
     },
     onChancel () {
