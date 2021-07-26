@@ -103,7 +103,11 @@ export default {
 
       const addMethods = this.shippingMethodsLoaded === false || !data?.selected_shipping_option
 
-      if (!data?.selected_shipping_option && shippingMethods.length > 0) {
+      if (
+        (!data?.selected_shipping_option && shippingMethods.length > 0) ||
+        (data?.selected_shipping_option && shippingMethods.length > 0 &&
+          !shippingMethods.some(o => o.selected === true))
+      ) {
         data.selected_shipping_option = shippingMethods[0]
         data.selected_shipping_option.selected = true
       } else if (shippingMethods.length > 0) {
