@@ -98,6 +98,21 @@ const actions: ActionTree<PayPalState, RootState> = {
         Logger.error('Can\'t capture order:', 'icmaa-paypal', e.message)()
         return false
       })
+  },
+  async fail (_, payload) {
+    return PaypalCheckoutService.fail(payload)
+      .then(resp => {
+        if (resp?.code === 200) {
+          const { result } = resp
+          return result
+        }
+
+        throw Error(resp?.result || 'Error during `fail`')
+      })
+      .catch(e => {
+        Logger.error('Can\'t revive order:', 'icmaa-paypal', e.message)()
+        return false
+      })
   }
 }
 

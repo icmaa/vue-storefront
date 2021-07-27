@@ -182,6 +182,10 @@ export default {
           { email, address, captureResponse: resp }
         )
 
+        if (!response) {
+          throw Error('Error during capturing of payment')
+        }
+
         this.$store.dispatch('ui/closeAll')
 
         this.$store.dispatch('checkout/setGatewayOrder', { order: null, response })
@@ -193,10 +197,8 @@ export default {
 
       console.error('PayPal', 'onChancel', arguments)
     },
-    onError () {
-      // ...
-
-      console.error('PayPal', 'onError', arguments)
+    async onError (error) {
+      await this.$store.dispatch('icmaaPayPal/fail', { error: error.message })
     }
   }
 }

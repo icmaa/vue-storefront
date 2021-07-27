@@ -38,9 +38,19 @@ const capture = ({ email, address, captureResponse }): Promise<Task> =>
     }
   })
 
+const fail = (payload): Promise<Task> =>
+  TaskQueue.execute({
+    url: processLocalizedURLAddress(icmaa_paypal.endpoint + icmaa_paypal?.endpoints?.checkout_fail),
+    payload: {
+      method: 'POST',
+      body: JSON.stringify(payload)
+    }
+  })
+
 export const PaypalCheckoutService = {
   start,
   shipping,
   approve,
-  capture
+  capture,
+  fail
 }
