@@ -183,11 +183,10 @@ export default {
         )
 
         this.$store.dispatch('ui/closeAll')
-        await this.$store.dispatch('checkout/reset', {})
 
         this.$store.dispatch('checkout/setGatewayOrder', { order: null, response })
         this.$router.push('checkout-gateway-success')
-      });
+      })
     },
     onChancel () {
       // ...
