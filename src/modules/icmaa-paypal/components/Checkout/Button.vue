@@ -90,7 +90,7 @@ export default {
       }
 
       const methodCode = data?.selected_shipping_option?.id
-      let shippingMethods = await this.$store.dispatch('icmaaPayPal/getBypassShipping', { address, methodCode })
+      let shippingMethods = await this.$store.dispatch('icmaaPayPal/getShipping', { address, methodCode })
       shippingMethods = shippingMethods.map(method => ({
         id: method.code,
         label: `${method.method_title} - ${method.method_description}`,
@@ -152,7 +152,7 @@ export default {
     },
     async onApprove (data, actions) {
       const { orderID: orderId, payerID: payerId } = data
-      const result = await this.$store.dispatch('icmaaPayPal/bypassApprove', { orderId, payerId })
+      const result = await this.$store.dispatch('icmaaPayPal/approve', { orderId, payerId })
 
       await actions.order.patch([
         {
@@ -178,7 +178,7 @@ export default {
         const address = { firstname, lastname, street, city, postcode, state, country_id }
 
         const response = await this.$store.dispatch(
-          'icmaaPayPal/bypassCapture',
+          'icmaaPayPal/capture',
           { email, address, captureResponse: resp }
         )
 

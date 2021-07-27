@@ -5,7 +5,7 @@ import Task from '@vue-storefront/core/lib/sync/types/Task'
 
 const start = (): Promise<Task> =>
   TaskQueue.execute({
-    url: processLocalizedURLAddress(icmaa_paypal.endpoint + icmaa_paypal?.endpoints?.bypass_start),
+    url: processLocalizedURLAddress(icmaa_paypal.endpoint + icmaa_paypal?.endpoints?.checkout_start),
     payload: {
       method: 'POST'
     }
@@ -13,7 +13,7 @@ const start = (): Promise<Task> =>
 
 const shipping = ({ address, methodCode }): Promise<Task> =>
   TaskQueue.execute({
-    url: processLocalizedURLAddress(icmaa_paypal.endpoint + icmaa_paypal?.endpoints?.bypass_shipping),
+    url: processLocalizedURLAddress(icmaa_paypal.endpoint + icmaa_paypal?.endpoints?.checkout_shipping),
     payload: {
       method: 'POST',
       body: JSON.stringify({ address, methodCode })
@@ -22,7 +22,7 @@ const shipping = ({ address, methodCode }): Promise<Task> =>
 
 const approve = ({ payerId, orderId }): Promise<Task> =>
   TaskQueue.execute({
-    url: processLocalizedURLAddress(icmaa_paypal.endpoint + icmaa_paypal?.endpoints?.bypass_approve),
+    url: processLocalizedURLAddress(icmaa_paypal.endpoint + icmaa_paypal?.endpoints?.checkout_approve),
     payload: {
       method: 'POST',
       body: JSON.stringify({ payerId, orderId })
@@ -31,14 +31,14 @@ const approve = ({ payerId, orderId }): Promise<Task> =>
 
 const capture = ({ email, address, captureResponse }): Promise<Task> =>
   TaskQueue.execute({
-    url: processLocalizedURLAddress(icmaa_paypal.endpoint + icmaa_paypal?.endpoints?.bypass_capture),
+    url: processLocalizedURLAddress(icmaa_paypal.endpoint + icmaa_paypal?.endpoints?.checkout_capture),
     payload: {
       method: 'POST',
       body: JSON.stringify({ email, address, captureResponse })
     }
   })
 
-export const PaypalBypassService = {
+export const PaypalCheckoutService = {
   start,
   shipping,
   approve,

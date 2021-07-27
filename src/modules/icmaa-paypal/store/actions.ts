@@ -2,7 +2,7 @@ import { ActionTree } from 'vuex'
 import RootState from '@vue-storefront/core/types/RootState'
 import PayPalState from '../type/PayPalState'
 import * as mutationTypes from './mutation-types'
-import { PaypalBypassService } from '../data-resolver/BypassService'
+import { PaypalCheckoutService } from '../data-resolver/CheckoutService'
 import { Logger } from '@vue-storefront/core/lib/logger'
 
 const actions: ActionTree<PayPalState, RootState> = {
@@ -36,7 +36,7 @@ const actions: ActionTree<PayPalState, RootState> = {
     })
   },
   async start ({ commit }) {
-    return PaypalBypassService.start()
+    return PaypalCheckoutService.start()
       .then(resp => {
         if (resp?.code === 200) {
           const { result } = resp
@@ -55,44 +55,44 @@ const actions: ActionTree<PayPalState, RootState> = {
         return false
       })
   },
-  async getBypassShipping (_, { address, methodCode }) {
-    return PaypalBypassService.shipping({ address, methodCode })
+  async getShipping (_, { address, methodCode }) {
+    return PaypalCheckoutService.shipping({ address, methodCode })
       .then(resp => {
         if (resp?.code === 200) {
           const { result } = resp
           return result
         }
 
-        throw Error(resp?.result || 'Error during `getBypassShipping`')
+        throw Error(resp?.result || 'Error during `getShipping`')
       })
       .catch(e => {
         Logger.error('Can\'t fetch shipping-informations for PayPal checkout:', 'icmaa-paypal', e.message)()
         return false
       })
   },
-  async bypassApprove (_, { payerId, orderId }) {
-    return PaypalBypassService.approve({ payerId, orderId })
+  async approve (_, { payerId, orderId }) {
+    return PaypalCheckoutService.approve({ payerId, orderId })
       .then(resp => {
         if (resp?.code === 200) {
           const { result } = resp
           return result
         }
 
-        throw Error(resp?.result || 'Error during `bypassApprove`')
+        throw Error(resp?.result || 'Error during `approve`')
       })
       .catch(e => {
         Logger.error('Can\'t approve order:', 'icmaa-paypal', e.message)()
         return false
       })
   },
-  async bypassCapture (_, { email, address, captureResponse }) {
-    return PaypalBypassService.capture({ email, address, captureResponse })
+  async capture (_, { email, address, captureResponse }) {
+    return PaypalCheckoutService.capture({ email, address, captureResponse })
       .then(resp => {
         if (resp?.code === 200) {
           return resp
         }
 
-        throw Error(resp?.result || 'Error during `bypassCapture`')
+        throw Error(resp?.result || 'Error during `capture`')
       })
       .catch(e => {
         Logger.error('Can\'t capture order:', 'icmaa-paypal', e.message)()
