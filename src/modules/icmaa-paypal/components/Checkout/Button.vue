@@ -91,6 +91,10 @@ export default {
 
       const methodCode = data?.selected_shipping_option?.id
       let shippingMethods = await this.$store.dispatch('icmaaPayPal/getShipping', { address, methodCode })
+      if (shippingMethods?.error) {
+        throw Error(shippingMethods?.error)
+      }
+
       shippingMethods = shippingMethods.map(method => ({
         id: method.code,
         label: `${method.method_title} - ${method.method_description}`,
@@ -153,6 +157,9 @@ export default {
     async onApprove (data, actions) {
       const { orderID: orderId, payerID: payerId } = data
       const result = await this.$store.dispatch('icmaaPayPal/approve', { orderId, payerId })
+      if (result?.error) {
+        throw Error(result?.error)
+      }
 
       await actions.order.patch([
         {
@@ -182,8 +189,8 @@ export default {
           { email, address, captureResponse: resp }
         )
 
-        if (!response) {
-          throw Error('Error during capturing of payment')
+        if (response?.error) {
+          throw Error(result?.error)
         }
 
         this.$store.dispatch('ui/closeAll')
@@ -193,12 +200,20 @@ export default {
       })
     },
     onChancel () {
-      // ...
-
       console.error('PayPal', 'onChancel', arguments)
     },
     async onError (error) {
-      await this.$store.dispatch('icmaaPayPal/fail', { error: error.message })
+      let { message } = error
+      await this.$store.dispatch('icmaaPayPal/fail', { error: message })
+
+      this.$store.dispatch('notification/spawnNotification', {
+        type: 'error',
+        message: this.$t(
+          'There was an error during your payment: {message}. Please try again, or contact our support.',
+          { message }
+        ),
+        action1: { label: this.$t('OK') }
+      })
     }
   }
 }

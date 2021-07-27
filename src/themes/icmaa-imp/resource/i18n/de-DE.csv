@@ -373,6 +373,7 @@
 "The new account will be created with the purchase. You will receive details on e-mail.","Das neue Konto wird mit dem Abschluss der Bestellung erstellt. Weitere Details werden Ihnen per E-Mail zugesendet."
 "The server order id has been set to ","Die Server-Bestellnummer wurde gesetzt auf "
 "There are no addresses yet.","Du hast noch keine Adressen angelegt."
+"There was an error during your payment: {message}. Please try again, or contact our support.","Während deiner Zahlung ist ein Fehler aufgetreten: {message}. Bitte versuche es erneut oder kontaktiere unseren Kundensupport."
 "There was an error while removing your coupon code. Please try again.","Beim Entfernen ist ein Fehler aufgetreten. Bitte versuche es noch einmal."
 "There was an unexpected error. Please check your entered data and try again.","Ein unerwarteter Fehler ist aufgetreten. Bitte überprüfe deine Eingabe und versuche es erneut."
 "These are your recent orders. Click for more details and options.","Hier siehst du deine letzten Bestellungen. Für mehr Details, klicke auf die gewünschte Bestellung."

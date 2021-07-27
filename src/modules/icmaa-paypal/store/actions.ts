@@ -67,7 +67,7 @@ const actions: ActionTree<PayPalState, RootState> = {
       })
       .catch(e => {
         Logger.error('Can\'t fetch shipping-informations for PayPal checkout:', 'icmaa-paypal', e.message)()
-        return false
+        return { error: e.message }
       })
   },
   async approve (_, { payerId, orderId }) {
@@ -82,7 +82,7 @@ const actions: ActionTree<PayPalState, RootState> = {
       })
       .catch(e => {
         Logger.error('Can\'t approve order:', 'icmaa-paypal', e.message)()
-        return false
+        return { error: e.message }
       })
   },
   async capture (_, { email, address, captureResponse }) {
@@ -96,7 +96,7 @@ const actions: ActionTree<PayPalState, RootState> = {
       })
       .catch(e => {
         Logger.error('Can\'t capture order:', 'icmaa-paypal', e.message)()
-        return false
+        return { error: e.message }
       })
   },
   async fail (_, payload) {
@@ -111,7 +111,7 @@ const actions: ActionTree<PayPalState, RootState> = {
       })
       .catch(e => {
         Logger.error('Can\'t revive order:', 'icmaa-paypal', e.message)()
-        return false
+        return { error: e.message }
       })
   }
 }

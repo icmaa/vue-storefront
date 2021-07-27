@@ -8,7 +8,8 @@ const start = (): Promise<Task> =>
     url: processLocalizedURLAddress(icmaa_paypal.endpoint + icmaa_paypal?.endpoints?.checkout_start),
     payload: {
       method: 'POST'
-    }
+    },
+    silent: true
   })
 
 const shipping = ({ address, methodCode }): Promise<Task> =>
@@ -17,7 +18,8 @@ const shipping = ({ address, methodCode }): Promise<Task> =>
     payload: {
       method: 'POST',
       body: JSON.stringify({ address, methodCode })
-    }
+    },
+    silent: true
   })
 
 const approve = ({ payerId, orderId }): Promise<Task> =>
@@ -26,7 +28,8 @@ const approve = ({ payerId, orderId }): Promise<Task> =>
     payload: {
       method: 'POST',
       body: JSON.stringify({ payerId, orderId })
-    }
+    },
+    silent: true
   })
 
 const capture = ({ email, address, captureResponse }): Promise<Task> =>
@@ -35,7 +38,8 @@ const capture = ({ email, address, captureResponse }): Promise<Task> =>
     payload: {
       method: 'POST',
       body: JSON.stringify({ email, address, captureResponse })
-    }
+    },
+    silent: true
   })
 
 const fail = (payload): Promise<Task> =>
@@ -44,7 +48,8 @@ const fail = (payload): Promise<Task> =>
     payload: {
       method: 'POST',
       body: JSON.stringify(payload)
-    }
+    },
+    silent: true
   })
 
 export const PaypalCheckoutService = {
