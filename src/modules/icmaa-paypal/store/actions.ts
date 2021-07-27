@@ -89,8 +89,7 @@ const actions: ActionTree<PayPalState, RootState> = {
     return PaypalBypassService.capture({ email, address, captureResponse })
       .then(resp => {
         if (resp?.code === 200) {
-          const { result } = resp
-          return result
+          return resp
         }
 
         throw Error(resp?.result || 'Error during `bypassCapture`')

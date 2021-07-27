@@ -27,8 +27,9 @@ export default {
       return
     }
 
-    await this.$store.dispatch('checkout/finishPlaceOrder', this.gatewayOrder)
-    this.$store.dispatch('icmaaGoogleTagManager/setLastOrderId', this.gatewayOrder.order.orderId)
+    const { order, response } = this.gatewayOrder
+    await this.$store.dispatch('checkout/finishPlaceOrder', { order, response })
+    this.$store.dispatch('icmaaGoogleTagManager/setLastOrderId', response.result.orderId)
 
     this.$store.dispatch('checkout/setGatewayOrder', null)
     this.$store.dispatch('ui/loader', false)

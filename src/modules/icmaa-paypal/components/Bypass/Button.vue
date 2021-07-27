@@ -177,7 +177,7 @@ export default {
 
         const address = { firstname, lastname, street, city, postcode, state, country_id }
 
-        const result = await this.$store.dispatch(
+        const response = await this.$store.dispatch(
           'icmaaPayPal/bypassCapture',
           { email, address, captureResponse: resp }
         )
@@ -185,7 +185,8 @@ export default {
         this.$store.dispatch('ui/closeAll')
         await this.$store.dispatch('checkout/reset', {})
 
-        console.error('PayPal', 'capured', { resp, result })
+        this.$store.dispatch('checkout/setGatewayOrder', { order: null, response })
+        this.$router.push('checkout-gateway-success')
       });
     },
     onChancel () {
