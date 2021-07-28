@@ -178,10 +178,15 @@ export default {
         .then(this.afterCapture)
     },
     async afterCapture (resp) {
+      if (resp.status !== 'COMPLETED') {
+        throw Error('Capture wasn\'t complete')
+      }
+
       const { payer, purchase_units } = resp
-      const { name, email_address: email } = payer
-      const { given_name: firstname, surname: lastname } = name
+      const { email_address: email } = payer
       const { shipping } = purchase_units[0]
+      const { name } = shipping
+      const [ firstname, lastname ] = name.full_name.split(' ', 2)
       const {
         address_line_1: street,
         admin_area_1: state,
@@ -215,7 +220,7 @@ export default {
       this.$store.dispatch('notification/spawnNotification', {
         type: 'error',
         message: this.$t(
-          'There was an error during your payment: {message}. Please try again, or contact our support.',
+          'There was an error during your payment. Please try again, or contact our support.',
           { message }
         ),
         action1: { label: this.$t('OK') }
