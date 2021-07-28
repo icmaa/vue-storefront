@@ -173,35 +173,38 @@ export default {
         }
       ])
 
-      return actions.order.capture().then(async resp => {
-        const { payer, purchase_units } = resp
-        const { name, email_address: email } = payer
-        const { given_name: firstname, surname: lastname } = name
-        const { shipping } = purchase_units[0]
-        const {
-          address_line_1: street,
-          admin_area_1: state,
-          admin_area_2: city,
-          postal_code: postcode,
-          country_code: country_id
-        } = shipping.address
+      return actions.order
+        .capture()
+        .then(this.afterCapture)
+    },
+    async afterCapture (resp) {
+      const { payer, purchase_units } = resp
+      const { name, email_address: email } = payer
+      const { given_name: firstname, surname: lastname } = name
+      const { shipping } = purchase_units[0]
+      const {
+        address_line_1: street,
+        admin_area_1: state,
+        admin_area_2: city,
+        postal_code: postcode,
+        country_code: country_id
+      } = shipping.address
 
-        const address = { firstname, lastname, street, city, postcode, state, country_id }
+      const address = { firstname, lastname, street, city, postcode, state, country_id }
 
-        const response = await this.$store.dispatch(
-          'icmaaPayPal/capture',
-          { email, address, captureResponse: resp }
-        )
+      const response = await this.$store.dispatch(
+        'icmaaPayPal/capture',
+        { email, address, captureResponse: resp }
+      )
 
-        if (response?.error) {
-          throw Error(result?.error)
-        }
+      if (response?.error) {
+        throw Error(response?.error)
+      }
 
-        this.$store.dispatch('ui/closeAll')
+      this.$store.dispatch('ui/closeAll')
 
-        this.$store.dispatch('checkout/setGatewayOrder', { order: null, response })
-        this.$router.push('checkout-gateway-success')
-      })
+      this.$store.dispatch('checkout/setGatewayOrder', { order: null, response })
+      this.$router.push('checkout-gateway-success')
     },
     async onError (error) {
       Logger.error('An error appeared during checkout:', 'icmaa-paypal', error)()
