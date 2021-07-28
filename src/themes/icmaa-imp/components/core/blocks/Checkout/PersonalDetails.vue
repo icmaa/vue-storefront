@@ -10,7 +10,7 @@
           >
             {{ $t('Login to your account') }}
           </button-component>
-          <paypal-checkout-button class="t-flex-1 t-mt-4 lg:t-mt-0 lg:t-ml-4 "/>
+          <paypal-checkout-button class="t-flex-1 t-mt-4 lg:t-mt-0 lg:t-ml-4 t-z-0"/>
         </div>
         <div v-if="!isLoggedIn" class="t-w-full t-px-2 t-mb-4 t-font-light">
           {{ $t('Proceed as new user') }}

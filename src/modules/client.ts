@@ -24,7 +24,7 @@ import { IcmaaExtendedReviewRoutes } from 'icmaa-review'
 import { IcmaaCategoryModule } from 'icmaa-category'
 import { IcmaaCategoryExtrasModule } from 'icmaa-category-extras'
 import { IcmaaCheckoutModule } from 'icmaa-checkout'
-// import { IcmaaExternalCheckoutModule } from 'icmaa-external-checkout'
+// import { IcmaaExternalCheckoutModule as IcmaaCheckoutModule } from 'icmaa-external-checkout'
 import { IcmaaCdnModule } from 'icmaa-cdn'
 import { IcmaaCmsModule } from 'icmaa-cms'
 import { IcmaaFormsModule } from 'icmaa-forms'
@@ -48,7 +48,6 @@ export function registerClientModules () {
   // Replaced by our module (order is important)
   // registerModule(CheckoutModule)
   registerModule(IcmaaCheckoutModule)
-  // registerModule(IcmaaExternalCheckoutModule)
   registerModule(CartModule)
   registerModule(WishlistModule) // Trigger on wishlist icon click
   registerModule(NotificationModule)

@@ -1,5 +1,6 @@
 import { langs, registerLocale, getNames, getName } from 'i18n-iso-countries'
 import { currentStoreView } from '@vue-storefront/core/lib/multistore'
+import { Logger } from '@vue-storefront/core/lib/logger'
 
 interface Language {
   name: string,
@@ -18,7 +19,11 @@ export const getTranslatedCountries = (languageCode?: string): Language[] => {
   languageCode = (languageCode as string).toLowerCase()
 
   if (!langs().includes(languageCode)) {
-    registerLocale(require(`i18n-iso-countries/langs/${languageCode}.json`))
+    try {
+      registerLocale(require(`i18n-iso-countries/langs/${languageCode}.json`))
+    } catch (e) {
+      Logger.error('Can\'t find country-translations for', 'icmaa-config', languageCode)()
+    }
   }
 
   if (!transCountries[languageCode]) {
