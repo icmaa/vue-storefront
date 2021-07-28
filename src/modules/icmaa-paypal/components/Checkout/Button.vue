@@ -5,6 +5,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import { round } from 'icmaa-config/helpers/price'
+import { Logger } from '@vue-storefront/core/lib/logger'
 
 export default {
   name: 'PayPalButton',
@@ -43,7 +44,6 @@ export default {
           createOrder: this.createOrder,
           onShippingChange: this.onShippingChange,
           onApprove: this.onApprove,
-          onChancel: this.onChancel,
           onError: this.onError
         })
         .render('#paypal-button-container')
@@ -155,6 +155,10 @@ export default {
         })
     },
     async onApprove (data, actions) {
+      if (!this.shippingMethodsLoaded) {
+        return
+      }
+
       const { orderID: orderId, payerID: payerId } = data
       const result = await this.$store.dispatch('icmaaPayPal/approve', { orderId, payerId })
       if (result?.error) {
@@ -199,10 +203,9 @@ export default {
         this.$router.push('checkout-gateway-success')
       })
     },
-    onChancel () {
-      console.error('PayPal', 'onChancel', arguments)
-    },
     async onError (error) {
+      Logger.error('An error appeared during checkout:', 'icmaa-paypal', error)()
+
       let { message } = error
       await this.$store.dispatch('icmaaPayPal/fail', { error: message })
 
