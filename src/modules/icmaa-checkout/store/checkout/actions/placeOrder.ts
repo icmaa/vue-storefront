@@ -61,7 +61,7 @@ const actions: ActionTree<CheckoutState, RootState> = {
 
     await dispatch('reset', {})
 
-    if (order.createAccount) {
+    if (order && order?.createAccount) {
       dispatch(
         'ui/loader',
         { active: true, message: i18n.t('Login to your new account') },
