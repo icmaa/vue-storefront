@@ -1,5 +1,5 @@
 <template>
-  <div class="easter-calendar t-container">
+  <div class="t-container" :class="identifier">
     <div class="lg:t-p-4">
       <div class="wrapper t-p-4">
         <div class="t-grid t-grid-cols-2 sm:t-grid-cols-4 t-gap-4">
@@ -113,7 +113,7 @@ import { mapGetters } from 'vuex'
 import { toDayjsDate, getCurrentStoreviewDayjsDatetime } from 'icmaa-config/helpers/datetime'
 
 export default {
-  name: 'EasterCalendar',
+  name: 'Calendar',
   mixins: [ Page ],
   components: {
     PictureComponent
@@ -210,10 +210,12 @@ export default {
 
 <style lang="scss">
 
-$alt-easter-color: #52766F;
-
 .easter-calendar .wrapper {
-  background-color: $alt-easter-color;
+  background-color: #52766F;
+}
+
+.summer-calendar .wrapper {
+  background-color: #79C9CF;
 }
 
 </style>
