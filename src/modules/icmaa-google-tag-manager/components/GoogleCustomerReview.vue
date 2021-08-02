@@ -101,7 +101,7 @@ export default {
       this.renderOptIn()
 
       this.$bus.$off(
-        'checkout-success-last-order-loaded',
+        'icmaa-external-checkout-user-data-complete',
         this.onCheckoutSuccessLastOrderLoaded
       )
     }
@@ -115,7 +115,7 @@ export default {
           break
         case 'popup':
           this.$bus.$on(
-            'checkout-success-last-order-loaded',
+            'icmaa-external-checkout-user-data-complete',
             this.onCheckoutSuccessLastOrderLoaded
           )
           break
@@ -124,7 +124,7 @@ export default {
   },
   beforeDestroy () {
     this.$bus.$off(
-      'checkout-success-last-order-loaded',
+      'icmaa-external-checkout-user-data-complete',
       this.onCheckoutSuccessLastOrderLoaded
     )
   }

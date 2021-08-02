@@ -32,6 +32,7 @@
 "Card number","Kortnummer"
 "Care instructions","Skötselråd"
 "Cash on delivery","Betalning vid leverans"
+"Categories","Kategorier"
 "Change my password","Ändra mitt lösenord"
 "Check balance","Kontrollera balans"
 "Checkout this out: {name} for {price}","Kolla in det här: {name} för {price}"
@@ -115,7 +116,7 @@
 "Field is required","Fält krävs"
 "Filter by categories","Filtrera efter kategorier"
 "Filter by categories","Filtrera efter kategorier"
-"Filter {label}","Filtrera {etikett}"
+"Filter {label}","Filtrera {label}"
 "Filter","Filter"
 "Filters","Filter"
 "First name","Förnamn"
@@ -333,6 +334,7 @@
 "Sorry  but you don't have any orders yet.
 "Sorry but this competition is already over.
 "Sort by","Sortera med"
+"Sorting","Sortiment"
 "Special Offer","Specialerbjudande"
 "State / Province","Land / region"
 "Status","Status"
@@ -464,6 +466,6 @@
 "to find something beautiful for You!","för att hitta något vackert till Dig!"
 "us a line here","använd en linje här"
 "{count} items","{count} varor"
-"{incl} {rate}% VAT","Exkl. frakt"
-"{incl} {rate}% VAT, Excl. shipping","{incl} {rate}% moms, exkl. frakt"
+"{incl} VAT","Exkl. frakt"
+"{incl} VAT, Excl. shipping","{incl} moms, exkl. frakt"
 "{name} is {height} tall and wears size {size}.","{name} är {height} lång och har på sig storlek {size}."

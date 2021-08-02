@@ -32,6 +32,7 @@
 "Card number","Kortin numero"
 "Care instructions","Pesuohjeet"
 "Cash on delivery","Käteismaksu toimitettaessa"
+"Categories","Kategoriat"
 "Change my password","Vaihda salasana"
 "Check balance","Tarkista saldo"
 "Checkout this out: {name} for {price}","Katso myös tämä: {name} hintaan {price}"
@@ -115,7 +116,7 @@
 "Field is required","Tieto puuttuu"
 "Filter by categories","Lajittele kategorian mukaan"
 "Filter by categories","Lajittele kategorian mukaan"
-"Filter {label}","Suodata {label}"
+"Filter {label}","Rajaa {label} mukaan"
 "Filter","Suodatin"
 "Filters","Suodattimet"
 "First name","Etunimi"
@@ -332,6 +333,7 @@
 "Sorry  but you don't have any orders yet.
 "Sorry but this competition is already over.
 "Sort by","Lajittele"
+"Sorting","Rajaa"
 "Special Offer","Erikoistarjous"
 "State / Province","Maakunta"
 "Status","Tila"
@@ -463,6 +465,6 @@
 "to find something beautiful for You!","tai löydä jotain upeaa itsellesi!"
 "us a line here","us a line here"
 "{count} items","{count} tuotteet"
-"{incl} {rate}% VAT","poislukien toimituskulut"
-"{incl} {rate}% VAT, Excl. shipping","{incl} {rate}% Arvonlisävero, poislukien toimituskulut"
+"{incl} VAT","poislukien toimituskulut"
+"{incl} VAT, Excl. shipping","{incl} Arvonlisävero, poislukien toimituskulut"
 "{name} is {height} tall and wears size {size}.","{name} on {height} pitkä ja käyttää kokoa {size}."
