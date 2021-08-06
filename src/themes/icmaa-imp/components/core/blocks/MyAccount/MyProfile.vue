@@ -23,6 +23,7 @@
           }
         ]"
         class="t-w-full lg:t-w-1/2 t-px-2 t-mb-4"
+        :disabled="true"
       />
       <base-input
         name="first-name"
