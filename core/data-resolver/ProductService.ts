@@ -114,7 +114,7 @@ const getProductRenderList = async ({
     })
     return task.result as DataResolver.ProductsListResponse
   } catch (err) {
-    console.error(err)
+    Logger.error('Error during \'getProductRenderList\'', 'core', err)()
     return { items: [] }
   }
 }
