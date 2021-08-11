@@ -58,12 +58,14 @@ export const IcmaaExtendedUserModule: StorefrontModule = async function ({ store
     if (type.endsWith(types.USER_ADD_SESSION_DATA) || type.endsWith(types.USER_RMV_SESSION_DATA)) {
       StorageManager.get('user')
         .setItem('session-data', state.user.sessionData)
-        .catch((reason) => { console.error(reason) })
+        .catch((reason) => {
+          Logger.error('Can\'t save customer to local-storage:', 'user', reason)()
+        })
     } else if (type.endsWith(types.USER_ORDERS_HISTORY_UPD)) {
       StorageManager.get('user')
         .setItem('orders-history', state.user.orders_history)
         .catch((reason) => {
-          Logger.error(reason)() // it doesn't work on SSR
+          Logger.error('Can\'t fetch customer from local-storage:', 'user', reason)()
         })
     }
   })

@@ -1,3 +1,4 @@
+import { Logger } from '@vue-storefront/core/lib/logger'
 import { StockService } from '@vue-storefront/core/data-resolver';
 import config from 'config'
 
@@ -18,7 +19,7 @@ export default async function getStockItems (products) {
     }
     return []
   } catch (err) {
-    console.error(err)
+    Logger.error('Error during \'getStockItems\'', 'catalog', err)()
     return []
   }
 }
