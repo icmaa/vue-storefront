@@ -7,15 +7,15 @@ env_variables:
   VSF_SERVER_PORT: $PORT
   GCLOUD_OPERATIONS_ENABLED: true
 resources:
-  cpu: 2
-  memory_gb: 4
+  cpu: 1
+  memory_gb: 2
   disk_size_gb: 25
 automatic_scaling:
   min_num_instances: 4
   max_num_instances: 30
   cool_down_period_sec: 60
   cpu_utilization:
-    target_utilization: 0.8
+    target_utilization: 0.65
 readiness_check:
   path: "/_ah/readiness_check"
 liveness_check:

@@ -7,12 +7,12 @@ env_variables:
   GCLOUD_OPERATIONS_ENABLED: true
 instance_class: F4_1G
 automatic_scaling:
-  min_instances: 0
+  min_instances: 1
   max_instances: 30
   min_idle_instances: 5
   max_idle_instances: 30
   max_concurrent_requests: 60
-  target_throughput_utilization: 0.8
+  target_throughput_utilization: 0.65
 vpc_access_connector:
   name: 'projects/icmaa-shop-imp-prod-01/locations/europe-west3/connectors/default-large'
 inbound_services:
