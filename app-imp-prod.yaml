@@ -9,8 +9,8 @@ instance_class: F4
 automatic_scaling:
   min_instances: 1
   max_instances: 30
-  min_idle_instances: 5
-  max_idle_instances: 30
+  min_idle_instances: 3
+  max_idle_instances: 10
   max_concurrent_requests: 60
   target_throughput_utilization: 0.75
 vpc_access_connector:
