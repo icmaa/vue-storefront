@@ -13,7 +13,7 @@ const actions: ActionTree<RecommendationsState, RootState> = {
     const rules = new Rules(product, type, rulesDTO)
 
     const query = rules.getSearchQuery()
-    query.applySort({ field: 'random', options: {} })
+    query.applySort({ field: 'ranking_shop_bestseller', options: 'desc' })
 
     const options = { separateSelectedVariant: rootGetters['category-next/separateSelectedVariantInProductList'] }
     const { includeFields, excludeFields } = entities.productList
