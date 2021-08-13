@@ -1,24 +1,19 @@
-env: flex
-runtime: nodejs
+runtime: nodejs14
 env_variables:
   NODE_APP_INSTANCE: imp
   NODE_CONFIG_ENV: production
   VSF_SERVER_HOST: 0.0.0.0
   VSF_SERVER_PORT: $PORT
   GCLOUD_OPERATIONS_ENABLED: true
-resources:
-  cpu: 2
-  memory_gb: 4
-  disk_size_gb: 25
+instance_class: F4
 automatic_scaling:
-  min_num_instances: 4
-  max_num_instances: 30
-  cool_down_period_sec: 60
-  cpu_utilization:
-    target_utilization: 0.8
-readiness_check:
-  path: "/_ah/readiness_check"
-liveness_check:
-  path: "/_ah/liveness_check"
-network:
-  name: default
+  min_instances: 1
+  max_instances: 30
+  min_idle_instances: 3
+  max_idle_instances: 10
+  max_concurrent_requests: 60
+  target_throughput_utilization: 0.75
+vpc_access_connector:
+  name: 'projects/icmaa-shop-imp-prod-01/locations/europe-west3/connectors/default-large'
+inbound_services:
+  - warmup
