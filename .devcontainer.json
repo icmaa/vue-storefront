@@ -1,0 +1,7 @@
+{
+  "remoteEnv": {
+    "NODE_APP_INSTANCE": "imp",
+    "NODE_CONFIG_ENV": "development",
+    "NODE_TLS_REJECT_UNAUTHORIZED": "0"
+  }
+}
