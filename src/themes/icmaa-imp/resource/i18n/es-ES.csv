@@ -462,4 +462,4 @@
 "{count} items","{count} producto"
 "{incl} VAT","envío excluido"
 "{incl} VAT, Excl. shipping","{incl} IVA, Gastos de envío excl."
-"{name} is {height} tall and wears size {size}.","{name} mide{height} y lleva la talla {size}."
+"{name} is {height} tall and wears size {size}.","{name} mide {height} y lleva la talla {size}."

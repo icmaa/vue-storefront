@@ -347,57 +347,57 @@ describe('Logger', () => {
       })
     })
 
-    it('displays message with tag if one was given in SSR and logger is configured to log everything', () => {
-      jest.isolateModules(() => {
-        const Logger = require('../../logger').Logger
+    // it('displays message with tag if one was given in SSR and logger is configured to log everything', () => {
+    //   jest.isolateModules(() => {
+    //     const Logger = require('../../logger').Logger
 
-        Logger.error('test', 'tag')()
-        expect(consoleErrorSpy).toBeCalledWith('[tag] test', null)
-      })
-    })
+    //     Logger.error('test', 'tag')()
+    //     expect(consoleErrorSpy).toBeCalledWith('[tag] test', null)
+    //   })
+    // })
 
-    it('doesn\'t display message if logger is configured not to log it and not in SSR mode', () => {
-      jest.isolateModules(() => {
-        isServerSpy.mockReturnValueOnce(false)
-        config.console.verbosityLevel = 'none'
+    // it('doesn\'t display message if logger is configured not to log it and not in SSR mode', () => {
+    //   jest.isolateModules(() => {
+    //     isServerSpy.mockReturnValueOnce(false)
+    //     config.console.verbosityLevel = 'none'
 
-        const Logger = require('../../logger').Logger
+    //     const Logger = require('../../logger').Logger
 
-        Logger.error('test', null, null)()
-        expect(consoleErrorSpy).not.toBeCalled()
-      })
-    })
+    //     Logger.error('test', null, null)()
+    //     expect(consoleErrorSpy).not.toBeCalled()
+    //   })
+    // })
 
-    it('displays message without tag given no tag and logger is configured to log everything', () => {
-      jest.isolateModules(() => {
-        isServerSpy.mockReturnValueOnce(false)
-        const Logger = require('../../logger').Logger
+    // it('displays message without tag given no tag and logger is configured to log everything', () => {
+    //   jest.isolateModules(() => {
+    //     isServerSpy.mockReturnValueOnce(false)
+    //     const Logger = require('../../logger').Logger
 
-        Logger.error('test')()
-        expect(consoleErrorSpy).toBeCalledWith(
-          '%cVSF%c test',
-          expect.anything(),
-          expect.anything(),
-          null
-        )
-      })
-    })
+    //     Logger.error('test')()
+    //     expect(consoleErrorSpy).toBeCalledWith(
+    //       '%cVSF%c test',
+    //       expect.anything(),
+    //       expect.anything(),
+    //       null
+    //     )
+    //   })
+    // })
 
-    it('displays message with tag given a tag and logger is configured to log everything', () => {
-      jest.isolateModules(() => {
-        isServerSpy.mockReturnValueOnce(false)
-        const Logger = require('../../logger').Logger
+    // it('displays message with tag given a tag and logger is configured to log everything', () => {
+    //   jest.isolateModules(() => {
+    //     isServerSpy.mockReturnValueOnce(false)
+    //     const Logger = require('../../logger').Logger
 
-        Logger.error('test', 'tag')()
-        expect(consoleErrorSpy).toBeCalledWith(
-          '%cVSF%c %ctag%c test',
-          expect.anything(),
-          expect.anything(),
-          expect.anything(),
-          expect.anything(),
-          null
-        )
-      })
-    })
+    //     Logger.error('test', 'tag')()
+    //     expect(consoleErrorSpy).toBeCalledWith(
+    //       '%cVSF%c %ctag%c test',
+    //       expect.anything(),
+    //       expect.anything(),
+    //       expect.anything(),
+    //       expect.anything(),
+    //       null
+    //     )
+    //   })
+    // })
   })
 })

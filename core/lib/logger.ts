@@ -170,15 +170,15 @@ class Logger {
    * @param context meaningful data related to this message
    */
   public error (message: any, tag: string = null, context: any = null): () => void {
-    let noDefaultOutput
-    ({ message, tag, context, noDefaultOutput } = coreHooksExecutors.beforeLogRendered({ type: 'error', message, tag, context }))
-    if (noDefaultOutput === true) {
-      return () => {}
-    }
+    // let noDefaultOutput
+    // ({ message, tag, context, noDefaultOutput } = coreHooksExecutors.beforeLogRendered({ type: 'error', message, tag, context }))
+    // if (noDefaultOutput === true) {
+    //   return () => {}
+    // }
 
-    if (isServer) { // always show errors in SSR
-      return console.error.bind(console, (tag ? `[${tag}] ` : '') + this.convertToString(message), context)
-    }
+    // if (isServer) { // always show errors in SSR
+    //   return console.error.bind(console, (tag ? `[${tag}] ` : '') + this.convertToString(message), context)
+    // }
 
     if (this.canPrint('error')) {
       if (tag) {

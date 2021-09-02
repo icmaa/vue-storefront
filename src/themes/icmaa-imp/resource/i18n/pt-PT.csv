@@ -464,4 +464,4 @@
 "{count} items","{count} itens"
 "{incl} VAT","{incl} IVA"
 "{incl} VAT, Excl. shipping","{incl} IVA, Excl. portes"
-"{name} is {height} tall and wears size {size}.","FOR BOYS: O {name} têm {height} de altura e veste o tamanho {size}. FOR GIRLS: A {name} têm {height} de altura e veste o tamanho {size}."
+"{name} is {height} tall and wears size {size}.","{name} têm {height} de altura e veste o tamanho {size}."
