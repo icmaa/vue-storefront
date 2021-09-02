@@ -1,17 +1,19 @@
-FROM node:12-alpine
-
-ENV VS_ENV prod
+FROM node:16-alpine
 
 WORKDIR /var/www
+EXPOSE 3000
 
 COPY package.json ./
 COPY yarn.lock ./
 
-RUN apk add --no-cache --virtual .build-deps ca-certificates wget python make g++ \
-  && apk add --no-cache git \
-  && yarn install --no-cache \
-  && apk del .build-deps
+COPY docker/vue-storefront/vue-storefront.sh /usr/local/bin/vue-storefront
+RUN chmod +x /usr/local/bin/vue-storefront
 
-COPY docker/vue-storefront/vue-storefront.sh /usr/local/bin/
+RUN apk add --no-cache \
+    python3 make g++ ca-certificates \
+    gcc libgcc libstdc++ linux-headers \
+    bash curl wget git rsync
 
-CMD ["vue-storefront.sh"]
+RUN yarn global add @icmaa/config-sync
+
+CMD ["vue-storefront"]
