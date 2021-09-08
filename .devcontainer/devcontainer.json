@@ -1,8 +1,7 @@
 {
   "name": "icmaa/vue-storefront",
   "forwardPorts": [
-    3000,
-    9229
+    3000
   ],
   "portsAttributes": {
     "3000": {
