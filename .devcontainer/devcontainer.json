@@ -3,17 +3,13 @@
   "forwardPorts": [
     3000
   ],
-  "portsAttributes": {
-    "3000": {
-      "label": "vue-storefront"
-    }
-  },
   "postCreateCommand": [
     "bash", ".devcontainer/scripts/postCreate.sh"
-],
-"dockerComposeFile": [
-	"../docker-compose.yml"
-],
-"service": "app",
-"workspaceFolder": "/var/www"
+  ],
+  "dockerComposeFile": [
+    "../docker-compose.yml",
+    "docker-compose.yml"
+  ],
+  "service": "app",
+  "workspaceFolder": "/var/www"
 }
