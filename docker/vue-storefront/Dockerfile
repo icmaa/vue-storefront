@@ -5,7 +5,7 @@ WORKDIR /var/www
 COPY package.json ./
 COPY yarn.lock ./
 
-RUN apk add --no-cache git curl wget \
+RUN apk add --no-cache bash curl wget git \
   && yarn install --no-cache
 
 COPY docker/vue-storefront/vue-storefront.sh /usr/local/bin/
