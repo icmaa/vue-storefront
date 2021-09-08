@@ -1,16 +1,12 @@
-FROM node:12-alpine
-
-ENV VS_ENV prod
+FROM node:16-alpine
 
 WORKDIR /var/www
 
 COPY package.json ./
 COPY yarn.lock ./
 
-RUN apk add --no-cache --virtual .build-deps ca-certificates wget python make g++ \
-  && apk add --no-cache git \
-  && yarn install --no-cache \
-  && apk del .build-deps
+RUN apk add --no-cache git curl wget \
+  && yarn install --no-cache
 
 COPY docker/vue-storefront/vue-storefront.sh /usr/local/bin/
 

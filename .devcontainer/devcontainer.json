@@ -1,15 +1,16 @@
 {
   "name": "icmaa/vue-storefront",
-  "image": "mcr.microsoft.com/vscode/devcontainers/javascript-node:16",
   "forwardPorts": [
-    3000
+    3000,
+    9229
   ],
-  "remoteEnv": {
-    "NODE_APP_INSTANCE": "imp",
-    "NODE_CONFIG_ENV": "development",
-    "NODE_TLS_REJECT_UNAUTHORIZED": "0"
-  },
   "postCreateCommand": [
     "bash", ".devcontainer/scripts/postCreate.sh"
-  ]
+],
+"dockerComposeFile": [
+	"../docker-compose.yml",
+	"docker-compose.yml"
+],
+"service": "app",
+"workspaceFolder": "/var/www"
 }

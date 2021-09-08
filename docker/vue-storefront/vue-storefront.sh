@@ -1,9 +1,7 @@
 #!/bin/sh
 set -e
 
-yarn install || exit $?
-
-if [ "$VS_ENV" = 'dev' ]; then
+if [ "$NODE_CONFIG_ENV" = 'development' ]; then
   yarn dev
 else
   yarn build || exit $?
