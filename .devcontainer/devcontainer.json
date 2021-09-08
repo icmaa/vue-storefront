@@ -4,6 +4,11 @@
     3000,
     9229
   ],
+  "portsAttributes": {
+    "3000": {
+      "label": "vue-storefront"
+    }
+  },
   "postCreateCommand": [
     "bash", ".devcontainer/scripts/postCreate.sh"
 ],
