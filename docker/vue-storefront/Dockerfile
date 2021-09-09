@@ -12,6 +12,6 @@ RUN chmod +x /usr/local/bin/vue-storefront
 RUN apk add --no-cache \
     python3 make g++ ca-certificates \
     gcc libgcc libstdc++ linux-headers \
-    bash curl wget git
+    bash curl wget git rsync
 
 CMD ["vue-storefront"]
