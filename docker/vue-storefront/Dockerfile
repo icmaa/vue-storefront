@@ -14,4 +14,6 @@ RUN apk add --no-cache \
     gcc libgcc libstdc++ linux-headers \
     bash curl wget git rsync
 
+RUN yarn global add @icmaa/config-sync
+
 CMD ["vue-storefront"]
