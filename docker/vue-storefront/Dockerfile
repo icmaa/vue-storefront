@@ -11,4 +11,4 @@ RUN chmod +x /usr/local/bin/vue-storefront
 
 RUN apk add --no-cache bash curl wget git
 
-ENTRYPOINT ["vue-storefront"]
+CMD ["vue-storefront"]
