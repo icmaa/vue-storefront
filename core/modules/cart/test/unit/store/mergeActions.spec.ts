@@ -319,7 +319,7 @@ describe('Cart mergeActions', () => {
       }
     });
     await (cartActions as any).updateTotalsAfterMerge(contextMock, { clientItems: [clientItem], dryRun: false });
-    expect(contextMock.dispatch).toBeCalledWith('syncTotals')
+    expect(contextMock.dispatch).toBeCalledWith('syncTotals', {})
     expect(contextMock.commit).toBeCalledWith(types.CART_SET_ITEMS_HASH, 'cart-hash')
   })
 

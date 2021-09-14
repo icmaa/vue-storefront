@@ -15,7 +15,7 @@ const reduceToObject = (previousValue: any, currentValue: Totals) => ({
 })
 
 const prepareShippingInfoForUpdateTotals = (totals: Totals[]) =>
-  totals
+  !totals ? {} : totals
     .map(applyOptions)
     .reduce(reduceToObject, {})
 

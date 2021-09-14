@@ -13,8 +13,9 @@
   "viewportHeight": 812,
   "defaultCommandTimeout": 20000,
   "requestTimeout": 20000,
+  "chromeWebSecurity": false,
   "env": {
-    "store_codes": ["de", "fr", "es", "uk"],
+    "store_codes": ["de", "fr", "es", "uk", "nl"],
     "category_pages": ["new.html", "clothing.html", "shoes.html", "accessories.html"]
   }
 }

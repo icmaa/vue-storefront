@@ -54,10 +54,10 @@ export default {
         return
       }
 
-      this.$bus.$emit('notification-progress-start', i18n.t('Please wait'))
+      this.$store.dispatch('ui/loader', { message: i18n.t('Please wait') })
       this.$store.dispatch('cart/applyCoupon', this.couponCode)
         .then(status => {
-          this.$bus.$emit('notification-progress-stop')
+          this.$store.dispatch('ui/loader', false)
 
           let type = 'success'
           let message = 'Your coupon has been successfully applied.'
@@ -76,10 +76,10 @@ export default {
         })
     },
     async removeCoupon () {
-      this.$bus.$emit('notification-progress-start', i18n.t('Please wait'))
+      this.$store.dispatch('ui/loader', { message: i18n.t('Please wait') })
       this.$store.dispatch('cart/removeCoupon')
         .then(status => {
-          this.$bus.$emit('notification-progress-stop')
+          this.$store.dispatch('ui/loader', false)
 
           let type = 'success'
           let message = 'Your coupon has been removed.'

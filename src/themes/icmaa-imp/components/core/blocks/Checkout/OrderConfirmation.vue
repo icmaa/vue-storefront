@@ -61,12 +61,14 @@
 </template>
 
 <script>
-import { ConfirmOrders } from '@vue-storefront/core/modules/offline-order/components/ConfirmOrders'
-import { CancelOrders } from '@vue-storefront/core/modules/offline-order/components/CancelOrders'
 import Modal from 'theme/components/core/Modal'
 import ButtonComponent from 'theme/components/core/blocks/Button'
 
 export default {
+  components: {
+    Modal,
+    ButtonComponent
+  },
   props: {
     ordersData: {
       required: false,
@@ -78,149 +80,6 @@ export default {
     this.$nextTick(() => {
       this.$store.dispatch('ui/showModal', 'modal-order-confirmation')
     })
-  },
-  methods: {
-    confirmOrders () {
-      ConfirmOrders.methods.confirmOrders.call(this)
-      this.$store.dispatch('ui/hideModal', 'modal-order-confirmation')
-    },
-    cancelOrders () {
-      CancelOrders.methods.cancelOrders.call(this)
-      this.$store.dispatch('ui/hideModal', 'modal-order-confirmation')
-    }
-  },
-  components: {
-    Modal,
-    ButtonComponent
-  },
-  mixins: [ ConfirmOrders, CancelOrders ]
+  }
 }
 </script>
-
-<style lang="scss" scoped>
-.modal {
-  font-size: 18px;
-}
-
-table {
-  border-collapse: collapse;
-  width: 100%;
-
-  @media (max-width: 767px) {
-    border-top: none;
-  }
-
-  th, td {
-    text-align: left;
-    padding: 20px;
-
-    &.align-right {
-      text-align: right;
-
-      @media (max-width: 767px) {
-        text-align: left;
-      }
-
-    }
-
-    @media (max-width: 1199px) {
-      padding: 10px;
-    }
-
-  }
-
-  thead {
-    @media (max-width: 767px) {
-      display: none;
-    }
-  }
-
-  tbody {
-
-    tr {
-      @media (max-width: 767px) {
-        display: block
-      }
-    }
-
-    td {
-      vertical-align: top;
-
-      @media (max-width: 767px) {
-        display: block;
-        text-align: left;
-        padding: 10px 20px;
-        &:before {
-          content: attr(data-th) ': ';
-          font-weight: 700;
-        }
-      }
-
-      &:first-child {
-        @media (max-width: 767px) {
-          padding: 20px 20px 10px 20px;
-        }
-      }
-
-      &:last-child {
-        @media (max-width: 767px) {
-          padding: 10px 20px 20px 20px;
-        }
-      }
-    }
-
-  }
-
-  tfoot {
-
-    tr {
-      @media (max-width: 767px) {
-        display: block
-      }
-
-      &:last-child {
-        td:last-child {
-         padding-bottom: 20px
-        }
-      }
-
-    }
-
-    td {
-      @media (max-width: 767px) {
-        display: block
-      }
-
-      &:first-child {
-        @media (max-width: 767px) {
-          font-weight: 700;
-          padding: 20px 20px 5px 20px;
-        }
-      }
-
-      &:last-child {
-        @media (max-width: 767px) {
-          padding: 5px 20px 0 20px;
-        }
-      }
-
-    }
-
-  }
-
-  i {
-    vertical-align: middle;
-  }
-
-}
-
-.cancel-order {
-  text-align: center;
-  margin-bottom: 30px;
-
-  @media only screen and (min-width: 576px) {
-    text-align: left;
-    margin-bottom: 0;
-  }
-}
-</style>

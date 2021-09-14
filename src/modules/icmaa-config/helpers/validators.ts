@@ -29,9 +29,13 @@ export const streetname = (v: string): boolean => {
  * #212674 Check that address has a valid housenumber
  */
 export const housenumber = (v: string): boolean => {
-  const leadingNumber = /([0-9]+)(\.*)([a-zA-Z]{2,})/;
-  const tailingNumber = /([a-zA-Z]{2,})(\.*)([0-9]+)/;
+  const leadingNumber = /([0-9]+)(\.*)([a-zA-Z]{2,})/
+  const tailingNumber = /([a-zA-Z]{2,})(\.*)([0-9]+)/
   return !helpers.req(v) || !v.split(' ').some(w => (leadingNumber.test(v) || tailingNumber.test(v)))
+}
+
+export const poststation = (v: string): boolean => {
+  return !helpers.req(v) || /^Packstation\s\d{3,}$/.test(v)
 }
 
 export const getPostcodeRegex = (code: string = 'XX') => {
@@ -107,5 +111,7 @@ export const postcode = (code: string = 'XX') => (v) => {
 }
 
 export const isTrue = (v: any): boolean => v === true
+
+export const notFalse = (v: any): boolean => v !== false
 
 export const regex = (regex: string) => helpers.regex('regex', new RegExp(regex))

@@ -52,11 +52,11 @@
           :validations="[
             {
               condition: !validation.firstname.required && validation.firstname.$error,
-              text: $t('Field is required.')
+              text: $t('Field is required')
             },
             {
               condition: !validation.firstname.latin && validation.firstname.$error,
-              text: $t('Invalid characters.')
+              text: $t('Invalid characters')
             }
           ]"
           class="t-w-1/2 lg:t-w-1/4 t-px-2 t-mb-4"
@@ -70,11 +70,11 @@
           :validations="[
             {
               condition: !validation.lastname.required && validation.lastname.$error,
-              text: $t('Field is required.')
+              text: $t('Field is required')
             },
             {
               condition: !validation.lastname.latin && validation.lastname.$error,
-              text: $t('Invalid characters.')
+              text: $t('Invalid characters')
             }
           ]"
           class="t-w-1/2 lg:t-w-1/4 t-px-2 t-mb-4"
@@ -87,7 +87,7 @@
           :label="$t('Company name')"
           :validations="[{
             condition: !validation.company.latin && validation.company.$error,
-            text: $t('Invalid characters.')
+            text: $t('Invalid characters')
           }]"
           class="t-w-full lg:t-w-1/2 t-px-2 t-mb-4"
         />
@@ -106,7 +106,7 @@
               },
               {
                 condition: !validation.street.$each[i].required && validation.street.$error,
-                text: $t('Field is required.')
+                text: $t('Field is required')
               },
               {
                 condition: !validation.street.$each[i].housenumber && validation.street.$error,
@@ -114,7 +114,7 @@
               },
               {
                 condition: (!validation.street.$each[i].latin || !validation.street.$each[i].streetname) && validation.street.$error,
-                text: $t('Invalid characters.')
+                text: $t('Invalid characters')
               }
             ]"
             class="t-w-full"
@@ -130,11 +130,11 @@
           :validations="[
             {
               condition: !validation.city.required && validation.city.$error,
-              text: $t('Field is required.')
+              text: $t('Field is required')
             },
             {
               condition: !validation.city.latin && validation.city.$error,
-              text: $t('Invalid characters.')
+              text: $t('Invalid characters')
             }
           ]"
           class="t-w-full lg:t-w-1/2 t-px-2 t-mb-4"
@@ -148,7 +148,7 @@
           :validations="[
             {
               condition: !validation.postcode.required && validation.postcode.$error,
-              text: $t('Field is required.')
+              text: $t('Field is required')
             },{
               condition: !validation.postcode.postcode && validation.postcode.$error,
               text: $t('This is not a valid postcode. Format: {code}', { code: postCodeFormat})
@@ -166,7 +166,7 @@
           :options="states"
           :validations="[{
             condition: !validation.region_id.required && validation.region_id.$error,
-            text: $t('Field is required.')
+            text: $t('Field is required')
           }]"
           class="t-w-1/2 lg:t-w-1/4 t-px-2 t-mb-4"
           v-if="hasState"
@@ -178,7 +178,7 @@
           :label="$t('Country') + ' *'"
           :validations="[{
             condition: !validation.country_id.required && validation.country_id.$error,
-            text: $t('Field is required.')
+            text: $t('Field is required')
           }]"
           class="t-w-1/2 lg:t-w-1/4 t-px-2 t-mb-4"
         />
@@ -208,7 +208,7 @@
             :validations="[
               {
                 condition: !validation.vat_id.required && validation.vat_id.$error,
-                text: $t('Field is required.')
+                text: $t('Field is required')
               }
             ]"
             class="t-w-full lg:t-w-1/2 t-px-2"
@@ -236,7 +236,7 @@
           {{ $t('Use as my default shipping address') }}
         </base-checkbox>
         <div class="t-px-2 t-w-full t-flex t-flex-wrap t-justify-between">
-          <button-component :submit="true" type="primary" size="lg" class="t-w-full lg:t-w-auto lg:t-order-3" data-test-id="SubmitButton">
+          <button-component :submit="true" type="primary" class="t-w-full lg:t-w-auto lg:t-order-3" data-test-id="SubmitButton">
             {{ $t('Save address') }}
           </button-component>
           <button-component type="ghost" icon="keyboard_arrow_left" icon-position="left" class="t-flex-1 lg:t-flex-fix t-w-1/2 t-mt-4 lg:t-mt-0 lg:t-w-auto lg:t-order-1" @click="back" data-test-id="BackButton">
@@ -256,13 +256,13 @@
 <script>
 import { mapGetters } from 'vuex'
 import i18n from '@vue-storefront/i18n'
-import { currentStoreView } from '@vue-storefront/core/lib/multistore'
 
 import pick from 'lodash-es/pick'
 
 import { required } from 'vuelidate/lib/validators'
-import { latin, unicodeAlphaNum, streetname, housenumber, postcode, getPostcodeRegex } from 'icmaa-config/helpers/validators'
+import { latin, unicodeAlphaNum, streetname, housenumber, postcode } from 'icmaa-config/helpers/validators'
 
+import AddressMixin from 'theme/mixins/user/addressMixin'
 import Headline from 'theme/components/core/blocks/MyAccount/Headline'
 import BaseInput from 'theme/components/core/blocks/Form/BaseInput'
 import BaseSelect from 'theme/components/core/blocks/Form/BaseSelect'
@@ -271,18 +271,15 @@ import ButtonComponent from 'theme/components/core/blocks/Button'
 import CountrySelect from 'theme/components/core/blocks/Form/CountrySelect'
 import MaterialIcon from 'theme/components/core/blocks/MaterialIcon'
 
-import { getTranslatedCountries } from 'icmaa-config/helpers/i18n/countries'
-import { getStates } from 'icmaa-config/helpers/i18n/states'
-
 export default {
   name: 'MyAdresses',
+  mixins: [ AddressMixin ],
   data () {
     return {
       edit: false,
       isNewAddress: false,
       isDelete: false,
-      address: {},
-      countries: getTranslatedCountries()
+      address: {}
     }
   },
   components: {
@@ -296,8 +293,6 @@ export default {
   },
   computed: {
     ...mapGetters({
-      viewport: 'ui/getViewport',
-      storeConfig: 'icmaaConfig/getCurrentStoreConfig',
       customer: 'user/getCustomer'
     }),
     addresses () {
@@ -312,35 +307,12 @@ export default {
     validation () {
       return this.$v.address
     },
-    countryId () {
-      return this.address.country_id.length > 0 ? this.address.country_id : undefined
-    },
-    postCodeFormat () {
-      return getPostcodeRegex(this.address.country_id)[1]
-    },
-    states () {
-      if (this.hasState) {
-        return getStates().map(({ code: value, name: label }) => ({ label, value }))
-      }
-
-      return []
-    },
-    houseNumberAdvice () {
-      const street = this.address.street.join('')
-      return street.length > 8 && !/(\d)+/.test(street)
-    },
     customerAddress () {
       return this.customer.addresses.find(a => a.entity_id === this.address.entity_id)
     },
     isDefaultAddress () {
       let address = this.customerAddress
       return address && (address.is_default_billing === true || address.is_default_shipping === true)
-    },
-    hasState () {
-      return ['US', 'GB'].includes(this.countryId)
-    },
-    hasVatId () {
-      return ['IT'].includes(this.countryId)
     }
   },
   methods: {
@@ -420,27 +392,6 @@ export default {
       this.isDelete = true
 
       this.$bus.$emit('myAccount-before-updateUser', customer)
-    },
-    setAddressDefaults () {
-      this.address = {
-        entity_id: '',
-        company: '',
-        prefix: '',
-        firstname: this.customer.firstname,
-        lastname: this.customer.lastname,
-        suffix: '',
-        street: [''],
-        postcode: '',
-        city: '',
-        country_id: currentStoreView().i18n.defaultCountry,
-        region_id: null,
-        telephone: '',
-        vat_id: null,
-        is_default_billing: false,
-        is_default_shipping: false
-      }
-
-      return this.address
     },
     back () {
       this.edit = false

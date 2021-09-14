@@ -4,13 +4,13 @@ import UserState from '../types/UserState'
 import { UserService } from '@vue-storefront/core/data-resolver'
 import { UserService as IcmaaUserService } from '../data-resolver/UserService'
 import * as userTypes from '@vue-storefront/core/modules/user/store/mutation-types'
+import * as types from './mutation-types'
 import { StorageManager } from '@vue-storefront/core/lib/storage-manager'
 import { SearchQuery } from 'storefront-query-builder'
 import { isServer } from '@vue-storefront/core/helpers'
 import { Logger } from '@vue-storefront/core/lib/logger'
 import Task from '@vue-storefront/core/lib/sync/types/Task'
 import EventBus from '@vue-storefront/core/compatibility/plugins/event-bus'
-import asyncForEach from 'icmaa-config/helpers/asyncForEach'
 import { entities } from 'config'
 
 import { notifications } from 'icmaa-cart/helpers'
@@ -66,8 +66,6 @@ const actions: ActionTree<UserState, RootState> = {
     await dispatch('cart/clear', { sync: false }, { root: true })
     await dispatch('clearCurrentUser')
 
-    commit(userTypes.USER_START_SESSION)
-
     if (token) {
       commit(userTypes.USER_TOKEN_CHANGED, { newToken: token })
       await dispatch('sessionAfterAuthorized', {})
@@ -76,15 +74,13 @@ const actions: ActionTree<UserState, RootState> = {
       EventBus.$emit('session-after-nonauthorized')
     }
 
+    commit(userTypes.USER_START_SESSION)
     EventBus.$emit('session-after-started')
   },
   /**
    * Copy of original – changes:
    * * Write updated user-token to store after profile is refreshed to extend JWT lifetime on each pull.
    * * Logout if 500er response is returned from '/me' request.
-   *
-   * @param any param0
-   * @param any param1
    */
   async refreshUserProfile ({ commit, dispatch }, { resolvedFromCache }) {
     const resp = await UserService.getProfile(true)
@@ -111,6 +107,10 @@ const actions: ActionTree<UserState, RootState> = {
       await dispatch('logout', { silent: true })
     }
   },
+  /**
+   * Copy of original – changes:
+   * * Add this feature, it's just a place holder in orginal action.
+   */
   async changePassword ({ dispatch, getters }, passwordData): Promise<Task> {
     return UserService.changePassword(passwordData)
       .then(async resp => {
@@ -123,17 +123,30 @@ const actions: ActionTree<UserState, RootState> = {
         return resp
       })
   },
-  async refreshOrdersHistory ({ commit, dispatch }, { resolvedFromCache, pageSize = 20, currentPage = 1 }) {
+  /**
+   * Copy of original – changes:
+   * * Add `loadProducts` parameter to fetch products off all fetched orders
+   * * If after page 1 update existing orders instead of replacing them.
+   */
+  async refreshOrdersHistory ({ commit, dispatch }, { resolvedFromCache, loadProducts = false, pageSize = 5, currentPage = 1 }) {
     const resp = await UserService.getOrdersHistory(pageSize, currentPage)
 
     if (resp.code === 200) {
-      /** Load orders products to order state item and localstorage */
-      await asyncForEach(resp.result.items, async (order, index) => {
-        resp.result.items[index] = await dispatch('loadOrderProducts', { order, history: resp.result.items })
-      })
+      let orders = resp.result.items
 
-      commit(userTypes.USER_ORDERS_HISTORY_LOADED, resp.result) // this also stores the current user to localForage
-      EventBus.$emit('user-after-loaded-orders', resp.result)
+      /** Load orders products to order state item and localstorage */
+      if (loadProducts) {
+        orders = await dispatch('loadOrderHistoryProducts', { history: orders })
+      }
+
+      // this also stores the current user to localForage
+      if (currentPage > 1) {
+        commit(types.USER_ORDERS_HISTORY_UPD, orders)
+      } else {
+        commit(userTypes.USER_ORDERS_HISTORY_LOADED, orders)
+      }
+
+      EventBus.$emit('user-after-loaded-orders', orders)
     }
 
     if (!resolvedFromCache) {
@@ -146,44 +159,47 @@ const actions: ActionTree<UserState, RootState> = {
     const resp = await IcmaaUserService.getLastOrder(token)
 
     if (resp.code === 200) {
-      const order = await dispatch('loadOrderProducts', { order: resp.result, history: [ resp.result ] })
+      const orders = await dispatch('loadOrderHistoryProducts', { history: [ resp.result ] })
 
-      commit(userTypes.USER_ORDERS_HISTORY_LOADED, { items: [ order ] })
-      EventBus.$emit('user-after-loaded-orders', resp.result)
+      commit(types.USER_ORDERS_HISTORY_UPD, orders)
+      EventBus.$emit('user-after-loaded-orders', orders)
     }
 
     return resp
   },
-  async loadLastOrderFromCache ({ dispatch }) {
-    let resolvedFromCache = false
-    const ordersHistory = await dispatch('loadOrdersFromCache')
-    if (ordersHistory) {
-      Logger.log('Current user order history served from cache', 'user')()
-      resolvedFromCache = true
-    }
-
-    if (!resolvedFromCache) {
-      Promise.resolve(null)
-    }
-  },
-  async loadOrderProducts ({ dispatch }, { order, history }) {
-    const index = history.findIndex(o => o.id === order.id)
-    if (history[index] && history[index].products) {
-      return history[index]
-    }
+  async loadOrderHistoryProducts ({ dispatch }, { history }) {
+    const missingOrders = history.filter(order => !order.products || order.products.length === 0)
+    const productIds = missingOrders
+      .map(o => o.items.map(oi => oi.product_id))
+      .reduce((a, b) => a.concat(b), [])
 
     let query = new SearchQuery()
-    query.applyFilter({ key: 'id', value: { 'eq': order.items.map(oi => oi.product_id) } })
+    query.applyFilter({ key: 'id', value: { 'eq': productIds } })
 
-    let { includeFields, excludeFields } = entities.productList
-    excludeFields = excludeFields.filter(f => f !== 'configurable_options')
-    includeFields.push('configurable_options.*')
+    const { includeFields, excludeFields } = entities.productList
+    const options = {
+      separateSelectedVariant: true,
+      fallbackToDefaultWhenNoAvailable: false,
+      setConfigurableProductOptions: false
+    }
 
-    return dispatch('product/findProducts', { query, includeFields, excludeFields }, { root: true })
-      .then(products => {
-        history[index].products = products.items
-        return history[index]
+    return dispatch('product/findProducts', { query, options, includeFields, excludeFields }, { root: true })
+      .then(result => {
+        if (!result.items || result.items.length === 0) return history
+
+        const products = result.items
+        history.map(order => {
+          order.products = products.filter(p => order.items.map(i => i.product_id).includes(p.id))
+          return order
+        })
+
+        return history
       })
+  },
+  async loadProductsForOrders ({ dispatch, commit }, history) {
+    history = history.filter(o => !o.products)
+    const updatedHistory = await dispatch('loadOrderHistoryProducts', { history })
+    commit(types.USER_ORDERS_HISTORY_UPD, updatedHistory)
   }
 }
 

@@ -139,16 +139,16 @@ export default {
         return
       }
 
-      this.$bus.$emit('notification-progress-start', i18n.t('Please wait'))
+      this.$store.dispatch('ui/loader', { message: i18n.t('Please wait') })
       this.$store.dispatch('icmaaCompetitions/post', { sheetId: this.sheetId, data: this.form })
         .then(this.afterSend)
     },
     afterSend (success) {
-      this.$bus.$emit('notification-progress-stop')
+      this.$store.dispatch('ui/loader', false)
 
       if (success) {
         this.isSend = true
-        this.$bus.$emit('notification-progress-stop')
+        this.$store.dispatch('ui/loader', false)
 
         this.$store.dispatch('notification/spawnNotification', {
           type: 'success',

@@ -30,4 +30,6 @@ beforeEach(() => {
   indexedDB.deleteDatabase('shop')
   indexedDB.deleteDatabase('carts')
   cy.clearLocalStorage()
+
+  cy.wrap(false).as('storeCode')
 })

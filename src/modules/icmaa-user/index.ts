@@ -54,9 +54,19 @@ export const IcmaaExtendedUserModule: StorefrontModule = async function ({ store
   }
 
   store.subscribe((mutation, state) => {
-    if (mutation.type.endsWith(types.USER_ADD_SESSION_DATA) || mutation.type.endsWith(types.USER_RMV_SESSION_DATA)) {
-      StorageManager.get('user').setItem('session-data', state.user.sessionData)
-        .catch((reason) => { console.error(reason) })
+    const type = mutation.type
+    if (type.endsWith(types.USER_ADD_SESSION_DATA) || type.endsWith(types.USER_RMV_SESSION_DATA)) {
+      StorageManager.get('user')
+        .setItem('session-data', state.user.sessionData)
+        .catch((reason) => {
+          Logger.error('Can\'t save customer to local-storage:', 'user', reason)()
+        })
+    } else if (type.endsWith(types.USER_ORDERS_HISTORY_UPD)) {
+      StorageManager.get('user')
+        .setItem('orders-history', state.user.orders_history)
+        .catch((reason) => {
+          Logger.error('Can\'t fetch customer from local-storage:', 'user', reason)()
+        })
     }
   })
 

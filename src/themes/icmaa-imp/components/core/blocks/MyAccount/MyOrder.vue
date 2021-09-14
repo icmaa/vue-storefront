@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="t-p-4 t-bg-white t-mb-4" v-if="order && typeof order !== 'undefined'">
+    <div class="t-p-4 t-bg-white t-mb-4" v-if="order && (typeof order !== 'undefined')">
       <headline>
         {{ $t('Order') }}
         <span v-if="order" class="t-text-sm t-text-base-light t-flex-grow lg:t-flex-fix t-ml-4"># {{ order.increment_id }}</span>
@@ -22,7 +22,7 @@
           <router-link :to="localizedRoute('/service')" class="t-w-full t-mb-2 lg:t-w-auto lg:t-mb-0 lg:t-mr-4 t-font-light t-text-normal">
             {{ $t('Are there any questions left?') }}
           </router-link>
-          <button-component type="ghost" @click="$router.push(localizedRoute(`/my-account/order-review/${order.id}`))">
+          <button-component type="ghost" @click="goToReview">
             {{ $t('Review order') }}
           </button-component>
         </div>
@@ -120,12 +120,6 @@
         <div class="t-w-1/3 lg:t-w-1/4 t-px-2 t-text-right">
           {{ order.shipping_incl_tax | round | price }}
         </div>
-        <template v-if="order.discount_amount < 0">
-          <div class="t-w-2/3 lg:t-w-3/4 t-px-2 t-text-right" v-text="$t('Discount')" />
-          <div class="t-w-1/3 lg:t-w-1/4 t-px-2 t-text-right">
-            {{ order.discount_amount | round | price }}
-          </div>
-        </template>
         <template v-if="order.payment.method === 'cashondelivery'">
           <div class="t-w-2/3 lg:t-w-3/4 t-px-2 t-text-right" v-text="$t('Cash on delivery')" />
           <div class="t-w-1/3 lg:t-w-1/4 t-px-2 t-text-right">
@@ -138,10 +132,12 @@
             {{ order.priority_handling_fee | round | price }}
           </div>
         </template>
-        <div class="t-w-2/3 lg:t-w-3/4 t-px-2 t-text-right" v-text="$t('Tax')" />
-        <div class="t-w-1/3 lg:t-w-1/4 t-px-2 t-text-right">
-          {{ (parseFloat(order.tax_amount) + parseFloat(order.discount_tax_compensation_amount)) | round | price }}
-        </div>
+        <template v-if="order.discount_amount < 0">
+          <div class="t-w-2/3 lg:t-w-3/4 t-px-2 t-text-right" v-text="$t('Discount')" />
+          <div class="t-w-1/3 lg:t-w-1/4 t-px-2 t-text-right">
+            {{ order.discount_amount | round | price }}
+          </div>
+        </template>
         <div class="t-w-2/3 lg:t-w-3/4 t-px-2 t-text-right t-text-lg t-font-bold t-text-base-darkest t-mt-2" v-text="$t('Grand total')" />
         <div class="t-w-1/3 lg:t-w-1/4 t-px-2 t-text-right t-text-lg t-font-bold t-text-base-darkest t-mt-2">
           {{ order.grand_total | round | price }}
@@ -152,19 +148,19 @@
 </template>
 
 <script>
-import Vue from 'vue'
 import { mapGetters } from 'vuex'
 import { currentStoreView } from '@vue-storefront/core/lib/multistore'
 import { formatProductLink } from 'icmaa-url/helpers'
 import i18n from '@vue-storefront/i18n'
 import Headline from 'theme/components/core/blocks/MyAccount/Headline'
-import MyOrder from '@vue-storefront/core/compatibility/components/blocks/MyAccount/MyOrder'
+import { UserSingleOrder } from '@vue-storefront/core/modules/order/components/UserSingleOrder'
 import TrackingLink from 'icmaa-tracking/components/TrackingLink'
 import StatusIcon from 'theme/components/core/blocks/MyAccount/MyOrders/StatusIcon'
 import ButtonComponent from 'theme/components/core/blocks/Button'
 
 export default {
-  mixins: [MyOrder],
+  name: 'MyOrder',
+  mixins: [ UserSingleOrder ],
   components: {
     Headline,
     StatusIcon,
@@ -237,10 +233,19 @@ export default {
       })
 
       return options
+    },
+    goToReview () {
+      this.$router.push(
+        this.localizedRoute(`/my-account/order-review/${this.order.id}`)
+      )
     }
   },
   async mounted () {
-    await this.$store.dispatch('attribute/list', { filterValues: this.attributeCodes })
+    if (!this.order.products) {
+      this.$store.dispatch('user/loadProductsForOrders', [ this.order ])
+    }
+
+    this.$store.dispatch('attribute/list', { filterValues: this.attributeCodes })
   }
 }
 </script>

@@ -38,7 +38,6 @@
 </template>
 
 <script>
-import config from 'config'
 import ProductAvailability from 'theme/components/core/blocks/Product/ProductAvailability'
 import ButtonComponent from 'theme/components/core/blocks/Button'
 import ProductTileMixin from 'theme/mixins/product/tileMixin'

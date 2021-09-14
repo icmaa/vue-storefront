@@ -1,15 +1,24 @@
 <template>
   <div class="base-select">
-    <label v-if="hasLabel" :for="id" :class="{ 't-sr-only': hideLabel }" class="t-w-full t-flex t-self-center t-mb-1 t-px-1 t-text-base-tone t-text-sm">
+    <base-label v-if="hasLabel && !isFloating" :class="{ 't-sr-only': hideLabel }" :id="id">
       <slot>
         {{ label }}
       </slot>
-    </label>
-    <div class="t-relative">
+    </base-label>
+    <div class="t-relative" :class="{ 'floating-label': isFloating }">
       <select
         class="t-w-full t-border t-rounded-sm t-text-sm t-leading-tight t-bg-white t-appearance-none t-cursor-pointer focus:outline-none focus:shadow-outline"
-        :class="[ sizeClasses, invalid ? 't-border-alert' : 't-border-base-light', { 't-text-base-light': !value || value === selected }, { [selectClass]: selectClass !== false } ]"
+        :class="[
+          sizeClasses,
+          invalid ? 't-border-alert' : 't-border-base-light',
+          {
+            't-text-base-light': (!value && value !== 0) || value === selected,
+            [selectClass]: selectClass !== false,
+            'value-selected': isFloating && (value || value === 0)
+          }
+        ]"
         :name="name"
+        :ref="name"
         :id="id"
         :disabled="disabled"
         @focus="$emit('focus')"
@@ -17,7 +26,7 @@
         @change="$emit('change', $event.target.value)"
         @input="$emit('input', $event.target.value)"
       >
-        <option disabled :selected="!value" v-if="selected === ''" value="" v-html="initialOptionText" />
+        <option disabled :selected="!value" v-if="selected === ''" value="" v-html="isFloating ? '' : initialOptionText" />
         <option
           v-for="(option, key) in options"
           :key="key"
@@ -27,6 +36,11 @@
           {{ option.label }}
         </option>
       </select>
+      <floating-label v-if="hasLabel && isFloating" :id="id || name" class="t-pointer-events-none">
+        <slot>
+          {{ label || initialOptionText }}
+        </slot>
+      </floating-label>
       <div class="t-pointer-events-none t-absolute t-inset-y-0 t-right-0 t-flex t-items-center" :class="[ size === 'sm' ? 't-px-1' : 't-px-2' ]">
         <material-icon icon="keyboard_arrow_down" />
       </div>
@@ -38,40 +52,18 @@
 
 <script>
 import i18n from '@vue-storefront/i18n'
-import ValidationMessages from './ValidationMessages'
+import InputMixin from 'theme/mixins/form/InputMixin'
 import MaterialIcon from 'theme/components/core/blocks/MaterialIcon'
 import LoaderBackground from 'theme/components/core/LoaderBackground'
 
 export default {
   name: 'BaseSelect',
+  mixins: [ InputMixin ],
   components: {
     MaterialIcon,
-    LoaderBackground,
-    ValidationMessages
+    LoaderBackground
   },
   props: {
-    label: {
-      type: [String, Boolean],
-      default: false
-    },
-    hideLabel: {
-      type: [Boolean],
-      default: false
-    },
-    value: {
-      type: [String, Number],
-      default: ''
-    },
-    id: {
-      type: String,
-      required: false,
-      default: ''
-    },
-    name: {
-      type: String,
-      required: false,
-      default: ''
-    },
     options: {
       type: Array,
       required: true,
@@ -118,7 +110,7 @@ export default {
       return this.validations.filter(v => v.condition).length > 0
     },
     hasLabel () {
-      return this.$slots.default || this.label
+      return this.$slots.default || this.label || this.initialOptionText
     },
     sizeClasses () {
       let classes = ''

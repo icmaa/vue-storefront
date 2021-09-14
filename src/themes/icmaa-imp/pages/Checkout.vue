@@ -1,56 +1,106 @@
 <template>
-  <div id="checkout">
-    <div class="container">
-      <div class="row" v-show="!isThankYouPage">
-        <div class="col-sm-7 col-xs-12 pb70">
-          <div class="checkout-title py5 px20">
-            <h1>
+  <div class="t-container" id="checkout">
+    <div class="t-flex t-justify-center lg:t-px-4 lg:t-py-8">
+      <div class="t-w-full t-p-6 t-pt-4 sm:t-w-2/3 lg:t-w-1/2 xl:t-w-2/5 lg:t-p-0 lg:t-py-8">
+        <div class="t-flex t-items-center t-justify-between t-mb-6 lg:t-mb-8">
+          <h1 class="t-flex t-items-center t-text-1xl t-font-bold">
+            <span class="t-flex t-items-center t-justify-center t-w-8 t-mr-4">
+              <material-icon icon="credit_card" size="lg" />
+            </span>
+            <span class="title">
               {{ $t('Checkout') }}
-            </h1>
-          </div>
-          <personal-details
-            class="line relative"
-            :is-active="activeSection.personalDetails"
-            :focused-field="focusedField"
-          />
-          <shipping class="line relative" :is-active="activeSection.shipping" v-if="!isVirtualCart" />
-          <payment class="line relative" :is-active="activeSection.payment" />
-          <order-review class="line relative" :is-active="activeSection.orderReview" />
-          <div id="custom-steps" />
+            </span>
+          </h1>
+          <logo width="174" height="43" class="logo t-flex-fix t--mr-6 lg:t-mr-0" />
         </div>
-        <div class="hidden-xs col-sm-5 bg-cl-secondary">
-          <cart-summary />
+        <step
+          v-for="(step, index) in steps"
+          :key="`${step.name}-${index}`"
+          :name="step.name"
+          :index="index + 1"
+          :title="$t(step.title)"
+          :active="step.active"
+          :done="step.done"
+          :last="(index + 1) === steps.length"
+        >
+          <component
+            v-if="loaded"
+            :is="step.component"
+            :active="step.active"
+            :done="step.done"
+          />
+        </step>
+      </div>
+      <div class="t-hidden lg:t-block lg:t-w-1/2 xl:t-w-2/5 t-pl-8">
+        <div class="t-min-h-full t-flex t-items-stretch t-bg-base-lightest t-p-4">
+          <cart class="t-bg-white t-w-full t-p-4" v-if="!isMobile" />
         </div>
       </div>
     </div>
-    <thank-you-page v-show="isThankYouPage" />
   </div>
 </template>
 
 <script>
-import Checkout from '@vue-storefront/core/pages/Checkout'
+import { mapGetters } from 'vuex'
 
-import PersonalDetails from 'theme/components/core/blocks/Checkout/PersonalDetails'
-import Shipping from 'theme/components/core/blocks/Checkout/Shipping'
-import Payment from 'theme/components/core/blocks/Checkout/Payment'
-import OrderReview from 'theme/components/core/blocks/Checkout/OrderReview'
-import CartSummary from 'theme/components/core/blocks/Checkout/CartSummary'
-import ThankYouPage from 'theme/components/core/blocks/Checkout/ThankYouPage'
-import { registerModule } from '@vue-storefront/core/lib/modules'
-import { OrderModule } from '@vue-storefront/core/modules/order'
+import Checkout from 'icmaa-checkout/pages/Checkout'
+import Logo from 'theme/components/core/blocks/Header/Logo'
+import Step from 'theme/components/core/blocks/Checkout/Step'
+import Cart from 'theme/components/core/blocks/Checkout/Cart'
+import MaterialIcon from 'theme/components/core/blocks/MaterialIcon'
+
+const PersonalDetails = () => import(/* webpackChunkName: "vsf-checkout-personal-details" */ 'theme/components/core/blocks/Checkout/PersonalDetails')
+const Addresses = () => import(/* webpackChunkName: "vsf-checkout-addresses" */ 'theme/components/core/blocks/Checkout/Addresses')
+const Shipping = () => import(/* webpackChunkName: "vsf-checkout-shipping" */ 'theme/components/core/blocks/Checkout/Shipping')
+const Payment = () => import(/* webpackChunkName: "vsf-checkout-payment" */ 'theme/components/core/blocks/Checkout/Payment')
+const Review = () => import(/* webpackChunkName: "vsf-checkout-review" */ 'theme/components/core/blocks/Checkout/Review')
 
 export default {
+  name: 'Checkout',
   components: {
-    PersonalDetails,
-    Shipping,
-    Payment,
-    OrderReview,
-    CartSummary,
-    ThankYouPage
+    Logo,
+    Step,
+    Cart,
+    MaterialIcon
   },
-  mixins: [Checkout],
-  beforeCreate () {
-    registerModule(OrderModule)
+  mixins: [ Checkout ],
+  computed: {
+    ...mapGetters({
+      isLoggedIn: 'user/isLoggedIn',
+      viewport: 'ui/getViewport'
+    }),
+    steps () {
+      return [
+        {
+          name: 'personal',
+          title: this.isLoggedIn ? 'Personal Details' : 'Sign-in',
+          component: PersonalDetails
+        },
+        {
+          name: 'addresses',
+          title: 'Address',
+          component: Addresses
+        },
+        {
+          name: 'shipping',
+          title: 'Shipping',
+          component: Shipping
+        },
+        {
+          name: 'payment',
+          title: 'Payment',
+          component: Payment
+        },
+        {
+          name: 'review',
+          title: 'Order Review',
+          component: Review
+        }
+      ].map(step => Object.assign(step, this.sections[step.name]))
+    },
+    isMobile () {
+      return ['xs', 'sm', 'md'].includes(this.viewport)
+    }
   },
   methods: {
     notifyEmptyCart () {
@@ -66,118 +116,17 @@ export default {
         message: chp.name + this.$t(' is out of stock!'),
         action1: { label: this.$t('OK') }
       })
-    },
-    notifyNotAvailable () {
-      this.$store.dispatch('notification/spawnNotification', {
-        type: 'error',
-        message: this.$t('Some of the ordered products are not available!'),
-        action1: { label: this.$t('OK') }
-      })
-    },
-    notifyStockCheck () {
-      this.$store.dispatch('notification/spawnNotification', {
-        type: 'warning',
-        message: this.$t('Stock check in progress, please wait while available stock quantities are checked'),
-        action1: { label: this.$t('OK') }
-      })
-    },
-    notifyNoConnection () {
-      this.$store.dispatch('notification/spawnNotification', {
-        type: 'warning',
-        message: this.$t('There is no Internet connection. You can still place your order. We will notify you if any of ordered products is not available because we cannot check it right now.'),
-        action1: { label: this.$t('OK') }
-      })
     }
   }
 }
 </script>
 
 <style lang="scss">
-  @import '~theme/css/base/global_vars';
 
-  #checkout {
-    .number-circle {
-      width: 35px;
-      height: 35px;
-
-      @media (max-width: 768px) {
-        width: 25px;
-        height: 25px;
-        line-height: 25px;
-      }
-    }
-    .radioStyled {
-      display: block;
-      position: relative;
-      padding-left: 35px;
-      margin-bottom: 12px;
-      cursor: pointer;
-      font-size: 16px;
-      line-height: 30px;
-      -webkit-user-select: none;
-      -moz-user-select: none;
-      -ms-user-select: none;
-      user-select: none;
-
-      input {
-        position: absolute;
-        opacity: 0;
-        cursor: pointer;
-      }
-
-      .checkmark {
-        position: absolute;
-        top: 0;
-        left: 0;
-        height: 25px;
-        width: 25px;
-        border-radius: 50%;
-        border: 1px solid $color-basetone;
-
-        &:after {
-          content: "";
-          position: absolute;
-          display: none;
-          top: 3px;
-          left: 3px;
-          width: 19px;
-          height: 19px;
-          border-radius: 50%;
-          background: $color-basetone;
-        }
-      }
-
-      input:checked ~ .checkmark:after {
-        display: block;
-      }
-    }
+@media (max-width: 400px) {
+  h1 > .title {
+    @apply t-hidden;
   }
+}
 
-  .line {
-    &:after {
-      content: '';
-      display: block;
-      position: absolute;
-      top: 0;
-      left: 37px;
-      z-index: -1;
-      width: 1px;
-      height: 100%;
-      background-color: $color-basetone;
-
-      @media (max-width: 768px) {
-        display: none;
-      }
-    }
-  }
-
-  .checkout-title {
-    @media (max-width: 767px) {
-      margin-bottom: 25px;
-
-      h1 {
-        font-size: 36px;
-      }
-    }
-  }
 </style>

@@ -52,6 +52,16 @@ const {
   executor: facebookLoginClickedExecutor
 } = createListenerHook<{ status: string }>()
 
+const {
+  hook: checkoutVisitedHook,
+  executor: checkoutVisitedExecutor
+} = createListenerHook()
+
+const {
+  hook: checkoutStepHook,
+  executor: checkoutStepExecutor
+} = createListenerHook<{ step: string, data?: any }>()
+
 const IcmaaGoogleTagManagerExecutors = {
   afterEach: afterEachExecutor,
   pageNotFound: pageNotFoundExecutor,
@@ -62,7 +72,9 @@ const IcmaaGoogleTagManagerExecutors = {
   onProductListFilter: onProductListFilterExecutor,
   removeProductFromCart: removeProductFromCartExecutor,
   wishlistInteraction: wishlistInteractionExecutor,
-  facebookLoginClicked: facebookLoginClickedExecutor
+  facebookLoginClicked: facebookLoginClickedExecutor,
+  checkoutVisited: checkoutVisitedExecutor,
+  checkoutStep: checkoutStepExecutor
 }
 
 const IcmaaGoogleTagManager = {
@@ -75,7 +87,9 @@ const IcmaaGoogleTagManager = {
   onProductListFilter: onProductListFilterHook,
   removeProductFromCart: removeProductFromCartHook,
   wishlistInteraction: wishlistInteractionHook,
-  facebookLoginClicked: facebookLoginClickedHook
+  facebookLoginClicked: facebookLoginClickedHook,
+  checkoutVisited: checkoutVisitedHook,
+  checkoutStep: checkoutStepHook
 }
 
 export {

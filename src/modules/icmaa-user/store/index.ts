@@ -9,6 +9,7 @@ import merge from 'lodash-es/merge'
 
 export const ExtendedUserStore: Module<UserState, any> = {
   state: merge(userStore.state, {
+    orders_history: [],
     session_started: null,
     sessionData: {}
   }),

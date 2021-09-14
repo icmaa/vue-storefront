@@ -26,7 +26,7 @@ import { mapGetters } from 'vuex'
 import i18n from '@vue-storefront/i18n'
 
 import GoogleCustomerReview from 'icmaa-google-tag-manager/components/GoogleCustomerReview'
-import CheckoutSuccessGtmMixin from 'icmaa-google-tag-manager/mixins/checkoutSuccessGtm'
+import CheckoutSuccessGtmMixin from 'icmaa-google-tag-manager/mixins/checkoutSuccessGtmExternalCheckout'
 
 export default {
   name: 'ExternalCheckoutSuccess',
@@ -50,8 +50,7 @@ export default {
   methods: {
     async clearCart () {
       if (this.cartIsNotEmpty) {
-        await this.$store.dispatch('cart/clear', {})
-        await this.$store.dispatch('cart/sync', { forceClientState: true })
+        await this.$store.dispatch('cart/clear', { sync: true })
       }
     }
   },

@@ -1,8 +1,8 @@
 <template>
   <modal name="modal-newsletter" :title="$t('Newsletter')" :width="400">
-    <form @submit.prevent="subscribe(onSuccesfulSubmission)" novalidate v-if="!isSubscribed">
+    <form @submit.prevent="subscribe(onSuccesfulSubmission)" novalidate v-if="!isSubscribedToNewsletter">
       <p class="t-text-sm t-mb-4">
-        {{ $t('Sign up to our newsletter and receive a coupon for {voucher_value} off!', { voucher_value }) }}
+        {{ $t('Sign up to our newsletter and receive a coupon for {voucher_value} off!', { voucher_value: newsletterVoucherValue }) }}
       </p>
       <base-input
         focus
@@ -14,7 +14,7 @@
         :validations="[
           {
             condition: $v.email.$error && !$v.email.required,
-            text: $t('Field is required.')
+            text: $t('Field is required')
           },
           {
             condition: !$v.email.email && $v.email.$error,
@@ -42,14 +42,14 @@
 import i18n from '@vue-storefront/i18n'
 import { required, email } from 'vuelidate/lib/validators'
 
+import NewsletterMixin from 'theme/mixins/newsletterMixin'
 import Modal from 'theme/components/core/Modal'
 import BaseInput from 'theme/components/core/blocks/Form/BaseInput'
 import ButtonComponent from 'theme/components/core/blocks/Button'
-import { mapGetters } from 'vuex'
-import { price } from '@vue-storefront/core/filters/price'
 
 export default {
   name: 'NewsletterPopup',
+  mixins: [ NewsletterMixin ],
   components: {
     Modal,
     BaseInput,
@@ -61,19 +61,6 @@ export default {
       user: {
         isSubscribed: false
       }
-    }
-  },
-  computed: {
-    ...mapGetters({
-      isSubscribed: 'newsletter/isSubscribed',
-      storeConfig: 'icmaaConfig/getCurrentStoreConfig'
-    }),
-    voucher_value () {
-      const config = this.storeConfig
-      if (config.newsletter.voucher_value) {
-        return config.newsletter.voucher_value
-      }
-      return price(5)
     }
   },
   validations: {

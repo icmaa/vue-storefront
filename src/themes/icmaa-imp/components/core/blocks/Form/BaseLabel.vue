@@ -1,35 +1,20 @@
 <template>
-  <label :for="formId" class="t-text-sm" :class="{ 't-block t-mb-2': isHorizontal, '': isVertical }">
-    {{ labelText }}
+  <label
+    :for="id"
+    @click="$emit('click', $event)"
+    class="t-w-full t-flex t-self-center t-mb-1 t-px-1 t-text-base-tone t-text-sm"
+  >
+    <slot />
   </label>
 </template>
 
 <script>
 export default {
-  name: 'BaseLabel',
+  name: 'FlaotingLabel',
   props: {
-    formId: {
+    id: {
       type: String,
       required: true
-    },
-    labelText: {
-      type: String,
-      required: true
-    },
-    direction: {
-      type: String,
-      default: 'horizontal',
-      validation: (value) => {
-        return ['horizontal', 'vertical'].includes(value)
-      }
-    }
-  },
-  computed: {
-    isHorizontal () {
-      return this.direction === 'horizontal'
-    },
-    isVertical () {
-      return this.direction === 'vertical'
     }
   }
 }

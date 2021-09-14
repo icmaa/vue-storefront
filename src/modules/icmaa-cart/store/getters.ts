@@ -8,8 +8,12 @@ const getters: GetterTree<CartState, RootState> = {
   /**
    * We are now adding the cart-id-hash to the items, this way we don't need the server-cart-token anymore.
    * The server-cart-token won't work as unique cart-hash anymore because it changes on each `cart/pull`.
+   * We will use the login status in this method so we notice that somebody logged in. We can't just use
+   * the user-token instead, because this will lead into the same problem. Without a login-status the cart won't
+   * be synced again after the user has logged in because `isCartHashChanged` won't return true and the `sync`
+   * action (called by the `connect` action) is aborted.
    */
-  getCurrentCartHash: state => calcItemsHmac(state.cartItems, ''),
+  getCurrentCartHash: (state, getters, RootState, rootGetters) => calcItemsHmac(state.cartItems, rootGetters['user/isLoggedIn']),
   getCoupon: ({ platformTotals }, getters): AppliedCoupon | false => {
     if (!platformTotals) {
       return false

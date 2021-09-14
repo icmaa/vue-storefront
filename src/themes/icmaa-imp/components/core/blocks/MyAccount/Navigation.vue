@@ -1,5 +1,5 @@
 <template>
-  <nav data-test-id="MyAccountNavigation">
+  <nav data-test-id="MyAccountNavigation" class="t-max-w-full">
     <div class="t-flex t-flex-wrap t-bg-white">
       <div class="t-flex t-flex-expand t-px-6 t-py-6">
         <material-icon icon="account_circle" size="xl" class="t-mr-3 t-text-primary" />

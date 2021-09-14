@@ -74,7 +74,7 @@ export default {
   },
   methods: {
     submit (success, failure) {
-      this.$bus.$emit('notification-progress-start', i18n.t('Please wait'))
+      this.$store.dispatch('ui/loader', { message: i18n.t('Please wait') })
 
       const targetAddress = icmaa.environment !== 'production'
         ? mailer.contactAddress : this.storeConfig.mailer.contactAddress || mailer.contactAddress
@@ -90,7 +90,7 @@ export default {
 
       this.$store.dispatch('mailer/sendEmail', mail)
         .then(async (res) => {
-          this.$bus.$emit('notification-progress-stop')
+          this.$store.dispatch('ui/loader', false)
 
           if (res.ok) {
             this.onSuccess()
@@ -101,7 +101,7 @@ export default {
           }
         })
         .catch(() => {
-          this.$bus.$emit('notification-progress-stop')
+          this.$store.dispatch('ui/loader', false)
           this.onError(i18n.t('Could not send an email. Please try again later.'))
         })
     },

@@ -16,11 +16,9 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import CurrentPage from 'theme/mixins/currentPage'
 
 export default {
   name: 'MainFooter',
-  mixins: [ CurrentPage ],
   computed: {
     ...mapGetters('icmaaCmsBlock', ['getJsonBlockByIdentifier']),
     footer () {
