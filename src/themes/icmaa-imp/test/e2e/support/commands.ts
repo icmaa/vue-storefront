@@ -37,13 +37,17 @@ Cypress.Commands.add('getFaker', () => {
 
 Cypress.Commands.add('createCustomerWithFaker', () => {
   cy.getFaker().then(faker => {
-    cy.wrap({
+    const data = {
       firstName: faker.name.firstName(),
       lastName: faker.name.lastName(),
       email: getIcmaaEmail(),
       password: faker.internet.password(10, true),
       dob: getBirthday()
-    }).as('customer')
+    }
+
+    Object.assign(faker, data)
+
+    cy.wrap(faker).as('customer')
   })
 })
 
@@ -90,8 +94,8 @@ Cypress.Commands.add('checkImage', { prevSubject: 'element' }, (subject) => {
     .and($img => expect($img[0].naturalWidth).to.be.greaterThan(0))
 })
 
-Cypress.Commands.add('getByTestId', { prevSubject: 'optional' }, (subject, id) => {
-  cy.get(`[data-test-id="${id}"]`)
+Cypress.Commands.add('getByTestId', { prevSubject: 'optional' }, (subject, id, options) => {
+  cy.get(`[data-test-id="${id}"]`, options)
 })
 
 Cypress.Commands.add('findByTestId', { prevSubject: 'element' }, (subject, id) => {
@@ -107,11 +111,16 @@ Cypress.Commands.add('getFromLocalStorage', (key) => {
 
 Cypress.Commands.overwrite('visit', (originalFn, url, options?) => {
   let storeCode: string
-  if (options && options.hasOwnProperty('storeCode')) {
+  if (options?.hasOwnProperty('storeCode')) {
     storeCode = options.storeCode
+    cy.setStoreCode(storeCode)
   }
 
-  cy.setStoreCode(storeCode)
+  cy.getStoreCode().then(hasStoreCode => {
+    if (!hasStoreCode) {
+      cy.setStoreCode(storeCode)
+    }
+  })
 
   if (options && options.hasOwnProperty('returningVisitor')) {
     cy.hideLanguageModal()
@@ -148,7 +157,7 @@ Cypress.Commands.add('visitCategoryPage', (options?) => {
 })
 
 Cypress.Commands.add('visitProductDetailPage', (options?) => {
-  if (options && options.categoryUrl) {
+  if (options?.categoryUrl) {
     cy.wrap<string>(options.categoryUrl)
       .as('categoryEntryPointUrl')
     cy.visitAsRecurringUser(options.categoryUrl, _.omit(options, ['categoryUrl']))
@@ -172,9 +181,9 @@ Cypress.Commands.add('getStoreCode', () => {
   cy.get<string>('@storeCode')
 })
 
-Cypress.Commands.add('setStoreCode', (storeCode?) => {
+Cypress.Commands.add('setStoreCode', (storeCode?: string | boolean) => {
   const storeCodes: string[] = Settings.availableStoreViews
-  if (!storeCode || !storeCodes.includes(storeCode)) {
+  if (!storeCode || !storeCodes.includes(storeCode as string)) {
     storeCode = storeCodes[Math.floor(Math.random() * (storeCodes.length - 1))]
   }
 
@@ -260,10 +269,11 @@ Cypress.Commands.add('hideLanguageModal', () => {
   })
 })
 
-Cypress.Commands.add('waitForLoader', () => {
+Cypress.Commands.add('waitForLoader', timeout => {
+  cy.wrap(`Wait for ${timeout / 1000}s until the loader disappears`).debug()
   cy.getByTestId('Loader')
     .should('be.visible')
-  cy.getByTestId('Loader')
+  cy.getByTestId('Loader', { timeout })
     .should('not.exist')
 })
 
@@ -346,9 +356,9 @@ Cypress.Commands.add('checkAvailabilityOfCurrentProduct', () => {
   })
 })
 
-Cypress.Commands.add('addRandomProductToCart', (options?: { tries: number }, count: number = 1) => {
-  options = Object.assign({ tries: 3 }, options)
-  let { tries } = options
+Cypress.Commands.add('addRandomProductToCart', (options?: { tries: number, enterCheckout?: boolean }, count: number = 1) => {
+  options = Object.assign({ tries: 3, enterCheckout: false }, options)
+  let { tries, enterCheckout } = options
 
   if (count > tries) {
     expect(true).to.be.equal(false, 'No buyable products found')
@@ -362,14 +372,14 @@ Cypress.Commands.add('addRandomProductToCart', (options?: { tries: number }, cou
   cy.get<boolean>('@availability')
     .then(available => {
       if (!available) {
-        cy.addRandomProductToCart({ tries }, count + 1)
+        cy.addRandomProductToCart({ tries, enterCheckout }, count + 1)
       } else {
-        cy.addCurrentProductToCart(false)
+        cy.addCurrentProductToCart(false, enterCheckout)
       }
     })
 })
 
-Cypress.Commands.add('addCurrentProductToCart', (checkAvailability = true) => {
+Cypress.Commands.add('addCurrentProductToCart', (checkAvailability = true, enterCheckout = false) => {
   if (checkAvailability) {
     cy.checkAvailabilityOfCurrentProduct()
   }
@@ -389,17 +399,138 @@ Cypress.Commands.add('addCurrentProductToCart', (checkAvailability = true) => {
           })
           .click()
 
-        cy.get('@sidebar').should('not.exist')
-
         cy.get<string>('@optionLabel').then(label => {
           cy.getByTestId('AddToCartSize').contains(label)
         })
-      }
 
-      cy.getByTestId('AddToCart').click()
+        cy.get('@sidebar').findByTestId('AddToCart').click()
+        cy.get('@sidebar')
+          .should('not.be.visible')
+      } else {
+        cy.getByTestId('AddToCart')
+          .click()
+      }
     })
 
   cy.checkNotification('success')
+  cy.getByTestId('MicroCart')
+    .should('be.visible')
 
-  cy.getByTestId('Sidebar').should('be.visible')
+  if (enterCheckout) {
+    cy.getByTestId('MicroCart').findByTestId('GoToCheckout')
+      .should('be.visible')
+      .click()
+  }
+})
+
+Cypress.Commands.add('focusInput', { prevSubject: 'element' }, (subject, id, options) => {
+  cy.wrap(subject)
+    .find('input[name="' + id + '"]', options)
+    .focus()
+})
+
+Cypress.Commands.add('createCartAndGoToCheckout', (storeCode) => {
+  cy.visitAsRecurringUser('/', { storeCode })
+  cy.addRandomProductToCart({ enterCheckout: true })
+  cy.createCustomerWithFaker()
+})
+
+Cypress.Commands.add('checkoutGoToNextStep', { prevSubject: 'element' }, (subject, waitForLoader = true) => {
+  cy.wrap(subject)
+    .findByTestId('NextStepButton').click()
+
+  if (waitForLoader) {
+    cy.waitForLoader()
+  }
+})
+
+Cypress.Commands.add('checkoutFillPersonalDetails', (createNewAccount: boolean = false) => {
+  cy.getCustomer().then(customer => {
+    cy.get('#checkout .step-personal .personal-details').as('personal-details')
+
+    cy.get('@personal-details').focusInput('email').type(customer.email)
+    cy.get('@personal-details').focusInput('first-name').type(customer.firstName)
+    cy.get('@personal-details').focusInput('last-name').type(customer.lastName)
+
+    if (createNewAccount) {
+      cy.get('@personal-details').findByTestId('CreateAccountCheckbox')
+        .should('be.visible')
+        .click()
+
+      cy.get('@personal-details').find('select[name="gender"]')
+        .should('be.visible')
+        .selectRandomOption(true)
+
+      cy.get('@personal-details').focusInput('dob').type(customer.dob)
+      cy.get('@personal-details').focusInput('password').type(customer.password)
+      cy.get('@personal-details').focusInput('password-confirm').type(customer.password)
+    }
+
+    cy.get('@personal-details').checkoutGoToNextStep(false)
+  })
+})
+
+Cypress.Commands.add('checkoutFillAddress', () => {
+  cy.get('#checkout .step-addresses .addresses').as('addresses')
+  cy.get('@addresses').get('.address-shipping')
+    .should('be.visible')
+    .checkoutFillNewAddressForm()
+
+  cy.get('@addresses').checkoutGoToNextStep()
+})
+
+Cypress.Commands.add('checkoutFillNewAddressForm', { prevSubject: 'element' }, (subject) => {
+  cy.wrap(subject).as('address')
+
+  cy.getCustomer().then(customer => {
+    cy.get('@address').focusInput('street[0]').type(customer.address.streetAddress())
+    cy.get('@address').focusInput('postcode').type(customer.address.zipCode())
+    cy.get('@address').focusInput('city').type(customer.address.city())
+
+    cy.getStoreCode().then(storeCode => {
+      if (storeCode === 'fr') {
+        cy.get('@address').focusInput('telephone').type(customer.phone.phoneNumber())
+      }
+    })
+  })
+})
+
+Cypress.Commands.add('checkoutFillShipping', () => {
+  cy.getStoreCode().then(storeCode => {
+    if (storeCode === 'de') {
+      cy.get('#checkout .step-shipping .shipping').as('shipping')
+      cy.get('@shipping').find('label[for="priorityHandling"]').randomlyClickElement()
+
+      cy.get('@shipping').checkoutGoToNextStep()
+    }
+  })
+})
+
+Cypress.Commands.add('checkoutFillPayment', (method, proceed = true) => {
+  cy.get('#checkout .step-payment .payment').as('payment')
+
+  cy.get('@payment').findByTestId(method + 'Checkbox').click()
+  cy.get('@payment').findByTestId(method + 'Form').should('be.visible')
+
+  if (proceed) {
+    cy.get('@payment').checkoutGoToNextStep()
+  }
+})
+
+Cypress.Commands.add('checkoutPlaceOrder', (isGateway = false) => {
+  cy.get('#checkout .step-review .order-review').as('review')
+
+  cy.get('@review').then(body => {
+    if (body.find('label[for="terms"]').length > 0) {
+      cy.get('label[for="terms"]').click(5, 5)
+    }
+  })
+
+  cy.get('@review').findByTestId('PlaceOrderButton').click()
+
+  cy.waitForLoader(30000)
+
+  if (!isGateway) {
+    cy.url().should('include', `checkout-success`)
+  }
 })

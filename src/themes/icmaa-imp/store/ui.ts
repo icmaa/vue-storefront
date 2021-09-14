@@ -9,7 +9,10 @@ export const uiStore = {
   state: {
     viewport: false,
     isTouchDevice: false,
-    loader: false,
+    loader: {
+      active: false,
+      message: false
+    },
     authElem: 'login',
     /** Sidebar and modal type states: */
     modals: {},
@@ -60,8 +63,9 @@ export const uiStore = {
     setOverlay (state, action: boolean) {
       state.overlay = action === true
     },
-    setLoader (state, action: boolean) {
-      state.loader = action === true
+    setLoader (state, { active = true, message }: { active: boolean, message?: string | boolean }) {
+      message = active === false ? false : message || false
+      state.loader = { active, message }
     },
     setAuthElem (state, action: boolean) {
       state.authElem = action
@@ -91,10 +95,10 @@ export const uiStore = {
        * @see https://tailwindcss.com/docs/breakpoints/#app
        */
       type viewport = [string, number]
-      const viewports: viewport[] = [ ['xs', 375], ['sm', 640], ['md', 768], ['lg', 1024], ['xl', 1280] ]
-      let viewport: viewport = viewports.find(vp => window.matchMedia(`(max-width: ${vp[1]}px)`).matches)
+      const viewports: viewport[] = [ ['xl', 1280], ['lg', 1024], ['md', 768], ['sm', 640], ['xs', 375] ]
+      let viewport: viewport = viewports.find(vp => window.matchMedia(`(min-width: ${vp[1]}px)`).matches)
 
-      /** If no viewport is found because its the largest viewport */
+      /** If no viewport is found because its the smallest viewport */
       if (!viewport) {
         viewport = viewports.slice(-1)[0]
       }
@@ -112,6 +116,13 @@ export const uiStore = {
     closeAll ({ commit }) {
       commit('setCloseAll')
       clearAllBodyScrollLocks()
+    },
+    loader ({ commit }, payload) {
+      if (typeof payload === 'boolean') {
+        payload = { active: payload }
+      }
+
+      commit('setLoader', payload)
     },
     setSidebar ({ commit }, { key, status }) {
       commit('toggleSidebar', { key, action: status })

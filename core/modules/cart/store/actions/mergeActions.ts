@@ -181,7 +181,7 @@ const mergeActions = {
     if (dryRun) return
 
     if (getters.isTotalsSyncRequired && clientItems.length > 0) {
-      await dispatch('syncTotals')
+      await dispatch('syncTotals', {})
     }
 
     commit(types.CART_SET_ITEMS_HASH, getters.getCurrentCartHash)

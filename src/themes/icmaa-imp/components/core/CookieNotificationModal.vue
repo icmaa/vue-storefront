@@ -73,10 +73,8 @@
 <script>
 import Modal from 'theme/components/core/Modal.vue'
 import ButtonComponent from 'theme/components/core/blocks/Button'
-import EventBus from '@vue-storefront/core/compatibility/plugins/event-bus'
 import MaterialIcon from 'theme/components/core/blocks/MaterialIcon'
 import BaseCheckbox from 'theme/components/core/blocks/Form/BaseCheckbox'
-import { claimCollection } from 'theme/store/claims'
 
 export default {
   name: 'CookieNotificationModal',

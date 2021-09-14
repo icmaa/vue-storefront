@@ -3,7 +3,6 @@ import VueGtm from 'vue-gtm'
 import { mapGetters } from 'vuex'
 import { currentStoreView } from '@vue-storefront/core/lib/multistore'
 import { googleTagManager } from 'config'
-import { getCookieHostname } from 'icmaa-external-checkout/helper'
 import { formatValue } from 'icmaa-config/helpers/price'
 import { toDate } from 'icmaa-config/helpers/datetime'
 import omit from 'lodash-es/omit'
@@ -13,13 +12,12 @@ import round from 'lodash-es/round'
 export default {
   computed: {
     ...mapGetters({
-      ordersHistory: 'user/getOrdersHistory',
+      orderHistory: 'user/getOrdersHistory',
       isGtmEnabled: 'icmaaGoogleTagManager/enabled',
-      getGTMProductDTO: 'icmaaGoogleTagManager/getProductDTO',
-      gtmLastOrderId: 'icmaaGoogleTagManager/getLastOrderId'
+      getGTMProductDTO: 'icmaaGoogleTagManager/getProductDTO'
     }),
     order () {
-      return this.ordersHistory.length > 0 ? this.ordersHistory[0] : false
+      return this.orderHistory && this.orderHistory.length > 0 ? this.orderHistory[0] : false
     },
     orderId () {
       return this.order.increment_id || this.order.id ? (this.order.increment_id || this.order.id).toString() : null
@@ -42,11 +40,11 @@ export default {
     orderShippingAmount () {
       return formatValue(this.order.shipping_amount, 'en-US')
     },
-    orderShippingDescription () {
-      return this.order.shipping_description
+    shippingMethod () {
+      return this.order.shipping_method
     },
     paymentMethod () {
-      return this.order.payment.additional_information[0]
+      return this.order.payment.method
     },
     couponCode () {
       return this.order.coupon_code ? String(this.order.coupon_code) : null
@@ -57,8 +55,8 @@ export default {
     singleOrderItems () {
       const itemAttributeMap = ['base_price', 'base_tax_amount']
       return this.order.items
-        .map(i => {
-          let product = this.order.products.find(p => p.sku === i.sku || (p.configurable_children && p.configurable_children.some(c => c.sku === i.sku))) || {}
+        ?.map(i => {
+          let product = this.order.products?.find(p => p.sku === i.sku || (p.configurable_children?.some(c => c.sku === i.sku))) || {}
           product = Object.assign(product, pick(i, itemAttributeMap))
           const productDTO = this.getGTMProductDTO(product)
           const additionalData = { sku: i.sku, quantity: round(i.qty_ordered), id: String(productDTO.id).toString() }
@@ -68,16 +66,9 @@ export default {
     }
   },
   methods: {
-    isRecentOrder (): boolean {
-      const cookie = Vue.$cookies.get('vsf_token_recentorder')
-      return !!cookie && cookie === '1'
-    },
-    removeRecentOrderCookie (): void {
-      Vue.$cookies.remove('vsf_token_recentorder', undefined, getCookieHostname())
-    },
     checkoutSuccessGtm () {
-      if (!this.isGtmEnabled || !this.order || this.gtmLastOrderId === this.orderId || !this.isRecentOrder()) {
-        this.removeRecentOrderCookie()
+      if (!this.isGtmEnabled || !this.order || !this.isRecentOrder()) {
+        this.removeRecentOrder()
         return
       }
 
@@ -99,7 +90,7 @@ export default {
               revenue: this.orderGrandTotal,
               tax: this.orderTaxAmount,
               shipping: this.orderShippingAmount,
-              shipping_method: this.orderShippingDescription,
+              shipping_method: this.shippingMethod,
               payment_method: this.paymentMethod,
               coupon: this.couponCode,
               couponrule: this.couponCodeRule
@@ -109,9 +100,7 @@ export default {
         }
       })
 
-      this.$store.dispatch('icmaaGoogleTagManager/setLastOrderId', this.orderId)
-
-      this.removeRecentOrderCookie()
+      this.removeRecentOrder()
     }
   },
   async mounted () {
@@ -119,11 +108,5 @@ export default {
       .filter(a => a.type && a.type === 'attribute')
       .map(a => a.field)
     await this.$store.dispatch('attribute/list', { filterValues })
-  },
-  beforeMount () {
-    this.$bus.$on('icmaa-external-checkout-user-data-complete', this.checkoutSuccessGtm)
-  },
-  beforeDestroy () {
-    this.$bus.$off('icmaa-external-checkout-user-data-complete', this.checkoutSuccessGtm)
   }
 }

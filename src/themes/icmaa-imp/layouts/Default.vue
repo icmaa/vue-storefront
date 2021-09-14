@@ -2,7 +2,7 @@
   <div class="default-layout">
     <overlay v-if="overlayActive" />
     <loader />
-    <div id="viewport" class="w-100 relative">
+    <div id="viewport">
       <main-header />
       <no-ssr>
         <advice />
@@ -31,11 +31,10 @@
         <div class="t-clearfix" />
       </main>
       <main-footer />
+      <auth-modal />
       <notifications />
-      <sign-up />
       <cookie-notification />
       <offline-badge />
-      <order-confirmation :orders-data="ordersData" v-if="loadOrderConfirmation" />
     </div>
     <vue-progress-bar />
   </div>
@@ -50,7 +49,7 @@ import MainFooter from 'theme/components/core/blocks/Footer/Footer'
 import Overlay from 'theme/components/core/Overlay'
 import Loader from 'theme/components/core/Loader'
 import Notifications from 'theme/components/core/blocks/Notification/Notifications'
-import SignUp from 'theme/components/core/blocks/Auth/SignUp'
+import AuthModal from 'theme/components/core/blocks/Auth/Modal'
 import CookieNotification from 'theme/components/core/CookieNotification'
 import OfflineBadge from 'theme/components/core/OfflineBadge'
 import { isServer } from '@vue-storefront/core/helpers'
@@ -61,20 +60,17 @@ const NavigationSidebar = () => import(/* webpackPreload: true */ /* webpackChun
 const Microcart = () => import(/* webpackPreload: true */ /* webpackChunkName: "vsf-microcart" */ 'theme/components/core/blocks/Microcart/Microcart')
 const Wishlist = () => import(/* webpackPreload: true */ /* webpackChunkName: "vsf-wishlist" */ 'theme/components/core/blocks/Wishlist/Wishlist')
 const SearchPanel = () => import(/* webpackChunkName: "vsf-search-panel" */ 'theme/components/core/blocks/SearchPanel/SearchPanel')
-const OrderConfirmation = () => import(/* webpackChunkName: "vsf-order-confirmation" */ 'theme/components/core/blocks/Checkout/OrderConfirmation')
 
 export default {
   data () {
     return {
-      loadOrderConfirmation: false,
-      ordersData: [],
       Microcart,
       Wishlist,
       SearchPanel,
       NavigationSidebar
     }
   },
-  mixins: [viewportMixin],
+  mixins: [ viewportMixin ],
   computed: {
     ...mapState({
       overlayActive: state => state.ui.overlay
@@ -82,11 +78,6 @@ export default {
   },
   methods: {
     ...mapGetters({ getMetaData: 'icmaaMeta/getData' }),
-    onOrderConfirmation (payload) {
-      this.loadOrderConfirmation = true
-      this.ordersData = payload
-      this.$store.dispatch('ui/showModal', 'modal-order-confirmation')
-    },
     fetchMetaData () {
       return this.$store.dispatch('icmaaMeta/load')
     },
@@ -110,13 +101,9 @@ export default {
     this.$router.afterEach((to, from) => {
       this.$Progress.finish()
     })
-    this.$bus.$on('offline-order-confirmation', this.onOrderConfirmation)
   },
   mounted () {
     this.fetchCmsData()
-  },
-  beforeDestroy () {
-    this.$bus.$off('offline-order-confirmation', this.onOrderConfirmation)
   },
   metaInfo () {
     let metaData = this.getMetaData()
@@ -141,14 +128,12 @@ export default {
     MainHeader,
     Advice,
     MainFooter,
-    NavigationSidebar, // eslint-disable-line vue/no-unused-components
     Overlay,
     Loader,
     Notifications,
-    SignUp,
+    AuthModal,
     CookieNotification,
     OfflineBadge,
-    OrderConfirmation,
     AsyncSidebar,
     'no-ssr': NoSSR
   }

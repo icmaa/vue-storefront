@@ -5,6 +5,7 @@
         <input type="hidden" name="cluster" :value="cluster">
         <base-input
           type="email"
+          id="email"
           name="email"
           autocomplete="email"
           v-model="email"
@@ -13,7 +14,7 @@
           :validations="[
             {
               condition: !$v.email.required && $v.email.$error,
-              text: $t('Field is required.')
+              text: $t('Field is required')
             },
             {
               condition: !$v.email.email && $v.email.$error,
@@ -23,6 +24,7 @@
           class="t-w-full t-px-2 t-mb-4"
         />
         <base-input
+          id="first-name"
           name="first-name"
           autocomplete="given-name"
           v-model="firstName"
@@ -30,34 +32,36 @@
           :validations="[
             {
               condition: !$v.firstName.required && $v.firstName.$error,
-              text: $t('Field is required.')
+              text: $t('Field is required')
             }
           ]"
           class="t-w-full sm:t-w-1/2 t-px-2 t-mb-4"
         />
         <base-input
+          id="last-name"
           name="last-name"
           autocomplete="family-name"
           v-model="lastName"
           :placeholder="$t('Last name') + ' *'"
           :validations="[{
             condition: !$v.lastName.required && $v.lastName.$error,
-            text: $t('Field is required.')
+            text: $t('Field is required')
           }]"
           class="t-w-full sm:t-w-1/2 t-px-2 t-mb-4"
         />
-        <base-select
+        <gender-select
+          id="gender"
           name="gender"
           v-model="gender"
-          :options="genderOptions"
           :initial-option-text="$t('Gender') + ' *'"
           :validations="[{
             condition: !$v.gender.required && $v.gender.$error,
-            text: $t('Field is required.')
+            text: $t('Field is required')
           }]"
           class="t-w-full sm:t-w-1/2 t-px-2 t-mb-4"
         />
         <base-input
+          id="dob"
           name="dob"
           autocomplete="bday"
           mask="date"
@@ -66,7 +70,7 @@
           :validations="[
             {
               condition: !$v.dob.required && $v.dob.$error,
-              text: $t('Field is required.')
+              text: $t('Field is required')
             },
             {
               condition: !$v.dob.date && $v.dob.$error,
@@ -77,6 +81,7 @@
         />
         <base-input
           type="password"
+          id="password"
           name="password"
           ref="password"
           autocomplete="new-password"
@@ -85,7 +90,7 @@
           :validations="[
             {
               condition: !$v.password.required && $v.password.$error,
-              text: $t('Field is required.')
+              text: $t('Field is required')
             },
             {
               condition: !$v.password.minLength && $v.password.$error,
@@ -96,6 +101,7 @@
         />
         <base-input
           type="password"
+          id="password-confirm"
           name="password-confirm"
           autocomplete="new-password"
           v-model="rPassword"
@@ -103,7 +109,7 @@
           :validations="[
             {
               condition: !$v.rPassword.required && $v.rPassword.$error,
-              text: $t('Field is required.')
+              text: $t('Field is required')
             },
             {
               condition: !$v.rPassword.sameAsPassword && $v.rPassword.$error,
@@ -154,10 +160,9 @@
 <script>
 import { mapGetters } from 'vuex'
 import i18n from '@vue-storefront/i18n'
-import GenderMixin from 'icmaa-user/mixins/gender'
 import ButtonComponent from 'theme/components/core/blocks/Button'
 import BaseInput from 'theme/components/core/blocks/Form/BaseInput'
-import BaseSelect from 'theme/components/core/blocks/Form/BaseSelect'
+import GenderSelect from 'theme/components/core/blocks/Form/GenderSelect'
 import BaseCheckbox from 'theme/components/core/blocks/Form/BaseCheckbox'
 import MaterialIcon from 'theme/components/core/blocks/MaterialIcon'
 import FacebookLoginButton from 'theme/components/core/blocks/Auth/FacebookLoginButton'
@@ -169,10 +174,9 @@ import { Logger } from '@vue-storefront/core/lib/logger'
 
 export default {
   name: 'Register',
-  mixins: [GenderMixin],
   components: {
     BaseInput,
-    BaseSelect,
+    GenderSelect,
     BaseCheckbox,
     ButtonComponent,
     MaterialIcon,
@@ -238,7 +242,7 @@ export default {
       this.$store.dispatch('ui/hideModal', 'modal-signup')
     },
     callRegister () {
-      this.$bus.$emit('notification-progress-start', i18n.t('Registering the account ...'))
+      this.$store.dispatch('ui/loader', { message: i18n.t('Registering the account ... ') })
 
       const formData = {
         email: this.email,
@@ -257,7 +261,7 @@ export default {
 
       this.$store.dispatch('user/register', formData).then((result) => {
         Logger.debug(result, 'user')()
-        this.$bus.$emit('notification-progress-stop')
+        this.$store.dispatch('ui/loader', false)
         if (result.code !== 200) {
           this.onFailure(result)
           // If error includes a word 'password', focus on a corresponding field
@@ -279,7 +283,7 @@ export default {
         }
 
         this.onFailure({ result: message })
-        this.$bus.$emit('notification-progress-stop')
+        this.$store.dispatch('ui/loader', false)
         Logger.error(err, 'user')()
       })
     },

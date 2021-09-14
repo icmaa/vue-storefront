@@ -45,9 +45,7 @@ const actions: ActionTree<ProductAlertState, RootState> = {
     let query = new SearchQuery()
     query.applyFilter({ key: 'configurable_children.id', value: { 'eq': productId } })
 
-    let { includeFields, excludeFields } = entities.productList
-    excludeFields = excludeFields.filter(f => f !== 'configurable_options')
-    includeFields.push('configurable_options.*')
+    const { includeFields, excludeFields } = entities.productList
 
     return dispatch('product/findProducts', { query, includeFields, excludeFields }, { root: true })
       .then(products => {

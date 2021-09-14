@@ -1,15 +1,21 @@
 <template>
   <div :class="{ 't-relative': validationsAsTooltip }">
-    <label v-if="hasLabel" :for="id" :class="{ 't-sr-only': hideLabel }" class="t-w-full t-flex t-self-center t-mb-1 t-px-1 t-text-base-tone t-text-sm">
+    <base-label v-if="hasLabel && !isFloating" :class="{ 't-sr-only': hideLabel }" :id="id || name">
       <slot>
-        {{ label }}
+        {{ label || placeholder }}
       </slot>
-    </label>
-    <div class="base-input t-relative t-flex t-flex-wrap">
+    </base-label>
+    <div class="base-input t-relative t-flex t-flex-wrap" :class="{ 'floating-label': isFloating }">
       <material-icon :icon="passTypeIcon" v-if="passIconActive" @click.native="togglePassType()" class="t-absolute t-flex t-self-center t-p-2 t-cursor-pointer t-text-base-lighter" :class="[`t-${iconPosition}-0`]" :aria-label="$t('Toggle password visibility')" :title="$t('Toggle password visibility')" />
       <input
-        class="t-w-full t-h-10 t-px-3 t-border t-rounded-sm t-appearance-none t-text-sm t-leading-tight placeholder:t-text-base-light"
-        :class="[ invalid ? 't-border-alert' : 't-border-base-light', { 't-pr-10': type === 'password' || (icon && iconPosition === 'right'), 't-pl-10': icon && iconPosition === 'left' } ]"
+        class="t-h-10 t-w-full t-px-3 t-border t-rounded-sm t-appearance-none t-text-sm t-leading-tigh placeholder:t-text-base-light"
+        :class="[
+          invalid ? 't-border-alert' : 't-border-base-light',
+          {
+            't-pr-10': type === 'password' || (icon && iconPosition === 'right'),
+            't-pl-10': icon && iconPosition === 'left'
+          }
+        ]"
         :placeholder="placeholder"
         :type="type === 'password' ? passType : type"
         :name="name || null"
@@ -18,6 +24,7 @@
         :value="value"
         :autofocus="autofocus"
         :disabled="disabled"
+        :maxlength="maxLength"
         :ref="name"
         v-mask="maskSettings"
         @input="$emit('input', $event.target.value)"
@@ -26,23 +33,28 @@
         @keyup.enter="$emit('keyup.enter', $event.target.value)"
         @keyup="$emit('keyup', $event)"
       >
+      <floating-label v-if="hasLabel && isFloating" :id="id || name" @click.prevent="setFocus">
+        <slot>
+          {{ label || placeholder }}
+        </slot>
+      </floating-label>
       <material-icon v-if="icon" :icon="icon" class="t-absolute t-flex t-self-center t-p-2" :class="[`t-${iconPosition}-0`]" />
     </div>
-    <ValidationMessages :validations="validations" :validations-as-tooltip="validationsAsTooltip" />
+    <validation-messages :validations="validations" :validations-as-tooltip="validationsAsTooltip" />
   </div>
 </template>
 
 <script>
-import ValidationMessages from './ValidationMessages'
+import InputMixin from 'theme/mixins/form/InputMixin'
 import MaterialIcon from 'theme/components/core/blocks/MaterialIcon'
 import { mask as maskDirective } from 'vue-the-mask'
 import { currentStoreView } from '@vue-storefront/core/lib/multistore'
 
 export default {
   name: 'BaseInput',
+  mixins: [ InputMixin ],
   components: {
-    MaterialIcon,
-    ValidationMessages
+    MaterialIcon
   },
   directives: {
     /**
@@ -64,36 +76,9 @@ export default {
     }
   },
   props: {
-    label: {
-      type: [String, Boolean],
-      default: false
-    },
-    hideLabel: {
-      type: [Boolean],
-      default: false
-    },
     type: {
       type: String,
       default: 'text'
-    },
-    value: {
-      type: [String, Number],
-      default: ''
-    },
-    id: {
-      type: String,
-      required: false,
-      default: ''
-    },
-    name: {
-      type: String,
-      required: false,
-      default: ''
-    },
-    placeholder: {
-      type: String,
-      required: false,
-      default: ''
     },
     autocomplete: {
       type: String,
@@ -133,6 +118,10 @@ export default {
     mask: {
       type: [String, Object, Boolean],
       default: false
+    },
+    maxLength: {
+      type: [Number, String, Boolean],
+      default: false
     }
   },
   computed: {
@@ -144,9 +133,6 @@ export default {
         return currentStoreView().i18n.dateFormat.replace(/([DMY])/gm, '#')
       }
       return this.mask
-    },
-    hasLabel () {
-      return this.$slots.default || this.label
     }
   },
   methods: {
@@ -158,12 +144,6 @@ export default {
         this.passType = 'password'
         this.passTypeIcon = 'visibility_off'
       }
-    },
-    // setFocus sets focus on a field which has a value of 'ref' tag equal to fieldName
-    setFocus (fieldName) {
-      if (this.name === fieldName) {
-        this.$refs[this.name].focus()
-      }
     }
   },
   created () {
@@ -173,7 +153,7 @@ export default {
   },
   mounted () {
     if (this.focus) {
-      this.$refs[this.name].focus()
+      this.setFocus()
     }
   }
 }

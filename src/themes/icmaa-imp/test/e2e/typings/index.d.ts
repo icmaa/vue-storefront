@@ -8,7 +8,7 @@ declare namespace Cypress {
     categoryUrl: string
   }
 
-  interface Customer {
+  interface Customer extends Faker.FakerStatic {
     firstName: string,
     lastName: string,
     email: string,
@@ -74,7 +74,7 @@ declare namespace Cypress {
      * @example
      * cy.getByTestId('Modal')
      */
-    getByTestId(selector: string): Chainable<JQuery<any>>,
+    getByTestId(selector: string, options?: Partial<Loggable & Timeoutable & Withinable & Shadow>): Chainable<JQuery<any>>,
 
     /**
      * Find child items by data-test-id attribute.
@@ -174,7 +174,7 @@ declare namespace Cypress {
      * cy.setStoreCode()
      * cy.setStoreCode('de')
      */
-    setStoreCode(storeCode?: string): Chainable<Window>,
+    setStoreCode(storeCode?: string | boolean): Chainable<Window>,
 
     /**
      * Open sidebar.
@@ -253,8 +253,9 @@ declare namespace Cypress {
      *
      * @example
      * cy.waitForLoader()
+     * cy.waitForLoader(1000)
      */
-    waitForLoader(): Chainable<Window>,
+    waitForLoader(timeout?: number): Chainable<Window>,
 
     /**
      * Check for notification and its status and returns.
@@ -311,7 +312,7 @@ declare namespace Cypress {
      * cy.addRandomProductToCart()
      * cy.addRandomProductToCart({ tries: 10 })
      */
-    addRandomProductToCart(options?: { tries: number }, count?: number): Chainable<Window>,
+    addRandomProductToCart(options?: { tries?: number, enterCheckout?: boolean }, count?: number): Chainable<Window>,
 
     /**
      * Try to add the product you are currently viewing to cart.
@@ -321,6 +322,93 @@ declare namespace Cypress {
      * cy.addCurrentProductToCart()
      * cy.addCurrentProductToCart(false)
      */
-    addCurrentProductToCart(checkAvailability?: boolean): Chainable<Window>
+    addCurrentProductToCart(checkAvailability?: boolean, enterCheckout?: boolean): Chainable<Window>,
+
+    /**
+     * Create a new user-session, add a random product to cart and enter checkout.
+     * Adds alias `customer` for further use.
+     *
+     * @example
+     * cy.createACartAndGoToCheckout()
+     */
+    createCartAndGoToCheckout(storeCode?: string): Chainable<Window>,
+
+    /**
+     * Get input by name and focus it
+     * @param name Name of input-field to focus
+     *
+     * @example
+     * cy.focusInput('Modal')
+     */
+    focusInput<E extends Node = HTMLElement>(name: string, options?: Partial<Loggable & Timeoutable & Shadow>): Chainable<JQuery<E>>,
+
+    /**
+     * Click on next-step button in checkout
+     * Need @customer alias to be already defined
+     *
+     * @example
+     * cy.checkoutGoToNextStep()
+     * cy.checkoutGoToNextStep(false)
+     */
+    checkoutGoToNextStep<E extends Node = HTMLElement>(waitForLoader?: boolean): Chainable<JQuery<E>>,
+
+    /**
+     * Fills out personal-details step in checkout
+     * Need @customer alias to be already defined
+     *
+     * @example
+     * cy.checkoutFillPersonalDetails()
+     * cy.checkoutFillPersonalDetails(true)
+     */
+    checkoutFillPersonalDetails(createNewAccount?: boolean): Chainable<Window>,
+
+    /**
+     * Fills out a new address in address step in checkout
+     * Need @customer alias to be already defined
+     *
+     * @example
+     * cy.checkoutFillAddress()
+     */
+    checkoutFillAddress(): Chainable<Window>,
+
+    /**
+     * Fills out parent address from in address checkout step
+     * Need @customer alias to be already defined
+     *
+     * @example
+     * cy.checkoutFillNewAddressForm()
+     */
+    checkoutFillNewAddressForm<E extends Node = HTMLElement>(waitForLoader?: boolean): Chainable<JQuery<E>>,
+
+    /**
+     * Fills out shipping step in checkout and randomly selects priority-handling.
+     * By default all store-views only have one shipping-method and therefore prefill
+     * and "skip" this step. Only in the /de store you can select the prio-handling
+     * and an action will be required.
+     *
+     * @example
+     * cy.checkoutFillShipping()
+     */
+    checkoutFillShipping(): Chainable<Window>,
+
+    /**
+     * Fills out payment step in checkout.
+     * If `proceed` is true then it assumes that there are no inputs necessary and proceeds
+     * to the next step.
+     *
+     * @example
+     * cy.checkoutFillPayment('Bankpayment')
+     * cy.checkoutFillPayment('CheckoutcomApmGiropay', false)
+     */
+    checkoutFillPayment(method: string, proceed?: boolean): Chainable<Window>,
+
+    /**
+     * Ticks all necessary checkboxes inside the review-step and places the order.
+     *
+     * @example
+     * cy.checkoutPlaceOrder()
+     * cy.checkoutPlaceOrder(true)
+     */
+    checkoutPlaceOrder(isGateway?: boolean): Chainable<Window>
   }
 }

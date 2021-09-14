@@ -17,19 +17,7 @@
       <p class="t-text-primary t-leading-tight" :class="{ 't-mb-1': showPrice }" data-test-id="ProductName">
         {{ translatedProductName | htmlDecode }}
       </p>
-      <p v-if="showPrice">
-        <span class="price-original t-text-base-light t-line-through t-mr-2" v-if="product.special_price && parseFloat(product.original_price_incl_tax) > 0" data-test-id="originalPrice">
-          {{ price(product.original_price_incl_tax) }}
-        </span>
-        <span class="price-special t-text-sale t-font-bold" v-if="product.special_price && parseFloat(product.special_price) > 0" data-test-id="specialPrice">
-          <span v-if="hasMultiplePrices" v-text="$t('as low as')" />
-          {{ price(lowestPriceInclTax) }}
-        </span>
-        <span class="price t-text-base-dark t-font-bold" v-if="!product.special_price && parseFloat(product.price_incl_tax) > 0" data-test-id="price">
-          <span v-if="hasMultiplePrices" v-text="$t('as low as')" />
-          {{ price(lowestPriceInclTax) }}
-        </span>
-      </p>
+      <price v-if="showPrice" :product="product" />
     </router-link>
   </div>
 </template>
@@ -39,20 +27,21 @@ import i18n from '@vue-storefront/i18n'
 import MaterialIcon from 'theme/components/core/blocks/MaterialIcon'
 import ProductImage from 'theme/components/core/ProductImage'
 import WishlistButton from 'theme/components/core/blocks/Wishlist/WishlistButton'
-import PromoBanner from 'theme/components/core/blocks/Category/PromoBanner'
+import PromoBanner from 'theme/components/core/blocks/ProductTile/PromoBanner'
+import Price from 'theme/components/core/blocks/ProductTile/Price'
 import ProductTileMixin from 'theme/mixins/product/tileMixin'
 import ProductNameMixin from 'icmaa-catalog/mixins/ProductNameMixin'
-import ProductPriceMixin from 'theme/mixins/product/priceMixin'
 import ProductOptionsMixin from 'theme/mixins/product/optionsMixin'
 import ProductAddToCartMixin from 'theme/mixins/product/addtocartMixin'
 
 export default {
   name: 'ProductTile',
-  mixins: [ProductTileMixin, ProductNameMixin, ProductPriceMixin, ProductOptionsMixin, ProductAddToCartMixin],
+  mixins: [ ProductTileMixin, ProductNameMixin, ProductOptionsMixin, ProductAddToCartMixin ],
   components: {
     MaterialIcon,
     ProductImage,
     PromoBanner,
+    Price,
     WishlistButton
   },
   props: {
@@ -81,10 +70,10 @@ export default {
   methods: {
     async openAddToCartSidebar () {
       if (this.isSingleOptionProduct) {
-        this.$bus.$emit('notification-progress-start', i18n.t('Please wait'))
+        this.$store.dispatch('ui/loader', { message: i18n.t('Please wait') })
         this.addToCart(this.product)
-          .then(() => { this.$bus.$emit('notification-progress-stop') })
-          .catch(() => { this.$bus.$emit('notification-progress-stop') })
+          .then(() => { this.$store.dispatch('ui/loader', false) })
+          .catch(() => { this.$store.dispatch('ui/loader', false) })
 
         return
       }

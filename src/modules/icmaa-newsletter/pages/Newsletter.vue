@@ -2,7 +2,7 @@
   <div id="newsletter-page" :headline="content.headline">
     <div class="newsletter t-p-4 lg:t-p-8 lg:t-w-1/2 t-bg-white t-m-4 lg:t-my-8 lg:t-container lg:t-mx-auto" data-test-id="Newsletter">
       <h1 class="t-text-2xl t-text-primary t-leading-7">
-        {{ $t("Get the Impericon Newsletter & and get yourself a {voucher_value} gift.", { voucher_value }) }}
+        {{ $t("Get the Impericon Newsletter & and get yourself a {voucher_value} gift.", { voucher_value: newsletterVoucherValue }) }}
       </h1>
 
       <ul class="t-my-4 lg:t-my-8">
@@ -21,12 +21,12 @@
       </div>
       <p class="t-mt-4 lg:t-mt-2 t-text-base-light t-text-xs" v-html="content.hint" />
       <i18n path="Data is not given to third parties and unsubscription is possible at any time. {policy}" tag="p" class="t-text-xs t-text-base-light t-leading-none t-mb-4">
-      <template #policy>
-        <router-link :to="localizedRoute('/service-privacy')">
-          {{ $t('Privacy Policy') }}
-        </router-link>
-      </template>
-    </i18n>
+        <template #policy>
+          <router-link :to="localizedRoute('/service-privacy')">
+            {{ $t('Privacy Policy') }}
+          </router-link>
+        </template>
+      </i18n>
       <newsletter-popup v-if="loadNewsletterPopup" />
     </div>
   </div>
@@ -34,10 +34,9 @@
 
 <script>
 import Page from 'icmaa-cms/mixins/Page'
+import NewsletterMixin from 'theme/mixins/newsletterMixin'
 import SubscriptionStatus from '@vue-storefront/core/modules/newsletter/mixins/SubscriptionStatus'
 import MaterialIcon from 'theme/components/core/blocks/MaterialIcon'
-import { mapGetters } from 'vuex'
-import { price } from '@vue-storefront/core/filters/price'
 
 const NewsletterPopup = () => import(/* webpackChunkName: "vsf-newsletter-modal" */ 'theme/components/core/NewsletterPopup.vue')
 
@@ -47,23 +46,11 @@ export default {
     MaterialIcon,
     NewsletterPopup
   },
-  mixins: [ Page, SubscriptionStatus ],
+  mixins: [ Page, NewsletterMixin, SubscriptionStatus ],
   data () {
     return {
       loadNewsletterPopup: false,
       dataType: 'yaml'
-    }
-  },
-  computed: {
-    ...mapGetters({
-      storeConfig: 'icmaaConfig/getCurrentStoreConfig'
-    }),
-    voucher_value () {
-      const config = this.storeConfig
-      if (config.newsletter.voucher_value) {
-        return config.newsletter.voucher_value
-      }
-      return price(5)
     }
   },
   methods: {

@@ -6,6 +6,7 @@ const createNotification = (message: string, type: string = 'error') =>
 
 const errorMsgMap = {
   'Your cart has been expired.': createNotification('Sorry, but your cart has been expired. Please try again.'),
+  'Your cart isn\'t currently active': createNotification('Sorry, but your cart isn\'t currently active. Are your still in payment progress?'),
   'Your session has been expired.': createNotification('Sorry, but your login has been expired. Please try to login again.'),
   'User is not authroized to access quote:': createNotification('Sorry, but your login has been expired. Please try to login again.'),
   'No quote found for token:': createNotification('Sorry, but there was an error with your cart. Please try again.'),

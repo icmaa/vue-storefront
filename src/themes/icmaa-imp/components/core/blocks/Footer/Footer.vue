@@ -72,7 +72,6 @@
 <script>
 import config from 'config'
 import { mapGetters } from 'vuex'
-import CurrentPage from 'theme/mixins/currentPage'
 import LanguageSwitcher from '../../LanguageSwitcher.vue'
 import Newsletter from 'theme/components/core/blocks/Footer/Newsletter'
 import BackToTop from 'theme/components/core/BackToTop'
@@ -90,7 +89,6 @@ export default {
     LanguageSwitcher,
     BackToTop
   },
-  mixins: [ CurrentPage ],
   data () {
     return {
       footerNavigationOffset: 0
