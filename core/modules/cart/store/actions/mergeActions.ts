@@ -44,7 +44,12 @@ const mergeActions = {
     }
 
     if (!wasUpdatedSuccessfully && (clientItem.server_item_id || clientItem.item_id)) {
-      await dispatch('restoreQuantity', { product: clientItem })
+      await dispatch('restoreQuantity', {
+        product: {
+          ...clientItem,
+          prev_qty: clientItem.prev_qty || (serverItem && serverItem.qty)
+        }
+      })
       return diffLog
     }
 
@@ -207,7 +212,7 @@ const mergeActions = {
       .pushClientParty({ status: getters.isCartHashChanged ? 'update-required' : 'no-changes' })
       .pushServerParty({ status: getters.isTotalsSyncRequired ? 'update-required' : 'no-changes' })
 
-    EventBus.$emit('servercart-after-diff', { diffLog: diffLog, serverItems: hookResult.serverItem, clientItems: hookResult.clientItems, dryRun: dryRun })
+    EventBus.$emit('servercart-after-diff', { diffLog: diffLog, serverItems: hookResult.serverItems, clientItems: hookResult.clientItems, dryRun: dryRun })
     Logger.info('Client/Server cart synchronised ', 'cart', diffLog)()
 
     return diffLog
