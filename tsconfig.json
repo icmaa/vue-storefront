@@ -19,14 +19,27 @@
       "jest"
     ],
     "paths": {
-      "core/*": ["core/*"],
-      "theme/*": ["src/themes/icmaa-imp/*", "src/themes/default/*"],
-      "core/modules/*": ["./core/modules/*"],
-      "@vue-storefront/*": ["./"]
+      "core/*": [
+        "core/*"
+      ],
+      "theme/*": [
+        "/workspaces/vue-storefront/node_modules/@icmaa/vsf-theme-imp/*"
+      ],
+      "core/modules/*": [
+        "./core/modules/*"
+      ],
+      "@vue-storefront/*": [
+        "./"
+      ]
     },
-    "lib": ["es2017", "dom"]
+    "lib": [
+      "es2017",
+      "dom"
+    ]
   },
-  "files": ["shims.d.ts"],
+  "files": [
+    "shims.d.ts"
+  ],
   "include": [
     "src/**/*.ts",
     "src/**/*.vue",

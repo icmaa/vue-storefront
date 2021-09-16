@@ -170,25 +170,25 @@ class Logger {
    * @param context meaningful data related to this message
    */
   public error (message: any, tag: string = null, context: any = null): () => void {
-    // let noDefaultOutput
-    // ({ message, tag, context, noDefaultOutput } = coreHooksExecutors.beforeLogRendered({ type: 'error', message, tag, context }))
-    // if (noDefaultOutput === true) {
-    //   return () => {}
-    // }
-
-    // if (isServer) { // always show errors in SSR
-    //   return console.error.bind(console, (tag ? `[${tag}] ` : '') + this.convertToString(message), context)
-    // }
-
-    if (this.canPrint('error')) {
-      if (tag) {
-        return console.error.bind(window.console, '%cVSF%c %c' + tag + '%c ' + this.convertToString(message), bgColorStyle('red'), 'color: inherit', bgColorStyle('gray'), 'font-weight: bold', context)
-      } else {
-        return console.error.bind(window.console, '%cVSF%c ' + this.convertToString(message), bgColorStyle('red'), 'font-weight: bold', context)
-      }
+    if (!this.canPrint('error')) {
+      return () => {}
     }
 
-    return () => {}
+    let noDefaultOutput
+    ({ message, tag, context, noDefaultOutput } = coreHooksExecutors.beforeLogRendered({ type: 'error', message, tag, context }))
+    if (noDefaultOutput === true) {
+      return () => {}
+    }
+
+    if (isServer) { // always show errors in SSR
+      return console.error.bind(console, (tag ? `[${tag}] ` : '') + this.convertToString(message), context)
+    }
+
+    if (tag) {
+      return console.error.bind(window.console, '%cVSF%c %c' + tag + '%c ' + this.convertToString(message), bgColorStyle('red'), 'color: inherit', bgColorStyle('gray'), 'font-weight: bold', context)
+    } else {
+      return console.error.bind(window.console, '%cVSF%c ' + this.convertToString(message), bgColorStyle('red'), 'font-weight: bold', context)
+    }
   }
 }
 

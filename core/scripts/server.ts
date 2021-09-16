@@ -324,7 +324,8 @@ app.get('*', async (req, res, next) => {
         if (typeof configProvider === 'function') {
           configPromises.push(configProvider(req).then(loadedConfig => {
             requestContextConfig = config.util.extendDeep(requestContextConfig, loadedConfig)
-          }).catch(() => {
+          }).catch(error => {
+            console.error(`Config provider error: ${req.url}`, error)
             if (!config.server.dynamicConfigContinueOnError) {
               if (req.url !== '/error') {
                 res.redirect('/error')
