@@ -8,8 +8,6 @@ import { products } from 'config'
 import { buildFilterProductsQuery } from '@vue-storefront/core/helpers'
 import { _prepareCategoryPathIds } from '@vue-storefront/core/modules/catalog-next/helpers/categoryHelpers'
 
-import { icmaa_catalog } from 'config'
-
 const actions: ActionTree<CategoryState, RootState> = {
   async loadSearchProducts ({ commit, getters, dispatch }, { route, category, pageSize = 50 } = {}) {
     const categoryMappedFilters = getters.getFiltersMap[category.id]
