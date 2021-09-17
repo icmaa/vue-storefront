@@ -12,10 +12,12 @@
     "@vue-storefront/core": "^1.11.1"
   },
   "dependencies": {
+    "app-root-path": "^2.0.1",
     "i18n-iso-countries": "^4.3.1",
     "intl": "^1.2.5",
     "intl-locales-supported": "^1.8.4",
     "js-sha3": "^0.8.0",
+    "module-alias": "^2.2.2",
     "vuelidate": "^0.7.4"
   }
 }
