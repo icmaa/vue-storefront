@@ -344,6 +344,10 @@ app.get('*', async (req, res, next) => {
     requestContextConfig = config.util.extendDeep({}, globalContextConfig)
   }
 
+  /**
+   * Add module-alias for `config` imports to use the custom `cnfig.json` created during the build.
+   * Actually there is a Webpack alias to handle this but it isn't working in SSR.
+   */
   const moduleAlias = require('module-alias')
   moduleAlias.addAlias('config', path.join(__dirname, '/../build/config.json'))
 

@@ -58,4 +58,4 @@ For `v1.10.x`:
 
 ## Todo
 
-[ ] ...
+[ ] Remove `module-alias` dependency. We only need it in `core/scripts/server.ts` to define an alias for `config` imports on SSR as the `config` webpack-alias isn't working anyhow.
