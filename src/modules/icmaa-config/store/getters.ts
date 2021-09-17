@@ -2,44 +2,15 @@ import { GetterTree } from 'vuex'
 import config from 'config'
 import RootState from '@vue-storefront/core/types/RootState'
 import ConfigState, { StoreView } from '../types/ConfigState'
-import { getExtendedStoreviewConfig } from '../helpers'
 import { getTranslatedCountries } from '../helpers/i18n/countries'
 
-import { buildBaseStoreView, getExtendedStoreviewConfig as getOrgExtendedStoreviewConfig } from '@vue-storefront/core/lib/multistore'
+import { buildBaseStoreView, getExtendedStoreviewConfig } from '@vue-storefront/core/lib/multistore'
 import getStoreViewByStoreCode from '@vue-storefront/core/lib/multistore/getStoreViewByStoreCode'
 
 import merge from 'lodash-es/merge'
-import cloneDeep from 'lodash-es/cloneDeep'
 
 const getters: GetterTree<ConfigState, RootState> = {
-  getMap: (state): StoreView[] => state.map,
-  getCompleteMap: (state, getters): StoreView[] => {
-    const map = cloneDeep(getters.getMap)
-    const { tax, i18n, elasticsearch, storeCode, seo } = config
-    const defaultStoreViews = map.map(s => config.storeViews[s.storeCode])
-
-    return cloneDeep(getters.getMap)
-      .map(extendedStoreView => {
-        const defaults = cloneDeep({ tax, i18n, elasticsearch, storeCode, seo })
-        const defaultStoreConfig = defaultStoreViews.find(s => extendedStoreView.storeCode === s.storeCode)
-        const extendedStoreConfig = getExtendedStoreviewConfig(defaultStoreConfig, defaultStoreViews)
-        const result = merge(defaults, extendedStoreConfig, extendedStoreView)
-        return result
-      })
-  },
-  getCurrentStoreConfig: (state, getters): StoreView|boolean => {
-    const storeCode = getters.getCurrentStore.storeCode
-    if (storeCode) {
-      const storeConfig = state.map.find(s => s.storeCode === storeCode) || false
-      return merge(
-        {},
-        getters.getCurrentStore,
-        storeConfig || {}
-      )
-    }
-
-    return false
-  },
+  getCurrentStoreConfig: (state, getters): StoreView|boolean => getters.getCurrentStore,
   getCurrentStore: (state, getters, RootState): StoreView => {
     /**
      * As the storeView is removed from intial-state in `initialStateFactory` to save DOM size it could be possible
@@ -52,7 +23,7 @@ const getters: GetterTree<ConfigState, RootState> = {
     if (Object.keys(RootState.storeView).length === 1 && RootState.storeView.storeCode) {
       const storeCode = RootState.storeView.storeCode
       if (storeCode && config.storeViews.multistore && getStoreViewByStoreCode(storeCode)) {
-        return merge(buildBaseStoreView(), getOrgExtendedStoreviewConfig(getStoreViewByStoreCode(storeCode)))
+        return merge(buildBaseStoreView(), getExtendedStoreviewConfig(getStoreViewByStoreCode(storeCode)))
       }
     }
 

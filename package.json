@@ -79,6 +79,7 @@
     "js-sha3": "^0.8.0",
     "localforage": "^1.7.2",
     "magento2-rest-client": "github:DivanteLtd/magento2-rest-client",
+    "module-alias": "^2.2.2",
     "ms": "^2.1.2",
     "pm2": "^4.5.5",
     "proxy-polyfill": "^0.3.0",

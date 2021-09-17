@@ -344,6 +344,9 @@ app.get('*', async (req, res, next) => {
     requestContextConfig = config.util.extendDeep({}, globalContextConfig)
   }
 
+  const moduleAlias = require('module-alias')
+  moduleAlias.addAlias('config', path.join(__dirname, '/../build/config.json'))
+
   dynamicCacheHandler(requestContextConfig)
 })
 
