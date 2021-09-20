@@ -125,7 +125,7 @@
     "command-exists": "^1.2.2",
     "commander": "^2.18.0",
     "css-loader": "^1.0.0",
-    "cypress": "^7.7.0",
+    "cypress": "^8.4.1",
     "d3-dsv": "^1.0.8",
     "empty-dir": "^1.0.0",
     "eslint": "^5.0.0",
