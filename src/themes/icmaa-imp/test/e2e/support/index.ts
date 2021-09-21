@@ -16,6 +16,8 @@
 // Import commands.js using ES2015 syntax:
 import './commands'
 
+Cypress.on('uncaught:exception', () => false)
+
 before(() => {
   return window.caches && window.caches.keys().then((cacheNames) => {
     return Promise.all(
@@ -30,6 +32,7 @@ beforeEach(() => {
   indexedDB.deleteDatabase('shop')
   indexedDB.deleteDatabase('carts')
   cy.clearLocalStorage()
+  cy.clearCookies()
 
   cy.wrap(false).as('storeCode')
 })

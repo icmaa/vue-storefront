@@ -8,10 +8,9 @@ describe('Add to Cart', () => {
 
     /**
      * @todo The page gets rerendered after initial load.
-     * Thats why we need to wait a bit until this happens.
-     * I'll search the cause and remove this workaround.
+     * Because of the filter in the URL.
      */
-    cy.wait(1000)
+    cy.wait(4000)
 
     cy.getByTestId('ProductTile')
       .random()

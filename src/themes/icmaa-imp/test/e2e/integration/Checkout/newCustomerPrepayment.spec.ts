@@ -1,6 +1,6 @@
 describe('Checkout', () => {
   it('as new user, create an account and use prepayment.', () => {
-    cy.createCartAndGoToCheckout()
+    cy.createCartAndGoToCheckout('de')
 
     cy.checkoutFillPersonalDetails(true)
 
