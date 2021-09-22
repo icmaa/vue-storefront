@@ -2,6 +2,7 @@
 "Product price is unknown, product cannot be added to the cart!",سعر المنتج غير معلوم، لايمكن إضافته للسلة.
 "Stock check in progress, please wait while available stock quantities are checked",جاري فحص المخزون، يرجى الانتظار حتى يتم التأكد من التوفر
 "The product, category or CMS page is not available in Offline mode. Redirecting to Home.",المنتج أو التصنيف أو الصفحة غير متوفرة بدون اتصال إنترنت. جاري التحويل للصفحة الرئيسية.
+"Unhandled error, wrong response format!","Unhandled error, wrong response format!"
 404 Page Not Found,404 الصفحة غير متوفرة
 Account data has successfully been updated,تم تحديث الحساب بنجاح
 Add review,أضف مراجعة
@@ -14,6 +15,7 @@ Compare Products,مقارنة المنتجات
 Compare products,مقارنة المنتجات
 Confirm your order,أكّد طلبك
 Error refreshing user token. User is not authorized to access the resource,خطأ في تحديث التشفير. المستخدم غير مصرح له بالدخول
+Error with response - bad content-type!,خطأ بالرد - محتوى غير صالح!
 Error: Error while adding products,خطأ: خطأ أثناء إضافة المنتجات
 Extension developers would like to thank you for placing an order!,Extension developers would like to thank you for placing an order!
 Field is required,حقل مطلوب
@@ -59,7 +61,7 @@ Summary,ملخص
 The product is out of stock and cannot be added to the cart!,المنتج غير متوفر بالمخزون ولا يمكن إضافته للسلة
 The system is not sure about the stock quantity (volatile). Product has been added to the cart for pre-reservation.,الكمية غير مؤكدة (volatile). تمت إضافة المنتج للسلة للحجز المسبق.
 There is no Internet connection. You can still place your order. We will notify you if any of ordered products is not available because we cannot check it right now.,لا يوجد اتصال بالإنترنت. مازال بإمكانك إتمام الطلب. وسنقوم بإخطارك إذا كان أي من المنتجات المطلوبة غير متوفر، لايمكننا التحقق الآن.
-This feature is not implemented yet! Please take a look at https://github.com/DivanteLtd/vue-storefront/issues for our Roadmap!,This feature is not implemented yet! Please take a look at https://github.com/DivanteLtd/vue-storefront/issues for our Roadmap!
+This feature is not implemented yet! Please take a look at https://github.com/vuestorefront/vue-storefront/issues for our Roadmap!,This feature is not implemented yet! Please take a look at https://github.com/vuestorefront/vue-storefront/issues for our Roadmap!
 Type what you are looking for...,اكتب ما تبحث عنه…
 Unexpected authorization error. Check your Network conection.,خطأ تحقق غير متوقع. تحقق من اتصالك بالشبكة.
 You are logged in!,تم تسجيل دخولك!

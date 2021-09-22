@@ -5,6 +5,8 @@ import { UserService } from '@vue-storefront/core/data-resolver'
 import { UserService as IcmaaUserService } from '../data-resolver/UserService'
 import * as userTypes from '@vue-storefront/core/modules/user/store/mutation-types'
 import * as types from './mutation-types'
+import { UserProfile } from '@vue-storefront/core/modules/user/types/UserProfile'
+import { userHooksExecutors } from '@vue-storefront/core/modules/user/hooks'
 import { StorageManager } from '@vue-storefront/core/lib/storage-manager'
 import { SearchQuery } from 'storefront-query-builder'
 import { isServer } from '@vue-storefront/core/helpers'
@@ -106,6 +108,14 @@ const actions: ActionTree<UserState, RootState> = {
 
       await dispatch('logout', { silent: true })
     }
+  },
+  /**
+   * Copy of original – changes:
+   * * Return response of service request
+   */
+  async update (_, profile: UserProfile) {
+    profile = userHooksExecutors.beforeUserProfileUpdate(profile)
+    return UserService.updateProfile(profile, 'user/handleUpdateProfile')
   },
   /**
    * Copy of original – changes:

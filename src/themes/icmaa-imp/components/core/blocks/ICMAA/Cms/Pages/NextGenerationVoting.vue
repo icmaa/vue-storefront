@@ -18,7 +18,9 @@
           <picture-component :src="voting.img.src" :width="voting.img.width" :height="voting.img.height" :sizes="voting.img.sizes" :placeholder="true" :ratio="`${voting.img.width}:${voting.img.height}`" :alt="voting.img.alt | htmlDecode" class="t-w-full" />
           <div v-if="voting.votes" class="t-text-white t-flex t-flex-wrap t-content-center t-w-10 t-h-10 lg:t-w-12 lg:t-h-12 t-bg-base-lighter t-items-center t-justify-center t-absolute t-bottom-0 t-left-0 t-z-1">
             <div v-text="voting.votes" class="t-font-bold t-leading-none" />
-            <div class="t-leading-none t-text-xs">{{ $t('Votes') }}</div>
+            <div class="t-leading-none t-text-xs">
+              {{ $t('Votes') }}
+            </div>
           </div>
         </div>
         <div v-if="voting.video" class="t-relative t-w-full t-bg-white t-mt-1" style="padding-top: 56.25%">

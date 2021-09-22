@@ -1,8 +1,8 @@
 import EventBus from '@vue-storefront/core/compatibility/plugins/event-bus'
 import { StorefrontModule } from '@vue-storefront/core/lib/modules'
-import { extendStore } from '@vue-storefront/core/helpers'
+import { extendStore, isServer } from '@vue-storefront/core/helpers'
 import { StorageManager } from '@vue-storefront/core/lib/storage-manager'
-import { isServer } from '@vue-storefront/core/helpers'
+
 import { localizedRoute } from '@vue-storefront/core/lib/multistore'
 import { Logger } from '@vue-storefront/core/lib/logger'
 

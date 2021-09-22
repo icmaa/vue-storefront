@@ -5,9 +5,9 @@ import CategoryState, { ProductListingWidgetState } from '../types/CategoryState
 import * as types from './mutation-types'
 import * as catTypes from '@vue-storefront/core/modules/catalog-next/store/category/mutation-types'
 import addDefaultProductFilter from 'icmaa-catalog/helpers/defaultProductFilter'
-import { fetchChildCategories } from '../helpers'
+import { fetchChildCategories, sortByLetter } from '../helpers'
 import { SearchQuery } from 'storefront-query-builder'
-import { sortByLetter } from '../helpers'
+
 import { getObjectHash } from 'icmaa-config/helpers/hash'
 
 import forEach from 'lodash-es/forEach'

@@ -4,7 +4,7 @@ describe('CLP', () => {
 
     cy.getByTestId('ProductListing')
       .findImageWithPlaceholder()
-      .each(e => cy.wrap(e).scrollIntoView().checkImage())
+      .each(e => cy.wrap(e).scrollIntoView({ duration: 0 }).checkImage())
   })
 
   it('has products and valid department filter', () => {
@@ -17,7 +17,7 @@ describe('CLP', () => {
       cy.get('@sidebar')
         .find('[data-attribute-key="department"] button')
         .random()
-        .scrollIntoView({ offset: { top: -200, left: 0 }, duration: 1000 })
+        .scrollIntoView()
         .click({ force: true })
 
       cy.url().should('include', `?department=`)

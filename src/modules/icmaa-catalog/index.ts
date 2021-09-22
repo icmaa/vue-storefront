@@ -1,6 +1,5 @@
 import { StorefrontModule } from '@vue-storefront/core/lib/modules'
-import { extendStore } from '@vue-storefront/core/helpers'
-import { isServer } from '@vue-storefront/core/helpers'
+import { extendStore, isServer } from '@vue-storefront/core/helpers'
 
 import { IcmaaExtendedAttributeStore } from './store/attribute'
 import { IcmaaExtendedCategoryStore } from './store/category'
@@ -9,8 +8,8 @@ import { IcmaaBreadcrumbsStore } from './store/breadcrumbs'
 import { SearchAliasStore, stateKey } from './store/search-alias'
 import { icmaaCatalogHooks } from './hooks'
 
-import { products, entities } from 'config'
-import config from 'config'
+import config, { products, entities } from 'config'
+
 import uniq from 'lodash-es/uniq'
 import pick from 'lodash-es/pick'
 

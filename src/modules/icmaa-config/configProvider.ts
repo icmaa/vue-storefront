@@ -5,15 +5,15 @@ module.exports = (req) => {
   let icmaaConfig = { map: [] }
 
   const configPath = path.resolve(__dirname, '../../../config')
-  const { NODE_APP_INSTANCE: man } = process.env
+  const { NODE_APP_INSTANCE: mandant } = process.env
 
-  const regex = new RegExp('local-(' + man + ')-storeview-(\\w*)\\.json', 'i')
+  const regex = new RegExp('local-(' + mandant + ')-storeview-(\\w*)\\.json', 'i')
 
   return new Promise((resolve, reject) => {
     try {
       fs.readdirSync(configPath).forEach(file => {
         if (regex.test(file)) {
-          const [fileName, mandant, storeCode] = regex.exec(file)
+          const [fileName, man, storeCode] = regex.exec(file)
           icmaaConfig.map.push({ storeCode, ...require(path.resolve(configPath, fileName)) })
         }
       })

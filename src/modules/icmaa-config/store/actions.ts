@@ -8,12 +8,12 @@ import { Logger } from '@vue-storefront/core/lib/logger'
 import { currentStoreView } from '@vue-storefront/core/lib/multistore'
 
 const actions: ActionTree<ConfigState, RootState> = {
-  setMap ({ commit }, storeView?: StoreView): StoreView[] {
+  setMap ({ commit, rootState }, storeView?: StoreView): StoreView[] {
     Logger.debug('Hydrate store-view config values', 'icmaa-config')()
 
-    const { icmaa_config, storeViews } = config
-    let storeConfigs = storeViews.mapStoreUrlsFor.map(storeCode => {
-      let store = icmaa_config.map.find(s => s.storeCode === storeCode) || { storeCode }
+    const { icmaa_config, storeViews } = rootState.config
+    let storeConfigs = storeViews.mapStoreUrlsFor?.map(storeCode => {
+      let store = icmaa_config.map?.find(s => s.storeCode === storeCode) || { storeCode }
       store.extend = storeViews[storeCode].extend
       return store
     })

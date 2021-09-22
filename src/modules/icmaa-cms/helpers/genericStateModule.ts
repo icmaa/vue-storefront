@@ -1,6 +1,6 @@
-import { StorefrontModule } from '@vue-storefront/core/lib/modules'
+import { StorefrontModule, registerModule } from '@vue-storefront/core/lib/modules'
 import { StorageManager } from '@vue-storefront/core/lib/storage-manager'
-import { registerModule } from '@vue-storefront/core/lib/modules'
+
 import createGenericStore from '../store/generic'
 
 import { Module } from 'vuex'

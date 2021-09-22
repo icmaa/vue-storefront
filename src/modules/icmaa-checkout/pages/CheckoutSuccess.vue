@@ -33,14 +33,14 @@ export default {
       isLoggedIn: 'user/isLoggedIn'
     })
   },
-  async mounted () {
+  mounted () {
     if (!this.isLoggedIn && !this.lastOrderToken) {
-      await this.$store.dispatch('user/loadOrdersFromCache')
+      this.$store.dispatch('user/loadOrdersFromCache')
     }
   },
   metaInfo () {
     return {
-      title: i18n.t('Order complete'),
+      title: i18n.t('Order complete').toString(),
       meta: [
         { vmid: 'robots', name: 'robots', content: 'noindex, nofollow' }
       ]
