@@ -63,7 +63,7 @@ export default {
     continueShopping (toCheckout = false) {
       this.$store.dispatch('ui/closeAll')
       if (toCheckout === true) {
-        this.$router.push(this.localizedRoute('/checkout'))
+        this.$router.push(this.localizedRoute({ name: 'checkout' }))
       }
     },
     goToCheckout () {
