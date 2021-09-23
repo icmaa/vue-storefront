@@ -94,13 +94,19 @@ Cypress.Commands.add('checkImage', { prevSubject: 'element' }, (subject) => {
     .and($img => expect($img[0].naturalWidth).to.be.greaterThan(0))
 })
 
-Cypress.Commands.add('getByTestId', { prevSubject: 'optional' }, (subject, id, options) => {
+Cypress.Commands.add('getByTestId', (id, options) => {
   cy.get(`[data-test-id="${id}"]`, options)
 })
 
 Cypress.Commands.add('findByTestId', { prevSubject: 'element' }, (subject, id) => {
   cy.wrap(subject)
     .find(`[data-test-id="${id}"]`)
+})
+
+Cypress.Commands.overwrite('scrollIntoView', (originalFn, subject, options) => {
+  const defaults = { offset: { top: -400 }, duration: 300 }
+  options = Object.assign({}, defaults, options)
+  return originalFn(subject, options)
 })
 
 Cypress.Commands.add('getFromLocalStorage', (key) => {
@@ -332,11 +338,12 @@ Cypress.Commands.add('checkNotification', (status: string) => {
 
   cy.wrap(Object.keys(map)).should('include', status)
 
-  cy.getByTestId('NotificationItem').first()
+  cy.getByTestId('NotificationItem')
+    .first()
     .should('be.visible')
     .should('have.class', map[status])
 
-  cy.getByTestId('NotificationItem').invoke('text')
+  cy.getByTestId('NotificationItemMessage').invoke('text')
 })
 
 Cypress.Commands.add('getBrowserLanguage', () => {

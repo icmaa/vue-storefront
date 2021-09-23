@@ -192,6 +192,8 @@ export default {
       }
     },
     async submit () {
+      this.$store.dispatch('ui/loader', { active: true })
+
       const isReviewCreated = await this.$store.dispatch('review/add', {
         'review_entity': 'product',
         'product_id': this.productId,
@@ -203,6 +205,8 @@ export default {
         'detail': this.reviewForm.review,
         'recaptcha': this.reviewForm.recaptcha
       })
+
+      this.$store.dispatch('ui/loader', false)
 
       if (isReviewCreated) {
         this.$store.dispatch('notification/spawnNotification', {

@@ -1,0 +1,26 @@
+{
+  "VSF-Logger": {
+    "scope": "javascript,typescript",
+    "prefix": "log",
+    "body": [
+      "Logger.${4|error,warn,log|}('${1:Lorem ipsum}', '${3:DEBUG}', ${2:$CLIPBOARD})()"
+    ],
+    "description": "Logger.log() - VueStorefront"
+  },
+  "Console.log()": {
+    "scope": "javascript,typescript",
+    "prefix": "log",
+    "body": [
+      "console.log(${1:$CLIPBOARD})"
+    ],
+    "description": "Javascript's console.log()"
+  },
+  "VSF-Logger import": {
+    "scope": "javascript,typescript",
+    "prefix": "ilog",
+    "body": [
+      "import { Logger } from '@vue-storefront/core/lib/logger'"
+    ],
+    "description": "Import VueStorefront logger"
+  }
+}

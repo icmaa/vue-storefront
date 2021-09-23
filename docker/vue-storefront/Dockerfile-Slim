@@ -1,0 +1,21 @@
+# This dockerfile runs node using debias slim version (in case you wan't to run Cypress.io)
+FROM node:16-slim
+
+WORKDIR /var/www
+EXPOSE 3000
+
+COPY package.json ./
+COPY yarn.lock ./
+
+COPY docker/vue-storefront/vue-storefront.sh /usr/local/bin/vue-storefront
+RUN chmod +x /usr/local/bin/vue-storefront
+
+RUN apt update
+RUN apt install -y \
+    build-essential python python3 \
+    libgtk2.0-0 libgtk-3-0 libgbm-dev libnotify-dev libgconf-2-4 libnss3 libxss1 libasound2 libxtst6 xauth xvfb \
+    bash curl wget git rsync
+
+RUN yarn global add @icmaa/config-sync
+
+CMD ["vue-storefront"]
