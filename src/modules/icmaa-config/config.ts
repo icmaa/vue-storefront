@@ -13,6 +13,8 @@ export default function () {
       if (regex.test(file)) {
         const [fileName, man, storeCode] = regex.exec(file)
         Object.assign(storeViews, { [storeCode]: require(path.resolve(configPath, fileName)) })
+
+        console.log(`Merged "${fileName}" into "${storeCode}" store configs`)
       }
     })
   } catch (error) {
