@@ -4,7 +4,7 @@ import { path as rootPath } from 'app-root-path'
 import glob from 'glob'
 
 export default function () {
-  console.log('Collection and merging configs from modules.')
+  console.log('Collect and merge configs from modules.')
 
   const serverExtensions = glob.sync('src/modules/*/config.{ts,js}')
   serverExtensions.map(serverModule => {
