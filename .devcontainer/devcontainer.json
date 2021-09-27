@@ -1,0 +1,31 @@
+{
+  "name": "icmaa/vue-storefront",
+  "forwardPorts": [
+    3000
+  ],
+  "dockerComposeFile": [
+    "../docker-compose.yml",
+    "docker-compose.yml"
+  ],
+  "service": "app",
+  "workspaceFolder": "/var/www",
+  "extensions": [
+    "bradlc.vscode-tailwindcss",
+    "christian-kohler.npm-intellisense",
+    "christian-kohler.path-intellisense",
+    "dbaeumer.vscode-eslint",
+    "dotjoshjohnson.xml",
+    "eamodio.gitlens",
+    "esbenp.prettier-vscode",
+    "mechatroner.rainbow-csv",
+    "ms-vscode.js-debug-nightly",
+    "octref.vetur",
+    "redhat.vscode-yaml",
+    "ria.elastic",
+    "sibiraj-s.vscode-scss-formatter",
+    "visualstudioexptteam.vscodeintellicode",
+    "wix.vscode-import-cost",
+    "yzhang.markdown-all-in-one",
+    "ziyasal.vscode-open-in-github"
+  ]
+}

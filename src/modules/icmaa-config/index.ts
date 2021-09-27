@@ -3,13 +3,11 @@ import config from 'config'
 import { coreHooks } from '@vue-storefront/core/hooks'
 import { StorefrontModule } from '@vue-storefront/core/lib/modules'
 import { ExtendedConfigStore } from './store'
-import { once } from '@vue-storefront/core/helpers'
+import { once, isServer } from '@vue-storefront/core/helpers'
+import { StorageManager } from '@vue-storefront/core/lib/storage-manager'
+import { Logger } from '@vue-storefront/core/lib/logger'
 
 import { round, formatValue } from './helpers/price'
-
-import { StorageManager } from '@vue-storefront/core/lib/storage-manager'
-import { isServer } from '@vue-storefront/core/helpers'
-import { Logger } from '@vue-storefront/core/lib/logger'
 
 export const cacheStorageKey = 'icmaa-config'
 
@@ -21,7 +19,7 @@ export const IcmaaExtendedConfigModule: StorefrontModule = function ({ store }) 
 
     coreHooks.afterAppInit(() => { store.dispatch('icmaaConfig/setMap') })
     coreHooks.beforeStoreViewChanged(storeView => {
-      store.dispatch('icmaaConfig/setMap', { storeView })
+      store.dispatch('icmaaConfig/setMap', storeView)
       return storeView // Must return the storeView variable as it is a mutator-hook
     })
 

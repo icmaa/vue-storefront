@@ -15,7 +15,7 @@
         :validations="[
           {
             condition: !validation.email.required && validation.email.$error,
-            text: $t('Field is required.')
+            text: $t('Field is required')
           },
           {
             condition: !validation.email.email && validation.email.$error,
@@ -23,6 +23,7 @@
           }
         ]"
         class="t-w-full lg:t-w-1/2 t-px-2 t-mb-4"
+        :disabled="true"
       />
       <base-input
         name="first-name"
@@ -33,7 +34,7 @@
         :validations="[
           {
             condition: !validation.firstname.required && validation.firstname.$error,
-            text: $t('Field is required.')
+            text: $t('Field is required')
           }
         ]"
         class="t-w-full lg:t-w-1/2 t-px-2 t-mb-4"
@@ -46,20 +47,19 @@
         :label="$t('Last name') + ' *'"
         :validations="[{
           condition: !validation.lastname.required && validation.lastname.$error,
-          text: $t('Field is required.')
+          text: $t('Field is required')
         }]"
         class="t-w-full lg:t-w-1/2 t-px-2 t-mb-4"
       />
-      <base-select
+      <gender-select
         name="gender"
         id="gender"
         v-model="profile.gender"
         :options="genderOptions"
         :label="$t('Gender') + ' *'"
-        :initial-option-text="$t('Gender')"
         :validations="[{
           condition: !validation.gender.required && validation.gender.$error,
-          text: $t('Field is required.')
+          text: $t('Field is required')
         }]"
         class="t-w-full lg:t-w-1/2 t-px-2 t-mb-4"
       />
@@ -74,7 +74,7 @@
         :validations="[
           {
             condition: !validation.dob.required && validation.dob.$error,
-            text: $t('Field is required.')
+            text: $t('Field is required')
           },
           {
             condition: !validation.dob.date && validation.dob.$error,
@@ -103,7 +103,7 @@
           :validations="[
             {
               condition: !validation.oldPassword.required && validation.oldPassword.$error,
-              text: $t('Field is required.')
+              text: $t('Field is required')
             },
             {
               condition: !validation.oldPassword.minLength && validation.oldPassword.$error,
@@ -124,7 +124,7 @@
           :validations="[
             {
               condition: !validation.password.required && validation.password.$error,
-              text: $t('Field is required.')
+              text: $t('Field is required')
             },
             {
               condition: !validation.password.minLength && validation.password.$error,
@@ -143,7 +143,7 @@
           :validations="[
             {
               condition: !validation.rPassword.required && validation.rPassword.$error,
-              text: $t('Field is required.')
+              text: $t('Field is required')
             },
             {
               condition: !validation.rPassword.sameAsPassword && validation.rPassword.$error,
@@ -176,20 +176,18 @@ import { unicodeAlpha } from '@vue-storefront/core/helpers/validators'
 import { date } from 'icmaa-config/helpers/validators'
 import { toDate } from 'icmaa-config/helpers/datetime'
 
-import GenderMixin from 'icmaa-user/mixins/gender'
 import Headline from 'theme/components/core/blocks/MyAccount/Headline'
 import BaseCheckbox from 'theme/components/core/blocks/Form/BaseCheckbox'
-import BaseSelect from 'theme/components/core/blocks/Form/BaseSelect'
+import GenderSelect from 'theme/components/core/blocks/Form/GenderSelect'
 import BaseInput from 'theme/components/core/blocks/Form/BaseInput'
 import ButtonComponent from 'theme/components/core/blocks/Button'
 
 export default {
   name: 'MyProfile',
-  mixins: [GenderMixin],
   components: {
     Headline,
     BaseCheckbox,
-    BaseSelect,
+    GenderSelect,
     BaseInput,
     ButtonComponent
   },

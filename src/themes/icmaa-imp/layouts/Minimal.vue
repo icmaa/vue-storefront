@@ -1,5 +1,6 @@
 <template>
   <div class="minimal-layout">
+    <loader />
     <div id="viewport" class="t-w-full">
       <minimal-header />
       <slot />
@@ -9,21 +10,12 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex'
+import { mapGetters } from 'vuex'
 import MinimalHeader from 'theme/components/core/blocks/Header/MinimalHeader.vue'
 import MinimalFooter from 'theme/components/core/blocks/Footer/MinimalFooter.vue'
+import Loader from 'theme/components/core/Loader'
 
 export default {
-  data () {
-    return {
-      ordersData: []
-    }
-  },
-  computed: {
-    ...mapState({
-      overlayActive: state => state.ui.overlay
-    })
-  },
   methods: {
     ...mapGetters({ getMetaData: 'icmaaMeta/getData' }),
     fetchMetaData () {
@@ -40,7 +32,8 @@ export default {
   },
   components: {
     MinimalHeader,
-    MinimalFooter
+    MinimalFooter,
+    Loader
   }
 }
 </script>

@@ -49,7 +49,8 @@ module.exports = {
         /** These are special classes for the buttons */
         '6': '1.5rem',
         '8': '2rem',
-        '10': '2.5rem'
+        '10': '2.5rem',
+        '12': '3rem'
       },
       maxHeight: {
         '0': '0',
@@ -155,9 +156,10 @@ module.exports = {
       addUtilities(
         {
           '.hide-scrollbar': { 'scrollbar-width': 'none', '-ms-overflow-style': 'none' },
-          '.hide-scrollbar::-webkit-scrollbar': { 'display': 'none' },
+          '.hide-scrollbar::-webkit-scrollbar': { display: 'none' },
           '.webkit-tap-transparent': { '-webkit-tap-highlight-color': 'transparent' },
-          '.blend-hard-light': { 'mix-blend-mode': 'hard-light' }
+          '.blend-hard-light': { 'mix-blend-mode': 'hard-light' },
+          '.grayscale': { filter: 'grayscale(1)' }
         },
         ['responsive']
       )

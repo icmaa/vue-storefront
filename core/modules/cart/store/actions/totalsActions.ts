@@ -10,6 +10,9 @@ import {
 import EventBus from '@vue-storefront/core/compatibility/plugins/event-bus'
 
 const totalsActions = {
+  async updateTotals ({ commit }, payload) {
+    commit(types.CART_UPD_TOTALS, payload)
+  },
   async getTotals (_, { addressInformation, hasShippingInformation }) {
     if (hasShippingInformation) {
       return CartService.setShippingInfo(addressInformation)
@@ -22,7 +25,7 @@ const totalsActions = {
 
     if (resultCode === 200) {
       const totals = result.totals || result
-      Logger.info('Overriding server totals. ', 'cart', totals)()
+      Logger.log('Overriding server totals. ', 'cart', totals)()
       const itemsAfterTotal = prepareShippingInfoForUpdateTotals(totals.items)
 
       for (let key of Object.keys(itemsAfterTotal)) {

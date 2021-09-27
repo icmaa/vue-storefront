@@ -18,12 +18,10 @@
 </template>
 
 <script>
-import CurrentPage from 'theme/mixins/currentPage'
 import Logo from 'theme/components/core/blocks/Header/Logo'
 import MaterialIcon from 'theme/components/core/blocks/MaterialIcon'
 
 export default {
-  mixins: [CurrentPage],
   components: {
     Logo,
     MaterialIcon

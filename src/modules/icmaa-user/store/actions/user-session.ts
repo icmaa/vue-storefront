@@ -1,4 +1,4 @@
-import config from 'config'
+import config, { products } from 'config'
 import { ActionTree } from 'vuex'
 import RootState from '@vue-storefront/core/types/RootState'
 import UserState from '../../types/UserState'
@@ -9,7 +9,6 @@ import { StorageManager } from '@vue-storefront/core/lib/storage-manager'
 
 import { changeFilterQuery } from '@vue-storefront/core/modules/catalog-next/helpers/filterHelpers'
 import { router } from '@vue-storefront/core/app'
-import { products } from 'config'
 
 import isEmpty from 'lodash-es/isEmpty'
 import invert from 'lodash-es/invert'

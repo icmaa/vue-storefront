@@ -9,7 +9,7 @@
       :validations="[
         {
           condition: !$v.email.required && $v.email.$error,
-          text: $t('Field is required.')
+          text: $t('Field is required')
         },
         {
           condition: !$v.email.email && $v.email.$error,
@@ -27,7 +27,7 @@
       :validations="[
         {
           condition: !$v.password.required && $v.password.$error,
-          text: $t('Field is required.')
+          text: $t('Field is required')
         }
       ]"
     />
@@ -104,9 +104,9 @@ export default {
       this.callLogin()
     },
     callLogin () {
-      this.$bus.$emit('notification-progress-start', i18n.t('Please wait'))
+      this.$store.dispatch('ui/loader', { message: i18n.t('Please wait') })
       this.$store.dispatch('user/login', { username: this.email, password: this.password }).then((result) => {
-        this.$bus.$emit('notification-progress-stop', {})
+        this.$store.dispatch('ui/loader', false)
 
         if (result.code !== 200) {
           this.onFailure(result)
@@ -117,7 +117,7 @@ export default {
       }).catch(err => {
         Logger.error('Error while login:', 'user', err)()
         this.onFailure({ result: 'Unexpected authorization error. Check your Network connection.' })
-        this.$bus.$emit('notification-progress-stop')
+        this.$store.dispatch('ui/loader', false)
       })
     },
     callRegister () {

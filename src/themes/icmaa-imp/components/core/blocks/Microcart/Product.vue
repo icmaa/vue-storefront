@@ -28,27 +28,7 @@
         </div>
       </div>
 
-      <div class="t-w-full t-text-sm t-mb-4" v-if="product.totals">
-        <template v-if="product.totals.discount_amount">
-          <span class="t-text-base-light t-line-through t-mr-2">
-            {{ product.totals.row_total_incl_tax | price }}
-          </span>
-          <span class="t-text-sale t-font-bold">
-            {{ (product.totals.row_total - product.totals.discount_amount + product.totals.tax_amount) | price }}
-          </span>
-        </template>
-        <template v-else>
-          <span class="price-original t-text-base-light t-line-through t-mr-2" v-if="product.special_price && parseFloat(product.original_price_incl_tax) > 0">
-            {{ product.original_price_incl_tax | price }}
-          </span>
-          <span class="price-special t-text-sale t-font-bold" v-if="product.special_price && parseFloat(product.special_price) > 0">
-            {{ product.price_incl_tax | price }}
-          </span>
-          <span class="price t-text-base-dark t-font-bold" v-if="!product.special_price && parseFloat(product.price_incl_tax) > 0">
-            {{ product.price_incl_tax | price }}
-          </span>
-        </template>
-      </div>
+      <product-price :product="product" class="t-w-full t-mb-4" />
 
       <div class="t-flex t-items-center t-flex-wrap t-justify-between t-text-base-light" v-if="!isFree">
         <div class="t-flex t-items-center">
@@ -61,6 +41,7 @@
             :value="productQty"
             :disabled="loading || isAddingToCart"
             :loading="loading || isAddingToCart"
+            :hide-label="true"
             @change="updateQty"
             v-if="!isFree"
           />
@@ -75,130 +56,30 @@
 </template>
 
 <script>
-import config from 'config'
+
 import i18n from '@vue-storefront/i18n'
-import { mapGetters } from 'vuex'
-import { currentStoreView } from '@vue-storefront/core/lib/multistore'
-import { productThumbnailPath } from '@vue-storefront/core/helpers'
-import { formatProductLink } from 'icmaa-url/helpers'
 import { IcmaaGoogleTagManagerExecutors } from 'icmaa-google-tag-manager/hooks'
-import Product from '@vue-storefront/core/compatibility/components/blocks/Microcart/Product'
-import ProductNameMixin from 'icmaa-catalog/mixins/ProductNameMixin'
+import ProductMixin from 'theme/mixins/cart/productMixin'
+import ProductPrice from 'theme/components/core/blocks/Microcart/Product/Price'
 import ProductImage from 'theme/components/core/ProductImage'
 import BaseSelect from 'theme/components/core/blocks/Form/BaseSelect'
 import ButtonComponent from 'theme/components/core/blocks/Button'
 
-import last from 'lodash-es/last'
-
 export default {
   name: 'MicroCartProduct',
-  props: {
-    product: {
-      type: Object,
-      required: true
-    }
-  },
   components: {
     ButtonComponent,
     BaseSelect,
-    ProductImage
+    ProductImage,
+    ProductPrice
   },
-  mixins: [Product, ProductNameMixin],
+  mixins: [ ProductMixin ],
   data () {
     return {
       loading: false
     }
   },
-  computed: {
-    ...mapGetters({
-      freeCartItems: 'cart/getFreeCartItems',
-      getOptionLabel: 'attribute/getOptionLabel',
-      getAttributeLabel: 'attribute/getAttributeLabel',
-      isAddingToCart: 'cart/getIsAdding'
-    }),
-    hasProductInfo () {
-      return this.product.info && Object.keys(this.product.info).length > 0
-    },
-    hasProductErrors () {
-      return this.product.errors && Object.keys(this.product.errors).length > 0
-    },
-    isTotalsActive () {
-      return this.isOnline && !this.editMode && this.product.totals && this.product.totals.options
-    },
-    thumbnail () {
-      return productThumbnailPath(this.product)
-    },
-    productLink () {
-      return formatProductLink(this.product, currentStoreView().storeCode)
-    },
-    productQty () {
-      return this.product.qty
-    },
-    qtyOptions () {
-      const limit = (this.productQty >= 5 ? this.productQty + 5 : 5)
-      let options = []
-      for (let value = 1; value <= limit; value++) {
-        options.push({ label: value, value, selected: this.productQty === value })
-      }
-      return options
-    },
-    totals () {
-      if (this.isTotalsActive) {
-        return this.product.totals.options
-      } else if (this.customProductOptions) {
-        return this.customProductOptions
-      }
-      return []
-    },
-    customProductOptions () {
-      return this.getCustomProductOptions(this.product)
-    },
-    isFree () {
-      return this.freeCartItems.includes(this.product.sku)
-    }
-  },
   methods: {
-    getCustomProductOptions (product) {
-      if (product.product_option) {
-        const { configurable_item_options, custom_options, bundle_options } = product.product_option.extension_attributes
-        if (product.type_id === 'configurable') {
-          /**
-           * The `populateProductConfigurationAsync()` method already populate option label
-           * and value into state for configurable product – nothing to do here.
-           */
-          return this.product.options
-        } else if (product.type_id === 'bundle') {
-          let options = []
-          this.product.bundle_options.forEach(option => {
-            bundle_options[option.option_id].option_selections.forEach(id => {
-              const productLink = option.product_links.find(productLink => productLink.id === id)
-              if (option.configurable_options && option.configurable_options.length > 0) {
-                const attributeKey = option.configurable_options[0]['attribute_code']
-                options.push({
-                  label: this.getAttributeLabel({ attributeKey }),
-                  value: this.getOptionLabel({ attributeKey, optionId: productLink[attributeKey] })
-                })
-              } else {
-                options.push({
-                  label: option.title,
-                  value: this.trimLongBundleName(productLink.product.name)
-                })
-              }
-            })
-          })
-
-          return options
-        }
-      }
-
-      return []
-    },
-    trimLongBundleName (name) {
-      if (name.length > 45) {
-        name = last(name.split(' - '))
-      }
-      return name
-    },
     async updateQty (qty) {
       this.loading = true
       return this.$store.dispatch('cart/updateQuantity', { product: this.product, qty })
@@ -211,6 +92,16 @@ export default {
 
           this.loading = false
         })
+    },
+    removeItem () {
+      this.$store.dispatch('notification/spawnNotification', {
+        type: 'warning',
+        item: this.product,
+        message: i18n.t('Are you sure you would like to remove this item from the shopping cart?'),
+        action2: { label: i18n.t('OK'), action: this.removeFromCart },
+        action1: { label: i18n.t('Cancel'), action: 'close' },
+        hasNoTimeout: true
+      })
     },
     async removeFromCart () {
       await this.$store.dispatch('cart/removeItem', { product: this.product })

@@ -4,15 +4,16 @@
     :initial-option-text="$t('Country')"
     v-bind="{ ...$props, ...$attrs }"
     :value="country"
-    @input="(v) => $emit('input', v)"
+    @input="$emit('input', $event)"
   />
 </template>
 
 <script>
 import config from 'config'
-import BaseSelect from 'theme/components/core/blocks/Form/BaseSelect'
+import { mapGetters } from 'vuex'
 import { currentStoreView } from '@vue-storefront/core/lib/multistore'
-import { getTranslatedCountries } from 'icmaa-config/helpers/i18n/countries'
+
+import BaseSelect from 'theme/components/core/blocks/Form/BaseSelect'
 
 import get from 'lodash-es/get'
 
@@ -23,7 +24,7 @@ export default {
   },
   props: {
     value: {
-      type: [Object, String],
+      type: [Object, String, null],
       required: true
     },
     preselectStoreViewLanguage: {
@@ -37,16 +38,13 @@ export default {
   },
   data () {
     return {
-      countries: getTranslatedCountries()
+      country: this.value || ''
     }
   },
   computed: {
-    country () {
-      if (!this.value && this.preselectStoreViewLanguage) {
-        return currentStoreView().i18n.defaultCountry
-      }
-      return this.value
-    },
+    ...mapGetters({
+      countries: 'icmaaConfig/getCountries'
+    }),
     allowedCountries () {
       /**
        * We can't just use the values from `currentStoreView()`, because they are concatenated by
@@ -60,6 +58,13 @@ export default {
         .filter(({ code }) => !this.onlyAllowed || this.allowedCountries.includes(code))
         .map(({ code: value, name: label }) => ({ value, label }))
     }
+  },
+  mounted () {
+    if (!this.value && this.preselectStoreViewLanguage) {
+      this.country = currentStoreView().i18n.defaultCountry
+    }
+
+    this.$emit('input', this.country)
   }
 }
 </script>

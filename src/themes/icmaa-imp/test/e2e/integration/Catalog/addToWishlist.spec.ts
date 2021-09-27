@@ -12,7 +12,11 @@ describe('Add to and remove from wishlist ', () => {
   it('on CLP', () => {
     cy.visitCategoryPage()
     cy.wait(1000)
-    cy.getByTestId('ProductTile').random().findByTestId('wishlistButton').click()
+    cy.getByTestId('ProductTile')
+      .random()
+      .findByTestId('wishlistButton')
+      .scrollIntoView()
+      .click()
     cy.checkNotification('success')
   })
 })

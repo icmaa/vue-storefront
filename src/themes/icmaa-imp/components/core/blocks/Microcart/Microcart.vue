@@ -12,31 +12,14 @@
       <template v-if="productsInCart.length">
         <coupon />
         <ul class="t-mb-4">
-          <product v-for="product in productsInCart" :key="product.checksum || product.sku" :product="product" />
+          <product v-for="(product, i) in productsInCart" :key="`cart-${i}-${product.checksum || product.sku}`" :product="product" />
         </ul>
-        <div class="t-mb-4">
-          <div v-for="(segment, index) in filteredTotals" :key="`total-${index}`" class="t-flex t-items-center t-justify-between t-mb-2 t-text-sm">
-            <span>
-              {{ segment.title }}
-            </span>
-            <span v-if="segment.value !== null">
-              {{ segment.value_incl_tax || segment.value | price }}
-            </span>
-          </div>
-          <div class="t-flex t-items-center t-justify-between t-font-bold" v-for="(segment, index) in grandTotals" :key="`grand-total-${index}`">
-            <span>
-              {{ segment.title }}
-            </span>
-            <span>
-              {{ segment.value | price }}
-            </span>
-          </div>
-        </div>
-
+        <totals class="t-mb-4" />
         <template v-if="!isCheckoutMode">
-          <button-component type="primary" class="t-w-full" @click.native="continueShopping(true)">
+          <button-component type="primary" class="t-w-full" @click.native="continueShopping(true)" data-test-id="GoToCheckout">
             {{ $t('Go to checkout') }}
           </button-component>
+          <paypal-checkout-button class="t-mt-2" />
           <button-component type="transparent" class="t-w-full t-mt-2" @click.native="continueShopping()">
             {{ $t('Continue shopping') }}
           </button-component>
@@ -53,7 +36,9 @@ import VueOfflineMixin from 'vue-offline/mixin'
 import ButtonComponent from 'theme/components/core/blocks/Button'
 import Sidebar from 'theme/components/core/blocks/AsyncSidebar/Sidebar'
 import Product from 'theme/components/core/blocks/Microcart/Product'
+import Totals from 'theme/components/core/blocks/Microcart/Totals'
 import Coupon from 'theme/components/core/blocks/Microcart/Coupon'
+import PaypalCheckoutButton from 'icmaa-paypal/components/Checkout/ButtonWrapper'
 
 export default {
   name: 'MicroCart',
@@ -61,14 +46,11 @@ export default {
     ButtonComponent,
     Coupon,
     Sidebar,
-    Product
+    Product,
+    Totals,
+    PaypalCheckoutButton
   },
-  mixins: [VueOfflineMixin],
-  data () {
-    return {
-      componentLoaded: false
-    }
-  },
+  mixins: [ VueOfflineMixin ],
   props: {
     isCheckoutMode: {
       type: Boolean,
@@ -76,28 +58,16 @@ export default {
       default: () => false
     }
   },
-  mounted () {
-    this.$nextTick(() => {
-      this.componentLoaded = true
-    })
-  },
   computed: {
     ...mapGetters({
-      productsInCart: 'cart/getCartItems',
-      totals: 'cart/getTotals'
-    }),
-    filteredTotals () {
-      return this.totals.filter(segment => segment.code !== 'grand_total')
-    },
-    grandTotals () {
-      return this.totals.filter(segment => segment.code === 'grand_total')
-    }
+      productsInCart: 'cart/getCartItems'
+    })
   },
   methods: {
     continueShopping (toCheckout = false) {
       this.$store.dispatch('ui/closeAll')
       if (toCheckout === true) {
-        this.$router.push(this.localizedRoute('/checkout'))
+        this.$router.push(this.localizedRoute({ name: 'checkout' }))
       }
     },
     clearCart () {
@@ -108,8 +78,7 @@ export default {
         action2: {
           label: i18n.t('OK'),
           action: async () => {
-            await this.$store.dispatch('cart/clear')
-            await this.$store.dispatch('cart/sync', { forceClientState: true })
+            await this.$store.dispatch('cart/clear', { sync: true })
           }
         },
         hasNoTimeout: true

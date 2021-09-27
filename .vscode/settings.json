@@ -1,0 +1,24 @@
+{
+  "editor.tabSize": 2,
+  "editor.renderWhitespace": "boundary",
+  "eslint.packageManager": "yarn",
+  "eslint.validate": [ "javascript", "typescript", "vue", "html" ],
+  "npm.packageManager": "yarn",
+  "openInGitHub.providerType": "github",
+  "openInGitHub.requireSelectionForLines": true,
+  "json.schemas": [
+    {
+      "fileMatch": [ "cypress.json" ],
+      "url": "https://on.cypress.io/cypress.schema.json"
+    }
+  ],
+  "tailwindCSS.emmetCompletions": true,
+  "scssFormatter.singleQuote": true,
+  "vetur.validation.style": false,
+  "vetur.format.defaultFormatter.html": "prettier",
+  "eslint.nodePath": "./vue-storefront",
+  "editor.formatOnSave": false,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  }
+}

@@ -78,7 +78,7 @@ export const icmaaGoogleTagManagerModule: Module<GoogleTagManagerState, any> = {
 
       return !isEmpty(product) ? product : false
     },
-    gtmEventPayload: (state, getters, rootState, rootGetters) => (type?: 'product' | 'category' | 'search') => {
+    gtmEventPayload: (state, getters, rootState, rootGetters) => (type?: 'product' | 'category' | 'search' | 'checkout') => {
       let DTO: Record<string, any> = {}
 
       const storeView = currentStoreView()
@@ -132,6 +132,11 @@ export const icmaaGoogleTagManagerModule: Module<GoogleTagManagerState, any> = {
               currencyCode
             }
           }
+
+          break
+
+        case 'checkout':
+          DTO = { event: 'icmaa-checkout' }
 
           break
       }

@@ -1,0 +1,10 @@
+{
+  "name": "icmaa-checkout",
+  "version": "1.0.0",
+  "description": "Checkout module for Vue Storefront",
+  "main": "index.ts",
+  "contributors": [
+    "Christian Ewald <c.ewald@impericon.com>"
+  ],
+  "license": "MIT"
+}

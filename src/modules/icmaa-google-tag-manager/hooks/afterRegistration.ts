@@ -25,6 +25,11 @@ export const registerCustomPageEvents = () => {
     IcmaaGoogleTagManagerExecutors.onGtmPageView({ type: event.event, event })
   })
 
+  EventHooks.checkoutVisited(() => {
+    const event = rootStore.getters['icmaaGoogleTagManager/gtmEventPayload']('checkout')
+    IcmaaGoogleTagManagerExecutors.onGtmPageView({ type: event.event, event })
+  })
+
   EventHooks.pageNotFound(() => {
     const event = Object.assign(
       rootStore.getters['icmaaGoogleTagManager/gtmEventPayload'](),
@@ -141,6 +146,14 @@ export function afterRegistration () {
     GTM.trackEvent({
       event: 'icmaa-facebook-login',
       facebookLoginAction: status
+    })
+  })
+
+  EventHooks.checkoutStep(({ step, data }) => {
+    data = data || {}
+    GTM.trackEvent({
+      event: 'icmaa-checkout-step-' + step,
+      ...data
     })
   })
 

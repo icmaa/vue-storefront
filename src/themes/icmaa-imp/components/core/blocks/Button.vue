@@ -127,6 +127,9 @@ export default {
           break
         case 'sm':
           size = 't-min-h-8 t-px-4 t-text-xs'
+          break;
+        case 'lg':
+          size = 't-min-h-12 t-px-6 t-text-sm'
       }
 
       if (this.paddingX) {

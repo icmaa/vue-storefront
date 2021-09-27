@@ -3,9 +3,9 @@ import VueCookies from 'vue-cookies'
 
 import config, { externalCheckout as checkoutConfig } from 'config'
 import EventBus from '@vue-storefront/core/compatibility/plugins/event-bus'
-import { once } from '@vue-storefront/core/helpers'
+import { once, isServer } from '@vue-storefront/core/helpers'
 import { userHooks } from '@vue-storefront/core/modules/user/hooks'
-import { isServer } from '@vue-storefront/core/helpers'
+
 import { Logger } from '@vue-storefront/core/lib/logger'
 
 import { StorefrontModule } from '@vue-storefront/core/lib/modules'
@@ -68,7 +68,7 @@ export const IcmaaExternalCheckoutModule: StorefrontModule = function ({ router,
           }
         }
       } else if (!store.getters['user/isLoggedIn']) {
-        await store.dispatch('user/loadLastOrderFromCache', { resolvedFromCache: false })
+        await store.dispatch('user/loadOrdersFromCache')
         EventBus.$emit('icmaa-external-checkout-user-data-complete')
       }
     })

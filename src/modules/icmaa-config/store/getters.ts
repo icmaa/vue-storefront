@@ -3,6 +3,7 @@ import config from 'config'
 import RootState from '@vue-storefront/core/types/RootState'
 import ConfigState, { StoreView } from '../types/ConfigState'
 import { getExtendedStoreviewConfig } from '../helpers'
+import { getTranslatedCountries } from '../helpers/i18n/countries'
 
 import { buildBaseStoreView, getExtendedStoreviewConfig as getOrgExtendedStoreviewConfig } from '@vue-storefront/core/lib/multistore'
 import getStoreViewByStoreCode from '@vue-storefront/core/lib/multistore/getStoreViewByStoreCode'
@@ -56,6 +57,11 @@ const getters: GetterTree<ConfigState, RootState> = {
     }
 
     return RootState.storeView
+  },
+  getCountries: () => getTranslatedCountries(),
+  getCountryNameByCode: (state, getters) => (code: string): string => {
+    const country = getters.getCountries.find(c => c.code === code)
+    return country.name || code
   }
 }
 
