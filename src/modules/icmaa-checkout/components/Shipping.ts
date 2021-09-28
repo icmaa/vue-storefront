@@ -80,6 +80,10 @@ export default {
           shippingMethod
         )
 
+        // Reset payment-method in case the shipping-/billing-address has changed.
+        // Otherwise "Payment-Method is not available" error-message might block the checkout step.
+        await this.$store.dispatch('checkout/savePaymentMethod', null)
+
         await this.$store.dispatch('cart/syncTotals', { forceServerSync: true })
         await this.$store.dispatch('cart/syncPaymentMethods', { forceServerSync: true })
 
