@@ -16,7 +16,8 @@ const actions: ActionTree<CartState, RootState> = {
    */
   async applyCoupon ({ getters, dispatch, commit }, couponCode) {
     if (couponCode && getters.canSyncTotals) {
-      const { result } = await CartService.applyCoupon(couponCode)
+      const response = await CartService.applyCoupon(couponCode)
+      const { result } = response
       if (result) {
         await dispatch('couponCallback')
 
@@ -24,7 +25,7 @@ const actions: ActionTree<CartState, RootState> = {
         // so we need to update it in vuex and StorageManager
         commit(orgTypes.CART_SET_ITEMS_HASH, getters.getCurrentCartHash)
       }
-      return result
+      return response
     }
   },
   /**
@@ -35,14 +36,15 @@ const actions: ActionTree<CartState, RootState> = {
    */
   async removeCoupon ({ getters, dispatch, commit }, { sync = true } = {}) {
     if (getters.canSyncTotals) {
-      const { result } = await CartService.removeCoupon()
+      const response = await CartService.removeCoupon()
+      const { result } = response
       if (result && sync) {
         await dispatch('couponCallback')
 
         // 'getCurrentCartHash' has been changed (it's based on cart items data)
         // so we need to update it in vuex and StorageManager
         commit(orgTypes.CART_SET_ITEMS_HASH, getters.getCurrentCartHash)
-        return result
+        return response
       }
     }
   },

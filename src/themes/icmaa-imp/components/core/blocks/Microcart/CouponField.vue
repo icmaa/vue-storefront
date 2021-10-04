@@ -56,12 +56,12 @@ export default {
 
       this.$store.dispatch('ui/loader', { message: i18n.t('Please wait') })
       this.$store.dispatch('cart/applyCoupon', this.couponCode)
-        .then(status => {
+        .then(response => {
           this.$store.dispatch('ui/loader', false)
 
           let type = 'success'
           let message = 'Your coupon has been successfully applied.'
-          if (status) {
+          if (response.code === 200 && !!response.result) {
             this.couponCode = ''
           } else {
             type = 'error'
@@ -78,12 +78,12 @@ export default {
     async removeCoupon () {
       this.$store.dispatch('ui/loader', { message: i18n.t('Please wait') })
       this.$store.dispatch('cart/removeCoupon')
-        .then(status => {
+        .then(response => {
           this.$store.dispatch('ui/loader', false)
 
           let type = 'success'
           let message = 'Your coupon has been removed.'
-          if (status) {
+          if (response.code === 200 && !!response.result) {
             this.couponCode = ''
           } else {
             type = 'error'
