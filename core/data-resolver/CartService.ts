@@ -98,7 +98,7 @@ const applyCoupon = async (couponCode: string): Promise<Task> => {
     payload: {
       method: 'POST'
     },
-    silent: false
+    silent: true
   });
 }
 
@@ -108,7 +108,7 @@ const removeCoupon = async (): Promise<Task> =>
     payload: {
       method: 'POST'
     },
-    silent: false
+    silent: true
   });
 
 export const CartService: DataResolver.CartService = {
