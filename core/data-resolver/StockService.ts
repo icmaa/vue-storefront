@@ -17,7 +17,8 @@ const check = (sku: string): Promise<Task> =>
   TaskQueue.execute({
     url: processURLAddress(`${getApiEndpointUrl(config.stock, 'endpoint')}/check?sku=${encodeURIComponent(sku)}`),
     is_result_cacheable: true,
-    product_sku: sku
+    product_sku: sku,
+    silent: true
   })
 
 const list = (skuList: string[]): Promise<Task> =>
@@ -27,7 +28,8 @@ const list = (skuList: string[]): Promise<Task> =>
         skuList.join(',')
       )}`
     ),
-    skus: skuList
+    skus: skuList,
+    silent: true
   })
 
 export const StockService: DataResolver.StockService = {
