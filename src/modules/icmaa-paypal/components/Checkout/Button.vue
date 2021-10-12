@@ -21,10 +21,14 @@ export default {
       brandName: 'icmaaPayPal/getBrandName',
       softDescriptor: 'icmaaPayPal/getSoftDescriptor',
       referenceId: 'icmaaPayPal/getReferenceId',
+      cartItems: 'cart/getCartItems',
       totals: 'cart/getTotals'
     }),
     grandTotal () {
       return this.totals.find(t => t.code === 'grand_total')?.value || 0
+    },
+    isTicket () {
+      return this.cartItems.some(i => i.department === 4)
     }
   },
   mounted () {
@@ -41,12 +45,33 @@ export default {
             label: 'checkout',
             tagline: false
           },
+          onClick: this.onClick,
           createOrder: this.createOrder,
           onShippingChange: this.onShippingChange,
           onApprove: this.onApprove,
           onError: this.onError
         })
         .render('#paypal-button-container')
+    },
+    onClick (data, actions) {
+      if (this.isTicket) {
+        this.$store.dispatch('notification/spawnNotification', {
+          type: 'warning',
+          message: this.$t(
+            'We are sorry, it\'s not possible to buy tickets using PayPal. Please use another payment-method.'
+          ),
+          action1: { label: this.$t('OK') },
+          action2: {
+            label: this.$t('Go to checkout'),
+            action: this.goToCheckout
+          },
+          timeToLive: 8000
+        })
+
+        return actions.reject()
+      } else {
+        return actions.resolve()
+      }
     },
     createOrder (data, actions) {
       return actions.order.create({
@@ -220,11 +245,14 @@ export default {
       this.$store.dispatch('notification/spawnNotification', {
         type: 'error',
         message: this.$t(
-          'There was an error during your payment. Please try again, or contact our support.',
-          { message }
+          'There was an error during your payment. Please try again, or contact our support.'
         ),
         action1: { label: this.$t('OK') }
       })
+    },
+    goToCheckout () {
+      this.$store.dispatch('ui/closeAll')
+      this.$router.push(this.localizedRoute({ name: 'checkout' }))
     }
   }
 }

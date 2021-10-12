@@ -1,11 +1,17 @@
 <template>
   <div class="payment">
-    <template class="" v-if="active">
+    <template v-if="active">
       <div
         v-if="$v.selected.$error && (!$v.selected.required || !$v.selected.notFalse)"
         class="t-text-sm t-text-alert t-mb-4"
       >
         {{ $t('Please select a payment method.') }}
+      </div>
+      <div
+        v-if="paymentMethods.length === 0"
+        class="t-text-sm t-mb-4"
+      >
+        {{ $t('We are sorry but there are no payment-methods available.') }}
       </div>
       <div
         v-for="(method, index) in paymentMethods"

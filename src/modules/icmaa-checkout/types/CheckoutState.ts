@@ -57,6 +57,7 @@ export default interface CheckoutState {
   sections: {
     [key: string]: Section
   },
+  message: string | boolean,
   personalDetails: PersonalDetails,
   shippingDetails: ShippingDetails,
   shippingMethod: any,
