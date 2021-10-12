@@ -23,7 +23,8 @@ export default {
       isLoading: 'checkout/isLoading',
       getShippingMethods: 'checkout/getShippingMethods',
       shippingDetails: 'checkout/getShippingDetails',
-      isPriorityHandlingEnabled: 'checkout/isPriorityHandlingEnabled'
+      isPriorityHandlingEnabled: 'checkout/isPriorityHandlingEnabled',
+      message: 'checkout/getMessage'
     }),
     hasShippingMethod () {
       return this.getShippingMethods.length > 0
