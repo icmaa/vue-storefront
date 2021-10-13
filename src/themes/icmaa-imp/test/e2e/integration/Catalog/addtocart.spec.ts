@@ -11,13 +11,7 @@ describe('Add to Cart', () => {
         cy.log(`Try to find product which is in stock ${run}/${tries}`)
       }
 
-      cy.visitCategoryPage({ url: '/clothing.html?type_top=99' })
-
-      /**
-     * @todo The page gets rerendered after initial load.
-     * Because of the filter in the URL.
-     */
-      cy.wait(4000)
+      cy.visitCategoryPage({ url: '/t-shirts-tanks-and-girlies.html' })
 
       cy.getByTestId('ProductTile')
         .random()
