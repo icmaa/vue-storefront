@@ -1,10 +1,10 @@
 // Route components
 const ServiceComponent = () => import(/* webpackChunkName: "vsf-icmaa-cms-page-custom-service" */ 'theme/components/core/blocks/ICMAA/Cms/Pages/Service.vue')
-const ServiceJobsComponent = () => import(/* webpackChunkName: "vsf-icmaa-cms-page-custom-service-jobs" */ 'theme/components/core/blocks/ICMAA/Cms/Pages/ServiceJobs.vue')
 const ServiceRTEComponent = () => import(/* webpackChunkName: "vsf-icmaa-cms-page-custom-service-rte" */ 'theme/components/core/blocks/ICMAA/Cms/Pages/ServiceRTE.vue')
 const ServiceSizeComponent = () => import(/* webpackChunkName: "vsf-icmaa-cms-page-custom-service-size" */ 'theme/components/core/blocks/ICMAA/Cms/Pages/ServiceSize.vue')
 const ServiceContactComponent = () => import(/* webpackChunkName: "vsf-icmaa-cms-page-custom-service-contact" */ 'theme/components/core/blocks/ICMAA/Cms/Pages/ServiceContact.vue')
 const ServiceWiderrufComponent = () => import(/* webpackChunkName: "vsf-icmaa-cms-page-custom-service-widerruf" */ 'theme/components/core/blocks/ICMAA/Cms/Pages/ServiceWiderruf.vue')
+const ServiceJobsComponent = () => import(/* webpackChunkName: "vsf-icmaa-cms-page-custom-service-jobs" */ 'theme/components/core/blocks/ICMAA/Cms/Pages/ServiceJobs.vue')
 const NewsletterComponent = () => import(/* webpackChunkName: "vsf-icmaa-cms-page-custom-newsletter-landingpage" */ 'icmaa-newsletter/pages/Newsletter.vue')
 const AffiliateComponent = () => import(/* webpackChunkName: "vsf-icmaa-cms-page-custom-affiliate" */ 'theme/components/core/blocks/ICMAA/Cms/Pages/Affiliate.vue')
 const TicketsComponent = () => import(/* webpackChunkName: "vsf-icmaa-cms-page-custom-tickets" */ 'theme/pages/Tickets.vue')
@@ -18,11 +18,11 @@ const NextGenerationVoting = () => import(/* webpackChunkName: "vsf-icmaa-cms-pa
 export const routes: any = [
   // Custom cms routes, like /service or /festivals
   { name: 'service', path: '/:identifier', component: ServiceComponent },
-  { name: 'service-jobs', path: '/:identifier', component: ServiceJobsComponent },
   { name: 'service-rte', path: '/:identifier', component: ServiceRTEComponent },
   { name: 'service-size', path: '/:identifier', component: ServiceSizeComponent },
   { name: 'service-contact', path: '/:identifier', component: ServiceContactComponent },
   { name: 'service-widerruf', path: '/:identifier', component: ServiceWiderrufComponent },
+  { name: 'service-jobs', path: '/:identifier', component: ServiceJobsComponent },
   { name: 'newsletter', path: '/:identifier', component: NewsletterComponent },
   { name: 'affiliate', path: '/:identifier', component: AffiliateComponent },
   { name: 'tickets', path: '/:identifier', component: TicketsComponent },
