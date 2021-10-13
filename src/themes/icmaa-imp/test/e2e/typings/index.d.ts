@@ -314,15 +314,48 @@ declare namespace Cypress {
     registerStockApiRequest(): Chainable<Window>,
 
     /**
-     * Check availability of current product.
+     * Check response of latest product stock api request.
+     * Uses alias `apiStockReq` therefore `cy.registerStockApiRequest()` must be used before.
+     * Adds alias `availability` for further use.
+     *
+     * @example
+     * cy.checkStockApiRequest()
+     */
+    checkStockApiRequest(): Chainable<Window>,
+
+    /**
+     * Check availability of current product on PDP.
      * Its important that the `registerStockApiRequest` is called to register the stock-api route before the PDP is opened.
      * Adds alias `availability` for further use.
      * Adds alias `productType` for further use.
      *
      * @example
      * cy.checkAvailabilityOfCurrentProduct()
+     * cy.checkAvailabilityOfCurrentProduct(true)
      */
-    checkAvailabilityOfCurrentProduct(): Chainable<Window>,
+    checkAvailabilityOfCurrentProduct(closeSidebar?: boolean): Chainable<Window>,
+
+    /**
+     * Check availability of current product in sidebar.
+     * Its important that the `registerStockApiRequest` is called to register the stock-api route before the PDP is opened.
+     * Adds alias `availability` for further use.
+     * Adds alias `productType` for further use.
+     *
+     * @example
+     * cy.checkAvailabilityOfCurrentProductInSidebar()
+     * cy.checkAvailabilityOfCurrentProductInSidebar(true)
+     */
+    checkAvailabilityOfCurrentProductInSidebar(closeSidebar?: boolean): Chainable<Window>,
+
+    /**
+     * Select a random product option add-to-cart sidebar.
+     * Adds alias `availability` for further use.
+     * Adds alias `productType` for further use.
+     *
+     * @example
+     * cy.selectRandomProductOptionInSidebar()
+     */
+    selectRandomProductOptionInSidebar(): Chainable<Window>,
 
     /**
      * Try to add random product to cart. Retries if product is unavailable or out-of-stock.

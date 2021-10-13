@@ -379,7 +379,23 @@ Cypress.Commands.add('registerStockApiRequest', () => {
     .as('apiStockReq')
 })
 
-Cypress.Commands.add('checkAvailabilityOfCurrentProduct', () => {
+Cypress.Commands.add('checkStockApiRequest', () => {
+  cy.wait('@apiStockReq')
+    .its('response')
+    .then(response => {
+      if (
+        response.statusCode === 200 &&
+        response.body.result.is_in_stock === true &&
+        response.body.result.qty > 1
+      ) {
+        cy.wrap(true).as('availability')
+      } else {
+        cy.wrap(false).as('availability')
+      }
+    })
+})
+
+Cypress.Commands.add('checkAvailabilityOfCurrentProduct', (closeSidebar = false) => {
   cy.wait('@apiStockReq')
   cy.wait(300) // Wait for DOM change
 
@@ -391,15 +407,13 @@ Cypress.Commands.add('checkAvailabilityOfCurrentProduct', () => {
         if ($product.find('[data-test-id="AddToCartSize"]').length) {
           cy.wrap('configurable').as('productType')
           cy.openSidebar('[data-test-id="AddToCartSize"]')
-          cy.get('@sidebar').findByTestId('DefaultSelector').filter('.available')
-            .then($selector => {
-              if ($selector.length === 0) {
-                cy.wrap(false).as('availability')
-              } else {
-                cy.wrap(true).as('availability')
-              }
-            })
-          cy.get('@sidebar').findByTestId('closeButton').click()
+
+          cy.selectRandomProductOptionInSidebar()
+            .checkStockApiRequest()
+
+          if (closeSidebar) {
+            cy.get('@sidebar').findByTestId('closeButton').click()
+          }
         } else {
           cy.wrap('simple').as('productType')
           cy.wrap(true).as('availability')
@@ -407,6 +421,12 @@ Cypress.Commands.add('checkAvailabilityOfCurrentProduct', () => {
       })
     }
   })
+})
+
+Cypress.Commands.add('checkAvailabilityOfCurrentProductInSidebar', (closeSidebar = false) => {
+  cy.wrap('configurable').as('productType')
+  cy.selectRandomProductOptionInSidebar()
+    .checkStockApiRequest()
 })
 
 Cypress.Commands.add('addRandomProductToCart', (options?: { tries: number, enterCheckout?: boolean }, count: number = 1) => {
@@ -432,6 +452,22 @@ Cypress.Commands.add('addRandomProductToCart', (options?: { tries: number, enter
     })
 })
 
+Cypress.Commands.add('selectRandomProductOptionInSidebar', () => {
+  cy.get<'configurable'|'simple'>('@productType')
+    .then(type => {
+      if (type === 'configurable') {
+        cy.get('@sidebar').findByTestId('DefaultSelector')
+          .filter('.available')
+          .random()
+          .then($item => {
+            cy.wrap<string>($item.find('span').first().text().trim()).as('optionLabel')
+            cy.wrap($item)
+          })
+          .click({ force: true })
+      }
+    })
+})
+
 Cypress.Commands.add('addCurrentProductToCart', (checkAvailability = true, enterCheckout = false) => {
   if (checkAvailability) {
     cy.checkAvailabilityOfCurrentProduct()
@@ -442,21 +478,18 @@ Cypress.Commands.add('addCurrentProductToCart', (checkAvailability = true, enter
   cy.get<'configurable'|'simple'>('@productType')
     .then(type => {
       if (type === 'configurable') {
-        cy.openSidebar('[data-test-id="AddToCartSize"]')
-        cy.get('@sidebar').findByTestId('DefaultSelector')
-          .filter('.available')
-          .random()
-          .then($item => {
-            cy.wrap<string>($item.find('span').first().text().trim()).as('optionLabel')
-            cy.wrap($item)
-          })
-          .click({ force: true })
-
         cy.get<string>('@optionLabel').then(label => {
+          if (!label) {
+            cy.selectRandomProductOptionInSidebar()
+          }
+
           cy.getByTestId('AddToCartSize').contains(label)
         })
 
-        cy.get('@sidebar').findByTestId('AddToCart').click()
+        cy.get('@sidebar').findByTestId('AddToCart')
+          .should('not.be.disabled')
+          .click()
+
         cy.get('@sidebar')
           .should('not.be.visible')
       } else {
