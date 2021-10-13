@@ -1,6 +1,5 @@
 <template>
-  <layout id="cms-page">
-    <h2 v-html="content.headline" />
+  <layout id="cms-page" :headline="content.headline">
     <div class="t-mt-4 t-mb-8">
       {{ content.description }}
     </div>
