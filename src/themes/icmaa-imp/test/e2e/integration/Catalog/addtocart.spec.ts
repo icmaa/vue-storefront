@@ -1,7 +1,7 @@
 describe('Add to Cart', () => {
-  // it('is working for random product on PDP.', () => {
-  //   cy.addRandomProductToCart()
-  // })
+  it('is working for random product on PDP.', () => {
+    cy.addRandomProductToCart()
+  })
 
   it('is working for random product on PLP.', () => {
     const findProductInStock = (run: number = 1, tries: number = 3) => {
