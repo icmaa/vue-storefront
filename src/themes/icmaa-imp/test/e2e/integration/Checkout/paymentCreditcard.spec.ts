@@ -22,6 +22,7 @@ describe('Checkout', () => {
 
     cy.get('@payment')
       .findByTestId('CheckoutcomCardForm')
+      .wait(3000)
       .getFrame().as('ccIframe')
       .then(() => {
         cy.get('@ccIframe').find('input[name="cardnumber"]').type(ccNumber)
