@@ -37,6 +37,12 @@ const findProductInStock = (run: number = 1, tries: number = 3) => {
   cy.registerStockApiRequest()
 
   cy.getByTestId('ProductTile')
+    // Filter only products without "from" prices
+    .then($items => {
+      cy.wrap($items.filter((i, e) => {
+        return Cypress.$(e).find('.price > span').length === 0
+      }))
+    })
     .random()
     .then($product => {
       cy.wrap<PriceDTO>(collectPriceFromDOM($product)).as('listPrice')

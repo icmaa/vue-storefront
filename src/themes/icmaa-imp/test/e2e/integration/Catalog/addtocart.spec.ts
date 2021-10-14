@@ -4,42 +4,57 @@ describe('Add to Cart', () => {
   })
 
   it('is working for random product on PLP.', () => {
-    cy.visitCategoryPage({ url: '/clothing.html?type_top=99' })
+    const findProductInStock = (run: number = 1, tries: number = 3) => {
+      if (run > tries) {
+        expect(true).to.be.equal(false, 'No buyable products found')
+      } else {
+        cy.log(`Try to find product which is in stock ${run}/${tries}`)
+      }
 
-    /**
+      cy.visitCategoryPage({ url: '/t-shirts-tanks-and-girlies.html' })
+
+      /**
      * @todo The page gets rerendered after initial load.
-     * Because of the filter in the URL.
      */
-    cy.wait(4000)
+      cy.wait(1000)
 
-    cy.getByTestId('ProductTile')
-      .random()
-      .as('Product')
+      cy.getByTestId('ProductTile')
+        .random()
+        .as('Product')
 
-    cy.get('@Product')
-      .findByTestId('ProductName')
-      .then($productName => {
-        cy.wrap($productName.text().trim()).as('ProductName')
-      })
+      cy.get('@Product')
+        .findByTestId('ProductName')
+        .then($productName => {
+          cy.wrap($productName.text().trim()).as('ProductName')
+        })
 
-    cy.get('@Product')
-      .findByTestId('QuickAddToCart')
-      .click()
+      cy.get('@Product')
+        .findByTestId('QuickAddToCart')
+        .scrollIntoView()
+        .click()
 
-    cy.getByTestId('Sidebar')
-      .as('Sidebar')
-      .should('be.visible')
+      cy.getByTestId('Sidebar')
+        .as('sidebar')
+        .should('be.visible')
 
-    cy.get('@Sidebar')
-      .findByTestId('DefaultSelector')
-      .filter('.available')
-      .clickRandomElement()
+      cy.registerStockApiRequest()
+      cy.checkAvailabilityOfCurrentProductInSidebar()
+
+      cy.get<boolean>('@availability')
+        .then(available => {
+          if (!available) {
+            findProductInStock(run + 1)
+          }
+        })
+    }
+
+    findProductInStock()
 
     cy.getByTestId('AddToCart')
       .should('not.be.disabled')
       .click()
 
-    cy.get('@Sidebar')
+    cy.get('@sidebar')
       .should('not.be.visible')
 
     cy.checkNotification('success')
