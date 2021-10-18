@@ -1,7 +1,7 @@
 <template>
   <div data-test-id="Register">
     <div class="modal-content">
-      <form @submit.prevent="register" novalidate class="t-flex t-flex-wrap t--mx-2">
+      <form @submit.prevent="validate" novalidate class="t-flex t-flex-wrap t--mx-2">
         <input type="hidden" name="cluster" :value="cluster">
         <base-input
           type="email"
@@ -128,17 +128,22 @@
           {{ $t('I want to receive a newsletter') }}
         </base-checkbox>
         <div class="t-w-full t-px-2">
+          <div class="t-mb-2 t-text-sm t-text-alert" v-if="$v.recaptcha.$error && !this.$v.recaptcha.required">
+            {{ $t('Your Google reCAPTCHA validation is invalid.') }}<br>
+            {{ $t('Please try again or contact our customer-support.') }}
+          </div>
+          <vue-recaptcha ref="recaptcha" :sitekey="recaptchaWebsiteKey" :load-recaptcha-script="true" badge="inline" size="invisible" @verify="recaptchaVerify" @expired="recaptchaError" />
           <button-component :submit="true" type="primary" class="t-w-full t-mb-2" data-test-id="registerSubmit">
-            {{ $t('Register') }} *
+            {{ $t('Register') }} <sup class="t-ml-1">1, 2</sup>
           </button-component>
           <no-ssr>
             <facebook-login-button initial-text="Register with Facebook" class="t-w-full t-mb-2" />
           </no-ssr>
-          <button-component type="transparent" @click="switchElem" class="t-w-full t-mb-4">
+          <button-component type="transparent" @click="switchElem" class="t-w-full t-mb-4 t-flex-wrap">
             {{ $t('Already have an account?') }} <span class="t-ml-1">– {{ $t('Login to your account') }}</span>
           </button-component>
-          <div class="t-w-full t-text-xs t-text-base-lighter t-leading-1-rem lg:t-text-center">
-            <material-icon icon="asterisk" icon-set="icmaa" size="xxs" class="t-mr-1" />
+          <div class="t-w-full t-text-xs t-text-base-lighter t-leading-1-rem">
+            <sup class="t-font-bold t-mr-1">1)</sup>
             <i18n path="I have read and agree with the {terms}, {policy} and {return}." tag="span">
               <template #terms>
                 <router-link :to="localizedRoute('/service-conditions')" v-html="$t('Terms and Conditions')" class="t-text-base-lighter t-underline" @click.native="close()" />
@@ -151,6 +156,12 @@
               </template>
             </i18n>
           </div>
+          <div class="t-w-full t-text-xs t-text-base-lighter t-leading-1-rem t-mt-2">
+            <sup class="t-font-bold t-mr-1">2)</sup>
+            This site is protected by reCAPTCHA and the Google
+            <a href="https://policies.google.com/privacy" target="_blank" class="t-underline">Privacy Policy</a> and
+            <a href="https://policies.google.com/terms" target="_blank" class="t-underline">Terms of Service</a> apply.
+          </div>
         </div>
       </form>
     </div>
@@ -159,13 +170,14 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import config from 'config'
 import i18n from '@vue-storefront/i18n'
 import ButtonComponent from 'theme/components/core/blocks/Button'
 import BaseInput from 'theme/components/core/blocks/Form/BaseInput'
 import GenderSelect from 'theme/components/core/blocks/Form/GenderSelect'
 import BaseCheckbox from 'theme/components/core/blocks/Form/BaseCheckbox'
-import MaterialIcon from 'theme/components/core/blocks/MaterialIcon'
 import FacebookLoginButton from 'theme/components/core/blocks/Auth/FacebookLoginButton'
+import VueRecaptcha from 'vue-recaptcha'
 import NoSSR from 'vue-no-ssr'
 import { toDate } from 'icmaa-config/helpers/datetime'
 import { date } from 'icmaa-config/helpers/validators'
@@ -179,8 +191,8 @@ export default {
     GenderSelect,
     BaseCheckbox,
     ButtonComponent,
-    MaterialIcon,
     FacebookLoginButton,
+    VueRecaptcha,
     'no-ssr': NoSSR
   },
   data () {
@@ -194,6 +206,7 @@ export default {
       password: '',
       rPassword: '',
       conditions: false,
+      recaptcha: '',
       attemps: 0
     }
   },
@@ -222,6 +235,9 @@ export default {
     rPassword: {
       required,
       sameAsPassword: sameAs('password')
+    },
+    recaptcha: {
+      required
     }
   },
   computed: {
@@ -231,6 +247,9 @@ export default {
     }),
     dateFormat () {
       return this.storeConfig.i18n.dateFormat
+    },
+    recaptchaWebsiteKey () {
+      return config.icmaa?.googleRecaptcha?.websiteKey || false
     }
   },
   methods: {
@@ -241,7 +260,27 @@ export default {
       this.$store.commit('ui/setAuthElem', 'login')
       this.$store.dispatch('ui/hideModal', 'modal-signup')
     },
-    callRegister () {
+    recaptchaVerify (token) {
+      this.recaptcha = token
+      return this.validate()
+    },
+    async recaptchaError () {
+      this.recaptcha = ''
+      this.$v.recaptcha.$reset()
+      return this.$refs.recaptcha.reset()
+    },
+    async validate () {
+      await this.$refs.recaptcha.execute()
+      if (!this.$v.recaptcha.$error && !this.$v.recaptcha.required) {
+        return
+      }
+
+      this.$v.$touch()
+      if (!this.$v.$invalid) {
+        return this.register()
+      }
+    },
+    register () {
       this.$store.dispatch('ui/loader', { message: i18n.t('Registering the account ... ') })
 
       const formData = {
@@ -252,7 +291,8 @@ export default {
         dob: this.dob,
         gender: this.gender,
         cluster: this.cluster || null,
-        newsletter: this.newsletter
+        newsletter: this.newsletter,
+        recaptcha: this.recaptcha
       }
 
       if (this.dob) {
@@ -287,12 +327,6 @@ export default {
         Logger.error(err, 'user')()
       })
     },
-    register () {
-      this.$v.$touch()
-      if (!this.$v.$invalid) {
-        this.callRegister()
-      }
-    },
     onSuccess () {
       this.$store.dispatch('notification/spawnNotification', {
         type: 'success',
@@ -301,6 +335,7 @@ export default {
       })
     },
     onFailure (result) {
+      this.recaptchaError()
       this.$store.dispatch('notification/spawnNotification', {
         type: 'error',
         message: this.$t(result.result),
@@ -310,3 +345,12 @@ export default {
   }
 }
 </script>
+
+<style lang="scss">
+
+.grecaptcha-badge {
+    visibility: hidden;
+    display: none;
+}
+
+</style>
