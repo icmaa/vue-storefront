@@ -211,14 +211,20 @@ export default {
       const { email_address: email } = payer
       const { shipping } = purchase_units[0]
       const { name } = shipping
-      const [ firstname, lastname ] = name.full_name.split(' ', 2)
+
+      const nameAsArray = name.full_name.split(' ')
+      const firstname = nameAsArray.shift()
+      const lastname = nameAsArray.join(' ')
+
       const {
-        address_line_1: street,
+        address_line_1: street1,
+        address_line_2: street2,
         admin_area_1: state,
         admin_area_2: city,
         postal_code: postcode,
         country_code: country_id
       } = shipping.address
+      const street = street1 + ', ' + street2
 
       const address = { firstname, lastname, street, city, postcode, state, country_id }
 
