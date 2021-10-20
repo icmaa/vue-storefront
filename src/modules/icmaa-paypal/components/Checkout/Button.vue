@@ -25,7 +25,8 @@ export default {
       totals: 'cart/getTotals'
     }),
     grandTotal () {
-      return this.totals.find(t => t.code === 'grand_total')?.value || 0
+      const shipping = this.totals.find(t => t.code === 'shipping')?.value_incl_tax || 0
+      return this.totals.find(t => t.code === 'grand_total')?.value - shipping || 0
     },
     isTicket () {
       return this.cartItems.some(i => i.department === 4)
