@@ -225,7 +225,11 @@ export default {
         postal_code: postcode,
         country_code: country_id
       } = shipping.address
-      const street = street1 + ', ' + street2
+
+      let street = street1
+      if (street2) {
+        street += ', ' + street2
+      }
 
       const address = { firstname, lastname, street, city, postcode, state, country_id }
 
