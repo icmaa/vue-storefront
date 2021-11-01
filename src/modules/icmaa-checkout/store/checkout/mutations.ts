@@ -19,6 +19,9 @@ const mutations: MutationTree<CheckoutState> = {
 
     state.sections[key].active = true
   },
+  [types.CHECKOUT_SET_MESSAGE] (state, message = false) {
+    state.message = message === '' ? false : message
+  },
   [types.CHECKOUT_SAVE_PERSONAL_DETAILS] (state, personalDetails) {
     state.personalDetails = personalDetails
   },

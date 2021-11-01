@@ -109,6 +109,9 @@ const actions: ActionTree<CheckoutState, RootState> = {
     dispatch('savePaymentDetails', {})
     dispatch('savePaymentMethod', {})
     dispatch('dropPassword')
+  },
+  setMessage ({ commit }, message) {
+    commit(types.CHECKOUT_SET_MESSAGE, message)
   }
 }
 

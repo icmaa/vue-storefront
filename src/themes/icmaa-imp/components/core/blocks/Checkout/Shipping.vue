@@ -30,7 +30,12 @@
         </button-component>
       </div>
       <div v-else class="t-mb-4 t-text-sm">
-        {{ $t('There are currently no shipping options available for your shipping address.') }}
+        <template v-if="message">
+          {{ message }}
+        </template>
+        <template v-else>
+          {{ $t('There are currently no shipping options available for your shipping address.') }}
+        </template>
       </div>
     </template>
     <template v-else-if="!active && done">

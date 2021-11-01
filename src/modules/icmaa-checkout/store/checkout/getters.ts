@@ -6,6 +6,7 @@ import CheckoutState from '../../types/CheckoutState'
 const getters: GetterTree<CheckoutState, RootState> = {
   isLoading: state => state.loading,
   getSections: state => state.sections,
+  getMessage: state => state.message,
   getPersonalDetails: state => state.personalDetails || {},
   getCreateAccount: (state, getters) => getters.getPersonalDetails.createAccount || false,
   getShippingDetails: state => state.shippingDetails || {},

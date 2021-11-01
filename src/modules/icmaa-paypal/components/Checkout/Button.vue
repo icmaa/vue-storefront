@@ -21,10 +21,15 @@ export default {
       brandName: 'icmaaPayPal/getBrandName',
       softDescriptor: 'icmaaPayPal/getSoftDescriptor',
       referenceId: 'icmaaPayPal/getReferenceId',
+      cartItems: 'cart/getCartItems',
       totals: 'cart/getTotals'
     }),
     grandTotal () {
-      return this.totals.find(t => t.code === 'grand_total')?.value || 0
+      const shipping = this.totals.find(t => t.code === 'shipping')?.value_incl_tax || 0
+      return this.totals.find(t => t.code === 'grand_total')?.value - shipping || 0
+    },
+    isTicket () {
+      return this.cartItems.some(i => i.department === 4)
     }
   },
   mounted () {
@@ -41,12 +46,33 @@ export default {
             label: 'checkout',
             tagline: false
           },
+          onClick: this.onClick,
           createOrder: this.createOrder,
           onShippingChange: this.onShippingChange,
           onApprove: this.onApprove,
           onError: this.onError
         })
         .render('#paypal-button-container')
+    },
+    onClick (data, actions) {
+      if (this.isTicket) {
+        this.$store.dispatch('notification/spawnNotification', {
+          type: 'warning',
+          message: this.$t(
+            'We are sorry, it\'s not possible to buy tickets using PayPal. Please use another payment-method.'
+          ),
+          action1: { label: this.$t('OK') },
+          action2: {
+            label: this.$t('Go to checkout'),
+            action: this.goToCheckout
+          },
+          timeToLive: 8000
+        })
+
+        return actions.reject()
+      } else {
+        return actions.resolve()
+      }
     },
     createOrder (data, actions) {
       return actions.order.create({
@@ -186,14 +212,20 @@ export default {
       const { email_address: email } = payer
       const { shipping } = purchase_units[0]
       const { name } = shipping
-      const [ firstname, lastname ] = name.full_name.split(' ', 2)
+
+      const nameAsArray = name.full_name.split(' ')
+      const firstname = nameAsArray.shift()
+      const lastname = nameAsArray.join(' ')
+
       const {
-        address_line_1: street,
+        address_line_1: street1,
+        address_line_2: street2,
         admin_area_1: state,
         admin_area_2: city,
         postal_code: postcode,
         country_code: country_id
       } = shipping.address
+      const street = street1 + ', ' + street2
 
       const address = { firstname, lastname, street, city, postcode, state, country_id }
 
@@ -220,11 +252,14 @@ export default {
       this.$store.dispatch('notification/spawnNotification', {
         type: 'error',
         message: this.$t(
-          'There was an error during your payment. Please try again, or contact our support.',
-          { message }
+          'There was an error during your payment. Please try again, or contact our support.'
         ),
         action1: { label: this.$t('OK') }
       })
+    },
+    goToCheckout () {
+      this.$store.dispatch('ui/closeAll')
+      this.$router.push(this.localizedRoute({ name: 'checkout' }))
     }
   }
 }

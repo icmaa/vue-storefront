@@ -9,7 +9,7 @@ const CheckoutGatewaySuccess = () => import(/* webpackChunkName: "vsf-checkout-g
  * the ìcmaa-checkout` module as it was registered afterwards. So, keep that in mind.
  */
 export default [
-  { name: 'checkout', path: '/checkout-v2', component: CheckoutPage, meta: { layout: 'empty', gtm: 'checkout' } },
+  { name: 'checkout', path: '/checkout', component: CheckoutPage, meta: { layout: 'empty', gtm: 'checkout' } },
   { name: 'checkout-success', path: '/(checkout|order)-success', component: SuccessPage },
   { name: 'checkout-gateway-success', path: '/checkout-gateway-success', component: CheckoutGatewaySuccess, meta: { layout: 'empty' } }
 ]

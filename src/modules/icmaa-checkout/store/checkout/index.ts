@@ -7,6 +7,7 @@ import getters from './getters'
 const state = {
   loading: false,
   sections: {},
+  message: false,
   personalDetails: null,
   shippingDetails: null,
   shippingMethod: null,

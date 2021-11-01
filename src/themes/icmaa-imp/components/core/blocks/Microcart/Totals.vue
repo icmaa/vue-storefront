@@ -35,7 +35,7 @@ export default {
   props: {
     rows: {
       type: Array,
-      default: () => [ 'subtotal', 'shipping', 'cashondelivery', 'priority_handling' ]
+      default: () => [ 'subtotal', 'shipping', 'cashondelivery', 'priority_handling', 'discount' ]
     }
   },
   computed: {
