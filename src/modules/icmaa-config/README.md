@@ -13,6 +13,8 @@ local-${mandant}-storeview-${store-code}.json
 
 This module also put the current `process.env.__BUILDTIME__` into local-storage and force a flush if it isn't sync anymore. This way we can force a new load of specific data into local-storage with each new build. Items in local-storage that should be protected from flush, must be added to the `localStorageBuildFlushWhitelist` config array in `icmaa_config` config node (can be a RegExp).
 
+With this changes we can disable the `dynamicConfigReload` and save some resources on server-side requests.
+
 ## Further explanation
 
 The VSF uses the `node-config` package and it's [recommended approach for universal applications](https://github.com/lorenwest/node-config/wiki/Webpack-Usage). That's why we are able to just extend the output JSON file during the build. Webpack then creates an alias for `config` imports to load the generated JSON instead of the `node-config` library.
