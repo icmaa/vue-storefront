@@ -29,7 +29,8 @@ export default merge(base, {
       'create-api': './create-api-server.js'
     }
   },
-  externals: Object.keys(require('../../package.json').dependencies),
+  externals: Object.keys(require('../../package.json').dependencies)
+    .filter(k => !['config'].includes(k)),
   plugins: [
     new webpack.DefinePlugin({
       'process.env.VUE_ENV': '"server"'

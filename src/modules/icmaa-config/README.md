@@ -26,22 +26,7 @@ We try to overwrite everything needed by extending the Vuex store. But some meth
   import extendConfigs from 'icmaa-config/extendConfigs'
   extendConfigs()
   ``` 
-
-## Installation
-
-First enable `server.dynamicConfigReload` in your settings.
-
-For `v1.11.0` and above:
-*  Add the custom `configProvider` to the `src/ modules/server.ts` file like:
-   ```javascript
-   export const configProvider = require('icmaa-config      configProvider')
-   ```
-
-For `v1.10.x`:  
-* Add the custom `configProvider` to the `src/server/index.js` file like:
-  ```javascript
-  module.exports.registerUserServerRoutes = require('icmaa-config/    configProvider')
-  ```
+* We needed to remove `node-config` from the `externals` array of the `webpack.server.config.ts` to make the alias for `config` (which shows to the `config.json` file) work.
 
 ## Configs
 
@@ -58,4 +43,4 @@ For `v1.10.x`:
 
 ## Todo
 
-[ ] Remove `module-alias` dependency. We only need it in `core/scripts/server.ts` to define an alias for `config` imports on SSR as the `config` webpack-alias isn't working anyhow.
+[ ] ...
