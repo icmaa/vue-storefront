@@ -12,7 +12,7 @@ const glob = require('glob')
 const fs = require('fs')
 const rootPath = require('app-root-path').path
 const resolve = file => path.resolve(rootPath, file)
-const serverExtensions = glob.sync('src/modules/*/server.{ts,js}')
+const serverExtensions = glob.sync('src/modules/*/server.js')
 const configProviders: Function[] = []
 
 serverExtensions.map(serverModule => {
