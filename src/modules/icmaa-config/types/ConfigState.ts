@@ -4,6 +4,4 @@ export interface StoreView extends StoreViewAbstract {
   [key: string]: any
 }
 
-export default interface ConfigState {
-  map: StoreView[]
-}
+export default interface ConfigState {}
