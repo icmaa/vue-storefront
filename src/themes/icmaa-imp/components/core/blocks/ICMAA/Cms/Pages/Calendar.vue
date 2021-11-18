@@ -210,6 +210,10 @@ export default {
 
 <style lang="scss">
 
+.xmas-calendar .wrapper {
+  background-color: #073630;
+}
+
 .easter-calendar .wrapper {
   background-color: #52766F;
 }
