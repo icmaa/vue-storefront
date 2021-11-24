@@ -80,7 +80,7 @@ export default {
     }),
     availableFilters () {
       const submenuFilters = config.products.submenuFilters || []
-      const singleOptionFilters = config.products.singleOptionFilters || []
+      const hideSingleOptionsFilters = config.products.hideSingleOptionsFilters || []
       const attributes = this.attributes
 
       let filters = Object.entries(this.filters)
@@ -89,7 +89,17 @@ export default {
           const options = v[1].filter(o => o.id !== '0')
           return { attributeKey: v[0], options }
         })
-        .filter(f => (f.options.length > 1 || (f.options.length === 1 && singleOptionFilters.includes(f.attributeKey))) && !this.getSystemFilterNames.includes(f.attributeKey) && this.isVisibleFilter(f.attributeKey) && attributes[f.attributeKey])
+        .filter(f => {
+          return f.options.length > 0 &&
+            !this.getSystemFilterNames.includes(f.attributeKey) &&
+            this.isVisibleFilter(f.attributeKey) &&
+            attributes[f.attributeKey]
+        })
+        .filter(f => {
+          // Hide bands/brands if there is only one option (e.g. in band CLP)
+          const hideFilter = hideSingleOptionsFilters.includes(f.attributeKey)
+          return !hideFilter || (hideFilter && f.options.length > 1)
+        })
         .map(f => ({ ...f, submenu: submenuFilters.includes(f.attributeKey), attributeLabel: this.attributeLabel({ attributeKey: f.attributeKey }), position: attributes[f.attributeKey].position || 0 }))
         .map(this.sortOptions)
 
