@@ -342,11 +342,13 @@ export default {
     catalogHooksExecutors.productPageVisited(this.product)
   },
   created () {
-    const selectVariantCallback = () => { this.userHasSelectedVariant = true }
-    this.$bus.$on('user-has-selected-product-variant', selectVariantCallback)
-    this.$once('hook:destroyed', () => {
-      this.$bus.$off('user-has-selected-product-variant', selectVariantCallback)
-    })
+    if (!isServer) {
+      const selectVariantCallback = () => { this.userHasSelectedVariant = true }
+      this.$bus.$on('user-has-selected-product-variant', selectVariantCallback)
+      this.$once('hook:beforeDestroy', () => {
+        this.$bus.$off('user-has-selected-product-variant', selectVariantCallback)
+      })
+    }
   }
 }
 </script>
