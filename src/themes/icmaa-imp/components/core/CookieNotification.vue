@@ -46,7 +46,7 @@ export default {
       this.loadCookieNotificationModal = false
     }
   },
-  async created () {
+  async beforeMount () {
     this.$store.dispatch(
       'ui/setModalPriority',
       { name: 'modal-cookie-notification', priority: 100 }

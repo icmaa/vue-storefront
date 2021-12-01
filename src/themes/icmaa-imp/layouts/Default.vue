@@ -31,10 +31,12 @@
         <div class="t-clearfix" />
       </main>
       <main-footer />
-      <auth-modal />
-      <notifications />
-      <cookie-notification />
-      <offline-badge />
+      <no-ssr>
+        <auth-modal />
+        <notifications />
+        <cookie-notification />
+        <offline-badge />
+      </no-ssr>
     </div>
     <vue-progress-bar />
   </div>

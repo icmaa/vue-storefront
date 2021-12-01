@@ -75,7 +75,7 @@ export default {
       component: null
     }
   },
-  created () {
+  beforeMount () {
     this.getComponent()
   },
   mounted () {

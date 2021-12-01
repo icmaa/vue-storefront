@@ -54,7 +54,7 @@ export default {
       return attributeCodes
     }
   },
-  async created () {
+  async beforeMount () {
     await this.$store.dispatch('icmaaProductAlert/fetchProductStockAlerts')
     await this.$store.dispatch('icmaaProductAlert/fetchParentProductsByStockIds', this.stockItems)
     await this.$store.dispatch('attribute/list', { filterValues: this.attributeCodes })
