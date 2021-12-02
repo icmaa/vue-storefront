@@ -7,6 +7,7 @@ import { products, entities } from 'config'
 import { buildFilterProductsQuery } from '@vue-storefront/core/helpers'
 import { _prepareCategoryPathIds } from '@vue-storefront/core/modules/catalog-next/helpers/categoryHelpers'
 import { formatCategoryLink } from '@vue-storefront/core/modules/url/helpers'
+import getDefaultCategorySort from 'icmaa-catalog/helpers/defaultCategorySort'
 
 import omit from 'lodash-es/omit'
 import cloneDeep from 'lodash-es/cloneDeep'
@@ -47,7 +48,7 @@ const actions: ActionTree<CategoryState, RootState> = {
     )
 
     const { includeFields, excludeFields } = getters.getIncludeExcludeFields(category)
-    const sort = searchQuery.sort || getters.getDefaultCategorySort
+    const sort = searchQuery.sort || getDefaultCategorySort(searchCategory)
     const separateSelectedVariant = getters.separateSelectedVariantInProductList
 
     const { items, perPage, start, total, aggregations, attributeMetadata } = await dispatch('product/findProducts', {
