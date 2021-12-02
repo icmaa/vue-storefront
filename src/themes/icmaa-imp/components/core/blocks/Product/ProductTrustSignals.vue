@@ -6,7 +6,6 @@
         {{ line }}
       </li>
     </ul>
-    <google-customer-reviews-badge :score="googleScore" class="t-mb-4 t-cursor-pointer" @click="openGoogleReviews()" />
   </div>
 </template>
 
@@ -14,13 +13,11 @@
 
 import { mapGetters } from 'vuex'
 import MaterialIcon from 'theme/components/core/blocks/MaterialIcon'
-import GoogleCustomerReviewsBadge from 'theme/components/core/blocks/Product/GoogleCustomerReviewsBadge'
 
 export default {
   name: 'ProductTrustSignals',
   components: {
-    MaterialIcon,
-    GoogleCustomerReviewsBadge
+    MaterialIcon
   },
   computed: {
     ...mapGetters({
@@ -29,19 +26,8 @@ export default {
     cmsData () {
       return this.getCmsBlock('pdp-trust-signals')
     },
-    googleScore () {
-      return this.cmsData.google.score
-    },
-    googleLink () {
-      return this.cmsData.google.link
-    },
     signals () {
       return this.cmsData.trustSignals
-    }
-  },
-  methods: {
-    openGoogleReviews () {
-      window.open(this.googleLink, '_blank')
     }
   }
 }
