@@ -29,9 +29,9 @@ export const getCustomCategorySort = (category: Category): Record<string, string
  * @param {Category} category
  * @return {Record<string, string>|boolean}
  */
-export const getCategorySort = (category: Category): string => {
+export const getDefaultCategorySort = (category: Category): string => {
   const sort = getCustomCategorySort(category)
   return sort ? Object.values(sort)[0] : `${defaultCategorySort.attribute}:${defaultCategorySort.order}`
 }
 
-export default getCategorySort
+export default getDefaultCategorySort
