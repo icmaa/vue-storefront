@@ -1,9 +1,10 @@
+import config from 'config'
 import { ActionTree } from 'vuex'
 import RootState from '@vue-storefront/core/types/RootState'
 import CartState from '@vue-storefront/core/modules/cart/types/CartState'
-import { createDiffLog, productsEquals } from '@vue-storefront/core/modules/cart/helpers'
-import { cartHooksExecutors } from '@vue-storefront/core/modules/cart/hooks'
+import { createDiffLog, productsEquals, validateProduct, notifications } from '@vue-storefront/core/modules/cart/helpers'
 import * as types from '@vue-storefront/core/modules/cart/store/mutation-types'
+import { Logger } from '@vue-storefront/core/lib/logger'
 
 const actions: ActionTree<CartState, RootState> = {
   /**
@@ -25,6 +26,68 @@ const actions: ActionTree<CartState, RootState> = {
     const record = getters.getCartItems.find(p => productsEquals(p, product))
     const qty = record ? record.qty + 1 : (product.qty ? product.qty : 1)
     return dispatch('stock/check', { product, qty }, { root: true })
+  },
+  /**
+   * Clone of originial `cart/addItems`
+   *
+   * Note: There was a bug which causes the first attemp to put an item in cart to fail without message.
+   * It's important to have `serverMergeByDefault` enabled to synchronize an existing customer cart, also enable
+   * `serverSyncCanRemoveLocalItems` to remove orphaned items from client cart and adding the `connect` action
+   * to the beginning of `addItems` action  if the cart is not yet connected. Only this way we prevent the
+   * `synchronizeServerItem` method during server- and client-cart-merge to remove the new item from cart again
+   * if the cart was empty at first.
+   *
+   * Changes:
+   * * Add `connect` action if at the beginning of the action if cart isn't yet connected.
+   */
+  async addItems ({ commit, dispatch, getters }, { productsToAdd, forceServerSilence = false }) {
+    if (!getters.isCartConnected) {
+      await dispatch('connect', { guestCart: false })
+    }
+
+    let productIndex = 0
+    const diffLog = createDiffLog()
+    for (let product of productsToAdd) {
+      const errors = validateProduct(product)
+      diffLog.pushNotifications(notifications.createNotifications({ type: 'error', messages: errors }))
+
+      if (errors.length === 0) {
+        const { status, onlineCheckTaskId } = await dispatch('checkProductStatus', { product })
+
+        if (status === 'volatile' && !config.stock.allowOutOfStockInCart) {
+          diffLog.pushNotification(notifications.unsafeQuantity())
+        }
+        if (status === 'out_of_stock') {
+          diffLog.pushNotification(notifications.outOfStock())
+        }
+
+        if (status === 'ok' || status === 'volatile') {
+          commit(types.CART_ADD_ITEM, {
+            product: { ...product, onlineStockCheckid: onlineCheckTaskId },
+            forceServerSilence
+          })
+        }
+        if (productIndex === (productsToAdd.length - 1) && (!getters.isCartSyncEnabled || forceServerSilence)) {
+          diffLog.pushNotification(notifications.productAddedToCart())
+        }
+        productIndex++
+      }
+    }
+
+    let newDiffLog = await dispatch('create')
+    if (newDiffLog !== undefined) {
+      diffLog.merge(newDiffLog)
+    }
+
+    if (getters.isCartSyncEnabled && getters.isCartConnected && !forceServerSilence) {
+      const syncDiffLog = await dispatch('sync', { forceClientState: true })
+
+      if (!syncDiffLog.isEmpty()) {
+        diffLog.merge(syncDiffLog)
+      }
+    }
+
+    return diffLog
   }
 }
 

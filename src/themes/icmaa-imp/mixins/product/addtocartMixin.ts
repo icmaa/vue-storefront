@@ -17,14 +17,6 @@ export default {
     },
     async addToCart (product) {
       try {
-        /**
-         * Note: There was a bug which causes the first attemp to put an item in cart to fail without message.
-         **
-         * It's important to have `serverMergeByDefault` enabled to synchronize an existing customer cart but
-         * `serverSyncCanRemoveLocalItems` and `serverSyncCanModifyLocalItems` disabled. Only this way we prevent
-         * the `synchronizeServerItem` method during server- and client-cart-merge to remove the new item from cart again
-         * if the cart was empty at first. This is a misconception of the VSF.
-         */
         const diffLog = await this.$store.dispatch('cart/addItem', { productToAdd: product })
 
         this.$store.dispatch('ui/closeAll')
