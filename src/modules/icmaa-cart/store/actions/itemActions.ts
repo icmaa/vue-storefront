@@ -25,36 +25,6 @@ const actions: ActionTree<CartState, RootState> = {
     const record = getters.getCartItems.find(p => productsEquals(p, product))
     const qty = record ? record.qty + 1 : (product.qty ? product.qty : 1)
     return dispatch('stock/check', { product, qty }, { root: true })
-  },
-
-  /**
-   * Clone of original `cart/removeItem`
-   *
-   * Ticket MB-16751
-   * If cart contains a couponCode before we remove an item, we should sync the cart again in case
-   * cart conditions have changed and a free product has been removed or added
-   */
-  async removeItem ({ commit, dispatch, getters }, payload) {
-    const removeByParentSku = payload.product ? !!payload.removeByParentSku && payload.product.type_id !== 'bundle' : true
-    const product = payload.product || payload
-    const { cartItem } = await cartHooksExecutors.beforeRemoveFromCart({ cartItem: product })
-
-    commit(types.CART_DEL_ITEM, { product: cartItem, removeByParentSku })
-
-    if (getters.isCartSyncEnabled && cartItem.server_item_id) {
-      const cartHasCoupon = !!getters.getCoupon
-      const diffLog = await dispatch('sync', { forceClientState: true })
-      cartHooksExecutors.afterRemoveFromCart(diffLog)
-      if (cartHasCoupon) {
-        await dispatch('sync', { forceClientState: false, forceSync: true })
-      }
-      return diffLog
-    }
-
-    const diffLog = createDiffLog()
-      .pushClientParty({ status: 'no-item', sku: product.sku })
-    cartHooksExecutors.afterRemoveFromCart(diffLog)
-    return diffLog
   }
 }
 
