@@ -32,10 +32,10 @@ const actions: ActionTree<CartState, RootState> = {
    *
    * Note: There was a bug which causes the first attemp to put an item in cart to fail without message.
    * It's important to have `serverMergeByDefault` enabled to synchronize an existing customer cart, also enable
-   * `serverSyncCanRemoveLocalItems` to remove orphaned items from client cart and adding the `connect` action
-   * to the beginning of `addItems` action  if the cart is not yet connected. Only this way we prevent the
-   * `synchronizeServerItem` method during server- and client-cart-merge to remove the new item from cart again
-   * if the cart was empty at first.
+   * `serverSyncCanRemoveLocalItems` and `serverSyncCanModifyLocalItems` to update and remove orphaned items
+   * from client cart and adding the `connect` action to the beginning of `addItems` action if the cart
+   * is not yet connected. Only this way we prevent the `synchronizeServerItem` method during server- and
+   * client-cart-merge to remove the new item from cart again if the cart was empty at first.
    *
    * Changes:
    * * Add `connect` action if at the beginning of the action if cart isn't yet connected.

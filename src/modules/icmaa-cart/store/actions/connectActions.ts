@@ -1,3 +1,4 @@
+import config from 'config'
 import { ActionTree } from 'vuex'
 import RootState from '@vue-storefront/core/types/RootState'
 import CartState from '@vue-storefront/core/modules/cart/types/CartState'
@@ -12,7 +13,7 @@ const actions: ActionTree<CartState, RootState> = {
    * * There is a bug in the original method where the method assumes that `getCoupon` always returns an object.
    *   This sometimes leads to an exception during the login if a cart exists and the user wants to login into
    *   a customer account with a exsisting quote.
-   * * Use `forceSync` in `connect` action as otherwise the quote won't be merged with the server cart after the login.
+   * * Use `mergeItems` in `connect` action as otherwise the quote won't be merged with the server cart after the login.
    */
   async authorize ({ dispatch, getters }) {
     const coupon = getters.getCoupon ? getters.getCoupon.code : false
@@ -20,7 +21,9 @@ const actions: ActionTree<CartState, RootState> = {
       await dispatch('removeCoupon', { sync: false })
     }
 
-    await dispatch('connect', { guestCart: false, mergeQty: true })
+    const { serverMergeByDefault, serverSyncCanRemoveLocalItems, serverSyncCanModifyLocalItems } = config.cart
+    const mergeItems = (serverMergeByDefault && serverSyncCanRemoveLocalItems && serverSyncCanModifyLocalItems)
+    await dispatch('connect', { guestCart: false, mergeItems, mergeQty: true })
 
     if (coupon) {
       await dispatch('applyCoupon', coupon)
