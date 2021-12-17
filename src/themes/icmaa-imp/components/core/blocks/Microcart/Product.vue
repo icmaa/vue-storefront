@@ -18,7 +18,7 @@
           <button-component class="t-mr-2 t-mb-2" type="tag" size="xs" :cursor-pointer="false" v-for="opt in totals" :key="opt.label">
             {{ opt.value }}
           </button-component>
-          <div class="t-text-xs t-text-sale t-font-bold t-uppercase" v-if="isFree">
+          <div class="t-text-xs t-text-sale t-font-bold t-uppercase t-mb-2" v-if="isFree">
             {{ $t('Free') }}
           </div>
         </div>
@@ -50,6 +50,9 @@
         <button-component type="transparent" :size="'sm'" :icon="'remove_shopping_cart'" :icon-only="true" @click="removeItem">
           {{ $t('Delete') }}
         </button-component>
+      </div>
+      <div class="t-text-sm t-text-base-tone" v-else>
+        {{ productQty }} {{ $t('Pcs.') }}
       </div>
     </div>
   </li>

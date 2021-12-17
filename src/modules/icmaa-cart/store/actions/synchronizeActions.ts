@@ -17,8 +17,9 @@ const actions: ActionTree<CartState, RootState> = {
    * * Clear cart if token isn't valid
    * * Filter errors that are returned to only spawn notice for important and readable errors
    * * Remove `maxCartBypassAttempts` logic as we don't need it
+   * * Add `mergeItems` parameter to merge items instead of overwrite them if needed (e.g. after login)
    */
-  async sync ({ getters, rootGetters, commit, dispatch }, { forceClientState = false, dryRun = false, mergeQty = false, forceSync = false }) {
+  async sync ({ getters, rootGetters, commit, dispatch }, { forceClientState = false, dryRun = false, mergeItems = false, mergeQty = false, forceSync = false }) {
     const shouldUpdateClientState = rootGetters['checkout/isUserInCheckout'] || forceClientState
     const { getCartItems, canUpdateMethods, isSyncRequired } = getters
     if ((!canUpdateMethods || !isSyncRequired) && !forceSync) return createDiffLog()
@@ -37,8 +38,10 @@ const actions: ActionTree<CartState, RootState> = {
         serverItems,
         clientItems,
         forceClientState: shouldUpdateClientState,
+        mergeItems,
         mergeQty
       })
+
       cartHooksExecutors.afterSync(diffLog)
       return diffLog
     }
