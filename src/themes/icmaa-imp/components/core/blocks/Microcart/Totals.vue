@@ -29,13 +29,14 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import cloneDeep from 'lodash-es/cloneDeep'
 
 export default {
   name: 'MicroCartTotals',
   props: {
     rows: {
       type: Array,
-      default: () => [ 'subtotal', 'shipping', 'cashondelivery', 'priority_handling', 'discount' ]
+      default: () => [ 'subtotal', 'shipping', 'cashondelivery', 'priority_handling', 'ugiftcert', 'discount' ]
     }
   },
   computed: {
@@ -43,10 +44,16 @@ export default {
       totals: 'cart/getTotals'
     }),
     filteredTotals () {
-      const totals = this.totals
+      const totals = cloneDeep(this.totals)
       return totals
         .filter(segment => this.rows.includes(segment.code))
         .sort((a, b) => this.rows.findIndex(c => c === a.code) - this.rows.findIndex(c => c === b.code))
+        .map(segment => {
+          if (segment.code === 'ugiftcert') {
+            segment.value = -1 * segment.value
+          }
+          return segment
+        })
     },
     grandTotals () {
       const totals = this.totals

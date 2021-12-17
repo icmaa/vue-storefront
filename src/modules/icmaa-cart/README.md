@@ -9,6 +9,9 @@ Add our custom functionality for the original `cart` module:
 We try to overwrite everything needed by extending the Vuex store. But some methods are not highjackable like that – this is a list of core changes.
 
 * In the `core/modules/cart/store/actions/synchronizeActions.ts` we added some `async`/`await` logic to be sure to wait for specific requests. We added one for the `cart/synchronizeCart` action inside the `cart/load` action. We also prevent `cart/create` inside the `cart/synchronizeCart` action if a token is already found (just `cart/sync` instead).
+* We added a `mergeItems` parameter to the following cart actions to be able to merge client- and server-carts in `cart/authorize` action on login:
+  * In action overwrites: `authorize`, `sync`
+  * In core actions: `connect`, `merge`, `mergeServerItems`, `mergeServerItem`, `mergeClientItems`, `mergeClientItem`, `synchronizeServerItem`
 
 ## Todo
 

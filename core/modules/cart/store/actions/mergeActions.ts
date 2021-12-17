@@ -35,7 +35,7 @@ const mergeActions = {
     const cartItem = createCartItemForUpdate(clientItem, serverItem, updateIds, mergeQty)
     const event = await CartService.updateItem(getters.getCartToken, cartItem)
     const wasUpdatedSuccessfully = event.resultCode === 200
-    Logger.debug('Cart item server sync' + event, 'cart')()
+    Logger.info('Cart item server sync', 'cart')()
     diffLog.pushServerResponse({ status: event.resultCode, sku: clientItem.sku, result: event })
 
     if (!wasUpdatedSuccessfully && !serverItem) {
@@ -70,15 +70,15 @@ const mergeActions = {
 
     return diffLog
   },
-  async synchronizeServerItem ({ dispatch }, { serverItem, clientItem, forceClientState, dryRun, mergeQty }) {
+  async synchronizeServerItem ({ dispatch }, { serverItem, clientItem, forceClientState, dryRun, mergeItems, mergeQty }) {
     const diffLog = createDiffLog()
 
     if (!serverItem) {
-      Logger.warn('No server item with sku ' + clientItem.sku + ' on stock.', 'cart')()
+      Logger.info('No server item with sku ' + clientItem.sku, 'cart')()
       diffLog.pushServerParty({ sku: clientItem.sku, status: 'no-item' })
 
       if (dryRun) return diffLog
-      if (forceClientState || !config.cart.serverSyncCanRemoveLocalItems) {
+      if (forceClientState || mergeItems || !config.cart.serverSyncCanRemoveLocalItems) {
         const updateServerItemDiffLog = await dispatch('updateServerItem', { clientItem, serverItem, updateIds: false })
         return diffLog.merge(updateServerItemDiffLog)
       }
@@ -102,9 +102,9 @@ const mergeActions = {
 
     return diffLog
   },
-  async mergeClientItem ({ dispatch }, { clientItem, serverItems, forceClientState, dryRun, mergeQty }) {
+  async mergeClientItem ({ dispatch }, { clientItem, serverItems, forceClientState, dryRun, mergeItems, mergeQty }) {
     const serverItem = serverItems.find(itm => productsEquals(itm, clientItem))
-    const diffLog = await dispatch('synchronizeServerItem', { serverItem, clientItem, forceClientState, dryRun, mergeQty })
+    const diffLog = await dispatch('synchronizeServerItem', { serverItem, clientItem, forceClientState, dryRun, mergeItems, mergeQty })
 
     if (!diffLog.isEmpty()) return diffLog
 
@@ -123,12 +123,15 @@ const mergeActions = {
 
     return diffLog
   },
-  async mergeClientItems ({ dispatch }, { clientItems, serverItems, forceClientState, dryRun, mergeQty }) {
+  async mergeClientItems ({ dispatch }, { clientItems, serverItems, forceClientState, dryRun, mergeItems, mergeQty }) {
     const diffLog = createDiffLog()
 
     for (const clientItem of clientItems) {
       try {
-        const mergeClientItemDiffLog = await dispatch('mergeClientItem', { clientItem, serverItems, forceClientState, dryRun, mergeQty })
+        const mergeClientItemDiffLog = await dispatch(
+          'mergeClientItem',
+          { clientItem, serverItems, forceClientState, mergeItems, dryRun, mergeQty }
+        )
         diffLog.merge(mergeClientItemDiffLog)
       } catch (e) {
         Logger.debug('Problem syncing clientItem', 'cart', clientItem)()
@@ -137,15 +140,15 @@ const mergeActions = {
 
     return diffLog
   },
-  async mergeServerItem ({ dispatch, getters }, { clientItems, serverItem, forceClientState, dryRun }) {
+  async mergeServerItem ({ dispatch, getters }, { clientItems, serverItem, forceClientState, dryRun, mergeItems }) {
     const diffLog = createDiffLog()
     const clientItem = clientItems.find(itm => productsEquals(itm, serverItem))
     if (clientItem) return diffLog
-    Logger.info('No client item for' + serverItem.sku, 'cart')()
+    Logger.info('No client item for ' + serverItem.sku, 'cart')()
     diffLog.pushClientParty({ sku: serverItem.sku, status: 'no-item' })
     if (dryRun) return diffLog
 
-    if (forceClientState) {
+    if (forceClientState && !mergeItems) {
       Logger.info('Removing product from cart', 'cart', serverItem)()
       Logger.log('Removing item' + serverItem.sku + serverItem.item_id, 'cart')()
       const cartItem = {
@@ -167,13 +170,16 @@ const mergeActions = {
 
     return diffLog
   },
-  async mergeServerItems ({ dispatch }, { serverItems, clientItems, forceClientState, dryRun }) {
+  async mergeServerItems ({ dispatch }, { serverItems, clientItems, forceClientState, dryRun, mergeItems }) {
     const diffLog = createDiffLog()
     const definedServerItems = serverItems.filter(serverItem => serverItem)
 
     for (const serverItem of definedServerItems) {
       try {
-        const mergeServerItemDiffLog = await dispatch('mergeServerItem', { clientItems, serverItem, forceClientState, dryRun })
+        const mergeServerItemDiffLog = await dispatch(
+          'mergeServerItem',
+          { clientItems, serverItem, forceClientState, dryRun, mergeItems }
+        )
         diffLog.merge(mergeServerItemDiffLog)
       } catch (e) {
         Logger.debug('Problem syncing serverItem', 'cart', serverItem)()
@@ -191,7 +197,7 @@ const mergeActions = {
 
     commit(types.CART_SET_ITEMS_HASH, getters.getCurrentCartHash)
   },
-  async merge ({ getters, dispatch }, { serverItems, clientItems, dryRun = false, forceClientState = false, mergeQty = false }) {
+  async merge ({ getters, dispatch }, { serverItems, clientItems, dryRun = false, forceClientState = false, mergeItems = false, mergeQty = false }) {
     const hookResult = await cartHooksExecutors.beforeSync({ clientItems, serverItems })
 
     const diffLog = createDiffLog()
@@ -200,6 +206,7 @@ const mergeActions = {
       serverItems: hookResult.serverItems,
       forceClientState,
       dryRun,
+      mergeItems,
       mergeQty
     }
     const mergeClientItemsDiffLog = await dispatch('mergeClientItems', mergeParameters)
