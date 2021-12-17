@@ -51,6 +51,9 @@
           {{ $t('Delete') }}
         </button-component>
       </div>
+      <div class="t-text-sm t-text-base-tone" v-else>
+        {{ productQty }} {{ $t('Pcs.') }}
+      </div>
     </div>
   </li>
 </template>
