@@ -70,8 +70,19 @@ export default {
   methods: {
     async openAddToCartSidebar () {
       if (this.isSingleOptionProduct) {
+        const product = this.product
+        if (this.isOnesizeProduct) {
+          /**
+           * Bugfix: We need to replace the sku of cart-item by the SKU of the selected-variant
+           * to be able to check for it using `productsEquals` in `cart/mergeClientItem` action.
+           * Otherwise the product will be removed on reload or the next cart-action if you add
+           * an onesize product to cart from CLP.
+           */
+          Object.assign(product, { sku: product.selectedVariant.sku })
+        }
+
         this.$store.dispatch('ui/loader', { message: i18n.t('Please wait') })
-        this.addToCart(this.product)
+        this.addToCart(product)
           .then(() => { this.$store.dispatch('ui/loader', false) })
           .catch(() => { this.$store.dispatch('ui/loader', false) })
 
