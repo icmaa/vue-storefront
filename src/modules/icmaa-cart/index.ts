@@ -11,4 +11,11 @@ export const IcmaaExtendedCartModule: StorefrontModule = function ({ store }) {
     store.dispatch('cart/updateFreeCartItems', data.serverItems)
     return data
   })
+
+  cartHooks.afterRemoveFromCart(async data => {
+    if (store.getters['cart/getFreeCartItems']?.length > 0) {
+      store.dispatch('cart/couponCallback')
+    }
+    return data
+  })
 }

@@ -53,7 +53,7 @@ const actions: ActionTree<CartState, RootState> = {
    * There is already an up-to-date representation of the cart in `cart/shipping-information` request
    * of `syncTotals` but this isn't returned so we can't use it without extending the core excessivly.
    */
-  async couponCallback ({ getters, dispatch, commit }) {
+  async couponCallback ({ getters, dispatch }) {
     const { getCartItems, isTotalsSyncRequired } = getters
 
     const { result, resultCode } = await CartService.getItems()
