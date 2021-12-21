@@ -42,6 +42,18 @@ const actions: ActionTree<CartState, RootState> = {
         return dispatch('overrideServerTotals', {
           hasShippingInformation: shippingMethod || false,
           addressInformation
+        }).catch(err => {
+          /**
+           * If there was a invalid shipping-method due to changes in cart,
+           * try again without transmitting the current shipping-method (reset) to prevent
+           * the wrong shipping-method to block the add-to-cart action
+           */
+          if (err.message === 'Invalid shipping method.') {
+            return dispatch('overrideServerTotals', {
+              hasShippingInformation: false,
+              addressInformation
+            })
+          }
         })
       }
 
@@ -112,7 +124,7 @@ const actions: ActionTree<CartState, RootState> = {
     }
 
     Logger.error('Error during "overrideServerTotals" action: ', 'cart', result)()
-    throw Error(result)
+    throw Error(result?.message || result)
   }
 }
 
