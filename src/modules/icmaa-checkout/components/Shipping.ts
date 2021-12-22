@@ -56,6 +56,17 @@ export default {
       return this.getShippingMethods.find(m => m.code === this.selected)
     }
   },
+  watch: {
+    shippingMethods (methods) {
+      const isCurrentMethodInMethods = methods.find(m => m.code === this.selected)
+      if (!isCurrentMethodInMethods && methods.length) {
+        if (methods.length > 0) {
+          const firstMethod = methods.slice(0, 1).pop()
+          this.selected = firstMethod.code
+        }
+      }
+    }
+  },
   async beforeMount () {
     if (this.shippingMethods.length > 0) {
       const firstMethod = this.shippingMethods.slice(0, 1).pop()

@@ -3,10 +3,15 @@
     <template v-if="active && !done">
       <div v-if="hasShippingMethod">
         <div
-          v-if="$v.selected.$error && (!$v.selected.required || !$v.selected.notFalse)"
+          v-if="($v.selected.$error && (!$v.selected.required || !$v.selected.notFalse)) || (message && message.length > 0)"
           class="t-text-sm t-text-alert t-mb-4"
         >
-          {{ $t('Please select a shipping method.') }}
+          <template v-if="message">
+            {{ $t(message) }}
+          </template>
+          <template v-else>
+            {{ $t('Please select a shipping method.') }}
+          </template>
         </div>
         <shipping-method
           v-for="method in shippingMethods"

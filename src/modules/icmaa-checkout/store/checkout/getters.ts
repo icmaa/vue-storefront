@@ -40,7 +40,14 @@ const getters: GetterTree<CheckoutState, RootState> = {
     const totals = rootGetters['cart/getTotals']
     return totals.some(t => t.code === 'priority_handling')
   },
-  isUserInCheckout: () => false, // Compatibility
+  isUserInCheckout: (state, getters, rootState, rootGetters) => {
+    const currentRouteName = rootGetters['url/getCurrentRoute']?.name
+    if (!currentRouteName) return false
+
+    const storeCode = rootGetters['icmaaConfig/getCurrentStore'].storeCode
+    const storeCodeRegex = new RegExp(`^(${storeCode})-(checkout)$`, 'gm')
+    return currentRouteName.replace(storeCodeRegex, '$2') === 'checkout'
+  },
   hasAgreements: (state, getters, rootState, rootGetters): boolean => {
     const countryId = getters.getPaymentDetails.country_id || rootGetters['icmaaConfig/getCurrentStore'].storeCode
     return icmaa_checkout.agreements.countryAllowlist.includes(countryId.toLowerCase())
