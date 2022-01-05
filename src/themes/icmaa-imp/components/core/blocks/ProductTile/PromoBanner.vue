@@ -40,7 +40,7 @@ export default {
         { id: '12', key: 'purenoise', label: 'Pure Noise', background: null },
         { id: '13', key: 'limited', label: i18n.t('Limited'), background: 't-bg-limited' },
         { id: '14', key: 'backprint', label: i18n.t('Backprint'), background: '#551D99' },
-        { id: '15', key: 'sustainble', label: i18n.t('Sustainble'), background: 't-bg-sustainble' },
+        { id: '15', key: 'sustainable', label: i18n.t('Sustainable'), background: 't-bg-sustainable' },
         { id: '16', key: 'onlytemporary', label: i18n.t('Only temporary'), background: 't-bg-onlytemporary' },
         { id: '', key: 'sale', label: i18n.t('Sale'), background: 't-bg-sale' },
         { id: '', key: 'new', label: i18n.t('New'), background: 't-bg-new' }

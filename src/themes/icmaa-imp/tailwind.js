@@ -14,7 +14,7 @@ module.exports = {
         'primary': '#611122',
         'sale': '#006EA1',
         'new': '#1AC759',
-        'sustainble': '#30A895',
+        'sustainable': '#30A895',
         'onlytemporary': '#2A6265',
         'exclusive': '#B18C3E',
         'limited': '#023AE1',
