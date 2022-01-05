@@ -32,10 +32,15 @@ export default {
     shippingMethods () {
       const methods = this.getShippingMethods
       return methods.map(method => {
-        const { code, method_title: title, method_description: description, carrier_code: carrierCode, amount } = method
+        let { code, method_title: title, method_description: description, carrier_code: carrierCode, amount } = method
 
         let image
         try {
+          // Use same logo as tablerates
+          if (['dpb', 'dhlic'].includes(carrierCode)) {
+            carrierCode = 'tablerate'
+          }
+
           image = require(`theme/assets/logos/shipping/checkout/${carrierCode}.png`)
         } catch (e) {
           image = false
@@ -49,6 +54,17 @@ export default {
     },
     rawSelectedMethod () {
       return this.getShippingMethods.find(m => m.code === this.selected)
+    }
+  },
+  watch: {
+    shippingMethods (methods) {
+      const isCurrentMethodInMethods = methods.find(m => m.code === this.selected)
+      if (!isCurrentMethodInMethods && methods.length) {
+        if (methods.length > 0) {
+          const firstMethod = methods.slice(0, 1).pop()
+          this.selected = firstMethod.code
+        }
+      }
     }
   },
   async beforeMount () {

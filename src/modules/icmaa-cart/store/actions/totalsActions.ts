@@ -6,7 +6,7 @@ import * as types from '@vue-storefront/core/modules/cart/store/mutation-types'
 import { prepareShippingInfoForUpdateTotals } from '@vue-storefront/core/modules/cart/helpers'
 import { Logger } from '@vue-storefront/core/lib/logger'
 import { CartService as IcmaaCartService } from 'icmaa-cart/data-resolver/CartService'
-import { notifications } from 'icmaa-cart/helpers'
+import { getKnownError, ErrorMsg } from 'icmaa-cart/helpers/notifications'
 
 const actions: ActionTree<CartState, RootState> = {
   /**
@@ -42,7 +42,7 @@ const actions: ActionTree<CartState, RootState> = {
         return dispatch('overrideServerTotals', {
           hasShippingInformation: shippingMethod || false,
           addressInformation
-        })
+        }).catch(error => dispatch('handleInvalidShipping', { error, addressInformation }))
       }
 
       Logger.error('Please do set the tax.defaultCountry in order to calculate totals', 'cart')()
@@ -65,12 +65,14 @@ const actions: ActionTree<CartState, RootState> = {
       response = await IcmaaCartService.getTotals()
     }
 
-    if (response.code === 500) {
-      const isKnownError = notifications.isKnownError(response.result)
-      const logMessageType = isKnownError ? 'warn' : 'error'
-      Logger[logMessageType]('Error while `cart/getTotals` action:', 'cart', response.result)()
+    const { code, result } = response
 
-      if (isKnownError) {
+    if (code === 500) {
+      const knownError = getKnownError(result?.message || result)
+      const logMessageType = knownError ? 'warn' : 'error'
+      Logger[logMessageType]('Error while `cart/getTotals` action:', 'cart', result?.message || result)()
+
+      if ((knownError as ErrorMsg)?.clearCart === true) {
         await dispatch('clear', { sync: false })
           .then(() => { Logger.log('Cart has been cleared.', 'cart')() })
       }
@@ -111,8 +113,28 @@ const actions: ActionTree<CartState, RootState> = {
       return { resultCode, result }
     }
 
-    Logger.error('Error during "overrideServerTotals" action: ', 'cart', result)()
-    throw Error(result)
+    throw Error(result?.message || result)
+  },
+  async handleInvalidShipping ({ dispatch, rootGetters }, { error, addressInformation }) {
+    if (error.message !== 'Invalid shipping method.') return
+
+    if (rootGetters['checkout/isUserInCheckout']) {
+      await dispatch('cart/syncShippingMethods', { forceServerSync: true }, { root: true })
+      await dispatch('checkout/saveShippingMethod', {}, { root: true })
+
+      await dispatch(
+        'checkout/setMessage',
+        'We had to updated your shipping-method due to changes in your order. ' +
+        'Please re-confirm your shipping-method.',
+        { root: true }
+      )
+      await dispatch('checkout/activateSection', 'shipping', { root: true })
+    }
+
+    return dispatch('overrideServerTotals', {
+      hasShippingInformation: false,
+      addressInformation
+    })
   }
 }
 

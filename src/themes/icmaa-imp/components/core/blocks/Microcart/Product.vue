@@ -2,7 +2,7 @@
   <li class="t-flex t-py-2 t-border-b t-border-base-lightest" :class="{ 't-opacity-75': loading }" data-test-id="MicroCartProduct">
     <div class="t-w-1/3 t-mr-4">
       <router-link :to="productLink" @click.native="$store.dispatch('ui/setSidebar', { key: 'microcart', status: false })">
-        <product-image :image="thumbnail" :alt="product.name | htmlDecode" />
+        <product-image :image="thumbnail" :alt="product.name | htmlDecode" :key="product.sku" />
       </router-link>
     </div>
 
