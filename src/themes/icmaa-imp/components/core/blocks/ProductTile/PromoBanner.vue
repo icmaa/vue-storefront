@@ -29,19 +29,13 @@ export default {
     return {
       map: [
         { id: '1', key: 'exclusive', label: i18n.t('Exclusive'), background: 't-bg-exclusive' },
-        { id: '3', key: 'american_apparel', label: 'American Apparel', background: null },
+        { id: '2', key: 'sustainable', label: i18n.t('Sustainable'), background: 't-bg-sustainable' },
+        { id: '3', key: 'onlytemporary', label: i18n.t('Only temporary'), background: 't-bg-onlytemporary' },
         { id: '5', key: 'preorder', label: i18n.t('Preorder'), background: '#611222' },
-        { id: '6', key: 'special_offer', label: i18n.t('Special Offer'), background: 't-bg-special' },
-        { id: '7', key: 'special_offer', label: i18n.t('Special Offer'), background: 't-bg-special' },
-        { id: '8', key: 'artery', label: 'Artery', background: null },
-        { id: '9', key: 'sumerian', label: 'Sumerian Records', background: null },
-        { id: '10', key: 'deathwish', label: 'Deathwish', background: null },
-        { id: '11', key: 'continental', label: 'Continental', background: null },
-        { id: '12', key: 'purenoise', label: 'Pure Noise', background: null },
-        { id: '13', key: 'limited', label: i18n.t('Limited'), background: 't-bg-limited' },
-        { id: '14', key: 'backprint', label: i18n.t('Backprint'), background: '#551D99' },
-        { id: '15', key: 'sustainable', label: i18n.t('Sustainable'), background: 't-bg-sustainable' },
-        { id: '16', key: 'onlytemporary', label: i18n.t('Only temporary'), background: 't-bg-onlytemporary' },
+        { id: '6', key: 'special', label: i18n.t('Special'), background: 't-bg-special' },
+        { id: '7', key: 'purenoise', label: 'Pure Noise', background: null },
+        { id: '8', key: 'continental', label: 'Continental', background: null },
+        { id: '9', key: 'limited', label: i18n.t('Limited'), background: 't-bg-limited' },
         { id: '', key: 'sale', label: i18n.t('Sale'), background: 't-bg-sale' },
         { id: '', key: 'new', label: i18n.t('New'), background: 't-bg-new' }
       ]
