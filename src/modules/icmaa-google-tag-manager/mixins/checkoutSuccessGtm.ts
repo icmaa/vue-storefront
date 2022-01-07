@@ -53,7 +53,7 @@ export default {
       return this.order.coupon_rule_name
     },
     singleOrderItems () {
-      const itemAttributeMap = ['base_price', 'base_tax_amount']
+      const itemAttributeMap = ['base_price', 'base_tax_amount', 'discount_amount']
       return this.order.items
         ?.map(i => {
           let product = this.order.products?.find(p => p.sku === i.sku || (p.configurable_children?.some(c => c.sku === i.sku))) || {}
