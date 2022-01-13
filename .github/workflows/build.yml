@@ -45,19 +45,20 @@ jobs:
           export CONFIG_BRANCH=$(if [[ ${{ env.BRANCH_NAME }} =~ ^master ]]; then echo "-b master"; fi)
           config-sync -t ${{ secrets.PAT }} -r vue-storefront $CONFIG_BRANCH -d ./
 
-      - name: Register GCP credentials
-        uses: 'google-github-actions/auth@v0'
-        with:
-          credentials_json: ${{ env.ENV == 'production' && secrets.GCP_VSF_SA_KEY_PROD || secrets.GCP_VSF_SA_KEY_TEST }}
-
-      - name: Set up GCP Cloud SDK
-        uses: google-github-actions/setup-gcloud@v0
-
       - name: Build "${{ env.APP }}"
         run: yarn build
         env:
           NODE_CONFIG_ENV: ${{ env.ENV }}
           NODE_APP_INSTANCE: ${{ matrix.env.MANDANT }}
+
+      - name: Register GCP credentials
+        uses: 'google-github-actions/auth@v0'
+        id: auth
+        with:
+          credentials_json: ${{ env.ENV == 'production' && secrets.GCP_VSF_SA_KEY_PROD || secrets.GCP_VSF_SA_KEY_TEST }}
+
+      - name: Set up GCP Cloud SDK
+        uses: google-github-actions/setup-gcloud@v0
 
       - name: Build and deploy in GCP
         run: |

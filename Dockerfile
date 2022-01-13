@@ -10,7 +10,6 @@ COPY config ./config
 COPY core ./core
 COPY dist ./dist
 COPY src ./src
-COPY var ./var
 COPY package.json yarn.lock ./
 
 RUN yarn install --production
