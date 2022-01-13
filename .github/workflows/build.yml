@@ -42,8 +42,8 @@ jobs:
       - name: Checkout and sync "icmaa/shop-workspace" repo
         run: |
           yarn global add @icmaa/config-sync
-          export CONFIG_BRANCH=$(if [[ ! ${{ env.BRANCH_NAME }} =~ ^master ]]; then echo "-b develop"; fi)
-          config-sync -t ${{ secrets.PAT }} -r vue-storefront -b $CONFIG_BRANCH -d ./
+          export CONFIG_BRANCH=$(if [[ ${{ env.BRANCH_NAME }} =~ ^master ]]; then echo "-b master"; fi)
+          config-sync -t ${{ secrets.PAT }} -r vue-storefront $CONFIG_BRANCH -d ./
 
       - name: Build "${{ env.APP }}"
         run: yarn build
