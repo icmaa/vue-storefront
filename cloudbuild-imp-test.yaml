@@ -1,5 +1,5 @@
 steps:
 - name: 'gcr.io/cloud-builders/docker'
-  args: [ 'build', '-t', 'gcr.io/icmaa-shop-imp-test-01/vue-storefront', '.' ]
+  args: [ 'build', '-t', 'gcr.io/icmaa-shop-imp-test-01/vue-storefront', '-f', 'docker/google-cloud-run/Dockerfile', '.' ]
 - name: 'gcr.io/cloud-builders/docker'
   args: [ 'push', 'gcr.io/icmaa-shop-imp-test-01/vue-storefront' ]
