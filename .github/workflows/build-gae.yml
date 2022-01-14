@@ -1,4 +1,4 @@
-name: Continuous Delivery
+name: Continuous Delivery (GAE)
 
 on:
   push:
@@ -39,27 +39,17 @@ jobs:
         run: |
           echo "ENV=$(if [[ ${{ env.BRANCH_NAME }} =~ ^master ]]; then echo "production"; else echo "test"; fi)" >> $GITHUB_ENV
 
-      - name: Checkout "icmaa/shop-workspace" repo
+      - name: Checkout and sync "icmaa/shop-workspace" repo
         run: |
-          rm -rf shop-workspace
-          export CONFIG_BRANCH=$(if [[ ! ${{ env.BRANCH_NAME }} =~ ^master ]]; then echo "-b develop"; fi)
-          git clone --no-tags --depth 1 https://${{ secrets.PAT }}@github.com/icmaa/shop-workspace $CONFIG_BRANCH
-
-      - name: Sync config JSON files
-        run: rsync -r ./shop-workspace/template/${{ env.APP }}/ ./
+          yarn global add @icmaa/config-sync
+          export CONFIG_BRANCH=$(if [[ ${{ env.BRANCH_NAME }} =~ ^master ]]; then echo "-b master"; fi)
+          config-sync -t ${{ secrets.PAT }} -r vue-storefront $CONFIG_BRANCH -d ./
 
       - name: Build "${{ env.APP }}"
         run: yarn build
         env:
           NODE_CONFIG_ENV: ${{ env.ENV }}
           NODE_APP_INSTANCE: ${{ matrix.env.MANDANT }}
-
-      # The newest NodeJS LTS version isn't supported by GAE flex engine
-      # @see https://github.com/GoogleCloudPlatform/nodejs-docker/issues/214
-      # - name: Hotfix for new NodeJS 14.17.* LTS version
-      #   if: ${{ env.ENV == 'production' }}
-      #   run: |
-      #     sed -i 's/"node": "^14"/"node": "14.16.x"/' package.json
 
       - id: deploy
         uses: google-github-actions/deploy-appengine@main
