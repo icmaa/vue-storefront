@@ -1,14 +1,13 @@
 import Vue from 'vue'
 import VueGtm from 'vue-gtm'
 
-import EventBus from '@vue-storefront/core/compatibility/plugins/event-bus'
 import { StorefrontModule } from '@vue-storefront/core/lib/modules'
 import { StorageManager } from '@vue-storefront/core/lib/storage-manager'
 import { coreHooks } from '@vue-storefront/core/hooks'
 
 import { icmaaGoogleTagManagerModule } from './store'
 import { IcmaaGoogleTagManagerExecutors } from './hooks'
-import { isEnabled, isAccepted } from './helpers'
+import { isEnabled } from './helpers'
 import { afterRegistration } from './hooks/afterRegistration'
 
 import { isServer } from '@vue-storefront/core/helpers'
@@ -40,20 +39,6 @@ export const IcmaaGoogleTagManagerModule: StorefrontModule = function ({ store, 
       }
     }
 
-    if (forceCookieAccept) {
-      isAccepted(forceCookieAccept).then(accepted => {
-        if (accepted) {
-          initGTM()
-        } else {
-          EventBus.$on('cookiesAccepted', async (enabled: boolean) => {
-            if (enabled) {
-              initGTM()
-            }
-          })
-        }
-      })
-    } else {
-      initGTM()
-    }
+    initGTM()
   })
 }

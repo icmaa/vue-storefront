@@ -2,9 +2,6 @@
 
 This module contains all functionality for our Google-Tag-Manager (GTM) implementation.
 
-The GTM is by default disabled until the cookie-notice is accepted.  
-This can be disabled by the config value: `forceCookieAccept`.
-
 ## Add custom page-types to custom routes
 
 Follow these steps to add a custom page-view type:
@@ -86,7 +83,6 @@ We try to overwrite everything needed by extending the Vuex store. But some meth
   "googleTagManager": {
     "id": "XXX-XXXXXX",
     "debug": false,
-    "forceCookieAccept": true,
     "productAttributes": [
       { "field": "id" },
       { "field": "name" },
