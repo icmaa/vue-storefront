@@ -59,7 +59,7 @@ export default {
           let product = this.order.products?.find(p => p.sku === i.sku || (p.configurable_children?.some(c => c.sku === i.sku))) || {}
           product = Object.assign(product, pick(i, itemAttributeMap))
           const productDTO = this.getGTMProductDTO(product)
-          const additionalData = { sku: i.sku, quantity: round(i.qty_ordered), id: String(productDTO.id).toString() }
+          const additionalData = { sku: i.sku, quantity: round(i.qty_ordered), id: String(productDTO.id).toString(), discountAmountExcludingTax: formatValue(i.discount_amount / ((i.tax_percent / 100) + 1), 'en-US') }
           return Object.assign(productDTO, additionalData)
         })
         .map(p => omit(p, ['children']))
