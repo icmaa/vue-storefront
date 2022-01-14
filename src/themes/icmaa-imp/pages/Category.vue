@@ -115,7 +115,7 @@ const composeInitialPageState = async (store, route, forceLoad = false, pageSize
 
     await Promise.all([
       store.dispatch('category-next/loadCategoryProducts', { route, category: currentCategory, pageSize }),
-      store.dispatch('category-next/loadChildCategoryFilter')
+      store.dispatch('category-next/loadChildCategoryFilter', { category: currentCategory })
     ])
 
     const breadCrumbsLoader = store.dispatch(
