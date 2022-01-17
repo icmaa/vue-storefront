@@ -1,6 +1,7 @@
 import queryString from 'query-string'
 import fetch from 'isomorphic-fetch'
-import getApiEndpointUrl from '@vue-storefront/core/helpers/getApiEndpointUrl';
+import getApiEndpointUrl from '@vue-storefront/core/helpers/getApiEndpointUrl'
+import RequestError from 'icmaa-config/Error'
 
 export const processURLAddress = (url: string = '', config: any) => {
   if (url.startsWith('/')) return `${getApiEndpointUrl(config.api, 'url')}${url}`
@@ -53,6 +54,15 @@ export async function search (request, storeView, config) {
   })
     .then(resp => { return resp.json() })
     .catch(error => {
-      throw new Error('FetchError in request to ES: ' + error.toString())
+      throw new RequestError(
+        'FetchError in request to ES: ' + error.toString(),
+        url,
+        JSON.stringify(
+          Object.assign(
+            httpQuery,
+            config.elasticsearch.queryMethod === 'POST' ? elasticsearchQueryBody : {}
+          )
+        )
+      )
     })
 }
