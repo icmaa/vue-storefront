@@ -100,30 +100,52 @@ export class SearchAdapter {
       },
       body: config.elasticsearch.queryMethod === 'POST' ? JSON.stringify(rawQueryObject) : null
     })
-      .then(resp => {
-        try {
-          return resp.json()
-        } catch (error) {
-          throw new RequestError(
-            'JsonParseError in request to API: ' + error.toString(),
-            url,
-            Object.assign(
-              httpQuery,
-              config.elasticsearch.queryMethod === 'POST' ? rawQueryObject : {},
-              { response: resp }
-            )
-          )
-        }
-      })
       .catch(error => {
         throw new RequestError(
-          'FetchError in request to API: ' + error.toString(),
+          'FetchError in request to API: ' + error.message,
           url,
           Object.assign(
             httpQuery,
             config.elasticsearch.queryMethod === 'POST' ? rawQueryObject : {}
-          )
+          ),
+          error
         )
+      })
+      .then(resp => {
+        return resp.json()
+          .catch(error => {
+            return {
+              error,
+              message: 'JsonParseError: ' + error.message,
+              response: resp
+            }
+          })
+          .then(respJSON => {
+            if (parseInt(respJSON?.code) > 400) {
+              return {
+                error: true,
+                message: `No success response-code (${respJSON?.code})`,
+                response: respJSON
+              }
+            }
+
+            return respJSON
+          })
+      })
+      .then(resp => {
+        if (resp?.error) {
+          throw new RequestError(
+            'Error in response of request to API: ' + resp?.message || resp?.error.message,
+            url,
+            Object.assign(
+              httpQuery,
+              config.elasticsearch.queryMethod === 'POST' ? rawQueryObject : {}
+            ),
+            resp?.response
+          )
+        }
+
+        return resp
       })
   }
 
@@ -155,9 +177,9 @@ export class SearchAdapter {
     } else {
       if (resp.error) {
         throw new Error(JSON.stringify(resp.error))
-      } else {
-        throw new Error('Unknown error with API catalog result in resultProcessor for entity type \'' + type + '\'')
       }
+
+      return resp
     }
   }
 
