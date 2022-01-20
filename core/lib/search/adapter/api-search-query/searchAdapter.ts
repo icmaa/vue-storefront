@@ -7,7 +7,8 @@ import { SearchQuery } from 'storefront-query-builder'
 import HttpQuery from '@vue-storefront/core/types/search/HttpQuery'
 import { SearchResponse } from '@vue-storefront/core/types/search/SearchResponse'
 import config from 'config'
-import getApiEndpointUrl from '@vue-storefront/core/helpers/getApiEndpointUrl';
+import getApiEndpointUrl from '@vue-storefront/core/helpers/getApiEndpointUrl'
+import RequestError from 'icmaa-config/Error'
 
 export class SearchAdapter {
   public entities: any
@@ -99,9 +100,30 @@ export class SearchAdapter {
       },
       body: config.elasticsearch.queryMethod === 'POST' ? JSON.stringify(rawQueryObject) : null
     })
-      .then(resp => { return resp.json() })
+      .then(resp => {
+        try {
+          return resp.json()
+        } catch (error) {
+          throw new RequestError(
+            'JsonParseError in request to API: ' + error.toString(),
+            url,
+            Object.assign(
+              httpQuery,
+              config.elasticsearch.queryMethod === 'POST' ? rawQueryObject : {},
+              { response: resp }
+            )
+          )
+        }
+      })
       .catch(error => {
-        throw new Error('FetchError in request to API: ' + error.toString())
+        throw new RequestError(
+          'FetchError in request to API: ' + error.toString(),
+          url,
+          Object.assign(
+            httpQuery,
+            config.elasticsearch.queryMethod === 'POST' ? rawQueryObject : {}
+          )
+        )
       })
   }
 
