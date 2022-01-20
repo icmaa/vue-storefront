@@ -31,7 +31,9 @@ export const streetname = (v: string): boolean => {
 export const housenumber = (v: string): boolean => {
   const leadingNumber = /([0-9]+)(\.*)([a-zA-Z]{2,})/
   const tailingNumber = /([a-zA-Z]{2,})(\.*)([0-9]+)/
-  return !helpers.req(v) || !v.split(' ').some(w => (leadingNumber.test(v) || tailingNumber.test(v)))
+  const englishNumber = /([0-9]+)(st|nd|rd|th)/
+  const checkNumbers = w => (!englishNumber.test(v) && (leadingNumber.test(v) || tailingNumber.test(v)))
+  return !helpers.req(v) || !v.split(' ').some(checkNumbers)
 }
 
 export const poststation = (v: string): boolean => {
