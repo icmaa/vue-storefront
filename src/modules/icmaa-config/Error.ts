@@ -11,7 +11,7 @@ export default class RequestError extends Error {
     this.request = request
     this.response = response
 
-    if (process.env.GCLOUD_OPERATIONS_ENABLED) {
+    if (process.env.GCLOUD_OPERATIONS_ENABLED || process.env.GCLOUD_STRUCLOG_ENABLED) {
       console.error(JSON.stringify(this.gcloudStructuredLog()))
     }
   }
