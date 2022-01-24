@@ -94,8 +94,8 @@ export default {
   },
   data () {
     return {
-      pageSizes: [24, 48, 60, 100],
-      pageSize: this.$route && this.$route.query.pagesize ? this.$route.query.pagesize : 24,
+      pageSizes: [12, 24, 48, 60, 100],
+      pageSize: this.$route && this.$route.query.pagesize ? this.$route.query.pagesize : 12,
       loadingProducts: false,
       loading: true,
       FilterSidebar,

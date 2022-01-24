@@ -148,7 +148,7 @@ export default {
   mixins: [ CategoryMixin, CategoryExtrasMixin, CategoryMetaMixin, ClusterMixin ],
   data () {
     return {
-      pageSize: this.$route && this.$route.query.pagesize ? this.$route.query.pagesize : 24,
+      pageSize: this.$route && this.$route.query.pagesize ? this.$route.query.pagesize : 12,
       loadingProducts: false,
       loading: true,
       FilterSidebar,
