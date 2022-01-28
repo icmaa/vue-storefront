@@ -83,6 +83,9 @@ const actions: ActionTree<CheckoutState, RootState> = {
       if (additional['priorityHandling']) {
         commit(types.CHECKOUT_SET_PRIORITY_HANDLING, additional['priorityHandling'])
       }
+      if (additional['goGreen']) {
+        commit(types.CHECKOUT_SET_GO_GREEN, additional['goGreen'])
+      }
     }
   },
   setGatewayOrder ({ commit }, order) {

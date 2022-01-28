@@ -24,6 +24,10 @@
           v-model="priorityHandling"
           class="t-mt-6 t-mb-4"
         />
+        <go-green
+          v-model="goGreen"
+          class="t-mt-6 t-mb-4"
+        />
         <button-component
           class="t-w-full lg:t-w-auto t-mt-8"
           type="primary"
@@ -55,6 +59,12 @@
         :disabled="true"
         class="t-mt-6"
       />
+      <go-green
+        v-if="goGreen"
+        v-model="goGreen"
+        :disabled="true"
+        class="t-mt-6"
+      />
     </template>
   </div>
 </template>
@@ -67,12 +77,14 @@ import { notFalse } from 'icmaa-config/helpers/validators'
 import Shipping from 'icmaa-checkout/components/Shipping'
 import ShippingMethod from 'theme/components/core/blocks/Checkout/Shipping/Method'
 import PriorityHandling from 'theme/components/core/blocks/Checkout/Shipping/PriorityHandling'
+import GoGreen from 'theme/components/core/blocks/Checkout/Shipping/GoGreen'
 import ButtonComponent from 'theme/components/core/blocks/Button'
 
 export default {
   components: {
     ShippingMethod,
     PriorityHandling,
+    GoGreen,
     ButtonComponent
   },
   mixins: [ Shipping ],

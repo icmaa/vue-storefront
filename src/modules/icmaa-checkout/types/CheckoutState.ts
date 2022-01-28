@@ -52,6 +52,13 @@ export interface PriorityHandling {
   enabled: boolean
 }
 
+export interface GoGreen {
+  title: string,
+  description: string,
+  fee: number,
+  enabled: boolean
+}
+
 export default interface CheckoutState {
   loading: boolean,
   sections: {
@@ -66,5 +73,6 @@ export default interface CheckoutState {
   paymentMethods: any[],
   shippingMethods: any[],
   priorityHandling: PriorityHandling,
+  goGreen: GoGreen,
   gatewayOrder: any
 }

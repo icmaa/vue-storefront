@@ -52,6 +52,9 @@ const mutations: MutationTree<CheckoutState> = {
   [types.CHECKOUT_SET_PRIORITY_HANDLING] (state, payload) {
     state.priorityHandling = payload
   },
+  [types.CHECKOUT_SET_GO_GREEN] (state, payload) {
+    state.goGreen = payload
+  },
   [types.CHECKOUT_SET_GATEWAY_ORDER] (state, payload) {
     state.gatewayOrder = payload
   },

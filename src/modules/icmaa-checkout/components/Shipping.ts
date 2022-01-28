@@ -15,7 +15,8 @@ export default {
   data () {
     return {
       selected: false,
-      priorityHandling: false
+      priorityHandling: false,
+      goGreen: false
     }
   },
   computed: {
@@ -24,6 +25,7 @@ export default {
       getShippingMethods: 'checkout/getShippingMethods',
       shippingDetails: 'checkout/getShippingDetails',
       isPriorityHandlingEnabled: 'checkout/isPriorityHandlingEnabled',
+      isGoGreenEnabled: 'checkout/isGoGreenEnabled',
       message: 'checkout/getMessage'
     }),
     hasShippingMethod () {
@@ -76,6 +78,10 @@ export default {
         return
       }
 
+      if (this.isGoGreenEnabled) {
+        return
+      }
+
       if (this.shippingMethods.length === 1) {
         this.submit()
       }
@@ -90,6 +96,10 @@ export default {
         let shippingMethod = this.rawSelectedMethod
         if (this.isPriorityHandlingEnabled && this.priorityHandling) {
           shippingMethod = Object.assign({}, shippingMethod, { priorityHandling: true })
+        }
+
+        if (this.isGoGreenEnabled && this.goGreen) {
+          shippingMethod = Object.assign({}, shippingMethod, { goGreen: true })
         }
 
         this.$store.dispatch(

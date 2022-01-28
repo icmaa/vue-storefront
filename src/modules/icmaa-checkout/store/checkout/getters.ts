@@ -40,6 +40,14 @@ const getters: GetterTree<CheckoutState, RootState> = {
     const totals = rootGetters['cart/getTotals']
     return totals.some(t => t.code === 'priority_handling')
   },
+  getGoGreen: state => state.goGreen || false,
+  isGoGreenEnabled: (state, getters): boolean => getters.getGoGreen.enabled || false,
+  hasGoGreen: (state, getters, RootState, rootGetters): boolean => {
+    if (!getters.isGoGreenEnabled) return false
+    if (getters.getShippingMethod.goGreen === true) return true
+    const totals = rootGetters['cart/getTotals']
+    return totals.some(t => t.code === 'go_green')
+  },
   isUserInCheckout: (state, getters, rootState, rootGetters) => {
     const currentRouteName = rootGetters['url/getCurrentRoute']?.name
     if (!currentRouteName) return false
