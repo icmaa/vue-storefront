@@ -56,7 +56,8 @@ export interface GoGreen {
   title: string,
   description: string,
   fee: number,
-  enabled: boolean
+  enabled: boolean,
+  allowed_shipping_methods: string
 }
 
 export default interface CheckoutState {

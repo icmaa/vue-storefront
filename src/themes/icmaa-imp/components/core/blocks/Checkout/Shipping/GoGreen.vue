@@ -49,10 +49,14 @@ export default {
   computed: {
     ...mapGetters({
       goGreen: 'checkout/getGoGreen',
-      hasGoGreen: 'checkout/hasGoGreen'
+      hasGoGreen: 'checkout/hasGoGreen',
+      getShippingMethod: 'checkout/getShippingMethods'
     }),
+    shipping () {
+      return this.getShippingMethod[0].code
+    },
     active () {
-      return this.goGreen && this.goGreen.enabled
+      return this.goGreen && this.goGreen.enabled && this.goGreen.allowed_shipping_methods.includes(this.shipping)
     }
   },
   methods: {
