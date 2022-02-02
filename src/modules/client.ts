@@ -38,7 +38,6 @@ import { IcmaaGiftcertModule } from 'icmaa-giftcert'
 import { IcmaaTrackingModule } from 'icmaa-tracking'
 import { IcmaaLooksModule } from 'icmaa-looks'
 import { IcmaaGoogleTagManagerModule } from 'icmaa-google-tag-manager'
-import { IcmaaLogsModule } from 'icmaa-logs'
 
 // TODO:distributed across proper pages BEFORE 1.11
 export function registerClientModules () {
@@ -81,7 +80,6 @@ export function registerClientModules () {
   registerModule(IcmaaGiftcertModule)
   registerModule(IcmaaTrackingModule)
   registerModule(IcmaaLooksModule)
-  registerModule(IcmaaLogsModule)
 }
 
 // Deprecated API, will be removed in 2.0
