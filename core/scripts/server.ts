@@ -1,7 +1,3 @@
-// Init gcloud operations libs
-// – see `icmaa-logs` module
-import 'icmaa-logs/lib/gcloud'
-
 import { serverHooksExecutors } from '@vue-storefront/core/server/hooks'
 import { storeCodeFromUrlPath } from 'icmaa-config/helpers/store'
 import { Context } from './utils/types';
