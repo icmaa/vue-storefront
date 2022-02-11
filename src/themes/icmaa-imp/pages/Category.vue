@@ -114,7 +114,7 @@ const composeInitialPageState = async (store, route, forceLoad = false, pageSize
     const hasCategoryExtras = store.getters['icmaaCategoryExtras/getCategoryExtrasByUrlKey'](route.path)
     const currentCategory = cachedCategory && !forceLoad && hasCategoryExtras ? cachedCategory : await store.dispatch('category-next/loadCategoryWithExtras', { filters })
 
-    const loadProducts = async () => {
+    const loadCategoryProducts = async () => {
       // If browser-history-back event use cached products
       if (routerHelper.popStateDetected === true) {
         routerHelper.popStateDetected = false
@@ -124,7 +124,7 @@ const composeInitialPageState = async (store, route, forceLoad = false, pageSize
     }
 
     await Promise.all([
-      loadProducts(),
+      loadCategoryProducts(),
       store.dispatch('category-next/loadChildCategoryFilter', { category: currentCategory })
     ])
 
