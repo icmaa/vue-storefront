@@ -7,11 +7,16 @@ import { IcmaaExtendedProductStore } from './store/product'
 import { IcmaaBreadcrumbsStore } from './store/breadcrumbs'
 import { SearchAliasStore, stateKey } from './store/search-alias'
 import { icmaaCatalogHooks } from './hooks'
+import { initBrowserBackEvent } from 'icmaa-catalog/helpers/popState'
 
 import config, { products, entities } from 'config'
 
 import uniq from 'lodash-es/uniq'
 import pick from 'lodash-es/pick'
+
+// This inits the popstate event-binding
+// and Vue.observable for browser-back in CLP
+initBrowserBackEvent()
 
 export const IcmaaExtendedCatalogModule: StorefrontModule = async ({ store }) => {
   extendStore('attribute', IcmaaExtendedAttributeStore)

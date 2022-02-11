@@ -85,6 +85,7 @@ import { Logger } from '@vue-storefront/core/lib/logger'
 import { getSearchOptionsFromRouteParams } from '@vue-storefront/core/modules/catalog-next/helpers/categoryHelpers'
 import { IcmaaGoogleTagManagerExecutors } from 'icmaa-google-tag-manager/hooks'
 import * as productMutationTypes from '@vue-storefront/core/modules/catalog/store/product/mutation-types'
+import { routerHelper } from 'icmaa-catalog/helpers/popState'
 
 import AsyncSidebar from 'theme/components/core/blocks/AsyncSidebar/AsyncSidebar.vue'
 import ProductListing from 'theme/components/core/ProductListing'
@@ -113,8 +114,17 @@ const composeInitialPageState = async (store, route, forceLoad = false, pageSize
     const hasCategoryExtras = store.getters['icmaaCategoryExtras/getCategoryExtrasByUrlKey'](route.path)
     const currentCategory = cachedCategory && !forceLoad && hasCategoryExtras ? cachedCategory : await store.dispatch('category-next/loadCategoryWithExtras', { filters })
 
+    const loadCategoryProducts = async () => {
+      // If browser-history-back event use cached products
+      if (routerHelper.popStateDetected === true) {
+        routerHelper.popStateDetected = false
+        return Promise.resolve()
+      }
+      return store.dispatch('category-next/loadCategoryProducts', { route, category: currentCategory, pageSize })
+    }
+
     await Promise.all([
-      store.dispatch('category-next/loadCategoryProducts', { route, category: currentCategory, pageSize }),
+      loadCategoryProducts(),
       store.dispatch('category-next/loadChildCategoryFilter', { category: currentCategory })
     ])
 
