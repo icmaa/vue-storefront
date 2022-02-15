@@ -69,6 +69,7 @@ import { mapGetters, mapMutations } from 'vuex'
 import { Logger } from '@vue-storefront/core/lib/logger'
 import { IcmaaGoogleTagManagerExecutors } from 'icmaa-google-tag-manager/hooks'
 import * as productMutationTypes from '@vue-storefront/core/modules/catalog/store/product/mutation-types'
+import { routerHelper } from 'icmaa-catalog/helpers/popState'
 
 import AsyncSidebar from 'theme/components/core/blocks/AsyncSidebar/AsyncSidebar.vue'
 import FilterPresets from 'theme/components/core/blocks/Category/FilterPresets'
@@ -178,8 +179,13 @@ export default {
         const pageSize = route.params.pagesize || this.pageSize
         const category = { id: this.termHash, term: this.searchAlias }
 
-        await this.$store.dispatch('category-next/loadSearchProducts', { route, category, pageSize })
-        this.$store.dispatch('category-next/loadSearchBreadcrumbs')
+        // If browser-history-back event use cached products
+        if (routerHelper.popStateDetected === true) {
+          routerHelper.popStateDetected = false
+        } else {
+          await this.$store.dispatch('category-next/loadSearchProducts', { route, category, pageSize })
+          this.$store.dispatch('category-next/loadSearchBreadcrumbs')
+        }
 
         this.loading = false
       } catch (e) {
