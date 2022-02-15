@@ -184,8 +184,9 @@ export default {
           routerHelper.popStateDetected = false
         } else {
           await this.$store.dispatch('category-next/loadSearchProducts', { route, category, pageSize })
-          this.$store.dispatch('category-next/loadSearchBreadcrumbs')
         }
+
+        this.$store.dispatch('category-next/loadSearchBreadcrumbs')
 
         this.loading = false
       } catch (e) {
