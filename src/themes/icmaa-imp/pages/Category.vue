@@ -118,8 +118,10 @@ const composeInitialPageState = async (store, route, forceLoad = false, pageSize
       // If browser-history-back event use cached products
       if (routerHelper.popStateDetected === true) {
         routerHelper.popStateDetected = false
-        const prevRoute = store.getters['url/getPrevRouteDispatcher']
-        if (prevRoute && prevRoute?.name !== 'category') {
+        const curRoute = store.getters['url/getCurrentRoute']
+        const prevRoute = store.getters['url/getPrevRoute']
+        const prevRouteDisp = store.getters['url/getPrevRouteDispatcher']
+        if (prevRouteDisp?.name !== 'category' || prevRoute?.fullPath === curRoute?.fullPath) {
           return Promise.resolve()
         }
       }

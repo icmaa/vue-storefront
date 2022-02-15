@@ -20,8 +20,8 @@
       <div v-if="emptyResults && pleaseWait" class="t-px-2 t-pt-2 t-pb-4 t-text-sm">
         {{ $t('Please wait') }} ...
       </div>
-      <category-panel :categories="categories" title="Categories" :link="true" v-if="!emptyResults && filteredProducts.length && categories.length > 0" class="t-mb-4" :class="{ 't-opacity-25': pleaseWait }" />
-      <div class="product-listing t-flex t-flex-wrap t-bg-base-lightest t--mx-4 t-px-3 t-py-4" v-if="!emptyResults && filteredProducts.length > 0" :class="{ 't-opacity-25': pleaseWait }">
+      <category-panel :categories="categories" title="Categories" :link="true" v-if="!emptyResults && filteredProducts.length && categories.length > 0" class="t-pb-4 t-mb-4" :class="{ 't-opacity-25': pleaseWait }" />
+      <div class="product-listing t-flex t-flex-wrap t-bg-base-lightest t--mx-4 t--mt-4 t-px-3 t-py-4" v-if="!emptyResults && filteredProducts.length > 0" :class="{ 't-opacity-25': pleaseWait }">
         <div class="t-flex t-items-center t-justify-center t-w-full t-mx-1">
           <button-component type="second" @click="goToResults()" class="t-w-full md:t-w-2/3 t-mb-4">
             {{ $t('View all results') }}
