@@ -45,7 +45,10 @@ const getters: GetterTree<CategoryState, RootState> = {
       }
     }
 
-    return intersection(parents, currentFilterKeys).length > 0
+    const category = getters.getCurrentCategory
+    const showFilterInCategoryFor = category?.ceShowFiltersFor || []
+
+    return intersection(parents, [...currentFilterKeys, ...showFilterInCategoryFor]).length > 0
   },
   getFilterCategories: (state, getters) => getters.getAvailableFilters.category || [],
   isCategoryInTicketWhitelist: () => (category: Category): boolean => {
