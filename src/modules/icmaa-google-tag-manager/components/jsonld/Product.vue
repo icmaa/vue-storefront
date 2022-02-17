@@ -8,7 +8,6 @@ import { currentStoreView } from '@vue-storefront/core/lib/multistore'
 import { getThumbnailPath } from '@vue-storefront/core/helpers'
 import { icmaa_meta } from 'config'
 import { getCurrentStoreviewDayjsDatetime } from 'icmaa-config/helpers/datetime'
-import { getProductChildQtyByType } from 'icmaa-catalog/helpers'
 
 import JsonLd from './JsonLdContainer'
 
@@ -39,30 +38,6 @@ export default {
         }
       }
     },
-    price () {
-      return this.product.price_incl_tax
-    },
-    productChildQty () {
-      return getProductChildQtyByType(this.product)
-    },
-    availability () {
-      let status = 'InStock'
-      let qty = this.product.stock.qty + this.productChildQty
-
-      if (!this.product.stock.is_in_stock || qty === 0) {
-        status = 'OutOfStock'
-      } else if (this.product.stock.is_in_stock && qty <= 5) {
-        status = 'LimitedAvailability'
-      }
-
-      if (this.product.promo_id === '5') {
-        status = 'PreOrder'
-      } else if (this.isEndOfSale) {
-        status = 'OutOfStock'
-      }
-
-      return status
-    },
     images () {
       if (!this.product.media_gallery) {
         return []
@@ -85,19 +60,41 @@ export default {
         'aggregateRating': {
           '@type': 'AggregateRating',
           ratingValue: 5 * percent / 100,
-          reviewCount: Number(count)
-        },
-        'review': {
-          '@type': 'Review',
-          'reviewRating': {
-            '@type': 'Rating',
-            'ratingValue': 5 * percent / 100,
-            'bestRating': '5'
-          },
-          'author': {
-            '@type': 'Organization',
-            'name': 'IC Music and Apperal GmbH'
-          }
+          ratingCount: Number(count),
+          reviewCount: Number(count),
+          bestRating: 5,
+          worstRating: 0
+        }
+      }
+    },
+    offers () {
+      const defaults = {
+        '@type': 'Offer',
+        'url': icmaa_meta.base_url + this.currentRoute.fullPath,
+        'priceValidUntil': getCurrentStoreviewDayjsDatetime().add(7, 'days').format('YYYY-MM-DD'),
+        'priceCurrency': this.currency
+      }
+
+      if (this.product.type_id === 'configurable') {
+        const offers = []
+        this.product.configurable_children.forEach(p => {
+          offers.push({
+            ...defaults,
+            'sku': p.sku,
+            'price': p.price_incl_tax,
+            'availability': 'https://schema.org/' + this.availability(p)
+          })
+        })
+
+        return { offers }
+      }
+
+      return {
+        offers: {
+          ...defaults,
+          'sku': this.product.sku,
+          'price': this.product.price_incl_tax,
+          'availability': 'https://schema.org/' + this.availability(this.product)
         }
       }
     },
@@ -105,22 +102,33 @@ export default {
       return {
         '@context': 'https://schema.org/',
         '@type': 'Product',
+        'sku': this.product.parentSku || this.product.sku,
         'name': this.product.name.trim(),
         'image': this.images,
         'description': this.description,
-        'sku': this.product.parentSku || this.product.sku,
         ...this.brand,
         ...this.rating,
-        'offers': {
-          '@type': 'Offer',
-          'url': icmaa_meta.base_url + this.currentRoute.fullPath,
-          'priceCurrency': this.currency,
-          'price': this.price,
-          'priceValidUntil': getCurrentStoreviewDayjsDatetime().add(7, 'days').format('YYYY-MM-DD'),
-          'itemCondition': 'https://schema.org/NewCondition',
-          'availability': 'https://schema.org/' + this.availability
-        }
+        'itemCondition': 'https://schema.org/NewCondition',
+        ...this.offers
       }
+    }
+  },
+  methods: {
+    availability (product) {
+      let status = 'InStock'
+      let qty = product.stock.qty
+
+      if (!product.stock.is_in_stock || qty === 0) {
+        status = 'OutOfStock'
+      } else if (product.stock.is_in_stock && qty <= 5) {
+        status = 'LimitedAvailability'
+      }
+
+      if (this.product.promo_id === '5') {
+        status = 'PreOrder'
+      }
+
+      return status
     }
   }
 }
