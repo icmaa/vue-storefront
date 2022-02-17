@@ -28,7 +28,7 @@
                 <span class="t-block t-text-2xl t-font-thin t-mb-2">{{ productName | htmlDecode }}</span>
               </template>
             </h1>
-            <reviews-short :rating="reviewsTotalRating" :count="reviewsCount" class="t-flex-fix t-w-full t-mt-4 lg:t-flex-expand lg:t-w-2/3" />
+            <reviews-short :rating="reviewRating" :count="reviewCount" class="t-flex-fix t-w-full t-mt-4 lg:t-flex-expand lg:t-w-2/3" />
             <web-share :webshare-text="webshareText" :webshare-image="image.src" class="t-flex-fix t-w-full t-mt-4 t-text-base-light lg:t-w-auto" />
 
             <div class="t-w-full">
@@ -117,6 +117,8 @@
       :async-component="AddToCartSidebar"
       :async-component-props="{ showAddToCartButton: true, closeOnSelect: false }"
     />
+
+    <json-ld-loader type="product" />
   </div>
 </template>
 
@@ -127,7 +129,6 @@ import i18n from '@vue-storefront/i18n'
 import { registerModule } from '@vue-storefront/core/lib/modules'
 import { onlineHelper, isServer } from '@vue-storefront/core/helpers'
 import { catalogHooksExecutors } from '@vue-storefront/core/modules/catalog-next/hooks'
-import { currentStoreView } from '@vue-storefront/core/lib/multistore'
 import { formatCategoryLink } from '@vue-storefront/core/modules/url/helpers'
 import * as productMutationTypes from '@vue-storefront/core/modules/catalog/store/product/mutation-types'
 
@@ -154,6 +155,7 @@ import ProductCareInstructions from 'theme/components/core/blocks/Product/Produc
 import ReviewsShort from 'theme/components/core/blocks/Reviews/ReviewsShort'
 import ReviewsClaim from 'theme/components/core/blocks/Reviews/ReviewsClaim'
 import Recommendations from 'icmaa-recommendations/components/Recommendations'
+import JsonLdLoader from 'icmaa-google-tag-manager/components/jsonld/JsonLdLoader'
 import LoaderBackground from 'theme/components/core/LoaderBackground'
 import Lazyload from 'icmaa-cms/components/Lazyload'
 
@@ -187,6 +189,7 @@ export default {
     ReviewsShort,
     ReviewsClaim,
     Recommendations,
+    JsonLdLoader,
     WebShare,
     Lazyload
   },
