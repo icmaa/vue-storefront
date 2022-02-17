@@ -1,3 +1,5 @@
+import getProductChildQtyByType from './productQtyByType'
+
 /**
  * Overwrite default method with our, more simple variant.
  * We don't need to create the complete image path to be able to extend it using our `icmaa-cdn` hooks.
@@ -16,3 +18,5 @@ export function getMediaGallery (product) {
   }
   return mediaGallery
 }
+
+export { getProductChildQtyByType }
