@@ -133,9 +133,14 @@ export default {
     }
   },
   metaInfo () {
+    const description = this.$route.meta.description
+      ? [ { vmid: 'description', name: 'description', content: this.$route.meta.description } ] : []
     return {
       title: this.$route.meta.title || this.metaTitle,
-      meta: this.$route.meta.description ? [{ vmid: 'description', name: 'description', content: this.$route.meta.description }] : []
+      meta: [
+        { vmid: 'robots', name: 'robots', content: 'noindex, nofollow' },
+        ...description
+      ]
     }
   },
   async asyncData ({ context }) {
