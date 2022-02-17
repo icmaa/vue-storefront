@@ -30,16 +30,6 @@ export default {
       const storeView = currentStoreView()
       return storeView.i18n.currencyCode
     },
-    gtin () {
-      if (this.product.type_id === 'configurable') {
-        const curOpt = this.product.configurable_children.find(p => p.sku === this.product.sku)
-        if (!curOpt?.gtin) return {}
-        return { gtin: curOpt.gtin }
-      }
-
-      if (!this.product?.gtin) return {}
-      return { gtin: this.product.gtin }
-    },
     brand () {
       const attrKey = this.product.brand ? 'brand' : 'band'
       return {
@@ -119,7 +109,6 @@ export default {
         'image': this.images,
         'description': this.description,
         'sku': this.product.parentSku || this.product.sku,
-        ...this.gtin,
         ...this.brand,
         ...this.rating,
         'offers': {
