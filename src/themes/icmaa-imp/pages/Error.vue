@@ -14,7 +14,14 @@
 <script>
 
 export default {
-  name: 'Error'
+  name: 'Error',
+  metaInfo () {
+    return {
+      meta: [
+        { vmid: 'robots', name: 'robots', content: 'noindex, nofollow' }
+      ]
+    }
+  }
 }
 
 </script>

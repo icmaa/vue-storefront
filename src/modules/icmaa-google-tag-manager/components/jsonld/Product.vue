@@ -30,10 +30,6 @@ export default {
       const storeView = currentStoreView()
       return storeView.i18n.currencyCode
     },
-    gtin () {
-      if (!this.product.gtin) return {}
-      return { gtin: this.product.gtin }
-    },
     brand () {
       const attrKey = this.product.brand ? 'brand' : 'band'
       return {
@@ -113,7 +109,6 @@ export default {
         'image': this.images,
         'description': this.description,
         'sku': this.product.parentSku || this.product.sku,
-        ...this.gtin,
         ...this.brand,
         ...this.rating,
         'offers': {

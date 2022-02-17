@@ -210,6 +210,13 @@ export default {
   },
   serverPrefetch () {
     return this.fetchAsyncData()
+  },
+  metaInfo () {
+    return {
+      meta: [
+        { vmid: 'robots', name: 'robots', content: 'noindex, nofollow' }
+      ]
+    }
   }
 }
 </script>
