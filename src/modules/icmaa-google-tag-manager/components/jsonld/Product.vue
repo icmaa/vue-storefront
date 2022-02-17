@@ -31,7 +31,13 @@ export default {
       return storeView.i18n.currencyCode
     },
     gtin () {
-      if (!this.product.gtin) return {}
+      if (this.product.type_id === 'configurable') {
+        const curOpt = this.product.configurable_children.find(p => p.sku === this.product.sku)
+        if (!curOpt?.gtin) return {}
+        return { gtin: curOpt.gtin }
+      }
+
+      if (!this.product?.gtin) return {}
       return { gtin: this.product.gtin }
     },
     brand () {
