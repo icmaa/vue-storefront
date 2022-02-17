@@ -7,7 +7,7 @@ import { mapGetters } from 'vuex'
 import { currentStoreView } from '@vue-storefront/core/lib/multistore'
 import { getThumbnailPath } from '@vue-storefront/core/helpers'
 import { icmaa_meta } from 'config'
-import { getCurrentStoreviewDayjsDatetime } from 'icmaa-config/helpers/datetime'
+import { getCurrentStoreviewDayjsDatetime, toDate } from 'icmaa-config/helpers/datetime'
 
 import JsonLd from './JsonLdContainer'
 
@@ -20,7 +20,8 @@ export default {
     ...mapGetters({
       product: 'product/getCurrentProduct',
       getOptionLabel: 'attribute/getOptionLabel',
-      currentRoute: 'url/getCurrentRoute'
+      currentRoute: 'url/getCurrentRoute',
+      getReviews: 'review/getReviews'
     }),
     description () {
       return (this.product.description || '').trim()
@@ -98,6 +99,30 @@ export default {
         }
       }
     },
+    reviews () {
+      if (this.getReviews.length === 0) return {}
+
+      const reviews = []
+      this.getReviews.forEach(r => {
+        reviews.push({
+          '@type': 'Review',
+          'author': {
+            '@type': 'Person',
+            'name': r.nickname
+          },
+          'datePublished': toDate(r.created_at, 'YYYY-MM-DD', 'YYYY-MM-DD HH:mm:ss'),
+          'description': r.detail.trim(),
+          'reviewRating': {
+            '@type': 'Rating',
+            'bestRating': 100,
+            'worstRating': 0,
+            'ratingValue': r.ratings_total
+          }
+        })
+      })
+
+      return { reviews }
+    },
     jsonld () {
       return {
         '@context': 'https://schema.org/',
@@ -109,7 +134,8 @@ export default {
         ...this.brand,
         ...this.rating,
         'itemCondition': 'https://schema.org/NewCondition',
-        ...this.offers
+        ...this.offers,
+        ...this.reviews
       }
     }
   },
