@@ -365,7 +365,7 @@ declare namespace Cypress {
      * cy.addRandomProductToCart()
      * cy.addRandomProductToCart({ tries: 10 })
      */
-    addRandomProductToCart(options?: { tries?: number, enterCheckout?: boolean }, count?: number): Chainable<Window>,
+    addRandomProductToCart(options?: { categoryUrl?: string, tries?: number, enterCheckout?: boolean }, count?: number): Chainable<Window>,
 
     /**
      * Try to add the product you are currently viewing to cart.
