@@ -273,7 +273,7 @@ Cypress.Commands.add('addCustomerAddress', () => {
       if (storeCode === 'fr') {
         cy.get('@form').focusInput('telephone').type(faker.phone.phoneNumber())
       } else if (['uk', 'us'].includes(storeCode)) {
-        cy.get('@form').find('select[name="region_id"]').selectRandomOption()
+        cy.get('@form').find('select[name="region_id"]').selectRandomOption(true)
       }
     })
 
