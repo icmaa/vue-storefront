@@ -116,7 +116,8 @@ export default {
       contentHeader: 'icmaaCategoryExtras/getContentHeaderByCurrentCategory',
       term: 'icmaaSearchAlias/getCurrentResultsPageTerm',
       termHash: 'icmaaSearchAlias/getCurrentResultsPageTermHash',
-      searchAlias: 'icmaaSearchAlias/getCurrentResultsPageAlias'
+      searchAlias: 'icmaaSearchAlias/getCurrentResultsPageAlias',
+      prevRoute: 'url/getPrevRouteDispatcher'
     }),
     isLazyHydrateEnabled () {
       return config.ssr.lazyHydrateFor.includes('category-next.products')
@@ -180,7 +181,9 @@ export default {
         const category = { id: this.termHash, term: this.searchAlias }
 
         // If browser-history-back event use cached products
-        if (routerHelper.popStateDetected === true) {
+        if (routerHelper.popStateDetected === true &&
+          ['simple-product', 'configurable-product', 'bundle-product'].includes(this.prevRoute?.name)
+        ) {
           routerHelper.popStateDetected = false
         } else {
           await this.$store.dispatch('category-next/loadSearchProducts', { route, category, pageSize })
