@@ -1,6 +1,9 @@
 name: Continuous Integration
 
 on:
+  push:
+    branches:
+      - test-*
   pull_request:
     types: [ opened, reopened, synchronize ]
 
