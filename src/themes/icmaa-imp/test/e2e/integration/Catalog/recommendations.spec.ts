@@ -1,6 +1,6 @@
 describe('Recommendations', () => {
   it('Recommendations should be visible', () => {
-    cy.visitProductDetailPage()
+    cy.visitProductDetailPage({ categoryUrl: 'clothing.html' })
 
     cy.getByTestId('RecommendationsLoader')
       .first()
