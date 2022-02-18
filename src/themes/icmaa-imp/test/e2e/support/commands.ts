@@ -398,7 +398,7 @@ Cypress.Commands.add('checkStockApiRequest', () => {
 })
 
 Cypress.Commands.add('checkAvailabilityOfCurrentProduct', (closeSidebar = false) => {
-  cy.wait('@apiStockReq')
+  cy.checkStockApiRequest()
   cy.wait(300) // Wait for DOM change
 
   cy.getByTestId('AddToCart').then($button => {
