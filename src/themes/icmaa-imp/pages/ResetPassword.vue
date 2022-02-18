@@ -155,6 +155,13 @@ export default {
         })
       }
     }
+  },
+  metaInfo () {
+    return {
+      meta: [
+        { vmid: 'robots', name: 'robots', content: 'noindex, nofollow' }
+      ]
+    }
   }
 }
 </script>

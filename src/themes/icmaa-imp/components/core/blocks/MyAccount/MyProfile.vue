@@ -55,7 +55,6 @@
         name="gender"
         id="gender"
         v-model="profile.gender"
-        :options="genderOptions"
         :label="$t('Gender') + ' *'"
         :validations="[{
           condition: !validation.gender.required && validation.gender.$error,
