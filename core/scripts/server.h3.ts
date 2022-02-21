@@ -43,9 +43,9 @@ const staticRoutes = {
 export const serveStaticMiddleware = function (path: string) {
   return (req: IncomingMessage, res: OutgoingMessage, next) => {
     const mimeType = mime.getType(path + req.url)
-    let maxAge = config.expireHeaders.default;
+    let maxAge = config.expireHeaders.default
     if (config.expireHeaders.hasOwnProperty(mimeType)) {
-      maxAge = config.expireHeaders.get(mimeType);
+      maxAge = config.expireHeaders.get(mimeType)
     }
     return serveStatic(path, { maxAge })(req as any, res as any, next) as Handle
   }
@@ -143,7 +143,7 @@ app.use((req) => {
 })
 
 let renderer
-let globalContextConfig: any = null;
+let globalContextConfig: any = null
 const NOT_ALLOWED_SSR_EXTENSIONS_REGEX = new RegExp(`^.*\\.(${config.server.ssrDisabledFor.extensions.join('|')})$`)
 const compileOptions = {
   escape: /{{([^{][\s\S]+?[^}])}}/g,
@@ -179,10 +179,10 @@ app.use('*', async (req, res) => {
 
   const s = Date.now()
 
-  const site = req.headers['x-vs-store-code'] as string || 'main';
-  const currentKey = `page:${site}:${req.url}`;
+  const site = req.headers['x-vs-store-code'] as string || 'main'
+  const currentKey = `page:${site}:${req.url}`
   const newCacheKey = serverHooksExecutors.beforeBuildCacheKey({ currentKey, req, site })
-  const cacheKey = typeof newCacheKey === 'string' ? newCacheKey : currentKey;
+  const cacheKey = typeof newCacheKey === 'string' ? newCacheKey : currentKey
 
   const errorHandler = err => {
     if (err && err.code === 404) {
@@ -237,7 +237,7 @@ app.use('*', async (req, res) => {
         output = beforeOutputRenderedResponse
       }
 
-      output = ssr.applyAdvancedOutputProcessing(context, output, templatesCache, isProd);
+      output = ssr.applyAdvancedOutputProcessing(context, output, templatesCache, isProd)
 
       if (config.server.useOutputCache && cache) {
         cache.set(
@@ -299,7 +299,7 @@ app.use('*', async (req, res) => {
     }
   }
 
-  let requestContextConfig: any = config.util.extendDeep({}, config);
+  let requestContextConfig: any = config.util.extendDeep({}, config)
   if (globalContextConfig) {
     requestContextConfig = config.util.extendDeep({}, globalContextConfig)
   }
