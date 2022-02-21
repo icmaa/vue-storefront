@@ -1,15 +1,16 @@
 import config from 'config'
 import serveStatic from 'serve-static'
 import mime from 'mime/lite'
+import request from 'request'
+import path from 'path'
+import glob from 'glob'
+import { path as rootPath } from 'app-root-path'
 import { createServer, IncomingMessage, OutgoingMessage, ServerResponse } from 'http'
-import { createApp, useQuery, useMethod, Handle, createError, sendError, send, sendRedirect } from 'h3'
+import { createApp, useQuery, useMethod, assertMethod, Handle, createError, sendError, send, sendRedirect } from 'h3'
 import { serverHooksExecutors } from '@vue-storefront/core/server/hooks'
 import { storeCodeFromUrlPath } from 'icmaa-config/helpers/store'
 import { Context } from './utils/types'
 
-const path = require('path')
-const glob = require('glob')
-const rootPath = require('app-root-path').path
 const cache = require('./utils/cache-instance')
 const themeRootPath = require('../build/theme-path')
 const compilationPage = require('../pages/Compilation')
@@ -54,11 +55,83 @@ Object.entries(staticRoutes).forEach(([routePath, staticPath]) => {
   app.use(routePath, serveStaticMiddleware(staticPath))
 })
 
-serverHooksExecutors.afterApplicationInitialized({ app, config: config.server, isProd })
+const apiStatus = async (res: ServerResponse, data, statusCode = 200, dropExcp = true) => {
+  if (statusCode > 400) {
+    if (dropExcp) {
+      const statusMessage = typeof data === 'string' ? data : undefined
+      const err = createError({ statusCode, statusMessage, data })
+      return sendError(res, err, !isProd)
+    }
+    res.statusCode = statusCode
+  }
 
-/** @todo Handle invalidate requests */
-// app.post('/invalidate', invalidateCache)
-// app.get('/invalidate', invalidateCache)
+  return res.end(data)
+}
+
+app.use('/invalidate', async (req, res) => {
+  assertMethod(req, ['GET', 'POST'])
+  if (config.server.useOutputCache) {
+    const query = useQuery(req)
+    if (query.tag && query.key) { // clear cache pages for specific query tag
+      if (query.key !== config.server.invalidateCacheKey) {
+        console.error('Invalid cache invalidation key')
+        apiStatus(res, 'Invalid cache invalidation key', 500)
+        return
+      }
+
+      console.log(`Clear cache request for [${query.tag}]`)
+      const tags = query.tag === '*' ? config.server.availableCacheTags : query.tag.split(',')
+
+      serverHooksExecutors.beforeCacheInvalidated({ tags, req: req as any })
+
+      const subPromises = []
+      tags.forEach(tag => {
+        if (config.server.availableCacheTags.indexOf(tag) >= 0 ||
+          config.server.availableCacheTags.find(t => tag.indexOf(t) === 0)
+        ) {
+          subPromises.push(cache.invalidate(tag).then(() => {
+            console.log(`Tags invalidated successfully for [${tag}]`)
+          }))
+        } else {
+          console.error(`Invalid tag name ${tag}`)
+        }
+      })
+
+      Promise.all(subPromises).then(r => {
+        apiStatus(res, `Tags invalidated successfully [${query.tag}]`)
+      }).catch(error => {
+        console.error(error)
+        apiStatus(res, error, 500)
+      }).finally(() => {
+        serverHooksExecutors.afterCacheInvalidated({ tags, req: req as any })
+      })
+
+      if (config.server.invalidateCacheForwarding) {
+        if (!query.forwardedFrom && config.server.invalidateCacheForwardUrl) {
+          await request(
+            config.server.invalidateCacheForwardUrl + query.tag + '&forwardedFrom=vs',
+            {},
+            (err, res, body) => {
+              try {
+                if (err) console.error(err)
+                if (body && JSON.parse(body).code !== 200) console.error(body)
+              } catch (e) {
+                console.error('Invalid cache-invalidation response format', e)
+              }
+            }
+          )
+        }
+      }
+    } else {
+      console.error('Invalid parameters for Clear cache request')
+      apiStatus(res, 'Invalid parameters for Clear cache request', 500)
+    }
+  } else {
+    apiStatus(res, 'Cache invalidation is not required, output cache is disabled')
+  }
+})
+
+serverHooksExecutors.afterApplicationInitialized({ app, config: config.server, isProd })
 
 app.use((req) => {
   console.log(
@@ -70,7 +143,7 @@ app.use((req) => {
 })
 
 let renderer
-// let globalContextConfig: any = null;
+let globalContextConfig: any = null;
 const NOT_ALLOWED_SSR_EXTENSIONS_REGEX = new RegExp(`^.*\\.(${config.server.ssrDisabledFor.extensions.join('|')})$`)
 const compileOptions = {
   escape: /{{([^{][\s\S]+?[^}])}}/g,
@@ -96,19 +169,6 @@ if (isProd) {
     templatesCache['default'] = ssr.compileTemplate(template, compileOptions) // Important Notice: template switching doesn't work with dev server because of the HMR
     renderer = ssr.createRenderer(bundle)
   })
-}
-
-const apiStatus = async (res: ServerResponse, data, statusCode = 200, dropExcp = true) => {
-  if (statusCode > 400) {
-    if (dropExcp) {
-      const statusMessage = typeof data === 'string' ? data : undefined
-      const err = createError({ statusCode, statusMessage, data })
-      return sendError(res, err, !isProd)
-    }
-    res.statusCode = statusCode
-  }
-
-  return res.end(data)
 }
 
 app.use('*', async (req, res) => {
@@ -239,7 +299,12 @@ app.use('*', async (req, res) => {
     }
   }
 
-  return dynamicCacheHandler(config)
+  let requestContextConfig: any = config.util.extendDeep({}, config);
+  if (globalContextConfig) {
+    requestContextConfig = config.util.extendDeep({}, globalContextConfig)
+  }
+
+  return dynamicCacheHandler(requestContextConfig)
 })
 
 const port = process.env.PORT || config.server.port
