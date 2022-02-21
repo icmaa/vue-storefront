@@ -12,7 +12,7 @@ module.exports = {
   extends: [
     'plugin:vue/recommended',
     'standard',
-    'plugin:@typescript-eslint/recommended'
+    'plugin:@typescript-eslint/eslint-recommended'
   ],
   plugins: ['vue', 'vue-storefront', '@typescript-eslint'],
   // add your custom rules here

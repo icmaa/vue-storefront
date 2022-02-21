@@ -1,5 +1,4 @@
 import { localizedRoute as localizedRouteHelper, localizedDispatcherRoute as localizedDispatcherRouteHelper, currentStoreView } from '@vue-storefront/core/lib/multistore'
-import { isServer } from '../helpers';
 
 export const multistore = {
   methods: {
