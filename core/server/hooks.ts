@@ -1,6 +1,5 @@
 import { createListenerHook, createMutatorHook } from '@vue-storefront/core/lib/hooks'
 import { Express, Request } from 'express'
-import { App } from 'h3'
 import http, { IncomingMessage } from 'http'
 
 // To add like tracing which needs to be done as early as possible
@@ -32,7 +31,7 @@ const {
 
 // beforeStartApp
 interface Extend {
-  app: Express | App,
+  app: any,
   config: any,
   isProd: boolean
 }
@@ -55,7 +54,7 @@ const {
 
 interface Exception {
   err: Error,
-  req: Request | IncomingMessage,
+  req: any,
   isProd: boolean
 }
 

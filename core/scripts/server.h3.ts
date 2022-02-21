@@ -18,7 +18,7 @@ const resolve = file => path.resolve(rootPath, file)
 const isProd = process.env.NODE_ENV === 'production'
 
 /** Load server extensions */
-const serverExtensions = glob.sync('src/modules/*/server.js')
+const serverExtensions = glob.sync('src/modules/*/server.h3.js')
 const configProviders: Function[] = []
 serverExtensions.map(serverModule => {
   const module = require(resolve(serverModule))
