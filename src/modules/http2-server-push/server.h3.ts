@@ -2,6 +2,8 @@ import { serverHooks } from '@vue-storefront/core/server/hooks'
 import config from 'config'
 
 if (config.server.http2ServerPush) {
+  console.log('HTTP2 Server Push is enabled')
+
   serverHooks.beforeOutputRenderedResponse(({
     res,
     context,
@@ -9,7 +11,6 @@ if (config.server.http2ServerPush) {
     isProd
   }) => {
     if (isProd) {
-      console.log('HTTP2 Server Push is enabled')
       const serverPushItems = [];
       for (let { file, asType, extension } of (context as any).getPreloadFiles()) {
         if (extension !== 'js') {
