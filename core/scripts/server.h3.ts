@@ -31,8 +31,6 @@ serverHooksExecutors.afterProcessStarted(config.server)
 
 const app = createApp()
 
-serverHooksExecutors.afterApplicationInitialized({ app, config: config.server, isProd })
-
 const staticRoutes = {
   '/assets': `${themeRootPath}/assets`,
   '/dist': `${rootPath}/dist`,
@@ -55,6 +53,8 @@ export const serveStaticMiddleware = function (path: string) {
 Object.entries(staticRoutes).forEach(([routePath, staticPath]) => {
   app.use(routePath, serveStaticMiddleware(staticPath))
 })
+
+serverHooksExecutors.afterApplicationInitialized({ app, config: config.server, isProd })
 
 /** @todo Handle invalidate requests */
 // app.post('/invalidate', invalidateCache)
