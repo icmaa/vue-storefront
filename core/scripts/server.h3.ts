@@ -2,13 +2,15 @@ import config from 'config'
 import serveStatic from 'serve-static'
 import mime from 'mime/lite'
 import { createServer, IncomingMessage, OutgoingMessage, ServerResponse } from 'http'
-import { createApp, useQuery, useMethod, Handle, createError, sendError, send } from 'h3'
+import { createApp, useQuery, useMethod, Handle, createError, sendError, send, sendRedirect } from 'h3'
 import { serverHooksExecutors } from '@vue-storefront/core/server/hooks'
+import { storeCodeFromUrlPath } from 'icmaa-config/helpers/store'
 import { Context } from './utils/types'
 
 const path = require('path')
 const glob = require('glob')
 const rootPath = require('app-root-path').path
+const cache = require('./utils/cache-instance')
 const themeRootPath = require('../build/theme-path')
 const compilationPage = require('../pages/Compilation')
 const ssr = require('./utils/ssr-renderer')
@@ -96,12 +98,16 @@ if (isProd) {
   })
 }
 
-const apiStatus = async (res: ServerResponse, data, statusCode = 200) => {
+const apiStatus = async (res: ServerResponse, data, statusCode = 200, dropExcp = true) => {
   if (statusCode > 400) {
-    const statusMessage = typeof data === 'string' ? data : undefined
-    const err = createError({ statusCode, statusMessage, data })
-    return sendError(res, err, !isProd)
+    if (dropExcp) {
+      const statusMessage = typeof data === 'string' ? data : undefined
+      const err = createError({ statusCode, statusMessage, data })
+      return sendError(res, err, !isProd)
+    }
+    res.statusCode = statusCode
   }
+
   return res.end(data)
 }
 
@@ -112,6 +118,25 @@ app.use('*', async (req, res) => {
   }
 
   const s = Date.now()
+
+  const site = req.headers['x-vs-store-code'] as string || 'main';
+  const currentKey = `page:${site}:${req.url}`;
+  const newCacheKey = serverHooksExecutors.beforeBuildCacheKey({ currentKey, req, site })
+  const cacheKey = typeof newCacheKey === 'string' ? newCacheKey : currentKey;
+
+  const errorHandler = err => {
+    if (err && err.code === 404) {
+      console.error(`Redirect for resource not found: ${req.url}`)
+      return sendRedirect(res, '/page-not-found')
+    } else {
+      console.error(`Error during render : ${req.url}`)
+      if (!isProd) console.error(err)
+
+      serverHooksExecutors.ssrException({ err, req, isProd })
+      const storeCode = storeCodeFromUrlPath(req.url)
+      return sendRedirect(res, storeCode ? `/${storeCode}/error` : '/error')
+    }
+  }
 
   const dynamicRequestHandler = async (renderer, config) => {
     if (!renderer) {
@@ -130,6 +155,14 @@ app.use('*', async (req, res) => {
         res.setHeader('Content-Type', 'text/html')
       }
 
+      let tagsArray = []
+      if (config.server.useOutputCacheTagging && context.output.cacheTags && context.output.cacheTags.size > 0) {
+        tagsArray = Array.from(context.output.cacheTags)
+        const cacheTags = tagsArray.join(' ')
+        res.setHeader('X-VS-Cache-Tags', cacheTags)
+        console.log(`Cache tags for the request: ${cacheTags}`)
+      }
+
       const beforeOutputRenderedResponse = serverHooksExecutors.beforeOutputRenderedResponse({
         req,
         res,
@@ -145,6 +178,16 @@ app.use('*', async (req, res) => {
       }
 
       output = ssr.applyAdvancedOutputProcessing(context, output, templatesCache, isProd);
+
+      if (config.server.useOutputCache && cache) {
+        cache.set(
+          cacheKey,
+          { headers: res.getHeaders(), body: output, httpCode: res.statusCode },
+          tagsArray
+        ).catch(err => {
+          console.error('Couldn\'t write output-cache:', err.message)
+        })
+      }
 
       const afterOutputRenderedResponse = serverHooksExecutors.afterOutputRenderedResponse({
         req,
@@ -164,11 +207,39 @@ app.use('*', async (req, res) => {
     })
   }
 
-  const body = await dynamicRequestHandler(renderer, config)
+  const dynamicCacheHandler = async (config) => {
+    if (config.server.useOutputCache && cache) {
+      return cache.get(
+        cacheKey
+      ).then(async output => {
+        if (output !== null) {
+          if (output.headers) {
+            for (const header of Object.keys(output.headers)) {
+              res.setHeader(header, output.headers[header])
+            }
+          }
+          res.setHeader('X-VS-Cache', 'Hit')
 
-  console.log(`Whole request [${req.url}]: ${Date.now() - s}ms`)
+          if (output.body) {
+            apiStatus(res, output.body, output.httpCode, false)
+          } else {
+            res.setHeader('Content-Type', 'text/html')
+            apiStatus(res, output, output.httpCode, false)
+          }
 
-  return apiStatus(res, body)
+          console.log(`Cache hit [${req.url}], cached request: ${Date.now() - s}ms`)
+        } else {
+          res.setHeader('X-VS-Cache', 'Miss')
+          console.log(`Cache miss [${req.url}], request: ${Date.now() - s}ms`)
+          apiStatus(res, await dynamicRequestHandler(renderer, config), null, false)
+        }
+      }).catch(errorHandler)
+    } else {
+      await apiStatus(res, dynamicRequestHandler(renderer, config))
+    }
+  }
+
+  return dynamicCacheHandler(config)
 })
 
 const port = process.env.PORT || config.server.port
