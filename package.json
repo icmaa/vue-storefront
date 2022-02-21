@@ -27,7 +27,6 @@
   },
   "homepage": "https://github.com/vuestorefront/vue-storefront/README.md",
   "scripts": {
-    "h3": "tsc --build --clean && yarn generate-files && cross-env TS_NODE_PROJECT=\"tsconfig-build.json\" ts-node ./core/scripts/server.h3",
     "static-server": "cross-env TS_NODE_PROJECT=\"tsconfig-build.json\" ts-node ./core/scripts/static-server.ts",
     "generate": "cross-env TS_NODE_PROJECT=\"tsconfig-build.json\" ts-node ./core/scripts/generate.ts",
     "generate-files": "cross-env TS_NODE_PROJECT=\"tsconfig-build.json\" ts-node ./core/scripts/generate-files.ts",
@@ -117,8 +116,8 @@
     "@babel/preset-env": "^7.11.0",
     "@types/jest": "^25.1.3",
     "@types/node": "^16.11.6",
-    "@typescript-eslint/eslint-plugin": "^5.12.0",
-    "@typescript-eslint/parser": "^5.12.0",
+    "@typescript-eslint/eslint-plugin": "^1.7.1-alpha.17",
+    "@typescript-eslint/parser": "^1.7.1-alpha.17",
     "@vue/test-utils": "^1.0.0-beta.29",
     "autoprefixer": "^8.6.2",
     "babel-eslint": "^9.0.0",
