@@ -114,10 +114,8 @@ app.use('/invalidate', async (req, res) => {
 
 serverHooksExecutors.afterApplicationInitialized({ app, config: config.server, isProd })
 
-app.use(req => {
-  // Logging middleware for assets that are not found or all other SSR requests
-  console.log(new Date().toISOString(), useMethod(req), req.url, useQuery(req))
-})
+// Logging middleware for assets that are not found or all other SSR requests
+if (isProd) app.use(req => { console.log(new Date().toISOString(), useMethod(req), req.url, useQuery(req)) })
 
 let renderer
 let globalContextConfig: any = null
@@ -193,11 +191,15 @@ app.use('*', async (req, res) => {
       }
 
       let tagsArray = []
-      if (config.server.useOutputCacheTagging && context.output.cacheTags && context.output.cacheTags.size > 0) {
+      if (config.server.useOutputCache &&
+          config.server.useOutputCacheTagging &&
+          context.output.cacheTags &&
+          context.output.cacheTags.size > 0
+      ) {
         tagsArray = Array.from(context.output.cacheTags)
         const cacheTags = tagsArray.join(' ')
         res.setHeader('X-VS-Cache-Tags', cacheTags)
-        console.log(`Cache tags for the request: ${cacheTags}`)
+        if (!isProd) console.log(`Cache tags for the request: ${cacheTags}`)
       }
 
       const beforeOutputRenderedResponse = serverHooksExecutors.beforeOutputRenderedResponse({
@@ -272,7 +274,7 @@ app.use('*', async (req, res) => {
         }
       }).catch(errorHandler)
     } else {
-      await apiStatus(res, dynamicRequestHandler(renderer, config))
+      apiStatus(res, await dynamicRequestHandler(renderer, config))
     }
   }
 
