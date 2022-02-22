@@ -223,23 +223,6 @@ export default {
   mounted () {
     catalogHooksExecutors.categoryPageVisited(this.getCurrentCategory)
   },
-  async beforeRouteEnter (to, from, next) {
-    if (isServer) next() // SSR no need to invoke SW caching here
-    else if (!from.name) { // SSR but client side invocation, we need to cache products and invoke requests from asyncData for offline support
-      next(async vm => {
-        vm.loading = true
-        await composeInitialPageState(vm.$store, to, true, vm.pageSize)
-        await vm.$store.dispatch('category-next/cacheProducts', { route: to }) // await here is because we must wait for the hydration
-        vm.loading = false
-      })
-    } else { // Pure CSR, with no initial category state
-      next(async vm => {
-        vm.loading = true
-        vm.$store.dispatch('category-next/cacheProducts', { route: to })
-        vm.loading = false
-      })
-    }
-  },
   methods: {
     ...mapMutations('product', {
       resetCurrentProduct: productMutationTypes.PRODUCT_RESET_CURRENT
