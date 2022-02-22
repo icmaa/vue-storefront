@@ -41,6 +41,11 @@ const {
   executor: afterApplicationInitializedExecutor
 } = createListenerHook<Extend>()
 
+const {
+  hook: beforeHttpServerStartedHook,
+  executor: beforeHttpServerStartedExecutor
+} = createListenerHook<Extend>()
+
 interface Server {
   server: http.Server,
   config: any,
@@ -82,6 +87,7 @@ const {
 const serverHooksExecutors = {
   afterProcessStarted: afterProcessStartedExecutor,
   afterApplicationInitialized: afterApplicationInitializedExecutor,
+  beforeHttpServerStarted: beforeHttpServerStartedExecutor,
   httpServerIsReady: httpServerIsReadyExecutor,
   ssrException: ssrExceptionExecutor,
   beforeOutputRenderedResponse: beforeOutputRenderedResponseExecutor,
@@ -96,10 +102,8 @@ const serverHooks = {
    * @param void
    */
   afterProcessStarted: afterProcessStartedHook,
-  /**
-   *
-   */
   afterApplicationInitialized: afterApplicationInitializedHook,
+  beforeHttpServerStarted: beforeHttpServerStartedHook,
   httpServerIsReady: httpServerIsReadyHook,
   ssrException: ssrExceptionHook,
   beforeOutputRenderedResponse: beforeOutputRenderedResponseHook,

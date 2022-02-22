@@ -288,13 +288,16 @@ app.use('*', async (req, res) => {
   return dynamicCacheHandler(requestContextConfig)
 })
 
+serverHooksExecutors.beforeHttpServerStarted({ app, config: config.server, isProd })
+
 const port = process.env.PORT || config.server.port
 const host = process.env.HOST || config.server.host
 
-createServer(app)
-  .listen(process.env.PORT || 3000, host)
+const server = createServer(app)
+server.listen(process.env.PORT || 3000, host)
   .on('listening', () => {
     console.log('VueStorefront server started at:', `http://${host}:${port}`)
+    serverHooksExecutors.httpServerIsReady({ server, config: config.server, isProd })
   })
   .on('error', (e) => {
     if ((e as any).code === 'EADDRINUSE') {
