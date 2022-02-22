@@ -55,7 +55,7 @@ export default {
     rating () {
       const { count = 0, rating_summary: percent = 0 } = this.product.reviews
 
-      if (count === 0) return {}
+      if (parseInt(count) === 0) return {}
 
       return {
         'aggregateRating': {
@@ -87,7 +87,9 @@ export default {
           })
         })
 
-        return { offers }
+        if (offers.length > 0) {
+          return { offers }
+        }
       }
 
       return {
