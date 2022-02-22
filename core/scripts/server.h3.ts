@@ -114,13 +114,9 @@ app.use('/invalidate', async (req, res) => {
 
 serverHooksExecutors.afterApplicationInitialized({ app, config: config.server, isProd })
 
-app.use((req) => {
-  console.log(
-    Date.now(),
-    useMethod(req),
-    req.url,
-    useQuery(req)
-  )
+app.use(req => {
+  // Logging middleware for assets that are not found or all other SSR requests
+  console.log(new Date().toISOString(), useMethod(req), req.url, useQuery(req))
 })
 
 let renderer
