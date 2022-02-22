@@ -24,4 +24,4 @@ EXPOSE 3000
 
 COPY --from=build_img /var/www/ ./
 
-CMD [ "yarn", "start:h3" ]
+CMD [ "yarn", "start" ]
