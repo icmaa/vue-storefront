@@ -1,9 +1,9 @@
 import config from 'config'
 import serveStatic from 'serve-static'
 import mime from 'mime/lite'
-import request from 'request'
 import path from 'path'
 import glob from 'glob'
+import fetch from 'isomorphic-fetch'
 import { path as rootPath } from 'app-root-path'
 import { createServer, IncomingMessage, OutgoingMessage, ServerResponse } from 'http'
 import { createApp, useQuery, useMethod, assertMethod, Handle, createError, sendError, send, sendRedirect } from 'h3'
@@ -19,13 +19,9 @@ const resolve = file => path.resolve(rootPath, file)
 const isProd = process.env.NODE_ENV === 'production'
 
 /** Load server extensions */
-const serverExtensions = glob.sync('src/modules/*/server.h3.js')
-const configProviders: Function[] = []
+const serverExtensions = glob.sync('src/modules/*/server.h3.' + (isProd ? 'js' : 'ts'))
 serverExtensions.map(serverModule => {
-  const module = require(resolve(serverModule))
-  if (module.configProvider && typeof module.configProvider === 'function') {
-    configProviders.push(module.configProvider)
-  }
+  require(resolve(serverModule))
 })
 
 serverHooksExecutors.afterProcessStarted(config.server)
@@ -75,59 +71,44 @@ app.use('/invalidate', async (req, res) => {
     if (query.tag && query.key) { // clear cache pages for specific query tag
       if (query.key !== config.server.invalidateCacheKey) {
         console.error('Invalid cache invalidation key')
-        apiStatus(res, 'Invalid cache invalidation key', 500)
-        return
+        return apiStatus(res, 'Invalid cache invalidation key', 500)
       }
 
-      console.log(`Clear cache request for [${query.tag}]`)
       const tags = query.tag === '*' ? config.server.availableCacheTags : query.tag.split(',')
 
       serverHooksExecutors.beforeCacheInvalidated({ tags, req: req as any })
 
       const subPromises = []
       tags.forEach(tag => {
-        if (config.server.availableCacheTags.indexOf(tag) >= 0 ||
-          config.server.availableCacheTags.find(t => tag.indexOf(t) === 0)
-        ) {
-          subPromises.push(cache.invalidate(tag).then(() => {
-            console.log(`Tags invalidated successfully for [${tag}]`)
-          }))
+        if (config.server.availableCacheTags.find(t => t === tag)) {
+          subPromises.push(cache.invalidate(tag))
         } else {
           console.error(`Invalid tag name ${tag}`)
+          subPromises.push(Promise.reject(`Invalid tag name ${tag}`))
         }
-      })
-
-      Promise.all(subPromises).then(r => {
-        apiStatus(res, `Tags invalidated successfully [${query.tag}]`)
-      }).catch(error => {
-        console.error(error)
-        apiStatus(res, error, 500)
-      }).finally(() => {
-        serverHooksExecutors.afterCacheInvalidated({ tags, req: req as any })
       })
 
       if (config.server.invalidateCacheForwarding) {
         if (!query.forwardedFrom && config.server.invalidateCacheForwardUrl) {
-          await request(
-            config.server.invalidateCacheForwardUrl + query.tag + '&forwardedFrom=vs',
-            {},
-            (err, res, body) => {
-              try {
-                if (err) console.error(err)
-                if (body && JSON.parse(body).code !== 200) console.error(body)
-              } catch (e) {
-                console.error('Invalid cache-invalidation response format', e)
-              }
-            }
-          )
+          const url = config.server.invalidateCacheForwardUrl + query.tag + '&forwardedFrom=vs'
+          const cacheFoward = fetch(url).then(r => r.json())
+          subPromises.push(cacheFoward)
         }
       }
+
+      return Promise.all(subPromises).then(async () => {
+        serverHooksExecutors.afterCacheInvalidated({ tags, req: req as any })
+        return apiStatus(res, `Tags invalidated successfully [${query.tag}]`)
+      }).catch(error => {
+        console.error(error)
+        return apiStatus(res, error, 500)
+      })
     } else {
       console.error('Invalid parameters for Clear cache request')
-      apiStatus(res, 'Invalid parameters for Clear cache request', 500)
+      return apiStatus(res, 'Invalid parameters for Clear cache request', 500)
     }
   } else {
-    apiStatus(res, 'Cache invalidation is not required, output cache is disabled')
+    return apiStatus(res, 'Cache invalidation is not required, output cache is disabled')
   }
 })
 
