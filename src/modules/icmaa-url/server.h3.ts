@@ -30,7 +30,7 @@ if (appConfig.storeViews.multistore) {
     }
 
     app = (app as App)
-    app.use((req, res) => {
+    app.use(async (req, res) => {
       assertMethod(req, 'GET')
 
       const { url: path } = req
@@ -38,7 +38,7 @@ if (appConfig.storeViews.multistore) {
 
       console.log('Redirect to default-store:', newPath)
 
-      sendRedirect(res, handleQueryParams(newPath, useQuery(req)), 301)
+      return sendRedirect(res, handleQueryParams(newPath, useQuery(req)), 301)
     }, {
       match: (url, req) => hasStoreCode.test(url)
     })
@@ -51,13 +51,13 @@ if (appConfig.storeViews.multistore) {
       for (const rewrite in rewrites) {
         const aliases = rewrites[rewrite].join('|')
         const catalogOverwriteRegexp = new RegExp(`^\\/(${storeCodesStr})\\/(${aliases})$`)
-        app.use((req, res) => {
+        app.use(async (req, res) => {
           const { url: path } = req
           const newPath = path.replace(new RegExp(`(${aliases})`), rewrite)
 
           console.log('Redirecting catalog-overwrite:', newPath)
 
-          sendRedirect(res, handleQueryParams(newPath, useQuery(req)), 301)
+          return sendRedirect(res, handleQueryParams(newPath, useQuery(req)), 301)
         }, {
           match: (url, req) => catalogOverwriteRegexp.test(url)
         })

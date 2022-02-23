@@ -79,11 +79,6 @@ const {
 } = createMutatorHook<any, string | { output: string, [key: string]: any }>();
 
 const {
-  hook: asyncBeforeOutputRenderedResponseHook,
-  executor: asyncBeforeOutputRenderedResponseExecutor
-} = createAsyncMutatorHook<any, string | { output: string, [key: string]: any }>();
-
-const {
   hook: afterOutputRenderedResponseHook,
   executor: afterOutputRenderedResponseExecutor
 } = createMutatorHook<any, any>()
@@ -96,7 +91,6 @@ const serverHooksExecutors = {
   httpServerIsReady: httpServerIsReadyExecutor,
   ssrException: ssrExceptionExecutor,
   beforeOutputRenderedResponse: beforeOutputRenderedResponseExecutor,
-  asyncBeforeOutputRenderedResponse: asyncBeforeOutputRenderedResponseExecutor,
   afterOutputRenderedResponse: afterOutputRenderedResponseExecutor,
   beforeCacheInvalidated: beforeCacheInvalidatedExecutor,
   afterCacheInvalidated: afterCacheInvalidatedExecutor,
@@ -113,7 +107,6 @@ const serverHooks = {
   httpServerIsReady: httpServerIsReadyHook,
   ssrException: ssrExceptionHook,
   beforeOutputRenderedResponse: beforeOutputRenderedResponseHook,
-  asyncBeforeOutputRenderedResponse: asyncBeforeOutputRenderedResponseHook,
   afterOutputRenderedResponse: afterOutputRenderedResponseHook,
   beforeCacheInvalidated: beforeCacheInvalidatedHook,
   afterCacheInvalidated: afterCacheInvalidatedHook,

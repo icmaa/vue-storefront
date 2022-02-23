@@ -202,7 +202,7 @@ app.use('*', async (req, res) => {
         if (!isProd) console.log(`Cache tags for the request: ${cacheTags}`)
       }
 
-      const beforeOutputRenderedResponse = await serverHooksExecutors.asyncBeforeOutputRenderedResponse({
+      const beforeOutputRenderedResponse = await serverHooksExecutors.beforeOutputRenderedResponse({
         req,
         res,
         context,

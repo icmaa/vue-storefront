@@ -4,33 +4,27 @@ import config from 'config'
 if (config.server.http2ServerPush) {
   console.log('HTTP2 Server Push is enabled')
 
-  serverHooks.asyncBeforeOutputRenderedResponse(async ({
+  serverHooks.beforeOutputRenderedResponse(({
     res,
     context,
     output,
     isProd
   }) => {
     if (isProd) {
-      return new Promise(async resolve => {
-        const spiPromises = []
-        const serverPushItems = [];
+      const serverPushItems = []
+      for (let { file, asType, extension } of (context as any).getPreloadFiles()) {
+        if (extension !== 'js') continue
+        serverPushItems.push(`</dist/${file}>;rel=preload;as=${asType}`)
+      }
 
-        for (let { file, asType, extension } of (context as any).getPreloadFiles()) {
-          spiPromises.push(new Promise(resolve => {
-            if (extension !== 'js') resolve(true)
-            serverPushItems.push(`</dist/${file}>;rel=preload;as=${asType}`)
-            resolve(true)
-          }))
-        }
-
-        await Promise.all(spiPromises)
-
-        if (serverPushItems.length > 0) {
+      if (serverPushItems.length > 0) {
+        try {
           res.setHeader('Link', serverPushItems)
+        } catch (e) {
+          // throw Error(`Can't add http2-server-push header for ${res.req.url}`)
+          console.error(`Can't add http2-server-push header for ${res.req.url}`, e)
         }
-
-        resolve(output)
-      })
+      }
     }
     return output
   })
