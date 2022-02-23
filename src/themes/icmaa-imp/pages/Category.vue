@@ -37,7 +37,7 @@
       </lazy-hydrate>
       <div v-else>
         <component v-if="isInTicketWhitelist" :is="ProductListingTicket" :products="getCategoryProducts" />
-        <product-listing v-else :products="getCategoryProducts" />
+        <product-listing v-else :products="getCategoryProducts" :show-add-to-cart="true" />
       </div>
       <div class="t-flex t-items-center t-justify-center t-mb-8" v-if="moreProductsInSearchResults">
         <button-component type="ghost" @click.native="loadMoreProducts" :disabled="loadingProducts" class="t-w-2/3 lg:t-w-1/4" :class="{ 't-relative t-opacity-60': loadingProducts }">
