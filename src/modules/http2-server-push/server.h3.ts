@@ -4,7 +4,7 @@ import config from 'config'
 if (config.server.http2ServerPush) {
   console.log('HTTP2 Server Push is enabled')
 
-  serverHooks.beforeOutputRenderedResponse(({
+  serverHooks.asyncBeforeOutputRenderedResponse(async ({
     res,
     context,
     output,

@@ -179,7 +179,7 @@ app.use('*', async (req, res) => {
     }
 
     const context: Context = ssr.initSSRRequestContext(app, req, res, config)
-    return renderer.renderToString(context).then(output => {
+    return renderer.renderToString(context).then(async output => {
       if (context.server._redirect.isPending()) {
         console.log(`Redirect from [${context.url}]`)
         context.server._redirect.resolver.call(null)
@@ -202,7 +202,7 @@ app.use('*', async (req, res) => {
         if (!isProd) console.log(`Cache tags for the request: ${cacheTags}`)
       }
 
-      const beforeOutputRenderedResponse = serverHooksExecutors.beforeOutputRenderedResponse({
+      const beforeOutputRenderedResponse = await serverHooksExecutors.asyncBeforeOutputRenderedResponse({
         req,
         res,
         context,
