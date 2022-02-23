@@ -1,6 +1,6 @@
 import appConfig from 'config'
 import { serverHooks } from '@vue-storefront/core/server/hooks'
-import { App, assertMethod, useQuery, sendRedirect } from 'h3'
+import { App, assertMethod, sendRedirect } from 'h3'
 
 if (appConfig.storeViews.multistore) {
   serverHooks.afterApplicationInitialized(({ app }) => {
@@ -20,14 +20,7 @@ if (appConfig.storeViews.multistore) {
       `^((?!\\/(${storeCodesStr})(\\/|$))(?!\\/(${blacklistStr})$))\\/?.*((?<=\\.html)|(?<!\\.[a-zA-Z0-9]*))$`
     )
 
-    const handleQueryParams = (url: string, queryObj: Record<string, any>): string => {
-      let query = ''
-      if (Object.values(queryObj).length > 0) {
-        const params = new URLSearchParams(queryObj)
-        query += '?' + params.toString()
-      }
-      return url + query
-    }
+    const matchRegExAgainstUrl = (regExp) => (url, req) => regExp.test(url.split('?').shift())
 
     app = (app as App)
     app.use(async (req, res) => {
@@ -38,9 +31,9 @@ if (appConfig.storeViews.multistore) {
 
       console.log('Redirect to default-store:', newPath)
 
-      return sendRedirect(res, handleQueryParams(newPath, useQuery(req)), 301)
+      return sendRedirect(res, newPath, 301)
     }, {
-      match: (url, req) => hasStoreCode.test(url)
+      match: matchRegExAgainstUrl(hasStoreCode)
     })
 
     /**
@@ -57,9 +50,9 @@ if (appConfig.storeViews.multistore) {
 
           console.log('Redirecting catalog-overwrite:', newPath)
 
-          return sendRedirect(res, handleQueryParams(newPath, useQuery(req)), 301)
+          return sendRedirect(res, newPath, 301)
         }, {
-          match: (url, req) => catalogOverwriteRegexp.test(url)
+          match: matchRegExAgainstUrl(catalogOverwriteRegexp)
         })
       }
     }
