@@ -12975,6 +12975,11 @@ lru-cache@^6.0.0:
   dependencies:
     yallist "^4.0.0"
 
+lru-cache@^7.4.0:
+  version "7.4.0"
+  resolved "https://registry.yarnpkg.com/lru-cache/-/lru-cache-7.4.0.tgz#2830a779b483e9723e20f26fa5278463c50599d8"
+  integrity sha512-YOfuyWa/Ee+PXbDm40j9WXyJrzQUynVbgn4Km643UYcWNcrSfRkKL0WaiUcxcIbkXcVTgNpDqSnPXntWXT75cw==
+
 "magento2-rest-client@github:DivanteLtd/magento2-rest-client":
   version "0.0.12"
   resolved "https://codeload.github.com/DivanteLtd/magento2-rest-client/tar.gz/29cfac4c4f9982f99b7832621820f93dcf6f9dd4"
