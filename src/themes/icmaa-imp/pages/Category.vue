@@ -181,7 +181,9 @@ export default {
       filterCategories: 'category-next/getFilterCategories',
       isInTicketWhitelist: 'category-next/isCurrentCategoryInTicketWhitelist',
       contentHeader: 'icmaaCategoryExtras/getContentHeaderByCurrentCategory',
-      sidebarNavigationGenderChange: 'ui/getSidebarNavigationGenderChange'
+      sidebarNavigationGenderChange: 'ui/getSidebarNavigationGenderChange',
+      sessionFilterKeys: 'user/getSessionFilterKeys',
+      prevRoute: 'url/getPrevRoute'
     }),
     isLazyHydrateEnabled () {
       return config.ssr.lazyHydrateFor.includes('category-next.products')
@@ -216,12 +218,19 @@ export default {
       }
     }
   },
-  async asyncData ({ store, route, context }) { // this is for SSR purposes to prefetch data - and it's always executed before parent component methods
+  async asyncData ({ store, route, context }) {
     const { pageSize } = this.data()
     await composeInitialPageState(store, route, false, route.params.pagesize || pageSize)
   },
-  mounted () {
+  async mounted () {
     catalogHooksExecutors.categoryPageVisited(this.getCurrentCategory)
+
+    // Reload category if a session-filter is set (like a selected gender) on inital load
+    if (!this.prevRoute.name && this.sessionFilterKeys.length > 0) {
+      this.loading = true
+      await composeInitialPageState(this.$store, this.$route, false, this.$route.params.pagesize || this.pageSize)
+      this.loading = false
+    }
   },
   methods: {
     ...mapMutations('product', {
