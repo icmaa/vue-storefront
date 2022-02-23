@@ -11,16 +11,26 @@ if (config.server.http2ServerPush) {
     isProd
   }) => {
     if (isProd) {
-      const serverPushItems = [];
-      for (let { file, asType, extension } of (context as any).getPreloadFiles()) {
-        if (extension !== 'js') {
-          continue;
+      return new Promise(async resolve => {
+        const spiPromises = []
+        const serverPushItems = [];
+
+        for (let { file, asType, extension } of (context as any).getPreloadFiles()) {
+          spiPromises.push(new Promise(resolve => {
+            if (extension !== 'js') resolve(true)
+            serverPushItems.push(`</dist/${file}>;rel=preload;as=${asType}`)
+            resolve(true)
+          }))
         }
-        serverPushItems.push(`</dist/${file}>;rel=preload;as=${asType}`)
-      }
-      if (serverPushItems.length) {
-        res.setHeader('Link', serverPushItems)
-      }
+
+        await Promise.all(spiPromises)
+
+        if (serverPushItems.length > 0) {
+          res.setHeader('Link', serverPushItems)
+        }
+
+        resolve(output)
+      })
     }
     return output
   })
