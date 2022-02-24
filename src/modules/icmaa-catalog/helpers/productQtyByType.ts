@@ -14,8 +14,8 @@ const getProductChildQtyByType = (product: Product): number => {
     let qty = 0
     product.bundle_options?.forEach(o => {
       o.product_links?.forEach((p: any) => {
-        if (p.stock.is_in_stock === true) {
-          qty += p.stock.qty
+        if (p.stock?.is_in_stock === true) {
+          qty += p.stock?.qty || 0
         }
       })
     })

@@ -1,4 +1,4 @@
-import { createListenerHook, createMutatorHook } from '@vue-storefront/core/lib/hooks'
+import { createListenerHook, createMutatorHook, createAsyncMutatorHook } from '@vue-storefront/core/lib/hooks'
 import { Express, Request } from 'express'
 import http from 'http'
 
@@ -31,7 +31,7 @@ const {
 
 // beforeStartApp
 interface Extend {
-  app: Express,
+  app: any,
   config: any,
   isProd: boolean
 }
@@ -39,6 +39,11 @@ interface Extend {
 const {
   hook: afterApplicationInitializedHook,
   executor: afterApplicationInitializedExecutor
+} = createListenerHook<Extend>()
+
+const {
+  hook: beforeHttpServerStartedHook,
+  executor: beforeHttpServerStartedExecutor
 } = createListenerHook<Extend>()
 
 interface Server {
@@ -54,7 +59,7 @@ const {
 
 interface Exception {
   err: Error,
-  req: Request,
+  req: any,
   isProd: boolean
 }
 
@@ -82,6 +87,7 @@ const {
 const serverHooksExecutors = {
   afterProcessStarted: afterProcessStartedExecutor,
   afterApplicationInitialized: afterApplicationInitializedExecutor,
+  beforeHttpServerStarted: beforeHttpServerStartedExecutor,
   httpServerIsReady: httpServerIsReadyExecutor,
   ssrException: ssrExceptionExecutor,
   beforeOutputRenderedResponse: beforeOutputRenderedResponseExecutor,
@@ -96,10 +102,8 @@ const serverHooks = {
    * @param void
    */
   afterProcessStarted: afterProcessStartedHook,
-  /**
-   *
-   */
   afterApplicationInitialized: afterApplicationInitializedHook,
+  beforeHttpServerStarted: beforeHttpServerStartedHook,
   httpServerIsReady: httpServerIsReadyHook,
   ssrException: ssrExceptionHook,
   beforeOutputRenderedResponse: beforeOutputRenderedResponseHook,

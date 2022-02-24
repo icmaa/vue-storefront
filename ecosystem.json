@@ -8,7 +8,7 @@
       "env": {
         "NODE_ENV": "production"
       },
-      "script": "./core/scripts/server.js",
+      "script": "./core/scripts/server.h3.js",
       "node_args": "--max_old_space_size=2048",
       "log_date_format": "YYYY-MM-DD HH:mm:ss",
       "ignore_watch": [
