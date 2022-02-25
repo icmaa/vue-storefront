@@ -118,10 +118,7 @@ const composeInitialPageState = async (store, route, forceLoad = false, pageSize
       // If browser-history-back event use cached products
       if (routerHelper.popStateDetected === true) {
         routerHelper.popStateDetected = false
-        const prevRouteDisp = store.getters['url/getPrevRouteDispatcher']
-        if (['simple-product', 'configurable-product', 'bundle-product'].includes(prevRouteDisp?.name)) {
-          return Promise.resolve()
-        }
+        return Promise.resolve()
       }
       return store.dispatch('category-next/loadCategoryProducts', { route, category: currentCategory, pageSize })
     }

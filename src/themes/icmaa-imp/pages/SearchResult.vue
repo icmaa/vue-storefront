@@ -181,9 +181,7 @@ export default {
         const category = { id: this.termHash, term: this.searchAlias }
 
         // If browser-history-back event use cached products
-        if (routerHelper.popStateDetected === true &&
-          ['simple-product', 'configurable-product', 'bundle-product'].includes(this.prevRoute?.name)
-        ) {
+        if (routerHelper.popStateDetected === true) {
           routerHelper.popStateDetected = false
         } else {
           await this.$store.dispatch('category-next/loadSearchProducts', { route, category, pageSize })
