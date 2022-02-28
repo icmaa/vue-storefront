@@ -80,7 +80,7 @@ app.use('/invalidate', async (req, res) => {
 
       const subPromises = []
       tags.forEach(tag => {
-        if (config.server.availableCacheTags.find(t => t === tag)) {
+        if (config.server.availableCacheTags.find(t => t === tag || tag.indexOf(t) === 0)) {
           subPromises.push(cache.invalidate(tag))
         } else {
           console.error(`Invalid tag name ${tag}`)
