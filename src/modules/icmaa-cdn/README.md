@@ -1,6 +1,6 @@
 # `icmaa-cdn` module
 
-Load custom image provider to support external CDN services.
+Load custom image provider to support external CDN services and add Cloudflare cache-bust based on FPC cache-tags.
 
 ## Configs
 
@@ -19,8 +19,19 @@ Load custom image provider to support external CDN services.
     "scalecommerce": {
       "baseUrl": "https://www.base-url.com/",
       "quality": 85
+    },
+    "cloudflare": {
+      "enabled": true,
+      "baseUrl": "https://www.impericon.com",
+      "email": "XXXXXXXXXX",
+      "authKey": "XXXXXXXXXX",
+      "zone": "XXXXXXXXXX"
     }
-  }
+  },
+  "purgeConfig": [
+    ...
+    "icmaa_cdn.cloudflare"
+  ]
   ```
 
 ## Add a new provider
@@ -40,6 +51,13 @@ const providers: { [provider: string]: ImageHook } = {
 Then add your desired configs under the `icmaa_cdn` configs path.
 
 > It would be nice to use dynamic-imports for this (as before) but the module registration is synchronous and therefore a dynamic-import can lead into a race condition where the picture component is using the wrong image-path because the cdn provider isn't initialized yet. So we can't lazyload the providers using an import-promise.
+
+## Cloudflare Cache-Control
+
+By default Cloudflare will cache HTML requests if its cache-lifetime is greater or equal to the default CF-TTL.
+To be able to still have dynamic cache-busts, we flush the cache for specific pages using a `addCacheInvalidatedSubPromise`-hook to add a cache-bust request based on the paths connected to a cache-tag during cache-invalidation.
+
+It's important to add `icmaa_cdn.cloudflare` to the `purgeConfig` config-parameter to be sure to hide CF credentials for the frontend-response.
 
 ## Todo
 
