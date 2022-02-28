@@ -8,7 +8,7 @@ if (config.server.useOutputCache) {
   const cacheVersionPath = path.resolve(path.join('core', 'build', 'cache-version.json'))
   let cacheKey = ''
   try {
-    cacheKey = JSON.parse(fs.readFileSync(cacheVersionPath) || '')
+    cacheKey = JSON.parse(fs.readFileSync(cacheVersionPath) || '') + ':'
   } catch (err) {
     console.error(err)
   }
