@@ -80,7 +80,7 @@ app.use('/invalidate', async (req, res) => {
 
       const subPromises = []
       tags.forEach(tag => {
-        if (config.server.availableCacheTags.find(t => t === tag)) {
+        if (config.server.availableCacheTags.find(t => t === tag || tag.indexOf(t) === 0)) {
           subPromises.push(cache.invalidate(tag))
         } else {
           console.error(`Invalid tag name ${tag}`)
@@ -258,6 +258,7 @@ app.use('*', async (req, res) => {
             }
           }
           res.setHeader('X-VS-Cache', 'Hit')
+          res.setHeader('Cache-Control', 'public, max-age=' + config.server.outputCacheDefaultTtl)
 
           if (output.body) {
             apiStatus(res, output.body, output.httpCode, false)
