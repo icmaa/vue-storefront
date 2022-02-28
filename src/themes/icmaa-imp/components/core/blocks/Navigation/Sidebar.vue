@@ -10,7 +10,7 @@
       </div>
     </template>
     <template v-slot:footer>
-      <div class="t-flex-expand t-bg-base-lightest t-p-4 t-pb-24" data-test-id="SidebarMenuFooter">
+      <div class="t-flex-expand t-bg-base-lightest t-p-4 t-pb-32" data-test-id="SidebarMenuFooter">
         <div class="t-flex t-w-full t-justify-between">
           <div class="t-flex t-flex-wrap t-items-center" @click="closeMenu">
             <template v-for="(link, index) in metaNavigationItems">
@@ -18,7 +18,7 @@
                 v-if="link.isRoute === true"
                 :key="index"
                 :to="localizedRoute(link.route)" :title="link.name | htmlDecode"
-                class="t-flex t-flex-fit t-mr-6 t-py-1 t-text-xs t-uppercase t-text-base-tone"
+                class="t-flex t-flex-fit t-mr-4 t-py-1 t-text-xs t-uppercase t-text-base-tone"
               >
                 {{ link.name }}
               </router-link>
@@ -27,7 +27,7 @@
                 :key="index"
                 :href="link.route"
                 :title="link.name | htmlDecode"
-                class="t-flex t-flex-fit t-mr-6 t-py-1 t-text-xs t-uppercase t-text-base-tone"
+                class="t-flex t-flex-fit t-mr-4 t-py-1 t-text-xs t-uppercase t-text-base-tone"
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -81,7 +81,7 @@ export default {
     metaNavigationItems () {
       return this.getJsonBlockByIdentifier('navigation-meta').map(link =>
         Object.assign(link, { isRoute: (typeof link.route === 'object' || link.route.startsWith('/')) })
-      )
+      ).slice(0, 4)
     },
     loginButtonText () {
       return this.isLoggedIn ? 'My Account' : 'Login'
