@@ -6,14 +6,17 @@
     <div class="t-flex t-flex-wrap t-mb-4 t--mx-1" v-else-if="type === 'gender'">
       <gender-selector v-for="(option, index) in options" :key="index" :option="option" @change="changeFilter" />
     </div>
+    <div class="t-flex t-flex-wrap t-mb-4" v-else-if="type === 'shortList'">
+      <short-list-selector :options="options" @change="changeFilter" />
+    </div>
+    <div class="t-mb-4" v-else-if="['list', 'searchableList'].includes(type)">
+      <list-selector v-bind="$props" @change="changeFilter" :searchable="type === 'searchableList'" :use-links="attributeKey === 'category'" />
+    </div>
     <div class="t-mb-6" v-else-if="type === 'price'">
       <price-selector v-bind="$props" @change="changeFilter" />
     </div>
     <div class="t-flex t-flex-wrap t-mb-4" v-else-if="type === 'sale'">
       <sale-selector v-for="(option, index) in options" :key="index" :option="option" @change="changeFilter" class="t-mb-2" />
-    </div>
-    <div class="t-mb-4" v-else-if="['list', 'searchableList'].includes(type)">
-      <list-selector v-bind="$props" @change="changeFilter" :searchable="type === 'searchableList'" :use-links="attributeKey === 'category'" />
     </div>
     <div class="t-flex t-flex-wrap t-mb-4" v-else>
       <generic-selector v-for="(option, index) in options" :key="index" :option="option" @change="changeFilter" class="t-mb-2" :class="{ 't-mr-2': index !== option.length - 1 }" />
@@ -26,6 +29,7 @@ import config from 'config'
 import { IcmaaGoogleTagManagerExecutors } from 'icmaa-google-tag-manager/hooks'
 
 import GenericSelector from 'theme/components/core/blocks/Category/Filter/GenericSelector'
+import ShortListSelector from 'theme/components/core/blocks/Category/Filter/ShortListSelector'
 import ListSelector from 'theme/components/core/blocks/Category/Filter/ListSelector'
 import PriceSelector from 'theme/components/core/blocks/Category/Filter/PriceSelector'
 import ColorSelector from 'theme/components/core/blocks/Category/Filter/ColorSelector'
@@ -36,6 +40,7 @@ export default {
   name: 'CategoryFilter',
   components: {
     GenericSelector,
+    ShortListSelector,
     ListSelector,
     PriceSelector,
     ColorSelector,
