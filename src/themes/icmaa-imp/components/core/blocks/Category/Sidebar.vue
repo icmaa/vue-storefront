@@ -68,11 +68,12 @@ export default {
   },
   computed: {
     ...mapGetters({
+      currentCategory: 'category-next/getCurrentCategory',
       filters: 'category-next/getAvailableFilters',
       hasActiveFilters: 'category-next/hasActiveFilters',
       getCurrentFilters: 'category-next/getCurrentFilters',
       isActiveFilterAttribute: 'category-next/isActiveFilterAttribute',
-      getSystemFilterNames: 'category-next/getSystemFilterNames',
+      systemFilterNames: 'category-next/getSystemFilterNames',
       isVisibleFilter: 'category-next/isVisibleFilter',
       attributeLabel: 'attribute/getAttributeLabel',
       attributes: 'attribute/getAttributeListByCode',
@@ -80,6 +81,7 @@ export default {
     }),
     availableFilters () {
       const submenuFilters = config.products.submenuFilters || []
+      const singleOptionFilters = config.products.singleOptionFilters || []
       const hideSingleOptionsFilters = config.products.hideSingleOptionsFilters || []
       const attributes = this.attributes
 
@@ -91,13 +93,18 @@ export default {
         })
         .filter(f => {
           return f.options.length > 0 &&
-            !this.getSystemFilterNames.includes(f.attributeKey) &&
+            !this.systemFilterNames.includes(f.attributeKey) &&
             this.isVisibleFilter(f.attributeKey) &&
             attributes[f.attributeKey]
         })
         .filter(f => {
+          // Alway show active items despite the option-count
+          if (this.isActiveFilterAttribute(f.attributeKey)) return true
           // Hide bands/brands if there is only one option (e.g. in band CLP)
           const hideFilter = hideSingleOptionsFilters.includes(f.attributeKey)
+          const singleOptionsFilter = singleOptionFilters.includes(f.attributeKey)
+          // Hide single options after filter is active or has showFiltersFor, eg. if only black dresses are left in filter results, don't show single dresses and black option
+          if (!hideFilter && !singleOptionsFilter && (this.hasActiveFilters || this.hasShowFiltersFor) && f.options.length <= 1) return false
           return !hideFilter || (hideFilter && f.options.length > 1)
         })
         .map(f => ({ ...f, submenu: submenuFilters.includes(f.attributeKey), attributeLabel: this.attributeLabel({ attributeKey: f.attributeKey }), position: attributes[f.attributeKey].position || 0 }))
@@ -111,7 +118,7 @@ export default {
     },
     groupedFilters () {
       let allAvailableFilters = sortBy(this.availableFilters, 'position', 'attributeLabel')
-      const parentsOfNestedFilters = Object.keys(config.products.filterTree) || []
+      const parentsOfNestedFilters = config.products.primaryFilter || []
 
       return [
         allAvailableFilters.filter(f => parentsOfNestedFilters.includes(f.attributeKey)),
@@ -134,6 +141,9 @@ export default {
     },
     closeIcon () {
       return this.hasActiveFilters ? 'check' : undefined
+    },
+    hasShowFiltersFor () {
+      return (this.currentCategory?.ceShowFiltersFor || []).length > 0
     }
   },
   methods: {

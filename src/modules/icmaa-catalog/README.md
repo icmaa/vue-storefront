@@ -47,19 +47,21 @@ There are some new filter options to setup our filter logic. To find out what th
     "type_top_sleeve",
     ...
   ],
+  "primaryFilter": ["category", "band", "brand", ... ],
   "filterTree": {
-    "band": [], "brand": [],
     "type_top": ["type_top_sleeve", "type_top_printtyp", "type_top_jackets", "type_top_cut", "type_jackets_lenght", "type_shirt_pattern"],
     ...
   },
   "submenuFilters": ["band", "brand", ... ],
   "singleOptionFilters": ["is_in_sale", "preorder"],
+  "hideSingleOptionsFilters": ["band", "brand",... ],
   "filterTypeMapping": {
     "color": ["color"],
     "gender": ["gender"],
     "price": ["price"],
     "sale": ["is_in_sale"],
     "list": ["type_top", "type_shoes_height", ... ],
+    "shortList": ["size", "pant_size", "size_diameter", ... ],
     "searchableList": ["band", "brand"]
   },
 ```
