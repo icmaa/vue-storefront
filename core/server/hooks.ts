@@ -25,6 +25,11 @@ const {
 } = createListenerHook<BeforeCacheInvalidatedParamter>()
 
 const {
+  hook: addCacheInvalidatedSubPromiseHook,
+  executor: addCacheInvalidatedSubPromiseExecutor
+} = createListenerHook<{ promises: Promise<any>[], cache: any, tag: string, req: any }>()
+
+const {
   hook: afterCacheInvalidatedHook,
   executor: afterCacheInvalidatedExecutor
 } = createListenerHook<AfterCacheInvalidatedParamter>()
@@ -93,6 +98,7 @@ const serverHooksExecutors = {
   beforeOutputRenderedResponse: beforeOutputRenderedResponseExecutor,
   afterOutputRenderedResponse: afterOutputRenderedResponseExecutor,
   beforeCacheInvalidated: beforeCacheInvalidatedExecutor,
+  addCacheInvalidatedSubPromise: addCacheInvalidatedSubPromiseExecutor,
   afterCacheInvalidated: afterCacheInvalidatedExecutor,
   beforeBuildCacheKey: beforeBuildCacheKeyExecutor
 }
@@ -109,6 +115,7 @@ const serverHooks = {
   beforeOutputRenderedResponse: beforeOutputRenderedResponseHook,
   afterOutputRenderedResponse: afterOutputRenderedResponseHook,
   beforeCacheInvalidated: beforeCacheInvalidatedHook,
+  addCacheInvalidatedSubPromise: addCacheInvalidatedSubPromiseHook,
   afterCacheInvalidated: afterCacheInvalidatedHook,
   beforeBuildCacheKey: beforeBuildCacheKeyHook
 }
