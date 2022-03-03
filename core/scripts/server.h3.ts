@@ -51,7 +51,7 @@ Object.entries(staticRoutes).forEach(([routePath, staticPath]) => {
   app.use(routePath, serveStaticMiddleware(staticPath))
 })
 
-const apiStatus = async (res: ServerResponse, data, statusCode = 200, dropExcp = true) => {
+export const apiStatus = async (res: ServerResponse, data, statusCode = 200, dropExcp = true) => {
   if (statusCode > 400) {
     if (dropExcp) {
       const statusMessage = typeof data === 'string' ? data : undefined
@@ -64,7 +64,8 @@ const apiStatus = async (res: ServerResponse, data, statusCode = 200, dropExcp =
   return res.end(data)
 }
 
-app.use('/invalidate', async (req, res) => {
+// Cache-invalidation route
+app.use(async (req, res) => {
   assertMethod(req, ['GET', 'POST'])
   if (config.server.useOutputCache) {
     const query = useQuery(req)
@@ -111,7 +112,7 @@ app.use('/invalidate', async (req, res) => {
   } else {
     return apiStatus(res, 'Cache invalidation is not required, output cache is disabled')
   }
-})
+}, { match: (url, req) => new RegExp(/^\/invalidate$/).test(url.split('?').shift()) })
 
 serverHooksExecutors.afterApplicationInitialized({ app, config: config.server, isProd })
 
