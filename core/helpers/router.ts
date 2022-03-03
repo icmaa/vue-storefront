@@ -24,7 +24,11 @@ export const createRouter = (): VueRouter => {
       }
       if (rootStore.getters['url/isBackRoute']) {
         const { scrollPosition = { x: 0, y: 0 } } = rootStore.getters['url/getCurrentRoute']
-        return scrollPosition
+        return new Promise(resolve => {
+          setTimeout(() => {
+            resolve(scrollPosition)
+          }, 300)
+        })
       } else if (to.path !== from.path) { // do not change scroll position when navigating on the same page (ex. change filters)
         return { x: 0, y: 0 }
       }

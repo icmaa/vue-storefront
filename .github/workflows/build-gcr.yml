@@ -63,4 +63,4 @@ jobs:
       - name: Build and deploy in GCP
         run: |
           gcloud builds submit --quiet --config cloudbuild-${{ matrix.env.MANDANT }}-${{ env.ENV == 'production' && 'prod' || 'test' }}.yaml
-          gcloud run deploy ${{ env.APP }} --region europe-west3 --image gcr.io/icmaa-shop-imp-${{ env.ENV == 'production' && 'prod' || 'test' }}-01/${{ env.APP }}:latest
+          gcloud run deploy ${{ env.APP }} --region europe-west3 --image europe-docker.pkg.dev/icmaa-shop-imp-${{ env.ENV == 'production' && 'prod' || 'test' }}-01/eu.gcr.io/${{ env.APP }}:latest

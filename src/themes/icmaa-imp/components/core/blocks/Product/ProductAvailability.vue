@@ -7,6 +7,7 @@
 
 <script>
 import { toDayjsDate, getCurrentStoreviewDayjsDatetime } from 'icmaa-config/helpers/datetime'
+import { getProductChildQtyByType } from 'icmaa-catalog/helpers'
 import MaterialIcon from 'theme/components/core/blocks/MaterialIcon'
 
 export default {
@@ -34,19 +35,8 @@ export default {
     }
   },
   computed: {
-    confChildrenQty () {
-      if (this.product.type_id !== 'configurable') {
-        return 0
-      }
-
-      let qty = 0
-      this.product.configurable_children.foreach(c => {
-        if (c.stock.is_in_stock === true) {
-          qty += c.stock.qty
-        }
-      })
-
-      return qty
+    childQty () {
+      return getProductChildQtyByType(this.product)
     },
     isEndOfSale () {
       return this.endOfSale <= 0
@@ -68,7 +58,7 @@ export default {
     },
     stockStatus () {
       let status = 'available'
-      let qty = this.product.stock.qty + this.confChildrenQty
+      let qty = this.product.stock.qty + this.childQty
 
       if (!this.product.stock.is_in_stock || qty === 0) {
         status = 'unavailable'
@@ -76,7 +66,7 @@ export default {
         status = 'lessstock'
       }
 
-      if (this.product.preorder) {
+      if (this.product.promo_id === '5') {
         status = 'preorder'
       } else if (this.isEndOfSale) {
         status = 'endofsale'

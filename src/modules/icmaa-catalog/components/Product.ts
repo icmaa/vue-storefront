@@ -37,10 +37,7 @@ export default {
     ...mapGetters({
       getOptionLabel: 'attribute/getOptionLabel',
       categoryExtras: 'icmaaCategoryExtras/getCategoryExtrasByCurrentCategory',
-      departmentCategory: 'icmaaCategoryExtras/getCurrentProductDepartmentCategory',
-      reviews: 'review/getReviews',
-      reviewsCount: 'review/getReviewsCount',
-      reviewsTotalRating: 'review/getReviewsTotalRating'
+      departmentCategory: 'icmaaCategoryExtras/getCurrentProductDepartmentCategory'
     }),
     departmentBrandType () {
       return this.product.brand ? 'brand' : 'band'
@@ -79,6 +76,14 @@ export default {
         'Checkout this out: {name} for {price}',
         { name: this.translatedProductName, price: this.formattedProductPrice }
       )
+    },
+    reviewRating () {
+      if (!this.product.id) return 0
+      return parseInt(this.product?.reviews?.rating_summary || 0)
+    },
+    reviewCount () {
+      if (!this.product.id) return 0
+      return parseInt(this.product?.reviews?.count || 0)
     }
   },
   methods: {

@@ -1,10 +1,10 @@
 describe('Recommendations', () => {
   it('Recommendations should be visible', () => {
-    cy.visitProductDetailPage()
+    cy.visitProductDetailPage({ categoryUrl: 'clothing.html' })
 
     cy.getByTestId('RecommendationsLoader')
       .first()
-      .scrollIntoView()
+      .scrollIntoView({ offset: { top: 0, left: 0 } })
 
     cy.getByTestId('Recommendations')
       .as('recommendations')

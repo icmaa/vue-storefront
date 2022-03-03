@@ -69,6 +69,7 @@ import { mapGetters, mapMutations } from 'vuex'
 import { Logger } from '@vue-storefront/core/lib/logger'
 import { IcmaaGoogleTagManagerExecutors } from 'icmaa-google-tag-manager/hooks'
 import * as productMutationTypes from '@vue-storefront/core/modules/catalog/store/product/mutation-types'
+import { routerHelper } from 'icmaa-catalog/helpers/popState'
 
 import AsyncSidebar from 'theme/components/core/blocks/AsyncSidebar/AsyncSidebar.vue'
 import FilterPresets from 'theme/components/core/blocks/Category/FilterPresets'
@@ -115,7 +116,8 @@ export default {
       contentHeader: 'icmaaCategoryExtras/getContentHeaderByCurrentCategory',
       term: 'icmaaSearchAlias/getCurrentResultsPageTerm',
       termHash: 'icmaaSearchAlias/getCurrentResultsPageTermHash',
-      searchAlias: 'icmaaSearchAlias/getCurrentResultsPageAlias'
+      searchAlias: 'icmaaSearchAlias/getCurrentResultsPageAlias',
+      prevRoute: 'url/getPrevRouteDispatcher'
     }),
     isLazyHydrateEnabled () {
       return config.ssr.lazyHydrateFor.includes('category-next.products')
@@ -178,7 +180,15 @@ export default {
         const pageSize = route.params.pagesize || this.pageSize
         const category = { id: this.termHash, term: this.searchAlias }
 
-        await this.$store.dispatch('category-next/loadSearchProducts', { route, category, pageSize })
+        // If browser-history-back event use cached products
+        if (routerHelper.popStateDetected === true &&
+          ['simple-product', 'configurable-product', 'bundle-product'].includes(this.prevRoute?.name)
+        ) {
+          routerHelper.popStateDetected = false
+        } else {
+          await this.$store.dispatch('category-next/loadSearchProducts', { route, category, pageSize })
+        }
+
         this.$store.dispatch('category-next/loadSearchBreadcrumbs')
 
         this.loading = false
@@ -203,6 +213,13 @@ export default {
   },
   serverPrefetch () {
     return this.fetchAsyncData()
+  },
+  metaInfo () {
+    return {
+      meta: [
+        { vmid: 'robots', name: 'robots', content: 'noindex, nofollow' }
+      ]
+    }
   }
 }
 </script>

@@ -273,7 +273,7 @@ Cypress.Commands.add('addCustomerAddress', () => {
       if (storeCode === 'fr') {
         cy.get('@form').focusInput('telephone').type(faker.phone.phoneNumber())
       } else if (['uk', 'us'].includes(storeCode)) {
-        cy.get('@form').find('select[name="region_id"]').selectRandomOption()
+        cy.get('@form').find('select[name="region_id"]').selectRandomOption(true)
       }
     })
 
@@ -398,7 +398,7 @@ Cypress.Commands.add('checkStockApiRequest', () => {
 })
 
 Cypress.Commands.add('checkAvailabilityOfCurrentProduct', (closeSidebar = false) => {
-  cy.wait('@apiStockReq')
+  cy.checkStockApiRequest()
   cy.wait(300) // Wait for DOM change
 
   cy.getByTestId('AddToCart').then($button => {
@@ -431,7 +431,7 @@ Cypress.Commands.add('checkAvailabilityOfCurrentProductInSidebar', (closeSidebar
     .checkStockApiRequest()
 })
 
-Cypress.Commands.add('addRandomProductToCart', (options?: { tries: number, enterCheckout?: boolean }, count: number = 1) => {
+Cypress.Commands.add('addRandomProductToCart', (options?: { categoryUrl?: string, tries: number, enterCheckout?: boolean }, count: number = 1) => {
   options = Object.assign({ tries: 3, enterCheckout: false }, options)
   let { tries, enterCheckout } = options
 
@@ -441,7 +441,8 @@ Cypress.Commands.add('addRandomProductToCart', (options?: { tries: number, enter
     cy.log(`Try to find product which is in stock ${count}/${tries}`)
   }
 
-  cy.visitProductDetailPage()
+  const categoryUrl = options.categoryUrl ? { categoryUrl: options.categoryUrl } : {}
+  cy.visitProductDetailPage(categoryUrl)
   cy.checkAvailabilityOfCurrentProduct()
 
   cy.get<boolean>('@availability')

@@ -29,8 +29,8 @@ function createRenderer (bundle, clientManifest, template?) {
     clientManifest,
     // runInNewContext: false,
     cache: new LRU({
-      max: 1000,
-      maxAge: 1000 * 60 * 15
+      max: 500,
+      ttl: 1000 * 60 * 15
     }),
     shouldPreload,
     shouldPrefetch
