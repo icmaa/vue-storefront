@@ -49,10 +49,11 @@ export default {
   computed: {
     ...mapGetters({
       priorityHandling: 'checkout/getPriorityHandling',
-      hasPriorityHandling: 'checkout/hasPriorityHandling'
+      hasPriorityHandling: 'checkout/hasPriorityHandling',
+      getShippingMethod: 'checkout/getShippingMethods'
     }),
     active () {
-      return this.priorityHandling && this.priorityHandling.enabled
+      return this.priorityHandling && this.priorityHandling.enabled && this.priorityHandling.allowed_shipping_methods.includes(this.shipping)
     }
   },
   methods: {
