@@ -54,7 +54,7 @@ export default {
         return this.map.find(v => v.key === 'sale')
       }
 
-      const newRange = dayjs(this.product.online).isAfter(dayjs().subtract(14, 'days'))
+      const newRange = dayjs(this.product.online).isAfter(dayjs().subtract(30, 'days'))
       const isNew = newRange ? this.map.find(v => v.key === 'new') : undefined
 
       return this.map.find(v => v.id === this.promoId) || isNew || false
