@@ -49,7 +49,8 @@ export interface PriorityHandling {
   title: string,
   description: string,
   fee: number,
-  enabled: boolean
+  enabled: boolean,
+  allowed_shipping_methods: string
 }
 
 export interface GoGreen {
