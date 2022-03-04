@@ -54,7 +54,7 @@ if (config.icmaa_cdn?.cloudflare?.enabled === true) {
   })
 
   serverHooks.afterApplicationInitialized(({ app }) => {
-    app.use('/invalidate/all', async (req, res) => {
+    app.use('/invalidate/cf/all', async (req, res) => {
       assertMethod(req, 'GET')
 
       if (config.server.useOutputCache) {
