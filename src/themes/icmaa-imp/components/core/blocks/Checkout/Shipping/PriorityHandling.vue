@@ -52,6 +52,9 @@ export default {
       hasPriorityHandling: 'checkout/hasPriorityHandling',
       getShippingMethod: 'checkout/getShippingMethods'
     }),
+    shipping () {
+      return this.getShippingMethod[0].code
+    },
     active () {
       return this.priorityHandling && this.priorityHandling.enabled && this.priorityHandling.allowed_shipping_methods.includes(this.shipping)
     }
