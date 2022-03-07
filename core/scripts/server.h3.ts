@@ -61,6 +61,13 @@ export const apiStatus = async (res: ServerResponse, data, statusCode = 200, dro
     res.statusCode = statusCode
   }
 
+  if (typeof data === 'object') {
+    if (!res.getHeader('content-type')) {
+      res.setHeader('Content-Type', 'application/json')
+    }
+    return res.end(JSON.stringify(data))
+  }
+
   return res.end(data)
 }
 
@@ -100,7 +107,10 @@ app.use(async (req, res) => {
 
       return Promise.all(subPromises).then(async () => {
         serverHooksExecutors.afterCacheInvalidated({ tags, req: req as any })
-        return apiStatus(res, `Tags invalidated successfully [${query.tag}]`)
+        return apiStatus(res, {
+          message: `Tags invalidated successfully [${query.tag}]`,
+          status: 200
+        })
       }).catch(error => {
         console.error(error)
         return apiStatus(res, error, 500)
@@ -110,7 +120,10 @@ app.use(async (req, res) => {
       return apiStatus(res, 'Invalid parameters for Clear cache request', 500)
     }
   } else {
-    return apiStatus(res, 'Cache invalidation is not required, output cache is disabled')
+    return apiStatus(res, {
+      message: 'Cache invalidation is not required, output cache is disabled',
+      status: 200
+    })
   }
 }, { match: (url, req) => new RegExp(/^\/invalidate$/).test(url.split('?').shift()) })
 

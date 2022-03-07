@@ -45,7 +45,7 @@ if (config.icmaa_cdn?.cloudflare?.enabled === true) {
 
         return Promise.all(cacheBustRequests)
           .then(() => {
-            if (!isProd) console.log('CloudFlare-Purge complete for:', pathChunks)
+            console.log('CloudFlare-Purge complete for:', pathChunks)
           })
       })
       .catch(err => console.error(err))
