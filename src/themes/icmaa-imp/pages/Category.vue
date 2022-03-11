@@ -119,7 +119,7 @@ const composeInitialPageState = async (store, route, forceLoad = false, pageSize
       if (routerHelper.popStateDetected === true) {
         routerHelper.popStateDetected = false
         const prevDisp = store.getters['url/getPrevRouteDispatcher']
-        if (prevDisp?.name !== 'category') return Promise.resolve()
+        if (!!prevDisp && prevDisp?.name !== 'category') return Promise.resolve()
       }
       return store.dispatch('category-next/loadCategoryProducts', { route, category: currentCategory, pageSize })
     }
