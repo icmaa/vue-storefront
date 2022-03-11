@@ -14,6 +14,7 @@
       <span class="t-mx-3 lg:t-mx-4 t-text-xs t-font-thin" :class="{ 't-hidden md:t-inline': !link.visible || (!showActiveRoute && link.isLast), 'md:t-hidden': link.placeholder }" :key="'bullet-' + index" v-text="spacerCharacter" />
     </template>
     <span class="t-text-base-tone" :class="{ 't-hidden md:t-inline': !showActiveRoute }">{{ current | htmlDecode }}</span>
+    <json-ld-loader type="breadcrumbs" />
   </div>
 </template>
 
@@ -23,11 +24,13 @@ import i18n from '@vue-storefront/i18n'
 import last from 'lodash-es/last'
 
 import MaterialIcon from 'theme/components/core/blocks/MaterialIcon'
+import JsonLdLoader from 'icmaa-google-tag-manager/components/jsonld/JsonLdLoader'
 
 export default {
   name: 'Breadcrumbs',
   components: {
-    MaterialIcon
+    MaterialIcon,
+    JsonLdLoader
   },
   props: {
     activeRoute: {
@@ -53,8 +56,8 @@ export default {
   },
   computed: {
     ...mapGetters({
-      getBreadcrumbsRoutes: 'breadcrumbs/getBreadcrumbsRoutes',
-      getBreadcrumbsCurrent: 'breadcrumbs/getBreadcrumbsCurrent'
+      breadcrumbsRoutes: 'breadcrumbs/getBreadcrumbsRoutes',
+      breadcrumbsCurrent: 'breadcrumbs/getBreadcrumbsCurrent'
     }),
     testLimit () {
       return this.showActiveRoute ? this.limit - 1 : this.limit
@@ -63,7 +66,7 @@ export default {
       return this.routes.length > this.testLimit
     },
     routes () {
-      let routes = this.getBreadcrumbsRoutes
+      let routes = this.breadcrumbsRoutes
 
       // Remove last element – got it already in `current`
       if (routes.length && last(routes).name === this.current) {
@@ -92,7 +95,7 @@ export default {
       return routes
     },
     current () {
-      return this.activeRoute || this.getBreadcrumbsCurrent
+      return this.activeRoute || this.breadcrumbsCurrent
     }
   }
 }
