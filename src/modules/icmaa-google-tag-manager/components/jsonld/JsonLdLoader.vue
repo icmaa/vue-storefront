@@ -10,12 +10,14 @@
 import { mapGetters } from 'vuex'
 
 const productComp = () => import(/* webpackChunkName: "vsf-jsonld-product" */ './Product')
+const breadcrumbsComp = () => import(/* webpackChunkName: "vsf-jsonld-breadcrumbs" */ './Breadcrumbs')
 
 export default {
   name: 'JsonLdLoader',
   data () {
     return {
-      productComp
+      productComp,
+      breadcrumbsComp
     }
   },
   props: {
