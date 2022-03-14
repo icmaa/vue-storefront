@@ -1,6 +1,7 @@
 <template>
   <div id="home" class="t-container">
     <teaser tags="2" :show-split="false" class="sm:t-pt-4 t-pb-8" />
+    <link-list :title="topCategories.title" :items="topCategories.items" class="t-pb-4" />
     <teaser tags="21" :show-large="false" :show-small-in-row="true" class="t-pb-8" />
     <teaser tags="2" :show-large="false" :limit="3" class="t-pb-8" />
     <teaser tags="20" :show-large="false" :show-small-in-row="true" class="t-pb-8" />
@@ -24,6 +25,7 @@
 import { mapGetters } from 'vuex'
 import Lazyload from 'icmaa-cms/components/Lazyload'
 import Teaser from 'theme/components/core/blocks/Teaser/Teaser'
+import LinkList from 'theme/components/core/blocks/CategoryExtras/LinkList'
 import LogoLine from 'theme/components/core/blocks/CategoryExtras/LogoLineBlock'
 import ProductListingWidget from 'icmaa-category/components/ProductListingWidget'
 import CmsBlock from 'icmaa-cms/components/Block'
@@ -32,14 +34,19 @@ export default {
   components: {
     Lazyload,
     Teaser,
+    LinkList,
     LogoLine,
     ProductListingWidget,
     CmsBlock
   },
   computed: {
     ...mapGetters({
-      isLoggedIn: 'user/isLoggedIn'
-    })
+      isLoggedIn: 'user/isLoggedIn',
+      getJsonBlockByIdentifier: 'icmaaCmsBlock/getJsonBlockByIdentifier'
+    }),
+    topCategories () {
+      return this.getJsonBlockByIdentifier('home-top-categories')
+    }
   },
   mounted () {
     if (!this.isLoggedIn && localStorage.getItem('redirect')) {
@@ -61,12 +68,14 @@ export default {
       this.$router.push(this.localizedHomeRoute)
     }
   },
-  async asyncData ({ context }) {
+  async asyncData ({ store, context }) {
     if (context) {
       context.output.cacheTags
         .add('home')
         .add('cms')
     }
+
+    await store.dispatch('icmaaCmsBlock/list', 'home-seo,home-top-categories')
   }
 }
 </script>
