@@ -1,6 +1,6 @@
 <template>
   <div class="t-px-4 t--mx-4 t-flex t-flex-wrap">
-    <h4 v-if="!!title" class="t-w-full t-px-4 t-flex t-justify-between t-items-center t-text-xl t-text-base-dark t-mb-4">
+    <h4 v-if="!!title && title !== ''" class="t-w-full t-px-4 t-flex t-justify-between t-items-center t-text-xl t-text-base-dark t-mb-4">
       {{ title }}
       <span class="t-inline-block t-l t-text-primary t-text-xs t-leading-loose t-cursor-pointer" @click="openSidebarNavigation">
         {{ $t('View all') }}
