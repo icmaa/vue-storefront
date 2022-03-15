@@ -20,8 +20,11 @@ const actions: ActionTree<ProductState, RootState> = {
    */
   setProductGallery ({ commit }, { product }) {
     let gallery = []
-    if (product.type_id === 'configurable' && product.hasOwnProperty('configurable_children')) {
-      if (!config.products.gallery.mergeConfigurableChildren && product.is_configured) {
+    if (product.type_id === 'configurable' &&
+      product.hasOwnProperty('configurable_children') &&
+      product.configurable_children?.length > 0
+    ) {
+      if (!config.products.gallery.mergeConfigurableChildren) {
         gallery = uniqBy(getMediaGallery(product), 'src')
       } else {
         gallery = uniqBy(configurableChildrenImages(product).concat(getMediaGallery(product)), 'src')
