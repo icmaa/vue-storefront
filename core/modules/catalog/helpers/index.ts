@@ -141,8 +141,8 @@ export function configurableChildrenImages (product) {
 
 export const setRequestCacheTags = ({ products = [] }) => {
   if (Vue.prototype.$cacheTags) {
-    products.forEach((product) => {
-      Vue.prototype.$cacheTags.add(`P${product.id}`);
+    products.forEach(product => {
+      Vue.prototype.$cacheTags.add(`P${product?.id || ''}`);
     })
   }
 }

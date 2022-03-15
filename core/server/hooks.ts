@@ -1,4 +1,4 @@
-import { createListenerHook, createMutatorHook } from '@vue-storefront/core/lib/hooks'
+import { createListenerHook, createMutatorHook, createAsyncMutatorHook } from '@vue-storefront/core/lib/hooks'
 import { Express, Request } from 'express'
 import http from 'http'
 
@@ -25,13 +25,18 @@ const {
 } = createListenerHook<BeforeCacheInvalidatedParamter>()
 
 const {
+  hook: addCacheInvalidatedSubPromiseHook,
+  executor: addCacheInvalidatedSubPromiseExecutor
+} = createListenerHook<{ promises: Promise<any>[], cache: any, tag: string, req: any }>()
+
+const {
   hook: afterCacheInvalidatedHook,
   executor: afterCacheInvalidatedExecutor
 } = createListenerHook<AfterCacheInvalidatedParamter>()
 
 // beforeStartApp
 interface Extend {
-  app: Express,
+  app: any,
   config: any,
   isProd: boolean
 }
@@ -39,6 +44,11 @@ interface Extend {
 const {
   hook: afterApplicationInitializedHook,
   executor: afterApplicationInitializedExecutor
+} = createListenerHook<Extend>()
+
+const {
+  hook: beforeHttpServerStartedHook,
+  executor: beforeHttpServerStartedExecutor
 } = createListenerHook<Extend>()
 
 interface Server {
@@ -54,7 +64,7 @@ const {
 
 interface Exception {
   err: Error,
-  req: Request,
+  req: any,
   isProd: boolean
 }
 
@@ -82,11 +92,13 @@ const {
 const serverHooksExecutors = {
   afterProcessStarted: afterProcessStartedExecutor,
   afterApplicationInitialized: afterApplicationInitializedExecutor,
+  beforeHttpServerStarted: beforeHttpServerStartedExecutor,
   httpServerIsReady: httpServerIsReadyExecutor,
   ssrException: ssrExceptionExecutor,
   beforeOutputRenderedResponse: beforeOutputRenderedResponseExecutor,
   afterOutputRenderedResponse: afterOutputRenderedResponseExecutor,
   beforeCacheInvalidated: beforeCacheInvalidatedExecutor,
+  addCacheInvalidatedSubPromise: addCacheInvalidatedSubPromiseExecutor,
   afterCacheInvalidated: afterCacheInvalidatedExecutor,
   beforeBuildCacheKey: beforeBuildCacheKeyExecutor
 }
@@ -96,15 +108,14 @@ const serverHooks = {
    * @param void
    */
   afterProcessStarted: afterProcessStartedHook,
-  /**
-   *
-   */
   afterApplicationInitialized: afterApplicationInitializedHook,
+  beforeHttpServerStarted: beforeHttpServerStartedHook,
   httpServerIsReady: httpServerIsReadyHook,
   ssrException: ssrExceptionHook,
   beforeOutputRenderedResponse: beforeOutputRenderedResponseHook,
   afterOutputRenderedResponse: afterOutputRenderedResponseHook,
   beforeCacheInvalidated: beforeCacheInvalidatedHook,
+  addCacheInvalidatedSubPromise: addCacheInvalidatedSubPromiseHook,
   afterCacheInvalidated: afterCacheInvalidatedHook,
   beforeBuildCacheKey: beforeBuildCacheKeyHook
 }

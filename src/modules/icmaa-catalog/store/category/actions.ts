@@ -52,8 +52,8 @@ const actions: ActionTree<CategoryState, RootState> = {
 
     return categories
   },
-  async loadChildCategoryFilter ({ dispatch, getters, commit }) {
-    let currentCategory: Category = getters.getCurrentCategory
+  async loadChildCategoryFilter ({ dispatch, getters, commit }, { category }: { category?: Category }) {
+    let currentCategory: Category = category || getters.getCurrentCategory
     if (currentCategory) {
       const { children_count, children_data: children } = currentCategory
       if (Number(children_count) === 0 || !children || children.length === 0) {

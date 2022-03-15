@@ -30,6 +30,7 @@ const AsyncText = () => import(/* webpackChunkName: "vsf-content-block-text" */ 
 const AsyncPicture = () => import(/* webpackChunkName: "vsf-content-block-picture" */ 'theme/components/core/blocks/Picture')
 const AsyncProductlisting = () => import(/* webpackChunkName: "vsf-content-block-productlisting" */ '../../icmaa-category/components/ProductListingWidget')
 const AsyncCategorylist = () => import(/* webpackChunkName: "vsf-content-block-categorylist" */ 'icmaa-category/components/List/List')
+const AsyncLinkList = () => import(/* webpackChunkName: "vsf-content-block-linklist" */ 'theme/components/core/blocks/CategoryExtras/LinkList')
 
 export default {
   name: 'CmsBlockWrapper',
@@ -112,6 +113,15 @@ export default {
           },
           propsDefaults: {},
           cssClass: 't-mb-8',
+          padding: false
+        },
+        'component_linklist': {
+          component: AsyncLinkList,
+          propsTypes: {
+            items: 'json'
+          },
+          propsDefaults: {},
+          cssClass: 't-mb-4',
           padding: false
         }
       }

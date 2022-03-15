@@ -37,7 +37,7 @@
       </lazy-hydrate>
       <div v-else>
         <component v-if="isInTicketWhitelist" :is="ProductListingTicket" :products="getCategoryProducts" />
-        <product-listing v-else :products="getCategoryProducts" />
+        <product-listing v-else :products="getCategoryProducts" :show-add-to-cart="true" />
       </div>
       <div class="t-flex t-items-center t-justify-center t-mb-8" v-if="moreProductsInSearchResults">
         <button-component type="ghost" @click.native="loadMoreProducts" :disabled="loadingProducts" class="t-w-2/3 lg:t-w-1/4" :class="{ 't-relative t-opacity-60': loadingProducts }">
@@ -85,6 +85,7 @@ import { Logger } from '@vue-storefront/core/lib/logger'
 import { getSearchOptionsFromRouteParams } from '@vue-storefront/core/modules/catalog-next/helpers/categoryHelpers'
 import { IcmaaGoogleTagManagerExecutors } from 'icmaa-google-tag-manager/hooks'
 import * as productMutationTypes from '@vue-storefront/core/modules/catalog/store/product/mutation-types'
+import { routerHelper } from 'icmaa-catalog/helpers/popState'
 
 import AsyncSidebar from 'theme/components/core/blocks/AsyncSidebar/AsyncSidebar.vue'
 import ProductListing from 'theme/components/core/ProductListing'
@@ -113,9 +114,19 @@ const composeInitialPageState = async (store, route, forceLoad = false, pageSize
     const hasCategoryExtras = store.getters['icmaaCategoryExtras/getCategoryExtrasByUrlKey'](route.path)
     const currentCategory = cachedCategory && !forceLoad && hasCategoryExtras ? cachedCategory : await store.dispatch('category-next/loadCategoryWithExtras', { filters })
 
+    const loadCategoryProducts = async () => {
+      // If browser-history-back event use cached products
+      if (routerHelper.popStateDetected === true) {
+        routerHelper.popStateDetected = false
+        const prevDisp = store.getters['url/getPrevRouteDispatcher']
+        if (!!prevDisp && prevDisp?.name !== 'category') return Promise.resolve()
+      }
+      return store.dispatch('category-next/loadCategoryProducts', { route, category: currentCategory, pageSize })
+    }
+
     await Promise.all([
-      store.dispatch('category-next/loadCategoryProducts', { route, category: currentCategory, pageSize }),
-      store.dispatch('category-next/loadChildCategoryFilter')
+      loadCategoryProducts(),
+      store.dispatch('category-next/loadChildCategoryFilter', { category: currentCategory })
     ])
 
     const breadCrumbsLoader = store.dispatch(
@@ -148,7 +159,7 @@ export default {
   mixins: [ CategoryMixin, CategoryExtrasMixin, CategoryMetaMixin, ClusterMixin ],
   data () {
     return {
-      pageSize: this.$route && this.$route.query.pagesize ? this.$route.query.pagesize : 24,
+      pageSize: this.$route && this.$route.query.pagesize ? this.$route.query.pagesize : 16,
       loadingProducts: false,
       loading: true,
       FilterSidebar,
@@ -168,7 +179,9 @@ export default {
       filterCategories: 'category-next/getFilterCategories',
       isInTicketWhitelist: 'category-next/isCurrentCategoryInTicketWhitelist',
       contentHeader: 'icmaaCategoryExtras/getContentHeaderByCurrentCategory',
-      sidebarNavigationGenderChange: 'ui/getSidebarNavigationGenderChange'
+      sidebarNavigationGenderChange: 'ui/getSidebarNavigationGenderChange',
+      sessionFilterKeys: 'user/getSessionFilterKeys',
+      prevRoute: 'url/getPrevRoute'
     }),
     isLazyHydrateEnabled () {
       return config.ssr.lazyHydrateFor.includes('category-next.products')
@@ -203,28 +216,18 @@ export default {
       }
     }
   },
-  async asyncData ({ store, route, context }) { // this is for SSR purposes to prefetch data - and it's always executed before parent component methods
+  async asyncData ({ store, route, context }) {
     const { pageSize } = this.data()
     await composeInitialPageState(store, route, false, route.params.pagesize || pageSize)
   },
-  mounted () {
+  async mounted () {
     catalogHooksExecutors.categoryPageVisited(this.getCurrentCategory)
-  },
-  async beforeRouteEnter (to, from, next) {
-    if (isServer) next() // SSR no need to invoke SW caching here
-    else if (!from.name) { // SSR but client side invocation, we need to cache products and invoke requests from asyncData for offline support
-      next(async vm => {
-        vm.loading = true
-        await composeInitialPageState(vm.$store, to, true, vm.pageSize)
-        await vm.$store.dispatch('category-next/cacheProducts', { route: to }) // await here is because we must wait for the hydration
-        vm.loading = false
-      })
-    } else { // Pure CSR, with no initial category state
-      next(async vm => {
-        vm.loading = true
-        vm.$store.dispatch('category-next/cacheProducts', { route: to })
-        vm.loading = false
-      })
+
+    // Reload category if a session-filter is set (like a selected gender) on inital load
+    if (!this.prevRoute.name && this.sessionFilterKeys.length > 0) {
+      this.loading = true
+      await composeInitialPageState(this.$store, this.$route, false, this.$route.params.pagesize || this.pageSize)
+      this.loading = false
     }
   },
   methods: {
