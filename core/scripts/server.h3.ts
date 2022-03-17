@@ -206,11 +206,11 @@ app.use('*', async (req, res) => {
       }
 
       let tagsArray = []
-      if (config.server.useOutputCache &&
-          config.server.useOutputCacheTagging &&
+      if (config.server.useOutputCacheTagging &&
           context.output.cacheTags &&
           context.output.cacheTags.size > 0
       ) {
+        if (!config.server.useOutputCache) res.setHeader('X-VS-Cache', 'Disabled')
         tagsArray = Array.from(context.output.cacheTags)
         const cacheTags = tagsArray.join(' ')
         res.setHeader('X-VS-Cache-Tags', cacheTags)
