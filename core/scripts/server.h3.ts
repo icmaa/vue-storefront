@@ -273,7 +273,6 @@ app.use('*', async (req, res) => {
             }
           }
           res.setHeader('X-VS-Cache', 'Hit')
-          res.setHeader('Cache-Control', 'public, max-age=' + config.server.outputCacheDefaultTtl)
 
           if (output.body) {
             apiStatus(res, output.body, output.httpCode, false)
