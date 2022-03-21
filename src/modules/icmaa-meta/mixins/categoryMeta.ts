@@ -6,15 +6,14 @@ import { htmlDecode } from '@vue-storefront/core/filters'
 
 export default {
   computed: {
-    ...mapGetters('category-next', ['getCurrentCategory']),
-    ...mapGetters({ categoryExtras: 'icmaaCategoryExtras/getCategoryExtrasByCurrentCategory' }),
+    ...mapGetters({
+      category: 'category-next/getCurrentCategory'
+    }),
     metaTitle (): string {
-      return this.categoryExtras && this.categoryExtras['metaTitle']
-        ? this.categoryExtras['metaTitle'] : this.getCurrentCategory['name']
+      return this.category.meta_title || this.category.name
     },
     metaDescription (): string | boolean {
-      return this.categoryExtras && this.categoryExtras.metaDescription
-        ? this.categoryExtras.metaDescription : false
+      return this.category.meta_description || false
     },
     categoryFBImages () {
       if (!this.getCategoryProducts) {
@@ -39,7 +38,7 @@ export default {
       {
         vmid: 'og:title',
         property: 'og:title',
-        content: htmlDecode(this.getCurrentCategory.name)
+        content: htmlDecode(this.category.name)
       },
       { vmid: 'og:type', property: 'og:type', content: 'product.group' },
       ...this.categoryFBImages
