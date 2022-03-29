@@ -34,6 +34,7 @@
 <script>
 import i18n from '@vue-storefront/i18n'
 import { Logger } from '@vue-storefront/core/lib/logger'
+import { removeStoreCodeFromRoute } from '@vue-storefront/core/lib/multistore'
 import { IcmaaGoogleTagManagerExecutors } from 'icmaa-google-tag-manager/hooks'
 import ButtonComponent from 'theme/components/core/blocks/Button'
 
@@ -47,10 +48,11 @@ export default {
       this.$store.dispatch('ui/setSidebar', { key: 'searchpanel' })
     }
   },
-  async asyncData ({ store, route, context }) {
+  async asyncData ({ route, context }) {
     Logger.log('Entering asyncData for PageNotFound ' + new Date())()
     if (context) {
-      context.output.cacheTags.add(`page-not-found`)
+      context.output.cacheTags.add('page-not-found')
+      context.output.cacheTags.add(`404-` + removeStoreCodeFromRoute(route?.path))
       context.server.response.statusCode = 404
     }
   },
