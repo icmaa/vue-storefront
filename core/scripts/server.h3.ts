@@ -1,6 +1,6 @@
 import config from 'config'
 import serveStatic from 'serve-static'
-import mime from 'mime/lite'
+import mime from 'mime'
 import path from 'path'
 import glob from 'glob'
 import fetch from 'isomorphic-fetch'
@@ -38,7 +38,7 @@ const staticRoutes = {
 
 export const serveStaticMiddleware = function (path: string) {
   return (req: IncomingMessage, res: OutgoingMessage, next) => {
-    const mimeType = mime.getType(path + req.url)
+    const mimeType = mime.getType(path + req.url.replace(/\?.*$/, ''))
     let maxAge = config.expireHeaders.default
     if (config.expireHeaders.hasOwnProperty(mimeType)) {
       maxAge = config.expireHeaders.get(mimeType)
