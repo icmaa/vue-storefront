@@ -43,6 +43,7 @@ export const serveStaticMiddleware = function (path: string) {
     if (config.expireHeaders.hasOwnProperty(mimeType)) {
       maxAge = config.expireHeaders.get(mimeType)
     }
+    console.error(['serve-static', req.url, maxAge, mimeType].join(' | '))
     return serveStatic(path, { maxAge })(req as any, res as any, next) as Handle
   }
 }
