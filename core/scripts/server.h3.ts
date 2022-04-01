@@ -1,6 +1,6 @@
 import config from 'config'
 import serveStatic from 'serve-static'
-import mime from 'mime'
+import mime from 'mime/lite'
 import path from 'path'
 import glob from 'glob'
 import fetch from 'isomorphic-fetch'
