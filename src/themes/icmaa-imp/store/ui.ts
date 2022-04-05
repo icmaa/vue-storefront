@@ -16,6 +16,7 @@ export const uiStore = {
     authElem: 'login',
     /** Sidebar and modal type states: */
     modals: {},
+    modalInitTimeout: true,
     sidebars: {},
     sidebarPath: [],
     overlay: false,
@@ -147,7 +148,15 @@ export const uiStore = {
     removeLastSidebarPath ({ commit }) {
       commit('removeSidebarPath')
     },
-    toggleModal ({ commit, getters }, item: { name: string, visible?: boolean }) {
+    toggleModal ({ dispatch, commit, getters, state }, item: { name: string, visible?: boolean }) {
+      if (state.modalInitTimeout === true) {
+        setTimeout(() => {
+          state.modalInitTimeout = false
+          dispatch('toggleModal', item)
+        }, 5000)
+        return
+      }
+
       if (item.visible === undefined) {
         item.visible = !getters.isModalVisible(item.name)
       }
