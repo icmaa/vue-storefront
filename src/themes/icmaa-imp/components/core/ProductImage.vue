@@ -1,7 +1,22 @@
 <template>
   <picture>
-    <source v-for="(sImage, i) in sourceImages" :key="i + '-' + sImage.key" :media="sImage.media" :data-srcset="sImage.srcset" :alt="alt + ` - ${sImage.width}px`">
-    <img :src="placeholder" :data-src="defaultImage.src" :data-srcset="`${defaultImage.src} 1x, ${defaultImage.srcAt2x} 2x`" class="product-image t-w-full" v-bind="$attrs" v-on="$listeners" :alt="alt" ref="image">
+    <source
+      v-for="(sImage, i) in sourceImages"
+      :key="i + '-' + sImage.key"
+      :media="sImage.media"
+      :data-srcset="sImage.srcset"
+      :alt="alt + ` - ${sImage.width}px`"
+    >
+    <img
+      :src="placeholder"
+      :data-src="defaultImage.src"
+      :data-srcset="`${defaultImage.src} 1x, ${defaultImage.srcAt2x} 2x`"
+      class="product-image t-w-full"
+      v-bind="$attrs"
+      v-on="$listeners" :alt="alt" ref="image"
+      width="186"
+      height="269"
+    >
   </picture>
 </template>
 
