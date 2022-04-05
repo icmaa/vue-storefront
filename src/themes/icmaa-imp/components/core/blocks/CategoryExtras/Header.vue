@@ -6,10 +6,11 @@
         <slot />
       </div>
     </div>
-    <div class="t-px-4 t-py-2 t-flex t-justify-between" v-if="isInSpotifyCategoryAllowList && (!isSpotifyLoaded || spotifyLogoItems.length > 0)">
-      <span class="t-flex-fix t-hidden xl:t-inline-block t-flex t-self-center t-text-base-light t-text-sm t-mr-8">{{ $t('Similar bands:') }}</span>
-      <div class="t-flex-fix" style="height: 38px;" v-if="!isSpotifyLoaded" />
-      <department-logo v-for="(logo, index) in spotifyLogoItems" :key="index" v-bind="logo.data()" class="t-flex-fix t-opacity-60 hover:t-opacity-100" :class="{ 't-mr-4': isLast(index, spotifyLogoItems)}" />
+    <div class="t-px-4 t-py-2" v-if="isInSpotifyCategoryAllowList && (!isSpotifyLoaded || spotifyLogoItems.length > 0)">
+      <div class="t-flex t-justify-between" style="height: 38px;">
+        <span class="t-flex t-flex-fix t-hidden xl:t-inline-block t-self-center t-text-base-light t-text-sm t-mr-8">{{ $t('Similar bands:') }}</span>
+        <department-logo v-for="(logo, index) in spotifyLogoItems" :key="index" v-bind="logo.data()" class="t-flex-fix t-opacity-60 hover:t-opacity-100" :class="{ 't-mr-4': isLast(index, spotifyLogoItems)}" />
+      </div>
     </div>
   </div>
 </template>
