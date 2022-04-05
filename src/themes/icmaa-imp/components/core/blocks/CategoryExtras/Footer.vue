@@ -65,7 +65,11 @@ export default {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 
-  * { @apply t-inline t-text-left t-text-sm t-text-base-tone t-font-normal; }
+  * {
+    font-size: inherit !important;
+    font-weight: inherit !important;
+    @apply t-inline t-text-left t-text-sm t-text-base-tone t-font-normal;
+  }
   br { @apply t-hidden; }
   a { @apply t-static; }
 }
