@@ -133,7 +133,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 
 @import "theme/css/base/_sprite-footer-logos.scss";
 
