@@ -1,5 +1,5 @@
 <template>
-  <div class="category-links">
+  <div>
     <router-link
       v-for="c in categories"
       :key="'filter-' + c.slug"

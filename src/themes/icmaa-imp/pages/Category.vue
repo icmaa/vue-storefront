@@ -15,12 +15,12 @@
                 <span data-test-id="productsTotal">{{ productsTotal }}</span> {{ $t('items') }}
               </span>
             </div>
-            <div class="t-w-full t-px-1 md:t-px-2 t-flex t-flex-wrap t-items-stretch">
+            <div class="t-w-full t-px-1 md:t-px-2 t-flex t-flex-wrap t-items-center">
               <button-component style="second" align="center" :icon="activeFilterCount > 0 ? 'check' : 'filter_list'" @click.native="openFilters" class="t-w-full lg:t-w-auto" data-test-id="ButtonFilter">
                 {{ $t('Filters') }}
                 <span v-if="activeFilterCount > 0" v-text="`(${activeFilterCount})`" class="t-flex-grow t-text-left t-pl-2 t-opacity-75" />
               </button-component>
-              <div class="t-w-full lg:t-flex-1 t-mt-2 lg:t-mt-0 t-overflow-x-auto t-hide-scrollbar t-flex t-items-center">
+              <div class="t-w-full lg:t-flex-1 t-mt-2 lg:t-mt-0 t-overflow-x-auto t-hide-scrollbar t-flex t-items-center t-h-8">
                 <filter-presets class="t-flex t-items-center md:t-ml-2" v-if="shouldLoadPresets" />
                 <category-links :categories="filterCategories" class="t-flex t-items-center lg:t-ml-2" v-else />
               </div>

@@ -1,5 +1,5 @@
 <template>
-  <div class="presets" v-if="loaded">
+  <div>
     <button-component v-for="(p, i) in presets" :key="'filter-' + i" size="sm" :icon="p.active ? 'clear' : false" @click.native="changeFilter(p)" class="t-flex-shrink-0 t-mr-2 t-opacity-75 hover:t-opacity-100">
       {{ p.label }}
     </button-component>
