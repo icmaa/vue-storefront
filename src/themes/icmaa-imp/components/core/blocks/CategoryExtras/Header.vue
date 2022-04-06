@@ -6,7 +6,7 @@
         <slot />
       </div>
     </div>
-    <div class="t-px-4 t-py-2" v-if="isInSpotifyCategoryAllowList && (!isSpotifyLoaded || spotifyLogoItems.length > 0)">
+    <div class="t-px-4 t-py-2" v-if="isSpotifyCategory && (!isSpotifyLoaded || spotifyLogoItems.length > 0)">
       <div class="t-flex t-justify-between" style="height: 38px;">
         <span class="t-flex t-flex-fix t-hidden xl:t-inline-block t-self-center t-text-base-light t-text-sm t-mr-8">{{ $t('Similar bands:') }}</span>
         <department-logo v-for="(logo, index) in spotifyLogoItems" :key="index" v-bind="logo.data()" class="t-flex-fix t-opacity-60 hover:t-opacity-100" :class="{ 't-mr-4': isLast(index, spotifyLogoItems)}" />
@@ -78,7 +78,7 @@ export default {
       }
 
       const { bannerShowFrom, bannerShowTo, active } = this.categoryExtras
-      return active && (this.banner || this.isInSpotifyCategoryAllowList || this.spotifyLogoItems.length > 0) &&
+      return active && (this.banner || this.isSpotifyCategory || this.spotifyLogoItems.length > 0) &&
         isDatetimeInBetween(bannerShowFrom, bannerShowTo)
     },
     banner () {
@@ -98,6 +98,9 @@ export default {
     },
     bannerHeight () {
       return this.bannerExists ? this.bannerDimensions.default.height : this.bannerDimensions.fallback.height
+    },
+    isSpotifyCategory () {
+      return this.isInSpotifyCategoryAllowList(this.category)
     },
     spotifyLogoItems () {
       return Object.values(this.getSpotifyLogoItems).slice(0, this.spotifyLogoLimit || this.logoLimitByViewport())
