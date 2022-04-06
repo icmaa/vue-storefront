@@ -15,6 +15,9 @@ export default {
     close () {
       this.$store.dispatch('ui/closeAll')
     }
+  },
+  mounted () {
+    this.$store.dispatch('ui/initModalDelay')
   }
 }
 </script>
