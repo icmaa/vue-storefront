@@ -2,7 +2,6 @@
   <picture>
     <source v-for="(sImage, i) in sourceImages" :key="sImage.srcset + '-' + i" :media="sImage.media" :data-srcset="sImage.srcset" :alt="alt + (sImage.alt || '')">
     <img
-      :src="defaultImage.src"
       :data-src="defaultImage.src"
       :data-srcset="`${defaultImage.src} 1x, ${defaultImage.srcAt2x} 2x`"
       :class="[{ 't-hidden': (placeholder && loading), 't-w-full': imgFullSize }, ...imgClassTransformed]"
