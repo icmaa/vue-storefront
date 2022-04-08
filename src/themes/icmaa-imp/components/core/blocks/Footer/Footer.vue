@@ -33,7 +33,7 @@
             <h2 class="t-hidden md:t-block t-text-sm t-text-base-tone t-mb-4">
               {{ $t("Payments & Shipping") }}
             </h2>
-            <div class="logos t-flex t-justify-between t-flex-wrap t--mx-2">
+            <div class="logos lazyload t-flex t-justify-between t-flex-wrap t--mx-2" ref="serviceLogos">
               <template v-for="(name, path) in carrierLogos">
                 <div :key="path" class="t-flex t-flex-initial t-w-1/3 t-justify-center t-px-2 t-pb-4">
                   <div class="t-flex t-flex-initial t-h-12 t-w-full t-py-2 t-px-1 t-items-center t-justify-center t-border t-border-base-lighter t-rounded-sm">
@@ -126,6 +126,13 @@ export default {
   mounted () {
     window.addEventListener('resize', this.setFooterNavigationOffset)
     this.$nextTick(this.setFooterNavigationOffset)
+
+    // Lazyload footer-logo sprite
+    new IntersectionObserver(es => {
+      es.forEach(e => {
+        if (e.isIntersecting) e.target.classList.remove('lazyload')
+      })
+    }).observe(this.$refs.serviceLogos)
   },
   destroyed () {
     window.removeEventListener('resize', this.setFooterNavigationOffset)
@@ -137,7 +144,7 @@ export default {
 
 @import "theme/css/base/_sprite-footer-logos.scss";
 
-.service-carrier .logos {
+.service-carrier .logos:not(.lazyload) {
   @include retina-sprites($retina-groups)
 }
 
