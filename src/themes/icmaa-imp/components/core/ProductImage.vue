@@ -14,8 +14,8 @@
       class="product-image t-w-full"
       v-bind="$attrs"
       v-on="$listeners" :alt="alt" ref="image"
-      width="186"
-      height="269"
+      :width="width"
+      :height="height"
     >
   </picture>
 </template>
@@ -37,6 +37,14 @@ export default {
     alt: {
       type: String,
       default: ''
+    },
+    width: {
+      type: Number,
+      default: 186
+    },
+    height: {
+      type: Number,
+      default: 269
     },
     sizes: {
       type: [Array, Boolean],
