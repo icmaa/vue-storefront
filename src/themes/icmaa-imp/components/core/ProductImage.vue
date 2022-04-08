@@ -63,8 +63,9 @@ export default {
         // Order high-to-low is important
         { media: '(min-width: 1280px)', width: 300 },
         { media: '(min-width: 1024px)', width: 236 },
-        { media: '(min-width: 415px)', width: 364 },
-        { media: '(max-width: 414px)', width: 188 }
+        { media: '(min-width: 620px)', width: 364 },
+        { media: '(min-width: 425px)', width: 255 },
+        { media: '(max-width: 424px)', width: 193 }
       ]
     },
     sourceImages () {
