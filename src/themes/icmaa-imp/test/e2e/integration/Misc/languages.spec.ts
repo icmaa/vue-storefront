@@ -4,7 +4,6 @@ const { _ } = Cypress
 
 describe('Language selector', () => {
   it('Modal popup as new user', () => {
-    cy.acceptCookieNotice()
     cy.getBrowserLanguage()
 
     cy.get<string[]>('@browserLanguages').then(lang => {

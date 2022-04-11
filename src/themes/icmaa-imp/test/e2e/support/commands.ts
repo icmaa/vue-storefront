@@ -141,10 +141,6 @@ Cypress.Commands.overwrite('visit', (originalFn, url, options?) => {
 
     const originalFnOptions = _.omit(options, ['storeCode', 'returningVisitor'])
     cy.then(() => originalFn(url, originalFnOptions))
-
-    if (options?.returningVisitor) {
-      cy.acceptCookieNotice()
-    }
   })
 })
 
@@ -303,22 +299,6 @@ Cypress.Commands.add('isLoggedIn', (status: boolean = true) => {
     .as('accountButton')
 
   cy.get('@accountButton').should('have.class', status ? 'logged-in' : 'logged-out')
-})
-
-Cypress.Commands.add('acceptCookieNotice', () => {
-  cy.window().then(async window => {
-    return new Promise<void>(resolve => {
-      window.addEventListener('UC_UI_INITIALIZED', (event) => {
-        /**
-         * This method sets the `uc_user_interaction` local-storage value to true and hides the modal.
-         * Originally UC recommends to use the `UC_UI_SUPPRESS_CMP_DISPLAY` window var but this needs
-         * to be set on each request and is hard to implement that way (unless you change the application-code).
-         * @see https://docs.usercentrics.com/#/cmp-v2-ui-api?id=suppress-the-cmp
-         * */
-        window.UC_UI.denyAllConsents().then(resolve)
-      });
-    })
-  })
 })
 
 Cypress.Commands.add('hideLanguageModal', () => {
