@@ -313,10 +313,12 @@ Cypress.Commands.add('acceptCookieNotice', () => {
           clearInterval(myInterval)
 
           /**
-           * This method sets the `uc_user_interaction` local-storage value to true and hides the modal
+           * This method sets the `uc_user_interaction` local-storage value to true and hides the modal.
+           * Originally UC recommends to use the `UC_UI_SUPPRESS_CMP_DISPLAY` window var but this needs
+           * to be set on each request and is hard to implement that way (unless you change the application-code).
            * @see https://docs.usercentrics.com/#/cmp-v2-ui-api?id=suppress-the-cmp
            * */
-          window.UC_UI.acceptAllConsents().then(resolve)
+          window.UC_UI.denyAllConsents().then(resolve)
         }
       }, 100)
     })
