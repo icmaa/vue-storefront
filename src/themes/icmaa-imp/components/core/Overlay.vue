@@ -3,8 +3,6 @@
 </template>
 
 <script>
-import Overlay from '@vue-storefront/core/compatibility/components/Overlay'
-
 export default {
   computed: {
     isVisible () {
@@ -15,9 +13,6 @@ export default {
     close () {
       this.$store.dispatch('ui/closeAll')
     }
-  },
-  mounted () {
-    this.$store.dispatch('ui/initModalDelay')
   }
 }
 </script>
