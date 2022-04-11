@@ -103,7 +103,6 @@ export default {
     })
   },
   mounted () {
-    this.$store.dispatch('ui/initModalDelay')
     this.fetchCmsData()
   },
   metaInfo () {

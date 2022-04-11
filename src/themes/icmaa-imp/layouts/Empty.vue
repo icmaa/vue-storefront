@@ -38,9 +38,6 @@ export default {
       return this.$store.dispatch('icmaaMeta/load')
     }
   },
-  mounted () {
-    this.$store.dispatch('ui/initModalDelay')
-  },
   serverPrefetch () {
     return Promise.all([
       this.fetchMetaData()
