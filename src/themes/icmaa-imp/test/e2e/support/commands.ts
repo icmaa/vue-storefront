@@ -302,10 +302,10 @@ Cypress.Commands.add('isLoggedIn', (status: boolean = true) => {
   cy.get('@accountButton').should('have.class', status ? 'logged-in' : 'logged-out')
 })
 
-Cypress.Commands.add('acceptCookieNotice', async () => {
+Cypress.Commands.add('acceptCookieNotice', () => {
   cy.window().then(window => {
-    // This method sets the `uc_user_interaction` local-storage value to true and hides the modal
-    return window.UC_UI.acceptAllConsents()
+    /** @see https://docs.usercentrics.com/#/cmp-v2-ui-api?id=suppress-the-cmp */
+    window.UC_UI_SUPPRESS_CMP_DISPLAY = true
   })
 })
 
