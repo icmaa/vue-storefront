@@ -252,6 +252,15 @@ declare namespace Cypress {
     isLoggedIn(status?: boolean): Chainable<Window>,
 
     /**
+     * Accept cookie-consent using Usercentrics API
+     * @see https://docs.usercentrics.com/#/cmp-v2-ui-api
+     *
+     * @example
+     * cy.acceptCookieConsent()
+     */
+    acceptCookieConsent(): Chainable<Window>,
+
+    /**
      * Set local storage to mark language modal as clicked away.
      *
      * @example

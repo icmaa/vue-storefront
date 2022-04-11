@@ -9,6 +9,7 @@ describe('Language selector', () => {
     cy.get<string[]>('@browserLanguages').then(lang => {
       const storeViews: any = Settings.availableStoreViews.filter(l => !lang.includes(l) && l !== 'uk')
       cy.visit('/', { storeCode: _.sample(storeViews) })
+      cy.acceptCookieConsent()
     })
 
     cy.getByTestId('Modal').should('be.visible')

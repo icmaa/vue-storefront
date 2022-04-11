@@ -34,13 +34,5 @@ beforeEach(() => {
   cy.clearLocalStorage()
   cy.clearCookies()
 
-  /**
-   * Surpress cookie-consent of Usercentrics using `UC_UI_SUPPRESS_CMP_DISPLAY` variable
-   * @see https://docs.usercentrics.com/#/cmp-v2-ui-api?id=suppress-the-cmp
-   */
-  cy.window().then(window => {
-    window.UC_UI_SUPPRESS_CMP_DISPLAY = true
-  })
-
   cy.wrap(false).as('storeCode')
 })
