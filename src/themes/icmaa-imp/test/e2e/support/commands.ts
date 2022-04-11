@@ -302,11 +302,10 @@ Cypress.Commands.add('isLoggedIn', (status: boolean = true) => {
   cy.get('@accountButton').should('have.class', status ? 'logged-in' : 'logged-out')
 })
 
-Cypress.Commands.add('acceptCookieNotice', () => {
-  localStorage.setItem(
-    'shop/uniClaims/cookiesAccepted',
-    `{ "code": "cookiesAccepted", "created_at": "${new Date().toISOString()}", "value": true }`
-  )
+Cypress.Commands.add('acceptCookieNotice', async () => {
+  // This method sets the `uc_user_interaction` local-storage value to true and hides the modal
+  // eslint-disable-next-line no-undef
+  return UC_UI.acceptAllConsents()
 })
 
 Cypress.Commands.add('hideLanguageModal', () => {
