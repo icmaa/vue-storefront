@@ -309,7 +309,7 @@ Cypress.Commands.add('acceptCookieNotice', () => {
   cy.window().then(async window => {
     return new Promise<void>(resolve => {
       const myInterval = setInterval(() => {
-        if (window.UC_UI) {
+        if (window.UC_UI && window.UC_UI.isInitialized() === true) {
           clearInterval(myInterval)
 
           /**
