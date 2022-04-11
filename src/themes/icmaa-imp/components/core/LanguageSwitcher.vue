@@ -76,6 +76,7 @@ export default {
       this.loadLanguagesModal = true
       this.storeRecommendationAdvice = storeRecommendationAdvice
 
+      this.$store.dispatch('ui/addModalDelay', 'modal-switcher')
       this.$store.dispatch('ui/showModal', 'modal-switcher')
     },
     async onStoreViewChanged (fetchClaim = false) {

@@ -1,6 +1,6 @@
 <template>
   <router-link :to="link" :title="alt" @click.native="setCluster" data-test-id="DepartmentLogo">
-    <img :src="url" :srcset="`${url} 1x, ${retinaUrl} 2x`" :alt="alt">
+    <img :src="url" :srcset="`${url} 1x, ${retinaUrl} 2x`" :alt="alt" width="74" height="38">
   </router-link>
 </template>
 

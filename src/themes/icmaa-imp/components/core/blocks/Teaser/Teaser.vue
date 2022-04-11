@@ -92,7 +92,7 @@ export default {
       return teaser.slice(0, this.TeaserSmallRow ? 4 : this.limit)
     },
     isMobile () {
-      return ['xs', 'sm'].includes(this.viewport)
+      return !this.viewport || ['xs', 'sm'].includes(this.viewport)
     },
     size () {
       return !this.showLarge ? 'small' : this.showSplit ? undefined : 'large'

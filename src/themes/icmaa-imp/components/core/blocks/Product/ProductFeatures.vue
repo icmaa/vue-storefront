@@ -8,7 +8,6 @@
 import { mapGetters } from 'vuex'
 import { currentStoreView } from '@vue-storefront/core/lib/multistore'
 import FeaturesMixin from 'theme/mixins/product/featuresMixin'
-import MaterialIcon from 'theme/components/core/blocks/MaterialIcon'
 
 export default {
   mixins: [ FeaturesMixin ],

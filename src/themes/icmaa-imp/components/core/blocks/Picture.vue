@@ -1,8 +1,21 @@
 <template>
   <picture>
     <source v-for="(sImage, i) in sourceImages" :key="sImage.srcset + '-' + i" :media="sImage.media" :data-srcset="sImage.srcset" :alt="alt + (sImage.alt || '')">
-    <img :src="defaultImage.src" :data-src="defaultImage.src" :data-srcset="`${defaultImage.src} 1x, ${defaultImage.srcAt2x} 2x`" :class="[{ 't-hidden': (placeholder && loading), 't-w-full': imgFullSize }, ...imgClassTransformed]" v-bind="$attrs" v-on="$listeners" @error="loading = true" ref="image" :alt="alt">
-    <placeholder :ratio="ratio" v-if="placeholder && loading" :class="placeholderClassTransformed" />
+    <img
+      :data-src="defaultImage.src"
+      :data-srcset="`${defaultImage.src} 1x, ${defaultImage.srcAt2x} 2x`"
+      :class="[{ 't-hidden': (placeholder && loading), 't-w-full': imgFullSize }, ...imgClassTransformed]"
+      v-bind="{ ...$attrs, ...dimensions }"
+      v-on="$listeners"
+      @error="loading = true"
+      ref="image"
+      :alt="alt"
+    >
+    <placeholder
+      :ratio="ratio"
+      v-if="placeholder && loading"
+      :class="placeholderClassTransformed"
+    />
   </picture>
 </template>
 
@@ -108,6 +121,12 @@ export default {
         src: this.getImageWithSize(this.image, this.width, this.height),
         srcAt2x: this.getImageWithSize(this.image, this.width * 2, this.height * 2)
       }
+    },
+    dimensions () {
+      const dimensions = {}
+      if (this.width > 0) dimensions.width = this.width
+      if (this.height > 0) dimensions.height = this.height
+      return dimensions
     }
   },
   methods: {

@@ -33,6 +33,8 @@
             :sizes="sizes"
             :type="zoom ? 'fullsize' : 'gallery'"
             :enable-auto-reload="true"
+            :width="468"
+            :height="676"
             @dragstart.prevent
             @dragover.prevent
           />
