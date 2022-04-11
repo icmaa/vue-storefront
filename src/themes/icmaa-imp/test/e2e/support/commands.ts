@@ -303,8 +303,10 @@ Cypress.Commands.add('isLoggedIn', (status: boolean = true) => {
 })
 
 Cypress.Commands.add('acceptCookieNotice', async () => {
-  // This method sets the `uc_user_interaction` local-storage value to true and hides the modal
-  return window.UC_UI.acceptAllConsents()
+  cy.window().then(window => {
+    // This method sets the `uc_user_interaction` local-storage value to true and hides the modal
+    return window.UC_UI.acceptAllConsents()
+  })
 })
 
 Cypress.Commands.add('hideLanguageModal', () => {
