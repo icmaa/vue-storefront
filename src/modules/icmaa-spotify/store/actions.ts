@@ -4,7 +4,6 @@ import { Category } from '@vue-storefront/core/modules/catalog-next/types/Catego
 import { DataResolver } from '@vue-storefront/core/data-resolver/types/DataResolver'
 import SpotifyState from '../types/SpotifyState'
 import * as mutationTypes from './mutation-types'
-import { isCategoryInWhitelist } from '../helpers'
 
 import fetch from 'isomorphic-fetch'
 import fetchErrorHandler from 'icmaa-config/helpers/fetchResponseHandler'
@@ -28,22 +27,15 @@ const actions: ActionTree<SpotifyState, RootState> = {
       .then(resp => resp.result)
       .catch(() => [])
   },
-  async fetchRelatedArtistsByCategory (context, category: Category): Promise<any> {
-    if (!isCategoryInWhitelist(category)) {
-      Logger.log('Not a child of parent category whitelist', 'icmaaSpotify')()
-      return
+  async fetchRelatedArtistsByCategory ({ state, dispatch, commit, getters }, category: Category): Promise<any> {
+    if (!getters.isInCategoryAllowList(category)) {
+      Logger.log('Not a child of parent-category-allow-list', 'icmaaSpotify')()
+      return []
     }
 
     const { id, name } = category
-    const state = context.state
-
     if (!state.relatedArtists || Object.keys(state.relatedArtists).length === 0 || !state.relatedArtists[id]) {
-      const relatedArtists = await context.dispatch('fetchRelatedArtistsByName', name)
-
-      const result = { categoryId: id, relatedArtists }
-      context.commit(mutationTypes.ICMAA_SPOTIFY_RELATEDARTIST_ADD, result)
-
-      return result
+      return dispatch('fetchRelatedArtistsByName', name)
     } else {
       return new Promise((resolve, reject) => {
         let result = state.relatedArtists[id]
@@ -55,9 +47,8 @@ const actions: ActionTree<SpotifyState, RootState> = {
       })
     }
   },
-  async fetchRelatedArtists ({ getters, dispatch, rootGetters }, category: Category) {
-    await dispatch('fetchRelatedArtistsByCategory', category)
-    const relatedArtists = getters.getRelatedArtistsByCategoryId(category.id)
+  async fetchRelatedArtists ({ dispatch, commit, rootGetters }, category: Category) {
+    const relatedArtists = await dispatch('fetchRelatedArtistsByCategory', category)
 
     /** Only load not already loaded categories (prevent invinite load of `category-next/loadCategories`) */
     const categoriesNotInState = relatedArtists.filter(a => !rootGetters['category-next/getCategories'].map(c => c.name).includes(a))
@@ -78,6 +69,10 @@ const actions: ActionTree<SpotifyState, RootState> = {
     }
 
     await dispatch('category-next/loadCategories', categorySearchOptions, { root: true })
+      .then(results => {
+        const relatedArtists = results.map(c => c.name)
+        commit(mutationTypes.ICMAA_SPOTIFY_RELATEDARTIST_ADD, { categoryId: category.id, relatedArtists })
+      })
   }
 }
 

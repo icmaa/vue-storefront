@@ -3,8 +3,6 @@
 </template>
 
 <script>
-import Overlay from '@vue-storefront/core/compatibility/components/Overlay'
-
 export default {
   computed: {
     isVisible () {

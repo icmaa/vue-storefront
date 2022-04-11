@@ -52,6 +52,8 @@ export default {
       { name: 'modal-cookie-notification', priority: 100 }
     )
 
+    this.$store.dispatch('ui/addModalDelay', 'modal-cookie-notification')
+
     this.loadModal()
   },
   watch: {
