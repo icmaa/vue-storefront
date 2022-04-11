@@ -130,7 +130,6 @@ Cypress.Commands.overwrite('visit', (originalFn, url, options?) => {
 
   if (options?.returningVisitor) {
     cy.hideLanguageModal()
-      .acceptCookieNotice()
   }
 
   cy.getStoreCode().then(storeCode => {
@@ -140,8 +139,12 @@ Cypress.Commands.overwrite('visit', (originalFn, url, options?) => {
 
     url = `${storeCode}${url}`
 
-    options = _.omit(options, ['storeCode', 'returningVisitor'])
-    cy.then(() => originalFn(url, options))
+    const originalFnOptions = _.omit(options, ['storeCode', 'returningVisitor'])
+    cy.then(() => originalFn(url, originalFnOptions))
+
+    if (options?.returningVisitor) {
+      cy.acceptCookieNotice()
+    }
   })
 })
 
@@ -303,9 +306,20 @@ Cypress.Commands.add('isLoggedIn', (status: boolean = true) => {
 })
 
 Cypress.Commands.add('acceptCookieNotice', () => {
-  cy.window().then(window => {
-    /** @see https://docs.usercentrics.com/#/cmp-v2-ui-api?id=suppress-the-cmp */
-    window.UC_UI_SUPPRESS_CMP_DISPLAY = true
+  cy.window().then(async window => {
+    return new Promise<void>(resolve => {
+      const myInterval = setInterval(() => {
+        if (window.UC_UI) {
+          clearInterval(myInterval)
+
+          /**
+           * This method sets the `uc_user_interaction` local-storage value to true and hides the modal
+           * @see https://docs.usercentrics.com/#/cmp-v2-ui-api?id=suppress-the-cmp
+           * */
+          window.UC_UI.acceptAllConsents().then(resolve)
+        }
+      }, 100)
+    })
   })
 })
 
