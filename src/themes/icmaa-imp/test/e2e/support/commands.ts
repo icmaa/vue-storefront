@@ -141,7 +141,6 @@ Cypress.Commands.overwrite('visit', (originalFn, url, options?) => {
 
     const originalFnOptions = _.omit(options, ['storeCode', 'returningVisitor'])
     cy.then(() => originalFn(url, originalFnOptions))
-      .hideCookieConsent()
   })
 })
 

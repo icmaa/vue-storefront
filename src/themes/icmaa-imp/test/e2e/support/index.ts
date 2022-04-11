@@ -34,5 +34,9 @@ beforeEach(() => {
   cy.clearLocalStorage()
   cy.clearCookies()
 
+  cy.on('window:before:load', () => {
+    cy.hideCookieConsent()
+  })
+
   cy.wrap(false).as('storeCode')
 })
