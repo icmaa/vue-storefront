@@ -141,10 +141,7 @@ Cypress.Commands.overwrite('visit', (originalFn, url, options?) => {
 
     const originalFnOptions = _.omit(options, ['storeCode', 'returningVisitor'])
     cy.then(() => originalFn(url, originalFnOptions))
-
-    if (options?.returningVisitor) {
-      cy.acceptCookieConsent()
-    }
+      .hideCookieConsent()
   })
 })
 
@@ -305,6 +302,16 @@ Cypress.Commands.add('isLoggedIn', (status: boolean = true) => {
   cy.get('@accountButton').should('have.class', status ? 'logged-in' : 'logged-out')
 })
 
+Cypress.Commands.add('hideCookieConsent', () => {
+  cy.window().then(window => {
+    return new Promise<void>(resolve => {
+      window.UC_UI_SUPPRESS_CMP_DISPLAY = true
+      resolve()
+    })
+  })
+  cy.log('Surpress cookie-consent dialog')
+})
+
 Cypress.Commands.add('hideLanguageModal', () => {
   cy.getStoreCode().then(storeCode => {
     /**
@@ -316,16 +323,6 @@ Cypress.Commands.add('hideLanguageModal', () => {
       `{ "code": "languageAccepted", "created_at": "${new Date().toISOString()}", "value": { "accepted": true, "storeCode": "${storeCode}" } }`
     )
   })
-})
-
-Cypress.Commands.add('acceptCookieConsent', () => {
-  cy.window().then(window => {
-    return new Promise<void>(resolve => {
-      window.UC_UI_SUPPRESS_CMP_DISPLAY = true
-      resolve()
-    })
-  })
-  cy.log('Surpress cookie-consent dialog')
 })
 
 Cypress.Commands.add('waitForLoader', timeout => {

@@ -256,9 +256,9 @@ declare namespace Cypress {
      * @see https://docs.usercentrics.com/#/cmp-v2-ui-api
      *
      * @example
-     * cy.acceptCookieConsent()
+     * cy.hideCookieConsent()
      */
-    acceptCookieConsent(): Chainable<Window>,
+    hideCookieConsent(): Chainable<Window>,
 
     /**
      * Set local storage to mark language modal as clicked away.
