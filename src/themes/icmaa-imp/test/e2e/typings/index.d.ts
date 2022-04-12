@@ -252,13 +252,13 @@ declare namespace Cypress {
     isLoggedIn(status?: boolean): Chainable<Window>,
 
     /**
-     * Set local storage to mark cookie-notice as accepted.
-     * Adds alias `customer` for further use of customer object.
+     * Accept cookie-consent using Usercentrics API
+     * @see https://docs.usercentrics.com/#/cmp-v2-ui-api
      *
      * @example
-     * cy.acceptCookieNotice()
+     * cy.hideCookieConsent()
      */
-    acceptCookieNotice(): Chainable<Window>,
+    hideCookieConsent(): Chainable<Window>,
 
     /**
      * Set local storage to mark language modal as clicked away.

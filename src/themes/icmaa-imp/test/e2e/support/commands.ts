@@ -130,7 +130,6 @@ Cypress.Commands.overwrite('visit', (originalFn, url, options?) => {
 
   if (options?.returningVisitor) {
     cy.hideLanguageModal()
-      .acceptCookieNotice()
   }
 
   cy.getStoreCode().then(storeCode => {
@@ -140,8 +139,8 @@ Cypress.Commands.overwrite('visit', (originalFn, url, options?) => {
 
     url = `${storeCode}${url}`
 
-    options = _.omit(options, ['storeCode', 'returningVisitor'])
-    cy.then(() => originalFn(url, options))
+    const originalFnOptions = _.omit(options, ['storeCode', 'returningVisitor'])
+    cy.then(() => originalFn(url, originalFnOptions))
   })
 })
 
@@ -302,11 +301,14 @@ Cypress.Commands.add('isLoggedIn', (status: boolean = true) => {
   cy.get('@accountButton').should('have.class', status ? 'logged-in' : 'logged-out')
 })
 
-Cypress.Commands.add('acceptCookieNotice', () => {
-  localStorage.setItem(
-    'shop/uniClaims/cookiesAccepted',
-    `{ "code": "cookiesAccepted", "created_at": "${new Date().toISOString()}", "value": true }`
-  )
+Cypress.Commands.add('hideCookieConsent', () => {
+  cy.window().then(window => {
+    return new Promise<void>(resolve => {
+      window.UC_UI_SUPPRESS_CMP_DISPLAY = true
+      resolve()
+    })
+  })
+  cy.log('Surpress cookie-consent dialog')
 })
 
 Cypress.Commands.add('hideLanguageModal', () => {

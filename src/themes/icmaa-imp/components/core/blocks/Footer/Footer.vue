@@ -58,6 +58,9 @@
                 {{ link.name }}
               </router-link>
             </template>
+            <a href="#" onClick="UC_UI.showSecondLayer(); return false;" class="t-flex-initial t-px-4 t-text-white t-text-xs t-uppercase">
+              {{ $t("Privacy Settings") }}
+            </a>
             <div class="t-hidden t-flex-expand lg:t-flex" />
             <div class="copyright t-px-4 t-hidden lg:t-flex t-text-white t-text-xs t-uppercase" v-html="copyright" />
           </div>
