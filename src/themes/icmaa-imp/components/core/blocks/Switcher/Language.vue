@@ -62,11 +62,6 @@ export default {
         this.setLanguageAccepted(this.currentStoreView.storeCode)
       }
     }
-  },
-  mounted () {
-    this.$nextTick(() => {
-      this.$store.dispatch('ui/showModal', 'modal-switcher')
-    })
   }
 }
 </script>
