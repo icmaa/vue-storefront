@@ -17,7 +17,7 @@ export default {
   },
   methods: {
     showLanguagesModal () {
-      this.$bus.$emit('modal-toggle-switcher')
+      this.$store.dispatch('ui/showModalImmediately', 'modal-switcher')
     }
   }
 }
