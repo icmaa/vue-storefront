@@ -34,7 +34,6 @@
       <no-ssr>
         <auth-modal />
         <notifications />
-        <cookie-notification />
         <offline-badge />
       </no-ssr>
     </div>
@@ -52,7 +51,6 @@ import Overlay from 'theme/components/core/Overlay'
 import Loader from 'theme/components/core/Loader'
 import Notifications from 'theme/components/core/blocks/Notification/Notifications'
 import AuthModal from 'theme/components/core/blocks/Auth/Modal'
-import CookieNotification from 'theme/components/core/CookieNotification'
 import OfflineBadge from 'theme/components/core/OfflineBadge'
 import { isServer } from '@vue-storefront/core/helpers'
 import viewportMixin from 'theme/mixins/viewportMixin.ts'
@@ -105,6 +103,7 @@ export default {
     })
   },
   mounted () {
+    this.$store.dispatch('ui/initModalDelay')
     this.fetchCmsData()
   },
   metaInfo () {
@@ -134,7 +133,6 @@ export default {
     Loader,
     Notifications,
     AuthModal,
-    CookieNotification,
     OfflineBadge,
     AsyncSidebar,
     'no-ssr': NoSSR

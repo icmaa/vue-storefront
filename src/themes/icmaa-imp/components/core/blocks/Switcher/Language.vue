@@ -23,7 +23,7 @@
 import config from 'config'
 import { currentStoreView } from '@vue-storefront/core/lib/multistore'
 
-import Modal from 'theme/components/core/Modal.vue'
+import Modal from 'theme/components/core/Modal'
 import LanguageButton from 'theme/components/core/blocks/Switcher/LanguageButton'
 
 export default {
@@ -62,11 +62,6 @@ export default {
         this.setLanguageAccepted(this.currentStoreView.storeCode)
       }
     }
-  },
-  mounted () {
-    this.$nextTick(() => {
-      this.$store.dispatch('ui/showModal', 'modal-switcher')
-    })
   }
 }
 </script>

@@ -773,8 +773,7 @@
   },
   "expireHeaders": {
     "default": "30d",
-    "application/json": "24h",
-    "image/png": "7d"
+    "application/json": "24h"
   },
   "newsletter": {
     "endpoint": "/api/ext/mailchimp-subscribe/subscribe"

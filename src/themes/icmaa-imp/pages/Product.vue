@@ -13,7 +13,7 @@
           <category-extras-header class="t--mx-8 t--mt-8 t-mb-8 lg:t-pl-px t-border-b t-border-base-lightest" :linked-banner="true" :banner-sizes="categoryHeaderBannerSizes" :spotify-logo-limit="spotifyLogoLimit">
             <div class="t-flex" v-if="category">
               <button-component size="sm" @click="goToDepartmentCategory()">
-                {{ $t('More product\'s') }}
+                {{ $t('More products') }}
               </button-component>
             </div>
           </category-extras-header>

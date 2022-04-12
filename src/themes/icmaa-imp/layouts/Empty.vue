@@ -6,7 +6,6 @@
       <slot />
       <auth-modal />
       <notifications />
-      <cookie-notification />
     </div>
   </div>
 </template>
@@ -18,7 +17,6 @@ import Overlay from 'theme/components/core/Overlay'
 import Loader from 'theme/components/core/Loader'
 import Notifications from 'theme/components/core/blocks/Notification/Notifications'
 import AuthModal from 'theme/components/core/blocks/Auth/Modal'
-import CookieNotification from 'theme/components/core/CookieNotification'
 import viewportMixin from 'theme/mixins/viewportMixin.ts'
 
 export default {
@@ -26,8 +24,7 @@ export default {
     Overlay,
     Loader,
     Notifications,
-    AuthModal,
-    CookieNotification
+    AuthModal
   },
   mixins: [ viewportMixin ],
   computed: {
@@ -40,6 +37,9 @@ export default {
     fetchMetaData () {
       return this.$store.dispatch('icmaaMeta/load')
     }
+  },
+  mounted () {
+    this.$store.dispatch('ui/initModalDelay')
   },
   serverPrefetch () {
     return Promise.all([

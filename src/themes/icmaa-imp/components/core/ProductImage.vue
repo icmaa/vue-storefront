@@ -1,7 +1,22 @@
 <template>
   <picture>
-    <source v-for="(sImage, i) in sourceImages" :key="i + '-' + sImage.key" :media="sImage.media" :data-srcset="sImage.srcset" :alt="alt + ` - ${sImage.width}px`">
-    <img :src="placeholder" :data-src="defaultImage.src" :data-srcset="`${defaultImage.src} 1x, ${defaultImage.srcAt2x} 2x`" class="product-image t-w-full" v-bind="$attrs" v-on="$listeners" :alt="alt" ref="image">
+    <source
+      v-for="(sImage, i) in sourceImages"
+      :key="i + '-' + sImage.key"
+      :media="sImage.media"
+      :data-srcset="sImage.srcset"
+      :alt="alt + ` - ${sImage.width}px`"
+    >
+    <img
+      :src="placeholder"
+      :data-src="defaultImage.src"
+      :data-srcset="`${defaultImage.src} 1x, ${defaultImage.srcAt2x} 2x`"
+      class="product-image t-w-full"
+      v-bind="$attrs"
+      v-on="$listeners" :alt="alt" ref="image"
+      :width="width"
+      :height="height"
+    >
   </picture>
 </template>
 
@@ -22,6 +37,14 @@ export default {
     alt: {
       type: String,
       default: ''
+    },
+    width: {
+      type: Number,
+      default: 186
+    },
+    height: {
+      type: Number,
+      default: 269
     },
     sizes: {
       type: [Array, Boolean],
@@ -48,8 +71,9 @@ export default {
         // Order high-to-low is important
         { media: '(min-width: 1280px)', width: 300 },
         { media: '(min-width: 1024px)', width: 236 },
-        { media: '(min-width: 415px)', width: 364 },
-        { media: '(max-width: 414px)', width: 188 }
+        { media: '(min-width: 620px)', width: 364 },
+        { media: '(min-width: 425px)', width: 255 },
+        { media: '(max-width: 424px)', width: 193 }
       ]
     },
     sourceImages () {

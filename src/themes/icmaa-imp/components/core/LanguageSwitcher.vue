@@ -1,6 +1,6 @@
 <template>
   <div>
-    <modal-switcher v-if="loadLanguagesModal" :store-recommendation-advice="storeRecommendationAdvice" :change-store-advice="isStoreAdviceVisible" />
+    <modal-switcher :store-recommendation-advice="storeRecommendationAdvice" :change-store-advice="isStoreAdviceVisible" />
     <modal-advice v-if="loadLanguageAdviceModal" :current="claim.value" />
   </div>
 </template>
@@ -22,7 +22,6 @@ export default {
   data () {
     return {
       claim: false,
-      loadLanguagesModal: false,
       loadLanguageAdviceModal: false,
       storeRecommendationAdvice: false,
       languageAccepted: false
@@ -72,12 +71,6 @@ export default {
     async getClaim () {
       return this.$store.dispatch('claims/check', { claimCode: 'languageAccepted' })
     },
-    showLanguagesModal (storeRecommendationAdvice = false) {
-      this.loadLanguagesModal = true
-      this.storeRecommendationAdvice = storeRecommendationAdvice
-
-      this.$store.dispatch('ui/showModal', 'modal-switcher')
-    },
     async onStoreViewChanged (fetchClaim = false) {
       if (fetchClaim) {
         await this.getClaim()
@@ -91,12 +84,6 @@ export default {
         this.loadLanguageAdviceModal = true
       }
     }
-  },
-  beforeMount () {
-    this.$bus.$on('modal-toggle-switcher', this.showLanguagesModal)
-  },
-  destroyed () {
-    this.$bus.$off('modal-toggle-switcher', this.showLanguagesModal)
   },
   async mounted () {
     this.claim = await this.getClaim()
@@ -120,7 +107,9 @@ export default {
     })
 
     if (!this.isCorrectStoreviewLanguage) {
-      this.showLanguagesModal(true)
+      this.storeRecommendationAdvice = true
+      this.$store.dispatch('ui/setModalDelay', { name: 'modal-switcher' })
+      this.$store.dispatch('ui/showModal', 'modal-switcher')
     }
   }
 }

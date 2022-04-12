@@ -20,7 +20,7 @@
 
 <script>
 import onEscapePress from '@vue-storefront/core/mixins/onEscapePress'
-import { mapMutations, mapGetters } from 'vuex'
+import { mapGetters } from 'vuex'
 import { disableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock'
 
 import { uiHooksExecutors } from 'theme/hooks/ui'
@@ -82,7 +82,6 @@ export default {
     }
   },
   methods: {
-    ...mapMutations('ui', ['setOverlay']),
     close () {
       this.$store.dispatch('ui/hideModal', this.name)
       this.$emit('close', this)

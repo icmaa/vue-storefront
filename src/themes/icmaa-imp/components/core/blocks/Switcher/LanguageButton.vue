@@ -6,7 +6,6 @@
 </template>
 
 <script>
-import config from 'config'
 import FlagIcon from 'theme/components/core/blocks/FlagIcon'
 
 export default {
