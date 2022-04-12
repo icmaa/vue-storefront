@@ -6,7 +6,7 @@
 
     <div class="t-w-2/3 t-flex t-flex-col t-py-2">
       <div class="t-mb-4 t-leading-tight t-text-sm">
-        {{ translatedProductName | htmlDecode }}
+        {{ product.translatedName | htmlDecode }}
       </div>
 
       <div class="t-flex-grow">

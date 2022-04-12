@@ -14,7 +14,7 @@
         class="t-block t-border t-border-base-lightest t-mb-2"
       />
     </div>
-    <p class="t-text-xs t-leading-tight t-mb-1" v-text="translatedProductName" />
+    <p class="t-text-xs t-leading-tight t-mb-1" v-text="product.translatedName" />
     <product-price :product="product" :alt="product.name | htmlDecode" class="t-text-xs" />
   </div>
 </template>
@@ -23,14 +23,12 @@
 
 import { mapGetters } from 'vuex'
 import productsEquals from '@vue-storefront/core/modules/cart/helpers/productsEquals'
-import ProductNameMixin from 'icmaa-catalog/mixins/ProductNameMixin'
 import ProductImage from 'theme/components/core/ProductImage'
 import ProductPrice from 'theme/components/core/blocks/ProductTile/Price'
 import MaterialIcon from 'theme/components/core/blocks/MaterialIcon'
 
 export default {
   name: 'AdditionalProduct',
-  mixins: [ ProductNameMixin ],
   components: {
     ProductImage,
     ProductPrice,

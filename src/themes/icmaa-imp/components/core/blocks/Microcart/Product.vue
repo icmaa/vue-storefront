@@ -9,7 +9,7 @@
     <div class="t-w-2/3 t-flex t-flex-col t-py-2">
       <div class="t-mb-4 t-leading-tight">
         <router-link class="t-text-primary t-text-sm" :to="productLink" data-test-id="productLink" @click.native="$store.dispatch('ui/setSidebar', { key: 'microcart', status: false })">
-          {{ translatedProductName | htmlDecode }}
+          {{ product.translatedName | htmlDecode }}
         </router-link>
       </div>
 
