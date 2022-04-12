@@ -301,6 +301,16 @@ Cypress.Commands.add('isLoggedIn', (status: boolean = true) => {
   cy.get('@accountButton').should('have.class', status ? 'logged-in' : 'logged-out')
 })
 
+Cypress.Commands.add('hideCookieConsent', () => {
+  cy.window().then(window => {
+    return new Promise<void>(resolve => {
+      window.UC_UI_SUPPRESS_CMP_DISPLAY = true
+      resolve()
+    })
+  })
+  cy.log('Surpress cookie-consent dialog')
+})
+
 Cypress.Commands.add('hideLanguageModal', () => {
   cy.getStoreCode().then(storeCode => {
     /**
