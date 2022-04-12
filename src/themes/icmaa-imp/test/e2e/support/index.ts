@@ -34,8 +34,15 @@ beforeEach(() => {
   cy.clearLocalStorage()
   cy.clearCookies()
 
-  cy.on('window:before:load', () => {
-    cy.hideCookieConsent()
+  cy.on('window:before:load', window => {
+    /**
+     * This seems the only way it is working /w Electron – If we load it using `cy.hideCookieConsent()`
+     * it works in the browser but not in headless-mode or Electron. After excessive try-n-error this
+     * seems the only working solution and is slightly conform to the Usercentrics docs.
+     * @see https://docs.usercentrics.com/#/cmp-v2-ui-api
+     */
+    window.UC_UI_SUPPRESS_CMP_DISPLAY = true
+    cy.log('Surpress cookie-consent dialog')
   })
 
   cy.wrap(false).as('storeCode')
