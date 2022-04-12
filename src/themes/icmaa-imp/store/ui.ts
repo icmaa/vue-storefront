@@ -88,8 +88,8 @@ export const uiStore = {
       const modal = Object.assign({}, state.modals[name], { priority })
       Vue.set(state.modals, name, modal)
     },
-    addModalDelay (state, name) {
-      const modal = Object.assign({}, state.modals[name], { delayed: true })
+    setModalDelay (state, { name, delayed }) {
+      const modal = Object.assign({}, state.modals[name], { delayed })
       Vue.set(state.modals, name, modal)
     },
     setModalInitialTimeout (state, value = false) {
@@ -161,7 +161,7 @@ export const uiStore = {
     setSidebarNavigationGenderChange ({ commit }, value) {
       commit('setSidebarNavigationGenderChange', value)
     },
-    toggleModal ({ dispatch, commit, getters, state }, item: { name: string, visible?: boolean, delayed?: boolean, queued?: boolean }) {
+    toggleModal ({ commit, getters, state }, item: { name: string, visible?: boolean, delayed?: boolean, queued?: boolean }) {
       item = Object.assign({}, state.modals[item.name], item)
       if (state.modalInitTimeout === true && item.delayed === true) {
         item.queued = true
@@ -185,14 +185,17 @@ export const uiStore = {
     showModal ({ dispatch }, name: string) {
       dispatch('toggleModal', { name, visible: true })
     },
+    showModalImmediately ({ dispatch }, name: string) {
+      dispatch('toggleModal', { name, visible: true, delayed: false })
+    },
     hideModal ({ dispatch }, name: string) {
       dispatch('toggleModal', { name, visible: false })
     },
     setModalPriority ({ commit }, { name, priority }) {
       commit('setModalPriority', { name, priority })
     },
-    addModalDelay ({ commit }, name) {
-      commit('addModalDelay', name)
+    setModalDelay ({ commit }, { name, delayed = true }) {
+      commit('setModalDelay', { name, delayed })
     },
     initModalDelay ({ state, dispatch, commit }) {
       setTimeout(() => {

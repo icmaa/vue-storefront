@@ -107,7 +107,7 @@ export default {
     },
     showLanguageSwitcher () {
       this.closeMenu()
-      this.$bus.$emit('modal-toggle-switcher')
+      this.$store.dispatch('ui/showModalImmediately', 'modal-switcher')
     }
   }
 }
