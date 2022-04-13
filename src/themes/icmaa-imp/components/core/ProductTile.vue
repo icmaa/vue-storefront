@@ -15,7 +15,7 @@
     </div>
     <router-link :to="productLink" tag="div" class="t-text-sm" v-if="!onlyImage">
       <p class="t-text-primary t-leading-tight" :class="{ 't-mb-1': showPrice }" data-test-id="ProductName">
-        {{ translatedProductName | htmlDecode }}
+        {{ product.translatedName | htmlDecode }}
       </p>
       <price v-if="showPrice" :product="product" />
     </router-link>
@@ -30,13 +30,12 @@ import WishlistButton from 'theme/components/core/blocks/Wishlist/WishlistButton
 import PromoBanner from 'theme/components/core/blocks/ProductTile/PromoBanner'
 import Price from 'theme/components/core/blocks/ProductTile/Price'
 import ProductTileMixin from 'theme/mixins/product/tileMixin'
-import ProductNameMixin from 'icmaa-catalog/mixins/ProductNameMixin'
 import ProductOptionsMixin from 'theme/mixins/product/optionsMixin'
 import ProductAddToCartMixin from 'theme/mixins/product/addtocartMixin'
 
 export default {
   name: 'ProductTile',
-  mixins: [ ProductTileMixin, ProductNameMixin, ProductOptionsMixin, ProductAddToCartMixin ],
+  mixins: [ ProductTileMixin, ProductOptionsMixin, ProductAddToCartMixin ],
   components: {
     MaterialIcon,
     ProductImage,

@@ -2,7 +2,7 @@
   <router-link :to="productLink" tag="li" class="t-flex t-flex-wrap t-px-2 t-bg-white t-py-4 t-cursor-pointer">
     <div class="t-w-full md:t-w-7/12 t-px-2 t-flex-grow">
       <div class="t-text-primary t-mb-2 md:t-mb-0 t-leading-tight md:t-leading-normal">
-        {{ translatedProductName }}
+        {{ product.translatedName }}
       </div>
       <div class="t-text-sm">
         <span v-text="product.ticket_city" />
@@ -41,13 +41,12 @@
 import ProductAvailability from 'theme/components/core/blocks/Product/ProductAvailability'
 import ButtonComponent from 'theme/components/core/blocks/Button'
 import ProductTileMixin from 'theme/mixins/product/tileMixin'
-import ProductNameMixin from 'icmaa-catalog/mixins/ProductNameMixin'
 import ProductPriceMixin from 'theme/mixins/product/priceMixin'
 import { toDate } from 'icmaa-config/helpers/datetime'
 
 export default {
   name: 'ProductTicketTile',
-  mixins: [ProductTileMixin, ProductNameMixin, ProductPriceMixin],
+  mixins: [ProductTileMixin, ProductPriceMixin],
   components: {
     ProductAvailability,
     ButtonComponent

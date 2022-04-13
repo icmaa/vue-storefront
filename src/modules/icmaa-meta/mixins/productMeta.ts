@@ -11,6 +11,9 @@ export default {
     currencyCode () {
       return this.storeConfig ? this.storeConfig.i18n.currencyCode : ''
     },
+    translatedName () {
+      return this.product.translatedName
+    },
     productPrice () {
       return this.product.original_price_incl_tax || this.productFinalPrice
     },
@@ -42,12 +45,12 @@ export default {
   },
   metaInfo () {
     return {
-      title: this.translatedProductName,
+      title: this.translatedName,
       meta: [
         { vmid: 'description', name: 'description', content: htmlDecode(this.product.description) },
-        { vmid: 'og:title', property: 'og:title', content: htmlDecode(this.translatedProductName) },
+        { vmid: 'og:title', property: 'og:title', content: htmlDecode(this.translatedName) },
         { vmid: 'og:type', property: 'og:type', content: 'product' },
-        { name: 'product.name', content: htmlDecode(this.translatedProductName) },
+        { name: 'product.name', content: htmlDecode(this.translatedName) },
         { name: 'product.final_price', content: this.productFinalPrice },
         { name: 'product.price', content: this.productPrice },
         { name: 'product:condition', content: 'new' },
