@@ -130,7 +130,7 @@ export default {
         '@context': 'https://schema.org/',
         '@type': 'Product',
         'sku': this.product.parentSku || this.product.sku,
-        'name': this.product.name.trim(),
+        'name': this.product.translatedName.trim(),
         'image': this.images,
         'description': this.description,
         ...this.brand,

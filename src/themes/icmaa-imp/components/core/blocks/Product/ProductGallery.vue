@@ -29,7 +29,7 @@
             v-for="(image, i) in images"
             :key="'zoom-' + product.sku + '-' + i"
             :image="image"
-            :alt="product.name | htmlDecode"
+            :alt="product.translatedName | htmlDecode"
             :sizes="sizes"
             :type="zoom ? 'fullsize' : 'gallery'"
             :enable-auto-reload="true"

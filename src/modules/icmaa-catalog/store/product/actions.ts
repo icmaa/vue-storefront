@@ -53,7 +53,7 @@ const actions: ActionTree<ProductState, RootState> = {
     if (product && product.category_ids) {
       const routes = rootGetters['breadcrumbs/getBreadcrumbsRoutes']
       if (routes.length > 0 && rootGetters['breadcrumbs/isPreserved']) {
-        await dispatch('breadcrumbs/set', { current: product.name, routes, preserve: false }, { root: true })
+        await dispatch('breadcrumbs/set', { current: product.translatedName, routes, preserve: false }, { root: true })
         return
       }
 
