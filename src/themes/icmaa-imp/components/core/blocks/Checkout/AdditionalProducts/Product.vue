@@ -9,7 +9,7 @@
       </div>
       <product-image
         :image="product.image"
-        :alt="product.name | htmlDecode"
+        :alt="product.translatedName | htmlDecode"
         data-test-id="productImage"
         class="t-block t-border t-border-base-lightest t-mb-2"
       />
