@@ -2,13 +2,13 @@
   <li class="t-w-full t-flex t-mr-4 t-py-2">
     <div class="t-w-1/3 t-mr-4">
       <router-link :to="productLink">
-        <product-image :image="thumbnail" :alt="product.name | htmlDecode" />
+        <product-image :image="thumbnail" :alt="product.translatedName | htmlDecode" />
       </router-link>
     </div>
     <div class="t-w-2/3 t-flex t-flex-col t-py-2 t-justify-between">
       <div class="t-mb-2">
         <router-link :to="productLink" class="t-block t-text-primary t-w-full t-text-sm t-leading-tight">
-          {{ product.name | htmlDecode }}
+          {{ product.translatedName | htmlDecode }}
         </router-link>
       </div>
       <div class="t-text-sm t-text-base-light t-pb-4 t-mb-2">

@@ -3,10 +3,8 @@ import config from 'config'
 import i18n from '@vue-storefront/i18n'
 import { price } from '@vue-storefront/core/filters/price'
 import { Logo } from 'icmaa-category-extras/helpers/categoryExtras/logo'
-import ProductNameMixin from 'icmaa-catalog/mixins/ProductNameMixin'
 
 export default {
-  mixins: [ProductNameMixin],
   async asyncData ({ store, context }) {
     if (context) {
       context.output.cacheTags.add(`product`)
@@ -58,7 +56,7 @@ export default {
       return this.departmentBrandOptionLabel !== this.departmentBrandValue
     },
     productName () {
-      let name = this.translatedProductName
+      let name = this.product.translatedName
       const regex = this.hasDepartmentBrandOptionLabel
         ? new RegExp('/^(' + this.departmentBrandOptionLabel + '*?)(\\s-\\s)/')
         : /^(.*?)(\s-\s)/
@@ -74,7 +72,7 @@ export default {
     webshareText () {
       return i18n.t(
         'Checkout this out: {name} for {price}',
-        { name: this.translatedProductName, price: this.formattedProductPrice }
+        { name: this.product.translatedName, price: this.formattedProductPrice }
       )
     },
     reviewRating () {

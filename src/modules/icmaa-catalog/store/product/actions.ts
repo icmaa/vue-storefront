@@ -53,7 +53,7 @@ const actions: ActionTree<ProductState, RootState> = {
     if (product && product.category_ids) {
       const routes = rootGetters['breadcrumbs/getBreadcrumbsRoutes']
       if (routes.length > 0 && rootGetters['breadcrumbs/isPreserved']) {
-        await dispatch('breadcrumbs/set', { current: product.name, routes, preserve: false }, { root: true })
+        await dispatch('breadcrumbs/set', { current: product.translatedName, routes, preserve: false }, { root: true })
         return
       }
 
@@ -77,7 +77,7 @@ const actions: ActionTree<ProductState, RootState> = {
         breadcrumbCategory = categories.sort((a, b) => (a.level > b.level) ? -1 : 1)[0] // sort starting by deepest level
       }
 
-      await dispatch('category-next/loadCategoryBreadcrumbs', { category: breadcrumbCategory, currentRouteName: product.name, preserve: false }, { root: true })
+      await dispatch('category-next/loadCategoryBreadcrumbs', { category: breadcrumbCategory, currentRouteName: product.translatedName, preserve: false }, { root: true })
     }
   },
   /**

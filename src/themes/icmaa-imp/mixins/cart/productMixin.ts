@@ -2,7 +2,6 @@ import { mapGetters } from 'vuex'
 import { currentStoreView } from '@vue-storefront/core/lib/multistore'
 import { productThumbnailPath } from '@vue-storefront/core/helpers'
 import { formatProductLink } from 'icmaa-url/helpers'
-import ProductNameMixin from 'icmaa-catalog/mixins/ProductNameMixin'
 
 import last from 'lodash-es/last'
 
@@ -13,7 +12,6 @@ export default {
       required: true
     }
   },
-  mixins: [ ProductNameMixin ],
   computed: {
     ...mapGetters({
       freeCartItems: 'cart/getFreeCartItems',

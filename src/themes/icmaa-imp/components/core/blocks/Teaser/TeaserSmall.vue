@@ -1,12 +1,12 @@
 <template>
   <div data-test-id="TeaserSmall" class="teaser-small t-flex-fix t-w-1/2 lg:t-w-1/4 t-px-4 t-flex t-flex-col t-relative t-cursor-pointer t-webkit-tap-transparent" @click="redirect" @mouseover="onHover" @mouseleave="onHover">
     <div class="t-absolute t-top-0 t-right-0 t-text-sm t-py-2 t-px-3 t-mr-4" :class="{ 't-text-white': !textColor, 't-bg-base-primary': !backgroundColor }" :style="{ 'background-color': backgroundColor, 'color': textColor }" v-if="teaser.buttonText">
-      {{ teaser.buttonText | translate }}
+      {{ teaser.buttonText }}
     </div>
-    <picture-component :src="imageUrl" :alt="teaser.text1 | translate | htmlDecode" :width="288" :height="288" :placeholder="true" :sizes="sizes" ratio="1:1" class="t-flex-fix t-min-w-full t-max-w-full" />
+    <picture-component :src="imageUrl" :alt="teaser.text1 | htmlDecode" :width="288" :height="288" :placeholder="true" :sizes="sizes" ratio="1:1" class="t-flex-fix t-min-w-full t-max-w-full" />
     <h2 class="t-flex-grow t-text-sm t-text-primary t-leading-tight t-pt-4">
-      <router-link :to="link" @click.native="setGender" :title="teaser.text1 | translate | htmlDecode" class="t-text-primary">
-        {{ teaser.text1 | translate }}
+      <router-link :to="link" @click.native="setGender" :title="teaser.text1 | htmlDecode" class="t-text-primary">
+        {{ teaser.text1 }}
       </router-link>
     </h2>
     <edit-button :edit-url="editUrl" class="t-left-0 t-ml-2 t--mt-2" :class="{ 't-hidden': !hover }" />

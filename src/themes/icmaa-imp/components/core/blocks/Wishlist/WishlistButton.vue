@@ -99,7 +99,7 @@ export default {
       await this.$store.dispatch(`wishlist/${actionNameMap[action]}`, this.product)
       this.$store.dispatch('notification/spawnNotification', {
         type: 'success',
-        message: i18n.t(message, { productName: htmlDecode(this.product.name) }),
+        message: i18n.t(message, { productName: htmlDecode(this.product.translatedName) }),
         action1: { label: i18n.t('OK') }
       }, { root: true })
 

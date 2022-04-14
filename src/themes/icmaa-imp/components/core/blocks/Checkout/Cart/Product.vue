@@ -1,12 +1,12 @@
 <template>
   <li class="t-flex t-py-2 t-border-b t-border-base-lightest">
     <div class="t-w-1/3 t-mr-4">
-      <product-image :image="thumbnail" :alt="product.name | htmlDecode" />
+      <product-image :image="thumbnail" :alt="product.translatedName | htmlDecode" />
     </div>
 
     <div class="t-w-2/3 t-flex t-flex-col t-py-2">
       <div class="t-mb-4 t-leading-tight t-text-sm">
-        {{ translatedProductName | htmlDecode }}
+        {{ product.translatedName | htmlDecode }}
       </div>
 
       <div class="t-flex-grow">
