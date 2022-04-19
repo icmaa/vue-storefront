@@ -61,11 +61,11 @@ jobs:
         uses: google-github-actions/setup-gcloud@v0
 
       - name: Upload files to Google Cloud CDN
-        id: 'upload-folder'
-        uses: 'google-github-actions/upload-cloud-storage@v0'
+        id: upload-folder
+        uses: google-github-actions/upload-cloud-storage@v0
         with:
-          path: 'dist'
-          destination: 'icmaa-${{ matrix.env.MANDANT }}-${{ env.ENV == "production" && "prod" || "test" }}-vsf-assets'
+          path: dist
+          destination: icmaa-${{ matrix.env.MANDANT }}-${{ env.ENV == 'production' && 'prod' || 'test' }}-vsf-assets
 
       - name: Build and deploy in GCP
         run: |
