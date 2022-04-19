@@ -1,5 +1,5 @@
 import { Logger } from '@vue-storefront/core/lib/logger'
-import localForage from 'localforage'
+import * as localForage from 'localforage'
 import UniversalStorage from '@vue-storefront/core/lib/store/storage'
 import { currentStoreView } from '@vue-storefront/core/lib/multistore'
 import config from 'config'
