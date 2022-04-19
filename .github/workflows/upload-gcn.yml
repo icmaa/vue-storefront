@@ -53,8 +53,8 @@ jobs:
         with:
           credentials_json: ${{ env.ENV == 'production' && secrets.GCP_VSF_SA_KEY_PROD || secrets.GCP_VSF_SA_KEY_TEST }}
 
-      - name: Set up GCP Cloud SDK
-        uses: google-github-actions/setup-gcloud@v0
+      # - name: Set up GCP Cloud SDK
+      #   uses: google-github-actions/setup-gcloud@v0
 
       - id: 'upload-folder'
         uses: 'google-github-actions/upload-cloud-storage@v0'
