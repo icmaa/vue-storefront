@@ -65,7 +65,7 @@ jobs:
         uses: 'google-github-actions/upload-cloud-storage@v0'
         with:
           path: 'dist'
-          destination: 'icmaa-${{ matrix.env.MANDANT }}-${{ env.ENV == 'production' && 'prod' || 'test' }}-vsf-assets'
+          destination: 'icmaa-${{ matrix.env.MANDANT }}-${{ env.ENV == "production" && "prod" || "test" }}-vsf-assets'
 
       - name: Build and deploy in GCP
         run: |
