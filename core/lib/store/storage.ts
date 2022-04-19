@@ -1,4 +1,4 @@
-import * as localForage from 'localforage'
+import localForage from 'localforage'
 import { Logger } from '@vue-storefront/core/lib/logger'
 import { isServer } from '@vue-storefront/core/helpers'
 import cloneDeep from 'lodash-es/cloneDeep'
