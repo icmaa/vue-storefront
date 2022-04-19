@@ -60,7 +60,7 @@ jobs:
         uses: 'google-github-actions/upload-cloud-storage@v0'
         with:
           path: 'src'
-          destination: 'icmaa-imp-test-vsf-assets/src'
+          destination: 'icmaa-imp-test-vsf-assets'
 
       # - name: Build and deploy in GCP
       #   run: |
