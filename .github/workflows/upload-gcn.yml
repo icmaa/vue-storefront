@@ -1,13 +1,9 @@
-name: Continuous Delivery (GCR)
+name: Continuous Delivery (CDN)
 
 on:
   push:
     branches:
-      - master
-      - master-*
-      - develop
-      - develop-*
-      - build/*
+      - feature/cloud-cdn
 
 jobs:
 
@@ -60,7 +56,14 @@ jobs:
       - name: Set up GCP Cloud SDK
         uses: google-github-actions/setup-gcloud@v0
 
-      - name: Build and deploy in GCP
-        run: |
-          gcloud builds submit --quiet --config cloudbuild-${{ matrix.env.MANDANT }}-${{ env.ENV == 'production' && 'prod' || 'test' }}.yaml
-          gcloud run deploy ${{ env.APP }} --region europe-west3 --image europe-docker.pkg.dev/icmaa-shop-imp-${{ env.ENV == 'production' && 'prod' || 'test' }}-01/eu.gcr.io/${{ env.APP }}:latest
+      - id: 'upload-folder'
+        uses: 'google-github-actions/upload-cloud-storage@v0'
+        with:
+          path: '/dist'
+          destination: 'icmaa-imp-test-vsf'
+          parent: false
+
+      # - name: Build and deploy in GCP
+      #   run: |
+      #     gcloud builds submit --quiet --config cloudbuild-${{ matrix.env.MANDANT }}-${{ env.ENV == 'production' && 'prod' || 'test' }}.yaml
+      #     gcloud run deploy ${{ env.APP }} --region europe-west3 --image europe-docker.pkg.dev/icmaa-shop-imp-${{ env.ENV == 'production' && 'prod' || 'test' }}-01/eu.gcr.io/${{ env.APP }}:latest
