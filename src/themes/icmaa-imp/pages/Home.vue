@@ -1,14 +1,43 @@
 <template>
   <div id="home" class="t-container">
-    <teaser tags="2" :show-split="false" class="sm:t-pt-4 t-pb-8" />
-    <link-list :title="topCategories.title" :items="topCategories.items" class="t-pb-4" />
-    <teaser tags="21" :show-large="false" :show-small-in-row="true" class="t-pb-8" />
-    <teaser tags="2" :show-large="false" :limit="3" class="t-pb-8" />
-    <teaser tags="20" :show-large="false" :show-small-in-row="true" class="t-pb-8" />
+    <teaser
+      tags="2"
+      :show-split="false"
+      class="sm:t-pt-4 t-pb-8"
+    />
+    <link-list
+      :title="topCategories.title"
+      :items="topCategories.items"
+      class="t-pb-4"
+    />
+    <teaser
+      tags="21"
+      :show-large="false"
+      :show-small-in-row="true"
+      class="t-pb-8"
+    />
+    <teaser
+      tags="2"
+      :show-large="false"
+      :limit="3"
+      class="t-pb-8"
+    />
+    <teaser
+      tags="20"
+      :show-large="false"
+      :show-small-in-row="true"
+      class="t-pb-8"
+    />
     <lazyload data-test-id="LogoLineBlockLoader">
       <div class="t-flex t-flex-wrap t-px-4 t--mx-4 t-pb-4">
-        <logo-line :parent-id="16" path="/merchandise" :title="'Bands'" class="t-mb-4 lg:t-mb-0" />
-        <logo-line :parent-id="4681" path="/fashion" :title="'Brands'" />
+        <logo-line
+          v-for="({ path, title, logos }, i) in logolines"
+          :key="path"
+          :path="path"
+          :title="title"
+          :items="logos"
+          :class="{ 't-mb-4 lg:t-mb-0': i < logolines.length - 1 }"
+        />
       </div>
     </lazyload>
     <lazyload data-test-id="ProductListingWidgetLoader">
@@ -22,6 +51,7 @@
 </template>
 
 <script>
+import config from 'config'
 import { mapGetters } from 'vuex'
 import Lazyload from 'icmaa-cms/components/Lazyload'
 import Teaser from 'theme/components/core/blocks/Teaser/Teaser'
@@ -42,10 +72,25 @@ export default {
   computed: {
     ...mapGetters({
       isLoggedIn: 'user/isLoggedIn',
+      cluster: 'user/getCluster',
       getJsonBlockByIdentifier: 'icmaaCmsBlock/getJsonBlockByIdentifier'
     }),
     topCategories () {
       return this.getJsonBlockByIdentifier('home-top-categories')
+    },
+    logolines () {
+      const noClusterValue = config.icmaa.user.noClusterValue
+      const logolines = this.getJsonBlockByIdentifier('home-logos')
+      return logolines.map(line => {
+        const logos = line.logos.filter(l => {
+          if (!l.cluster || l.cluster.length === 0 || (!this.cluster && l.cluster.includes(noClusterValue))) {
+            return true
+          }
+          return l.cluster.includes(this.cluster)
+        })
+
+        return Object.assign(line, { logos })
+      })
     }
   },
   mounted () {
@@ -75,7 +120,7 @@ export default {
         .add('cms')
     }
 
-    await store.dispatch('icmaaCmsBlock/list', 'home-seo,home-top-categories')
+    await store.dispatch('icmaaCmsBlock/list', 'home-top-categories,home-logos,home-seo')
   }
 }
 </script>

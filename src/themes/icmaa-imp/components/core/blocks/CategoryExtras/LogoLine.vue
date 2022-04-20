@@ -31,8 +31,8 @@ export default {
   },
   props: {
     parentId: {
-      type: Number,
-      required: true
+      type: [Number, Boolean],
+      default: false
     },
     staticItems: {
       type: Array,
@@ -92,7 +92,7 @@ export default {
       return getCategoryExtrasKeyByAttribute(this.type)
     },
     hasStaticItems () {
-      return this.parentId === 0 && this.staticItems.length > 0
+      return !this.parentId && this.staticItems.length > 0
     },
     staticLogoLineItems () {
       return this.staticItems.map(c => new Logo({ category: c.name, link: c.link }))
