@@ -3,11 +3,13 @@ name: Continuous Delivery (GAE)
 on:
   push:
     branches:
-      - master
-      - master-*
-      - develop
-      - develop-*
-      - build/*
+      - never
+      # Skip it for now as we use GCR
+      # - master
+      # - master-*
+      # - develop
+      # - develop-*
+      # - build/*
 
 jobs:
 
