@@ -6,6 +6,7 @@
 import { mapGetters } from 'vuex'
 import { currentStoreView } from '@vue-storefront/core/lib/multistore'
 import { getThumbnailPath } from '@vue-storefront/core/helpers'
+import { htmlDecode } from '@vue-storefront/core/filters'
 import { icmaa_meta } from 'config'
 import { getCurrentStoreviewDayjsDatetime, toDate } from 'icmaa-config/helpers/datetime'
 
@@ -24,7 +25,7 @@ export default {
       getReviews: 'review/getReviews'
     }),
     description () {
-      return (this.product.description || '').trim()
+      return (htmlDecode(this.product.description) || '').trim()
     },
     currency () {
       const storeView = currentStoreView()
