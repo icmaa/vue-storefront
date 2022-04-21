@@ -79,8 +79,10 @@ export default {
       if (this.product.type_id === 'configurable') {
         const offers = []
         this.product.configurable_children.forEach(p => {
+          const gtin = p.gtin ? { gtin: p.gtin } : {}
           offers.push({
             ...defaults,
+            ...gtin,
             'sku': p.sku,
             'price': p.price_incl_tax,
             'availability': 'https://schema.org/' + this.availability(p)
@@ -90,6 +92,8 @@ export default {
         if (offers.length > 0) {
           return { offers }
         }
+      } else if (this.product.gtin) {
+        defaults.gtin = this.product.gtin
       }
 
       return {
