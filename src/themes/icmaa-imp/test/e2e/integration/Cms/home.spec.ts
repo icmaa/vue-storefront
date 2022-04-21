@@ -13,7 +13,7 @@ describe('Homepage', () => {
     cy.getByTestId('LogoLineBlockLoader').scrollIntoView()
     cy.getByTestId('LogoLineBlock').should('have.length', 2)
     // 2 LogoLines
-    cy.getByTestId('LogoLine').should('have.length', 2)
+    cy.getByTestId('LogoLine').should('have.length', 3)
     // 24 LogoItems
     cy.getByTestId('DepartmentLogo').should('have.length', 24)
     // 2 ProductListings
