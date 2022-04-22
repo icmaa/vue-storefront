@@ -11,9 +11,9 @@ describe('Homepage', () => {
     cy.getByTestId('TeaserSmall').first().scrollIntoView().findImageWithPlaceholder().checkImage()
     // 2 LogoLineBlocks
     cy.getByTestId('LogoLineBlockLoader').scrollIntoView()
-    cy.getByTestId('LogoLineBlock').should('have.length', 2)
+    cy.getByTestId('LogoLineBlock').should('have.length', 3)
     // 2 LogoLines
-    cy.getByTestId('LogoLine').should('have.length', 2)
+    cy.getByTestId('LogoLine').should('have.length', 3)
     // 24 LogoItems
     cy.getByTestId('DepartmentLogo').should('have.length', 24)
     // 2 ProductListings
