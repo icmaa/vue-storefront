@@ -390,7 +390,7 @@ Cypress.Commands.add('checkStockApiRequest', () => {
       if (
         response.statusCode === 200 &&
         response.body.result.is_in_stock === true &&
-        response.body.result.qty > 1
+        response.body.result.qty >= 1
       ) {
         cy.wrap(true).as('availability')
       } else {
@@ -450,7 +450,7 @@ Cypress.Commands.add('addRandomProductToCart', (options?: { categoryUrl?: string
   cy.get<boolean>('@availability')
     .then(available => {
       if (!available) {
-        cy.addRandomProductToCart({ tries, enterCheckout }, count + 1)
+        cy.addRandomProductToCart(options, count + 1)
       } else {
         cy.addCurrentProductToCart(false, enterCheckout)
       }
