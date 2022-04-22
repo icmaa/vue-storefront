@@ -93,7 +93,7 @@ export default {
         if (offers.length > 0) {
           return { offers }
         }
-      } else if (this.product.gtin) {
+      } else if (this.product.type_id === 'simple' && this.product.gtin) {
         defaults.gtin = this.product.gtin
       }
 
@@ -130,6 +130,18 @@ export default {
 
       return { reviews }
     },
+    gtin () {
+      if (this.product.type_id === 'simple' && this.product.gtin) {
+        return { gtin: this.product.gtin }
+      } else if (this.product.type_id === 'configurable' &&
+        this.product.configurable_children.length > 0 &&
+        this.product.configurable_children[0].gtin
+      ) {
+        return { gtin: this.product.configurable_children[0].gtin }
+      }
+
+      return {}
+    },
     jsonld () {
       return {
         '@context': 'https://schema.org/',
@@ -138,6 +150,7 @@ export default {
         'name': this.product.translatedName.trim(),
         'image': this.images,
         'description': this.description,
+        ...this.gtin,
         ...this.brand,
         ...this.rating,
         'itemCondition': 'https://schema.org/NewCondition',
