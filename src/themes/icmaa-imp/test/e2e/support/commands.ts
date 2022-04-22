@@ -390,7 +390,7 @@ Cypress.Commands.add('checkStockApiRequest', () => {
       if (
         response.statusCode === 200 &&
         response.body.result.is_in_stock === true &&
-        response.body.result.qty > 1
+        response.body.result.qty >= 1
       ) {
         cy.wrap(true).as('availability')
       } else {
