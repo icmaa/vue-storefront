@@ -6,6 +6,7 @@
 import { mapGetters } from 'vuex'
 import { currentStoreView } from '@vue-storefront/core/lib/multistore'
 import { getThumbnailPath } from '@vue-storefront/core/helpers'
+import { htmlDecode } from '@vue-storefront/core/filters'
 import { icmaa_meta } from 'config'
 import { getCurrentStoreviewDayjsDatetime, toDate } from 'icmaa-config/helpers/datetime'
 
@@ -24,7 +25,7 @@ export default {
       getReviews: 'review/getReviews'
     }),
     description () {
-      return (this.product.description || '').trim()
+      return (htmlDecode(this.product.description) || '').trim()
     },
     currency () {
       const storeView = currentStoreView()
@@ -79,8 +80,10 @@ export default {
       if (this.product.type_id === 'configurable') {
         const offers = []
         this.product.configurable_children.forEach(p => {
+          const gtin = p.gtin ? { gtin: p.gtin } : {}
           offers.push({
             ...defaults,
+            ...gtin,
             'sku': p.sku,
             'price': p.price_incl_tax,
             'availability': 'https://schema.org/' + this.availability(p)
@@ -90,6 +93,8 @@ export default {
         if (offers.length > 0) {
           return { offers }
         }
+      } else if (this.product.type_id === 'simple' && this.product.gtin) {
+        defaults.gtin = this.product.gtin
       }
 
       return {
@@ -125,6 +130,18 @@ export default {
 
       return { reviews }
     },
+    gtin () {
+      if (this.product.type_id === 'simple' && this.product.gtin) {
+        return { gtin: this.product.gtin }
+      } else if (this.product.type_id === 'configurable' &&
+        this.product.configurable_children.length > 0 &&
+        this.product.configurable_children[0].gtin
+      ) {
+        return { gtin: this.product.configurable_children[0].gtin }
+      }
+
+      return {}
+    },
     jsonld () {
       return {
         '@context': 'https://schema.org/',
@@ -133,6 +150,7 @@ export default {
         'name': this.product.translatedName.trim(),
         'image': this.images,
         'description': this.description,
+        ...this.gtin,
         ...this.brand,
         ...this.rating,
         'itemCondition': 'https://schema.org/NewCondition',
