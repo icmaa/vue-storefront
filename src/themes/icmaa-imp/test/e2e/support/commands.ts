@@ -450,7 +450,7 @@ Cypress.Commands.add('addRandomProductToCart', (options?: { categoryUrl?: string
   cy.get<boolean>('@availability')
     .then(available => {
       if (!available) {
-        cy.addRandomProductToCart({ tries, enterCheckout }, count + 1)
+        cy.addRandomProductToCart(options, count + 1)
       } else {
         cy.addCurrentProductToCart(false, enterCheckout)
       }
