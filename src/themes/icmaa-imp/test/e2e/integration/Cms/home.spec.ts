@@ -15,7 +15,7 @@ describe('Homepage', () => {
     // 2 LogoLines
     cy.getByTestId('LogoLine').should('have.length', 2)
     // 24 LogoItems
-    cy.getByTestId('DepartmentLogo').should('have.length', 24)
+    cy.getByTestId('DepartmentLogo').should('have.length', 27)
     // 2 ProductListings
     cy.getByTestId('ProductListingWidget').should('have.length', 2)
     // 2x4 ProductTiles
