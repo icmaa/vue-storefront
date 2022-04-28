@@ -83,10 +83,11 @@ export default {
       const logolines = this.getJsonBlockByIdentifier('home-logos')
       return logolines.map(line => {
         const logos = line.logos.filter(l => {
-          if (!l.cluster || l.cluster.length === 0 || (!this.cluster && l.cluster.includes(noClusterValue))) {
+          const cluster = l.cluster?.map(l => l.toString()) || []
+          if (cluster.length === 0 || (!this.cluster && cluster.includes(noClusterValue))) {
             return true
           }
-          return l.cluster.includes(parseInt(this.cluster))
+          return cluster.includes(this.cluster)
         })
 
         return Object.assign(line, { logos })
