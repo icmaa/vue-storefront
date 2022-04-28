@@ -49,8 +49,8 @@ const mutations: MutationTree<CheckoutState> = {
   [types.CHECKOUT_SET_SHIPPING_METHODS] (state, shippingMethods = []) {
     state.shippingMethods = shippingMethods
   },
-  [types.CHECKOUT_SET_PRIORITY_HANDLING] (state, payload) {
-    state.priorityHandling = payload
+  [types.CHECKOUT_SET_ADDITONAL_SHIPPING_CHARGES] (state, payload) {
+    state.additionalShippingCharges = payload
   },
   [types.CHECKOUT_SET_GATEWAY_ORDER] (state, payload) {
     state.gatewayOrder = payload

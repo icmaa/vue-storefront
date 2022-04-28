@@ -1,7 +1,7 @@
 import { ActionTree } from 'vuex'
 import * as types from '../mutation-types'
 import RootState from '@vue-storefront/core/types/RootState'
-import CheckoutState from '../../../types/CheckoutState'
+import CheckoutState, { AdditionalShippingCharges } from '../../../types/CheckoutState'
 import { StorageManager } from '@vue-storefront/core/lib/storage-manager'
 
 const actions: ActionTree<CheckoutState, RootState> = {
@@ -78,11 +78,14 @@ const actions: ActionTree<CheckoutState, RootState> = {
   replaceShippingMethods ({ commit }, shippingMethods) {
     commit(types.CHECKOUT_SET_SHIPPING_METHODS, shippingMethods)
   },
-  updateAdditionalShippingInformation ({ commit }, additional) {
-    if (additional && Object.keys(additional).length > 0) {
-      if (additional['priorityHandling']) {
-        commit(types.CHECKOUT_SET_PRIORITY_HANDLING, additional['priorityHandling'])
+  updateAdditionalShippingCharges ({ commit }, additionals: AdditionalShippingCharges[]) {
+    if (additionals && Object.keys(additionals).length > 0) {
+      const additionalCharges: AdditionalShippingCharges[] = []
+      for (const i in additionals) {
+        additionalCharges.push({ key: i, ...additionals[i] })
       }
+
+      commit(types.CHECKOUT_SET_ADDITONAL_SHIPPING_CHARGES, additionalCharges)
     }
   },
   setGatewayOrder ({ commit }, order) {

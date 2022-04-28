@@ -15,7 +15,7 @@ export default {
   data () {
     return {
       selected: false,
-      priorityHandling: false
+      selectedAdditionalCharges: {}
     }
   },
   computed: {
@@ -23,7 +23,8 @@ export default {
       isLoading: 'checkout/isLoading',
       getShippingMethods: 'checkout/getShippingMethods',
       shippingDetails: 'checkout/getShippingDetails',
-      isPriorityHandlingEnabled: 'checkout/isPriorityHandlingEnabled',
+      hasAdditionalCharges: 'checkout/hasAdditionalShippingCharges',
+      additionalCharges: 'checkout/getEnabledAdditionalShippingCharges',
       message: 'checkout/getMessage'
     }),
     hasShippingMethod () {
@@ -72,7 +73,7 @@ export default {
       const firstMethod = this.shippingMethods.slice(0, 1).pop()
       this.selected = firstMethod.code
 
-      if (this.isPriorityHandlingEnabled) {
+      if (this.hasAdditionalCharges) {
         return
       }
 
@@ -88,8 +89,11 @@ export default {
         this.$store.dispatch('checkout/loading')
 
         let shippingMethod = this.rawSelectedMethod
-        if (this.isPriorityHandlingEnabled && this.priorityHandling) {
-          shippingMethod = Object.assign({}, shippingMethod, { priorityHandling: true })
+
+        if (this.hasAdditionalCharges &&
+            Object.values(this.selectedAdditionalCharges).filter(v => v === true).length > 0
+        ) {
+          shippingMethod = Object.assign({}, shippingMethod, ...this.selectedAdditionalCharges)
         }
 
         this.$store.dispatch(

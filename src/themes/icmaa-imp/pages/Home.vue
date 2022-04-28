@@ -86,7 +86,7 @@ export default {
           if (!l.cluster || l.cluster.length === 0 || (!this.cluster && l.cluster.includes(noClusterValue))) {
             return true
           }
-          return l.cluster.includes(this.cluster)
+          return l.cluster.includes(parseInt(this.cluster))
         })
 
         return Object.assign(line, { logos })

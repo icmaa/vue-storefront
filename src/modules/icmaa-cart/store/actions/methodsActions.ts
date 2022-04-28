@@ -36,7 +36,7 @@ const actions: ActionTree<CartState, RootState> = {
 
       if (result !== false) {
         await dispatch('updateShippingMethods', { shippingMethods: result.methods || result })
-        await dispatch('checkout/updateAdditionalShippingInformation', result.additional || false, { root: true })
+        await dispatch('checkout/updateAdditionalShippingCharges', result.additional || [], { root: true })
         await dispatch('checkout/setMessage', result.message, { root: true })
         return true
       }

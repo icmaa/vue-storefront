@@ -4,17 +4,17 @@
     v-if="active"
   >
     <base-checkbox
-      name="priorityHandling"
-      id="priorityHandling"
+      :name="'additionalCharges' + charge.key"
+      :id="charge.key"
       v-model="selected"
       :checkbox-class="disabled ? '' : 't-self-start'"
     >
       <p :class="{ 't-font-bold': !disabled }">
-        {{ priorityHandling.title }}
+        {{ charge.title }}
       </p>
       <p class="t-text-base-tone t-text-xs" v-if="!disabled">
-        {{ priorityHandling.description }},
-        {{ price(priorityHandling.fee) }}
+        {{ charge.description }},
+        {{ price(charge.fee) }}
       </p>
     </base-checkbox>
   </div>
@@ -27,13 +27,17 @@ import { price } from 'icmaa-config/helpers/price'
 import BaseCheckbox from 'theme/components/core/blocks/Form/BaseCheckbox'
 
 export default {
-  name: 'PriorityHandling',
+  name: 'AdditionalShippingCharges',
   components: {
     BaseCheckbox
   },
   props: {
     value: {
       type: [ Boolean, String ],
+      default: false
+    },
+    charge: {
+      type: Object,
       required: true
     },
     disabled: {
@@ -48,11 +52,11 @@ export default {
   },
   computed: {
     ...mapGetters({
-      priorityHandling: 'checkout/getPriorityHandling',
-      hasPriorityHandling: 'checkout/hasPriorityHandling'
+      hasAdditionalShipping: 'checkout/hasAdditionalShippingCharge'
     }),
     active () {
-      return this.priorityHandling && this.priorityHandling.enabled
+      if (this.disabled) return this.selected
+      return this.charge.enabled
     }
   },
   methods: {
@@ -65,7 +69,7 @@ export default {
     }
   },
   beforeMount () {
-    this.selected = this.hasPriorityHandling
+    this.selected = this.hasAdditionalShipping(this.charge.key)
   }
 }
 </script>

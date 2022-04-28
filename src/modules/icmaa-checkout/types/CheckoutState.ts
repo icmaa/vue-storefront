@@ -45,7 +45,8 @@ export interface ShippingDetails {
   [key: string]: any
 }
 
-export interface PriorityHandling {
+export interface AdditionalShippingCharges {
+  key: string,
   title: string,
   description: string,
   fee: number,
@@ -65,6 +66,6 @@ export default interface CheckoutState {
   paymentMethod: any,
   paymentMethods: any[],
   shippingMethods: any[],
-  priorityHandling: PriorityHandling,
+  additionalShippingCharges: AdditionalShippingCharges[],
   gatewayOrder: any
 }

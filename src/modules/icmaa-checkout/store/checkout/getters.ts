@@ -2,6 +2,7 @@ import { icmaa_checkout } from 'config'
 import { GetterTree } from 'vuex'
 import RootState from '@vue-storefront/core/types/RootState'
 import CheckoutState from '../../types/CheckoutState'
+import snakeCase from 'lodash-es/snakeCase'
 
 const getters: GetterTree<CheckoutState, RootState> = {
   isLoading: state => state.loading,
@@ -32,13 +33,16 @@ const getters: GetterTree<CheckoutState, RootState> = {
     ),
   getShippingMethods: state => state.shippingMethods,
   getDefaultShippingMethod: state => state.shippingMethods.find(item => item.default),
-  getPriorityHandling: state => state.priorityHandling || false,
-  isPriorityHandlingEnabled: (state, getters): boolean => getters.getPriorityHandling.enabled || false,
-  hasPriorityHandling: (state, getters, RootState, rootGetters): boolean => {
-    if (!getters.isPriorityHandlingEnabled) return false
-    if (getters.getShippingMethod.priorityHandling === true) return true
+  hasAdditionalShippingCharges: state => state.additionalShippingCharges.some(c => c.enabled === true),
+  getAdditionalShippingCharges: state => state.additionalShippingCharges || [],
+  getEnabledAdditionalShippingCharges: (state, getters) => {
+    return getters.getAdditionalShippingCharges.filter(c => c.enabled === true)
+  },
+  hasAdditionalShippingCharge: (state, getters, RootState, rootGetters) => (key: string): boolean => {
+    if (!getters.hasAdditionalShippingCharges) return false
+    if (getters.getShippingMethod[key] === true) return true
     const totals = rootGetters['cart/getTotals']
-    return totals.some(t => t.code === 'priority_handling')
+    return totals.some(t => t.code === snakeCase(key))
   },
   isUserInCheckout: (state, getters, rootState, rootGetters) => {
     const currentRouteName = rootGetters['url/getCurrentRoute']?.name
