@@ -40,9 +40,9 @@ export default {
   plugins: [
     new webpack.ContextReplacementPlugin(/dayjs[/\\]locale$/, buildLocaleIgnorePattern()),
     new webpack.ProgressPlugin(),
-    /* new BundleAnalyzerPlugin({
-      generateStatsFile: true
-    }), */
+    // new BundleAnalyzerPlugin({
+    //   generateStatsFile: true
+    // }),
     new CaseSensitivePathsPlugin(),
     new VueLoaderPlugin(),
     // generate output HTML
@@ -84,7 +84,7 @@ export default {
   ],
   devtool: 'source-map',
   entry: {
-    app: ['@babel/polyfill', './core/client-entry.ts']
+    app: ['./core/client-entry.ts']
   },
   output: {
     path: path.resolve(__dirname, '../../dist'),
