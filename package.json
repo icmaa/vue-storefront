@@ -120,6 +120,7 @@
     "@typescript-eslint/parser": "^1.7.1-alpha.17",
     "@vue/test-utils": "^1.0.0-beta.29",
     "autoprefixer": "^8.6.2",
+    "babel-jest": "^25.5.1",
     "babel-loader": "^8.0.6",
     "case-sensitive-paths-webpack-plugin": "^2.1.2",
     "command-exists": "^1.2.2",
@@ -192,9 +193,11 @@
       "> 5%"
     ],
     "production": [
-      ">5%",
-      "last 4 versions",
-      "Firefox ESR"
+      "> 5%",
+      "last 2 versions",
+      "Firefox ESR",
+      "not IE 11",
+      "not dead"
     ]
   },
   "workspaces": [
