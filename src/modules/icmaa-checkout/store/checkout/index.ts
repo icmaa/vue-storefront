@@ -15,7 +15,7 @@ const state = {
   paymentMethod: null,
   shippingMethods: [],
   paymentMethods: [],
-  priorityHandling: null,
+  additionalShippingCharges: [],
   gatewayOrder: null
 }
 

@@ -65,6 +65,7 @@
           </div>
           <p v-text="order.shipping_description || $t('No informations')" />
           <p v-if="hasPriorityHandling" v-text="order.priority_handling_fee_description || $t('Priority Service')" />
+          <p v-if="hasDhlGoGreen" v-text="order.dhl_go_green_fee_description || $t('DHL GoGreen')" />
           <tracking-link :order-id="order.id" :status="order.status" class="t-mt-2">
             <button-component type="ghost" icon="local_shipping">
               {{ $t('Shipment tracking') }}
@@ -130,6 +131,12 @@
           <div class="t-w-2/3 lg:t-w-3/4 t-px-2 t-text-right" v-text="order.priority_handling_fee_description || $t('Priority Service')" />
           <div class="t-w-1/3 lg:t-w-1/4 t-px-2 t-text-right">
             {{ order.priority_handling_fee | round | price }}
+          </div>
+        </template>
+        <template v-if="hasDhlGoGreen">
+          <div class="t-w-2/3 lg:t-w-3/4 t-px-2 t-text-right" v-text="order.dhl_go_green_fee_description || $t('DHL GoGreen')" />
+          <div class="t-w-1/3 lg:t-w-1/4 t-px-2 t-text-right">
+            {{ order.dhl_go_green_fee | round | price }}
           </div>
         </template>
         <template v-if="order.discount_amount < 0">
@@ -198,7 +205,10 @@ export default {
       return attributeCodes
     },
     hasPriorityHandling () {
-      return this.order && this.order.priority_handling_fee && this.order.priority_handling_fee > 0
+      return this.order?.priority_handling_fee && this.order?.priority_handling_fee > 0
+    },
+    hasDhlGoGreen () {
+      return this.order?.dhl_go_green_fee && this.order.dhl_go_green_fee > 0
     }
   },
   methods: {
