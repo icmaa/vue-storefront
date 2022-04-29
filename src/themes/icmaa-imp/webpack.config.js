@@ -14,22 +14,6 @@ const SpritesmithPlugin = require('webpack-spritesmith')
 */
 module.exports = function (config, { isClient, isDev }) {
   /**
-   * Add Vue.js library with compiler to compile components in runtime
-   * @see https://vuejs.org/v2/guide/installation.html#Runtime-Compiler-vs-Runtime-only
-   */
-  if (isClient) {
-    const addCompiler = {
-      resolve: {
-        alias: {
-          'vue$': 'vue/dist/vue.esm.js'
-        }
-      }
-    }
-
-    config = merge(config, addCompiler)
-  }
-
-  /**
    * Inject postcss plugin for Tailwind.css to original webpack config.
    * Change the postcssConfig of the postcss-loader and add our loader plugin.
    *
