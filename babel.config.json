@@ -1,0 +1,20 @@
+{
+  "presets": [
+    [
+      "@babel/preset-env",
+      {
+        "modules": false,
+        "useBuiltIns": "usage",
+        "corejs": 3
+      }
+    ]
+  ],
+  "plugins": ["@babel/plugin-transform-runtime", "@babel/plugin-syntax-dynamic-import"],
+  "env": {
+    // This a custom ENV for JEST unit-tests
+    "test": {
+      "plugins": ["@babel/plugin-transform-modules-commonjs", "@babel/plugin-syntax-dynamic-import"],
+      "ignore": ["/node_modules\/(?!lodash-es|@vue\/test-utils)/"]
+    }
+  }
+}

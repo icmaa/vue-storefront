@@ -4,7 +4,7 @@
 .jshintrc
 .lintstagedrc.js
 .postcssrc
-babel.config.js
+babel.config.json
 cypress.json
 docker-compose.yml
 lerna.json
