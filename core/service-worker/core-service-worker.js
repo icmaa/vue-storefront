@@ -9,6 +9,8 @@ const precacheAllowList = config?.precacheFiles || []
 if (precacheAllowList.length > 0) {
   const allowRegExpList = precacheAllowList.map(string => new RegExp(string, 'gi'))
   manifestFiles = manifestFiles.filter(file => allowRegExpList.some(r => r.test(file.url)))
+} else if (precacheAllowList.length === 1 && precacheAllowList[0] === 'none') {
+  manifestFiles = []
 }
 
 precacheAndRoute(manifestFiles || [])
