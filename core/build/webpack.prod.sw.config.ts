@@ -6,7 +6,7 @@ export default {
       mode: 'production',
       swSrc: './core/service-worker/index.js',
       swDest: 'service-worker.js',
-      exclude: [ /\.html$/ ]
+      exclude: [ /\.html$/, /\.map$/ ]
     })
   ]
 }

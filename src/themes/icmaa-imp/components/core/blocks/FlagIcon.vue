@@ -1,12 +1,15 @@
 <template>
-  <svg v-if="useSprite">
+  <svg>
     <use :xlink:href="`${sprite}#${isoFileCode}`" />
   </svg>
-  <img :src="image" :alt="iso" v-else>
 </template>
 
 <script>
-import config from 'config'
+
+const flagSprites = {
+  '1x1': require(`theme/assets/flags/1x1.svg`),
+  '4x3': require(`theme/assets/flags/4x3.svg`)
+}
 
 export default {
   props: {
@@ -23,20 +26,14 @@ export default {
     }
   },
   computed: {
-    useSprite () {
-      return config.icmaa.useCountryFlagSprites || false
-    },
     attributes () {
       return this.$attrs
     },
     sprite () {
-      return require(`theme/assets/flags/${this.format}.svg`)
+      return flagSprites[this.format]
     },
     isoFileCode () {
       return this.iso.toLowerCase()
-    },
-    image () {
-      return require(`theme/assets/flags/${this.format}/${this.isoFileCode}.svg`)
     }
   }
 }
