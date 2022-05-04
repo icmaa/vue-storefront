@@ -1,8 +1,17 @@
+import { serviceWorker as config } from 'config'
 import { precacheAndRoute } from 'workbox-precaching'
 import { registerRoute } from 'workbox-routing'
 import { NetworkFirst, CacheFirst } from 'workbox-strategies'
 
-precacheAndRoute(self.__WB_MANIFEST || [])
+let manifestFiles = self.__WB_MANIFEST || []
+
+const precacheAllowList = config?.precacheFiles || []
+if (precacheAllowList.length > 0) {
+  const allowRegExpList = precacheAllowList.map(string => new RegExp(string, 'gi'))
+  manifestFiles = manifestFiles.filter(file => allowRegExpList.some(r => r.test(file.url)))
+}
+
+precacheAndRoute(manifestFiles || [])
 
 const assetCache = new CacheFirst({
   cacheName: 'vsf-asset'

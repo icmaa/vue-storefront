@@ -4,8 +4,9 @@ import config from 'config'
 const initialResources = addRegexpListToConfig(config)
 
 const prefetchRegexps = flatToRegexpList(
-  initialResources.filter(filterConfig => filterConfig.rel !== 'preload' && filterConfig.onload)
+  initialResources.filter(filterConfig => filterConfig.rel === 'prefetch' && filterConfig.onload)
 )
+
 const preloadRegexps = flatToRegexpList(
   initialResources.filter(filterConfig => filterConfig.rel === 'preload' && filterConfig.onload)
 )

@@ -1,20 +1,26 @@
-import { addRegexpListToConfig, createRegexpMatcher, flatToRegexpList } from './helpers';
+import { addRegexpListToConfig, createRegexpMatcher, flatToRegexpList } from './helpers'
 
 const config = require('config')
 const initialResources = addRegexpListToConfig(config)
+const dissallowList = [ /\.map$/ ]
 
 const prefetchRegexps = flatToRegexpList(
-  initialResources.filter(filterConfig => filterConfig.rel !== 'preload')
+  initialResources.filter(filterConfig => filterConfig.rel === 'prefetch')
 )
+
 /**
  * vue-ssr method that filters prefetch files based on initialResources config
  */
 export const shouldPrefetch = (file: string) => {
+  const checkRegexpList = createRegexpMatcher(file)
+
+  const matchDissallowList = checkRegexpList(dissallowList)
+  if (matchDissallowList) return false
+
   if (prefetchRegexps.length) {
-    const checkRegexpList = createRegexpMatcher(file)
     const matchFilter = checkRegexpList(prefetchRegexps)
 
-    return !matchFilter
+    return matchFilter
   }
   return true
 }
@@ -22,15 +28,20 @@ export const shouldPrefetch = (file: string) => {
 const preloadRegexps = flatToRegexpList(
   initialResources.filter(filterConfig => filterConfig.rel === 'preload')
 )
+
 /**
  * vue-ssr method that filters preload files based on initialResources config
  */
 export const shouldPreload = (file: string) => {
+  const checkRegexpList = createRegexpMatcher(file)
+
+  const matchDissallowList = checkRegexpList(dissallowList)
+  if (matchDissallowList) return false
+
   if (preloadRegexps.length) {
-    const checkRegexpList = createRegexpMatcher(file)
     const matchFilter = checkRegexpList(preloadRegexps)
 
-    return !matchFilter
+    return matchFilter
   }
   return true
 }

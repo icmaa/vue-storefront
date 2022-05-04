@@ -92,6 +92,9 @@
       "rel": "prefetch"
     }
   ],
+  "serviceWorker": {
+    "precacheFiles": [ ]
+  },
   "staticPages": {
     "updateOnRequest": true,
     "destPath": "static"
