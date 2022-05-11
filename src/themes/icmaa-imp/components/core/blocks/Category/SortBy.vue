@@ -42,7 +42,7 @@ export default {
     ...mapGetters({
       query: 'category-next/getCurrentSearchQuery',
       category: 'category-next/getCurrentCategory',
-      isSearchResultPage: 'icmaaSearchAlias/isSearchResultPage'
+      isSearchResultPage: 'icmaaSearch/isSearchResultPage'
     }),
     sortingOptions () {
       let variants = []

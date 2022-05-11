@@ -53,8 +53,8 @@ const actions: ActionTree<CategoryState, RootState> = {
   },
   async loadMoreSearchProducts ({ commit, getters, dispatch, rootGetters }) {
     const category = {
-      id: rootGetters['icmaaSearchAlias/getCurrentResultsPageTermHash'],
-      term: rootGetters['icmaaSearchAlias/getCurrentResultsPageAlias']
+      id: rootGetters['icmaaSearch/getCurrentResultsPageTermHash'],
+      term: rootGetters['icmaaSearch/getCurrentResultsPageTerm']
     }
 
     const { perPage, start, total } = getters.getCategorySearchProductsStats
@@ -100,7 +100,7 @@ const actions: ActionTree<CategoryState, RootState> = {
   },
   async loadSearchBreadcrumbs ({ dispatch, rootGetters }) {
     const routes = [ { name: i18n.t('Search') } ]
-    const current = rootGetters['icmaaSearchAlias/getCurrentResultsPageTerm']
+    const current = rootGetters['icmaaSearch/getCurrentResultsPageTerm']
 
     await dispatch('breadcrumbs/set', { current, routes }, { root: true })
   }

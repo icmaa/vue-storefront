@@ -114,9 +114,8 @@ export default {
       getProductsStats: 'category-next/getCategorySearchProductsStats',
       productsTotal: 'category-next/getCategoryProductsTotal',
       contentHeader: 'icmaaCategoryExtras/getContentHeaderByCurrentCategory',
-      term: 'icmaaSearchAlias/getCurrentResultsPageTerm',
-      termHash: 'icmaaSearchAlias/getCurrentResultsPageTermHash',
-      searchAlias: 'icmaaSearchAlias/getCurrentResultsPageAlias',
+      term: 'icmaaSearch/getCurrentResultsPageTerm',
+      termHash: 'icmaaSearch/getCurrentResultsPageTermHash',
       prevRoute: 'url/getPrevRouteDispatcher'
     }),
     isLazyHydrateEnabled () {
@@ -174,11 +173,9 @@ export default {
     },
     async fetchAsyncData (newRoute) {
       try {
-        await this.$store.dispatch('icmaaSearchAlias/setCurrentResultAlias', this.term)
-
         const route = newRoute || this.$route
         const pageSize = route.params.pagesize || this.pageSize
-        const category = { id: this.termHash, term: this.searchAlias }
+        const category = { id: this.termHash, term: this.term }
 
         // If browser-history-back event use cached products
         if (routerHelper.popStateDetected === true) {

@@ -5,7 +5,7 @@ import { IcmaaExtendedAttributeStore } from './store/attribute'
 import { IcmaaExtendedCategoryStore } from './store/category'
 import { IcmaaExtendedProductStore } from './store/product'
 import { IcmaaBreadcrumbsStore } from './store/breadcrumbs'
-import { SearchAliasStore, stateKey } from './store/search-alias'
+import { SearchStore, stateKey } from './store/search'
 import { icmaaCatalogHooks } from './hooks'
 import { routerHelper, initBrowserBackEvent } from 'icmaa-catalog/helpers/popState'
 
@@ -23,7 +23,7 @@ export const IcmaaExtendedCatalogModule: StorefrontModule = async ({ store, rout
   extendStore('category-next', IcmaaExtendedCategoryStore)
   extendStore('product', IcmaaExtendedProductStore)
   extendStore('breadcrumbs', IcmaaBreadcrumbsStore)
-  store.registerModule(stateKey, SearchAliasStore)
+  store.registerModule(stateKey, SearchStore)
 
   /**
    * Bugfix for missing price if the selected variant don't have specific price attributes.

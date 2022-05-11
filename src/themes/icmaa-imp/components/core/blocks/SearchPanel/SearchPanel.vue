@@ -85,7 +85,6 @@ export default {
   },
   data () {
     return {
-      searchAlias: '',
       products: [],
       categoryAggs: [],
       size: 12,
@@ -104,7 +103,7 @@ export default {
   },
   computed: {
     ...mapGetters({
-      currentTerm: 'icmaaSearchAlias/getCurrentTerm',
+      currentTerm: 'icmaaSearch/getCurrentTerm',
       separateSelectedVariant: 'category-next/separateSelectedVariantInProductList'
     }),
     searchString: {
@@ -112,7 +111,7 @@ export default {
         return this.currentTerm
       },
       set (value) {
-        this.$store.dispatch('icmaaSearchAlias/setCurrentTerm', value)
+        this.$store.dispatch('icmaaSearch/setCurrentTerm', value)
       }
     },
     items () {
@@ -125,7 +124,7 @@ export default {
       const splitChars = [' ', '-', ',']
       return this.categoryAggs.filter(category => {
         let searchStrings = []
-        const strings = [this.searchString, this.searchAlias]
+        const strings = [this.searchString]
         strings.forEach(s => splitChars.forEach(c => searchStrings.push(...s.split(c).filter(s => s.length >= 3))))
         searchStrings = uniq(searchStrings)
 
@@ -169,8 +168,7 @@ export default {
     },
     searchDebounced: debounce(async function () {
       if (!this.$v.searchString.$invalid) {
-        this.searchAlias = await this.getAlias(this.searchString)
-        let query = this.prepareQuickSearchQuery(this.searchAlias)
+        let query = this.prepareQuickSearchQuery(this.searchString)
 
         this.start = 0
         this.moreProducts = true
@@ -198,12 +196,9 @@ export default {
         this.emptyResults = true
       }
     }, 350),
-    async getAlias (searchString) {
-      return this.$store.dispatch('icmaaSearchAlias/getAliasesBySearchString', { searchString })
-    },
     async loadMoreProducts () {
       if (!this.$v.searchString.$invalid) {
-        let query = this.prepareQuickSearchQuery(await this.getAlias(this.searchString), true)
+        let query = this.prepareQuickSearchQuery(this.searchString, true)
         this.loadingProducts = true
 
         /** Enable `separateSelectedVariant` to not overwrite parent variables by selected variant ones. */
@@ -258,7 +253,7 @@ export default {
       }
     },
     emptySearchInput () {
-      this.$store.dispatch('icmaaSearchAlias/setCurrentTerm', '')
+      this.$store.dispatch('icmaaSearch/setCurrentTerm', '')
       Object.assign(this.$data, this.$options.data.apply(this))
       this.$refs.searchString.focus()
     },

@@ -127,7 +127,7 @@ export const icmaaGoogleTagManagerModule: Module<GoogleTagManagerState, any> = {
         case 'search':
           DTO = {
             event: 'icmaa-search-results',
-            searchTerm: rootGetters['icmaaSearchAlias/getCurrentResultsPageTerm'],
+            searchTerm: rootGetters['icmaaSearch/getCurrentResultsPageTerm'],
             ecommerce: {
               currencyCode
             }

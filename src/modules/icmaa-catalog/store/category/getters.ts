@@ -17,8 +17,8 @@ const getters: GetterTree<CategoryState, RootState> = {
    * Overwrite parent to be able to search for search-filters of search-result page.
    */
   getAvailableFilters: (state, getters, rootState, rootGetters) => {
-    if (rootGetters['icmaaSearchAlias/isSearchResultPage']) {
-      return state.filtersMap[rootGetters['icmaaSearchAlias/getCurrentResultsPageTermHash']] || {}
+    if (rootGetters['icmaaSearch/isSearchResultPage']) {
+      return state.filtersMap[rootGetters['icmaaSearch/getCurrentResultsPageTermHash']] || {}
     }
 
     const categoryId = get(getters.getCurrentCategory, 'id', null)
