@@ -120,17 +120,7 @@ export default {
       return this.products || []
     },
     categories () {
-      const splitChars = [' ', '-', ',']
-      return this.categoryAggs.filter(category => {
-        let searchStrings = []
-        const strings = [this.searchString]
-        strings.forEach(s => splitChars.forEach(c => searchStrings.push(...s.split(c).filter(s => s.length >= 3))))
-        searchStrings = uniq(searchStrings)
-
-        const searchRegex = new RegExp(`(${searchStrings.join('|')})`, 'i')
-
-        return searchStrings.length > 0 && searchRegex.test(category.name)
-      })
+      return this.categoryAggs
     },
     getNoResultsMessage () {
       let msg = ''
