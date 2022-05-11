@@ -52,7 +52,6 @@ import ButtonComponent from 'theme/components/core/blocks/Button'
 import LoaderBackground from 'theme/components/core/LoaderBackground'
 import VueOfflineMixin from 'vue-offline/mixin'
 
-import config from 'config'
 import i18n from '@vue-storefront/i18n'
 import addDefaultProductFilter from 'icmaa-catalog/helpers/defaultProductFilter'
 import { mapGetters } from 'vuex'
