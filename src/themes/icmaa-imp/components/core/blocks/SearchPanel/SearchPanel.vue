@@ -215,6 +215,7 @@ export default {
     },
     prepareQuickSearchQuery (value, plain = false) {
       let searchQuery = new SearchQuery()
+      value = value.toLowerCase()
 
       const searchFilterKey = plain ? 'search-text-plain' : 'search-text'
       searchQuery = searchQuery

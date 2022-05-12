@@ -175,7 +175,7 @@ export default {
       try {
         const route = newRoute || this.$route
         const pageSize = route.params.pagesize || this.pageSize
-        const category = { id: this.termHash, term: this.term }
+        const category = { id: this.termHash, term: this.term.toLowerCase() }
 
         // If browser-history-back event use cached products
         if (routerHelper.popStateDetected === true) {
