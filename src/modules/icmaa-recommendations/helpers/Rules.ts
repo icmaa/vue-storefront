@@ -180,7 +180,7 @@ class Rules {
    * @returns {this}
    */
   protected addDefaultFilter (): this {
-    addDefaultProductFilter(this.query, true)
+    addDefaultProductFilter(this.query)
     return this
   }
 

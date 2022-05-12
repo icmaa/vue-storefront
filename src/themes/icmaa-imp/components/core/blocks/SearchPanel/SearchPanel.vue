@@ -221,7 +221,7 @@ export default {
       searchQuery = searchQuery
         .applyFilter({ key: searchFilterKey, value })
 
-      addDefaultProductFilter(searchQuery, true)
+      addDefaultProductFilter(searchQuery, 'search')
 
       return searchQuery
     },

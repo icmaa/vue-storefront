@@ -48,7 +48,7 @@ const actions: ActionTree<CategoryState, RootState> = {
       return
     }
 
-    let query = addDefaultProductFilter(new SearchQuery(), true)
+    let query = addDefaultProductFilter(new SearchQuery())
     query.applyFilter({ key: 'category_ids', value: { in: [categoryId] } })
 
     if (filter !== false) {

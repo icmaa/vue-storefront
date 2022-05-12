@@ -112,7 +112,7 @@ export default {
     const skus = this.productsConfigArray.map(p => p.sku)
 
     const query = new SearchQuery()
-    addDefaultProductFilter(query, true)
+    addDefaultProductFilter(query)
     query.applyFilter({ key: 'sku', value: { 'in': skus } })
 
     const { includeFields, excludeFields } = config.entities.productList

@@ -16,7 +16,7 @@ const actions: ActionTree<CategoryState, RootState> = {
     let filterQr = buildFilterProductsQuery({}, searchQuery.filters)
 
     filterQr.applyFilter({ key: 'search-text', value: category.term })
-    addDefaultProductFilter(filterQr)
+    addDefaultProductFilter(filterQr, 'search')
 
     const { includeFields, excludeFields } = getters.getIncludeExcludeFields(category)
     const sort = searchQuery.sort
@@ -65,7 +65,7 @@ const actions: ActionTree<CategoryState, RootState> = {
     let filterQr = buildFilterProductsQuery({}, searchQuery.filters)
 
     filterQr.applyFilter({ key: 'search-text-plain', value: category.term })
-    addDefaultProductFilter(filterQr)
+    addDefaultProductFilter(filterQr, 'search')
 
     const { includeFields, excludeFields } = getters.getIncludeExcludeFields(category)
     const sort = searchQuery.sort
