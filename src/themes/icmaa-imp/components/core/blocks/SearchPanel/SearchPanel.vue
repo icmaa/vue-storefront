@@ -8,7 +8,20 @@
         <span class="t-sr-only">{{ $t('Search') }}</span>
         <material-icon icon="search" size="sm" class="t-text-base-light t-pl-2 t-pr-1" />
       </label>
-      <input type="text" v-model="searchString" @input="onInput" @blur="$v.searchString.$touch()" id="search" :placeholder="$t('Type what you are looking for...')" autocorrect="off" autocomplete="off" autofocus="true" data-test-id="SearchInput" ref="searchString" class="t-self-stretch t-flex-expand t-p-0 t-text-lg t-text-base-tone placeholder:t-text-base-lighter">
+      <input
+        type="text"
+        v-model="searchString"
+        @input="onInput"
+        @blur="$v.searchString.$touch()"
+        id="search"
+        :placeholder="$t('Type what you are looking for...')"
+        autocorrect="off"
+        autocomplete="off"
+        autofocus="true"
+        data-test-id="SearchInput"
+        ref="searchString"
+        class="t-self-stretch t-flex-expand t-p-0 t-text-lg t-text-base-tone placeholder:t-text-base-lighter"
+      >
     </template>
     <template v-slot:top-right>
       <top-button icon="close" text="Close" @click.native="emptySearchInput" v-show="searchString.length > 0" />
@@ -20,8 +33,19 @@
       <div v-if="emptyResults && pleaseWait" class="t-px-2 t-pt-2 t-pb-4 t-text-sm">
         {{ $t('Please wait') }} ...
       </div>
-      <category-panel :categories="categories" title="Categories" :link="true" v-if="!emptyResults && filteredProducts.length && categories.length > 0" class="t-pb-4 t-mb-4" :class="{ 't-opacity-25': pleaseWait }" />
-      <div class="product-listing t-flex t-flex-wrap t-bg-base-lightest t--mx-4 t--mt-4 t-px-3 t-py-4" v-if="!emptyResults && filteredProducts.length > 0" :class="{ 't-opacity-25': pleaseWait }">
+      <category-panel
+        :categories="categories"
+        title="Categories"
+        :link="true"
+        v-if="!emptyResults && filteredProducts.length && categories.length > 0"
+        class="t-pb-4 t-mb-4"
+        :class="{ 't-opacity-25': pleaseWait }"
+      />
+      <div
+        v-if="!emptyResults && filteredProducts.length > 0"
+        class="product-listing t-flex t-flex-wrap t-bg-base-lightest t--mx-4 t--mt-4 t-px-3 t-py-4"
+        :class="{ 't-opacity-25': pleaseWait }"
+      >
         <div class="t-flex t-items-center t-justify-center t-w-full t-mx-1">
           <button-component type="second" @click="goToResults()" class="t-w-full md:t-w-2/3 t-mb-4">
             {{ $t('View all results') }}
@@ -29,12 +53,28 @@
         </div>
         <product-tile v-for="product in filteredProducts" :key="product.sku + '-' + (product.parentId || 'parent')" :product="product" @click.native="closeSidebar" class="t-w-1/2 lg:t-w-1/3 t-px-1 t-mb-8" />
       </div>
-      <div v-if="filteredProducts.length >= size && OnlineOnly" class="t-flex t-items-center t-flex-wrap t-justify-center t-mt-4" :class="{ 't-opacity-25': pleaseWait }">
-        <button-component type="ghost" @click="loadMoreProducts" v-if="moreProducts" class="t-w-full md:t-w-2/3 t-mb-2" :class="{ 't-relative t-opacity-60': loadingProducts }" data-test-id="LoadMoreButton">
+      <div
+        v-if="filteredProducts.length >= size && OnlineOnly"
+        class="t-flex t-items-center t-flex-wrap t-justify-center t-mt-4"
+        :class="{ 't-opacity-25': pleaseWait }"
+      >
+        <button-component
+          type="ghost"
+          @click="loadMoreProducts"
+          v-if="moreProducts"
+          class="t-w-full md:t-w-2/3 t-mb-2"
+          :class="{ 't-relative t-opacity-60': loadingProducts }"
+          data-test-id="LoadMoreButton"
+        >
           {{ $t('Load more') }}
           <loader-background v-if="loadingProducts" bar="t-bg-base-darkest" class="t-bottom-0" />
         </button-component>
-        <button-component type="second" @click="goToResults()" class="t-w-full md:t-w-2/3" data-test-id="ShowAllButton">
+        <button-component
+          type="second"
+          @click="goToResults()"
+          class="t-w-full md:t-w-2/3"
+          data-test-id="ShowAllButton"
+        >
           {{ $t('View all results') }}
         </button-component>
       </div>
@@ -62,7 +102,6 @@ import { SearchQuery } from 'storefront-query-builder'
 import { localizedRoute } from '@vue-storefront/core/lib/multistore'
 import { Logger } from '@vue-storefront/core/lib/logger'
 import debounce from 'lodash-es/debounce'
-import uniq from 'lodash-es/uniq'
 
 export default {
   name: 'SearchPanel',
@@ -96,7 +135,9 @@ export default {
     }
   },
   watch: {
-    searchString () {
+    searchString (a, b) {
+      // Don't search when only a whitespaces is entered
+      if (a.trim() === b.trim()) return
       this.search()
     }
   },
