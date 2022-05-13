@@ -26,6 +26,12 @@ export default {
   components: {
     MaterialIcon
   },
+  props: {
+    foldDescription: {
+      type: Boolean,
+      default: false
+    }
+  },
   data () {
     return {
       descriptionFolded: false
@@ -43,7 +49,7 @@ export default {
       return this.categoryExtras.description
     },
     isLongDescription () {
-      return (stripHTML(this.description).length > 500)
+      return !!this.foldDescription && (stripHTML(this.description).length > 500)
     },
     footerDescription () {
       // This is the disclaimer text below the footer / weird attribute title
@@ -52,7 +58,7 @@ export default {
   },
   created () {
     if (this.isLongDescription) {
-      this.descriptionFolded = false
+      this.descriptionFolded = true
     }
   }
 }
