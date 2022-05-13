@@ -76,7 +76,7 @@ export default {
             }
           } else {
             selectorOption = {
-              label: productLink.product.name,
+              label: productLink.name || productLink.product?.name || productLink.sku,
               optionId: option.option_id,
               productLink
             }
