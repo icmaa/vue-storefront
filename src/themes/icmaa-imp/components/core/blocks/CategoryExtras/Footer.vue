@@ -52,7 +52,7 @@ export default {
   },
   created () {
     if (this.isLongDescription) {
-      this.descriptionFolded = true
+      this.descriptionFolded = false
     }
   }
 }
