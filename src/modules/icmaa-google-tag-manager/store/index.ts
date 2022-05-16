@@ -64,7 +64,7 @@ export const icmaaGoogleTagManagerModule: Module<GoogleTagManagerState, any> = {
                 product[attributeName] = value.map(v => pick(v, ['name', 'id', 'price', 'sku']))
                 break
               case 'category':
-                product[attributeName] = value.map(v => pick(v, ['name', 'category_id']))
+                product[attributeName] = value.map(v => pick(v, ['name', 'id']))
                 break
               case 'catalogImage':
                 product[attributeName] = getThumbnailPath(value)
@@ -127,7 +127,7 @@ export const icmaaGoogleTagManagerModule: Module<GoogleTagManagerState, any> = {
         case 'search':
           DTO = {
             event: 'icmaa-search-results',
-            searchTerm: rootGetters['icmaaSearchAlias/getCurrentResultsPageTerm'],
+            searchTerm: rootGetters['icmaaSearch/getCurrentResultsPageTerm'],
             ecommerce: {
               currencyCode
             }
