@@ -37,7 +37,7 @@ const actions: ActionTree<LooksState, RootState> = {
       return
     }
 
-    addDefaultProductFilter(query, true)
+    addDefaultProductFilter(query)
     query.applyFilter({ key: 'sku', value: { 'in': skus } })
 
     const result = await dispatch('product/findProducts', { query, includeFields, excludeFields, options }, { root: true })

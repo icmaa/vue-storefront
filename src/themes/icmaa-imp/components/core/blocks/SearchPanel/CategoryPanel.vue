@@ -4,7 +4,7 @@
       {{ $t(title) }}
     </h4>
     <div class="t-flex t--mx-4 t-px-2 t-overflow-scroll t-scrolling-touch t-hide-scrollbar">
-      <button-component v-for="category in categories" :key="category.category_id" type="ghost" :icon="value.includes(category.category_id) ? 'check' : false" class="t-flex-fix t-mx-2" @click="toggleCategory(category)">
+      <button-component v-for="category in categories" :key="category.id" type="ghost" :icon="value.includes(category.id) ? 'check' : false" class="t-flex-fix t-mx-2" @click="toggleCategory(category)">
         {{ category.name }}
       </button-component>
     </div>
@@ -48,14 +48,14 @@ export default {
   methods: {
     toggleCategory (category) {
       if (this.link) {
-        if (category.category_id === this.currentCategory.id) {
+        if (category.id === this.currentCategory.id) {
           this.$store.dispatch('ui/closeAll')
           return
         }
 
         this.$Progress.start()
 
-        const filters = { id: category.category_id }
+        const filters = { id: category.id }
         return this.$store.dispatch('category-next/loadCategoryWithExtras', { filters }).then(category => {
           if (category) {
             this.$store.dispatch('ui/closeAll')
@@ -80,11 +80,11 @@ export default {
         })
       }
 
-      const isSelected = this.value.includes(category.category_id)
+      const isSelected = this.value.includes(category.id)
       if (isSelected) {
-        this.$emit('input', this.value.filter(categoryId => categoryId !== category.category_id))
+        this.$emit('input', this.value.filter(categoryId => categoryId !== category.id))
       } else {
-        this.$emit('input', [...this.value, category.category_id])
+        this.$emit('input', [...this.value, category.id])
       }
     }
   }
