@@ -217,7 +217,7 @@ export default {
 
           this.populateCategoryAggregations(aggregations)
 
-          IcmaaGoogleTagManagerExecutors.onSearchResult({ term: this.searchString, results: this.products })
+          this.gtmOnSearchResult()
         }).catch((err) => {
           Logger.error(err, 'components-search')()
         })
@@ -294,6 +294,15 @@ export default {
     },
     closeSidebar () {
       this.$store.dispatch('ui/setSidebar', { key: 'searchpanel', status: false })
+    },
+    gtmOnSearchResult () {
+      // Wait and check if the client is still typing to prevent a trigger of `onSearchResult` event
+      // and therefore data in GA we can't really relate to because of the sub-searches.
+      const currentString = this.searchString
+      setTimeout(() => {
+        if (currentString !== this.searchString) return
+        IcmaaGoogleTagManagerExecutors.onSearchResult({ term: this.searchString, results: this.products })
+      }, 2000)
     }
   },
   async mounted () {
