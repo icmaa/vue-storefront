@@ -258,6 +258,8 @@ app.use('*', async (req, res) => {
       } else {
         return output
       }
+    }).finally(() => {
+      ssr.clearContext(context)
     })
   }
 
