@@ -1,4 +1,3 @@
-import Vue from 'vue'
 import { ActionTree } from 'vuex'
 import * as types from './mutation-types'
 import { quickSearchByQuery } from '@vue-storefront/core/lib/search'
@@ -81,15 +80,11 @@ const actions: ActionTree<CategoryState, RootState> = {
    * @param {String} value
    * @param {Bool} setCurrentCategory default=true and means that state.current_category is set to the one loaded
    */
-  single (context, { key, value, setCurrentCategory = true, setCurrentCategoryPath = true, populateRequestCacheTags = true, skipCache = false }) {
-    const state = context.state
-    const commit = context.commit
-    const dispatch = context.dispatch
-
+  single ({ state, commit, dispatch }, { key, value, setCurrentCategory = true, setCurrentCategoryPath = true, populateRequestCacheTags = true, skipCache = false }) {
     return new Promise((resolve, reject) => {
       const fetchCat = ({ key, value }) => {
         if (key !== 'id' || value >= config.entities.category.categoriesRootCategorylId/* root category */) {
-          context.dispatch('list', { key: key, value: value }).then(res => {
+          dispatch('list', { key: key, value: value }).then(res => {
             if (res && res.items && res.items.length) {
               setcat(null, res.items[0]) // eslint-disable-line @typescript-eslint/no-use-before-define
             } else {
@@ -113,8 +108,8 @@ const actions: ActionTree<CategoryState, RootState> = {
         if (setCurrentCategory) {
           commit(types.CATEGORY_UPD_CURRENT_CATEGORY, mainCategory)
         }
-        if (populateRequestCacheTags && mainCategory && Vue.prototype.$cacheTags) {
-          rootStore.state.cacheTags.add(`C${mainCategory.id}`)
+        if (populateRequestCacheTags && mainCategory) {
+          dispatch('addCacheTag', `C${mainCategory.id}`, { root: true })
         }
         if (setCurrentCategoryPath) {
           let currentPath = []

@@ -1,6 +1,4 @@
-import Vue from 'vue'
 import { ActionTree } from 'vuex'
-import rootStore from '@vue-storefront/core/store'
 import RootState from '@vue-storefront/core/types/RootState'
 import CategoryState from '@vue-storefront/core/modules/catalog-next/store/category/CategoryState'
 import FilterVariant from '@vue-storefront/core/modules/catalog-next/types/FilterVariant'
@@ -43,11 +41,9 @@ const actions: ActionTree<CategoryState, RootState> = {
   },
   async findCategoriesWithoutBlacklisting ({ dispatch, commit }, categorySearchOptions: DataResolver.CategorySearchOptions): Promise<Category[]> {
     const categories = await dispatch('findCategories', categorySearchOptions)
-    if (Vue.prototype.$cacheTags) {
-      categories.forEach(category => {
-        rootStore.state.cacheTags.add(`C${category.id}`)
-      })
-    }
+    categories.forEach(category => {
+      dispatch('addCacheTag', `C${category.id}`, { root: true })
+    })
 
     commit(types.CATEGORY_ADD_CATEGORIES, categories)
 

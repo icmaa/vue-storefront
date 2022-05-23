@@ -10,8 +10,10 @@ const mutations: MutationTree<RootState> = {
     state.userTokenInvalidateLock = 0
     state.userTokenInvalidated = null
     state.userTokenInvalidateAttemptsCount = 0
+  },
+  [types.ADD_CACHE_TAG] (state, tag) {
+    state.cacheTags.add(tag)
   }
-
 }
 
 export default mutations
