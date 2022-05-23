@@ -46,9 +46,7 @@ const createApp = async (ssrContext, config, storeCode = null): Promise<{app: Vu
   store.state.version = process.env.APPVERSION
   store.state.config = config // @deprecated
   store.state.__DEMO_MODE__ = (config.demomode === true)
-  if (ssrContext) {
-    store.state.cacheTags = ssrContext.output.cacheTags
-  }
+  if (ssrContext) store.state.cacheTags = ssrContext.output.cacheTags
   if (!store.state.config) store.state.config = globalConfig //  @deprecated - we should avoid the `config`
   const storeView = await prepareStoreView(storeCode) // prepare the default storeView
   store.state.storeView = storeView
