@@ -33,5 +33,6 @@ export default interface RootState {
   userTokenInvalidateAttemptsCount: number,
   userTokenInvalidateLock: number,
   route?: any,
-  url: any
+  url: any,
+  cacheTags: Set<string>
 }

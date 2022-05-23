@@ -20,7 +20,8 @@ const state: any = {
   twoStageCachingDisabled: false,
   userTokenInvalidated: null,
   userTokenInvalidateAttemptsCount: 0,
-  userTokenInvalidateLock: 0
+  userTokenInvalidateLock: 0,
+  cacheTags: new Set()
 }
 
 let rootStore = new Vuex.Store<RootState>({

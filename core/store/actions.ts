@@ -8,6 +8,9 @@ const actions: ActionTree<RootState, RootState> = {
   },
   async resetUserInvalidation ({ commit }) {
     commit(types.RESET_USER_TOKEN_INVALIDATION)
+  },
+  addCacheTag ({ commit }, tag) {
+    commit(types.ADD_CACHE_TAG, tag)
   }
 }
 
