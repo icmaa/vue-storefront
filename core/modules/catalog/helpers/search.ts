@@ -1,6 +1,6 @@
-import Vue from 'vue';
-import { Logger } from '@vue-storefront/core/lib/logger';
 import config from 'config';
+import rootStore from '@vue-storefront/core/store';
+import { Logger } from '@vue-storefront/core/lib/logger';
 import { StorageManager } from '@vue-storefront/core/lib/storage-manager';
 import { entityKeyName } from '@vue-storefront/core/lib/store/entities';
 
@@ -49,7 +49,7 @@ export const storeProductToCache = (product, cacheByKey) => {
 };
 
 export const preConfigureProduct = ({ product, populateRequestCacheTags }) => {
-  const shouldPopulateCacheTags = populateRequestCacheTags && Vue.prototype.$cacheTags;
+  const shouldPopulateCacheTags = populateRequestCacheTags;
   const isFirstVariantAsDefaultInURL =
     config.products.setFirstVarianAsDefaultInURL &&
     product.hasOwnProperty('configurable_children') &&
@@ -58,7 +58,7 @@ export const preConfigureProduct = ({ product, populateRequestCacheTags }) => {
   product.info = {};
 
   if (shouldPopulateCacheTags) {
-    Vue.prototype.$cacheTags.add(`P${product.id}`);
+    rootStore.dispatch('addCacheTag', `P${product.id}`)
   }
 
   if (!product.parentSku) {

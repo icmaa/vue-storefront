@@ -233,16 +233,6 @@ app.use('*', async (req, res) => {
 
       output = ssr.applyAdvancedOutputProcessing(context, output, templatesCache, isProd)
 
-      if (config.server.useOutputCache && cache) {
-        cache.set(
-          cacheKey,
-          { headers: res.getHeaders(), body: output, httpCode: res.statusCode },
-          tagsArray
-        ).catch(err => {
-          console.error('Couldn\'t write output-cache:', err.message)
-        })
-      }
-
       const afterOutputRenderedResponse = serverHooksExecutors.afterOutputRenderedResponse({
         req,
         res,
@@ -250,6 +240,16 @@ app.use('*', async (req, res) => {
         output,
         isProd
       })
+
+      if (config.server.useOutputCache && cache) {
+        await cache.set(
+          cacheKey,
+          { headers: res.getHeaders(), body: output, httpCode: res.statusCode },
+          tagsArray
+        ).catch(err => {
+          console.error('Couldn\'t write output-cache:', err.message)
+        })
+      }
 
       if (typeof afterOutputRenderedResponse === 'string') {
         return afterOutputRenderedResponse
