@@ -301,7 +301,8 @@ export default {
       const currentString = this.searchString
       setTimeout(() => {
         if (currentString !== this.searchString) return
-        IcmaaGoogleTagManagerExecutors.onSearchResult({ term: this.searchString, results: this.products })
+        const term = this.searchString.toLowerCase().trim()
+        IcmaaGoogleTagManagerExecutors.onSearchResult({ term, results: this.products })
       }, 2000)
     }
   },
