@@ -114,7 +114,7 @@ const actions: ActionTree<CategoryState, RootState> = {
           commit(types.CATEGORY_UPD_CURRENT_CATEGORY, mainCategory)
         }
         if (populateRequestCacheTags && mainCategory && Vue.prototype.$cacheTags) {
-          Vue.prototype.$cacheTags.add(`C${mainCategory.id}`)
+          rootStore.state.cacheTags.add(`C${mainCategory.id}`)
         }
         if (setCurrentCategoryPath) {
           let currentPath = []

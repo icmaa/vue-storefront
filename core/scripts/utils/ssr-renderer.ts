@@ -27,7 +27,6 @@ function createRenderer (bundle, clientManifest, template?) {
   // https://github.com/vuejs/vue/blob/dev/packages/vue-server-renderer/README.md#why-use-bundlerenderer
   return require('vue-server-renderer').createBundleRenderer(bundle, {
     clientManifest,
-    // runInNewContext: false,
     cache: new LRU({
       max: 500,
       ttl: 1000 * 60 * 15

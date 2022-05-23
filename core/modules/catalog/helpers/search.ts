@@ -1,6 +1,7 @@
 import Vue from 'vue';
-import { Logger } from '@vue-storefront/core/lib/logger';
 import config from 'config';
+import rootStore from '@vue-storefront/core/store';
+import { Logger } from '@vue-storefront/core/lib/logger';
 import { StorageManager } from '@vue-storefront/core/lib/storage-manager';
 import { entityKeyName } from '@vue-storefront/core/lib/store/entities';
 
@@ -58,7 +59,7 @@ export const preConfigureProduct = ({ product, populateRequestCacheTags }) => {
   product.info = {};
 
   if (shouldPopulateCacheTags) {
-    Vue.prototype.$cacheTags.add(`P${product.id}`);
+    rootStore.state.cacheTags.add(`P${product.id}`);
   }
 
   if (!product.parentSku) {

@@ -3,6 +3,7 @@ import Vue from 'vue'
 import { optionLabel } from './optionLabel'
 import { getThumbnailPath } from '@vue-storefront/core/helpers'
 import config from 'config'
+import rootStore from '@vue-storefront/core/store'
 import registerProductsMapping from './registerProductsMapping'
 import getProductGallery from './getProductGallery'
 import { findConfigurableVariant, isOptionAvailable } from './variant'
@@ -142,7 +143,7 @@ export function configurableChildrenImages (product) {
 export const setRequestCacheTags = ({ products = [] }) => {
   if (Vue.prototype.$cacheTags) {
     products.forEach(product => {
-      Vue.prototype.$cacheTags.add(`P${product?.id || ''}`);
+      rootStore.state.cacheTags.add(`P${product?.id || ''}`);
     })
   }
 }

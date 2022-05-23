@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import { ActionTree } from 'vuex'
 import * as types from './mutation-types'
+import rootStore from '@vue-storefront/core/store'
 import RootState from '@vue-storefront/core/types/RootState'
 import CategoryState from './CategoryState'
 import { quickSearchByQuery } from '@vue-storefront/core/lib/search'
@@ -140,7 +141,7 @@ const actions: ActionTree<CategoryState, RootState> = {
       const categories = await CategoryService.getCategories(categorySearchOptions)
       if (Vue.prototype.$cacheTags) {
         categories.forEach(category => {
-          Vue.prototype.$cacheTags.add(`C${category.id}`)
+          rootStore.state.cacheTags.add(`C${category.id}`)
         })
       }
       const notFoundCategories = searchedIds.filter(categoryId => !categories.some(cat => cat.id === parseInt(categoryId) || cat.id === categoryId))
@@ -155,7 +156,7 @@ const actions: ActionTree<CategoryState, RootState> = {
     const categories: Category[] = await CategoryService.getCategories(categorySearchOptions)
     const category: Category = categories && categories.length ? categories[0] : null
     if (category && Vue.prototype.$cacheTags) {
-      Vue.prototype.$cacheTags.add(`C${category.id}`)
+      rootStore.state.cacheTags.add(`C${category.id}`)
     }
     commit(types.CATEGORY_ADD_CATEGORY, category)
     return category

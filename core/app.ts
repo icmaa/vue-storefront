@@ -47,15 +47,7 @@ const createApp = async (ssrContext, config, storeCode = null): Promise<{app: Vu
   store.state.config = config // @deprecated
   store.state.__DEMO_MODE__ = (config.demomode === true)
   if (ssrContext) {
-    // @deprecated - we shouldn't share server context between requests
-    Vue.prototype.$ssrRequestContext = {
-      output: {
-        cacheTags: ssrContext.output.cacheTags
-      },
-      userAgent: ssrContext.server.request.headers['user-agent']
-    }
-
-    Vue.prototype.$cacheTags = ssrContext.output.cacheTags
+    store.state.cacheTags = ssrContext.output.cacheTags
   }
   if (!store.state.config) store.state.config = globalConfig //  @deprecated - we should avoid the `config`
   const storeView = await prepareStoreView(storeCode) // prepare the default storeView

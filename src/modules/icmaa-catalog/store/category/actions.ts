@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import { ActionTree } from 'vuex'
+import rootStore from '@vue-storefront/core/store'
 import RootState from '@vue-storefront/core/types/RootState'
 import CategoryState from '@vue-storefront/core/modules/catalog-next/store/category/CategoryState'
 import FilterVariant from '@vue-storefront/core/modules/catalog-next/types/FilterVariant'
@@ -44,7 +45,7 @@ const actions: ActionTree<CategoryState, RootState> = {
     const categories = await dispatch('findCategories', categorySearchOptions)
     if (Vue.prototype.$cacheTags) {
       categories.forEach(category => {
-        Vue.prototype.$cacheTags.add(`C${category.id}`)
+        rootStore.state.cacheTags.add(`C${category.id}`)
       })
     }
 
