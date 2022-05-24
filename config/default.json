@@ -808,6 +808,9 @@
       }
     ]
   },
+  "searchPanel": {
+    "hideCategoriesFromPath": []
+  },
   "hotjar": {
     "id": false
   },

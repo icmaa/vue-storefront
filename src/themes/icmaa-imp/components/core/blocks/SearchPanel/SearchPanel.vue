@@ -34,10 +34,9 @@
         {{ $t('Please wait') }} ...
       </div>
       <category-panel
-        :categories="categories"
+        :category-ids="categoryIds"
         title="Categories"
-        :link="true"
-        v-if="!emptyResults && filteredProducts.length && categories.length > 0"
+        v-if="!emptyResults && filteredProducts.length && categoryIds.length > 0"
         class="t-pb-4 t-mb-4"
         :class="{ 't-opacity-25': pleaseWait }"
       />
@@ -92,6 +91,7 @@ import ButtonComponent from 'theme/components/core/blocks/Button'
 import LoaderBackground from 'theme/components/core/LoaderBackground'
 import VueOfflineMixin from 'vue-offline/mixin'
 
+import { searchPanel } from 'config'
 import i18n from '@vue-storefront/i18n'
 import addDefaultProductFilter from 'icmaa-catalog/helpers/defaultProductFilter'
 import { mapGetters } from 'vuex'
@@ -160,8 +160,8 @@ export default {
     filteredProducts () {
       return this.products || []
     },
-    categories () {
-      return this.categoryAggs
+    categoryIds () {
+      return this.categoryAggs.map(c => c.id)
     },
     getNoResultsMessage () {
       let msg = ''
@@ -215,9 +215,11 @@ export default {
           this.loadingProducts = false
           this.showPleaseWait = false
 
-          this.populateCategoryAggregations(aggregations)
-
           this.gtmOnSearchResult()
+
+          return aggregations
+        }).then(async aggr => {
+          await this.populateCategoryAggregations(aggr)
         }).catch((err) => {
           Logger.error(err, 'components-search')()
         })
@@ -266,7 +268,7 @@ export default {
 
       return searchQuery
     },
-    populateCategoryAggregations (aggr) {
+    async populateCategoryAggregations (aggr) {
       // This is a massive nested aggregation object which we crawl and collect all
       // available categories of all results not just those who are on results page
       this.categoryAggs = []
@@ -281,7 +283,14 @@ export default {
           }
           this.categoryAggs.push(cat)
         })
+
+        return this.fetchCategories(this.categoryIds)
       }
+    },
+    async fetchCategories (categoryIds) {
+      const pathFilter = searchPanel.hideCategoriesFromPath.map(toString)
+      const filters = Object.assign({ id: categoryIds, path: { 'nin': pathFilter } })
+      return this.$store.dispatch('category-next/loadCategories', { filters })
     },
     emptySearchInput () {
       this.$store.dispatch('icmaaSearch/setCurrentTerm', '')
