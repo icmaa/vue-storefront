@@ -1,4 +1,3 @@
-import Vue from 'vue'
 import union from 'lodash-es/union'
 import { createApp } from '@vue-storefront/core/app'
 import rootStore from '@vue-storefront/core/store'

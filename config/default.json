@@ -86,7 +86,7 @@
       "rel": "prefetch"
     },
     {
-      "filters": ["vsf-category", "vsf-home", "vsf-not-found", "vsf-error", "vsf-product", "vsf-cms", "vsf-checkout", "vsf-compare", "vsf-my-account", "vsf-static", "vsf-reset-password"],
+      "filters": ["vsf-category", "vsf-home", "vsf-not-found", "vsf-error", "vsf-product", "vsf-checkout", "vsf-compare", "vsf-my-account", "vsf-static", "vsf-reset-password"],
       "type": "script",
       "onload": true,
       "rel": "prefetch"
@@ -126,10 +126,7 @@
       "attribute",
       "category",
       "taxrule",
-      "review",
-      "cms_page",
-      "cms_block",
-      "cms_hierarchy"
+      "review"
     ]
   },
   "ssr": {
@@ -633,8 +630,6 @@
   "localForage": {
     "defaultDrivers": {
       "user": "LOCALSTORAGE",
-      "cmspage": "LOCALSTORAGE",
-      "cmsblock": "LOCALSTORAGE",
       "carts": "LOCALSTORAGE",
       "orders": "LOCALSTORAGE",
       "wishlist": "LOCALSTORAGE",
@@ -773,16 +768,6 @@
   },
   "hotjar": {
     "id": false
-  },
-  "cms": {
-    "endpoint": "/api/ext/cms-data/cms{{type}}/{{cmsId}}",
-    "endpointIdentifier": "/api/ext/cms-data/cms{{type}}Identifier/{{cmsIdentifier}}/storeId/{{storeId}}"
-  },
-  "cms_block": {
-    "max_count": 500
-  },
-  "cms_page": {
-    "max_count": 500
   },
   "usePriceTiers": false,
   "useZeroPriceProduct": true,

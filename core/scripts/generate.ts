@@ -87,31 +87,6 @@ program
   .option('-s|--size <size>', 'size - batch size', 20)
   .action(_cmdGenerateCategories)
 
-const _cmdGenerateCms = async (cmd) => {
-  const getCmsPage = (from, size) => search({
-    size: size,
-    from: from,
-    sort: 'id:desc',
-    type: 'cms_page',
-    searchQuery: bodybuilder().build()
-  }, config, config /* TODO: add support for different storeviews */).then(results => {
-    if (results.hits && results.hits.hits.length > 0) {
-      results.hits.hits.map(page => { page._source.url_path = `/i/${page._source.identifier}` })
-    }
-    return results
-  })
-  let pageFrom = parseInt(cmd.from)
-  let pageSize = parseInt(cmd.size)
-
-  await _renderItems(getCmsPage, pageFrom, pageSize, cmd.relative)
-}
-program
-  .command('cms')
-  .option('-r|--relative <relative>', 'use relative paths', false)
-  .option('-f|--from <from>', 'from - starting record', 0)
-  .option('-s|--size <size>', 'size - batch size', 20)
-  .action(_cmdGenerateCms)
-
 const _cmdPrepare = async (cmd) => {
   await generator.clearAll(destPath);
   await generator.saveScripts(resolve(''), destPath);
@@ -155,7 +130,6 @@ const _cmdAll = async (cmd) => {
   })
   await _cmdGenerateCategories(cmd)
   await _cmdGenerateProducts(cmd)
-  await _cmdGenerateCms(cmd)
 }
 program
   .command('all')
