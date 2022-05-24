@@ -19,7 +19,10 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import { searchPanel } from 'config'
+import { IcmaaGoogleTagManagerExecutors } from 'icmaa-google-tag-manager/hooks'
 import ButtonComponent from 'theme/components/core/blocks/Button'
+import pick from 'lodash-es/pick'
 
 export default {
   name: 'CategoryPanel',
@@ -42,11 +45,21 @@ export default {
       getCategoryById: 'category-next/getCategoryById'
     }),
     categories () {
-      return this.categoryIds.map(id => this.getCategoryById(id)).filter(c => !!c)
+      const pathFilter = searchPanel.hideCategoriesFromPath.map(c => c.toString())
+      return this.categoryIds
+        .map(id => this.getCategoryById(id))
+        .filter(c => {
+          if (!c) return false
+          if (c.path.split('/').includes(pathFilter)) return false
+          return true
+        })
     }
   },
   methods: {
     goToCategory (category) {
+      const gtmCategory = pick(category, ['url_path', 'name', 'id', 'slug'])
+      IcmaaGoogleTagManagerExecutors.onSearchPanelCategoryClick({ category: gtmCategory })
+
       this.$store.dispatch('ui/closeAll')
       if (category.id === this.currentCategory.id) return
       this.$router.push(this.localizedRoute(category.url_path))

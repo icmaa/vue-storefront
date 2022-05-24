@@ -93,6 +93,13 @@ export function afterRegistration () {
     })
   })
 
+  EventHooks.onSearchPanelCategoryClick(({ category }) => {
+    GTM.trackEvent({
+      event: 'icmaa-search-panel-category-click',
+      category
+    })
+  })
+
   EventHooks.openProductListFilterSidebar(() => {
     GTM.trackEvent({
       event: 'icmaa-open-product-list-filter-sidebar'

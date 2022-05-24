@@ -1,5 +1,6 @@
 import { createListenerHook } from '@vue-storefront/core/lib/hooks'
 import Product from '@vue-storefront/core/modules/catalog/types/Product'
+import { Category } from 'core/modules/catalog-next/types/Category'
 import { Route } from 'vue-router'
 
 const {
@@ -21,6 +22,11 @@ const {
   hook: onSearchResultHook,
   executor: onSearchResultExecutor
 } = createListenerHook<{ term: string, results: Product[] }>()
+
+const {
+  hook: onSearchPanelCategoryClickHook,
+  executor: onSearchPanelCategoryClickExecutor
+} = createListenerHook<{ category: Category }>()
 
 const {
   hook: searchResultVisitedHook,
@@ -67,6 +73,7 @@ const IcmaaGoogleTagManagerExecutors = {
   pageNotFound: pageNotFoundExecutor,
   onGtmPageView: onGtmPageViewExecutor,
   onSearchResult: onSearchResultExecutor,
+  onSearchPanelCategoryClick: onSearchPanelCategoryClickExecutor,
   searchResultVisited: searchResultVisitedExecutor,
   openProductListFilterSidebar: openProductListFilterSidebarExecutor,
   onProductListFilter: onProductListFilterExecutor,
@@ -82,6 +89,7 @@ const IcmaaGoogleTagManager = {
   pageNotFound: pageNotFoundHook,
   onGtmPageView: onGtmPageViewHook,
   onSearchResult: onSearchResultHook,
+  onSearchPanelCategoryClick: onSearchPanelCategoryClickHook,
   searchResultVisited: searchResultVisitedHook,
   openProductListFilterSidebar: openProductListFilterSidebarHook,
   onProductListFilter: onProductListFilterHook,
