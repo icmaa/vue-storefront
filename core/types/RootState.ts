@@ -4,7 +4,6 @@ export default interface RootState {
   config: any,
   cart: any,
   checkout: any,
-  cms: any,
   compare: any,
   product: any,
   shipping: any,

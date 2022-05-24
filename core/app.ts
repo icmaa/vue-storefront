@@ -8,7 +8,6 @@ import VueRouter from 'vue-router'
 import Vuelidate from 'vuelidate'
 import Meta from 'vue-meta'
 import { sync } from 'vuex-router-sync'
-import { getApolloProvider } from './scripts/resolvers/resolveGraphQL'
 // TODO simplify by removing global mixins, plugins and filters - it can be done in normal 'vue' way
 import { registerTheme } from '@vue-storefront/core/lib/themes'
 import { themeEntry } from 'theme/index.js'
@@ -77,9 +76,6 @@ const createApp = async (ssrContext, config, storeCode = null): Promise<{app: Vu
     i18n,
     render: h => h(themeEntry)
   }
-
-  const apolloProvider = await getApolloProvider()
-  if (apolloProvider) Object.assign(vueOptions, { provider: apolloProvider })
 
   const app = new Vue(vueOptions)
 

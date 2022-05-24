@@ -27,12 +27,3 @@ export const transformCategoryUrl = (category) => {
     }
   }
 }
-
-export const transformCmsPageUrl = (cmsPage) => {
-  return {
-    name: 'cms-page',
-    params: {
-      slug: cmsPage.identifier
-    }
-  }
-}

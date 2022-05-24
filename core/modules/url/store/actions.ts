@@ -1,4 +1,4 @@
-import { transformProductUrl, transformCategoryUrl, transformCmsPageUrl } from '@vue-storefront/core/modules/url/helpers/transformUrl';
+import { transformProductUrl, transformCategoryUrl } from '@vue-storefront/core/modules/url/helpers/transformUrl';
 import { isServer } from '@vue-storefront/core/helpers';
 import { UrlState } from '../types/UrlState'
 import { ActionTree } from 'vuex';
@@ -13,7 +13,6 @@ import fetch from 'isomorphic-fetch'
 import { Logger } from '@vue-storefront/core/lib/logger'
 import { processURLAddress } from '@vue-storefront/core/helpers';
 import * as categoryMutationTypes from '@vue-storefront/core/modules/catalog-next/store/category/mutation-types'
-import * as cmsPageMutationTypes from '@vue-storefront/core/modules/cms/store/page/mutation-types'
 import isEqual from 'lodash-es/isEqual'
 import * as types from './mutation-types'
 import omit from 'lodash-es/omit'
@@ -184,9 +183,6 @@ export const actions: ActionTree<UrlState, any> = {
       case 'category': {
         return transformCategoryUrl(_source)
       }
-      case 'cms_page': {
-        return transformCmsPageUrl(_source)
-      }
       default: {
         return {
           name: 'page-not-found',
@@ -209,11 +205,6 @@ export const actions: ActionTree<UrlState, any> = {
       }
       case 'category': {
         commit('category-next/' + categoryMutationTypes.CATEGORY_ADD_CATEGORY, _source, { root: true })
-        break
-      }
-      case 'cms_page': {
-        commit('cmsPage/' + cmsPageMutationTypes.CMS_PAGE_ADD_CMS_PAGE, _source, { root: true })
-        commit('cmsPage/' + cmsPageMutationTypes.CMS_PAGE_SET_CURRENT, _source, { root: true })
         break
       }
       default: {
