@@ -91,10 +91,10 @@ import ButtonComponent from 'theme/components/core/blocks/Button'
 import LoaderBackground from 'theme/components/core/LoaderBackground'
 import VueOfflineMixin from 'vue-offline/mixin'
 
-import { searchPanel } from 'config'
 import i18n from '@vue-storefront/i18n'
 import addDefaultProductFilter from 'icmaa-catalog/helpers/defaultProductFilter'
 import { mapGetters } from 'vuex'
+import { searchPanel } from 'config'
 import { required, minLength } from 'vuelidate/lib/validators'
 import { disableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock'
 import { IcmaaGoogleTagManagerExecutors } from 'icmaa-google-tag-manager/hooks'
@@ -288,7 +288,7 @@ export default {
       }
     },
     async fetchCategories (categoryIds) {
-      const pathFilter = searchPanel.hideCategoriesFromPath.map(toString)
+      const pathFilter = searchPanel.hideCategoriesFromPath.map(c => c.toString())
       const filters = Object.assign({ id: categoryIds, path: { 'nin': pathFilter } })
       return this.$store.dispatch('category-next/loadCategories', { filters })
     },
