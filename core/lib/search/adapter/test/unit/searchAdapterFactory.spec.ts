@@ -1,7 +1,7 @@
 import { getSearchAdapter } from '@vue-storefront/core/lib/search/adapter/searchAdapterFactory'
 
 jest.mock('config', () => {
-  return { server: { api: 'api' } };
+  return { server: { api: 'api-search-query' } };
 });
 jest.mock('@vue-storefront/core/lib/logger', () => ({
   Logger: {
@@ -25,12 +25,12 @@ const mockSearchAdapterModule = {
 
 describe('Search adapter factory tests', () => {
   it('Search adapter constructor called always only once', async () => {
-    jest.mock('../../api/searchAdapter', () => {
+    jest.mock('../../api-search-query/searchAdapter', () => {
       return mockSearchAdapterModule;
     })
 
     const apiSearchAdapter1 = await getSearchAdapter()
-    const apiSearchAdapter2 = await getSearchAdapter('api')
+    const apiSearchAdapter2 = await getSearchAdapter('api-search-query')
     expect(mockSearchAdapterModule.SearchAdapter).toHaveBeenCalledTimes(1)
   })
 

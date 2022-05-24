@@ -3,7 +3,7 @@
     "host": "localhost",
     "port": 3000,
     "protocol": "http",
-    "api": "api",
+    "api": "api-search-query",
     "devServiceWorker": false,
     "useHtmlMinifier": true,
     "htmlMinifierOptions": {
@@ -113,10 +113,6 @@
     "port": 6379,
     "db": 0
   },
-  "graphql": {
-    "host": "localhost",
-    "port": 8080
-  },
   "api": {
     "url": "http://localhost:8080",
     "saveBandwidthOverCache": true
@@ -134,43 +130,7 @@
       "cms_page",
       "cms_block",
       "cms_hierarchy"
-    ],
-    "min_score": 0.02,
-    "csrTimeout": 5000,
-    "ssrTimeout": 1000,
-    "queryMethod": "GET",
-    "disablePersistentQueriesCache": true,
-    "searchScoring": {
-      "attributes": {
-        "attribute_code": {
-          "scoreValues": {
-            "attribute_value": {
-              "weight": 1
-            }
-          }
-        }
-      },
-      "fuzziness": 2,
-      "cutoff_frequency": 0.01,
-      "max_expansions": 3,
-      "minimum_should_match": "75%",
-      "prefix_length": 2,
-      "boost_mode": "multiply",
-      "score_mode": "multiply",
-      "max_boost": 100,
-      "function_min_score": 1
-    },
-    "searchableAttributes": {
-      "name": {
-        "boost": 4
-      },
-      "sku": {
-        "boost": 2
-      },
-      "category.name": {
-        "boost": 1
-      }
-    }
+    ]
   },
   "ssr": {
     "templates": {
@@ -826,32 +786,6 @@
   },
   "usePriceTiers": false,
   "useZeroPriceProduct": true,
-  "query": {
-    "inspirations": {
-      "filter": [
-        {
-          "key": "category.name",
-          "value": { "eq": "Performance Fabrics" }
-        }
-      ]
-    },
-    "newProducts": {
-      "filter": [
-        {
-          "key": "new",
-          "value": { "eq": 1 }
-        }
-      ]
-    },
-    "bestSellers": {
-      "filter": [
-        {
-          "key": "category.name",
-          "value": { "eq": "Tees" }
-        }
-      ]
-    }
-  },
   "urlModule": {
     "enableMapFallbackUrl": false,
     "endpoint": "/api/url",
