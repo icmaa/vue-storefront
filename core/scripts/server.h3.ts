@@ -205,6 +205,8 @@ app.use('*', async (req, res) => {
         res.setHeader('Content-Type', 'text/html')
       }
 
+      res.setHeader('aoe-static', 'cache')
+
       let tagsArray = []
       if (config.server.useOutputCacheTagging &&
           context.output.cacheTags &&
