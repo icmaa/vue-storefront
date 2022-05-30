@@ -244,6 +244,7 @@ app.use('*', async (req, res) => {
       })
 
       if (config.server.useOutputCache && cache) {
+        res.setHeader('X-VS-Cache', 'Initial')
         await cache.set(
           cacheKey,
           { headers: res.getHeaders(), body: output, httpCode: res.statusCode },
