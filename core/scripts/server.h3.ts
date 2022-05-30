@@ -205,7 +205,7 @@ app.use('*', async (req, res) => {
         res.setHeader('Content-Type', 'text/html')
       }
 
-      res.setHeader('aoe-static', 'cache')
+      res.setHeader('aoestatic', 'cache')
       res.setHeader('cache-control', 'max-age=86400')
 
       let tagsArray = []
