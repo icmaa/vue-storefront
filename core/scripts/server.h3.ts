@@ -207,6 +207,8 @@ app.use('*', async (req, res) => {
 
       res.setHeader('aoestatic', 'cache')
       res.setHeader('cache-control', 'max-age=86400')
+      res.setHeader('x-magento-action', 'cms_index_index')
+      res.setHeader('x-magento-lifetime', '86400')
 
       let tagsArray = []
       if (config.server.useOutputCacheTagging &&
