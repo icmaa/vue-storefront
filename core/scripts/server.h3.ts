@@ -206,7 +206,7 @@ app.use('*', async (req, res) => {
       }
 
       res.setHeader('aoe-static', 'cache')
-      res.setHeader('cache-control', 86400)
+      res.setHeader('cache-control', 'max-age=86400')
 
       let tagsArray = []
       if (config.server.useOutputCacheTagging &&
