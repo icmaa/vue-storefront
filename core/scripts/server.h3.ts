@@ -206,6 +206,7 @@ app.use('*', async (req, res) => {
       }
 
       res.setHeader('x-magento-action', 'vue-storefront')
+      res.setHeader('set-cookie', 'do not reset cookie')
 
       let tagsArray = []
       if (config.server.useOutputCacheTagging &&
