@@ -2,43 +2,52 @@ import config from 'config'
 import { assertMethod, useQuery } from 'h3'
 import { apiStatus } from '@vue-storefront/core/scripts/server.h3'
 import { serverHooks } from '@vue-storefront/core/server/hooks'
-import chunk from 'lodash/chunk'
+import cache from '@vue-storefront/core/scripts/utils/cache-instance'
+import uniq from 'lodash/uniq'
 
-if (config.icmaa_cdn?.scalecommerce?.fullPageCache?.enabled === true) {
-  let { baseUrl, fullPageCache } = config.icmaa_cdn?.scalecommerce
-  const { cacheBustHeader } = fullPageCache
-  baseUrl = baseUrl.replace(/\/$/gm, '')
+serverHooks.afterApplicationInitialized(({ app }) => {
+  app.use('/cache-tag-urls', async (req, res) => {
+    assertMethod(req, 'GET')
+    const query = useQuery(req)
 
-  serverHooks.addCacheInvalidatedSubPromise(({ promises, cache, tag, req }) => {
-    const cacheKeyPromise = cache.redis.smembers('tags:' + tag)
-      .then(pageKeys => {
-        const site = req.headers['x-vs-store-code'] as string || 'main'
-        const currentKey = `page:${site}:`
-        const paths = pageKeys.map(key => key.replace(currentKey, ''))
-        const cacheBustRequests = []
+    if (config.server.useOutputCache) {
+      if (!query.key || query.key !== config.server.invalidateCacheKey) { // clear cache pages for specific query tag
+        console.error('Invalid cache invalidation key')
+        return apiStatus(res, 'Invalid cache invalidation key', 500)
+      }
+    } else {
+      return apiStatus(res, 'Cache invalidation is not required, output cache is disabled')
+    }
 
-        paths.forEach(path => {
-          const batchCacheBust = fetch(baseUrl + path, {
-            method: 'GET',
-            headers: cacheBustHeader
-          }).catch(e => {
-            throw Error('An error during ScaleCommerce purge appeared: ' + e.message)
-          })
+    const paths = []
+    const pathPromises = []
+    const tags = uniq(query.tag.split(','))
 
-          cacheBustRequests.push(batchCacheBust)
+    if (tags.length > 10) {
+      return apiStatus(res, 'Please fetch only 10 tags at once.', 500)
+    }
+
+    const site = req.headers['x-vs-store-code'] as string || 'main'
+    const currentKey = `page:${site}:`
+
+    tags.forEach(tag => {
+      if (!config.server.availableCacheTags.find(t => t === tag || tag.indexOf(t) === 0)) {
+        pathPromises.push(Promise.reject(`Invalid tag name ${tag}`))
+      }
+
+      const tagMemberPromis = cache.redis.smembers('tags:' + tag)
+        .then(pageKeys => {
+          paths.push(...pageKeys.map(k => k.replace(currentKey, '')))
         })
 
-        if (paths.length === 0) {
-          return Promise.resolve(true)
-        }
+      pathPromises.push(tagMemberPromis)
+    })
 
-        return Promise.all(cacheBustRequests)
-          .then(() => {
-            console.log('ScaleCommerce-Purge complete for:', paths)
-          })
+    return Promise.all(pathPromises)
+      .then(() => {
+        return apiStatus(res, uniq(paths))
+      }).catch(err => {
+        return apiStatus(res, err.message, 500)
       })
-      .catch(err => console.error(err))
-
-    promises.push(cacheKeyPromise)
   })
-}
+})
