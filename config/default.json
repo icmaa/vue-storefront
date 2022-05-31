@@ -794,8 +794,6 @@
     "expireHeaders",
     "fastly",
     "nginx",
-    "varnish",
-    "cloudflare",
-    "scalecommerce.fullPageCache"
+    "varnish"
   ]
 }
