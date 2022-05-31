@@ -33,6 +33,7 @@ serverHooks.afterApplicationInitialized(({ app }) => {
     tags.forEach(tag => {
       if (!config.server.availableCacheTags.find(t => t === tag || tag.indexOf(t) === 0)) {
         pathPromises.push(Promise.reject(`Invalid tag name ${tag}`))
+        return
       }
 
       const tagMemberPromis = cache.redis.smembers('tags:' + tag)
@@ -45,9 +46,9 @@ serverHooks.afterApplicationInitialized(({ app }) => {
 
     return Promise.all(pathPromises)
       .then(() => {
-        return apiStatus(res, uniq(paths))
+        return apiStatus(res, uniq(paths.sort()))
       }).catch(err => {
-        return apiStatus(res, err.message, 500)
+        return apiStatus(res, err, 500)
       })
   })
 })
