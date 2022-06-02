@@ -21,7 +21,7 @@ serverHooks.afterApplicationInitialized(({ app }) => {
 
     const paths = []
     const pathPromises = []
-    const tags = uniq(query.tag.split(','))
+    const tags = uniq((query.tag as string).split(','))
 
     if (tags.length > 10) {
       return apiStatus(res, 'Please fetch only 10 tags at once.', 500)

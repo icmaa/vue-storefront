@@ -7724,6 +7724,11 @@ convert-source-map@^1.4.0, convert-source-map@^1.5.1, convert-source-map@^1.6.0,
   dependencies:
     safe-buffer "~5.1.1"
 
+cookie-es@^0.5.0:
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/cookie-es/-/cookie-es-0.5.0.tgz#a6ad89923e68c542fc9e760b07aefa5ab020d719"
+  integrity sha512-RyZrFi6PNpBFbIaQjXDlFIhFVqV42QeKSZX1yQIl6ihImq6vcHNGMtqQ/QzY3RMPuYSkvsRwtnt5M9NeYxKt0g==
+
 cookie-signature@1.0.6:
   version "1.0.6"
   resolved "https://registry.yarnpkg.com/cookie-signature/-/cookie-signature-1.0.6.tgz#e303a882b342cc3ee8ca513a79999734dab3ae2c"
@@ -8587,6 +8592,11 @@ des.js@^1.0.0:
   dependencies:
     inherits "^2.0.1"
     minimalistic-assert "^1.0.0"
+
+destr@^1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/destr/-/destr-1.1.1.tgz#910457d10a2f2f247add4ca4fdb4a03adcc49079"
+  integrity sha512-QqkneF8LrYmwATMdnuD2MLI3GHQIcBnG6qFC2q9bSH430VTCDAVjcspPmUaKhPGtAtPAftIUFqY1obQYQuwmbg==
 
 destroy@~1.0.4:
   version "1.0.4"
@@ -10937,10 +10947,15 @@ gzip-size@^5.0.0:
     duplexer "^0.1.1"
     pify "^4.0.1"
 
-h3@^0.3.9:
-  version "0.3.9"
-  resolved "https://registry.yarnpkg.com/h3/-/h3-0.3.9.tgz#c395f1b6c40eb7664ca264007d5d6dc4b758211e"
-  integrity sha512-C9MbuWVQ88mGb3lmqtp/iqXdALBo34oyjrVT1hx+FYRgcQReNXiKWvzXM6eQdpp4MWQkMGNnp4tlRBT7wsgmmg==
+h3@^0.7.8:
+  version "0.7.8"
+  resolved "https://registry.yarnpkg.com/h3/-/h3-0.7.8.tgz#98aab2b1128e0f4edf4515d1477e6389230d1388"
+  integrity sha512-E5hqrzQvQEYVE4h579pLb9gipHagQVZIMP2v83vSKxa40b7ctG1zNylXtW57BT3BGNVeQTccl6vIwyVK1L6lLw==
+  dependencies:
+    cookie-es "^0.5.0"
+    destr "^1.1.1"
+    radix3 "^0.1.2"
+    ufo "^0.8.3"
 
 handle-thing@^2.0.0:
   version "2.0.0"
@@ -16791,6 +16806,11 @@ quick-lru@^4.0.1:
   resolved "https://registry.yarnpkg.com/quick-lru/-/quick-lru-4.0.1.tgz#5b8878f113a58217848c6482026c73e1ba57727f"
   integrity sha512-ARhCpm70fzdcvNQfPoy49IaanKkTlRWF2JMzqhcJbhSFRZv7nPTvZJdcY7301IPmvW+/p0RgIWnQDLJxifsQ7g==
 
+radix3@^0.1.2:
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/radix3/-/radix3-0.1.2.tgz#5f7351af7fc5e4b1d9a1b14a7266b6a4a8cac0ba"
+  integrity sha512-Mpfd/OuX0zoJ6ojLD/RTOHvJPg6e6PjINtmYzV87kIXc5iUtDz34i7gg4SV4XjqRJTmSiYO/g9i/mKWGf4z8wg==
+
 ramda@~0.27.1:
   version "0.27.1"
   resolved "https://registry.yarnpkg.com/ramda/-/ramda-0.27.1.tgz#66fc2df3ef873874ffc2da6aa8984658abacf5c9"
@@ -19775,6 +19795,11 @@ uc.micro@^1.0.1, uc.micro@^1.0.5:
   version "1.0.6"
   resolved "https://registry.yarnpkg.com/uc.micro/-/uc.micro-1.0.6.tgz#9c411a802a409a91fc6cf74081baba34b24499ac"
   integrity sha512-8Y75pvTYkLJW2hWQHXxoqRgV7qb9B+9vFEtidML+7koHUFapnVJAZ6cKs+Qjz5Aw3aZWHMC6u0wJE3At+nSGwA==
+
+ufo@^0.8.3:
+  version "0.8.4"
+  resolved "https://registry.yarnpkg.com/ufo/-/ufo-0.8.4.tgz#23e9ed82398d2116dcb378e8fba5ced8eca2ee40"
+  integrity sha512-/+BmBDe8GvlB2nIflWasLLAInjYG0bC9HRnfEpNi4sw77J2AJNnEVnTDReVrehoh825+Q/evF3THXTAweyam2g==
 
 uglify-es@^3.3.9:
   version "3.3.9"
