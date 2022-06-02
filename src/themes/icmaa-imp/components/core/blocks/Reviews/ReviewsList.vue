@@ -3,10 +3,10 @@
     <div v-if="!itemsPerPage || itemsPerPage.length === 0" class="t-bg-white t-rounded-sm t-p-4 t-text-sm t-text-base-light">
       {{ $t('No reviews have been posted yet. Please don\'t hesitate to share Your opinion and write the first review!') }}
     </div>
-    <div v-for="(item, index) in itemsPerPage" :key="index" itemprop="review" itemscope itemtype="http://schema.org/Review" class="t-bg-white t-rounded-sm t-p-4" :class="{ 't-mb-4': (index + 1) < perPage && (index + 1) < items.length }">
-      <meta itemprop="reviewAspect" :content="item.title" v-html="item.title">
-      <meta itemprop="itemReviewed" :content="productName | htmlDecode">
-      <meta itemprop="reviewBody" :content="item.detail | htmlDecode">
+    <div v-for="(item, index) in itemsPerPage" :key="index" itemscope itemtype="http://schema.org/Review" class="t-bg-white t-rounded-sm t-p-4" :class="{ 't-mb-4': (index + 1) < perPage && (index + 1) < items.length }">
+      <meta :content="item.title" v-html="item.title">
+      <meta :content="productName | htmlDecode">
+      <meta :content="item.detail | htmlDecode">
       <reviews-stars :rating="item.ratings_total" stars-size="sm" class="t-flex t-items-center t-text-md t-text-base-light t-mt-2" />
       <p class="t-text-sm t-my-4" v-html="item.detail" />
       <p class="t-text-sm t-text-base-light" v-text="item.nickname + ' / ' + item.date" />
