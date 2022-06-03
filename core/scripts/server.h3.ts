@@ -6,7 +6,7 @@ import glob from 'glob'
 import fetch from 'isomorphic-fetch'
 import { path as rootPath } from 'app-root-path'
 import { createServer, IncomingMessage, OutgoingMessage, ServerResponse } from 'http'
-import { createApp, useQuery, useMethod, assertMethod, Handle, createError, sendError, send, sendRedirect } from 'h3'
+import { createApp, useQuery, useMethod, assertMethod, Handler, createError, sendError, send, sendRedirect, CompatibilityEvent } from 'h3'
 import { serverHooksExecutors } from '@vue-storefront/core/server/hooks'
 import { storeCodeFromUrlPath } from 'icmaa-config/helpers/store'
 import { Context } from './utils/types'
@@ -43,7 +43,7 @@ export const serveStaticMiddleware = function (path: string) {
     if (config.expireHeaders.hasOwnProperty(mimeType)) {
       maxAge = config.expireHeaders.get(mimeType)
     }
-    return serveStatic(path, { maxAge })(req as any, res as any, next) as Handle
+    return serveStatic(path, { maxAge })(req as any, res as any, next) as Handler
   }
 }
 
@@ -56,7 +56,7 @@ export const apiStatus = async (res: ServerResponse, data, statusCode = 200, dro
     if (dropExcp) {
       const statusMessage = typeof data === 'string' ? data : undefined
       const err = createError({ statusCode, statusMessage, data })
-      return sendError(res, err, !isProd)
+      return sendError({ res } as any, err, !isProd)
     }
     res.statusCode = statusCode
   }
@@ -82,15 +82,15 @@ app.use(async (req, res) => {
         return apiStatus(res, 'Invalid cache invalidation key', 500)
       }
 
-      const tags = query.tag === '*' ? config.server.availableCacheTags : query.tag.split(',')
+      const tags = query.tag === '*' ? config.server.availableCacheTags : (query.tag as string).split(',')
 
       serverHooksExecutors.beforeCacheInvalidated({ tags, req: req as any })
 
       const subPromises = []
       tags.forEach(tag => {
         if (config.server.availableCacheTags.find(t => t === tag || tag.indexOf(t) === 0)) {
-          subPromises.push(cache.invalidate(tag))
           serverHooksExecutors.addCacheInvalidatedSubPromise({ promises: subPromises, cache, tag, req })
+          subPromises.push(cache.invalidate(tag))
         } else {
           console.error(`Invalid tag name ${tag}`)
           subPromises.push(Promise.reject(`Invalid tag name ${tag}`))
@@ -205,6 +205,10 @@ app.use('*', async (req, res) => {
         res.setHeader('Content-Type', 'text/html')
       }
 
+      for (const [key, value] of Object.entries(config.server.customResponseHeader || {})) {
+        res.setHeader(key, value as string)
+      }
+
       let tagsArray = []
       if (config.server.useOutputCacheTagging &&
           context.output.cacheTags &&
@@ -242,6 +246,7 @@ app.use('*', async (req, res) => {
       })
 
       if (config.server.useOutputCache && cache) {
+        res.setHeader('X-VS-Cache', 'Initial')
         await cache.set(
           cacheKey,
           { headers: res.getHeaders(), body: output, httpCode: res.statusCode },
@@ -265,9 +270,13 @@ app.use('*', async (req, res) => {
 
   const dynamicCacheHandler = async (config) => {
     if (config.server.useOutputCache && cache) {
-      return cache.get(
-        cacheKey
-      ).then(async output => {
+      const bypassHeader = config.server.outputCacheBypassHeader
+      if (!!bypassHeader && !!req.headers[bypassHeader.toLowerCase()]) {
+        console.log(`Bypass cache [${req.url}], request: ${Date.now() - s}ms`)
+        return apiStatus(res, await dynamicRequestHandler(renderer, config), null, false)
+      }
+
+      return cache.get(cacheKey).then(async output => {
         if (output !== null) {
           if (output.headers) {
             for (const header of Object.keys(output.headers)) {

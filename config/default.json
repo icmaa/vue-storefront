@@ -32,6 +32,8 @@
     "invalidateCacheKey": "aeSu7aip",
     "invalidateCacheForwarding": false,
     "invalidateCacheForwardUrl": "http://localhost:8080/invalidate?key=aeSu7aip&tag=",
+    "outputCacheBypassHeader": false,
+    "customResponseHeader": {},
     "dynamicConfigReload": true,
     "dynamicConfigReloadWithEachRequest": false,
     "dynamicConfigContinueOnError": false,
@@ -789,12 +791,12 @@
     "server.invalidateCacheKey",
     "server.invalidateCacheForwardUrl",
     "server.trace",
+    "server.customResponseHeader",
     "redis",
     "install",
     "expireHeaders",
     "fastly",
     "nginx",
-    "varnish",
-    "cloudflare"
+    "varnish"
   ]
 }

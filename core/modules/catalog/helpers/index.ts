@@ -142,6 +142,7 @@ export function configurableChildrenImages (product) {
 
 export const setRequestCacheTags = ({ products = [] }) => {
   products.forEach(product => {
-    rootStore.dispatch('addCacheTag', `P${product?.id || ''}`)
+    if (!product?.id && product?.parentId) return
+    rootStore.dispatch('addCacheTag', `P${product?.parentId || product?.id}`)
   })
 }
