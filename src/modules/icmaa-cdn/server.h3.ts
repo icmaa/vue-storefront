@@ -23,8 +23,8 @@ serverHooks.afterApplicationInitialized(({ app }) => {
     const pathPromises = []
     const tags = uniq((query.tag as string).split(','))
 
-    if (tags.length > 10) {
-      return apiStatus(res, 'Please fetch only 10 tags at once.', 500)
+    if (tags.length > 15) {
+      return apiStatus(res, 'Please fetch only 15 tags at once.', 500)
     }
 
     const site = req.headers['x-vs-store-code'] as string || 'main'
