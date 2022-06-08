@@ -156,15 +156,15 @@ export default {
 
 <style lang="scss" scoped>
 .t-bg-insd-container {
-  background-color: #181415
+  background-color: #1B1634
 }
 
 .t-bg-insd-box {
-  background-color: #2e1a1c
+  background-color: #3A2359
 }
 
 .t-bg-insd {
-  background-color: #e8ddbf
+  background-color: #D4BFFF
 }
 
 .t-text-insd {
