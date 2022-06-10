@@ -10,6 +10,7 @@
 import { mapGetters } from 'vuex'
 
 const productComp = () => import(/* webpackChunkName: "vsf-jsonld-product" */ './Product')
+const ticketComp = () => import(/* webpackChunkName: "vsf-jsonld-ticket" */ './Ticket')
 const breadcrumbsComp = () => import(/* webpackChunkName: "vsf-jsonld-breadcrumbs" */ './Breadcrumbs')
 
 export default {
@@ -17,6 +18,7 @@ export default {
   data () {
     return {
       productComp,
+      ticketComp,
       breadcrumbsComp
     }
   },

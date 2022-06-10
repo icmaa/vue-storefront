@@ -119,6 +119,7 @@
     />
 
     <json-ld-loader type="product" />
+    <json-ld-loader type="ticket" v-if="isTicket" />
   </div>
 </template>
 
@@ -245,6 +246,9 @@ export default {
     },
     isPreorder () {
       return this.product.promo_id === '5'
+    },
+    isTicket () {
+      return (this.product.type_id === 'simple' && !!this.product.ticket_address)
     },
     hasConfiguration () {
       return this.configuration && Object.keys(this.configuration).length > 0 && this.userHasSelectedVariant
