@@ -46,3 +46,20 @@ Allow: /*utm_source=Affiliate*
 
 User-agent: MJ12bot
 Disallow: /
+
+Sitemap: https://www.impericon.com/de/sitemap_de.xml?store_code=de
+Sitemap: https://www.impericon.com/ch/sitemap_ch.xml?store_code=ch
+Sitemap: https://www.impericon.com/at/sitemap_at.xml?store_code=at
+Sitemap: https://www.impericon.com/fr/sitemap_fr.xml?store_code=fr
+Sitemap: https://www.impericon.com/es/sitemap_es.xml?store_code=es
+Sitemap: https://www.impericon.com/pt/sitemap_pt.xml?store_code=pt
+Sitemap: https://www.impericon.com/it/sitemap_it.xml?store_code=it
+Sitemap: https://www.impericon.com/pl/sitemap_pl.xml?store_code=pl
+Sitemap: https://www.impericon.com/cz/sitemap_cz.xml?store_code=cz
+Sitemap: https://www.impericon.com/nl/sitemap_nl.xml?store_code=nl
+Sitemap: https://www.impericon.com/fi/sitemap_fi.xml?store_code=fi
+Sitemap: https://www.impericon.com/se/sitemap_se.xml?store_code=se
+Sitemap: https://www.impericon.com/en/sitemap_en.xml?store_code=en
+Sitemap: https://www.impericon.com/uk/sitemap_uk.xml?store_code=uk
+Sitemap: https://www.impericon.com/us/sitemap_us.xml?store_code=us
+Sitemap: https://www.impericon.com/au/sitemap_au.xml?store_code=au
