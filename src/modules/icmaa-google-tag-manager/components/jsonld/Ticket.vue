@@ -30,8 +30,15 @@ export default {
       const storeView = currentStoreView()
       return storeView.i18n.currencyCode
     },
-    band () {
-      return this.getOptionLabel({ attributeKey: 'band', optionId: this.product.band })
+    performer () {
+      if (!this.product.band) return {}
+
+      return {
+        'performer': {
+          '@type': 'PerformingGroup',
+          'name': this.getOptionLabel({ attributeKey: 'band', optionId: this.product.band })
+        }
+      }
     },
     startDate () {
       const date = this.product.ticket_eventdate.replace('00:00:00', this.product.ticket_start + ':00')
@@ -60,6 +67,7 @@ export default {
       const defaults = {
         '@type': 'Offer',
         'url': icmaa_meta.base_url + this.currentRoute.fullPath,
+        'validFrom': getCurrentStoreviewDayjsDatetime().format('YYYY-MM-DD'),
         'priceValidUntil': getCurrentStoreviewDayjsDatetime().add(7, 'days').format('YYYY-MM-DD'),
         'priceCurrency': this.currency
       }
@@ -114,15 +122,12 @@ export default {
             // 'addressCountry': 'US'
           }
         },
-        'performer': {
-          '@type': 'PerformingGroup',
-          'name': this.band
-        },
         // 'organizer': {
         //   '@type': 'Organization',
         //   'name': 'Kira and Morrison Music',
         //   'url': 'https://kiraandmorrisonmusic.com'
         // },
+        ...this.performer,
         ...this.offers
       }
     }
