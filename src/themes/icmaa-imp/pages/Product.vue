@@ -94,7 +94,7 @@
         </div>
         <div class="reviews t-relative t-w-full t-p-8 t-bg-base-lighter lg:t-w-1/2" id="reviews">
           <lazyload data-test-id="ReviewsLoader">
-            <reviews :product="product" :product-name="product.translatedName" v-show="isOnline" />
+            <reviews :product="product" :product-name="product.translatedName" />
             <reviews-claim />
           </lazyload>
         </div>
@@ -134,7 +134,6 @@ import * as productMutationTypes from '@vue-storefront/core/modules/catalog/stor
 
 import { ReviewModule } from '@vue-storefront/core/modules/review'
 import { IcmaaExtendedReviewModule } from 'icmaa-review'
-import { RecentlyViewedModule } from '@vue-storefront/core/modules/recently-viewed'
 import Reviews from 'theme/components/core/blocks/Reviews/Reviews'
 
 import AsyncSidebar from 'theme/components/core/blocks/AsyncSidebar/AsyncSidebar'
@@ -197,7 +196,6 @@ export default {
   beforeCreate () {
     registerModule(ReviewModule)
     registerModule(IcmaaExtendedReviewModule)
-    registerModule(RecentlyViewedModule)
   },
   data () {
     return {
