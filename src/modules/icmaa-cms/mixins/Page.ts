@@ -33,7 +33,7 @@ export default {
     if (context) {
       context.output.cacheTags
         .add('cms')
-        .add('cms-' + this.identifier)
+        .add('cms-' + route.params.identifier.toLowerCase())
     }
 
     await store.dispatch(
