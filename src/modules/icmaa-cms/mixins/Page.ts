@@ -29,7 +29,13 @@ export default {
       }
     }
   },
-  async asyncData ({ store, route }) {
+  async asyncData ({ context, store, route }) {
+    if (context) {
+      context.output.cacheTags
+        .add('cms')
+        .add('cms-' + route.params.identifier.toLowerCase())
+    }
+
     await store.dispatch(
       'icmaaCmsPage/single', { value: route.params.identifier }
     )
