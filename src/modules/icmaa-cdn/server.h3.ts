@@ -10,13 +10,13 @@ serverHooks.afterApplicationInitialized(({ app }) => {
     assertMethod(req, 'GET')
     const query = useQuery(req)
 
-    if (config.server.useOutputCache) {
+    if (config.server.useOutputCacheTagging) {
       if (!query.key || query.key !== config.server.invalidateCacheKey) { // clear cache pages for specific query tag
         console.error('Invalid cache invalidation key')
         return apiStatus(res, 'Invalid cache invalidation key', 500)
       }
     } else {
-      return apiStatus(res, 'Cache invalidation is not required, output cache is disabled')
+      return apiStatus(res, 'Cache-tags ar not required, output-cache-tagging is disabled')
     }
 
     const paths = []

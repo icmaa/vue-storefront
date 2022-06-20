@@ -254,6 +254,10 @@ app.use('*', async (req, res) => {
         ).catch(err => {
           console.error('Couldn\'t write output-cache:', err.message)
         })
+      } else if (!config.server.useOutputCache && config.server.useOutputCacheTagging && cache) {
+        await cache.set(cacheKey, {}, tagsArray).catch(err => {
+          console.error('Couldn\'t write tag-cache:', err.message)
+        })
       }
 
       if (typeof afterOutputRenderedResponse === 'string') {

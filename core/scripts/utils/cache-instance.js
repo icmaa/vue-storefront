@@ -4,7 +4,7 @@ const TagCache = require('redis-tag-cache').default
 const config = require('config')
 let cache = false
 
-if (config.server.useOutputCache) {
+if (config.server.useOutputCache || (!config.server.useOutputCache && config.server.useOutputCacheTagging)) {
   const cacheVersionPath = path.resolve(path.join('core', 'build', 'cache-version.json'))
   let cacheKey = ''
   try {
