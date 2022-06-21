@@ -4,6 +4,7 @@ import mime from 'mime/lite'
 import path from 'path'
 import glob from 'glob'
 import fetch from 'isomorphic-fetch'
+import cache, { tagCache } from './utils/cache-instance'
 import { path as rootPath } from 'app-root-path'
 import { createServer, IncomingMessage, OutgoingMessage, ServerResponse } from 'http'
 import { createApp, useQuery, useMethod, assertMethod, Handler, createError, sendError, send, sendRedirect, CompatibilityEvent } from 'h3'
@@ -11,7 +12,6 @@ import { serverHooksExecutors } from '@vue-storefront/core/server/hooks'
 import { storeCodeFromUrlPath } from 'icmaa-config/helpers/store'
 import { Context } from './utils/types'
 
-const cache = require('./utils/cache-instance')
 const themeRootPath = require('../build/theme-path')
 const compilationPage = require('../pages/Compilation')
 const ssr = require('./utils/ssr-renderer')
@@ -254,8 +254,10 @@ app.use('*', async (req, res) => {
         ).catch(err => {
           console.error('Couldn\'t write output-cache:', err.message)
         })
-      } else if (!config.server.useOutputCache && config.server.useOutputCacheTagging && cache) {
-        await cache.set(cacheKey, {}, tagsArray).catch(err => {
+      }
+
+      if (config.server.useOutputCacheTagging && tagCache) {
+        await tagCache.set(cacheKey, {}, tagsArray).catch(err => {
           console.error('Couldn\'t write tag-cache:', err.message)
         })
       }

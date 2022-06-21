@@ -2,15 +2,17 @@ import config from 'config'
 import { assertMethod, useQuery } from 'h3'
 import { apiStatus } from '@vue-storefront/core/scripts/server.h3'
 import { serverHooks } from '@vue-storefront/core/server/hooks'
-import cache from '@vue-storefront/core/scripts/utils/cache-instance'
+import cache, { tagCache } from '@vue-storefront/core/scripts/utils/cache-instance'
 import uniq from 'lodash/uniq'
+
+const cacheInstance = tagCache || cache
 
 serverHooks.afterApplicationInitialized(({ app }) => {
   app.use('/cache-tag-urls', async (req, res) => {
     assertMethod(req, 'GET')
     const query = useQuery(req)
 
-    if (config.server.useOutputCacheTagging) {
+    if (config.server.useOutputCacheTagging && cacheInstance) {
       if (!query.key || query.key !== config.server.invalidateCacheKey) { // clear cache pages for specific query tag
         console.error('Invalid cache invalidation key')
         return apiStatus(res, 'Invalid cache invalidation key', 500)
@@ -36,7 +38,7 @@ serverHooks.afterApplicationInitialized(({ app }) => {
         return
       }
 
-      const tagMemberPromis = cache.redis.smembers('tags:' + tag)
+      const tagMemberPromis = cacheInstance.redis.smembers('tags:' + tag)
         .then(pageKeys => {
           paths.push(...pageKeys.map(k => k.replace(currentKey, '')))
         })
