@@ -38,7 +38,7 @@ export default {
     }
   },
   methods: {
-    toggleRegistration (createAccount) {
+    toggleRegistration (createAccount = false) {
       this.details.createAccount = createAccount
       this.showRegistration = !this.showRegistration
     },
