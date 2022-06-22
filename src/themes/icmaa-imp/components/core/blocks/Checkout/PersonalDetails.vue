@@ -26,7 +26,7 @@
             <button-component
               type="primary"
               class="t-w-full"
-              @click="toggleRegistration"
+              @click="toggleRegistration(false)"
             >
               {{ $t('Proceed as guest') }}
             </button-component>
