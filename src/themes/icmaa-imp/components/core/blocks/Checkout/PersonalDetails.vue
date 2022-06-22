@@ -1,20 +1,40 @@
 <template>
   <div class="personal-details">
     <form v-if="active">
-      <div class="t-flex t-flex-wrap t--mx-2">
-        <div v-if="!isLoggedIn" class="t-w-full t-px-2 t-mb-6 t-flex t-flex-wrap lg:t-flex-no-wrap t-items-center">
-          <button-component
-            size="lg"
-            class="t-w-full lg:t-w-auto"
-            @click="openLoginModal"
-          >
-            {{ $t('Login to your account') }}
-          </button-component>
-          <paypal-checkout-button class="t-flex-1 t-mt-4 lg:t-mt-0 lg:t-ml-4 t-z-0" />
+      <div v-if="!isLoggedIn" class="t-flex t-mb-8">
+        <login
+          :is-modal="false"
+          @call-register="toggleRegistration(true)"
+          class="t-w-full"
+          v-if="!showRegistration"
+        />
+        <button-component
+          size="lg"
+          class="t-w-full lg:t-w-auto"
+          @click="toggleRegistration"
+          v-else
+        >
+          {{ $t('Login') }}
+        </button-component>
+      </div>
+      <div v-if="!isLoggedIn">
+        <div class="t-mb-4 t-font-light">
+          {{ details.createAccount ? $t('Proceed as new user') : $t('Proceed without login') }}
         </div>
-        <div v-if="!isLoggedIn" class="t-w-full t-px-2 t-mb-4 t-font-light">
-          {{ $t('Proceed as new user') }}
+        <div class="t-flex t-flex-wrap" v-if="!showRegistration">
+          <div class="t-w-full">
+            <button-component
+              type="primary"
+              class="t-w-full"
+              @click="toggleRegistration(false)"
+            >
+              {{ $t('Proceed as guest') }}
+            </button-component>
+          </div>
+          <paypal-checkout-button class="t-flex-1 t-mt-2 t-z-0" />
         </div>
+      </div>
+      <div class="t-flex t-flex-wrap t--mx-2" v-if="!isLoggedIn && showRegistration">
         <base-input
           class="t-w-full t-px-2 t-mb-4"
           type="email"
@@ -183,6 +203,7 @@
 <script>
 
 import PersonalDetails from 'icmaa-checkout/components/PersonalDetails'
+import Login from 'theme/components/core/blocks/Auth/Login'
 import BaseCheckbox from 'theme/components/core/blocks/Form/BaseCheckbox'
 import BaseInput from 'theme/components/core/blocks/Form/BaseInput'
 import GenderSelect from 'theme/components/core/blocks/Form/GenderSelect'
@@ -192,6 +213,7 @@ import PaypalCheckoutButton from 'icmaa-paypal/components/Checkout/ButtonWrapper
 export default {
   name: 'PersonalDetails',
   components: {
+    Login,
     ButtonComponent,
     BaseCheckbox,
     BaseInput,

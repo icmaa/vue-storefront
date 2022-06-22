@@ -21,6 +21,7 @@ export default {
   data () {
     return {
       details: {},
+      showRegistration: false,
       rPassword: ''
     }
   },
@@ -37,10 +38,15 @@ export default {
     }
   },
   methods: {
+    toggleRegistration (createAccount) {
+      this.details.createAccount = createAccount
+      this.showRegistration = !this.showRegistration
+    },
     onCheckoutAfterLoad () {
       this.details = this.initPersonalDetails(this.personalDetails)
 
       if (this.details.email && this.details.email !== '') {
+        this.showRegistration = true
         this.submit()
       } else {
         if (this.isLoggedIn) {
@@ -96,9 +102,6 @@ export default {
       }
 
       return data
-    },
-    openLoginModal () {
-      this.$store.dispatch('ui/showModal', 'modal-signup')
     }
   },
   mounted () {
