@@ -131,7 +131,7 @@ export default {
       }
     }
 
-    if (this.details.createAccount) {
+    if (this.details.createAccount === true) {
       const createVal = {
         details: {
           gender: {

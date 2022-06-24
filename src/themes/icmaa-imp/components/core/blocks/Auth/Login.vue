@@ -56,7 +56,7 @@
       </no-ssr>
       <div class="t-w-full t-px-1">
         <button-component
-          :type="isModal ? 'transparent' : 'ghost'"
+          :type="isModal ? 'transparent' : 'primary'"
           class="t-w-full t--mb-2 t-flex-wrap"
           @click="callRegister"
           data-test-id="registerLink"

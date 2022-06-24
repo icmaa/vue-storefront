@@ -11,7 +11,7 @@
         <button-component
           size="lg"
           class="t-w-full lg:t-w-auto"
-          @click="toggleRegistration"
+          @click="toggleRegistration(false)"
           v-else
         >
           {{ $t('Login') }}
@@ -24,9 +24,9 @@
         <div class="t-flex t-flex-wrap" v-if="!showRegistration">
           <div class="t-w-full">
             <button-component
-              type="primary"
+              type="ghost"
               class="t-w-full"
-              @click="toggleRegistration(false)"
+              @click="toggleRegistration(true)"
             >
               {{ $t('Proceed as guest') }}
             </button-component>
@@ -94,7 +94,6 @@
           ]"
         />
         <base-checkbox
-          v-if="!isLoggedIn"
           class="t-w-full t-px-2 t-mb-4"
           id="create-account"
           name="create-account"
