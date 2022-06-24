@@ -38,8 +38,9 @@ export default {
     }
   },
   methods: {
-    toggleRegistration (createAccount = false) {
-      this.details.createAccount = createAccount
+    toggleRegistration (createAccount) {
+      // Dude, stay reactive, its a nested objects!
+      this.details = Object.assign({}, this.details, { createAccount })
       this.showRegistration = !this.showRegistration
     },
     onCheckoutAfterLoad () {

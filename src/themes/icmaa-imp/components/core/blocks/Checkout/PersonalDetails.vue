@@ -11,7 +11,7 @@
         <button-component
           size="lg"
           class="t-w-full lg:t-w-auto"
-          @click="toggleRegistration(false)"
+          @click="toggleRegistration(true)"
           v-else
         >
           {{ $t('Login') }}
@@ -26,7 +26,7 @@
             <button-component
               type="ghost"
               class="t-w-full"
-              @click="toggleRegistration(true)"
+              @click="toggleRegistration(false)"
             >
               {{ $t('Proceed as guest') }}
             </button-component>
