@@ -36,7 +36,7 @@
         {{ $t('Forgot the password?') }}
       </div>
     </div>
-    <div class="t-flex t-flex-wrap t-mx--1">
+    <div class="t-flex t-flex-wrap t--mx-1">
       <div class="t-w-full t-px-1" :class="{ 'lg:t-w-1/2': !isModal }">
         <button-component
           :submit="true"
