@@ -34,7 +34,7 @@
           <paypal-checkout-button class="t-flex-1 t-mt-2 t-z-0" />
         </div>
       </div>
-      <div class="t-flex t-flex-wrap t--mx-2" v-if="!isLoggedIn && showRegistration">
+      <div class="t-flex t-flex-wrap t--mx-2" v-if="isLoggedIn || (!isLoggedIn && showRegistration)">
         <base-input
           class="t-w-full t-px-2 t-mb-4"
           type="email"
@@ -99,6 +99,7 @@
           name="create-account"
           v-model="details.createAccount"
           data-test-id="CreateAccountCheckbox"
+          v-if="!isLoggedIn"
         >
           {{ $t('I want to create an account') }}
         </base-checkbox>
