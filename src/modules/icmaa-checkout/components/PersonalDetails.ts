@@ -21,6 +21,7 @@ export default {
   data () {
     return {
       details: {},
+      showRegistration: false,
       rPassword: ''
     }
   },
@@ -37,10 +38,16 @@ export default {
     }
   },
   methods: {
+    toggleRegistration (createAccount) {
+      // Dude, stay reactive, its a nested objects!
+      this.details = Object.assign({}, this.details, { createAccount })
+      this.showRegistration = !this.showRegistration
+    },
     onCheckoutAfterLoad () {
       this.details = this.initPersonalDetails(this.personalDetails)
 
       if (this.details.email && this.details.email !== '') {
+        this.showRegistration = true
         this.submit()
       } else {
         if (this.isLoggedIn) {
@@ -96,9 +103,6 @@ export default {
       }
 
       return data
-    },
-    openLoginModal () {
-      this.$store.dispatch('ui/showModal', 'modal-signup')
     }
   },
   mounted () {
@@ -128,7 +132,7 @@ export default {
       }
     }
 
-    if (this.details.createAccount) {
+    if (this.details.createAccount === true) {
       const createVal = {
         details: {
           gender: {

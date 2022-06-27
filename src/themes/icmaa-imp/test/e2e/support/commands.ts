@@ -539,16 +539,22 @@ Cypress.Commands.add('checkoutFillPersonalDetails', (createNewAccount: boolean =
   cy.getCustomer().then(customer => {
     cy.get('#checkout .step-personal .personal-details').as('personal-details')
 
+    const initialButton = createNewAccount ? 'registerLink' : 'guestCheckoutButton'
+    cy.get('@personal-details')
+      .getByTestId(initialButton).click()
+      .getByTestId('RegistrationForm').should('be.visible')
+
     cy.get('@personal-details').focusInput('email').type(customer.email)
     cy.get('@personal-details').focusInput('first-name').type(customer.firstName)
     cy.get('@personal-details').focusInput('last-name').type(customer.lastName)
 
     if (createNewAccount) {
-      cy.get('@personal-details').findByTestId('CreateAccountCheckbox')
+      cy.get('@personal-details')
+        .findByTestId('CreateAccountCheckbox')
         .should('be.visible')
-        .click()
 
-      cy.get('@personal-details').find('select[name="gender"]')
+      cy.get('@personal-details')
+        .find('select[name="gender"]')
         .should('be.visible')
         .selectRandomOption(true)
 
