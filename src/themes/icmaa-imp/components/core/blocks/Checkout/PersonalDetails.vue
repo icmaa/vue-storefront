@@ -9,10 +9,11 @@
           v-if="!showRegistration"
         />
         <button-component
+          v-else
           size="lg"
           class="t-w-full lg:t-w-auto"
           @click="toggleRegistration(true)"
-          v-else
+          data-test-id="RegistrationButton"
         >
           {{ $t('Login') }}
         </button-component>
@@ -27,6 +28,7 @@
               type="ghost"
               class="t-w-full"
               @click="toggleRegistration(false)"
+              data-test-id="GuestCheckoutButton"
             >
               {{ $t('Proceed as guest') }}
             </button-component>
@@ -34,7 +36,11 @@
           <paypal-checkout-button class="t-flex-1 t-mt-2 t-z-0" />
         </div>
       </div>
-      <div class="t-flex t-flex-wrap t--mx-2" v-if="isLoggedIn || (!isLoggedIn && showRegistration)">
+      <div
+        class="t-flex t-flex-wrap t--mx-2"
+        v-if="isLoggedIn || (!isLoggedIn && showRegistration)"
+        data-test-id="RegistrationForm"
+      >
         <base-input
           class="t-w-full t-px-2 t-mb-4"
           type="email"
