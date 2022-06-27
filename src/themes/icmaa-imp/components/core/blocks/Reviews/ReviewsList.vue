@@ -3,7 +3,7 @@
     <div v-if="!itemsPerPage || itemsPerPage.length === 0" class="t-bg-white t-rounded-sm t-p-4 t-text-sm t-text-base-light">
       {{ $t('No reviews have been posted yet. Please don\'t hesitate to share Your opinion and write the first review!') }}
     </div>
-    <div v-for="(item, index) in itemsPerPage" :key="index" itemscope itemtype="http://schema.org/Review" class="t-bg-white t-rounded-sm t-p-4" :class="{ 't-mb-4': (index + 1) < perPage && (index + 1) < items.length }">
+    <div v-for="(item, index) in itemsPerPage" :key="index" class="t-bg-white t-rounded-sm t-p-4" :class="{ 't-mb-4': (index + 1) < perPage && (index + 1) < items.length }">
       <meta :content="item.title" v-html="item.title">
       <meta :content="productName | htmlDecode">
       <meta :content="item.detail | htmlDecode">
