@@ -13,7 +13,6 @@
           size="lg"
           class="t-w-full lg:t-w-auto"
           @click="toggleRegistration(true)"
-          data-test-id="RegistrationButton"
         >
           {{ $t('Login') }}
         </button-component>
@@ -28,7 +27,7 @@
               type="ghost"
               class="t-w-full"
               @click="toggleRegistration(false)"
-              data-test-id="GuestCheckoutButton"
+              data-test-id="guestCheckoutButton"
             >
               {{ $t('Proceed as guest') }}
             </button-component>
