@@ -4,7 +4,11 @@
       {{ $t('You need to be logged in to see this page') }}
     </div>
     <base-input
-      class="t-mb-4" type="email" name="email" id="email" v-model="email"
+      type="email"
+      name="email"
+      id="email"
+      v-model="email"
+      :class="[ showAll ? 't-mb-4' : 't-mb-2' ]"
       :placeholder="$t('E-mail address') + ' *'"
       :validations="[
         {
