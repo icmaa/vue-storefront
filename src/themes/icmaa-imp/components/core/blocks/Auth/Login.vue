@@ -51,7 +51,7 @@
         </button-component>
       </div>
       <no-ssr>
-        <div class="t-w-full t-px-1" :class="{ 'lg:t-w-1/2': !isModal }">
+        <div class="t-w-full t-px-1" :class="{ 'lg:t-w-1/2': !isModal && showAll }">
           <facebook-login-button
             class="t-w-full t-mb-2"
           />
