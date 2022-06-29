@@ -16,6 +16,8 @@
           text: $t('Please provide valid e-mail address.')
         }
       ]"
+      @focus="hasFocus=true"
+      @blur="hasFocus=false"
     />
     <base-input
       class="t-mb-4"
@@ -30,14 +32,15 @@
           text: $t('Field is required')
         }
       ]"
+      v-show="showAll"
     />
-    <div class="t-flex t-items-center t-justify-between t-mb-4">
+    <div class="t-flex t-items-center t-justify-between t-mb-4" v-show="showAll">
       <div href="#" @click.prevent="callForgotPassword" class="t-text-sm t-cursor-pointer">
         {{ $t('Forgot the password?') }}
       </div>
     </div>
     <div class="t-flex t-flex-wrap t--mx-1">
-      <div class="t-w-full t-px-1" :class="{ 'lg:t-w-1/2': !isModal }">
+      <div class="t-w-full t-px-1" :class="{ 'lg:t-w-1/2': !isModal }" v-show="showAll">
         <button-component
           :submit="true"
           type="primary"
@@ -91,7 +94,8 @@ export default {
     return {
       email: '',
       password: '',
-      hasRedirect: !!localStorage.getItem('redirect')
+      hasRedirect: !!localStorage.getItem('redirect'),
+      hasFocus: false
     }
   },
   props: {
@@ -108,6 +112,11 @@ export default {
     },
     password: {
       required
+    }
+  },
+  computed: {
+    showAll () {
+      return this.isModal || (!this.isModal && this.hasFocus) || (!this.isModal && this.email.length > 0)
     }
   },
   methods: {
