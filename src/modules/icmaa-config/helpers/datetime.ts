@@ -14,7 +14,7 @@ export const intDateTimeFormat = 'YYYY-MM-DD HH:mm'
 export const getCurrentStoreviewDayjsDatetime = (): Dayjs => {
   let storeLocale = currentStoreView().i18n.defaultLocale.toLocaleLowerCase()
   const separatorIndex = storeLocale.indexOf('-')
-  const languageCode = (separatorIndex > -1) ? storeLocale.substr(0, separatorIndex) : storeLocale
+  const languageCode = (separatorIndex > -1) ? storeLocale.substring(0, separatorIndex) : storeLocale
   return dayjs(new Date()).locale(languageCode)
 }
 

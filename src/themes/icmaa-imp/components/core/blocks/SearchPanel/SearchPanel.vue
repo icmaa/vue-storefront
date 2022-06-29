@@ -98,6 +98,7 @@ import { searchPanel } from 'config'
 import { required, minLength } from 'vuelidate/lib/validators'
 import { disableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock'
 import { IcmaaGoogleTagManagerExecutors } from 'icmaa-google-tag-manager/hooks'
+import { getCurrentStoreviewDatetime, getCurrentStoreviewDayjsDatetime, toDayjsDate } from 'icmaa-config/helpers/datetime'
 import { SearchQuery } from 'storefront-query-builder'
 import { localizedRoute } from '@vue-storefront/core/lib/multistore'
 import { Logger } from '@vue-storefront/core/lib/logger'
@@ -321,7 +322,22 @@ export default {
     this.$refs.searchString.focus()
     disableBodyScroll(this.$refs.searchSidebar)
 
-    this.searchString = await localStorage.getItem(`shop/user/searchQuery`) || ''
+    const lastSearchTime = await localStorage.getItem('shop/user/searchQueryTime') || null
+    if (lastSearchTime !== null) {
+      const lastSearchDayjsTime = toDayjsDate(lastSearchTime)
+      const searchTermTimeLimit = getCurrentStoreviewDayjsDatetime().subtract(30, 'minute')
+      if (lastSearchDayjsTime.isBefore(searchTermTimeLimit)) {
+        this.emptySearchInput()
+        await Promise.all(
+          localStorage.removeItem('shop/user/searchQueryTime'),
+          localStorage.setItem('shop/user/searchQuery', '')
+        )
+
+        return
+      }
+    }
+
+    this.searchString = await localStorage.getItem('shop/user/searchQuery') || ''
     if (this.searchString) {
       this.search()
     }
@@ -329,7 +345,11 @@ export default {
   beforeDestroy () {
     const search = this.$v.searchString.$invalid ? '' : this.searchString
     this.$bus.$emit('search-input-change', { search })
-    localStorage.setItem(`shop/user/searchQuery`, search)
+
+    localStorage.setItem('shop/user/searchQuery', search)
+    if (search && !this.emptyResults) {
+      localStorage.setItem('shop/user/searchQueryTime', getCurrentStoreviewDatetime())
+    }
 
     clearAllBodyScrollLocks()
   }
