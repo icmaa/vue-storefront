@@ -116,7 +116,8 @@ export default {
   },
   computed: {
     showAll () {
-      return this.isModal || (!this.isModal && this.hasFocus) || (!this.isModal && this.email.length > 0)
+      const hasInput = this.email.length > 0 || this.password.length > 0
+      return this.isModal || (!this.isModal && (this.hasFocus || hasInput))
     }
   },
   methods: {
