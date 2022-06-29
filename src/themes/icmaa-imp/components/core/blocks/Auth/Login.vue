@@ -17,7 +17,6 @@
         }
       ]"
       @focus="hasFocus=true"
-      @blur="hasFocus=false"
     />
     <base-input
       class="t-mb-4"
