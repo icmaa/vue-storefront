@@ -6,6 +6,7 @@
     <base-input
       type="email"
       name="email"
+      ref="emailInput"
       id="email"
       v-model="email"
       :class="[ showAll ? 't-mb-4' : 't-mb-2' ]"
@@ -43,18 +44,18 @@
       </div>
     </div>
     <div class="t-flex t-flex-wrap t--mx-1">
-      <div class="t-w-full t-px-1" :class="{ 'lg:t-w-1/2': !isModal }" v-show="showAll">
+      <div class="t-w-full t-px-1" :class="{ 'lg:t-w-auto lg:t-min-w-1/3': !isModal }">
         <button-component
           :submit="true"
           type="primary"
           class="t-w-full t-mb-2"
           data-test-id="loginSubmit"
         >
-          {{ $t('Login to your account') }}
+          {{ $t('Login') }}
         </button-component>
       </div>
       <no-ssr>
-        <div class="t-w-full t-px-1" :class="{ 'lg:t-w-1/2': !isModal && showAll }">
+        <div class="t-w-full t-px-1" :class="{ 'lg:t-flex-1': !isModal }">
           <facebook-login-button
             class="t-w-full t-mb-2"
           />
@@ -125,6 +126,11 @@ export default {
   },
   methods: {
     login () {
+      if (!this.isModal && !this.showAll) {
+        this.$refs.emailInput.setFocus()
+        return
+      }
+
       if (this.$v.$invalid) {
         this.$v.$touch()
 
