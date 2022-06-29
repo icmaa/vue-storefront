@@ -1,5 +1,5 @@
 <template>
-  <paypal-checkout-button v-if="isLoaded" />
+  <paypal-checkout-button v-if="isLoaded" :color="color" />
 </template>
 
 <script>
@@ -11,6 +11,13 @@ export default {
   name: 'PayPalButtonWrapper',
   components: {
     PaypalCheckoutButton
+  },
+  props: {
+    color: {
+      type: String,
+      default: 'gold',
+      validator: (v) => ['gold', 'blue', 'silver', 'white', 'black'].includes(v)
+    }
   },
   data () {
     return {
