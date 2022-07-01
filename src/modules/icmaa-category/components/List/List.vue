@@ -2,12 +2,22 @@
   <div id="category-list" v-if="notEmpty">
     <ul class="slingrope t-flex t-overflow-auto t-scrolling-touch t-mx-4">
       <li :key="letter.letter" v-for="letter in categoriesGroupedByFirstLetter">
-        <a :href="`#${ letter.anchor }`" v-html="letter.letter" v-scroll-to="`#${ letter.anchor }`" class="t-flex t-px-4 t-py-2 t-bg-white t-border-r t-border-b t-border-base-lightest t-font-mono" />
+        <a
+          :href="`#${ letter.anchor }`"
+          v-html="letter.letter"
+          v-scroll-to="{ el: `#${ letter.anchor }`, lazy: false }"
+          class="t-flex t-px-4 t-py-2 t-bg-white t-border-r t-border-b t-border-base-lightest t-font-mono"
+        />
       </li>
     </ul>
     <ul class="letters t-px-6">
       <template v-for="letter in categoriesGroupedByFirstLetter">
-        <letter :key="`${categoryId}-${letter.letter}`" :id="letter.anchor" :letter="letter" class="t-p-4 t-py-8 t-bg-white t-my-4 t-flex t--mx-2" />
+        <letter
+          :key="`${categoryId}-${letter.letter}`"
+          :id="letter.anchor"
+          :letter="letter"
+          class="t-p-4 t-py-8 t-bg-white t-my-4 t-flex t--mx-2"
+        />
       </template>
     </ul>
   </div>
