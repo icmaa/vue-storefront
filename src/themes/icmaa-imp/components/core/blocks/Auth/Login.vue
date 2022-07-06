@@ -4,7 +4,12 @@
       {{ $t('You need to be logged in to see this page') }}
     </div>
     <base-input
-      class="t-mb-4" type="email" name="email" id="email" v-model="email"
+      type="email"
+      name="email"
+      ref="emailInput"
+      id="email"
+      v-model="email"
+      :class="[ showAll ? 't-mb-4' : 't-mb-2' ]"
       :placeholder="$t('E-mail address') + ' *'"
       :validations="[
         {
@@ -16,6 +21,7 @@
           text: $t('Please provide valid e-mail address.')
         }
       ]"
+      @focus="hasFocus=true"
     />
     <base-input
       class="t-mb-4"
@@ -30,25 +36,26 @@
           text: $t('Field is required')
         }
       ]"
+      v-show="showAll"
     />
-    <div class="t-flex t-items-center t-justify-between t-mb-4">
+    <div class="t-flex t-items-center t-justify-between t-mb-4" v-show="showAll">
       <div href="#" @click.prevent="callForgotPassword" class="t-text-sm t-cursor-pointer">
         {{ $t('Forgot the password?') }}
       </div>
     </div>
     <div class="t-flex t-flex-wrap t--mx-1">
-      <div class="t-w-full t-px-1" :class="{ 'lg:t-w-1/2': !isModal }">
+      <div class="t-w-full t-px-1" :class="{ 'lg:t-w-auto lg:t-min-w-1/3': !isModal }">
         <button-component
           :submit="true"
           type="primary"
           class="t-w-full t-mb-2"
           data-test-id="loginSubmit"
         >
-          {{ $t('Login to your account') }}
+          {{ $t('Login') }}
         </button-component>
       </div>
       <no-ssr>
-        <div class="t-w-full t-px-1" :class="{ 'lg:t-w-1/2': !isModal }">
+        <div class="t-w-full t-px-1" :class="{ 'lg:t-flex-1': !isModal }">
           <facebook-login-button
             class="t-w-full t-mb-2"
           />
@@ -91,7 +98,8 @@ export default {
     return {
       email: '',
       password: '',
-      hasRedirect: !!localStorage.getItem('redirect')
+      hasRedirect: !!localStorage.getItem('redirect'),
+      hasFocus: false
     }
   },
   props: {
@@ -110,8 +118,19 @@ export default {
       required
     }
   },
+  computed: {
+    showAll () {
+      const hasInput = this.email.length > 0 || this.password.length > 0
+      return this.isModal || (!this.isModal && (this.hasFocus || hasInput))
+    }
+  },
   methods: {
     login () {
+      if (!this.isModal && !this.showAll) {
+        this.$refs.emailInput.setFocus()
+        return
+      }
+
       if (this.$v.$invalid) {
         this.$v.$touch()
 

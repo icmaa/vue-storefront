@@ -32,7 +32,7 @@
               {{ $t('Proceed as guest') }}
             </button-component>
           </div>
-          <paypal-checkout-button class="t-flex-1 t-mt-2 t-z-0" />
+          <paypal-checkout-button color="white" class="t-flex-1 t-mt-2 t-z-0" />
         </div>
       </div>
       <div
