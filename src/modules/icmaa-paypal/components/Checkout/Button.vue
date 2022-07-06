@@ -14,6 +14,13 @@ export default {
       shippingMethodsLoaded: false
     }
   },
+  props: {
+    color: {
+      type: String,
+      default: 'gold',
+      validator: (v) => ['gold', 'blue', 'silver', 'white', 'black'].includes(v)
+    }
+  },
   computed: {
     ...mapGetters({
       currency: 'icmaaPayPal/getCurrency',
@@ -41,7 +48,7 @@ export default {
         .Buttons({
           style: {
             shape: 'rect',
-            color: 'gold',
+            color: this.color,
             layout: 'horizontal',
             label: 'checkout',
             tagline: false
