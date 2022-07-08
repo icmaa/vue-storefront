@@ -5,7 +5,7 @@ describe('Footer', () => {
 
     cy.get('footer .social-media').should('be.visible')
     cy.get('footer .social-media a')
-      .should('have.length', 6)
+      .should('have.length', 7)
 
     cy.get('footer .service-carrier')
       .should('be.visible')
