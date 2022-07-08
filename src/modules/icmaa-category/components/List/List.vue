@@ -4,8 +4,8 @@
       <li :key="letter.letter" v-for="letter in categoriesGroupedByFirstLetter">
         <a
           :href="`#${ letter.anchor }`"
+          @click.prevent="scroll(letter)"
           v-html="letter.letter"
-          v-scroll-to="{ el: `#${ letter.anchor }`, lazy: false }"
           class="t-flex t-px-4 t-py-2 t-bg-white t-border-r t-border-b t-border-base-lightest t-font-mono"
         />
       </li>
@@ -16,6 +16,7 @@
           :key="`${categoryId}-${letter.letter}`"
           :id="letter.anchor"
           :letter="letter"
+          @visible="visible"
           class="t-p-4 t-py-8 t-bg-white t-my-4 t-flex t--mx-2"
         />
       </template>
@@ -43,6 +44,11 @@ export default {
     depth: {
       type: String,
       required: true
+    }
+  },
+  data () {
+    return {
+      currentLetter: null
     }
   },
   computed: {
@@ -85,6 +91,18 @@ export default {
           depth: this.depth
         }
       )
+    },
+    scroll (letter) {
+      this.currentLetter = letter
+      document.getElementById(letter.anchor)
+        .scrollIntoView({ behavior: 'smooth' })
+    },
+    visible () {
+      if (this.currentLetter) {
+        this.$nextTick(() => {
+          this.scroll(this.currentLetter)
+        })
+      }
     }
   },
   watch: {
