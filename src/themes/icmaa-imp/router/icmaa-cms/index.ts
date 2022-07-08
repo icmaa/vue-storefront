@@ -23,7 +23,5 @@ export const icmaaCmsRoutes = routes.map((route, index) => {
   route.path = '/' + [ NAME_PREFIX, route.name ].join('/') + route.path
   route.name = prefixedName(route.name)
 
-  Logger.log('Registered custom cms route:', 'ICMAA', route)()
-
   return route
 })
