@@ -68,7 +68,7 @@ export default {
   computed: {
     sizeMap () {
       return this.sizes || [
-        // Order high-to-low is important
+        // Order high-to-low is important because we are using min-width
         { media: '(min-width: 1280px)', width: 300 },
         { media: '(min-width: 1024px)', width: 236 },
         { media: '(min-width: 620px)', width: 364 },
