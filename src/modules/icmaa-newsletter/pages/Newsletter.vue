@@ -1,5 +1,11 @@
 <template>
   <div id="newsletter-page" :headline="content.headline">
+    <div v-if="content.header.img" class="t-container">
+      <div class="t--mx-4 md:t-mx-0 md:t-mt-4 lg:t-w-full t-flex t-flex-wrap t-px-4 t-mb-8">
+        <img :src="getMediaThumbnail(content.header.img, 0, 0)" :alt="content.header.alt" :title="content.header.alt">
+      </div>
+    </div>
+
     <div class="newsletter t-p-4 lg:t-p-8 lg:t-w-1/2 t-bg-white t-m-4 lg:t-my-8 lg:t-container lg:t-mx-auto" data-test-id="Newsletter">
       <h1 class="t-text-2xl t-text-primary t-leading-7">
         {{ $t("Get the Impericon Newsletter & and get yourself a {voucher_value} gift.", { voucher_value: newsletterVoucherValue }) }}
