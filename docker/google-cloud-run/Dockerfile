@@ -1,10 +1,6 @@
-FROM node:16-alpine AS build_img
+FROM node:16-slim AS build_img
 
 WORKDIR /var/www
-
-RUN apk update && \
-    apk add python3 make g++ git bash && \
-    rm -rf /var/cache/apk/*
 
 COPY config ./config
 COPY core ./core
@@ -17,7 +13,7 @@ RUN yarn install --production
 RUN yarn global add node-prune && \
     node-prune
 
-FROM node:16-alpine
+FROM node:16-slim
 
 WORKDIR /var/www
 EXPOSE 3000
