@@ -1,8 +1,8 @@
 <template>
   <div id="newsletter-page" :headline="content.headline">
-    <div v-if="content.header.img" class="t-container">
+    <div class="t-container">
       <div class="t--mx-4 md:t-mx-0 md:t-mt-4 lg:t-w-full t-flex t-flex-wrap t-px-4 t-mb-8">
-        <img :src="getMediaThumbnail(content.header.img, 0, 0)" :alt="content.header.alt" :title="content.header.alt">
+        <picture-component :alt="content.header.alt" :src="content.header.img" :width="780" :height="240" :placeholder="true" :sizes="sizes" ratio="13:4" class="t-flex-1 t-self-start" />
       </div>
     </div>
 
@@ -43,6 +43,7 @@ import Page from 'icmaa-cms/mixins/Page'
 import NewsletterMixin from 'theme/mixins/newsletterMixin'
 import SubscriptionStatus from '@vue-storefront/core/modules/newsletter/mixins/SubscriptionStatus'
 import MaterialIcon from 'theme/components/core/blocks/MaterialIcon'
+import PictureComponent from 'theme/components/core/blocks/Picture'
 
 const NewsletterPopup = () => import(/* webpackChunkName: "vsf-newsletter-modal" */ 'theme/components/core/NewsletterPopup.vue')
 
@@ -50,13 +51,26 @@ export default {
   name: 'Newsletter',
   components: {
     MaterialIcon,
-    NewsletterPopup
+    NewsletterPopup,
+    PictureComponent
   },
   mixins: [ Page, NewsletterMixin, SubscriptionStatus ],
   data () {
     return {
       loadNewsletterPopup: false,
       dataType: 'yaml'
+    }
+  },
+  computed: {
+    sizes () {
+      return [
+        // Order high-to-low is important
+        { media: '(min-width: 1280px)', width: 1248 },
+        { media: '(min-width: 1024px)', width: 992 },
+        { media: '(min-width: 640px)', width: 768 },
+        { media: '(min-width: 415px)', width: 640 },
+        { media: '(max-width: 415px)', width: 415 }
+      ]
     }
   },
   methods: {
