@@ -1,4 +1,4 @@
-FROM node:16-slim AS build_img
+FROM node:16 AS build_img
 
 WORKDIR /var/www
 
@@ -13,7 +13,7 @@ RUN yarn install --production
 RUN yarn global add node-prune && \
     node-prune
 
-FROM node:16-slim
+FROM node:16
 
 WORKDIR /var/www
 EXPOSE 3000
