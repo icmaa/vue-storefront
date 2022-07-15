@@ -97,7 +97,7 @@ jobs:
         env:
           VSF_STORYBLOK_RELEASE_ID: ${{ secrets.STORYBLOK_RELEASE_ID }}
         run: |
-          yarn pm2 start ecosystem.ci.json
+          yarn start:pm2 &
 
       - name: Cypress run
         uses: cypress-io/github-action@v2
