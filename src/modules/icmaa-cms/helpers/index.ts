@@ -4,8 +4,32 @@ import { localizedRoute, currentStoreView } from '@vue-storefront/core/lib/multi
 // @ts-ignore:next-line
 const AsyncPictureComp = () => import(/* webpackChunkName: "vsf-content-block-picture" */ 'theme/components/core/blocks/Picture')
 
-export const getCurrentStoreCode = (): string => {
-  return !currentStoreView() ? null : currentStoreView().storeCode
+interface LinkOptions {
+  class: string
+}
+
+interface ImageOptions {
+  class: string,
+  sizes?: { media: string, width: number }[] | null,
+  width?: number,
+  height?: number,
+  [key: string]: any
+}
+
+const LinkDefaults: LinkOptions = {
+  class: 't-underline'
+}
+
+const ImageDefaults: ImageOptions = {
+  class: 't-block t-mb-4 lg:t-float-right lg:t-ml-4',
+  sizes: [
+    { media: '(min-width: 1280px)', width: 360 },
+    { media: '(min-width: 1024px)', width: 236 },
+    { media: '(min-width: 415px)', width: 364 },
+    { media: '(max-width: 414px)', width: 188 }
+  ],
+  width: 360,
+  height: 500
 }
 
 /**
@@ -18,7 +42,7 @@ export const getCurrentStoreCode = (): string => {
  * @param {string} wrapper
  * @return {object}
  */
-export const stringToComponent = (text: string, wrapper: string = 'div'): object => {
+export const stringToComponent = (text: string, wrapper: string = 'div', linkOptions: LinkOptions = LinkDefaults, imageOptions: ImageOptions = ImageDefaults): object => {
   return {
     render (createElement) {
       // https://vuejs.org/v2/guide/render-function.html#createElement-Arguments
@@ -37,7 +61,10 @@ export const stringToComponent = (text: string, wrapper: string = 'div'): object
           const url = anchor.getAttribute('href')
 
           // Skip external links and mail to
-          if (/^(http|https|mailto:):\/\//.test(url)) return
+          if (/^(http|https|mailto:):\/\//.test(url)) {
+            anchor.setAttribute('class', linkOptions.class)
+            return
+          }
 
           // https://vuejs.org/v2/api/#propsData
           const propsData = { to: localizedRoute(url) }
@@ -70,7 +97,8 @@ export const stringToComponent = (text: string, wrapper: string = 'div'): object
               const url = img.getAttribute('src')
 
               const parent = this
-              const propsData = { src: url }
+              const { sizes, width, height } = imageOptions
+              const propsData = { src: url, sizes, width, height }
 
               const alt = img.getAttribute('alt') || img.getAttribute('title')
               if (alt) Object.assign(propsData, { alt })
@@ -80,11 +108,15 @@ export const stringToComponent = (text: string, wrapper: string = 'div'): object
 
               picture.$mount(img)
 
-              picture.$el.setAttribute('class', 't-my-2')
+              picture.$el.setAttribute('class', imageOptions.class)
             })
           })
         }
       }
     }
   }
+}
+
+export const getCurrentStoreCode = (): string => {
+  return !currentStoreView() ? null : currentStoreView().storeCode
 }
