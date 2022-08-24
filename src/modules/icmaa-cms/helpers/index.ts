@@ -1,6 +1,9 @@
 import Vue from 'vue'
 import { localizedRoute, currentStoreView } from '@vue-storefront/core/lib/multistore'
 
+// @ts-ignore:next-line
+const AsyncPictureComp = () => import(/* webpackChunkName: "vsf-content-block-picture" */ 'theme/components/core/blocks/Picture')
+
 export const getCurrentStoreCode = (): string => {
   return !currentStoreView() ? null : currentStoreView().storeCode
 }
@@ -25,32 +28,63 @@ export const stringToComponent = (text: string, wrapper: string = 'div'): object
       return createElement(wrapper, options)
     },
     mounted () {
-      const anchors = this.$el.getElementsByTagName('a')
-      Array.from(anchors).forEach((anchor: Element) => {
-        const url = anchor.getAttribute('href')
+      this.parseAnchors(this.$el.getElementsByTagName('a'))
+      this.parseImages(this.$el.getElementsByTagName('img'))
+    },
+    methods: {
+      parseAnchors (anchors: HTMLAnchorElement[]) {
+        Array.from(anchors).forEach((anchor: HTMLAnchorElement) => {
+          const url = anchor.getAttribute('href')
 
-        // Skip external links and mail to
-        if (/^(http|https|mailto:):\/\//.test(url)) return
+          // Skip external links and mail to
+          if (/^(http|https|mailto:):\/\//.test(url)) return
 
-        // https://vuejs.org/v2/api/#propsData
-        const propsData = { to: localizedRoute(url) }
-        // https://vuejs.org/v2/api/#parent
-        // Without parent context RouterLink will be unable to access this.$router, etc.
-        const parent = this
+          // https://vuejs.org/v2/api/#propsData
+          const propsData = { to: localizedRoute(url) }
+          // https://vuejs.org/v2/api/#parent
+          // Without parent context RouterLink will be unable to access this.$router, etc.
+          const parent = this
 
-        const RouterLink = Vue.component('RouterLink')
-        const routerLink = new RouterLink({ propsData, parent })
+          const RouterLink = Vue.component('RouterLink')
+          const routerLink = new RouterLink({ propsData, parent })
 
-        // Mount and replaces anchor element
-        routerLink.$mount(anchor)
+          // Mount and replaces anchor element
+          routerLink.$mount(anchor)
 
-        // Replace innerHtml
-        routerLink.$el.innerHTML = anchor.innerHTML
+          // Replace innerHtml
+          routerLink.$el.innerHTML = anchor.innerHTML
 
-        // Add original title if needed
-        const title = anchor.getAttribute('title')
-        if (title) routerLink.$el.setAttribute('title', title)
-      })
+          // Add default Tailwind class
+          routerLink.$el.setAttribute('class', 't-underline')
+
+          // Add original title if needed
+          const title = anchor.getAttribute('title')
+          if (title) routerLink.$el.setAttribute('title', title)
+        })
+      },
+      parseImages (images: HTMLImageElement[]) {
+        if (Array.from(images).length > 0) {
+          AsyncPictureComp().then(c => {
+            const PictureComp = c.default
+            Array.from(images).forEach((img: HTMLElement) => {
+              const url = img.getAttribute('src')
+
+              const parent = this
+              const propsData = { src: url }
+
+              const alt = img.getAttribute('alt') || img.getAttribute('title')
+              if (alt) Object.assign(propsData, { alt })
+
+              const Picture = Vue.component('Picture', PictureComp)
+              const picture = new Picture({ propsData, parent })
+
+              picture.$mount(img)
+
+              picture.$el.setAttribute('class', 't-my-2')
+            })
+          })
+        }
+      }
     }
   }
 }

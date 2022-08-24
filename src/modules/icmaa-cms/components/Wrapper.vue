@@ -84,6 +84,13 @@ export default {
           cssClass: 't-mb-8',
           padding: false
         },
+        'component_rte': {
+          component: AsyncText,
+          propsTypes: {},
+          propsDefaults: {},
+          cssClass: 't-mb-8',
+          padding: false
+        },
         'component_image': {
           component: AsyncPicture,
           propsTypes: {
