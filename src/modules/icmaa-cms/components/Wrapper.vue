@@ -53,7 +53,7 @@ export default {
             tags: (v) => v.join(',')
           },
           propsDefaults: {},
-          cssClass: 't-mb-8',
+          cssClass: 't-mb-4',
           padding: false
         },
         'component_logoline': {
@@ -74,15 +74,22 @@ export default {
           component: AsyncHeadline,
           propsTypes: {},
           propsDefaults: {},
-          cssClass: 't-my-4',
+          cssClass: 't-mb-4',
           padding: false
         },
         'component_text': {
           component: AsyncText,
           propsTypes: {},
           propsDefaults: {},
-          cssClass: 't-mb-8',
-          padding: false
+          cssClass: 't-mb-4',
+          padding: true
+        },
+        'component_rte': {
+          component: AsyncText,
+          propsTypes: {},
+          propsDefaults: {},
+          cssClass: 't-mb-4',
+          padding: true
         },
         'component_image': {
           component: AsyncPicture,
@@ -90,7 +97,7 @@ export default {
             sizes: 'json'
           },
           propsDefaults: {},
-          cssClass: 't-mb-8',
+          cssClass: 't-mb-4',
           padding: true
         },
         'component_productlisting': {
@@ -103,7 +110,7 @@ export default {
           propsDefaults: {
             filter: {}
           },
-          cssClass: 't-mb-8',
+          cssClass: 't-mb-4',
           padding: false
         },
         'component_categorylist': {
@@ -112,7 +119,7 @@ export default {
             categoryId: 'number'
           },
           propsDefaults: {},
-          cssClass: 't-mb-8',
+          cssClass: 't-mb-4',
           padding: false
         },
         'component_linklist': {

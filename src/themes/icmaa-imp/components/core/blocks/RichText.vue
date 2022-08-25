@@ -1,7 +1,5 @@
 <template>
-  <div class="t-my-8 t-container t-px-4">
-    <component :is="htmlContent" class="t-text-sm t-leading-relaxed t-text-base-tone" />
-  </div>
+  <component :is="htmlContent" class="t-text-sm t-leading-relaxed t-text-base-tone" />
 </template>
 
 <script>
