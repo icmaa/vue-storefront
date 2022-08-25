@@ -60,6 +60,11 @@ export default {
 
 .category-footer {
 
+  .purgecsse-plchldr {
+    /** Those classes would be stripped by PostCSS PurgeCSS otherwise */
+    @apply t-border-l-4 t-list-decimal
+  }
+
   .category-footer__description {
     @apply t-text-base-tone t-text-sm t-leading-snug;
 
