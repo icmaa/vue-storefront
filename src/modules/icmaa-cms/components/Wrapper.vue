@@ -80,14 +80,18 @@ export default {
         'component_text': {
           component: AsyncText,
           propsTypes: {},
-          propsDefaults: {},
+          propsDefaults: {
+            tagClasses: { h2: 't-any' }
+          },
           cssClass: 't-mb-4',
           padding: true
         },
         'component_rte': {
           component: AsyncText,
           propsTypes: {},
-          propsDefaults: {},
+          propsDefaults: {
+            tagClasses: { h2: 't-any' }
+          },
           cssClass: 't-mb-4',
           padding: true
         },

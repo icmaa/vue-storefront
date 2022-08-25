@@ -10,3 +10,15 @@ export default {
   mixins: [ Block ]
 }
 </script>
+
+<style lang="scss">
+
+.cms-content {
+  p, ul, ol, blockquote {
+    &:not(:last-child) {
+      @apply t-mb-4;
+    }
+  }
+}
+
+</style>

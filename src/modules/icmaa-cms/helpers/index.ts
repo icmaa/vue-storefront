@@ -1,8 +1,15 @@
 import Vue from 'vue'
 import { localizedRoute, currentStoreView } from '@vue-storefront/core/lib/multistore'
+import merge from 'lodash-es/merge'
 
 // @ts-ignore:next-line
 const AsyncPictureComp = () => import(/* webpackChunkName: "vsf-content-block-picture" */ 'theme/components/core/blocks/Picture')
+
+interface Options {
+  wrapper?: string,
+  cssClasses?: CssClasses,
+  imageOptions?: ImageOptions
+}
 
 interface CssClasses {
   [key: string]: string,
@@ -24,8 +31,7 @@ const cssClassesDefaults: CssClasses = {
   img: 't-block lg:t-float-right lg:t-ml-4',
   ol: 't-list-decimal t-ml-4',
   ul: 't-list-disc t-ml-4',
-  blockquote: 't-border-l-4 t-border-base-lighter t-pl-4 t-py-2 t-italic',
-  h2: 't-anything'
+  blockquote: 't-border-l-4 t-border-base-lighter t-pl-4 t-py-2 t-italic'
 }
 
 interface ImageOptions {
@@ -35,7 +41,7 @@ interface ImageOptions {
   [key: string]: any
 }
 
-const ImageDefaults: ImageOptions = {
+const imageOptionsDefaults: ImageOptions = {
   sizes: [
     { media: '(min-width: 1280px)', width: 360 },
     { media: '(min-width: 1024px)', width: 236 },
@@ -56,7 +62,10 @@ const ImageDefaults: ImageOptions = {
  * @param {string} wrapper
  * @return {object}
  */
-export const stringToComponent = (text: string, wrapper: string = 'div', cssClasses: CssClasses = cssClassesDefaults, imageOptions: ImageOptions = ImageDefaults): object => {
+export const stringToComponent = (text: string, options?: Options): object => {
+  options = merge({}, { wrapper: 'div', cssClasses: cssClassesDefaults, imageOptions: imageOptionsDefaults }, options)
+  const { wrapper, cssClasses, imageOptions } = options
+
   return {
     render (createElement) {
       // https://vuejs.org/v2/guide/render-function.html#createElement-Arguments
