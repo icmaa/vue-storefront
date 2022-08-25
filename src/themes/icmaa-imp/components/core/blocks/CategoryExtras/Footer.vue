@@ -1,12 +1,11 @@
 <template>
-  <div class="t-flex t-flex-wrap t--mx-4 t-px-4" v-if="isVisible && (description || footerDescription)">
-    <div class="t-w-full t-mb-8 md:t-mb-0 t-px-4" v-if="description">
-      <h2 class="t-flex t-items-center t-h-10 t-text-1xl t-text-base-dark t-font-thin t-leading-1-em t-mb-4">
-        {{ categoryExtras.title }}
-      </h2>
-      <p class="t-text-base-tone t-text-sm t-leading-snug" v-html="description" />
+  <div class="category-footer" v-if="isVisible && (description || footerContent || footerDescription)">
+    <div class="t-mb-8 md:t-mb-0 t-px-4" v-if="description || footerContent">
+      <h2 class="t-any category-footer__headline" v-text="categoryExtras.title" v-if="categoryExtras.title" />
+      <p class="category-footer__description" v-html="description" v-if="description" />
+      <block-wrapper class="category-footer__description" :components="footerContent" v-if="footerContent" />
     </div>
-    <div class="t-w-full t-px-4 t-mt-8 t-text-xs t-text-base-lighter t-leading-snug" v-if="footerDescription">
+    <div class="t-mt-8 t-text-xs t-text-base-lighter t-leading-snug" v-if="footerDescription">
       {{ footerDescription }}
     </div>
   </div>
@@ -14,9 +13,13 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import BlockWrapper from 'icmaa-cms/components/Wrapper'
 
 export default {
   name: 'CategoryExtrasFooter',
+  components: {
+    BlockWrapper
+  },
   props: {
     foldDescription: {
       type: Boolean,
@@ -39,6 +42,9 @@ export default {
     description () {
       return this.categoryExtras.description
     },
+    footerContent () {
+      return this.categoryExtras.contentFooter
+    },
     footerDescription () {
       // This is the disclaimer text below the footer / weird attribute title
       return this.categoryExtras.descriptionFooter || false
@@ -46,3 +52,27 @@ export default {
   }
 }
 </script>
+
+<style lang="scss">
+.category-footer__headline {
+  @apply t-text-1xl t-text-base-dark t-font-thin t-leading-1-em t-mb-4;
+}
+
+.category-footer {
+
+  .category-footer__description {
+    @apply t-text-base-tone t-text-sm t-leading-snug;
+
+    h2 {
+      @apply category-footer__headline;
+    }
+
+    p, ul, ol, blockquote {
+      &:not(:last-child) {
+        @apply t-mb-4;
+      }
+    }
+  }
+}
+
+</style>

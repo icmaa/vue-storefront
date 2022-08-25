@@ -4,24 +4,38 @@ import { localizedRoute, currentStoreView } from '@vue-storefront/core/lib/multi
 // @ts-ignore:next-line
 const AsyncPictureComp = () => import(/* webpackChunkName: "vsf-content-block-picture" */ 'theme/components/core/blocks/Picture')
 
-interface LinkOptions {
-  class: string
+interface CssClasses {
+  [key: string]: string,
+  a?: string,
+  img?: string,
+  p?: string,
+  blockquote?: string,
+  ul?: string,
+  ol?: string,
+  li?: string,
+  h1?: string,
+  h2?: string,
+  h3?: string,
+  h4?: string
+}
+
+const cssClassesDefaults: CssClasses = {
+  a: 't-underline',
+  img: 't-block lg:t-float-right lg:t-ml-4',
+  ol: 't-list-decimal t-ml-4',
+  ul: 't-list-disc t-ml-4',
+  blockquote: 't-border-l-4 t-border-base-lighter t-pl-4 t-py-2 t-italic',
+  h2: 't-anything'
 }
 
 interface ImageOptions {
-  class: string,
   sizes?: { media: string, width: number }[] | null,
   width?: number,
   height?: number,
   [key: string]: any
 }
 
-const LinkDefaults: LinkOptions = {
-  class: 't-underline'
-}
-
 const ImageDefaults: ImageOptions = {
-  class: 't-block t-mb-4 lg:t-float-right lg:t-ml-4',
   sizes: [
     { media: '(min-width: 1280px)', width: 360 },
     { media: '(min-width: 1024px)', width: 236 },
@@ -42,7 +56,7 @@ const ImageDefaults: ImageOptions = {
  * @param {string} wrapper
  * @return {object}
  */
-export const stringToComponent = (text: string, wrapper: string = 'div', linkOptions: LinkOptions = LinkDefaults, imageOptions: ImageOptions = ImageDefaults): object => {
+export const stringToComponent = (text: string, wrapper: string = 'div', cssClasses: CssClasses = cssClassesDefaults, imageOptions: ImageOptions = ImageDefaults): object => {
   return {
     render (createElement) {
       // https://vuejs.org/v2/guide/render-function.html#createElement-Arguments
@@ -52,6 +66,7 @@ export const stringToComponent = (text: string, wrapper: string = 'div', linkOpt
       return createElement(wrapper, options)
     },
     mounted () {
+      this.addDefaultCssClasses()
       this.parseAnchors(this.$el.getElementsByTagName('a'))
       this.parseImages(this.$el.getElementsByTagName('img'))
     },
@@ -62,7 +77,7 @@ export const stringToComponent = (text: string, wrapper: string = 'div', linkOpt
 
           // Skip external links and mail to
           if (/^(http|https|mailto:):\/\//.test(url)) {
-            anchor.setAttribute('class', linkOptions.class)
+            anchor.setAttribute('class', cssClasses.a)
             return
           }
 
@@ -81,8 +96,9 @@ export const stringToComponent = (text: string, wrapper: string = 'div', linkOpt
           // Replace innerHtml
           routerLink.$el.innerHTML = anchor.innerHTML
 
-          // Add default Tailwind class
-          routerLink.$el.setAttribute('class', 't-underline')
+          // Add original css classes
+          const cssClass = anchor.getAttribute('class')
+          if (cssClass) routerLink.$el.setAttribute('class', cssClass)
 
           // Add original title if needed
           const title = anchor.getAttribute('title')
@@ -108,9 +124,19 @@ export const stringToComponent = (text: string, wrapper: string = 'div', linkOpt
 
               picture.$mount(img)
 
-              picture.$el.setAttribute('class', imageOptions.class)
+              // Add original css classes
+              const cssClass = img.getAttribute('class')
+              if (cssClass) picture.$el.setAttribute('class', cssClass)
             })
           })
+        }
+      },
+      addDefaultCssClasses () {
+        for (let tag in cssClasses) {
+          Array.from(this.$el.getElementsByTagName(tag))
+            .forEach(($el: HTMLElement) => {
+              $el.setAttribute('class', cssClasses[tag])
+            })
         }
       }
     }
