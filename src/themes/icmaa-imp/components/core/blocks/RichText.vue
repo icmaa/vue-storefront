@@ -12,11 +12,15 @@ export default {
     content: {
       type: String,
       required: true
+    },
+    tagClasses: {
+      type: Object,
+      default: () => ({})
     }
   },
   computed: {
     htmlContent () {
-      return stringToComponent(this.content)
+      return stringToComponent(this.content, { cssClasses: this.tagClasses })
     }
   }
 }
