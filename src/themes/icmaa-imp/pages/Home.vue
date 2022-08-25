@@ -5,16 +5,16 @@
       :show-split="false"
       class="sm:t-pt-4 t-pb-8"
     />
-    <link-list
-      :title="topCategories.title"
-      :items="topCategories.items"
-      class="t-pb-4"
-    />
     <teaser
       tags="21"
       :show-large="false"
       :show-small-in-row="true"
       class="t-pb-8"
+    />
+    <link-list
+      :title="topCategories.title"
+      :items="topCategories.items"
+      class="t-pb-4"
     />
     <teaser
       tags="2"
