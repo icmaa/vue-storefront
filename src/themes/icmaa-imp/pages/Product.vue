@@ -10,7 +10,7 @@
           :key="`product-gallery-${product.parentId}`"
         />
         <div class="t-w-full t-p-8 t-bg-white lg:t-w-1/2" :class="{ 'lg:t-flex lg:t-flex-col lg:t-justify-between': isPreorder }">
-          <category-extras-header class="t--mx-8 t--mt-8 t-mb-8 lg:t-pl-px t-border-b t-border-base-lightest" :linked-banner="true" :banner-sizes="categoryHeaderBannerSizes" :spotify-logo-limit="spotifyLogoLimit">
+          <category-extras-header class="t--mx-8 t--mt-8 t-mb-8 lg:t-pl-px t-border-b t-border-base-lightest" :linked-banner="true" :banner-sizes="categoryHeaderBannerSizes" :logo-limit="departmentLogoLimit">
             <div class="t-flex" v-if="category">
               <button-component size="sm" @click="goToDepartmentCategory()">
                 {{ $t('More products') }}
@@ -298,7 +298,7 @@ export default {
         { incl: i18n.t('incl.') }
       )
     },
-    spotifyLogoLimit () {
+    departmentLogoLimit () {
       return this.viewport === 'sm' ? 4 : 5
     },
     categoryHeaderBannerSizes () {

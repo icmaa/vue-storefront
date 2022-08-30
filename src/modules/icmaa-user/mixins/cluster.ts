@@ -9,8 +9,8 @@ export default {
   },
   methods: {
     setCluster () {
-      if (this.categoryExtras && this.categoryExtras.cluster) {
-        this.$store.dispatch('user/setCluster', this.categoryExtras.cluster)
+      if (this.categoryExtras?.cluster) {
+        this.$store.dispatch('user/setCluster', { value: this.categoryExtras.cluster })
       }
     }
   },

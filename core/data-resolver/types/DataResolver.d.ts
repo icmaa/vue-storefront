@@ -21,7 +21,8 @@ declare namespace DataResolver {
     sort?: string|any,
     includeFields?: string[],
     excludeFields?: string[],
-    reloadAll?: boolean
+    reloadAll?: boolean,
+    ignoreNotFoundCategories?: boolean
   }
 
   interface ProductSearchOptions {

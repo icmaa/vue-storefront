@@ -39,16 +39,6 @@ const actions: ActionTree<CategoryState, RootState> = {
       await dispatch('changeRouterFilterParameters', currentQuery)
     }
   },
-  async findCategoriesWithoutBlacklisting ({ dispatch, commit }, categorySearchOptions: DataResolver.CategorySearchOptions): Promise<Category[]> {
-    const categories = await dispatch('findCategories', categorySearchOptions)
-    categories.forEach(category => {
-      dispatch('addCacheTag', `C${category.id}`, { root: true })
-    })
-
-    commit(types.CATEGORY_ADD_CATEGORIES, categories)
-
-    return categories
-  },
   async loadChildCategoryFilter ({ dispatch, getters, commit }, { category }: { category?: Category }) {
     let currentCategory: Category = category || getters.getCurrentCategory
     if (currentCategory) {

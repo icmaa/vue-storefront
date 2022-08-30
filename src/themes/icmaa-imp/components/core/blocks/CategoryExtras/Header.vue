@@ -6,10 +6,10 @@
         <slot />
       </div>
     </div>
-    <div class="t-px-4 t-py-2" v-if="isSpotifyCategory && (!isSpotifyLoaded || spotifyLogoItems.length > 0)">
+    <div class="t-px-4 t-py-2" v-if="(showRelatedCategories && (!relatedCategoryLogosLoaded || logoItems.length > 0)) || (isSpotifyCategory && (!isSpotifyLoaded || logoItems.length > 0))">
       <div class="t-flex t-justify-between" style="height: 38px;">
-        <span class="t-flex t-flex-fix t-hidden xl:t-inline-block t-self-center t-text-base-light t-text-sm t-mr-8">{{ $t('Similar bands:') }}</span>
-        <department-logo v-for="(logo, index) in spotifyLogoItems" :key="index" v-bind="logo.data()" class="t-flex-fix t-opacity-60 hover:t-opacity-100" :class="{ 't-mr-4': isLast(index, spotifyLogoItems)}" />
+        <span class="t-flex t-flex-fix t-hidden xl:t-inline-block t-self-center t-text-base-light t-text-sm t-mr-8">{{ isSpotifyCategory ? $t('Similar bands:') : $t('Similar brands:') }}</span>
+        <department-logo v-for="(logo, index) in logoItems" :key="index" v-bind="logo.data()" class="t-flex-fix t-opacity-60 hover:t-opacity-100" :class="{ 't-mr-4': isLast(index, logoItems)}" />
       </div>
     </div>
   </div>
@@ -18,16 +18,15 @@
 <script>
 import { mapGetters } from 'vuex'
 import { formatCategoryLink } from '@vue-storefront/core/modules/url/helpers'
-import DepartmentLogo from 'theme/components/core/blocks/CategoryExtras/DepartmentLogo'
-import PictureComponent from 'theme/components/core/blocks/Picture'
-
 import { isDatetimeInBetween } from 'icmaa-config/helpers/datetime'
+import PictureComponent from 'theme/components/core/blocks/Picture'
+import DepartmentLogo from 'theme/components/core/blocks/CategoryExtras/DepartmentLogo'
 
 export default {
   name: 'CategoryExtrasHeader',
   components: {
-    DepartmentLogo,
-    PictureComponent
+    PictureComponent,
+    DepartmentLogo
   },
   props: {
     linkedBanner: {
@@ -52,7 +51,7 @@ export default {
         { media: '(max-width: 415px)', width: 415 }
       ]
     },
-    spotifyLogoLimit: {
+    logoLimit: {
       type: [Boolean, Number],
       default: false
     }
@@ -60,16 +59,21 @@ export default {
   data () {
     return {
       bannerLoading: true,
-      bannerExists: true
+      bannerExists: true,
+      relatedCategoryLogos: [],
+      relatedCategoryLogosLoaded: false
     }
   },
   computed: {
     ...mapGetters({
       category: 'icmaaCategoryExtras/getCurrentCategory',
       categoryExtras: 'icmaaCategoryExtras/getCategoryExtrasByCurrentCategory',
+      relatedParentCategoryId: 'icmaaCategoryExtras/getRelatedParentCategoryIdFromTree',
+      getLogolineItems: 'icmaaCategoryExtras/getLogolineItems',
       getSpotifyLogoItems: 'icmaaCategoryExtras/getSpotifyLogolineItemsByCurrentCategory',
-      isInSpotifyCategoryAllowList: 'icmaaSpotify/isInCategoryAllowList',
       isSpotifyLoaded: 'icmaaSpotify/areCurrentRelatedCategoriesLoaded',
+      showRelatedCategories: 'icmaaCategoryExtras/showRelatedCategoriesFromTree',
+      isInSpotifyCategoryAllowList: 'icmaaSpotify/isInCategoryAllowList',
       viewport: 'ui/getViewport'
     }),
     isVisible () {
@@ -78,8 +82,7 @@ export default {
       }
 
       const { bannerShowFrom, bannerShowTo, active } = this.categoryExtras
-      return active && (this.banner || this.isSpotifyCategory || this.spotifyLogoItems.length > 0) &&
-        isDatetimeInBetween(bannerShowFrom, bannerShowTo)
+      return active && this.banner && isDatetimeInBetween(bannerShowFrom, bannerShowTo)
     },
     banner () {
       if (!this.categoryExtras.bannerImage) {
@@ -102,8 +105,13 @@ export default {
     isSpotifyCategory () {
       return this.isInSpotifyCategoryAllowList(this.category)
     },
-    spotifyLogoItems () {
-      return Object.values(this.getSpotifyLogoItems).slice(0, this.spotifyLogoLimit || this.logoLimitByViewport())
+    logoItems () {
+      const items = this.isSpotifyCategory ? this.getSpotifyLogoItems : this.relatedCategoryLogos
+      return Object.values(items).slice(0, this.logoLimit || this.logoLimitByViewport)
+    },
+    logoLimitByViewport () {
+      const viewportLimits = { xs: 4, sm: 4, md: 7, lg: 7, xl: 10 }
+      return viewportLimits[this.viewport] || 4
     }
   },
   methods: {
@@ -117,14 +125,46 @@ export default {
       this.bannerLoading = true
       this.bannerExists = false
     },
-    logoLimitByViewport () {
-      const viewportLimits = { xs: 4, sm: 4, md: 7, lg: 7, xl: 10 }
-      return viewportLimits[this.viewport] || 4;
-    },
     goToCategory () {
       if (this.linkedBanner) {
         this.$router.push(formatCategoryLink(this.category))
       }
+    },
+    async loadRelatedCategoryLogos () {
+      if (!this.showRelatedCategories) return
+
+      const filters = {
+        'path': this.relatedParentCategoryId,
+        'ceHasLogo': true,
+        'ceLogoline': true,
+        'id': { 'neq': this.category.id }
+      }
+
+      // Add custom random sort, rather than build in as the results are not the same
+      const sort = {
+        field: '_script',
+        options: {
+          script: 'Math.random()',
+          type: 'number',
+          order: 'asc'
+        }
+      }
+
+      const fetchedCategories = await this.$store.dispatch(
+        'category-next/loadCategories',
+        { filters, size: this.limit, onlyActive: true, sort, ignoreNotFoundCategories: true }
+      )
+
+      this.relatedCategoryLogos = this.getLogolineItems(fetchedCategories)
+      this.relatedCategoryLogosLoaded = true
+    }
+  },
+  mounted () {
+    this.loadRelatedCategoryLogos()
+  },
+  watch: {
+    'category.id' () {
+      this.loadRelatedCategoryLogos()
     }
   }
 }
