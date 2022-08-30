@@ -21,17 +21,6 @@ export default {
   components: {
     BlockWrapper
   },
-  props: {
-    foldDescription: {
-      type: Boolean,
-      default: false
-    }
-  },
-  data () {
-    return {
-      descriptionFolded: false
-    }
-  },
   computed: {
     ...mapGetters({
       category: 'icmaaCategoryExtras/getCurrentCategory',
@@ -41,6 +30,10 @@ export default {
       return this.categoryExtras && this.categoryExtras.active
     },
     description () {
+      /**
+       * The fields `description` and `title` are deprecated and will be removec once the migration to the new HTML/RTE field is done.
+       * @see https://www.icmaa.info/redmine/issues/258705
+       **/
       return this.categoryExtras.description
     },
     descriptionComponent () {
