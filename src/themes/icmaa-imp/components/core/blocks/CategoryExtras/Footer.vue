@@ -2,7 +2,7 @@
   <div class="category-footer" v-if="isVisible && (description || footerContent || footerDescription)">
     <div class="t-mb-8 md:t-mb-0 t-px-4" v-if="description || footerContent">
       <h2 class="t-any category-footer__headline" v-text="categoryExtras.title" v-if="categoryExtras.title" />
-      <p class="category-footer__description" v-html="description" v-if="description" />
+      <component v-if="description" :is="descriptionComponent" class="category-footer__description" />
       <block-wrapper class="category-footer__description" :components="footerContent" v-if="footerContent" />
     </div>
     <div class="t-mt-8 t-text-xs t-text-base-lighter t-leading-snug" v-if="footerDescription">
@@ -13,6 +13,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import { stringToComponent } from 'icmaa-cms/helpers'
 import BlockWrapper from 'icmaa-cms/components/Wrapper'
 
 export default {
@@ -41,6 +42,9 @@ export default {
     },
     description () {
       return this.categoryExtras.description
+    },
+    descriptionComponent () {
+      return stringToComponent(this.description, { wrapper: 'p' })
     },
     footerContent () {
       return this.categoryExtras.contentFooter
