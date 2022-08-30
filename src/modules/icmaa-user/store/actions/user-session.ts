@@ -14,10 +14,10 @@ import isEmpty from 'lodash-es/isEmpty'
 import invert from 'lodash-es/invert'
 
 const actions: ActionTree<UserState, RootState> = {
-  setCluster ({ dispatch }, value) {
+  setCluster ({ dispatch }, { value, key }: { value: any, key?: string }) {
     // Don't set cluster for `always visible`/`0` as `customercluster` value
     if ((!isEmpty(value) || value === false) && value !== '0' && value !== 0) {
-      dispatch('addSessionData', { key: 'cluster', value })
+      dispatch('addSessionData', { key: key || 'cluster', value })
     }
   },
   async loadSessionData ({ commit }) {

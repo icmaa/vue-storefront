@@ -1,12 +1,13 @@
-import { isServer } from '@vue-storefront/core/helpers';
-import { nonReactiveState } from './index';
 import Vue from 'vue'
 import { MutationTree } from 'vuex'
+import { isServer } from '@vue-storefront/core/helpers'
+import { nonReactiveState } from './index'
+import { Category } from '../../types/Category'
 import * as types from './mutation-types'
 import CategoryState from './CategoryState'
-import { Category } from '../../types/Category'
-import cloneDeep from 'lodash-es/cloneDeep'
 import slugifyCategories from '@vue-storefront/core/modules/catalog/helpers/slugifyCategories'
+import merge from 'lodash-es/merge'
+import cloneDeep from 'lodash-es/cloneDeep'
 
 const mutations: MutationTree<CategoryState> = {
   [types.CATEGORY_SET_PRODUCTS] (state, products = []) {
@@ -28,7 +29,7 @@ const mutations: MutationTree<CategoryState> = {
       categories.forEach(category => {
         newCategoriesEntry[category.id] = category
       })
-      state.categoriesMap = Object.assign({}, state.categoriesMap, newCategoriesEntry)
+      state.categoriesMap = merge({}, state.categoriesMap, newCategoriesEntry)
     }
   },
   [types.CATEGORY_ADD_NOT_FOUND_CATEGORY_IDS] (state, categoryIds: string[] = []) {

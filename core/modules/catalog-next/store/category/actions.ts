@@ -123,7 +123,7 @@ const actions: ActionTree<CategoryState, RootState> = {
     return CategoryService.getCategories(categorySearchOptions)
   },
   async loadCategories ({ dispatch, commit, getters }, categorySearchOptions: DataResolver.CategorySearchOptions): Promise<Category[]> {
-    const searchingByIds = !(!categorySearchOptions || !categorySearchOptions.filters || !categorySearchOptions.filters.id)
+    const searchingByIds = !(!categorySearchOptions?.filters?.id || typeof categorySearchOptions?.filters?.id === 'object')
     const searchedIds: string[] = searchingByIds ? [...categorySearchOptions.filters.id].map(String) : []
     const loadedCategories: Category[] = []
     if (searchingByIds && !categorySearchOptions.reloadAll) { // removing from search query already loaded categories, they are added to returned results
@@ -140,10 +140,14 @@ const actions: ActionTree<CategoryState, RootState> = {
       categories.forEach(category => {
         dispatch('addCacheTag', `C${category.id}`, { root: true })
       })
-      const notFoundCategories = searchedIds.filter(categoryId => !categories.some(cat => cat.id === parseInt(categoryId) || cat.id === categoryId))
 
       commit(types.CATEGORY_ADD_CATEGORIES, categories)
-      commit(types.CATEGORY_ADD_NOT_FOUND_CATEGORY_IDS, notFoundCategories)
+
+      if (!categorySearchOptions?.ignoreNotFoundCategories) {
+        const notFoundCategories = searchedIds.filter(categoryId => !categories.some(cat => cat.id === parseInt(categoryId) || cat.id === categoryId))
+        commit(types.CATEGORY_ADD_NOT_FOUND_CATEGORY_IDS, notFoundCategories)
+      }
+
       return [...loadedCategories, ...categories]
     }
     return loadedCategories
