@@ -24,4 +24,4 @@ EXPOSE 3000
 
 COPY --from=build_img /var/www/ ./
 
-CMD [ "yarn", "start:pm2" ]
+CMD [ "yarn", "start" ]
