@@ -114,7 +114,7 @@ export default {
         filters['ceCluster'] = [this.cluster, '']
       }
 
-      // Add custom random sort, rather then build in as the results are not the same
+      // Add custom random sort, rather than build in as the results are not the same
       const sort = {
         field: '_script',
         options: {
@@ -125,8 +125,8 @@ export default {
       }
 
       const fetchedCategories = await this.$store.dispatch(
-        'category-next/findCategoriesWithoutBlacklisting',
-        { filters, size: this.limit, onlyActive: true, sort }
+        'category-next/loadCategories',
+        { filters, size: this.limit, onlyActive: true, sort, ignoreNotFoundCategories: true }
       )
 
       this.categoryIds = fetchedCategories.map(c => c.id)

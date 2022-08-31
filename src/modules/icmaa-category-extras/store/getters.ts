@@ -4,6 +4,7 @@ import CategoryExtrasState, { CategoryExtras, CategoryExtrasContentHeaderContent
 import RootState from '@vue-storefront/core/types/RootState'
 import { Logo } from '../helpers/categoryExtras/logo'
 import { getCategoryExtrasKeyByAttribute, mapCategoryExtrasAttributes } from '../helpers/'
+import { icmaa_categoryextras } from 'config'
 import isEmpty from 'lodash-es/isEmpty'
 
 const getters: GetterTree<CategoryExtrasState, RootState> = {
@@ -54,6 +55,24 @@ const getters: GetterTree<CategoryExtrasState, RootState> = {
     }
 
     return false
+  },
+  showRelatedCategoriesFromTree: (state, getters, rootState, rootGetters): boolean => {
+    const parentCategoryAllowList = icmaa_categoryextras.parentRelatedCategoryLogoIds || []
+    return getters.getCurrentCategory?.path
+      .split('/').map(i => parseInt(i))
+      .some(i => parentCategoryAllowList.includes(i))
+  },
+  getRelatedParentCategoryIdFromTree: (state, getters): number|boolean => {
+    const category: Category = getters.getCurrentCategory
+    if (!category || !getters.showRelatedCategoriesFromTree) return false
+
+    const parentCategoryAllowList = icmaa_categoryextras.parentRelatedCategoryLogoIds || []
+    const path = category.path.split('/').map(i => parseInt(i))
+
+    const parentIndex = path.findIndex(id => parentCategoryAllowList.includes(id))
+    if (parentIndex === -1) return false
+
+    return path[parentIndex + 1] || path[parentIndex]
   },
   getCurrentProductDepartmentCategory: (state, getters, rootState, rootGetters): Category|boolean => {
     const product = rootGetters['product/getCurrentProduct']

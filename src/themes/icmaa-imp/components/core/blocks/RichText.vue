@@ -1,7 +1,5 @@
 <template>
-  <div class="t-my-8 t-container t-px-4">
-    <component :is="htmlContent" class="t-text-sm t-leading-relaxed t-text-base-tone" />
-  </div>
+  <component :is="htmlContent" class="t-text-sm t-leading-relaxed t-text-base-tone" />
 </template>
 
 <script>
@@ -14,11 +12,15 @@ export default {
     content: {
       type: String,
       required: true
+    },
+    tagClasses: {
+      type: Object,
+      default: () => ({})
     }
   },
   computed: {
     htmlContent () {
-      return stringToComponent(this.content)
+      return stringToComponent(this.content, { cssClasses: this.tagClasses })
     }
   }
 }

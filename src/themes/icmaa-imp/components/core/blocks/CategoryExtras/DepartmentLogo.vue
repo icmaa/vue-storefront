@@ -31,7 +31,7 @@ export default {
   },
   methods: {
     setCluster () {
-      this.$store.dispatch('user/setCluster', this.cluster)
+      this.$store.dispatch('user/setCluster', { value: this.cluster })
     }
   }
 }
