@@ -12,6 +12,8 @@ function getItemsFromStorage ({ key }) {
   if (checkMultistoreKey(key, 'shop/cart/current-cart')) {
     const value = JSON.parse(localStorage[key])
     rootStore.dispatch('cart/updateCart', { items: value })
+  } else if (checkMultistoreKey(key, 'shop/cart/current-cart-token')) {
+    rootStore.dispatch('cart/synchronizeCart', { forceClientState: false })
   } else if (checkMultistoreKey(key, 'shop/cart/current-totals')) {
     const value = JSON.parse(localStorage[key])
     rootStore.dispatch('cart/updateTotals', value)
