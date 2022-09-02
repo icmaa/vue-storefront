@@ -7,7 +7,6 @@ import CartState from '../types/CartState'
 export const cartStore: Module<CartState, any> = {
   namespaced: true,
   state: {
-    isMicrocartOpen: false,
     itemsAfterPlatformTotals: {},
     platformTotals: null,
     platformTotalSegments: null,

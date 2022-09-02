@@ -62,23 +62,6 @@ describe('Microcart', () => {
     expect((wrapper.vm as any).totals).toEqual(storeMock.modules.cart.getters.getTotals());
   });
 
-  it('isOpen returns cart state if it is open', () => {
-    const storeMock = {
-      modules: {
-        cart: {
-          state: {
-            isMicrocartOpen: true
-          },
-          namespaced: true
-        }
-      }
-    };
-
-    const wrapper = mountMixinWithStore(Microcart, storeMock);
-
-    expect((wrapper.vm as any).isOpen).toBe(storeMock.modules.cart.state.isMicrocartOpen);
-  });
-
   it('applyCoupon dispatches applyCupon action to save it', () => {
     const couponCode = 'foo';
     const storeMock = {
@@ -116,24 +99,5 @@ describe('Microcart', () => {
     (wrapper.vm as any).removeCoupon();
 
     expect(storeMock.modules.cart.actions.removeCoupon).toBeCalled();
-  });
-
-  it('toggleMicrocart dispatches toggleMicrocart to change its state', () => {
-    const storeMock = {
-      modules: {
-        ui: {
-          actions: {
-            toggleMicrocart: jest.fn()
-          },
-          namespaced: true
-        }
-      }
-    };
-
-    const wrapper = mountMixinWithStore(Microcart, storeMock);
-
-    (wrapper.vm as any).toggleMicrocart();
-
-    expect(storeMock.modules.ui.actions.toggleMicrocart).toBeCalled();
   });
 });

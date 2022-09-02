@@ -23,23 +23,4 @@ describe('MicrocartButton', () => {
 
     expect((wrapper.vm as any).quantity).toEqual(storeMock.modules.cart.getters.getItemsTotalQuantity());
   });
-
-  it('toggleMicrocart dispatches toggleMicrocart to change its state', () => {
-    const storeMock = {
-      modules: {
-        cart: {
-          actions: {
-            toggleMicrocart: jest.fn()
-          },
-          namespaced: true
-        }
-      }
-    };
-
-    const wrapper = mountMixinWithStore(MicrocartButton, storeMock);
-
-    (wrapper.vm as any).toggleMicrocart();
-
-    expect(storeMock.modules.cart.actions.toggleMicrocart).toBeCalled();
-  });
 });

@@ -5,9 +5,6 @@ import { CartService } from '@vue-storefront/core/data-resolver'
 import { createDiffLog } from '@vue-storefront/core/modules/cart/helpers'
 
 const connectActions = {
-  toggleMicrocart ({ commit }) {
-    commit(types.CART_TOGGLE_MICROCART)
-  },
   /**
    * It will always clear cart items on frontend.
    * Options:
