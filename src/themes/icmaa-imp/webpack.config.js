@@ -44,7 +44,7 @@ module.exports = function (config, { isClient, isDev }) {
               './{src,core}/**/*.html',
               './{src,core}/**/*.vue'
             ],
-            whitelistPatterns: [ /^t-bg-*/, /^t-text-*/, /^t-border-alt-*/ ],
+            whitelistPatterns: [ /^t-bg-*/, /^t-text-*/, /^t-border-alt-*/, /.*t-float-(left|right|none)$/ ],
             whitelistPatternsChildren: [ /^service-carrier*/ ],
             defaultExtractor: content => content.match(/[\w-/:]+(?<!:)/g) || []
           })
