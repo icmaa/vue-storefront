@@ -59,7 +59,7 @@ const getters: GetterTree<CategoryExtrasState, RootState> = {
   showRelatedCategoriesFromTree: (state, getters, rootState, rootGetters): boolean => {
     const parentCategoryAllowList = icmaa_categoryextras.parentRelatedCategoryLogoIds || []
     return getters.getCurrentCategory?.path
-      .split('/').map(i => parseInt(i))
+      ?.split('/').map(i => parseInt(i))
       .some(i => parentCategoryAllowList.includes(i))
   },
   getRelatedParentCategoryIdFromTree: (state, getters): number|boolean => {
@@ -67,7 +67,7 @@ const getters: GetterTree<CategoryExtrasState, RootState> = {
     if (!category || !getters.showRelatedCategoriesFromTree) return false
 
     const parentCategoryAllowList = icmaa_categoryextras.parentRelatedCategoryLogoIds || []
-    const path = category.path.split('/').map(i => parseInt(i))
+    const path = category.path?.split('/').map(i => parseInt(i))
 
     const parentIndex = path.findIndex(id => parentCategoryAllowList.includes(id))
     if (parentIndex === -1) return false

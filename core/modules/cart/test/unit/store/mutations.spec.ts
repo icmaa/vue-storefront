@@ -566,20 +566,4 @@ describe('Cart mutations', () => {
 
     expect(stateMock).toEqual(expectedState)
   })
-
-  it('CART_TOGGLE_MICROCART changes microcart open status to the opposite one', () => {
-    const stateMock = {
-      isMicrocartOpen: true
-    }
-    const expectedState = {
-      isMicrocartOpen: false
-    }
-    const wrapper = (mutations: any) => mutations[types.CART_TOGGLE_MICROCART](
-      stateMock
-    )
-
-    wrapper(cartMutations)
-
-    expect(stateMock).toEqual(expectedState)
-  })
 })

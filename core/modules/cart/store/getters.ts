@@ -37,9 +37,7 @@ const getters: GetterTree<CartState, RootState> = {
   bypassCounter: state => state.connectBypassCount,
   getShippingMethodCode: state => state.shipping && state.shipping.method_code,
   getPaymentMethodCode: state => state.payment && state.payment.code,
-  getIsAdding: state => state.isAddingToCart,
-  getIsMicroCartOpen: state => state.isMicrocartOpen
-
+  getIsAdding: state => state.isAddingToCart
 }
 
 export default getters

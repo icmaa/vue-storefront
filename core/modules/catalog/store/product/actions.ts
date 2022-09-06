@@ -321,8 +321,6 @@ const actions: ActionTree<ProductState, RootState> = {
 
     return { ...selectedVariant, options, product_option }
   }
-  /** Below actions are not used from 1.12 and can be removed to reduce bundle */
-  // ...require('./deprecatedActions').default
 }
 
 export default actions
