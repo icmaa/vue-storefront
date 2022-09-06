@@ -172,5 +172,24 @@ module.exports = {
         ['responsive']
       )
     }
-  ]
+  ],
+  purge: {
+    enabled: true,
+    content: [
+      '!**/node_modules',
+      './{src,core}/**/*.html',
+      './{src,core}/**/*.vue'
+    ],
+    options: {
+      whitelistPatterns: [ /^t-bg-*/, /^t-text-*/, /^t-border-alt-*/, /.*t-float-(left|right|none)$/ ],
+      whitelistPatternsChildren: [ /^service-carrier*/ ]
+    },
+    defaultExtractor: content => content.match(/[\w-/:]+(?<!:)/g) || []
+  },
+  future: {
+    purgeLayersByDefault: true,
+    defaultLineHeights: false,
+    removeDeprecatedGapUtilities: true,
+    standardFontWeights: true
+  }
 }

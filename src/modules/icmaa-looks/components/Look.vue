@@ -9,7 +9,7 @@
           <h3 class="t-leading-tight t-text-2xl t-font-semibold">
             {{ look.title }}
           </h3>
-          <div class="t-text-sm t-font-thin">
+          <div class="t-text-sm t-font-extralight">
             <a :href="`https://www.instagram.com/${look.modelInstagram}`" target="_blank" :title="`@${look.modelInstagram}` | htmlDecode">
               <material-icon icon="instagram" icon-set="icmaa" size="xs" class="t-align-text-bottom" />
               {{ look.modelInstagram }}

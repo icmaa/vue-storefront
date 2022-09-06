@@ -11,7 +11,7 @@
         </template>
       </router-link>
       <span v-else :key="index" class="t-text-base-tone" :class="{ 't-hidden md:t-inline': !link.visible, 'md:t-hidden': link.placeholder }">{{ link.name | htmlDecode }}</span>
-      <span class="t-mx-3 lg:t-mx-4 t-text-xs t-font-thin" :class="{ 't-hidden md:t-inline': !link.visible || (!showActiveRoute && link.isLast), 'md:t-hidden': link.placeholder }" :key="'bullet-' + index" v-text="spacerCharacter" />
+      <span class="t-mx-3 lg:t-mx-4 t-text-xs t-font-extralight" :class="{ 't-hidden md:t-inline': !link.visible || (!showActiveRoute && link.isLast), 'md:t-hidden': link.placeholder }" :key="'bullet-' + index" v-text="spacerCharacter" />
     </template>
     <span class="t-text-base-tone" :class="{ 't-hidden md:t-inline': !showActiveRoute }">{{ current | htmlDecode }}</span>
     <json-ld-loader type="breadcrumbs" />
