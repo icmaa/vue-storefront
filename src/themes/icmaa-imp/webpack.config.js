@@ -27,11 +27,8 @@ module.exports = function (config, { isClient, isDev }) {
         ident: 'postcss',
         plugins: [
           require('tailwindcss')(path.join(__dirname, 'tailwind.js')),
-          // Minify CSS using postcss-clean
-          require('postcss-clean')({
-            keepSpecialComments: 0
-          }),
-          'autoprefixer'
+          'autoprefixer',
+          ...(process.env.NODE_ENV === 'production' ? [ 'cssnano' ] : [])
         ]
       }
     }

@@ -1,5 +1,29 @@
 const defaultTheme = require('tailwindcss/defaultTheme')
 
+const colors = {
+  'primary': '#611122',
+  'sale': '#006EA1',
+  'new': '#1AC759',
+  'sustainable': '#30A895',
+  'onlytemporary': '#2A6265',
+  'exclusive': '#B18C3E',
+  'limited': '#023AE1',
+  'special': '#8B2439',
+  'alt-1': '#3D9FA5',
+  'alt-2': '#CE8F4B',
+  'alt-3': '#65BD82',
+  'base-darkest': '#000000',
+  'base-dark': '#1E1E1E',
+  'base-tone': '#3E3E3E',
+  'base-light': '#999999',
+  'base-lighter': '#C7C7C7',
+  'base-lightest': '#EDEDED',
+  'alert': '#CC2823',
+  'facebook': '#4267B2',
+  'twitter': '#1DA1F2',
+  'youtube': '#ff0000'
+}
+
 module.exports = {
   prefix: 't-',
   theme: {
@@ -10,29 +34,7 @@ module.exports = {
       fontFamily: {
         sans: [ 'Roboto', ...defaultTheme.fontFamily.sans ]
       },
-      colors: {
-        'primary': '#611122',
-        'sale': '#006EA1',
-        'new': '#1AC759',
-        'sustainable': '#30A895',
-        'onlytemporary': '#2A6265',
-        'exclusive': '#B18C3E',
-        'limited': '#023AE1',
-        'special': '#8B2439',
-        'alt-1': '#3D9FA5',
-        'alt-2': '#CE8F4B',
-        'alt-3': '#65BD82',
-        'base-darkest': '#000000',
-        'base-dark': '#1E1E1E',
-        'base-tone': '#3E3E3E',
-        'base-light': '#999999',
-        'base-lighter': '#C7C7C7',
-        'base-lightest': '#EDEDED',
-        'alert': '#CC2823',
-        'facebook': '#4267B2',
-        'twitter': '#1DA1F2',
-        'youtube': '#ff0000'
-      },
+      colors,
       cursor: {
         'zoom-in': 'zoom-in'
       },
@@ -103,11 +105,6 @@ module.exports = {
       }
     }
   },
-  variants: {
-    backgroundColor: ['group-hover', 'responsive', 'hover', 'focus'],
-    textColor: ['group-hover', 'responsive', 'hover', 'focus', 'placeholder'],
-    opacity: ['hover', 'placeholder', 'disabled']
-  },
   plugins: [
     require('tailwindcss-accessibility'),
     /**
@@ -136,20 +133,13 @@ module.exports = {
       )
     }
   ],
-  purge: {
-    enabled: (process.env.NODE_ENV === 'production'),
-    content: [
-      '!**/node_modules',
-      './{src,core}/**/*.html',
-      './{src,core}/**/*.vue'
-    ],
-    options: {
-      safelist: {
-        standard: [ /^t-bg-*/, /^t-text-*/, /^t-border-alt-*/, /.*t-float-(left|right|none)$/ ],
-        deep: [ /^service-carrier*/ ]
-      },
-      preserveHtmlElements: false,
-      defaultExtractor: content => content.match(/[\w-/:]+(?<!:)/g) || []
-    }
-  }
+  content: [
+    './{src,core}/**/*.{html,vue}',
+    './src/modules/icmaa-cms/helpers/index.ts' // This is for custom classes in HTML parser
+  ],
+  safelist: [
+    // Preserve all custom color classes for dynamic colors from CMS
+    ...Object.keys(colors).map(k => 't-bg-' + k),
+    ...Object.keys(colors).map(k => 't-text-' + k)
+  ]
 }
