@@ -7,7 +7,7 @@
     </base-label>
     <div class="t-relative" :class="{ 'floating-label': isFloating }">
       <select
-        class="t-w-full t-border t-rounded-sm t-text-sm t-leading-tight t-bg-white t-appearance-none t-cursor-pointer focus:outline-none focus:shadow-outline"
+        class="t-w-full t-border t-rounded-sm t-text-sm t-leading-tight t-bg-white t-appearance-none t-cursor-pointer focus:outline-none focus:ring"
         :class="[
           sizeClasses,
           invalid ? 't-border-alert' : 't-border-base-light',

@@ -101,43 +101,6 @@ module.exports = {
         '1': '1',
         '1000': '1000'
       }
-    },
-    animations: {
-      'pulse': {
-        // t-animation-pulse t-animation-1/2s t-animation-twice t-animation-ease-in-out
-        '0%, 100%': { transform: 'scaleX(1)' },
-        '50%': { transform: 'scale3d(1.05, 1.05, 1.05)' }
-      },
-      'wiggle': {
-        // t-animation-wiggle t-animation-1/3s t-animation-twice
-        '0%, 50%, 100%': { transform: 'translateX(0)' },
-        '25%': { transform: 'translateX(-5px)' },
-        '75%': { transform: 'translateX(5px)' }
-      },
-      'spin': {
-        // t-animation-spin t-animation-linear
-        from: {
-          transform: 'rotate(0deg)'
-        },
-        to: {
-          transform: 'rotate(360deg)'
-        }
-      }
-    },
-    animationDuration: {
-      '1/4s': '.25s',
-      '1/3s': '.33333s',
-      '1/2s': '.5s',
-      '3/4s': '.75s'
-    },
-    animationDelay: {
-      '1/2s': '.5s',
-      '1/3s': '.33333s',
-      '1/4s': '.25s'
-    },
-    animationIterationCount: {
-      'twice': '2',
-      'three-times': '3'
     }
   },
   variants: {
@@ -147,7 +110,6 @@ module.exports = {
   },
   plugins: [
     require('tailwindcss-accessibility'),
-    require('tailwindcss-animations'),
     /**
      * Add placeholder variant
      * @see https://tailwindcss.com/docs/pseudo-class-variants/#creating-custom-variants
@@ -167,29 +129,27 @@ module.exports = {
           '.hide-scrollbar::-webkit-scrollbar': { display: 'none' },
           '.webkit-tap-transparent': { '-webkit-tap-highlight-color': 'transparent' },
           '.blend-hard-light': { 'mix-blend-mode': 'hard-light' },
-          '.grayscale': { filter: 'grayscale(1)' }
+          '.grayscale': { filter: 'grayscale(1)' },
+          '.scrolling-touch': { '-webkit-overflow-scrolling': 'touch' }
         },
         ['responsive']
       )
     }
   ],
   purge: {
-    enabled: true,
+    enabled: (process.env.NODE_ENV === 'production'),
     content: [
       '!**/node_modules',
       './{src,core}/**/*.html',
       './{src,core}/**/*.vue'
     ],
     options: {
-      whitelistPatterns: [ /^t-bg-*/, /^t-text-*/, /^t-border-alt-*/, /.*t-float-(left|right|none)$/ ],
-      whitelistPatternsChildren: [ /^service-carrier*/ ]
-    },
-    defaultExtractor: content => content.match(/[\w-/:]+(?<!:)/g) || []
-  },
-  future: {
-    purgeLayersByDefault: true,
-    defaultLineHeights: false,
-    removeDeprecatedGapUtilities: true,
-    standardFontWeights: true
+      safelist: {
+        standard: [ /^t-bg-*/, /^t-text-*/, /^t-border-alt-*/, /.*t-float-(left|right|none)$/ ],
+        deep: [ /^service-carrier*/ ]
+      },
+      preserveHtmlElements: false,
+      defaultExtractor: content => content.match(/[\w-/:]+(?<!:)/g) || []
+    }
   }
 }

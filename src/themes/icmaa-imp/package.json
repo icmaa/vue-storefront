@@ -11,10 +11,6 @@
   "author": "cewald <c.ewald@impericon.com> and contributors",
   "license": "MIT",
   "dependencies": {
-    "lozad": "^1.16.0",
-    "tailwindcss": "1.9.0",
-    "tailwindcss-accessibility": "^1.0.0",
-    "tailwindcss-animations": "^2.0.0",
     "vue": "^2.6.14",
     "vue-no-ssr": "^1.1.1",
     "vue-progressbar": "^0.7.5",
@@ -25,6 +21,11 @@
     "vuex": "^3.0.1"
   },
   "devDependencies": {
+    "autoprefixer": "^10.4.8",
+    "lozad": "^1.16.0",
+    "tailwindcss": "^2.2.19",
+    "tailwindcss-accessibility": "^1.0.0",
+    "postcss": "^8.4.16",
     "postcss-clean": "^1.1.0",
     "svg-sprite": "^1.5.0",
     "webpack-spritesmith": "^1.0.1"

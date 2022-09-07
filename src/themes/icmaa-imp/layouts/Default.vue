@@ -26,9 +26,9 @@
         :async-component="Wishlist"
       />
       <main class="t-bg-base-lightest">
-        <div class="t-clearfix" />
+        <div class="t-flow-root" />
         <slot />
-        <div class="t-clearfix" />
+        <div class="t-flow-root" />
       </main>
       <main-footer />
       <no-ssr>

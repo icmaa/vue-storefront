@@ -5,7 +5,7 @@
     @click="toggleWishlist"
     data-test-id="wishlistButton"
   >
-    <material-icon :icon="favoriteIcon" class="t-text-white" :class="{ 't-animation-spin t-animation-linear': loading }" />
+    <material-icon :icon="favoriteIcon" class="t-text-white" :class="{ 't-animate-spin': loading }" />
     <span class="t-sr-only">{{ !isActive ? $t('Add to favorite') : $t('Remove') }}</span>
   </div>
   <button-component
@@ -13,7 +13,7 @@
     :type="buttonType"
     :icon="favoriteIcon"
     :icon-only="true"
-    :icon-class="loading ? 't-animation-spin t-animation-linear' : false"
+    :icon-class="loading ? 't-animate-spin' : false"
     @click.native="toggleWishlist"
     data-test-id="wishlistButton"
   >

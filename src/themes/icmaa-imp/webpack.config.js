@@ -23,20 +23,17 @@ module.exports = function (config, { isClient, isDev }) {
   const postcssConfig = {
     loader: 'postcss-loader',
     options: {
-      ident: 'postcss',
-      plugins: () => [
-        require('tailwindcss')(path.join(__dirname, 'tailwind.js')),
-        require('postcss-flexbugs-fixes'),
-        /**
-         * Minify CSS using postcss-clean
-         */
-        require('postcss-clean')({
-          keepSpecialComments: 0
-        }),
-        require('autoprefixer')({
-          flexbox: 'no-2009'
-        })
-      ]
+      postcssOptions: {
+        ident: 'postcss',
+        plugins: [
+          require('tailwindcss')(path.join(__dirname, 'tailwind.js')),
+          // Minify CSS using postcss-clean
+          require('postcss-clean')({
+            keepSpecialComments: 0
+          }),
+          'autoprefixer'
+        ]
+      }
     }
   }
 
@@ -48,7 +45,7 @@ module.exports = function (config, { isClient, isDev }) {
         /**
          * Replace original `postcss-loader`
          */
-        .map(plugin => (plugin.loader && plugin.loader === 'postcss-loader') ? postcssConfig : plugin)
+        .map(plugin => (plugin?.loader === 'postcss-loader') ? postcssConfig : plugin)
         /**
          * Add `mini-css-extract-plugin.loader` to extract CSS into seperate files in production.
          * This loader isn't SSR compatible, so we need to use the `null-loader` to load the CSS files into manifest but don't resolve them.
