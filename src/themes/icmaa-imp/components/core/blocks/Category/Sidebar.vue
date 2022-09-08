@@ -1,7 +1,7 @@
 <template>
   <sidebar :title="$t('Filter')" :close-icon="closeIcon">
     <template v-slot:top-after-title>
-      <span class="t-font-thin t-text-base-light t-text-sm t-leading-7 t-pt-1 t-pl-2">
+      <span class="t-font-extralight t-text-base-light t-text-sm t-leading-7 t-pt-1 t-pl-2">
         <span data-test-id="productsTotal">{{ productsTotal }}</span> {{ $t('items') }}
       </span>
       <button-component v-if="hasActiveFilters" type="transparent" size="sm" icon="delete_sweep" :icon-only="true" @click="resetAllFilters">
