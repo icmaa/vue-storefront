@@ -2,7 +2,7 @@
   <nav role="service-navigation">
     <ul>
       <li class="t-w-full t-relative">
-        <a class="t-block lg:t-hidden t-bg-white t-border-base-light t-border t-px-3 t-py-2 t-appearance-none focus:outline-none t-text-black focus:shadow-outline t-cursor-pointer" @click="toggleView">Service
+        <a class="t-block lg:t-hidden t-bg-white t-border-base-light t-border t-px-3 t-py-2 t-appearance-none focus:outline-none t-text-black focus:ring t-cursor-pointer" @click="toggleView">Service
           <div class="t-pointer-events-none t-absolute t-inset-y-0 t-right-0 t-flex t-items-center t-px-2"><i class="material-icons t-text-2xl">keyboard_arrow_down</i></div>
         </a>
         <ul class="t-hidden lg:t-block lg:t-bg-transparent t-relative t-w-full">

@@ -23,36 +23,14 @@ module.exports = function (config, { isClient, isDev }) {
   const postcssConfig = {
     loader: 'postcss-loader',
     options: {
-      ident: 'postcss',
-      plugins: () => [
-        require('tailwindcss')(path.join(__dirname, 'tailwind.js')),
-        require('postcss-flexbugs-fixes'),
-        /**
-         * Minify CSS using postcss-clean
-         */
-        require('postcss-clean')({
-          keepSpecialComments: 0
-        }),
-        /**
-         * Remove unused CSS classes using PurgeCSS
-         * @see https://tailwindcss.com/docs/controlling-file-size/#app
-         * */
-        ...process.env.NODE_ENV === 'production' ? [
-          require('@fullhuman/postcss-purgecss')({
-            content: [
-              '!**/node_modules',
-              './{src,core}/**/*.html',
-              './{src,core}/**/*.vue'
-            ],
-            whitelistPatterns: [ /^t-bg-*/, /^t-text-*/, /^t-border-alt-*/, /.*t-float-(left|right|none)$/ ],
-            whitelistPatternsChildren: [ /^service-carrier*/ ],
-            defaultExtractor: content => content.match(/[\w-/:]+(?<!:)/g) || []
-          })
-        ] : [],
-        require('autoprefixer')({
-          flexbox: 'no-2009'
-        })
-      ]
+      postcssOptions: {
+        ident: 'postcss',
+        plugins: [
+          require('tailwindcss')(path.join(__dirname, 'tailwind.js')),
+          'autoprefixer',
+          ...(process.env.NODE_ENV === 'production' ? [ 'cssnano' ] : [])
+        ]
+      }
     }
   }
 
@@ -64,7 +42,7 @@ module.exports = function (config, { isClient, isDev }) {
         /**
          * Replace original `postcss-loader`
          */
-        .map(plugin => (plugin.loader && plugin.loader === 'postcss-loader') ? postcssConfig : plugin)
+        .map(plugin => (plugin?.loader === 'postcss-loader') ? postcssConfig : plugin)
         /**
          * Add `mini-css-extract-plugin.loader` to extract CSS into seperate files in production.
          * This loader isn't SSR compatible, so we need to use the `null-loader` to load the CSS files into manifest but don't resolve them.

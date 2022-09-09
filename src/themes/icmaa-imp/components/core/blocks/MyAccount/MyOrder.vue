@@ -76,7 +76,7 @@
     </div>
 
     <div>
-      <div class="t-text-base-tone t-text-xl t-font-thin t-mb-4 t-pl-4">
+      <div class="t-text-base-tone t-text-xl t-font-extralight t-mb-4 t-pl-4">
         {{ $t('Items ordered') }}
       </div>
       <div class="t-hidden md:t-flex t-items-center t-bg-white t-p-4 t-pb-0">

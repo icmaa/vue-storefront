@@ -52,7 +52,7 @@ export default {
 
 <style lang="scss">
 .category-footer__headline {
-  @apply t-text-1xl t-text-base-dark t-font-thin t-leading-1-em t-mb-4;
+  @apply t-text-1xl t-text-base-dark t-font-extralight t-leading-1-em t-mb-4;
 }
 
 .category-footer {

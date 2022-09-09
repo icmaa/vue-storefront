@@ -1,5 +1,29 @@
 const defaultTheme = require('tailwindcss/defaultTheme')
 
+const colors = {
+  'primary': '#611122',
+  'sale': '#006EA1',
+  'new': '#1AC759',
+  'sustainable': '#30A895',
+  'onlytemporary': '#2A6265',
+  'exclusive': '#B18C3E',
+  'limited': '#023AE1',
+  'special': '#8B2439',
+  'alt-1': '#3D9FA5',
+  'alt-2': '#CE8F4B',
+  'alt-3': '#65BD82',
+  'base-darkest': '#000000',
+  'base-dark': '#1E1E1E',
+  'base-tone': '#3E3E3E',
+  'base-light': '#999999',
+  'base-lighter': '#C7C7C7',
+  'base-lightest': '#EDEDED',
+  'alert': '#CC2823',
+  'facebook': '#4267B2',
+  'twitter': '#1DA1F2',
+  'youtube': '#ff0000'
+}
+
 module.exports = {
   prefix: 't-',
   theme: {
@@ -10,29 +34,7 @@ module.exports = {
       fontFamily: {
         sans: [ 'Roboto', ...defaultTheme.fontFamily.sans ]
       },
-      colors: {
-        'primary': '#611122',
-        'sale': '#006EA1',
-        'new': '#1AC759',
-        'sustainable': '#30A895',
-        'onlytemporary': '#2A6265',
-        'exclusive': '#B18C3E',
-        'limited': '#023AE1',
-        'special': '#8B2439',
-        'alt-1': '#3D9FA5',
-        'alt-2': '#CE8F4B',
-        'alt-3': '#65BD82',
-        'base-darkest': '#000000',
-        'base-dark': '#1E1E1E',
-        'base-tone': '#3E3E3E',
-        'base-light': '#999999',
-        'base-lighter': '#C7C7C7',
-        'base-lightest': '#EDEDED',
-        'alert': '#CC2823',
-        'facebook': '#4267B2',
-        'twitter': '#1DA1F2',
-        'youtube': '#ff0000'
-      },
+      colors,
       cursor: {
         'zoom-in': 'zoom-in'
       },
@@ -101,53 +103,10 @@ module.exports = {
         '1': '1',
         '1000': '1000'
       }
-    },
-    animations: {
-      'pulse': {
-        // t-animation-pulse t-animation-1/2s t-animation-twice t-animation-ease-in-out
-        '0%, 100%': { transform: 'scaleX(1)' },
-        '50%': { transform: 'scale3d(1.05, 1.05, 1.05)' }
-      },
-      'wiggle': {
-        // t-animation-wiggle t-animation-1/3s t-animation-twice
-        '0%, 50%, 100%': { transform: 'translateX(0)' },
-        '25%': { transform: 'translateX(-5px)' },
-        '75%': { transform: 'translateX(5px)' }
-      },
-      'spin': {
-        // t-animation-spin t-animation-linear
-        from: {
-          transform: 'rotate(0deg)'
-        },
-        to: {
-          transform: 'rotate(360deg)'
-        }
-      }
-    },
-    animationDuration: {
-      '1/4s': '.25s',
-      '1/3s': '.33333s',
-      '1/2s': '.5s',
-      '3/4s': '.75s'
-    },
-    animationDelay: {
-      '1/2s': '.5s',
-      '1/3s': '.33333s',
-      '1/4s': '.25s'
-    },
-    animationIterationCount: {
-      'twice': '2',
-      'three-times': '3'
     }
-  },
-  variants: {
-    backgroundColor: ['group-hover', 'responsive', 'hover', 'focus'],
-    textColor: ['group-hover', 'responsive', 'hover', 'focus', 'placeholder'],
-    opacity: ['hover', 'placeholder', 'disabled']
   },
   plugins: [
     require('tailwindcss-accessibility'),
-    require('tailwindcss-animations'),
     /**
      * Add placeholder variant
      * @see https://tailwindcss.com/docs/pseudo-class-variants/#creating-custom-variants
@@ -167,10 +126,20 @@ module.exports = {
           '.hide-scrollbar::-webkit-scrollbar': { display: 'none' },
           '.webkit-tap-transparent': { '-webkit-tap-highlight-color': 'transparent' },
           '.blend-hard-light': { 'mix-blend-mode': 'hard-light' },
-          '.grayscale': { filter: 'grayscale(1)' }
+          '.grayscale': { filter: 'grayscale(1)' },
+          '.scrolling-touch': { '-webkit-overflow-scrolling': 'touch' }
         },
         ['responsive']
       )
     }
+  ],
+  content: [
+    './{src,core}/**/*.{html,vue}',
+    './src/modules/icmaa-cms/helpers/index.ts' // This is for custom classes in HTML parser
+  ],
+  safelist: [
+    // Preserve all custom color classes for dynamic colors from CMS
+    ...Object.keys(colors).map(k => 't-bg-' + k),
+    ...Object.keys(colors).map(k => 't-text-' + k)
   ]
 }

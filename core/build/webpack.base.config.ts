@@ -25,13 +25,12 @@ const themedIndexAmp = path.join(themeRoot, '/templates/index.amp.template.html'
 const postcssConfig = {
   loader: 'postcss-loader',
   options: {
-    ident: 'postcss',
-    plugins: (loader) => [
-      require('postcss-flexbugs-fixes'),
-      require('autoprefixer')({
-        flexbox: 'no-2009'
-      })
-    ]
+    postcssOptions: {
+      ident: 'postcss',
+      plugins: [
+        'autoprefixer'
+      ]
+    }
   }
 };
 const isProd = process.env.NODE_ENV === 'production'
