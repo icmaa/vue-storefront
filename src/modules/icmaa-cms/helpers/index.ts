@@ -28,7 +28,6 @@ interface CssClasses {
 
 const cssClassesDefaults: CssClasses = {
   a: 't-underline',
-  img: 't-block lg:t-float-right lg:t-ml-4',
   ol: 't-list-decimal t-ml-4',
   ul: 't-list-disc t-ml-4',
   blockquote: 't-border-l-4 t-border-base-lighter t-pl-4 t-py-2 t-italic'
@@ -115,10 +114,14 @@ export const stringToComponent = (text: string, options?: Options): object => {
         })
       },
       parseImages (images: HTMLImageElement[]) {
-        if (Array.from(images).length > 0) {
+        const imgArray = Array.from(images).filter(img => {
+          return !img.getAttribute('src').startsWith('http')
+        })
+
+        if (imgArray.length > 0) {
           AsyncPictureComp().then(c => {
             const PictureComp = c.default
-            Array.from(images).forEach((img: HTMLElement) => {
+            imgArray.forEach((img: HTMLElement) => {
               const url = img.getAttribute('src')
 
               const parent = this

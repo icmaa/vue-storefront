@@ -32,6 +32,16 @@ const AsyncProductlisting = () => import(/* webpackChunkName: "vsf-content-block
 const AsyncCategorylist = () => import(/* webpackChunkName: "vsf-content-block-categorylist" */ 'icmaa-category/components/List/List')
 const AsyncLinkList = () => import(/* webpackChunkName: "vsf-content-block-linklist" */ 'theme/components/core/blocks/CategoryExtras/LinkList')
 
+const rteComponentOptions = {
+  component: AsyncText,
+  propsTypes: {},
+  propsDefaults: {
+    tagClasses: { h2: 't-any', img: 't-block t-mb-4 lg:t-float-right lg:t-ml-4 lg:t-mb-0' }
+  },
+  cssClass: 't-mb-4',
+  padding: true
+}
+
 export default {
   name: 'CmsBlockWrapper',
   components: {
@@ -78,22 +88,10 @@ export default {
           padding: false
         },
         'component_text': {
-          component: AsyncText,
-          propsTypes: {},
-          propsDefaults: {
-            tagClasses: { h2: 't-any' }
-          },
-          cssClass: 't-mb-4',
-          padding: true
+          ...rteComponentOptions
         },
         'component_rte': {
-          component: AsyncText,
-          propsTypes: {},
-          propsDefaults: {
-            tagClasses: { h2: 't-any' }
-          },
-          cssClass: 't-mb-4',
-          padding: true
+          ...rteComponentOptions
         },
         'component_image': {
           component: AsyncPicture,
