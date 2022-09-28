@@ -4,7 +4,7 @@
       <div class="t-flex t-flex-wrap t-items-start lg:t-items-stretch t-mb-8">
         <picture-component :alt="competition.headline | stripHTML" :src="image" :width="624" :height="624" :placeholder="true" :sizes="sizes" ratio="1:1" class="t-w-full lg:t-w-1/2" />
         <div class="t-w-full lg:t-w-1/2 t-bg-white t-p-8 t-flex t-flex-col t-justify-center">
-          <h1 class="t-font-light t-leading-tight t-mb-8 t-text-3xl t-text-primary lg:t-whitespace-pre-line" v-html="competition.headline" />
+          <h1 class="t-font-light t-leading-tight t-mb-8 t-text-3xl t-text-primary lg:t-whitespace-pre-line" v-html="competition.headline" v-if="competition.headline" />
           <component :is="description" class="description t-text-sm t-leading-relaxed t-text-base-tone" />
           <div class="t-mt-8">
             <button-component type="ghost" v-scroll-to="'#competition-form'" v-text="competition.buttonText || $t('Participate now!')" />
@@ -39,6 +39,14 @@
           {{ $t('Done') }}
         </div>
         {{ $t('Thank you. We successfully received your data and will inform you about further steps.') }}
+        <div v-if="successHeadline" class="t-flex t-items-center t-text-1xl t-text-primary t-mb-2 t-mt-8">
+          {{ successHeadline }}
+        </div>
+        <div class="t-flex t-w-full" v-if="successImage">
+          <div class="lg:t-w-1/2">
+            <picture-component :src="successImage" :width="624" :height="312" :placeholder="true" :sizes="sizes" ratio="1:1" class="t-flex-1 t-self-start" />
+          </div>
+        </div>
       </div>
       <div v-if="isActive && !isSend && competition.disclaimer" class="t-pt-4 t-text-sm t-text-base-light">
         <p v-if="showTo">
@@ -114,6 +122,12 @@ export default {
     },
     bannerImage () {
       return this.competition.bannerImage
+    },
+    successHeadline () {
+      return this.competition.successHeadline
+    },
+    successImage () {
+      return this.competition.successImage
     },
     youtubeVideoUrl () {
       return `https://www.youtube.com/embed/${this.competition.youtubeVideoId}`
