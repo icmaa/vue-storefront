@@ -42,9 +42,9 @@
         <div v-if="successHeadline" class="t-flex t-items-center t-text-1xl t-text-primary t-mb-2 t-mt-8">
           {{ successHeadline }}
         </div>
-        <div class="t-flex t-w-full">
+        <div class="t-flex t-w-full" v-if="successImage">
           <div class="lg:t-w-1/2">
-            <picture-component v-if="successImage" :src="successImage" :width="624" :height="312" :placeholder="true" :sizes="sizes" ratio="1:1" class="t-flex-1 t-self-start" />
+            <picture-component :src="successImage" :width="624" :height="312" :placeholder="true" :sizes="sizes" ratio="1:1" class="t-flex-1 t-self-start" />
           </div>
         </div>
       </div>
