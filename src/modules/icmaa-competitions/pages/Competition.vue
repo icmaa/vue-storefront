@@ -4,7 +4,7 @@
       <div class="t-flex t-flex-wrap t-items-start lg:t-items-stretch t-mb-8">
         <picture-component :alt="competition.headline | stripHTML" :src="image" :width="624" :height="624" :placeholder="true" :sizes="sizes" ratio="1:1" class="t-w-full lg:t-w-1/2" />
         <div class="t-w-full lg:t-w-1/2 t-bg-white t-p-8 t-flex t-flex-col t-justify-center">
-          <h1 class="t-font-light t-leading-tight t-mb-8 t-text-3xl t-text-primary lg:t-whitespace-pre-line" v-html="competition.headline" />
+          <h1 class="t-font-light t-leading-tight t-mb-8 t-text-3xl t-text-primary lg:t-whitespace-pre-line" v-html="competition.headline" v-if="competition.headline" />
           <component :is="description" class="description t-text-sm t-leading-relaxed t-text-base-tone" />
           <div class="t-mt-8">
             <button-component type="ghost" v-scroll-to="'#competition-form'" v-text="competition.buttonText || $t('Participate now!')" />
