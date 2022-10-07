@@ -1,5 +1,4 @@
 import { cartCacheHandlerPlugin } from './cartCacheHandler'
-import { totalsCacheHandlerPlugin } from './totalsCacheHandler'
 import optimizeProduct from './optimizeProduct'
 import prepareProductsToAdd from './prepareProductsToAdd'
 import productChecksum from './productChecksum'
@@ -21,7 +20,6 @@ import getProductPrice from './getProductPrice';
 
 export {
   cartCacheHandlerPlugin,
-  totalsCacheHandlerPlugin,
   optimizeProduct,
   prepareProductsToAdd,
   productChecksum,
