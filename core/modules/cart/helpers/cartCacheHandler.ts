@@ -16,7 +16,16 @@ export const cartCacheHandlerPlugin = (mutation, state) => {
   ) {
     return StorageManager.get('cart').setItem('current-cart', state.cart.cartItems).catch((reason) => {
       Logger.error(reason)() // it doesn't work on SSR
-    }) // populate cache
+    })
+  } else if (
+    type.endsWith(types.CART_UPD_TOTALS)
+  ) {
+    return StorageManager.get('cart').setItem('current-totals', {
+      platformTotalSegments: state.cart.platformTotalSegments,
+      platformTotals: state.cart.platformTotals
+    }).catch((reason) => {
+      Logger.error(reason)()
+    })
   } else if (
     type.endsWith(types.CART_LOAD_CART_SERVER_TOKEN)
   ) {

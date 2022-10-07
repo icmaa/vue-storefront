@@ -74,10 +74,6 @@ const totalsActions = {
 
       Logger.error('Please do set the tax.defaultCountry in order to calculate totals', 'cart')()
     }
-  },
-  async refreshTotals ({ dispatch }, payload) {
-    Logger.warn('The "cart/refreshTotals" action is deprecated and will not be supported with the Vue Storefront 1.11', 'cart')()
-    await dispatch('syncTotals', payload)
   }
 }
 

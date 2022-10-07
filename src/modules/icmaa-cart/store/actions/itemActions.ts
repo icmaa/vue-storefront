@@ -38,7 +38,7 @@ const actions: ActionTree<CartState, RootState> = {
    * client-cart-merge to remove the new item from cart again if the cart was empty at first.
    *
    * Changes:
-   * * Add `connect` action if at the beginning of the action if cart isn't yet connected.
+   * * Add `connect` action at the beginning of the action if cart isn't yet connected.
    */
   async addItems ({ commit, dispatch, getters }, { productsToAdd, forceServerSilence = false }) {
     if (!getters.isCartConnected) {
