@@ -93,4 +93,21 @@ const mutations: MutationTree<CartState> = {
   }
 }
 
+/**
+ * We can't use the following mutations for the localstorage-sync
+ * because they would create an infinite loop between the windows.
+ * Thats why we create a copy of this method with a suffix so the
+ * subscrided mutations won't get called.
+ */
+const localStorageMutations = [
+  types.CART_LOAD_CART,
+  types.CART_LOAD_CART_SERVER_TOKEN,
+  types.CART_SET_ITEMS_HASH,
+  types.CART_UPD_TOTALS
+]
+
+for (const name of localStorageMutations) {
+  mutations[name + types.LS_SUFFIX] = mutations[name]
+}
+
 export default mutations
