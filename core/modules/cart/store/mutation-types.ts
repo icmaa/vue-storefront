@@ -1,4 +1,5 @@
 export const SN_CART = 'cart'
+export const LS_SUFFIX = '_LS'
 export const CART_ADD_ITEM = SN_CART + '/ADD'
 export const CART_DEL_ITEM = SN_CART + '/DEL'
 export const CART_DEL_NON_CONFIRMED_ITEM = SN_CART + '/DEL_NONCONFIRMED'
