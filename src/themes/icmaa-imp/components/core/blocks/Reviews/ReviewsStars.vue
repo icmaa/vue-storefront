@@ -1,5 +1,5 @@
 <template>
-  <span class="t-text-reset">
+  <span class="t-leading-none t-text-reset">
     <material-icon v-for="(star,i) in stars" :key="i" :icon="star" :size="starsSize" :class="{ 't-text-alt-2': !starsColor && star !== 'star_border', [starsColor]: starsColor }" />
   </span>
 </template>
