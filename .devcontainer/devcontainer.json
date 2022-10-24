@@ -8,6 +8,7 @@
     "docker-compose.yml"
   ],
   "service": "app",
+  "workspaceFolder": "/var/www",
   "extensions": [
     "bradlc.vscode-tailwindcss",
     "christian-kohler.npm-intellisense",
