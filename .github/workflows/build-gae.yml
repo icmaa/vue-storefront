@@ -1,10 +1,14 @@
 name: Continuous Delivery (GAE)
 
 on:
-  push:
-    branches:
-      - never
-      # Skip it for now as we use GCR
+  workflow_dispatch:
+    inputs:
+      BUILD_SUFFIX:
+        description: Build suffix
+        default: '-123'
+        required: true
+  # push:
+  #   branches:
       # - master
       # - master-*
       # - develop
@@ -35,7 +39,7 @@ jobs:
         run: |
           echo "APP=$(echo ${GITHUB_REPOSITORY##*/})" >> $GITHUB_ENV
           echo "BRANCH_NAME=$(echo ${GITHUB_REF#refs/heads/})" >> $GITHUB_ENV
-          echo "VERSION_NAME=$(echo $(echo ${GITHUB_REF#refs/heads/} | cut -c -52)-$(git rev-parse --short ${GITHUB_SHA}) | sed -e 's/[^a-zA-Z0-9]/-/g')" >> $GITHUB_ENV
+          echo "VERSION_NAME=$(echo $(echo ${GITHUB_REF#refs/heads/} | cut -c -52)-$(git rev-parse --short ${GITHUB_SHA})$(echo ${BUILD_SUFFIX:} | cut -c -10) | sed -e 's/[^a-zA-Z0-9]/-/g')" >> $GITHUB_ENV
 
       - name: Get environment by branch
         run: |

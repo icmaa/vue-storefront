@@ -1,6 +1,7 @@
 name: Continuous Delivery (GCR)
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - master
