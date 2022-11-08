@@ -32,7 +32,7 @@
               {{ $t('Proceed as guest') }}
             </button-component>
           </div>
-          <!-- paypal-checkout-button color="white" class="t-flex-1 t-mt-2 t-z-0" / -->
+          <paypal-checkout-button color="white" class="t-flex-1 t-mt-2 t-z-0" />
         </div>
       </div>
       <div
@@ -213,7 +213,7 @@ import BaseCheckbox from 'theme/components/core/blocks/Form/BaseCheckbox'
 import BaseInput from 'theme/components/core/blocks/Form/BaseInput'
 import GenderSelect from 'theme/components/core/blocks/Form/GenderSelect'
 import ButtonComponent from 'theme/components/core/blocks/Button'
-// import PaypalCheckoutButton from 'icmaa-paypal/components/Checkout/ButtonWrapper'
+import PaypalCheckoutButton from 'icmaa-paypal/components/Checkout/ButtonWrapper'
 
 export default {
   name: 'PersonalDetails',
@@ -222,8 +222,8 @@ export default {
     ButtonComponent,
     BaseCheckbox,
     BaseInput,
-    GenderSelect
-    // PaypalCheckoutButton
+    GenderSelect,
+    PaypalCheckoutButton
   },
   mixins: [ PersonalDetails ]
 }
