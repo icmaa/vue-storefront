@@ -34,7 +34,7 @@ export default {
     }
   },
   metaInfo () {
-    let meta = [
+    const meta = [
       {
         vmid: 'og:title',
         property: 'og:title',

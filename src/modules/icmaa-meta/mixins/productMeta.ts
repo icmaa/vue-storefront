@@ -47,7 +47,7 @@ export default {
     return {
       title: this.translatedName,
       meta: [
-        { vmid: 'description', name: 'description', content: htmlDecode(this.product.description) },
+        { vmid: 'description', name: 'description', content: htmlDecode(this.product.meta_description || this.product.description) },
         { vmid: 'og:title', property: 'og:title', content: htmlDecode(this.translatedName) },
         { vmid: 'og:type', property: 'og:type', content: 'product' },
         { name: 'product.name', content: htmlDecode(this.translatedName) },
