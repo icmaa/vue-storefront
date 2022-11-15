@@ -79,6 +79,10 @@ export default {
     autoReload: {
       type: Boolean,
       default: false
+    },
+    preloadInHeader: {
+      type: Boolean,
+      default: false
     }
   },
   data () {
@@ -171,6 +175,39 @@ export default {
         }
       }
     )
+  },
+  metaInfo () {
+    if (!this.preloadInHeader) return {}
+
+    const link = []
+    const sourceImages = this.sourceImages.map(img => {
+      const regex = /(min-width|max-width):\s([0-9]+)(\w+)/gm
+      img.media = [...img.media.matchAll(regex)].map(([txt, scale, value, unit]) => ({ scale, value, unit }))
+      return img
+    })
+
+    sourceImages.forEach(({ media, srcset }, i, array) => {
+      let mediaStr = media
+      const fromScale = media[0].scale
+      const toValueSubstract = fromScale === 'min-width' ? -1 : 1
+      const wImg = fromScale === 'min-width' ? array[i - 1] : array[i + 1]
+      if (i > 0 && mediaStr.length === 1 && wImg) {
+        const to = fromScale === 'min-width' ? 'max-width' : fromScale
+        mediaStr.push({ scale: to, value: parseInt(wImg.media[0].value) + toValueSubstract, unit: wImg.media[0].unit })
+      }
+
+      mediaStr = mediaStr.map(m => `(${m.scale}: ${m.value}${m.unit})`).join(' and ')
+
+      link.push({
+        vmid: 'category-header-image-' + (i + 1),
+        rel: 'preload',
+        as: 'image',
+        imagesrcset: srcset,
+        media: mediaStr
+      })
+    })
+
+    return { link }
   }
 }
 </script>
