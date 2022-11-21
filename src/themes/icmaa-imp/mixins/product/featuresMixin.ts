@@ -2,6 +2,7 @@ export default {
   computed: {
     featureAttributes () {
       return [
+        'features_accessories',
         'features_backpacks',
         'features_headphones',
         'features_headwear',
