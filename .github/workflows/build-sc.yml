@@ -49,7 +49,7 @@ jobs:
       - name: Build "${{ env.APP }}"
         run: yarn build
         env:
-          NODE_CONFIG_ENV: ${{ env.ENV }}
+          NODE_CONFIG_ENV: ${{ env.ENV }}-sc
           NODE_APP_INSTANCE: ${{ matrix.env.MANDANT }}
 
       - name: Login to docker registry
