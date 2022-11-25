@@ -41,22 +41,17 @@ jobs:
         run: |
           echo "ENV=$(if [[ ${{ env.BRANCH_NAME }} =~ ^master ]]; then echo "production"; else echo "test"; fi)" >> $GITHUB_ENV
 
-      - name: Checkout and sync "icmaa/shop-workspace" repo
-        run: |
-          yarn global add @icmaa/config-sync
-          export CONFIG_BRANCH=$(if [[ ${{ env.BRANCH_NAME }} =~ ^master ]]; then echo "-b master"; fi)
-          config-sync -t ${{ secrets.PAT }} -r vue-storefront $CONFIG_BRANCH -d ./
+      # - name: Checkout and sync "icmaa/shop-workspace" repo
+      #   run: |
+      #     yarn global add @icmaa/config-sync
+      #     export CONFIG_BRANCH=$(if [[ ${{ env.BRANCH_NAME }} =~ ^master ]]; then echo "-b master"; fi)
+      #     config-sync -t ${{ secrets.PAT }} -r vue-storefront $CONFIG_BRANCH -d ./
 
-      - name: Build "${{ env.APP }}"
-        run: yarn build
-        env:
-          NODE_CONFIG_ENV: ${{ env.ENV }}
-          NODE_APP_INSTANCE: ${{ matrix.env.MANDANT }}
-
-      - name: Build docker image
-        run: |
-          gcloud builds submit --quiet --config cloudbuild-${{ matrix.env.MANDANT }}-${{ env.ENV == 'production' && 'prod' || 'test' }}.yaml
-          gcloud run deploy ${{ env.APP }} --region europe-west3 --image europe-docker.pkg.dev/icmaa-shop-imp-${{ env.ENV == 'production' && 'prod' || 'test' }}-01/eu.gcr.io/${{ env.APP }}:latest
+      # - name: Build "${{ env.APP }}"
+      #   run: yarn build
+      #   env:
+      #     NODE_CONFIG_ENV: ${{ env.ENV }}
+      #     NODE_APP_INSTANCE: ${{ matrix.env.MANDANT }}
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
