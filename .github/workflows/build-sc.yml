@@ -1,0 +1,75 @@
+name: Continuous Delivery (SC)
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - feature/*
+      - master
+      - master-*
+      - develop
+      - develop-*
+      - build/*
+
+jobs:
+
+  build:
+    timeout-minutes: 20
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        env:
+          - MANDANT: imp
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '16.x'
+
+      - name: Install
+        uses: bahmutov/npm-install@v1
+
+      - name: Get repository-name, branch-name and version-name
+        run: |
+          echo "APP=$(echo ${GITHUB_REPOSITORY##*/})" >> $GITHUB_ENV
+          echo "BRANCH_NAME=$(echo ${GITHUB_REF#refs/heads/})" >> $GITHUB_ENV
+          echo "VERSION_NAME=$(echo $(echo ${GITHUB_REF#refs/heads/} | cut -c -52)-$(git rev-parse --short ${GITHUB_SHA}) | sed -e 's/[^a-zA-Z0-9]/-/g')" >> $GITHUB_ENV
+
+      - name: Get environment by branch
+        run: |
+          echo "ENV=$(if [[ ${{ env.BRANCH_NAME }} =~ ^master ]]; then echo "production"; else echo "test"; fi)" >> $GITHUB_ENV
+
+      - name: Checkout and sync "icmaa/shop-workspace" repo
+        run: |
+          yarn global add @icmaa/config-sync
+          export CONFIG_BRANCH=$(if [[ ${{ env.BRANCH_NAME }} =~ ^master ]]; then echo "-b master"; fi)
+          config-sync -t ${{ secrets.PAT }} -r vue-storefront $CONFIG_BRANCH -d ./
+
+      - name: Build "${{ env.APP }}"
+        run: yarn build
+        env:
+          NODE_CONFIG_ENV: ${{ env.ENV }}
+          NODE_APP_INSTANCE: ${{ matrix.env.MANDANT }}
+
+      - name: Build docker image
+        run: |
+          gcloud builds submit --quiet --config cloudbuild-${{ matrix.env.MANDANT }}-${{ env.ENV == 'production' && 'prod' || 'test' }}.yaml
+          gcloud run deploy ${{ env.APP }} --region europe-west3 --image europe-docker.pkg.dev/icmaa-shop-imp-${{ env.ENV == 'production' && 'prod' || 'test' }}-01/eu.gcr.io/${{ env.APP }}:latest
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and push
+        uses: docker/build-push-action@v3
+        with:
+          file: docker/scale-commerce/Dockerfile
+          context: ./
+          tags: ${{GITHUB_REPOSITORY}}:latest
+          push: true
