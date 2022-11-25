@@ -28,8 +28,8 @@ jobs:
         with:
           node-version: '16.x'
 
-      # - name: Install
-      #   uses: bahmutov/npm-install@v1
+      - name: Install
+        uses: bahmutov/npm-install@v1
 
       - name: Get repository-name, branch-name and version-name
         run: |
@@ -41,17 +41,17 @@ jobs:
         run: |
           echo "ENV=$(if [[ ${{ env.BRANCH_NAME }} =~ ^master ]]; then echo "production"; else echo "test"; fi)" >> $GITHUB_ENV
 
-      # - name: Checkout and sync "icmaa/shop-workspace" repo
-      #   run: |
-      #     yarn global add @icmaa/config-sync
-      #     export CONFIG_BRANCH=$(if [[ ${{ env.BRANCH_NAME }} =~ ^master ]]; then echo "-b master"; fi)
-      #     config-sync -t ${{ secrets.PAT }} -r vue-storefront $CONFIG_BRANCH -d ./
+      - name: Checkout and sync "icmaa/shop-workspace" repo
+        run: |
+          yarn global add @icmaa/config-sync
+          export CONFIG_BRANCH=$(if [[ ${{ env.BRANCH_NAME }} =~ ^master ]]; then echo "-b master"; fi)
+          config-sync -t ${{ secrets.PAT }} -r vue-storefront $CONFIG_BRANCH -d ./
 
-      # - name: Build "${{ env.APP }}"
-      #   run: yarn build
-      #   env:
-      #     NODE_CONFIG_ENV: ${{ env.ENV }}
-      #     NODE_APP_INSTANCE: ${{ matrix.env.MANDANT }}
+      - name: Build "${{ env.APP }}"
+        run: yarn build
+        env:
+          NODE_CONFIG_ENV: ${{ env.ENV }}
+          NODE_APP_INSTANCE: ${{ matrix.env.MANDANT }}
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
