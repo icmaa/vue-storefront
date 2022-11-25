@@ -71,5 +71,5 @@ jobs:
         with:
           file: docker/scale-commerce/Dockerfile
           context: ./
-          tags: ${{GITHUB_REPOSITORY}}:latest
+          tags: ${{ env.GITHUB_REPOSITORY }}:latest
           push: true
