@@ -28,8 +28,8 @@ jobs:
         with:
           node-version: '16.x'
 
-      - name: Install
-        uses: bahmutov/npm-install@v1
+      # - name: Install
+      #   uses: bahmutov/npm-install@v1
 
       - name: Get repository-name, branch-name and version-name
         run: |
@@ -66,5 +66,5 @@ jobs:
         with:
           file: docker/scale-commerce/Dockerfile
           context: ./
-          tags: ${{ env.GITHUB_REPOSITORY }}:latest
+          tags: ${{ github.repository }}:latest
           push: true
