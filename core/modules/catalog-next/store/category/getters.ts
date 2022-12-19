@@ -2,7 +2,6 @@ import { nonReactiveState } from './index';
 import { GetterTree } from 'vuex'
 import RootState from '@vue-storefront/core/types/RootState'
 import CategoryState from './CategoryState'
-import { compareByLabel } from '../../helpers/categoryHelpers'
 import { products } from 'config'
 import FilterVariant from '../../types/FilterVariant'
 import { optionLabel } from '@vue-storefront/core/modules/catalog/helpers'
@@ -13,10 +12,9 @@ import get from 'lodash-es/get'
 import { getFiltersFromQuery } from '../../helpers/filterHelpers'
 import { Category } from '../../types/Category'
 import { parseCategoryPath } from '@vue-storefront/core/modules/breadcrumbs/helpers'
-import { _prepareCategoryPathIds, getSearchOptionsFromRouteParams } from '../../helpers/categoryHelpers';
+import { _prepareCategoryPathIds, getSearchOptionsFromRouteParams, compareByLabel } from '../../helpers/categoryHelpers';
 import { currentStoreView, removeLocalization } from '@vue-storefront/core/lib/multistore'
 import cloneDeep from 'lodash-es/cloneDeep'
-import config from 'config';
 
 function mapCategoryProducts (productsFromState, productsData) {
   return productsFromState.map(prodState => {
@@ -140,9 +138,6 @@ const getters: GetterTree<CategoryState, RootState> = {
     const totalValue = typeof total === 'object' ? total.value : total
 
     return totalValue || 0
-  },
-  getMenuCategories (state, getters, rootState, rootGetters) {
-    return state.menuCategories || rootGetters['category/getCategories']
   }
 }
 

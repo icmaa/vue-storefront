@@ -5,7 +5,6 @@ import { nonReactiveState } from './index'
 import { Category } from '../../types/Category'
 import * as types from './mutation-types'
 import CategoryState from './CategoryState'
-import slugifyCategories from '@vue-storefront/core/modules/catalog/helpers/slugifyCategories'
 import merge from 'lodash-es/merge'
 import cloneDeep from 'lodash-es/cloneDeep'
 
@@ -40,24 +39,6 @@ const mutations: MutationTree<CategoryState> = {
   },
   [types.CATEGORY_SET_SEARCH_PRODUCTS_STATS] (state, stats = {}) {
     state.searchProductsStats = stats
-  },
-  [types.CATEGORY_UPD_MENU_CATEGORIES] (state, categories) {
-    for (let category of categories.items) {
-      category = slugifyCategories(category)
-      const catExist = state.menuCategories.find(existingCat => existingCat.id === category.id)
-
-      if (!catExist) {
-        state.menuCategories.push(category)
-      }
-    }
-
-    state.menuCategories.sort((catA, catB) => {
-      if (catA.position && catB.position) {
-        if (catA.position < catB.position) return -1
-        if (catA.position > catB.position) return 1
-      }
-      return 0
-    })
   }
 }
 
