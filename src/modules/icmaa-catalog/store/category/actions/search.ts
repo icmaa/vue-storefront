@@ -1,7 +1,7 @@
 import { ActionTree } from 'vuex'
 import * as types from '@vue-storefront/core/modules/catalog-next/store/category/mutation-types'
 import RootState from '@vue-storefront/core/types/RootState'
-import CategoryState from '@vue-storefront/core/modules/catalog-next/store/category/CategoryState'
+import CategoryState from 'icmaa-catalog/types/CategoryState'
 import i18n from '@vue-storefront/i18n'
 import addDefaultProductFilter from 'icmaa-catalog/helpers/defaultProductFilter'
 import { products } from 'config'

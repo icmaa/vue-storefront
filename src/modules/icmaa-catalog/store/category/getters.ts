@@ -1,9 +1,11 @@
 import config, { entities, icmaa_catalog } from 'config'
 import { GetterTree } from 'vuex'
 import RootState from '@vue-storefront/core/types/RootState'
-import CategoryState from '@vue-storefront/core/modules/catalog-next/store/category/CategoryState'
+import CategoryState from 'icmaa-catalog/types/CategoryState'
 import { Category } from '@vue-storefront/core/modules/catalog-next/types/Category'
+import { removeLocalization } from '@vue-storefront/core/lib/multistore'
 import getDefaultCategorySort from 'icmaa-catalog/helpers/defaultCategorySort'
+import queryString from 'query-string'
 import intersection from 'lodash-es/intersection'
 import union from 'lodash-es/union'
 import get from 'lodash-es/get'
@@ -75,7 +77,16 @@ const getters: GetterTree<CategoryState, RootState> = {
    * product will still be configured but won't overwrite original options like the product image in unisex products.
    * @return boolean
    */
-  separateSelectedVariantInProductList: () => !icmaa_catalog.entities.category.configureChildProductsInCategoryList || false
+  separateSelectedVariantInProductList: () => !icmaa_catalog.entities.category.configureChildProductsInCategoryList || false,
+  isGenericSubcategory: state => state.isGenericSubcategory,
+  getGenericSubcategory: (state, getters, rootState) => {
+    const urlPath = (removeLocalization(rootState.route?.path || '') as string).replace(/^\//, '')
+    const subcategory = getters.getCurrentCategory.genericSubcategories?.find(c => c.urlPath === urlPath) || false
+    if (subcategory) {
+      subcategory.filtersQuery = queryString.parse('?' + subcategory.queryPath)
+    }
+    return subcategory
+  }
 }
 
 export default getters

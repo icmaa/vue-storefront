@@ -1,7 +1,7 @@
 import { ActionTree } from 'vuex'
 import * as types from '@vue-storefront/core/modules/catalog-next/store/category/mutation-types'
 import RootState from '@vue-storefront/core/types/RootState'
-import CategoryState from '@vue-storefront/core/modules/catalog-next/store/category/CategoryState'
+import CategoryState from 'icmaa-catalog/types/CategoryState'
 import addDefaultProductFilter from 'icmaa-catalog/helpers/defaultProductFilter'
 import { products, entities } from 'config'
 import { buildFilterProductsQuery } from '@vue-storefront/core/helpers'
@@ -39,6 +39,16 @@ const actions: ActionTree<CategoryState, RootState> = {
     addDefaultProductFilter(filterQr)
     if (!searchQuery.sort) {
       filterQr.applySort({ field: 'is_in_sale', options: { 'missing': '_first' } })
+    }
+
+    if (getters.isGenericSubcategory) {
+      const subcategory = getters.getGenericSubcategory
+      for (const key in subcategory.filtersQuery) {
+        const value = subcategory.filtersQuery[key] === 'notNull'
+          ? { [subcategory.filtersQuery[key]]: true }
+          : subcategory.filtersQuery[key].split(',')
+        filterQr.applyFilter({ key, value, scope: 'default' })
+      }
     }
 
     dispatch(
@@ -101,6 +111,16 @@ const actions: ActionTree<CategoryState, RootState> = {
     addDefaultProductFilter(filterQr)
     if (!searchQuery.sort) {
       filterQr.applySort({ field: 'is_in_sale', options: { 'missing': '_first' } })
+    }
+
+    if (getters.isGenericSubcategory) {
+      const subcategory = getters.getGenericSubcategory
+      for (const key in subcategory.filtersQuery) {
+        const value = subcategory.filtersQuery[key] === 'notNull'
+          ? { [subcategory.filtersQuery[key]]: true }
+          : subcategory.filtersQuery[key].split(',')
+        filterQr.applyFilter({ key, value, scope: 'default' })
+      }
     }
 
     dispatch(
