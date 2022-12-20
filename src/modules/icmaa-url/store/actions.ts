@@ -2,11 +2,12 @@ import config from 'config'
 import CmsService from 'icmaa-cms/data-resolver/CmsService'
 import { ActionTree } from 'vuex'
 import { UrlState } from '@vue-storefront/core/modules/url/types/UrlState'
-import { currentStoreView, localizedDispatcherRouteName, removeLocalization } from '@vue-storefront/core/lib/multistore'
+import { currentStoreView, localizedDispatcherRouteName } from '@vue-storefront/core/lib/multistore'
 import { getUrlPathFromUrl, isCatalogOverwrite } from '../helpers'
 import { Logger } from '@vue-storefront/core/lib/logger'
 import { storeProductToCache } from '@vue-storefront/core/modules/catalog/helpers/search';
 import { prepareProducts } from '@vue-storefront/core/modules/catalog/helpers/prepare';
+import stripUrlPath from 'icmaa-catalog/helpers/stripUrlPath'
 import * as categoryMutationTypes from '@vue-storefront/core/modules/catalog-next/store/category/mutation-types'
 import * as icmaaCategoryMutationTypes from 'icmaa-catalog/store/category/mutation-types'
 
@@ -123,7 +124,7 @@ export const actions: ActionTree<UrlState, any> = {
       }
     }
   },
-  async saveFallbackData ({ commit }, { _type, _source, url }) {
+  async saveFallbackData ({ commit, rootGetters }, { _type, _source, url }) {
     switch (_type) {
       case 'product': {
         const [product] = prepareProducts([_source])
@@ -131,15 +132,16 @@ export const actions: ActionTree<UrlState, any> = {
         break
       }
       case 'category': {
-        commit('category-next/' + categoryMutationTypes.CATEGORY_ADD_CATEGORY, _source, { root: true })
-
-        const urlPath = (removeLocalization(url) as string).replace(/^\//, '')
-        const isGenericSubcategory = (_source.genericSubcategories || []).some(c => c.urlPath === urlPath)
+        const urlPath = stripUrlPath(url)
+        const genericSubcategory = (_source.genericSubcategories || []).find(c => c.urlPath === urlPath)
+        const isGenericSubcategory = (genericSubcategory !== -1)
         commit(
           'category-next/' + icmaaCategoryMutationTypes.CATEGORY_SET_GENERIC_SUBCATEGORY,
           isGenericSubcategory,
           { root: true }
         )
+
+        commit('category-next/' + categoryMutationTypes.CATEGORY_ADD_CATEGORY, _source, { root: true })
 
         break
       }
