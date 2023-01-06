@@ -134,12 +134,19 @@ export const actions: ActionTree<UrlState, any> = {
       case 'category': {
         const urlPath = stripUrlPath(url)
         const genericSubcategory = (_source.genericSubcategories || []).find(c => c.urlPath === urlPath)
-        const isGenericSubcategory = (genericSubcategory !== -1)
+
+        const isGenericSubcategory = !!genericSubcategory
         commit(
           'category-next/' + icmaaCategoryMutationTypes.CATEGORY_SET_GENERIC_SUBCATEGORY,
           isGenericSubcategory,
           { root: true }
         )
+
+        if (isGenericSubcategory === true) {
+          _source['slug'] = genericSubcategory.slug
+          _source['url_key'] = genericSubcategory.slug
+          _source['url_path'] = genericSubcategory.urlPath
+        }
 
         commit('category-next/' + categoryMutationTypes.CATEGORY_ADD_CATEGORY, _source, { root: true })
 

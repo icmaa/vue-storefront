@@ -11,7 +11,9 @@ import union from 'lodash-es/union'
 import get from 'lodash-es/get'
 
 const getters: GetterTree<CategoryState, RootState> = {
-  getCategoryById: (state, getters) => (id): Category|boolean => getters.getCategoriesMap[id] || false,
+  getCategoryById: (state, getters) => (id): Category|boolean => {
+    return getters.getCategoriesMap.find(c => c.id === id) || false
+  },
   getDefaultCategorySort: (state, getters, rootState, rootGetters) => {
     return getDefaultCategorySort(getters.getCurrentCategory as Category)
   },
@@ -23,8 +25,8 @@ const getters: GetterTree<CategoryState, RootState> = {
       return state.filtersMap[rootGetters['icmaaSearch/getCurrentResultsPageTermHash']] || {}
     }
 
-    const categoryId = get(getters.getCurrentCategory, 'id', null)
-    return state.filtersMap[categoryId] || {}
+    const categoryUrlKey = get(getters.getCurrentCategory, 'url_key', null)
+    return state.filtersMap[categoryUrlKey] || {}
   },
   isActiveFilterAttribute: (state, getters) => (attributeKey: string) => {
     return (getters.getCurrentFilters[attributeKey])

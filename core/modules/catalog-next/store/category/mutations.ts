@@ -19,14 +19,14 @@ const mutations: MutationTree<CategoryState> = {
   },
   [types.CATEGORY_ADD_CATEGORY] (state, category: Category) {
     if (category) {
-      Vue.set(state.categoriesMap, category.id, category)
+      Vue.set(state.categoriesMap, category.url_key, category)
     }
   },
   [types.CATEGORY_ADD_CATEGORIES] (state, categories: Category[] = []) {
     if (categories.length) {
       let newCategoriesEntry = {}
       categories.forEach(category => {
-        newCategoriesEntry[category.id] = category
+        newCategoriesEntry[category.url_key] = category
       })
       state.categoriesMap = merge({}, state.categoriesMap, newCategoriesEntry)
     }
@@ -35,7 +35,7 @@ const mutations: MutationTree<CategoryState> = {
     state.notFoundCategoryIds = [...state.notFoundCategoryIds, ...categoryIds]
   },
   [types.CATEGORY_SET_CATEGORY_FILTERS] (state, { category, filters }) {
-    Vue.set(state.filtersMap, category.id, filters)
+    Vue.set(state.filtersMap, category.url_key, filters)
   },
   [types.CATEGORY_SET_SEARCH_PRODUCTS_STATS] (state, stats = {}) {
     state.searchProductsStats = stats
