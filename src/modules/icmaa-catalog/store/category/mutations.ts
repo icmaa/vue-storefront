@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import { MutationTree } from 'vuex'
-import CategoryState from 'icmaa-catalog/types/CategoryState'
-import * as types from './mutation-types'
+import CategoryState from '@vue-storefront/core/modules/catalog-next/store/category/CategoryState'
 import * as originalTypes from '@vue-storefront/core/modules/catalog-next/store/category/mutation-types'
 
 const mutations: MutationTree<CategoryState> = {
@@ -15,9 +14,6 @@ const mutations: MutationTree<CategoryState> = {
     const orgFilters = state.filtersMap[category.url_key] || {}
     filters = Object.assign({}, orgFilters, filters)
     Vue.set(state.filtersMap, category.url_key, filters)
-  },
-  [types.CATEGORY_SET_GENERIC_SUBCATEGORY] (state, isGenericSubcategory: boolean) {
-    state.isGenericSubcategory = isGenericSubcategory
   }
 }
 

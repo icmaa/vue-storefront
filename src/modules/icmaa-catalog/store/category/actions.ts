@@ -1,6 +1,6 @@
 import { ActionTree } from 'vuex'
 import RootState from '@vue-storefront/core/types/RootState'
-import CategoryState from 'icmaa-catalog/types/CategoryState'
+import CategoryState from '@vue-storefront/core/modules/catalog-next/store/category/CategoryState'
 import FilterVariant from '@vue-storefront/core/modules/catalog-next/types/FilterVariant'
 import { Category } from '@vue-storefront/core/modules/catalog-next/types/Category'
 import { DataResolver } from '@vue-storefront/core/data-resolver/types/DataResolver'

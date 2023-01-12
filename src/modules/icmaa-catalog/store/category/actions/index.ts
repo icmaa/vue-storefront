@@ -1,7 +1,7 @@
 import { ActionTree } from 'vuex'
 import * as types from '@vue-storefront/core/modules/catalog-next/store/category/mutation-types'
 import RootState from '@vue-storefront/core/types/RootState'
-import CategoryState from 'icmaa-catalog/types/CategoryState'
+import CategoryState from '@vue-storefront/core/modules/catalog-next/store/category/CategoryState'
 import addDefaultProductFilter from 'icmaa-catalog/helpers/defaultProductFilter'
 import { products, entities } from 'config'
 import { buildFilterProductsQuery } from '@vue-storefront/core/helpers'
@@ -43,10 +43,10 @@ const actions: ActionTree<CategoryState, RootState> = {
 
     if (getters.isGenericSubcategory) {
       const subcategory = getters.getGenericSubcategory
-      for (const key in subcategory.filtersQuery) {
-        const value = subcategory.filtersQuery[key] === 'notNull'
-          ? { [subcategory.filtersQuery[key]]: true }
-          : subcategory.filtersQuery[key].split(',')
+      for (const key in subcategory.query) {
+        const value = subcategory.query[key] === 'notNull'
+          ? { [subcategory.query[key]]: true }
+          : subcategory.query[key].split(',')
         filterQr.applyFilter({ key, value, scope: 'default' })
       }
     }
@@ -115,10 +115,10 @@ const actions: ActionTree<CategoryState, RootState> = {
 
     if (getters.isGenericSubcategory) {
       const subcategory = getters.getGenericSubcategory
-      for (const key in subcategory.filtersQuery) {
-        const value = subcategory.filtersQuery[key] === 'notNull'
-          ? { [subcategory.filtersQuery[key]]: true }
-          : subcategory.filtersQuery[key].split(',')
+      for (const key in subcategory.query) {
+        const value = subcategory.query[key] === 'notNull'
+          ? { [subcategory.query[key]]: true }
+          : subcategory.query[key].split(',')
         filterQr.applyFilter({ key, value, scope: 'default' })
       }
     }

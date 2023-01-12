@@ -7,9 +7,8 @@ import { getUrlPathFromUrl, isCatalogOverwrite } from '../helpers'
 import { Logger } from '@vue-storefront/core/lib/logger'
 import { storeProductToCache } from '@vue-storefront/core/modules/catalog/helpers/search';
 import { prepareProducts } from '@vue-storefront/core/modules/catalog/helpers/prepare';
-import stripUrlPath from 'icmaa-catalog/helpers/stripUrlPath'
 import * as categoryMutationTypes from '@vue-storefront/core/modules/catalog-next/store/category/mutation-types'
-import * as icmaaCategoryMutationTypes from 'icmaa-catalog/store/category/mutation-types'
+import { transformProductUrl, transformCategoryUrl } from '@vue-storefront/core/modules/url/helpers/transformUrl'
 
 import has from 'lodash-es/has'
 
@@ -124,37 +123,32 @@ export const actions: ActionTree<UrlState, any> = {
       }
     }
   },
-  async saveFallbackData ({ commit, rootGetters }, { _type, _source, url }) {
+  async transformFallback (context, { _type, _source, params }) {
     switch (_type) {
-      case 'product': {
+      case 'product':
+        return transformProductUrl(_source, params)
+      case 'subcategory':
+      case 'category':
+        return transformCategoryUrl(_source)
+      default:
+        return {
+          name: 'page-not-found',
+          params: {
+            slug: 'page-not-found'
+          }
+        }
+    }
+  },
+  async saveFallbackData ({ commit, rootGetters }, { _type, _source }) {
+    switch (_type) {
+      case 'product':
         const [product] = prepareProducts([_source])
         storeProductToCache(product, 'sku')
         break
-      }
-      case 'category': {
-        const urlPath = stripUrlPath(url)
-        const genericSubcategory = (_source.genericSubcategories || []).find(c => c.urlPath === urlPath)
-
-        const isGenericSubcategory = !!genericSubcategory
-        commit(
-          'category-next/' + icmaaCategoryMutationTypes.CATEGORY_SET_GENERIC_SUBCATEGORY,
-          isGenericSubcategory,
-          { root: true }
-        )
-
-        if (isGenericSubcategory === true) {
-          _source['slug'] = genericSubcategory.slug
-          _source['url_key'] = genericSubcategory.slug
-          _source['url_path'] = genericSubcategory.urlPath
-        }
-
+      case 'category':
+      case 'subcategory':
         commit('category-next/' + categoryMutationTypes.CATEGORY_ADD_CATEGORY, _source, { root: true })
-
         break
-      }
-      default: {
-        break
-      }
     }
   }
 }

@@ -1,10 +1,9 @@
 import config, { entities, icmaa_catalog } from 'config'
 import { GetterTree } from 'vuex'
 import RootState from '@vue-storefront/core/types/RootState'
-import CategoryState from 'icmaa-catalog/types/CategoryState'
+import CategoryState from '@vue-storefront/core/modules/catalog-next/store/category/CategoryState'
 import { Category } from '@vue-storefront/core/modules/catalog-next/types/Category'
 import getDefaultCategorySort from 'icmaa-catalog/helpers/defaultCategorySort'
-import stripUrlPath from 'icmaa-catalog/helpers/stripUrlPath'
 import queryString from 'query-string'
 import intersection from 'lodash-es/intersection'
 import union from 'lodash-es/union'
@@ -80,17 +79,12 @@ const getters: GetterTree<CategoryState, RootState> = {
    * @return boolean
    */
   separateSelectedVariantInProductList: () => !icmaa_catalog.entities.category.configureChildProductsInCategoryList || false,
-  isGenericSubcategory: state => state.isGenericSubcategory,
-  getGenericSubcategoryByUrlPath: (state, getters, rootState) => (urlPath?: string) => {
-    urlPath = stripUrlPath(urlPath)
-    const subcategory = getters.getCurrentCategory.genericSubcategories?.find(c => c.urlPath === urlPath) || false
-    if (subcategory) {
-      subcategory.filtersQuery = queryString.parse('?' + subcategory.queryPath)
-    }
+  isGenericSubcategory: (state, getters) => getters.getCurrentCategory?.isGenericSubcategory === true,
+  getGenericSubcategory: (state, getters, rootState): boolean | any => {
+    if (!getters.isGenericSubcategory) return false
+    const subcategory = getters.getCurrentCategory.subcategory
+    subcategory.query = queryString.parse('?' + subcategory.queryPath)
     return subcategory
-  },
-  getGenericSubcategory: (state, getters, rootState) => {
-    return getters.getGenericSubcategoryByUrlPath(rootState.route?.path || '')
   }
 }
 
