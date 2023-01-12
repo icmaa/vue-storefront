@@ -111,7 +111,7 @@ const composeInitialPageState = async (store, route, forceLoad = false, pageSize
   try {
     const filters = getSearchOptionsFromRouteParams(route.params)
     const cachedCategory = store.getters['category-next/getCategoryFrom'](route.path)
-    const hasCategoryExtras = store.getters['icmaaCategoryExtras/getCategoryExtrasByUrlKey'](route.path)
+    const hasCategoryExtras = store.getters['icmaaCategoryExtras/getCategoryExtrasByUrlKey'](filters.slug)
     const currentCategory = cachedCategory && !forceLoad && hasCategoryExtras ? cachedCategory : await store.dispatch('category-next/loadCategoryWithExtras', { filters })
 
     const loadCategoryProducts = async () => {
@@ -131,7 +131,7 @@ const composeInitialPageState = async (store, route, forceLoad = false, pageSize
 
     const breadCrumbsLoader = store.dispatch(
       'category-next/loadCategoryBreadcrumbs',
-      { category: currentCategory, currentRouteName: currentCategory.name, omitCurrent: true }
+      { category: currentCategory, currentRouteName: currentCategory?.name, omitCurrent: true }
     )
     if (isServer) {
       await breadCrumbsLoader
