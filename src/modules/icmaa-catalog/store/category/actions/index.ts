@@ -41,8 +41,8 @@ const actions: ActionTree<CategoryState, RootState> = {
       filterQr.applySort({ field: 'is_in_sale', options: { 'missing': '_first' } })
     }
 
-    if (getters.isGenericSubcategory) {
-      const subcategory = getters.getGenericSubcategory
+    if (category.isGenericSubcategory === true) {
+      const subcategory = getters.getGenericSubcategoryByCategory(category)
       for (const key in subcategory.query) {
         const value = subcategory.query[key] === 'notNull'
           ? { [subcategory.query[key]]: true }
