@@ -53,7 +53,22 @@ const getters: GetterTree<CategoryState, RootState> = {
 
     return intersection(parents, [...currentFilterKeys, ...showFilterInCategoryFor]).length > 0
   },
-  getFilterCategories: (state, getters) => getters.getAvailableFilters.category || [],
+  getFilterCategories: (state, getters) => {
+    const filterCategories = getters.getAvailableFilters.category || []
+
+    const genericSubcategories = getters.getCurrentCategory?.genericSubcategories
+    if (genericSubcategories) {
+      filterCategories.push(
+        ...genericSubcategories.map(c => ({
+          slug: c.urlKey,
+          url_path: c.urlPath,
+          label: c.title
+        }))
+      )
+    }
+
+    return filterCategories
+  },
   isCategoryInTicketWhitelist: () => (category: Category): boolean => {
     if (!category || !category.path) {
       return false
