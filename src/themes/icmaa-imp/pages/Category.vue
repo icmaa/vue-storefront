@@ -7,7 +7,7 @@
         <block-wrapper :components="contentHeader" v-if="contentHeader" />
         <div class="t-w-full">
           <div class="t-flex t-flex-wrap t-items-center t--mx-1 lg:t--mx-2">
-            <div class="t-hidden md:t-flex t-items-baseline t-w-full t-px-1 md:t-px-2 t-mb-4">
+            <div class="t-flex t-items-baseline t-w-full t-px-1 md:t-px-2 t-mb-4">
               <h1 class="category-title t-font-light t-text-2xl t-text-base-dark">
                 {{ category.name | htmlDecode }}
               </h1>
@@ -20,7 +20,7 @@
                 {{ $t('Filters') }}
                 <span v-if="activeFilterCount > 0" v-text="`(${activeFilterCount})`" class="t-flex-grow t-text-left t-pl-2 t-opacity-75" />
               </button-component>
-              <div class="t-w-full lg:t-flex-1 t-mt-2 lg:t-mt-0 t-overflow-x-auto t-hide-scrollbar t-flex t-items-center t-h-8">
+              <div class="t-w-full lg:t-flex-1 t-mt-2 lg:t-mt-0 t-overflow-x-auto t-hide-scrollbar t-flex t-items-center t-h-8" v-if="shouldLoadPresets || filterCategories.length > 0">
                 <filter-presets class="t-flex t-items-center md:t-ml-2" v-if="shouldLoadPresets" />
                 <category-links :categories="filterCategories" class="t-flex t-items-center lg:t-ml-2" v-else />
               </div>
