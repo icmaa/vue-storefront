@@ -54,7 +54,7 @@ const getters: GetterTree<CategoryState, RootState> = {
     return intersection(parents, [...currentFilterKeys, ...showFilterInCategoryFor]).length > 0
   },
   getFilterCategories: (state, getters) => {
-    const filterCategories = [...getters.getAvailableFilters.category] || []
+    const filterCategories = getters.getAvailableFilters?.category ? [...getters.getAvailableFilters.category] : []
 
     const genericSubcategories = getters.getCurrentCategory?.genericSubcategories
     if (genericSubcategories) {
