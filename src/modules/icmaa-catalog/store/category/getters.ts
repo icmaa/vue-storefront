@@ -11,7 +11,7 @@ import get from 'lodash-es/get'
 
 const getters: GetterTree<CategoryState, RootState> = {
   getCategoryById: (state, getters) => (id): Category|boolean => {
-    return getters.getCategoriesMap.find(c => c.id === id) || false
+    return Object.values(getters.getCategoriesMap as Category[]).find(c => c.id === id) || false
   },
   getDefaultCategorySort: (state, getters, rootState, rootGetters) => {
     return getDefaultCategorySort(getters.getCurrentCategory as Category)

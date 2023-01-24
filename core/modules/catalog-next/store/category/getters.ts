@@ -28,7 +28,7 @@ function mapCategoryProducts (productsFromState, productsData) {
 
 const getters: GetterTree<CategoryState, RootState> = {
   getCategories: (state): Category[] => Object.values(state.categoriesMap),
-  getCategoriesMap: (state): { [urlKey: string]: Category} => state.categoriesMap,
+  getCategoriesMap: (state): { [urlKey: string]: Category } => state.categoriesMap,
   getNotFoundCategoryIds: (state): string[] => state.notFoundCategoryIds,
   getCategoryProducts: (state) => mapCategoryProducts(state.products, nonReactiveState.products),
   getCategoryFrom: (state, getters) => (path: string = '') => {
