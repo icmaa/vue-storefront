@@ -8,10 +8,10 @@
         <div class="t-w-full">
           <div class="t-flex t-flex-wrap t-items-center t--mx-1 lg:t--mx-2">
             <div class="t-flex t-items-baseline t-w-full t-px-1 md:t-px-2 t-mb-4">
-              <h1 class="category-title t-font-light t-text-2xl t-text-base-dark">
+              <h1 class="category-title t-font-light t-text-2xl t-text-base-dark t-pr-2">
                 {{ category.name | htmlDecode }}
               </h1>
-              <span class="t-hidden md:t-inline-block t-font-extralight t-text-base-light t-text-sm t-leading-7 t-pl-2">
+              <span class="t-inline-block t-font-extralight t-text-base-light t-text-sm t-leading-7">
                 <span data-test-id="productsTotal">{{ productsTotal }}</span> {{ $t('items') }}
               </span>
             </div>
