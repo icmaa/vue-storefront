@@ -79,7 +79,9 @@ const getters: GetterTree<CategoryExtrasState, RootState> = {
     if (product && product.category) {
       const { band, brand } = product
       const account = band || brand
-      return account ? getters.getCategoryBy('ceAccount', account) : false
+      if (account) {
+        return rootGetters['category-next/getCategories'].find(c => !c.isGenericSubcategory && c.ceAccount === account)
+      }
     }
 
     return false

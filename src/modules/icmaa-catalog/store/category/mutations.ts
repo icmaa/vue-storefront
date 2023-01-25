@@ -11,9 +11,9 @@ const mutations: MutationTree<CategoryState> = {
    * @param {Array} attributes
    */
   [types.CATEGORY_SET_CATEGORY_FILTERS] (state, { category, filters }) {
-    const orgFilters = state.filtersMap[category.id] || {}
+    const orgFilters = state.filtersMap[category.url_key] || {}
     filters = Object.assign({}, orgFilters, filters)
-    Vue.set(state.filtersMap, category.id, filters)
+    Vue.set(state.filtersMap, category.url_key, filters)
   }
 }
 

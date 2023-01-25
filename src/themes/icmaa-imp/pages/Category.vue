@@ -3,15 +3,15 @@
     <header class="t-container">
       <div class="t-flex t-flex-wrap t-px-4 t-mb-8">
         <category-extras-header class="t-bg-white t--mx-4 md:t-mx-0 md:t-mt-4 lg:t-w-full" />
-        <breadcrumbs :active-route="getCurrentCategory.name" class="t-w-full t-my-4 md:t-my-8" />
+        <breadcrumbs :active-route="currentRouteName" class="t-w-full t-my-4 md:t-my-8" />
         <block-wrapper :components="contentHeader" v-if="contentHeader" />
         <div class="t-w-full">
           <div class="t-flex t-flex-wrap t-items-center t--mx-1 lg:t--mx-2">
-            <div class="t-hidden md:t-flex t-items-baseline t-w-full t-px-1 md:t-px-2 t-mb-4">
-              <h1 class="category-title t-font-light t-text-2xl t-text-base-dark">
+            <div class="t-flex t-items-baseline t-w-full t-px-1 md:t-px-2 t-mb-4">
+              <h1 class="category-title t-font-light t-text-2xl t-text-base-dark t-pr-2">
                 {{ category.name | htmlDecode }}
               </h1>
-              <span class="t-hidden md:t-inline-block t-font-extralight t-text-base-light t-text-sm t-leading-7 t-pl-2">
+              <span class="t-inline-block t-font-extralight t-text-base-light t-text-sm t-leading-7">
                 <span data-test-id="productsTotal">{{ productsTotal }}</span> {{ $t('items') }}
               </span>
             </div>
@@ -20,7 +20,7 @@
                 {{ $t('Filters') }}
                 <span v-if="activeFilterCount > 0" v-text="`(${activeFilterCount})`" class="t-flex-grow t-text-left t-pl-2 t-opacity-75" />
               </button-component>
-              <div class="t-w-full lg:t-flex-1 t-mt-2 lg:t-mt-0 t-overflow-x-auto t-hide-scrollbar t-flex t-items-center t-h-8">
+              <div class="t-w-full lg:t-flex-1 t-mt-2 lg:t-mt-0 t-overflow-x-auto t-hide-scrollbar t-flex t-items-center t-h-8" v-if="shouldLoadPresets || filterCategories.length > 0">
                 <filter-presets class="t-flex t-items-center md:t-ml-2" v-if="shouldLoadPresets" />
                 <category-links :categories="filterCategories" class="t-flex t-items-center lg:t-ml-2" v-else />
               </div>
@@ -111,7 +111,7 @@ const composeInitialPageState = async (store, route, forceLoad = false, pageSize
   try {
     const filters = getSearchOptionsFromRouteParams(route.params)
     const cachedCategory = store.getters['category-next/getCategoryFrom'](route.path)
-    const hasCategoryExtras = store.getters['icmaaCategoryExtras/getCategoryExtrasByUrlKey'](route.path)
+    const hasCategoryExtras = store.getters['icmaaCategoryExtras/getCategoryExtrasByUrlKey'](filters.slug)
     const currentCategory = cachedCategory && !forceLoad && hasCategoryExtras ? cachedCategory : await store.dispatch('category-next/loadCategoryWithExtras', { filters })
 
     const loadCategoryProducts = async () => {
@@ -131,7 +131,7 @@ const composeInitialPageState = async (store, route, forceLoad = false, pageSize
 
     const breadCrumbsLoader = store.dispatch(
       'category-next/loadCategoryBreadcrumbs',
-      { category: currentCategory, currentRouteName: currentCategory.name, omitCurrent: true }
+      { category: currentCategory, currentRouteName: currentCategory?.name, omitCurrent: true }
     )
     if (isServer) {
       await breadCrumbsLoader
