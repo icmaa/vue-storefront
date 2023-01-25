@@ -31,6 +31,10 @@ export default {
       })
 
       return categoryImagesTags
+    },
+    currentRouteName () {
+      return this.category?.isGenericSubcategory === true
+        ? this.category?.subcategory.title : this.category?.name
     }
   },
   metaInfo () {
