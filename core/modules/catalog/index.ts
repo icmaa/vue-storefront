@@ -3,7 +3,6 @@ import { productModule } from './store/product'
 import { attributeModule } from './store/attribute'
 import { stockModule } from './store/stock'
 import { taxModule } from './store/tax'
-import { categoryModule } from './store/category'
 import { catalogHooks } from './hooks'
 import { getAttributesFromMetadata } from './helpers/associatedProducts'
 import { StorageManager } from '@vue-storefront/core/lib/storage-manager'
@@ -11,7 +10,6 @@ import EventBus from '@vue-storefront/core/compatibility/plugins/event-bus'
 import config from 'config'
 import { filterChangedProduct, productAfterCustomoptions, productAfterBundleoptions, productAfterPriceupdate, onUserPricesRefreshed } from './events'
 import { isServer } from '@vue-storefront/core/helpers'
-import uniq from 'lodash-es/uniq'
 
 export const CatalogModule: StorefrontModule = async function ({ store, router, appConfig }) {
   StorageManager.init('categories', undefined, 1024)
@@ -23,7 +21,6 @@ export const CatalogModule: StorefrontModule = async function ({ store, router, 
   store.registerModule('attribute', attributeModule)
   store.registerModule('stock', stockModule)
   store.registerModule('tax', taxModule)
-  store.registerModule('category', categoryModule)
 
   catalogHooks.afterSetBundleProducts(products => getAttributesFromMetadata(store, products))
   catalogHooks.afterSetGroupedProduct(products => getAttributesFromMetadata(store, products))

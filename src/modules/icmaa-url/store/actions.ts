@@ -5,6 +5,10 @@ import { UrlState } from '@vue-storefront/core/modules/url/types/UrlState'
 import { currentStoreView, localizedDispatcherRouteName } from '@vue-storefront/core/lib/multistore'
 import { getUrlPathFromUrl, isCatalogOverwrite } from '../helpers'
 import { Logger } from '@vue-storefront/core/lib/logger'
+import { storeProductToCache } from '@vue-storefront/core/modules/catalog/helpers/search';
+import { prepareProducts } from '@vue-storefront/core/modules/catalog/helpers/prepare';
+import * as categoryMutationTypes from '@vue-storefront/core/modules/catalog-next/store/category/mutation-types'
+import { transformProductUrl, transformCategoryUrl } from '@vue-storefront/core/modules/url/helpers/transformUrl'
 
 import has from 'lodash-es/has'
 
@@ -100,7 +104,7 @@ export const actions: ActionTree<UrlState, any> = {
     if (fallbackData) {
       const [result] = await Promise.all([
         dispatch('transformFallback', { ...fallbackData, params }),
-        dispatch('saveFallbackData', fallbackData)
+        dispatch('saveFallbackData', { ...fallbackData, url })
       ])
       return result
     }
@@ -117,6 +121,34 @@ export const actions: ActionTree<UrlState, any> = {
       params: {
         slug: 'page-not-found'
       }
+    }
+  },
+  async transformFallback (context, { _type, _source, params }) {
+    switch (_type) {
+      case 'product':
+        return transformProductUrl(_source, params)
+      case 'subcategory':
+      case 'category':
+        return transformCategoryUrl(_source)
+      default:
+        return {
+          name: 'page-not-found',
+          params: {
+            slug: 'page-not-found'
+          }
+        }
+    }
+  },
+  async saveFallbackData ({ commit, rootGetters }, { _type, _source }) {
+    switch (_type) {
+      case 'product':
+        const [product] = prepareProducts([_source])
+        storeProductToCache(product, 'sku')
+        break
+      case 'category':
+      case 'subcategory':
+        commit('category-next/' + categoryMutationTypes.CATEGORY_ADD_CATEGORY, _source, { root: true })
+        break
     }
   }
 }

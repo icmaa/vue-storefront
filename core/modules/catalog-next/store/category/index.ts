@@ -12,8 +12,7 @@ export const categoryModule: Module<CategoryState, RootState> = {
     notFoundCategoryIds: [],
     filtersMap: {},
     products: [],
-    searchProductsStats: {},
-    menuCategories: []
+    searchProductsStats: {}
   },
   getters,
   actions,

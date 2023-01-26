@@ -26,12 +26,12 @@ const actions: ActionTree<CategoryState, RootState> = {
    */
   async loadCategoryProducts ({ commit, getters, rootGetters, dispatch }, { route, category, pageSize = 50 } = {}) {
     const searchCategory = category || getters.getCategoryFrom(route.path) || {}
-    let categoryMappedFilters = getters.getFiltersMap[searchCategory.id]
+    let categoryMappedFilters = getters.getFiltersMap[searchCategory.url_key]
     const areFiltersInQuery = !!Object.keys(route[products.routerFiltersSource]).length
     const hasSessionFilters = !!rootGetters['user/hasSessionFilters']
     if (!categoryMappedFilters && (areFiltersInQuery || hasSessionFilters)) { // loading all filters only when some filters are currently chosen and category has no available filters yet
       await dispatch('loadCategoryFilters', searchCategory)
-      categoryMappedFilters = getters.getFiltersMap[searchCategory.id]
+      categoryMappedFilters = getters.getFiltersMap[searchCategory.url_key]
     }
     const searchQuery = getters.getCurrentFiltersFrom(route[products.routerFiltersSource], categoryMappedFilters)
     let filterQr = buildFilterProductsQuery(searchCategory, searchQuery.filters)
@@ -39,6 +39,16 @@ const actions: ActionTree<CategoryState, RootState> = {
     addDefaultProductFilter(filterQr)
     if (!searchQuery.sort) {
       filterQr.applySort({ field: 'is_in_sale', options: { 'missing': '_first' } })
+    }
+
+    if (category.isGenericSubcategory === true) {
+      const subcategory = getters.getGenericSubcategoryByCategory(category)
+      for (const key in subcategory.query) {
+        const value = subcategory.query[key] === 'notNull'
+          ? { [subcategory.query[key]]: true }
+          : subcategory.query[key].split(',')
+        filterQr.applyFilter({ key, value, scope: 'default' })
+      }
     }
 
     dispatch(
@@ -103,6 +113,16 @@ const actions: ActionTree<CategoryState, RootState> = {
       filterQr.applySort({ field: 'is_in_sale', options: { 'missing': '_first' } })
     }
 
+    if (getters.isGenericSubcategory) {
+      const subcategory = getters.getGenericSubcategory
+      for (const key in subcategory.query) {
+        const value = subcategory.query[key] === 'notNull'
+          ? { [subcategory.query[key]]: true }
+          : subcategory.query[key].split(',')
+        filterQr.applyFilter({ key, value, scope: 'default' })
+      }
+    }
+
     dispatch(
       'user/applySessionFilterToSearchQuery',
       { query: filterQr, filters: searchQuery.filters },
@@ -151,7 +171,7 @@ const actions: ActionTree<CategoryState, RootState> = {
     }
     const aggregationFilters = getters.getAvailableFiltersFrom(aggregations)
     const currentCategory = category || getters.getCurrentCategory
-    const categoryMappedFilters = getters.getFiltersMap[currentCategory.id]
+    const categoryMappedFilters = getters.getFiltersMap[currentCategory.url_key]
     let resultFilters = aggregationFilters
     const filtersKeys = Object.keys(filters)
     if (categoryMappedFilters && (filtersKeys.length || userSessionFilterKeys.length)) {

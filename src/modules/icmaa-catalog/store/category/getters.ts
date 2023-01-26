@@ -4,12 +4,15 @@ import RootState from '@vue-storefront/core/types/RootState'
 import CategoryState from '@vue-storefront/core/modules/catalog-next/store/category/CategoryState'
 import { Category } from '@vue-storefront/core/modules/catalog-next/types/Category'
 import getDefaultCategorySort from 'icmaa-catalog/helpers/defaultCategorySort'
+import queryString from 'query-string'
 import intersection from 'lodash-es/intersection'
 import union from 'lodash-es/union'
 import get from 'lodash-es/get'
 
 const getters: GetterTree<CategoryState, RootState> = {
-  getCategoryById: (state, getters) => (id): Category|boolean => getters.getCategoriesMap[id] || false,
+  getCategoryById: (state, getters) => (id): Category|boolean => {
+    return Object.values(getters.getCategoriesMap as Category[]).find(c => c.id === id) || false
+  },
   getDefaultCategorySort: (state, getters, rootState, rootGetters) => {
     return getDefaultCategorySort(getters.getCurrentCategory as Category)
   },
@@ -21,8 +24,8 @@ const getters: GetterTree<CategoryState, RootState> = {
       return state.filtersMap[rootGetters['icmaaSearch/getCurrentResultsPageTermHash']] || {}
     }
 
-    const categoryId = get(getters.getCurrentCategory, 'id', null)
-    return state.filtersMap[categoryId] || {}
+    const categoryUrlKey = get(getters.getCurrentCategory, 'url_key', null)
+    return state.filtersMap[categoryUrlKey] || {}
   },
   isActiveFilterAttribute: (state, getters) => (attributeKey: string) => {
     return (getters.getCurrentFilters[attributeKey])
@@ -50,7 +53,22 @@ const getters: GetterTree<CategoryState, RootState> = {
 
     return intersection(parents, [...currentFilterKeys, ...showFilterInCategoryFor]).length > 0
   },
-  getFilterCategories: (state, getters) => getters.getAvailableFilters.category || [],
+  getFilterCategories: (state, getters) => {
+    const filterCategories = getters.getAvailableFilters?.category ? [...getters.getAvailableFilters.category] : []
+
+    const genericSubcategories = getters.getCurrentCategory?.genericSubcategories
+    if (genericSubcategories) {
+      filterCategories.push(
+        ...genericSubcategories.map(c => ({
+          slug: c.urlKey,
+          url_path: c.urlPath,
+          label: c.title
+        }))
+      )
+    }
+
+    return filterCategories
+  },
   isCategoryInTicketWhitelist: () => (category: Category): boolean => {
     if (!category || !category.path) {
       return false
@@ -75,7 +93,17 @@ const getters: GetterTree<CategoryState, RootState> = {
    * product will still be configured but won't overwrite original options like the product image in unisex products.
    * @return boolean
    */
-  separateSelectedVariantInProductList: () => !icmaa_catalog.entities.category.configureChildProductsInCategoryList || false
+  separateSelectedVariantInProductList: () => !icmaa_catalog.entities.category.configureChildProductsInCategoryList || false,
+  isGenericSubcategory: (state, getters) => getters.getCurrentCategory?.isGenericSubcategory === true,
+  getGenericSubcategory: (state, getters, rootState): boolean | any => {
+    return getters.getGenericSubcategoryByCategory(getters.getCurrentCategory)
+  },
+  getGenericSubcategoryByCategory: (state, getters, rootState) => (category: any): boolean | any => {
+    if (!category.isGenericSubcategory) return false
+    const subcategory = category.subcategory
+    subcategory.query = queryString.parse('?' + subcategory.queryPath)
+    return subcategory
+  }
 }
 
 export default getters
