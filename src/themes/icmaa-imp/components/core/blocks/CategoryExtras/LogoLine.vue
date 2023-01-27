@@ -136,7 +136,7 @@ export default {
       this.setCategories()
     },
     setCategories () {
-      this.categories = this.allCategories.filter(c => this.categoryIds.includes(c.id))
+      this.categories = this.allCategories.filter(c => this.categoryIds.includes(c.id) && !c.isGenericSubcategory)
     }
   },
   async mounted () {
