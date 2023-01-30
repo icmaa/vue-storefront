@@ -24,4 +24,9 @@ EXPOSE 3000
 
 COPY --from=build_img /var/www/ ./
 
+ENV VSF_SERVER_HOST=0.0.0.0
+ENV NODE_TLS_REJECT_UNAUTHORIZED=0
+ENV NODE_APP_INSTANCE=sc-imp
+ENV NODE_CONFIG_ENV=test-sc
+
 CMD [ "yarn", "start:pm2" ]
