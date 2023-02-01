@@ -3,13 +3,7 @@
     <div class="t-mt-4 t-mb-8">
       {{ content.description }}
     </div>
-    <div id="join-widget" />
-    <script
-      defer
-      type="application/javascript"
-      data-mount-in="#join-widget"
-      :src="content.joinlink"
-    />
+    <iframe class="t-top-0" width="100%" height="600px" scrolling="yes" :src="content.iframesrc" frameborder="0" />
   </layout>
 </template>
 
