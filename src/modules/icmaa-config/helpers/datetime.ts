@@ -42,10 +42,11 @@ export const isDateInBetween = (from: string, to: string, current = getCurrentSt
   return isDatetimeInBetween(from, to, current)
 }
 
-export const isValid = (date: string, format?: string): boolean => {
+export const isValid = (date: string, format?: string, checkYear: boolean = true): boolean => {
   format = format || storeDateFormat()
   const jsDate = dayjs(date, format)
-  return jsDate.isValid() && jsDate.format(format) === date
+  checkYear = checkYear === true ? jsDate.year() >= (dayjs().year() - 100) : true
+  return jsDate.isValid() && jsDate.format(format) === date && checkYear
 }
 
 export const toDayjsDate = (date: string, inputFormat: string = intDateTimeFormat): Dayjs => {
