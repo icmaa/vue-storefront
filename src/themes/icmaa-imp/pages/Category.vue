@@ -31,6 +31,22 @@
     </header>
 
     <div class="t-container">
+      <div class="t-flex t-items-center t-justify-center t-mb-8" v-if="prevProductsInSearchResults">
+        <button-component
+          type="ghost"
+          @click.native="loadMoreProducts(true)"
+          :disabled="loadingProducts"
+          class="t-w-2/3 lg:t-w-1/4"
+          :class="{ 't-relative t-opacity-60': loadingProducts }"
+        >
+          {{ $t('Load previous') }}
+          <loader-background
+            v-if="loadingProducts"
+            bar="t-bg-base-darkest"
+            class="t-bottom-0"
+          />
+        </button-component>
+      </div>
       <lazy-hydrate :trigger-hydration="!loading" v-if="isLazyHydrateEnabled">
         <component v-if="isInTicketWhitelist" :is="ProductListingTicket" :products="getCategoryProducts" />
         <product-listing v-else :products="getCategoryProducts" :show-add-to-cart="true" />
@@ -42,7 +58,7 @@
       <div class="t-flex t-items-center t-justify-center t-mb-8" v-if="moreProductsInSearchResults">
         <button-component
           type="ghost"
-          @click.native="loadMoreProducts"
+          @click.native="loadMoreProducts()"
           :disabled="loadingProducts"
           class="t-w-2/3 lg:t-w-1/4"
           :class="{ 't-relative t-opacity-60': loadingProducts }"
@@ -165,6 +181,12 @@ export default {
     isCategoryEmpty () {
       return this.getCategoryProductsTotal === 0
     },
+    prevProductsInSearchResults () {
+      const currentPage = this.$route.query.p || 1
+      const { perPage } = this.productsStats
+      return currentPage > 1 && this.moreProductsInSearchResults &&
+        this.getCategoryProducts.length < (currentPage * perPage)
+    },
     moreProductsInSearchResults () {
       const { perPage, start, total } = this.productsStats
       return (start + perPage < total)
@@ -243,14 +265,14 @@ export default {
     onAddToCartSidebarClose () {
       this.resetCurrentProduct({})
     },
-    async loadMoreProducts () {
+    async loadMoreProducts (prev = false) {
       if (this.loadingProducts) {
         return
       }
 
       try {
         this.loadingProducts = true
-        await this.$store.dispatch('category-next/loadMoreCategoryProducts', { router: this.$router })
+        await this.$store.dispatch('category-next/loadMoreCategoryProducts', { router: this.$router, prev })
       } catch (e) {
         Logger.error('Problem with fetching more products', 'category', e)()
       } finally {

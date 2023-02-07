@@ -103,9 +103,9 @@ const actions: ActionTree<CategoryState, RootState> = {
    *   but won't overwrite original options like the product image in unisex products
    * * Filter for custom attribute-filters in session (e.g. gender) if they are set
    */
-  async loadMoreCategoryProducts ({ commit, getters, dispatch, rootState }, { router }) {
+  async loadMoreCategoryProducts ({ commit, getters, dispatch, rootState }, { router, prev = false }) {
     const category = getters.getCurrentCategory
-    const { perPage, start, total } = getters.getCategorySearchProductsStats
+    const { perPage, start, total, page: currPage } = getters.getCategorySearchProductsStats
     const totalValue = typeof total === 'object' ? total.value : total
     if (start >= totalValue || totalValue < perPage) return
 
@@ -140,7 +140,7 @@ const actions: ActionTree<CategoryState, RootState> = {
     const searchResult = await dispatch('product/findProducts', {
       query: filterQr,
       sort,
-      start: start + perPage,
+      start: !prev ? start + perPage : start - perPage,
       size: perPage,
       includeFields,
       excludeFields,
@@ -155,16 +155,16 @@ const actions: ActionTree<CategoryState, RootState> = {
       }
     }, { root: true })
 
-    const page = searchResult.start / searchResult.perPage + 1
+    const page = prev ? currPage : searchResult.start / searchResult.perPage + 1
     commit(types.CATEGORY_SET_SEARCH_PRODUCTS_STATS, {
       page,
       perPage: searchResult.perPage,
       start: searchResult.start,
       total: searchResult.total
     })
-    commit(types.CATEGORY_ADD_PRODUCTS, searchResult.items)
+    commit(!prev ? types.CATEGORY_ADD_PRODUCTS : types.CATEGORY_ADD_PRODUCTS_IN_FRONT, searchResult.items)
 
-    if (page > 1) {
+    if (!prev && page > 1) {
       router.push({ query: { ...rootState.route.query, p: page } })
     }
 
