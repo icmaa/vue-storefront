@@ -55,7 +55,22 @@
         <component v-if="isInTicketWhitelist" :is="ProductListingTicket" :products="getCategoryProducts" />
         <product-listing v-else :products="getCategoryProducts" :show-add-to-cart="true" />
       </div>
-      <div class="t-flex t-items-center t-justify-center t-mb-8" v-if="moreProductsInSearchResults">
+      <div class="t-flex t-flex-wrap t-items-center t-justify-center t-mb-8" v-if="moreProductsInSearchResults">
+        <div class="t-mb-4 t-text-base-tone t-text-sm">
+          <div class="t-mb-2">
+            {{ $t(
+              'You\'ve viewed {count} of {total} products',
+              { count: visibleProductCount, total: productsStats.total })
+            }}
+          </div>
+          <div class="t-flex t-grow t-h-1 t-bg-base-lighter t-mx-4 t-rounded">
+            <div
+              class="t-h-full t-bg-base-light t-rounded"
+              :style="{ width: (visibleProductCount * 100 / productsStats.total) + '%' }"
+            />
+          </div>
+        </div>
+        <div class="t-w-full" />
         <button-component
           type="ghost"
           @click.native="loadMoreProducts()"
@@ -183,13 +198,20 @@ export default {
     },
     prevProductsInSearchResults () {
       const currentPage = this.$route.query.p || 1
-      const { perPage } = this.productsStats
-      return currentPage > 1 && this.moreProductsInSearchResults &&
-        this.getCategoryProducts.length < (currentPage * perPage)
+      const { perPage, start, total } = this.productsStats
+      return currentPage > 1 &&
+        start + perPage > perPage &&
+        this.getCategoryProducts.length < (currentPage * perPage) &&
+        this.getCategoryProducts.length < total
     },
     moreProductsInSearchResults () {
-      const { perPage, start, total } = this.productsStats
-      return (start + perPage < total)
+      const { perPage, page, total } = this.productsStats
+      return (page * perPage < total)
+    },
+    visibleProductCount () {
+      const { perPage, page, total } = this.productsStats
+      const countProds = page * perPage
+      return countProds > total ? total : countProds
     },
     activeFilterCount () {
       return Object.keys(this.getCurrentFilters).length

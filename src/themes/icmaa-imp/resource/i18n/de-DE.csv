@@ -438,6 +438,7 @@
 "You're subscribed to the following products and will be notified as soon as they are back in stock.","Das sind alle Produkte für die du Benachrichtigungen aktiviert hast und du wirst informiert sobald eines der Produkte wieder verfügbar ist."
 "You're waiting for","Gewünschtes Produkt"
 "You've entered an incorrect coupon code. Please try again.","Das ist kein gültiger Gutschein-Code. Bitte kontrolliere deine Eingabe."
+"You've viewed {count} of {total} products","Du hast {count} von {total} Produkten angesehen"
 "Your Account","Ihr Account"
 "Your Google reCAPTCHA validation is invalid.","Dein Google reCAPTCHA Validierung war nich erfolgreich."
 "Your account","Dein Kundenkonto"
