@@ -69,7 +69,6 @@ import { mapGetters, mapMutations } from 'vuex'
 import { Logger } from '@vue-storefront/core/lib/logger'
 import { IcmaaGoogleTagManagerExecutors } from 'icmaa-google-tag-manager/hooks'
 import * as productMutationTypes from '@vue-storefront/core/modules/catalog/store/product/mutation-types'
-import { routerHelper } from 'icmaa-catalog/helpers/popState'
 
 import AsyncSidebar from 'theme/components/core/blocks/AsyncSidebar/AsyncSidebar.vue'
 import FilterPresets from 'theme/components/core/blocks/Category/FilterPresets'
@@ -164,7 +163,7 @@ export default {
 
       try {
         this.loadingProducts = true
-        await this.$store.dispatch('category-next/loadMoreSearchProducts')
+        await this.$store.dispatch('category-next/loadMoreSearchProducts', { router: this.$router, route: this.$route })
       } catch (e) {
         Logger.error('Problem with fetching more products', 'search', e)()
       } finally {
@@ -177,13 +176,7 @@ export default {
         const pageSize = route.params.pagesize || this.pageSize
         const category = { id: this.termHash, term: this.term.toLowerCase() }
 
-        // If browser-history-back event use cached products
-        if (routerHelper.popStateDetected === true) {
-          routerHelper.popStateDetected = false
-        } else {
-          await this.$store.dispatch('category-next/loadSearchProducts', { route, category, pageSize })
-        }
-
+        await this.$store.dispatch('category-next/loadSearchProducts', { route, category, pageSize })
         this.$store.dispatch('category-next/loadSearchBreadcrumbs')
 
         this.loading = false
@@ -193,7 +186,8 @@ export default {
     }
   },
   watch: {
-    '$route.params': function () {
+    '$route': function (a, b) {
+      if (a.query?.p !== b.query?.p) return
       this.fetchAsyncData(this.$route)
     }
   },

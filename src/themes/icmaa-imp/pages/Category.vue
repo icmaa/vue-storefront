@@ -55,7 +55,7 @@
         <component v-if="isInTicketWhitelist" :is="ProductListingTicket" :products="getCategoryProducts" />
         <product-listing v-else :products="getCategoryProducts" :show-add-to-cart="true" />
       </div>
-      <div class="t-flex t-flex-wrap t-items-center t-justify-center t-mb-8" v-if="moreProductsInSearchResults">
+      <div class="t-flex t-flex-wrap t-items-center t-justify-center t-mb-16" v-if="moreProductsInSearchResults">
         <div class="t-mb-4 t-text-base-tone t-text-sm">
           <div class="t-mb-2">
             {{ $t(
