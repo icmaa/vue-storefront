@@ -10,6 +10,7 @@ import union from 'lodash-es/union'
 import get from 'lodash-es/get'
 
 const getters: GetterTree<CategoryState, RootState> = {
+  getCategoryName: (state, getters): string => getters.getCurrentCategory.name,
   getCategoryById: (state, getters) => (id): Category|boolean => {
     return Object.values(getters.getCategoriesMap as Category[]).find(c => c.id === id) || false
   },

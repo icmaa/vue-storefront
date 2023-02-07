@@ -40,9 +40,19 @@
         <product-listing v-else :products="getCategoryProducts" :show-add-to-cart="true" />
       </div>
       <div class="t-flex t-items-center t-justify-center t-mb-8" v-if="moreProductsInSearchResults">
-        <button-component type="ghost" @click.native="loadMoreProducts" :disabled="loadingProducts" class="t-w-2/3 lg:t-w-1/4" :class="{ 't-relative t-opacity-60': loadingProducts }">
+        <button-component
+          type="ghost"
+          @click.native="loadMoreProducts"
+          :disabled="loadingProducts"
+          class="t-w-2/3 lg:t-w-1/4"
+          :class="{ 't-relative t-opacity-60': loadingProducts }"
+        >
           {{ $t('Load more') }}
-          <loader-background v-if="loadingProducts" bar="t-bg-base-darkest" class="t-bottom-0" />
+          <loader-background
+            v-if="loadingProducts"
+            bar="t-bg-base-darkest"
+            class="t-bottom-0"
+          />
         </button-component>
       </div>
       <div class="t-mb-8" v-if="isCategoryEmpty">
@@ -78,14 +88,14 @@
 import LazyHydrate from 'vue-lazy-hydration'
 
 import config from 'config'
+import omit from 'lodash-es/omit'
+import isEqual from 'lodash-es/isEqual'
 import { mapGetters, mapMutations } from 'vuex'
-import { isServer } from '@vue-storefront/core/helpers'
 import { catalogHooksExecutors } from '@vue-storefront/core/modules/catalog-next/hooks'
 import { Logger } from '@vue-storefront/core/lib/logger'
 import { getSearchOptionsFromRouteParams } from '@vue-storefront/core/modules/catalog-next/helpers/categoryHelpers'
 import { IcmaaGoogleTagManagerExecutors } from 'icmaa-google-tag-manager/hooks'
 import * as productMutationTypes from '@vue-storefront/core/modules/catalog/store/product/mutation-types'
-import { routerHelper } from 'icmaa-catalog/helpers/popState'
 
 import AsyncSidebar from 'theme/components/core/blocks/AsyncSidebar/AsyncSidebar.vue'
 import ProductListing from 'theme/components/core/ProductListing'
@@ -106,40 +116,6 @@ const FilterPresets = () => import(/* webpackChunkName: "vsf-category-filter-pre
 const FilterSidebar = () => import(/* webpackChunkName: "vsf-sidebar-categoryfilter" */ 'theme/components/core/blocks/Category/Sidebar')
 const AddToCartSidebar = () => import(/* webpackChunkName: "vsf-addtocart-sidebar" */ 'theme/components/core/blocks/AddToCartSidebar/AddToCartSidebar')
 const ProductListingTicket = () => import(/* webpackChunkName: "vsf-product-listing-ticket" */ 'theme/components/core/ProductListingTicket')
-
-const composeInitialPageState = async (store, route, forceLoad = false, pageSize) => {
-  try {
-    const filters = getSearchOptionsFromRouteParams(route.params)
-    const cachedCategory = store.getters['category-next/getCategoryFrom'](route.path)
-    const hasCategoryExtras = store.getters['icmaaCategoryExtras/getCategoryExtrasByUrlKey'](filters.slug)
-    const currentCategory = cachedCategory && !forceLoad && hasCategoryExtras ? cachedCategory : await store.dispatch('category-next/loadCategoryWithExtras', { filters })
-
-    const loadCategoryProducts = async () => {
-      // If browser-history-back event use cached products
-      if (routerHelper.popStateDetected === true) {
-        routerHelper.popStateDetected = false
-        const prevDisp = store.getters['url/getPrevRouteDispatcher']
-        if (!!prevDisp && prevDisp?.name !== 'category') return Promise.resolve()
-      }
-      return store.dispatch('category-next/loadCategoryProducts', { route, category: currentCategory, pageSize })
-    }
-
-    await Promise.all([
-      loadCategoryProducts(),
-      store.dispatch('category-next/loadChildCategoryFilter', { category: currentCategory })
-    ])
-
-    const breadCrumbsLoader = store.dispatch(
-      'category-next/loadCategoryBreadcrumbs',
-      { category: currentCategory, currentRouteName: currentCategory?.name, omitCurrent: true }
-    )
-    if (isServer) {
-      await breadCrumbsLoader
-    }
-  } catch (e) {
-    Logger.error('Problem with setting Category initial data!', 'category', e)()
-  }
-}
 
 export default {
   name: 'Category',
@@ -206,34 +182,60 @@ export default {
         this.$store.dispatch('ui/setSidebarNavigationGenderChange', false)
 
         this.loading = true
-        await composeInitialPageState(this.$store, this.$route, false, this.$route.params.pagesize || this.pageSize)
+        await this.composeInitialPageState()
         this.loading = false
       }
     },
-    getCurrentCategory (nCategory, oCategory) {
-      if (nCategory.id && nCategory.id !== oCategory.id) {
-        catalogHooksExecutors.categoryPageVisited(nCategory)
-      }
-    }
-  },
-  async asyncData ({ store, route, context }) {
-    const { pageSize } = this.data()
-    await composeInitialPageState(store, route, false, route.params.pagesize || pageSize)
-  },
-  async mounted () {
-    catalogHooksExecutors.categoryPageVisited(this.getCurrentCategory)
+    '$route.params.slug': async function (current, old) {
+      await this.composeInitialPageState()
+      catalogHooksExecutors.categoryPageVisited(this.category)
+    },
+    '$route.query': async function (current, old) {
+      current = omit(current, ['p'])
+      old = omit(old, ['p'])
+      if (isEqual(current, old)) return
 
-    // Reload category if a session-filter is set (like a selected gender) on inital load
-    if (!this.prevRoute.name && this.sessionFilterKeys.length > 0) {
+      const pageSize = this.$route?.params?.pagesize || this.pageSize
+      const category = this.category
+
       this.loading = true
-      await composeInitialPageState(this.$store, this.$route, false, this.$route.params.pagesize || this.pageSize)
+      await this.$store.dispatch('category-next/loadCategoryProducts', { category, pageSize })
       this.loading = false
     }
+  },
+  serverPrefetch () {
+    return this.composeInitialPageState()
+  },
+  async mounted () {
+    await this.composeInitialPageState()
+    catalogHooksExecutors.categoryPageVisited(this.getCurrentCategory)
   },
   methods: {
     ...mapMutations('product', {
       resetCurrentProduct: productMutationTypes.PRODUCT_RESET_CURRENT
     }),
+    async composeInitialPageState () {
+      try {
+        const pageSize = this.$route?.params?.pagesize || this.pageSize
+        const filters = getSearchOptionsFromRouteParams(this.$route.params)
+        const cachedCategory = this.$store.getters['category-next/getCategoryFrom'](this.$route.path)
+        const hasCategoryExtras = this.$store.getters['icmaaCategoryExtras/getCategoryExtrasByUrlKey'](filters.slug)
+        const currentCategory = cachedCategory && hasCategoryExtras
+          ? cachedCategory : await this.$store.dispatch('category-next/loadCategoryWithExtras', { filters })
+
+        await Promise.all([
+          this.$store.dispatch('category-next/loadCategoryProducts', { category: currentCategory, pageSize }),
+          this.$store.dispatch('category-next/loadChildCategoryFilter', { category: currentCategory })
+        ])
+
+        await this.$store.dispatch(
+          'category-next/loadCategoryBreadcrumbs',
+          { category: currentCategory, currentRouteName: currentCategory?.name, omitCurrent: true }
+        )
+      } catch (e) {
+        Logger.error('Problem with setting Category initial data!', 'category', e)()
+      }
+    },
     openFilters () {
       this.$store.dispatch('ui/setSidebar', { key: 'categoryfilter' })
       IcmaaGoogleTagManagerExecutors.openProductListFilterSidebar()
@@ -248,7 +250,7 @@ export default {
 
       try {
         this.loadingProducts = true
-        await this.$store.dispatch('category-next/loadMoreCategoryProducts')
+        await this.$store.dispatch('category-next/loadMoreCategoryProducts', { router: this.$router })
       } catch (e) {
         Logger.error('Problem with fetching more products', 'category', e)()
       } finally {

@@ -9,7 +9,8 @@ import { buildFilterProductsQuery } from '@vue-storefront/core/helpers'
 import { _prepareCategoryPathIds } from '@vue-storefront/core/modules/catalog-next/helpers/categoryHelpers'
 
 const actions: ActionTree<CategoryState, RootState> = {
-  async loadSearchProducts ({ commit, getters, dispatch }, { route, category, pageSize = 50 } = {}) {
+  async loadSearchProducts ({ commit, getters, dispatch, rootState }, { category, pageSize = 50 } = {}) {
+    const route = rootState.route
     const categoryMappedFilters = getters.getFiltersMap[category.id]
 
     const searchQuery = getters.getCurrentFiltersFrom(route[products.routerFiltersSource], categoryMappedFilters)
@@ -22,11 +23,14 @@ const actions: ActionTree<CategoryState, RootState> = {
     const sort = searchQuery.sort
     const separateSelectedVariant = getters.separateSelectedVariantInProductList
 
+    const page = route?.query?.p || 1
+    const startFrom = pageSize * (page - 1)
     const { items, perPage, start, total, aggregations, attributeMetadata } = await dispatch('product/findProducts', {
       query: filterQr,
       sort,
       includeFields,
       excludeFields,
+      start: startFrom,
       size: pageSize,
       configuration: searchQuery.filters,
       options: {
@@ -46,12 +50,12 @@ const actions: ActionTree<CategoryState, RootState> = {
       filters: searchQuery.filters
     })
 
-    commit(types.CATEGORY_SET_SEARCH_PRODUCTS_STATS, { perPage, start, total })
+    commit(types.CATEGORY_SET_SEARCH_PRODUCTS_STATS, { page, perPage, start, total })
     commit(types.CATEGORY_SET_PRODUCTS, items)
 
     return items
   },
-  async loadMoreSearchProducts ({ commit, getters, dispatch, rootGetters }) {
+  async loadMoreSearchProducts ({ commit, getters, dispatch, rootGetters, rootState }, { router }) {
     const category = {
       id: rootGetters['icmaaSearch/getCurrentResultsPageTermHash'],
       term: rootGetters['icmaaSearch/getCurrentResultsPageTerm']
@@ -89,12 +93,18 @@ const actions: ActionTree<CategoryState, RootState> = {
       }
     }, { root: true })
 
+    const page = searchResult.start / searchResult.perPage + 1
     commit(types.CATEGORY_SET_SEARCH_PRODUCTS_STATS, {
+      page,
       perPage: searchResult.perPage,
       start: searchResult.start,
       total: searchResult.total
     })
     commit(types.CATEGORY_ADD_PRODUCTS, searchResult.items)
+
+    if (page > 1) {
+      router.push({ query: { ...rootState.route.query, p: page } })
+    }
 
     return searchResult.items
   },

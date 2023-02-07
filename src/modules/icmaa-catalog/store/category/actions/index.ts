@@ -24,7 +24,8 @@ const actions: ActionTree<CategoryState, RootState> = {
    *   but won't overwrite original options like the product image in unisex products
    * * Filter for custom attribute-filters in session (e.g. gender) if they are set
    */
-  async loadCategoryProducts ({ commit, getters, rootGetters, dispatch }, { route, category, pageSize = 50 } = {}) {
+  async loadCategoryProducts ({ commit, getters, rootGetters, dispatch, rootState }, { category, pageSize = 50 } = {}) {
+    const route = rootState.route
     const searchCategory = category || getters.getCategoryFrom(route.path) || {}
     let categoryMappedFilters = getters.getFiltersMap[searchCategory.url_key]
     const areFiltersInQuery = !!Object.keys(route[products.routerFiltersSource]).length
@@ -61,11 +62,14 @@ const actions: ActionTree<CategoryState, RootState> = {
     const sort = searchQuery.sort || getDefaultCategorySort(searchCategory)
     const separateSelectedVariant = getters.separateSelectedVariantInProductList
 
+    const page = route?.query?.p || 1
+    const startFrom = pageSize * (page - 1)
     const { items, perPage, start, total, aggregations, attributeMetadata } = await dispatch('product/findProducts', {
       query: filterQr,
       sort,
       includeFields,
       excludeFields,
+      start: startFrom,
       size: pageSize,
       configuration: searchQuery.filters,
       options: {
@@ -86,7 +90,7 @@ const actions: ActionTree<CategoryState, RootState> = {
       userSessionFilterKeys: rootGetters['user/getSessionFilterKeys']
     })
 
-    commit(types.CATEGORY_SET_SEARCH_PRODUCTS_STATS, { perPage, start, total })
+    commit(types.CATEGORY_SET_SEARCH_PRODUCTS_STATS, { page, perPage, start, total })
     commit(types.CATEGORY_SET_PRODUCTS, items)
 
     return items
@@ -99,7 +103,7 @@ const actions: ActionTree<CategoryState, RootState> = {
    *   but won't overwrite original options like the product image in unisex products
    * * Filter for custom attribute-filters in session (e.g. gender) if they are set
    */
-  async loadMoreCategoryProducts ({ commit, getters, dispatch }) {
+  async loadMoreCategoryProducts ({ commit, getters, dispatch, rootState }, { router }) {
     const category = getters.getCurrentCategory
     const { perPage, start, total } = getters.getCategorySearchProductsStats
     const totalValue = typeof total === 'object' ? total.value : total
@@ -151,12 +155,18 @@ const actions: ActionTree<CategoryState, RootState> = {
       }
     }, { root: true })
 
+    const page = searchResult.start / searchResult.perPage + 1
     commit(types.CATEGORY_SET_SEARCH_PRODUCTS_STATS, {
+      page,
       perPage: searchResult.perPage,
       start: searchResult.start,
       total: searchResult.total
     })
     commit(types.CATEGORY_ADD_PRODUCTS, searchResult.items)
+
+    if (page > 1) {
+      router.push({ query: { ...rootState.route.query, p: page } })
+    }
 
     return searchResult.items
   },
