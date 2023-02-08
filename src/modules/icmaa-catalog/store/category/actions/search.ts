@@ -23,7 +23,7 @@ const actions: ActionTree<CategoryState, RootState> = {
     const sort = searchQuery.sort
     const separateSelectedVariant = getters.separateSelectedVariantInProductList
 
-    const page = route?.query?.p || 1
+    const page = parseInt(route?.query?.p || 1)
     const startFrom = pageSize * (page - 1)
     const { items, perPage, start, total, aggregations, attributeMetadata } = await dispatch('product/findProducts', {
       query: filterQr,
@@ -50,7 +50,7 @@ const actions: ActionTree<CategoryState, RootState> = {
       filters: searchQuery.filters
     })
 
-    commit(types.CATEGORY_SET_SEARCH_PRODUCTS_STATS, { page, perPage, start, total })
+    commit(types.CATEGORY_SET_SEARCH_PRODUCTS_STATS, { page, perPage, start, visible: perPage, total })
     commit(types.CATEGORY_SET_PRODUCTS, items)
 
     return items
@@ -61,7 +61,7 @@ const actions: ActionTree<CategoryState, RootState> = {
       term: rootGetters['icmaaSearch/getCurrentResultsPageTerm']
     }
 
-    const { perPage, start, total, page: currPage } = getters.getCategorySearchProductsStats
+    const { perPage, start, visible, total, page: currPage } = getters.getCategorySearchProductsStats
     const totalValue = typeof total === 'object' ? total.value : total
     if (start >= totalValue || totalValue < perPage) return
 
@@ -78,7 +78,7 @@ const actions: ActionTree<CategoryState, RootState> = {
     const searchResult = await dispatch('product/findProducts', {
       query: filterQr,
       sort,
-      start: !prev ? start + perPage : start - perPage,
+      start: prev ? start - perPage : start + visible,
       size: perPage,
       includeFields,
       excludeFields,
@@ -93,11 +93,12 @@ const actions: ActionTree<CategoryState, RootState> = {
       }
     }, { root: true })
 
-    const page = prev ? currPage : searchResult.start / searchResult.perPage + 1
+    const page = parseInt(prev ? currPage : currPage + 1)
     commit(types.CATEGORY_SET_SEARCH_PRODUCTS_STATS, {
       page,
       perPage: searchResult.perPage,
-      start: searchResult.start,
+      start: prev ? searchResult.start : start,
+      visible: visible + perPage,
       total: searchResult.total
     })
     commit(!prev ? types.CATEGORY_ADD_PRODUCTS : types.CATEGORY_ADD_PRODUCTS_TO_START, searchResult.items)

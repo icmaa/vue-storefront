@@ -307,7 +307,7 @@ export default {
       }
     },
     createPaginationUrl (page) {
-      const p = parseInt(this.stats.page) + page
+      const p = this.stats.page + page
       if (p <= 1) {
         return this.$router.resolve({
           query: omit({ ...this.$route?.query }, ['p'])
