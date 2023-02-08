@@ -174,7 +174,7 @@ export default {
       try {
         const route = newRoute || this.$route
         const pageSize = route.params.pagesize || this.pageSize
-        const category = { id: this.termHash, term: this.term.toLowerCase() }
+        const category = { url_key: this.termHash, term: this.term.toLowerCase() }
 
         await this.$store.dispatch('category-next/loadSearchProducts', { route, category, pageSize })
         this.$store.dispatch('category-next/loadSearchBreadcrumbs')

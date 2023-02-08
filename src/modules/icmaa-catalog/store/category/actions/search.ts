@@ -11,7 +11,7 @@ import { _prepareCategoryPathIds } from '@vue-storefront/core/modules/catalog-ne
 const actions: ActionTree<CategoryState, RootState> = {
   async loadSearchProducts ({ commit, getters, dispatch, rootState }, { category, pageSize = 50 } = {}) {
     const route = rootState.route
-    const categoryMappedFilters = getters.getFiltersMap[category.id]
+    const categoryMappedFilters = getters.getFiltersMap[category.url_key]
 
     const searchQuery = getters.getCurrentFiltersFrom(route[products.routerFiltersSource], categoryMappedFilters)
     let filterQr = buildFilterProductsQuery({}, searchQuery.filters)
@@ -57,7 +57,7 @@ const actions: ActionTree<CategoryState, RootState> = {
   },
   async loadMoreSearchProducts ({ commit, getters, dispatch, rootGetters, rootState }, { router }) {
     const category = {
-      id: rootGetters['icmaaSearch/getCurrentResultsPageTermHash'],
+      url_key: rootGetters['icmaaSearch/getCurrentResultsPageTermHash'],
       term: rootGetters['icmaaSearch/getCurrentResultsPageTerm']
     }
 
