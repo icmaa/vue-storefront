@@ -42,6 +42,7 @@ class Hreflang {
     const hreflangConfig = icmaa_meta && icmaa_meta.hreflang && icmaa_meta.hreflang.find(m => m.storeCode === store.storeCode)
     if (this.hasConfigs()) {
       return {
+        vmid: 'hreflang-' + store.storeCode,
         rel: 'alternate',
         hreflang: hreflangConfig ? hreflangConfig['lang'] : store.i18n.defaultLocale,
         href: this.getCurrentStoreViewUrlPath(store)
@@ -57,6 +58,7 @@ class Hreflang {
 
       if (storeViews.multistore) {
         this._hreflang.push({
+          vmid: 'canonical',
           rel: 'canonical',
           href: this.getCurrentStoreViewUrlPath(this._currentStore)
         })

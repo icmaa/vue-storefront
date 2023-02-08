@@ -566,7 +566,8 @@
       "size"
     ],
     "systemFilterNames": [
-      "sort"
+      "sort",
+      "p"
     ],
     "maxFiltersQuerySize": 999,
     "routerFiltersSource": "query",

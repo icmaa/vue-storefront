@@ -23,6 +23,12 @@
     </header>
 
     <div class="t-container">
+      <div class="t-flex t-items-center t-justify-center t-mb-8" v-if="prevProductsInSearchResults">
+        <button-component type="ghost" @click.native="loadMoreProducts(true)" :disabled="loadingProducts" class="t-w-2/3 lg:t-w-1/4" :class="{ 't-relative t-opacity-60': loadingProducts }">
+          {{ $t('Load previous') }}
+          <loader-background v-if="loadingProducts" bar="t-bg-base-darkest" class="t-bottom-0" />
+        </button-component>
+      </div>
       <lazy-hydrate :trigger-hydration="!loading" v-if="isLazyHydrateEnabled">
         <product-listing :products="getCategoryProducts" :show-add-to-cart="true" />
       </lazy-hydrate>
@@ -30,7 +36,7 @@
         <product-listing :products="getCategoryProducts" />
       </div>
       <div class="t-flex t-items-center t-justify-center t-mb-8" v-if="moreProductsInSearchResults">
-        <button-component type="ghost" @click.native="loadMoreProducts" :disabled="loadingProducts" class="t-w-2/3 lg:t-w-1/4" :class="{ 't-relative t-opacity-60': loadingProducts }">
+        <button-component type="ghost" @click.native="loadMoreProducts()" :disabled="loadingProducts" class="t-w-2/3 lg:t-w-1/4" :class="{ 't-relative t-opacity-60': loadingProducts }">
           {{ $t('Load more') }}
           <loader-background v-if="loadingProducts" bar="t-bg-base-darkest" class="t-bottom-0" />
         </button-component>
@@ -69,7 +75,6 @@ import { mapGetters, mapMutations } from 'vuex'
 import { Logger } from '@vue-storefront/core/lib/logger'
 import { IcmaaGoogleTagManagerExecutors } from 'icmaa-google-tag-manager/hooks'
 import * as productMutationTypes from '@vue-storefront/core/modules/catalog/store/product/mutation-types'
-import { routerHelper } from 'icmaa-catalog/helpers/popState'
 
 import AsyncSidebar from 'theme/components/core/blocks/AsyncSidebar/AsyncSidebar.vue'
 import FilterPresets from 'theme/components/core/blocks/Category/FilterPresets'
@@ -111,7 +116,7 @@ export default {
       getCategoryProducts: 'category-next/getCategoryProducts',
       getCurrentCategory: 'category-next/getCurrentCategory',
       getCurrentFilters: 'category-next/getCurrentFilters',
-      getProductsStats: 'category-next/getCategorySearchProductsStats',
+      productsStats: 'category-next/getCategorySearchProductsStats',
       productsTotal: 'category-next/getCategoryProductsTotal',
       contentHeader: 'icmaaCategoryExtras/getContentHeaderByCurrentCategory',
       term: 'icmaaSearch/getCurrentResultsPageTerm',
@@ -127,9 +132,17 @@ export default {
     pageSizeOptions () {
       return this.pageSizes.map(s => { return { value: s, label: s } })
     },
+    prevProductsInSearchResults () {
+      const currentPage = this.$route.query.p || 1
+      const { perPage, start, total } = this.productsStats
+      return currentPage > 1 &&
+        start + perPage > perPage &&
+        this.getCategoryProducts.length < (currentPage * perPage) &&
+        this.getCategoryProducts.length < total
+    },
     moreProductsInSearchResults () {
-      const { perPage, start, total } = this.getProductsStats
-      return (start + perPage < total)
+      const { perPage, page, total } = this.productsStats
+      return (page * perPage < total)
     },
     activeFilterCount () {
       return Object.keys(this.getCurrentFilters).length
@@ -157,14 +170,14 @@ export default {
       this.pageSize = size
       this.$store.dispatch('category-next/switchSearchFilters', [ { type: 'pagesize', id: size } ])
     },
-    async loadMoreProducts () {
+    async loadMoreProducts (prev = false) {
       if (this.loadingProducts) {
         return
       }
 
       try {
         this.loadingProducts = true
-        await this.$store.dispatch('category-next/loadMoreSearchProducts')
+        await this.$store.dispatch('category-next/loadMoreSearchProducts', { router: this.$router, prev })
       } catch (e) {
         Logger.error('Problem with fetching more products', 'search', e)()
       } finally {
@@ -175,15 +188,9 @@ export default {
       try {
         const route = newRoute || this.$route
         const pageSize = route.params.pagesize || this.pageSize
-        const category = { id: this.termHash, term: this.term.toLowerCase() }
+        const category = { url_key: this.termHash, term: this.term.toLowerCase() }
 
-        // If browser-history-back event use cached products
-        if (routerHelper.popStateDetected === true) {
-          routerHelper.popStateDetected = false
-        } else {
-          await this.$store.dispatch('category-next/loadSearchProducts', { route, category, pageSize })
-        }
-
+        await this.$store.dispatch('category-next/loadSearchProducts', { route, category, pageSize })
         this.$store.dispatch('category-next/loadSearchBreadcrumbs')
 
         this.loading = false
@@ -193,7 +200,8 @@ export default {
     }
   },
   watch: {
-    '$route.params': function () {
+    '$route': function (a, b) {
+      if (a.query?.p !== b.query?.p) return
       this.fetchAsyncData(this.$route)
     }
   },
