@@ -100,7 +100,7 @@ const actions: ActionTree<CategoryState, RootState> = {
       start: searchResult.start,
       total: searchResult.total
     })
-    commit(!prev ? types.CATEGORY_ADD_PRODUCTS : types.CATEGORY_ADD_PRODUCTS_IN_FRONT, searchResult.items)
+    commit(!prev ? types.CATEGORY_ADD_PRODUCTS : types.CATEGORY_ADD_PRODUCTS_TO_START, searchResult.items)
 
     if (!prev && page > 1) {
       router.push({ query: { ...rootState.route.query, p: page } })
