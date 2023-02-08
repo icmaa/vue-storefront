@@ -307,8 +307,15 @@ export default {
       }
     },
     createPaginationUrl (page) {
+      const p = parseInt(this.productsStats.page) + page
+      if (p <= 1) {
+        return this.$router.resolve({
+          query: omit({ ...this.$route?.query }, ['p'])
+        })?.href || ''
+      }
+
       return this.$router.resolve({
-        query: { ...this.$route?.query, p: parseInt(this.productsStats.page) + page }
+        query: { ...this.$route?.query, p }
       })?.href || ''
     }
   }
