@@ -32,11 +32,10 @@
 
     <div class="t-container">
       <div class="t-flex t-items-center t-justify-center t-mb-8" v-if="prevProductsInSearchResults">
-        <button-component
-          type="ghost"
-          @click.native="loadMoreProducts(true)"
-          :disabled="loadingProducts"
-          class="t-w-2/3 lg:t-w-1/4"
+        <a
+          :href="prevPageUrl"
+          @click.prevent="loadMoreProducts(true)"
+          class="t-flex t-items-center t-webkit-tap-transparent t-w-2/3 lg:t-w-1/4 t-uppercase t-rounded-sm t-min-h-10 t-px-4 t-text-xs t-border t-border-base-darkest t-bg-transparent t-text-base-darkest t-justify-center"
           :class="{ 't-relative t-opacity-60': loadingProducts }"
         >
           {{ $t('Load previous') }}
@@ -45,7 +44,7 @@
             bar="t-bg-base-darkest"
             class="t-bottom-0"
           />
-        </button-component>
+        </a>
       </div>
       <lazy-hydrate :trigger-hydration="!loading" v-if="isLazyHydrateEnabled">
         <component v-if="isInTicketWhitelist" :is="ProductListingTicket" :products="getCategoryProducts" />
@@ -71,11 +70,11 @@
           </div>
         </div>
         <div class="t-w-full" />
-        <button-component
-          type="ghost"
-          @click.native="loadMoreProducts()"
+        <a
+          :href="nextPageUrl"
+          @click.prevent="loadMoreProducts()"
           :disabled="loadingProducts"
-          class="t-w-2/3 lg:t-w-1/4"
+          class="t-flex t-items-center t-webkit-tap-transparent t-w-2/3 lg:t-w-1/4 t-uppercase t-rounded-sm t-min-h-10 t-px-4 t-text-xs t-border t-border-base-darkest t-bg-transparent t-text-base-darkest t-justify-center"
           :class="{ 't-relative t-opacity-60': loadingProducts }"
         >
           {{ $t('Load more') }}
@@ -84,7 +83,7 @@
             bar="t-bg-base-darkest"
             class="t-bottom-0"
           />
-        </button-component>
+        </a>
       </div>
       <div class="t-mb-8" v-if="isCategoryEmpty">
         <div class="t-bg-white t-mx-4 t-p-4 t-py-10 t-text-center">
@@ -216,6 +215,12 @@ export default {
     activeFilterCount () {
       return Object.keys(this.getCurrentFilters).length
     },
+    nextPageUrl () {
+      return this.createPaginationUrl(1)
+    },
+    prevPageUrl () {
+      return this.createPaginationUrl(-1)
+    },
     shouldLoadPresets () {
       return this.filterCategories.length === 0
     }
@@ -300,6 +305,11 @@ export default {
       } finally {
         this.loadingProducts = false
       }
+    },
+    createPaginationUrl (page) {
+      return this.$router.resolve({
+        query: { ...this.$route?.query, p: parseInt(this.productsStats.page) + page }
+      })?.href || ''
     }
   }
 }
