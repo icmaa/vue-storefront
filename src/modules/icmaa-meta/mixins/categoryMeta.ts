@@ -40,6 +40,8 @@ export default {
     }
   },
   metaInfo () {
+    let title = htmlDecode(this.metaTitle)
+
     const link = []
     const meta = [
       {
@@ -67,13 +69,18 @@ export default {
         href: config.icmaa_meta.base_url + this.$route.fullPath
       })
 
+      const { page } = this.stats
+      if (page > 1) {
+        title = this.$t('Page {page}', { page }) + ' - ' + title
+      }
+
       config.storeViews.mapStoreUrlsFor.forEach(storeCode => {
         link.push({ vmid: 'hreflang-' + storeCode, skip: true })
       })
     }
 
     return {
-      title: htmlDecode(this.metaTitle),
+      title,
       meta,
       link
     }

@@ -59,13 +59,13 @@
           <div class="t-mb-2">
             {{ $t(
               'You\'ve viewed {count} of {total} products',
-              { count: visibleProductCount, total: productsStats.total })
+              { count: visibleProductCount, total: stats.total })
             }}
           </div>
           <div class="t-flex t-grow t-h-1 t-bg-base-lighter t-mx-4 t-rounded">
             <div
               class="t-h-full t-bg-base-light t-rounded"
-              :style="{ width: (visibleProductCount * 100 / productsStats.total) + '%' }"
+              :style="{ width: (visibleProductCount * 100 / stats.total) + '%' }"
             />
           </div>
         </div>
@@ -180,7 +180,7 @@ export default {
       getCurrentCategory: 'category-next/getCurrentCategory',
       getCategoryProductsTotal: 'category-next/getCategoryProductsTotal',
       getCurrentFilters: 'category-next/getCurrentFilters',
-      productsStats: 'category-next/getCategorySearchProductsStats',
+      stats: 'category-next/getCategorySearchProductsStats',
       productsTotal: 'category-next/getCategoryProductsTotal',
       filterCategories: 'category-next/getFilterCategories',
       isInTicketWhitelist: 'category-next/isCurrentCategoryInTicketWhitelist',
@@ -197,18 +197,18 @@ export default {
     },
     prevProductsInSearchResults () {
       const currentPage = this.$route.query.p || 1
-      const { perPage, start, total } = this.productsStats
+      const { perPage, start, total } = this.stats
       return currentPage > 1 &&
         start + perPage > perPage &&
         this.getCategoryProducts.length < (currentPage * perPage) &&
         this.getCategoryProducts.length < total
     },
     moreProductsInSearchResults () {
-      const { perPage, page, total } = this.productsStats
+      const { perPage, page, total } = this.stats
       return (page * perPage < total)
     },
     visibleProductCount () {
-      const { perPage, page, total } = this.productsStats
+      const { perPage, page, total } = this.stats
       const countProds = page * perPage
       return countProds > total ? total : countProds
     },
@@ -307,7 +307,7 @@ export default {
       }
     },
     createPaginationUrl (page) {
-      const p = parseInt(this.productsStats.page) + page
+      const p = parseInt(this.stats.page) + page
       if (p <= 1) {
         return this.$router.resolve({
           query: omit({ ...this.$route?.query }, ['p'])
