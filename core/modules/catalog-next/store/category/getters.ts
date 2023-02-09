@@ -6,6 +6,7 @@ import { products } from 'config'
 import FilterVariant from '../../types/FilterVariant'
 import { optionLabel } from '@vue-storefront/core/modules/catalog/helpers'
 import trim from 'lodash-es/trim'
+import omit from 'lodash-es/omit'
 import toString from 'lodash-es/toString'
 import forEach from 'lodash-es/forEach'
 import get from 'lodash-es/get'
@@ -34,7 +35,7 @@ const getters: GetterTree<CategoryState, RootState> = {
   getCategoryFrom: (state, getters) => (path: string = '') => {
     return getters.getCategories.find(category => (removeLocalization(path) as string).replace(/^(\/)/gm, '') === category.url_path)
   },
-  getCategoryByParams: (state, getters, rootState) => (params: { [key: string]: string } = {}) => {
+  getCategoryByParams: (state, getters) => (params: { [key: string]: string } = {}) => {
     return getters.getCategories.find(category => {
       let valueCheck = []
       const searchOptions = getSearchOptionsFromRouteParams(params)
@@ -42,8 +43,10 @@ const getters: GetterTree<CategoryState, RootState> = {
       return valueCheck.length > 0 && valueCheck.filter(check => check === true).length === Object.keys(searchOptions).length
     }) || {}
   },
-  getCurrentCategory: (state, getters, rootState, rootGetters) => {
-    return getters.getCategoryByParams(rootState.route.params)
+  getCurrentCategory: (state, getters, rootState) => {
+    return getters.getCategoryByParams(
+      omit(rootState.route.params, products.systemFilterNames || [])
+    )
   },
   getAvailableFiltersFrom: (state, getters, rootState) => (aggregations) => {
     const filters = {}

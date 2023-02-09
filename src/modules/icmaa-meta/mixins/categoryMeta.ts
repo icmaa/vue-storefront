@@ -7,7 +7,9 @@ import { htmlDecode } from '@vue-storefront/core/filters'
 export default {
   computed: {
     ...mapGetters({
-      category: 'category-next/getCurrentCategory'
+      category: 'category-next/getCurrentCategory',
+      hasActiveFilters: 'category-next/hasActiveFilters',
+      store: 'icmaaConfig/getCurrentStoreConfig'
     }),
     metaTitle (): string {
       return this.category.meta_title || this.category.name
@@ -38,6 +40,9 @@ export default {
     }
   },
   metaInfo () {
+    let title = htmlDecode(this.metaTitle)
+
+    const link = []
     const meta = [
       {
         vmid: 'og:title',
@@ -52,9 +57,32 @@ export default {
       meta.push({ vmid: 'description', name: 'description', content: htmlDecode(this.metaDescription) })
     }
 
+    const systemFilterNames = config.products.systemFilterNames.filter(k => !['p'].includes(k))
+    if (this.hasActiveFilters || Object.keys(this.$route?.query).some(k => systemFilterNames.includes(k))) {
+      meta.push({ vmid: 'robots', name: 'robots', content: 'noindex, nofollow' })
+    }
+
+    if (this.$route?.query?.p) {
+      link.push({
+        vmid: 'canonical',
+        rel: 'canonical',
+        href: config.icmaa_meta.base_url + this.$route.fullPath
+      })
+
+      const { page } = this.stats
+      if (page > 1) {
+        title = this.$t('Page {page}', { page }) + ' - ' + title
+      }
+
+      config.storeViews.mapStoreUrlsFor.forEach(storeCode => {
+        link.push({ vmid: 'hreflang-' + storeCode, skip: true })
+      })
+    }
+
     return {
-      title: htmlDecode(this.metaTitle),
-      meta
+      title,
+      meta,
+      link
     }
   }
 }

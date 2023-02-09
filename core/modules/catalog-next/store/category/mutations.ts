@@ -17,6 +17,10 @@ const mutations: MutationTree<CategoryState> = {
     nonReactiveState.products.push(...cloneDeep(products))
     state.products.push(...(isServer ? products : products.map(prod => prod.sku)))
   },
+  [types.CATEGORY_ADD_PRODUCTS_TO_START] (state, products = []) {
+    nonReactiveState.products.unshift(...cloneDeep(products))
+    state.products.unshift(...(isServer ? products : products.map(prod => prod.sku)))
+  },
   [types.CATEGORY_ADD_CATEGORY] (state, category: Category) {
     if (category) {
       Vue.set(state.categoriesMap, category.url_key, category)
