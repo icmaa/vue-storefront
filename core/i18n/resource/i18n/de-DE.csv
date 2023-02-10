@@ -53,6 +53,7 @@
 "Reviews","Bewertungen"
 "Shopping cart is empty. Please add some products before entering Checkout","Ihr Warenkorb ist leer. Bitte fügen Sie mindestens ein Produkt hinzu bevor Sie zur Kasse gehen"
 "Some of the ordered products are not available!","Einige der bestellten Produkte sind nicht auf Lager!"
+"Sorry, but we couldn\'t find a valid tracking-code in this tracking URL.","Entschuldige, wir konnten leider keinen validen Tracking-Code in der aufgerufenen URL finden."
 "Sort By","Sortieren nach"
 "Stock check in progress, please wait while available stock quantities are checked","Bestandskontrolle läuft. Bitte warten Sie einen Moment bis die verfügbare Bestandsmenge geprüft worden ist"
 "Subtotal incl. tax","Zwischensumme inkl. MwSt."

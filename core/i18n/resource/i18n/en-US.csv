@@ -61,6 +61,7 @@
 "Select 1","Select 1"
 "Shopping cart is empty. Please add some products before entering Checkout","Shopping cart is empty. Please add some products before entering Checkout"
 "Some of the ordered products are not available!","Some of the ordered products are not available!"
+"Sorry, but we couldn\'t find a valid tracking-code in this tracking URL.","Sorry, but we couldn\'t find a valid tracking-code in this tracking URL."
 "Stock check in progress, please wait while available stock quantities are checked","Stock check in progress, please wait while available stock quantities are checked"
 "Subtotal incl. tax","Subtotal incl. tax"
 "Summary","Summary"
