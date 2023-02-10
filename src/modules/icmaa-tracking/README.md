@@ -11,7 +11,10 @@ Get order tracking information from API.
     // Endpoint of the api
     "endpoint": "/api/ext/icmaa-tracking",
     // The tracking-link is only shown for orders in this status
-    "orderStatusWhitelist": ["complete"]
+    "orderStatusWhitelist": ["complete"],
+    "paqato": {
+      "customerId": XXXXXX
+    }
   }
 }
 ```
