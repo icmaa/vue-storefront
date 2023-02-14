@@ -35,7 +35,6 @@ import { IcmaaCompetitionsModule } from 'icmaa-competitions'
 import { IcmaaSpotifyModule } from 'icmaa-spotify'
 import { IcmaaProductAlertModule } from 'icmaa-product-alert'
 import { IcmaaGiftcertModule } from 'icmaa-giftcert'
-import { IcmaaTrackingModule } from 'icmaa-tracking'
 import { IcmaaLooksModule } from 'icmaa-looks'
 import { IcmaaGoogleTagManagerModule } from 'icmaa-google-tag-manager'
 
@@ -78,7 +77,6 @@ export function registerClientModules () {
   registerModule(IcmaaSpotifyModule)
   registerModule(IcmaaProductAlertModule)
   registerModule(IcmaaGiftcertModule)
-  registerModule(IcmaaTrackingModule)
   registerModule(IcmaaLooksModule)
 }
 

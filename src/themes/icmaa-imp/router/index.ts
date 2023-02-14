@@ -8,6 +8,7 @@ const Category = () => import(/* webpackChunkName: "vsf-category" */ 'theme/page
 const SearchResult = () => import(/* webpackChunkName: "vsf-searchresult" */ 'theme/pages/SearchResult.vue')
 const MyAccount = () => import(/* webpackChunkName: "vsf-my-account" */ 'theme/pages/MyAccount.vue')
 const ResetPassword = () => import(/* webpackChunkName: "vsf-reset-password" */ 'theme/pages/ResetPassword.vue')
+const Tracking = () => import(/* webpackChunkName: "vsf-order-tracking" */ 'theme/pages/Tracking.vue')
 
 const secureRoute = { meta: { isSecure: true } }
 
@@ -30,6 +31,7 @@ let routes = [
   { name: 'my-orders', path: '/my-account/orders', component: MyAccount, props: { activeBlock: 'MyOrders' }, ...secureRoute },
   { name: 'my-order', path: '/my-account/orders/:orderId', component: MyAccount, props: { activeBlock: 'MyOrder' }, ...secureRoute },
   { name: 'my-product-alerts', path: '/my-account/product-alerts', component: MyAccount, props: { activeBlock: 'MyProductAlerts' }, ...secureRoute },
+  { name: 'order-tracking', path: '/order-tracking', component: Tracking },
   { name: 'create-password', path: '/create-password', component: ResetPassword },
   { name: 'create-password-old-rewrite', path: '/customer/account/resetpassword', component: ResetPassword },
   { name: 'error', path: '/error', component: ErrorPage, meta: { layout: 'minimal' } },

@@ -66,7 +66,7 @@
           <p v-text="order.shipping_description || $t('No informations')" />
           <p v-if="hasPriorityHandling" v-text="order.priority_handling_fee_description || $t('Priority Service')" />
           <p v-if="hasDhlGoGreen" v-text="order.dhl_go_green_fee_description || $t('DHL GoGreen')" />
-          <tracking-link :order-id="order.id" :status="order.status" class="t-mt-2">
+          <tracking-link :order-id="order.id" class="t-mt-2">
             <button-component type="ghost" icon="local_shipping">
               {{ $t('Shipment tracking') }}
             </button-component>
@@ -161,8 +161,8 @@ import { formatProductLink } from 'icmaa-url/helpers'
 import i18n from '@vue-storefront/i18n'
 import Headline from 'theme/components/core/blocks/MyAccount/Headline'
 import { UserSingleOrder } from '@vue-storefront/core/modules/order/components/UserSingleOrder'
-import TrackingLink from 'icmaa-tracking/components/TrackingLink'
 import StatusIcon from 'theme/components/core/blocks/MyAccount/MyOrders/StatusIcon'
+import TrackingLink from 'theme/components/core/blocks/MyAccount/MyOrders/TrackingLink'
 import ButtonComponent from 'theme/components/core/blocks/Button'
 
 export default {
