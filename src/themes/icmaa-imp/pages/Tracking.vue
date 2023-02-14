@@ -39,9 +39,9 @@ export default {
        * because we set it on initial function call, so it results in:
        * https://domain.com/de/order-tracking?tracking-code=[LANGUAGE-CODE]~~[TRACKING-ID]~[ZIP-CODE]~[ORDER-ID]
        */
-      return !!this.customerId && !!this.trackingCode && this.trackingCode.split('~').length === 4
+      return !!this.pqtCustomerId && !!this.trackingCode && this.trackingCode.split('~').length === 4
     },
-    customerId () {
+    pqtCustomerId () {
       return config.icmaa_tracking?.paqato?.customerId || false
     }
   },
@@ -70,7 +70,7 @@ export default {
       this.sdKLoaded = true
 
       // eslint-disable-next-line
-      pqtTracking(this.customerId, this.store.storeCode)
+      pqtTracking(this.pqtCustomerId, this.store.storeCode)
     })
   }
 }
