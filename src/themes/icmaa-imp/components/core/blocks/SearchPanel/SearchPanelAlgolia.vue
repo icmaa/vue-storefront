@@ -33,6 +33,13 @@
       <div v-if="emptyResults && pleaseWait" class="t-px-2 t-pt-2 t-pb-4 t-text-sm">
         {{ $t('Please wait') }} ...
       </div>
+      <category-panel
+        :category-ids="categoryIds"
+        title="Categories"
+        v-if="!emptyResults && filteredProducts.length && categoryIds.length > 0"
+        class="t-pb-4 t-mb-4"
+        :class="{ 't-opacity-25': pleaseWait }"
+      />
       <div
         v-if="!emptyResults && filteredProducts.length > 0"
         class="product-listing t-flex t-flex-wrap t-bg-base-lightest t--mx-4 t--mt-4 t-px-3 t-py-4"
@@ -77,6 +84,7 @@
 <script>
 import Sidebar from 'theme/components/core/blocks/AsyncSidebar/Sidebar'
 import ProductTile from 'theme/components/core/ProductTile'
+import CategoryPanel from 'theme/components/core/blocks/SearchPanel/CategoryPanel'
 import MaterialIcon from 'theme/components/core/blocks/MaterialIcon'
 import TopButton from 'theme/components/core/blocks/AsyncSidebar/TopButton'
 import ButtonComponent from 'theme/components/core/blocks/Button'
@@ -85,6 +93,7 @@ import VueOfflineMixin from 'vue-offline/mixin'
 
 import i18n from '@vue-storefront/i18n'
 import { mapGetters } from 'vuex'
+import { searchPanel } from 'config'
 import { required, minLength } from 'vuelidate/lib/validators'
 import { disableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock'
 import { IcmaaGoogleTagManagerExecutors } from 'icmaa-google-tag-manager/hooks'
@@ -100,6 +109,7 @@ export default {
   components: {
     Sidebar,
     ProductTile,
+    CategoryPanel,
     MaterialIcon,
     TopButton,
     ButtonComponent,
@@ -122,6 +132,7 @@ export default {
       moreProducts: false,
       loadingProducts: false,
       showPleaseWait: false,
+      categoryAggs: [],
       index: null
     }
   },
@@ -147,6 +158,9 @@ export default {
     },
     filteredProducts () {
       return this.products || []
+    },
+    categoryIds () {
+      return this.categoryAggs.map(c => parseInt(c.id))
     },
     getNoResultsMessage () {
       let msg = ''
@@ -189,15 +203,24 @@ export default {
         this.index
           .search(
             this.searchString,
-            { hitsPerPage: this.size }
+            {
+              hitsPerPage: this.size,
+              facets: 'category.id'
+            }
           )
           .then(response => {
-            const { hits, nbHits, nbPages, page } = response
+            const { hits, nbHits, nbPages, page, facets } = response
             this.products = hits
             this.emptyResults = hits.length < 1
             this.moreProducts = nbHits > this.size && (page + 1) < nbPages
             this.loadingProducts = false
             this.showPleaseWait = false
+
+            this.categoryAggs = Object.entries(facets['category.id'])
+              .map(([id, count]) => ({ count, id }))
+              .sort((a, b) => b.count - a.count)
+
+            this.fetchCategories(this.categoryIds)
 
             this.gtmOnSearchResult()
           })
@@ -241,6 +264,11 @@ export default {
 
           Logger.error(err, 'components-search')()
         })
+    },
+    async fetchCategories (categoryIds) {
+      const pathFilter = searchPanel.hideCategoriesFromPath.map(c => c.toString())
+      const filters = Object.assign({ id: categoryIds, path: { 'nin': pathFilter } })
+      return this.$store.dispatch('category-next/loadCategories', { filters })
     },
     emptySearchInput () {
       this.$store.dispatch('icmaaSearch/setCurrentTerm', '')
