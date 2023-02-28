@@ -27,6 +27,27 @@
       <top-button icon="close" text="Close" @click.native="emptySearchInput" v-show="searchString.length > 0" />
     </template>
     <div class="t-pb-20">
+      <div
+        class="suggestions"
+        :class="{ 't-mb-4': categoryIds.length > 0 || getNoResultsMessage || (emptyResults && pleaseWait) }"
+        v-if="suggestions.length > 0"
+      >
+        <h4 class="t-text-base-light t-text-xs t-uppercase t-mb-2">
+          {{ $t('Did you mean:') }}
+        </h4>
+        <div class="t-flex t-items-center t--mx-4 t-px-2 backdrop:t-items-baseline t-overflow-scroll t-scrolling-touch t-hide-scrollbar">
+          <button-component
+            v-for="suggestion in suggestions"
+            :key="suggestion"
+            type="tag"
+            size="sm"
+            class="t-flex-fix t-mx-2"
+            @click="suggest(suggestion)"
+          >
+            {{ suggestion }}
+          </button-component>
+        </div>
+      </div>
       <div v-if="getNoResultsMessage" class="t-px-2 t-mt-2 t-mb-4 t-text-sm">
         {{ getNoResultsMessage }}
       </div>
@@ -104,6 +125,10 @@ import debounce from 'lodash-es/debounce'
 
 import algoliasearch from 'algoliasearch/lite'
 
+const client = algoliasearch('NJPNX24PMN', '14cd3ece9eae725b0489c31d655335f1')
+const index = client.initIndex('icmaa-imp-test')
+const indexSuggest = client.initIndex('icmaa-imp-test_query_suggestions')
+
 export default {
   name: 'SearchPanel',
   components: {
@@ -133,7 +158,9 @@ export default {
       loadingProducts: false,
       showPleaseWait: false,
       categoryAggs: [],
-      index: null
+      suggestions: [],
+      index,
+      indexSuggest
     }
   },
   watch: {
@@ -193,8 +220,25 @@ export default {
     },
     search () {
       this.showPleaseWait = (!this.$v.searchString.$invalid)
+
+      this.searchAutocomplete()
       this.searchDebounced()
     },
+    searchAutocomplete: debounce(function () {
+      if (!this.$v.searchString.required) {
+        this.suggestions = []
+        return
+      }
+
+      this.indexSuggest
+        .search(this.searchString, { hitsPerPage: 5 })
+        .then(response => {
+          const { hits } = response
+          this.suggestions = hits
+            .filter(s => !s._highlightResult?.query?.fullyHighlighted)
+            .map(s => s.query)
+        })
+    }, 100),
     searchDebounced: debounce(async function () {
       if (!this.$v.searchString.$invalid) {
         this.loadingProducts = true
@@ -226,6 +270,7 @@ export default {
           })
           .catch(err => {
             this.products = []
+            this.categoryAggs = []
             this.loadingProducts = false
             this.showPleaseWait = false
             this.moreProducts = false
@@ -235,9 +280,10 @@ export default {
           })
       } else {
         this.products = []
+        this.categoryAggs = []
         this.emptyResults = true
       }
-    }, 350),
+    }, 500),
     loadMore () {
       if (!this.moreProducts) return
 
@@ -270,6 +316,9 @@ export default {
       const filters = Object.assign({ id: categoryIds, path: { 'nin': pathFilter } })
       return this.$store.dispatch('category-next/loadCategories', { filters })
     },
+    suggest (suggestion) {
+      this.searchString = suggestion
+    },
     emptySearchInput () {
       this.$store.dispatch('icmaaSearch/setCurrentTerm', '')
       Object.assign(this.$data, this.$options.data.apply(this))
@@ -294,9 +343,6 @@ export default {
     }
   },
   async mounted () {
-    const client = algoliasearch('NJPNX24PMN', '14cd3ece9eae725b0489c31d655335f1')
-    this.index = client.initIndex('icmaa-imp-test')
-
     this.$v.searchString.$touch()
 
     this.$refs.searchString.focus()
