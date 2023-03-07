@@ -266,6 +266,7 @@ export default {
           })
       } else {
         this.products = []
+        this.categories = []
         this.emptyResults = true
       }
     }, 100),
@@ -315,7 +316,7 @@ export default {
       IcmaaGoogleTagManagerExecutors.onSearchPanelCategoryClick({ category: gtmCategory })
 
       this.$store.dispatch('ui/closeAll')
-      if (category._id === this.currentCategory.id) return
+      if (category.url_path === this.currentCategory.url_path) return
       this.$router.push(this.localizedRoute(category.url_path))
     },
     goToResults () {
