@@ -33,6 +33,19 @@
       <div v-if="emptyResults && pleaseWait" class="t-px-2 t-pt-2 t-pb-4 t-text-sm">
         {{ $t('Please wait') }} ...
       </div>
+      <div class="history t-pb-4 t-mb-4" v-if="emptyResults && !showPleaseWait && !loadingProducts && history.length > 0">
+        <h4 class="t-mb-2 t-text-base-light t-text-xs t-uppercase">
+          {{ $t('Recent searches') }}
+        </h4>
+        <div
+          v-for="(term, i) in history"
+          :key="i"
+          @click="searchString = term"
+          class="t-pb-2 t-mb-2 t-text-sm t-border-b t-cursor-pointer"
+        >
+          {{ term }}
+        </div>
+      </div>
       <div class="categories t-pb-4 t-mb-4" v-if="categories.length > 0">
         <h4 class="t-mb-2 t-text-base-light t-text-xs t-uppercase">
           {{ $t('Categories') }}
@@ -154,6 +167,7 @@ export default {
       loadingProducts: false,
       showPleaseWait: false,
       categories: [],
+      history: [],
       productIndex,
       categoryIndex
     }
@@ -252,6 +266,12 @@ export default {
             this.loadingProducts = false
             this.showPleaseWait = false
 
+            const currentTerm = this.searchString
+            setTimeout(() => {
+              if (currentTerm !== this.searchString) return
+              this.addHistory(currentTerm)
+            }, 5000)
+
             this.gtmOnSearchResult()
           })
           .catch(err => {
@@ -306,11 +326,18 @@ export default {
       return this.$store.dispatch('category-next/loadCategories', { filters })
     },
     emptySearchInput () {
+      Object.assign(
+        this.$data,
+        this.$options.data.apply(this),
+        { history: this.history }
+      )
+
       this.$store.dispatch('icmaaSearch/setCurrentTerm', '')
-      Object.assign(this.$data, this.$options.data.apply(this))
       this.$refs.searchString.focus()
     },
     goToCategory (category) {
+      this.addHistory(category.name)
+
       const gtmCategory = pick(category, ['url_path', 'name', 'id', 'url_key'])
       IcmaaGoogleTagManagerExecutors.onSearchPanelCategoryClick({ category: gtmCategory })
 
@@ -319,8 +346,17 @@ export default {
       this.$router.push(this.localizedRoute(category.url_path))
     },
     goToResults () {
+      this.addHistory(this.searchString)
+
       this.$router.push(localizedRoute({ name: 'search', params: { term: this.searchString } }))
       this.closeSidebar()
+    },
+    addHistory (term) {
+      const items = this.history.filter(t => term.toLowerCase() !== t.toLowerCase())
+      items.unshift(term)
+      this.history = items.slice(0, 10)
+
+      localStorage.setItem('shop/user/searchHistory', this.history)
     },
     closeSidebar () {
       this.$store.dispatch('ui/setSidebar', { key: 'searchpanel', status: false })
@@ -350,12 +386,15 @@ export default {
         this.emptySearchInput()
         await Promise.all(
           localStorage.removeItem('shop/user/searchQueryTime'),
-          localStorage.setItem('shop/user/searchQuery', '')
+          localStorage.setItem('shop/user/searchQuery', ''),
+          localStorage.setItem('shop/user/searchHistory', [])
         )
 
         return
       }
     }
+
+    this.history = await localStorage.getItem('shop/user/searchHistory').split(',') || []
 
     this.searchString = await localStorage.getItem('shop/user/searchQuery') || ''
     if (this.searchString) {
