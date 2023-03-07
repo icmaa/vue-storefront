@@ -240,7 +240,8 @@ export default {
             query_by_weights: '1,1,2',
             sort_by: '_text_match:desc,level:asc,name:asc',
             prioritize_token_position: true,
-            per_page: this.size
+            per_page: this.size,
+            use_cache: true
           })
           .then(response => {
             const { hits } = response
@@ -256,7 +257,8 @@ export default {
             q: this.searchString,
             query_by: 'category.name,category.search_alias,name,search_alias,sku',
             sort_by: '_text_match:desc,ranking_shop_bestseller:desc',
-            per_page: this.size
+            per_page: this.size,
+            use_cache: true
           })
           .then(response => {
             const { hits, found, out_of, page } = response
@@ -301,7 +303,8 @@ export default {
           query_by: 'category.name,category.search_alias,name,search_alias,sku',
           sort_by: '_text_match:desc,ranking_shop_bestseller:desc',
           per_page: this.size,
-          page: this.page
+          page: this.page,
+          use_cache: true
         })
         .then(response => {
           const { hits, found, page } = response
