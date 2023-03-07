@@ -94,7 +94,6 @@
 <script>
 import Sidebar from 'theme/components/core/blocks/AsyncSidebar/Sidebar'
 import ProductTile from 'theme/components/core/ProductTile'
-import CategoryPanel from 'theme/components/core/blocks/SearchPanel/CategoryPanel'
 import MaterialIcon from 'theme/components/core/blocks/MaterialIcon'
 import TopButton from 'theme/components/core/blocks/AsyncSidebar/TopButton'
 import ButtonComponent from 'theme/components/core/blocks/Button'
@@ -148,7 +147,7 @@ export default {
     return {
       products: [],
       size: 12,
-      start: 0,
+      page: 1,
       placeholder: i18n.t('Type what you are looking for...'),
       emptyResults: true,
       moreProducts: false,
@@ -218,14 +217,14 @@ export default {
     searchDebounced: debounce(async function () {
       if (!this.$v.searchString.$invalid) {
         this.loadingProducts = true
-        this.start = 0
+        this.page = 1
 
         this.categoryIndex.documents()
           .search({
             q: this.searchString,
             query_by: 'name,search_alias,url_key',
             query_by_weights: '1,1,2',
-            sort_by: '_text_match:desc,name:asc',
+            sort_by: '_text_match:desc,level:asc,name:asc',
             prioritize_token_position: true,
             per_page: this.size
           })
@@ -246,7 +245,7 @@ export default {
             per_page: this.size
           })
           .then(response => {
-            const { hits, found, out_of, page, facet_counts } = response
+            const { hits, found, out_of, page } = response
             this.products = hits.map(h => h.document)
             this.emptyResults = hits.length < 1
             this.moreProducts = found > this.size && (page * this.size) < out_of
@@ -273,7 +272,7 @@ export default {
     loadMore () {
       if (!this.moreProducts) return
 
-      this.start += 1
+      this.page += 1
 
       /** @todo Add pagination */
       this.productIndex.documents()
@@ -282,14 +281,14 @@ export default {
           query_by: 'category.name,category.search_alias,name,search_alias,sku',
           sort_by: '_text_match:desc,ranking_shop_bestseller:desc',
           per_page: this.size,
-          page: this.start
+          page: this.page
         })
         .then(response => {
-          const { hits, nbHits, nbPages, page } = response
+          const { hits, found, page } = response
           this.products.push(...hits.map(h => h.document))
           this.loadingProducts = false
           this.showPleaseWait = false
-          this.moreProducts = nbHits > this.size && (page + 1) < nbPages
+          this.moreProducts = found > this.size && (page * this.size) < found
         })
         .catch(err => {
           this.products = []
