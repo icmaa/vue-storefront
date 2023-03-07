@@ -64,7 +64,7 @@
         </div>
       </div>
       <div
-        v-if="!emptyResults && filteredProducts.length > 0"
+        v-if="!emptyResults && products.length > 0"
         class="product-listing t-flex t-flex-wrap t-bg-base-lightest t--mx-4 t--mt-4 t-px-3 t-py-4"
         :class="{ 't-opacity-25': pleaseWait }"
       >
@@ -73,10 +73,10 @@
             {{ $t('View all results') }}
           </button-component>
         </div>
-        <product-tile v-for="product in filteredProducts" :key="product.sku + '-' + (product.parentId || 'parent')" :product="product" @click.native="closeSidebar" class="t-w-1/2 lg:t-w-1/3 t-px-1 t-mb-8" />
+        <product-tile v-for="product in products" :key="product.sku + '-' + (product.parentId || 'parent')" :product="product" @click.native="closeSidebar" class="t-w-1/2 lg:t-w-1/3 t-px-1 t-mb-8" />
       </div>
       <div
-        v-if="filteredProducts.length >= size && OnlineOnly"
+        v-if="products.length >= size && OnlineOnly"
         class="t-flex t-items-center t-flex-wrap t-justify-center t-mt-4"
         :class="{ 't-opacity-25': pleaseWait }"
       >
@@ -173,7 +173,7 @@ export default {
     }
   },
   watch: {
-    searchString (a, b) {
+    searchStringWithoutStopWords (a, b) {
       // Don't search when only a whitespaces is entered
       if (a.trim() === b.trim()) return
       this.search()
@@ -192,8 +192,15 @@ export default {
         this.$store.dispatch('icmaaSearch/setCurrentTerm', value)
       }
     },
-    filteredProducts () {
-      return this.products || []
+    searchStringWithoutStopWords () {
+      const stopWords = ['und', 'in', 'von', 'mit', 'aus']
+      return this.searchString
+        .replace(/[&/\\#,+()[\]~%.'":*?<>{}]/g, '')
+        .replace(/\s{1,}/gm, ' ')
+        .split(' ')
+        .filter(w => !stopWords.includes(w.toLowerCase()))
+        .join(' ')
+        .trim()
     },
     getNoResultsMessage () {
       let msg = ''
@@ -235,7 +242,7 @@ export default {
 
         this.categoryIndex.documents()
           .search({
-            q: this.searchString,
+            q: this.searchStringWithoutStopWords,
             query_by: 'name,search_alias,url_key',
             query_by_weights: '1,1,2',
             sort_by: '_text_match:desc,level:asc,name:asc',
@@ -246,7 +253,6 @@ export default {
           .then(response => {
             const { hits } = response
             this.categories = hits.map(h => h.document)
-            this.fetchCategories(this.categories.map(c => c.url_path))
           })
           .catch(() => {
             this.categories = []
@@ -254,7 +260,7 @@ export default {
 
         this.productIndex.documents()
           .search({
-            q: this.searchString,
+            q: this.searchStringWithoutStopWords,
             query_by: 'category.name,category.search_alias,name,search_alias,sku',
             sort_by: '_text_match:desc,ranking_shop_bestseller:desc',
             per_page: this.size,
@@ -299,7 +305,7 @@ export default {
       /** @todo Add pagination */
       this.productIndex.documents()
         .search({
-          q: this.searchString,
+          q: this.searchStringWithoutStopWords,
           query_by: 'category.name,category.search_alias,name,search_alias,sku',
           sort_by: '_text_match:desc,ranking_shop_bestseller:desc',
           per_page: this.size,
@@ -322,11 +328,6 @@ export default {
 
           Logger.error(err, 'components-search')()
         })
-    },
-    async fetchCategories (categoryPaths) {
-      const pathFilter = searchPanel.hideCategoriesFromPath.map(c => c.toString())
-      const filters = Object.assign({ url_path: categoryPaths, path: { 'nin': pathFilter } })
-      return this.$store.dispatch('category-next/loadCategories', { filters })
     },
     emptySearchInput () {
       Object.assign(
