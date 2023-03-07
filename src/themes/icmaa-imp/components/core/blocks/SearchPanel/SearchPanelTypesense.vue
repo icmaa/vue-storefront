@@ -33,7 +33,7 @@
       <div v-if="emptyResults && pleaseWait" class="t-px-2 t-pt-2 t-pb-4 t-text-sm">
         {{ $t('Please wait') }} ...
       </div>
-      <div class="categories t-pb-4 t-mb-4">
+      <div class="categories t-pb-4 t-mb-4" v-if="categories.length > 0">
         <h4 class="t-mb-2 t-text-base-light t-text-xs t-uppercase">
           {{ $t('Categories') }}
         </h4>
@@ -182,9 +182,6 @@ export default {
     filteredProducts () {
       return this.products || []
     },
-    categoryIds () {
-      return this.categories.map(c => parseInt(c._id))
-    },
     getNoResultsMessage () {
       let msg = ''
       if (this.searchString !== '') {
@@ -227,11 +224,13 @@ export default {
           .search({
             q: this.searchString,
             query_by: 'name,search_alias,url_key',
+            query_by_weights: '1,1,2',
+            sort_by: '_text_match:desc,name:asc',
+            prioritize_token_position: true,
             per_page: this.size
           })
           .then(response => {
             const { hits } = response
-
             this.categories = hits.map(h => h.document)
             this.fetchCategories(this.categories.map(c => c.url_path))
           })
@@ -316,7 +315,7 @@ export default {
       IcmaaGoogleTagManagerExecutors.onSearchPanelCategoryClick({ category: gtmCategory })
 
       this.$store.dispatch('ui/closeAll')
-      if (category.id === this.currentCategory.id) return
+      if (category._id === this.currentCategory.id) return
       this.$router.push(this.localizedRoute(category.url_path))
     },
     goToResults () {
