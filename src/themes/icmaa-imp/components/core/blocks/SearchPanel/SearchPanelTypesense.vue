@@ -248,10 +248,7 @@ export default {
         this.categoryIndex.documents()
           .search({
             q: this.searchStringWithoutStopWords,
-            query_by: 'name,search_alias,url_key',
-            query_by_weights: '1,1,2',
-            sort_by: '_text_match:desc,level:asc,name:asc',
-            prioritize_token_position: true,
+            preset: 'category-default',
             per_page: this.size,
             use_cache: true
           })
@@ -266,8 +263,7 @@ export default {
         this.productIndex.documents()
           .search({
             q: this.searchStringWithoutStopWords,
-            query_by: 'category.name,category.search_alias,name,search_alias,sku',
-            sort_by: '_text_match:desc,ranking_shop_bestseller:desc',
+            preset: 'product-default',
             per_page: this.size,
             use_cache: true
           })
