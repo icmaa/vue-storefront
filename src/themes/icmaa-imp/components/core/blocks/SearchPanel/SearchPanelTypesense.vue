@@ -40,7 +40,7 @@
         <div
           v-for="(term, i) in history"
           :key="i"
-          @click="searchString = term"
+          @click="selectHistoryTerm(term)"
           class="t-pb-2 t-mb-2 t-text-sm t-border-b t-cursor-pointer"
         >
           {{ term }}
@@ -73,7 +73,13 @@
             {{ $t('View all results') }}
           </button-component>
         </div>
-        <product-tile v-for="product in products" :key="product.sku + '-' + (product.parentId || 'parent')" :product="product" @click.native="closeSidebar" class="t-w-1/2 lg:t-w-1/3 t-px-1 t-mb-8" />
+        <product-tile
+          v-for="product in products"
+          :key="product.sku + '-' + (product.parentId || 'parent')"
+          :product="product"
+          @click.native="clickProduct(product)"
+          class="t-w-1/2 lg:t-w-1/3 t-px-1 t-mb-8"
+        />
       </div>
       <div
         v-if="products.length >= size && OnlineOnly"
@@ -115,7 +121,6 @@ import VueOfflineMixin from 'vue-offline/mixin'
 
 import i18n from '@vue-storefront/i18n'
 import { mapGetters } from 'vuex'
-import { searchPanel } from 'config'
 import { required, minLength } from 'vuelidate/lib/validators'
 import { disableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock'
 import { IcmaaGoogleTagManagerExecutors } from 'icmaa-google-tag-manager/hooks'
@@ -275,8 +280,9 @@ export default {
             this.showPleaseWait = false
 
             const currentTerm = this.searchString
+            const currentHistory = JSON.stringify(this.history)
             setTimeout(() => {
-              if (currentTerm !== this.searchString) return
+              if (currentTerm !== this.searchString || currentHistory !== JSON.stringify(this.history)) return
               this.addHistory(currentTerm)
             }, 5000)
 
@@ -339,6 +345,10 @@ export default {
       this.$store.dispatch('icmaaSearch/setCurrentTerm', '')
       this.$refs.searchString.focus()
     },
+    clickProduct (product) {
+      this.closeSidebar()
+      this.addHistory(product.translatedName)
+    },
     goToCategory (category) {
       this.addHistory(category.name)
 
@@ -360,7 +370,11 @@ export default {
       items.unshift(term)
       this.history = items.slice(0, 10)
 
-      localStorage.setItem('shop/user/searchHistory', this.history)
+      localStorage.setItem('shop/user/searchHistory', JSON.stringify(this.history))
+    },
+    selectHistoryTerm (term) {
+      this.searchString = term
+      this.addHistory(term)
     },
     closeSidebar () {
       this.$store.dispatch('ui/setSidebar', { key: 'searchpanel', status: false })
@@ -391,19 +405,17 @@ export default {
         await Promise.all(
           localStorage.removeItem('shop/user/searchQueryTime'),
           localStorage.setItem('shop/user/searchQuery', ''),
-          localStorage.setItem('shop/user/searchHistory', [])
+          localStorage.setItem('shop/user/searchHistory', '[]')
         )
 
         return
       }
     }
 
-    this.history = await localStorage.getItem('shop/user/searchHistory').split(',') || []
+    this.history = JSON.parse(await localStorage.getItem('shop/user/searchHistory')) || []
 
     this.searchString = await localStorage.getItem('shop/user/searchQuery') || ''
-    if (this.searchString) {
-      this.search()
-    }
+    if (this.searchString) this.search()
   },
   beforeDestroy () {
     const search = this.$v.searchString.$invalid ? '' : this.searchString
