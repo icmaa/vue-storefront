@@ -187,7 +187,8 @@ export default {
   computed: {
     ...mapGetters({
       currentTerm: 'icmaaSearch/getCurrentTerm',
-      currentCategory: 'category-next/getCurrentCategory'
+      currentCategory: 'category-next/getCurrentCategory',
+      getJsonBlockByIdentifier: 'icmaaCmsBlock/getJsonBlockByIdentifier'
     }),
     searchString: {
       get () {
@@ -197,8 +198,11 @@ export default {
         this.$store.dispatch('icmaaSearch/setCurrentTerm', value)
       }
     },
+    settings () {
+      return this.getJsonBlockByIdentifier('search-settings') || { stopWords: [] }
+    },
     searchStringWithoutStopWords () {
-      const stopWords = ['und', 'in', 'von', 'mit', 'aus']
+      const { stopWords } = this.settings
       return this.searchString
         .replace(/[&/\\#,+()[\]~%.'":*?<>{}]/g, '')
         .replace(/\s{1,}/gm, ' ')
@@ -391,6 +395,8 @@ export default {
 
     this.$refs.searchString.focus()
     disableBodyScroll(this.$refs.searchSidebar)
+
+    await this.$store.dispatch('icmaaCmsBlock/single', { value: 'search-settings' })
 
     const lastSearchTime = await localStorage.getItem('shop/user/searchQueryTime') || null
     if (lastSearchTime !== null) {
