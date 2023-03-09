@@ -284,7 +284,7 @@ export default {
             setTimeout(() => {
               if (currentTerm !== this.searchString || currentHistory !== JSON.stringify(this.history)) return
               this.addHistory(currentTerm)
-            }, 5000)
+            }, 3000)
 
             this.gtmOnSearchResult()
           })
@@ -374,6 +374,7 @@ export default {
     },
     selectHistoryTerm (term) {
       this.searchString = term
+      this.$refs.searchString.focus()
       this.addHistory(term)
     },
     closeSidebar () {
