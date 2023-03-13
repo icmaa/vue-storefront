@@ -125,24 +125,17 @@ import { required, minLength } from 'vuelidate/lib/validators'
 import { disableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock'
 import { IcmaaGoogleTagManagerExecutors } from 'icmaa-google-tag-manager/hooks'
 import { getCurrentStoreviewDatetime, getCurrentStoreviewDayjsDatetime, toDayjsDate } from 'icmaa-config/helpers/datetime'
-import { localizedRoute } from '@vue-storefront/core/lib/multistore'
+import { localizedRoute, currentStoreView } from '@vue-storefront/core/lib/multistore'
 import { Logger } from '@vue-storefront/core/lib/logger'
 import debounce from 'lodash-es/debounce'
 import pick from 'lodash-es/pick'
 
+import { icmaa_search } from 'config'
 import { SearchClient } from 'typesense'
 
-const client = new SearchClient({
-  'nodes': [{
-    host: '7m0dpzjwignta4r6p-1.a1.typesense.net',
-    port: 443,
-    protocol: 'https'
-  }],
-  apiKey: 'MJ2aHXrwjkCSGY8BLaF7OePMrDiUQ3hg',
-  connectionTimeoutSeconds: 2
-})
-const productIndex = client.collections('product')
-const categoryIndex = client.collections('category')
+const client = new SearchClient(icmaa_search?.typesense?.config || {})
+const productIndex = client.collections('product-' + currentStoreView().storeCode)
+const categoryIndex = client.collections('category-' + currentStoreView().storeCode)
 
 export default {
   name: 'SearchPanel',
