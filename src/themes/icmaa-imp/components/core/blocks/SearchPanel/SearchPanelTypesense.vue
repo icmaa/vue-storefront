@@ -5,7 +5,7 @@
         <material-icon icon="keyboard_arrow_left" />
       </div>
       <label for="search" class="t-flex t-self-stretch t-items-center">
-        <span class="t-sr-only">{{ $t('Algolia-Search') }}</span>
+        <span class="t-sr-only">{{ $t('Search') }}</span>
         <material-icon icon="search" size="sm" class="t-text-base-light t-pl-2 t-pr-1" />
       </label>
       <input
@@ -34,17 +34,16 @@
         {{ $t('Please wait') }} ...
       </div>
       <div class="history t-pb-4 t-mb-4" v-if="emptyResults && !showPleaseWait && !loadingProducts && history.length > 0">
-        <h4 class="t-mb-2 t-text-base-light t-text-xs t-uppercase">
+        <h4 class="t-mb-3 t-text-base-light t-text-xs t-uppercase">
           {{ $t('Recent searches') }}
         </h4>
         <div
           v-for="(term, i) in history"
           :key="i"
           @click="selectHistoryTerm(term)"
-          class="t-pb-2 t-mb-2 t-text-sm t-border-b t-cursor-pointer"
-        >
-          {{ term }}
-        </div>
+          class="t-pb-3 t-mb-3 t-px-1 t-text-sm t-border-b t-cursor-pointer"
+          v-text="term"
+        />
       </div>
       <div class="categories t-pb-4 t-mb-4" v-if="categories.length > 0">
         <h4 class="t-mb-2 t-text-base-light t-text-xs t-uppercase">
