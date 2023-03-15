@@ -304,8 +304,7 @@ export default {
       this.productIndex.documents()
         .search({
           q: this.searchStringWithoutStopWords,
-          query_by: 'category.name,category.search_alias,name,search_alias,sku',
-          sort_by: '_text_match:desc,ranking_shop_bestseller:desc',
+          preset: 'product-default',
           per_page: this.size,
           page: this.page,
           use_cache: true
