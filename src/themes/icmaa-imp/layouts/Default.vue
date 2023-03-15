@@ -59,7 +59,7 @@ import NoSSR from 'vue-no-ssr'
 const NavigationSidebar = () => import(/* webpackPreload: true */ /* webpackChunkName: "vsf-sidebar-navigation" */ 'theme/components/core/blocks/Navigation/Sidebar')
 const Microcart = () => import(/* webpackPreload: true */ /* webpackChunkName: "vsf-microcart" */ 'theme/components/core/blocks/Microcart/Microcart')
 const Wishlist = () => import(/* webpackPreload: true */ /* webpackChunkName: "vsf-wishlist" */ 'theme/components/core/blocks/Wishlist/Wishlist')
-const SearchPanel = () => import(/* webpackChunkName: "vsf-search-panel" */ 'theme/components/core/blocks/SearchPanel/SearchPanel')
+const SearchPanel = () => import(/* webpackChunkName: "vsf-search-panel" */ 'theme/components/core/blocks/SearchPanel/SearchPanelTypesense')
 
 export default {
   data () {

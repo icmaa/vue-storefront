@@ -51,12 +51,6 @@ export default {
     ProductAvailability,
     ButtonComponent
   },
-  props: {
-    labelsActive: {
-      type: Boolean,
-      default: true
-    }
-  },
   computed: {
     ticketEventdate () {
       return toDate(this.product.ticket_eventdate)

@@ -44,10 +44,6 @@ export default {
     WishlistButton
   },
   props: {
-    labelsActive: {
-      type: Boolean,
-      default: true
-    },
     onlyImage: {
       type: Boolean,
       default: false
