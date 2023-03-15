@@ -170,7 +170,7 @@ export default {
         if (this.$v.searchString.$invalid) {
           msg = i18n.t('Searched term should consist of at least 3 characters.')
         } else if (this.emptyResults && !this.showPleaseWait) {
-          msg = i18n.t('No results were found.')
+          msg = i18n.t('No products were found.')
         }
       }
 
