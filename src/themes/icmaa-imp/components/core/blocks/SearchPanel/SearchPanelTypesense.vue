@@ -84,7 +84,7 @@
         />
       </div>
       <div
-        v-if="products.length >= size && OnlineOnly"
+        v-if="products.length > 0"
         class="t-flex t-items-center t-flex-wrap t-justify-center t-mt-4"
         :class="{ 't-opacity-25': pleaseWait }"
       >
@@ -119,7 +119,6 @@ import MaterialIcon from 'theme/components/core/blocks/MaterialIcon'
 import TopButton from 'theme/components/core/blocks/AsyncSidebar/TopButton'
 import ButtonComponent from 'theme/components/core/blocks/Button'
 import LoaderBackground from 'theme/components/core/LoaderBackground'
-import VueOfflineMixin from 'vue-offline/mixin'
 
 import i18n from '@vue-storefront/i18n'
 import { mapGetters } from 'vuex'
@@ -149,7 +148,6 @@ export default {
     ButtonComponent,
     LoaderBackground
   },
-  mixins: [VueOfflineMixin],
   validations: {
     searchString: {
       required,
@@ -267,10 +265,10 @@ export default {
             use_cache: true
           })
           .then(response => {
-            const { hits, found, out_of, page } = response
+            const { hits, found, page } = response
             this.products = hits.map(h => h.document)
             this.emptyResults = hits.length < 1
-            this.moreProducts = found > this.size && (page * this.size) < out_of
+            this.moreProducts = found > this.size
             this.loadingProducts = false
             this.showPleaseWait = false
 
@@ -288,7 +286,7 @@ export default {
             this.loadingProducts = false
             this.showPleaseWait = false
             this.moreProducts = false
-            this.emptyResults = true
+            this.emptyResults = false
 
             Logger.error(err, 'components-search')()
           })
@@ -324,7 +322,7 @@ export default {
           this.loadingProducts = false
           this.showPleaseWait = false
           this.moreProducts = false
-          this.emptyResults = true
+          this.emptyResults = false
 
           Logger.error(err, 'components-search')()
         })
