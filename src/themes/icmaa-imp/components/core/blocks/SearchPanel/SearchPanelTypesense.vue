@@ -27,25 +27,16 @@
       <top-button icon="close" text="Close" @click.native="emptySearchInput" v-show="searchString.length > 0" />
     </template>
     <div class="t-pb-20">
-      <div v-if="getNoResultsMessage" class="t-px-2 t-mt-2 t-mb-4 t-text-sm">
+      <div v-if="getNoResultsMessage" class="t-px-2 t-mt-2 t-mb-8 t-text-sm">
         {{ getNoResultsMessage }}
       </div>
-      <div v-if="emptyResults && pleaseWait" class="t-px-2 t-pt-2 t-pb-4 t-text-sm">
+      <div v-if="emptyResults && pleaseWait" class="t-px-2 t-pt-2 t-pb-8 t-text-sm">
         {{ $t('Please wait') }} ...
       </div>
-      <div class="history t-pb-4 t-mb-4" v-if="emptyResults && !showPleaseWait && !loadingProducts && history.length > 0">
-        <h4 class="t-mb-3 t-text-base-light t-text-xs t-uppercase">
-          {{ $t('Recent searches') }}
-        </h4>
-        <div
-          v-for="(term, i) in history"
-          :key="i"
-          @click="selectHistoryTerm(term)"
-          class="t-pb-3 t-mb-3 t-px-1 t-text-sm t-border-b t-cursor-pointer"
-          v-text="term"
-        />
-      </div>
-      <div class="categories t-pb-4 t-mb-4" v-if="categories.length > 0">
+      <div
+        class="categories t-pb-4 t-mb-4"
+        v-if="categories.length > 0"
+      >
         <h4 class="t-mb-2 t-text-base-light t-text-xs t-uppercase">
           {{ $t('Categories') }}
         </h4>
@@ -61,6 +52,18 @@
             {{ category.name }}
           </button-component>
         </div>
+      </div>
+      <div class="history t-pb-4 t-mb-4" v-if="emptyResults && !showPleaseWait && !loadingProducts && history.length > 0">
+        <h4 class="t-mb-3 t-text-base-light t-text-xs t-uppercase">
+          {{ $t('Recent searches') }}
+        </h4>
+        <div
+          v-for="(term, i) in history"
+          :key="i"
+          @click="selectHistoryTerm(term)"
+          class="t-pb-3 t-mb-3 t-px-1 t-text-sm t-border-b t-cursor-pointer"
+          v-text="term"
+        />
       </div>
       <div
         v-if="!emptyResults && products.length > 0"
@@ -81,7 +84,7 @@
         />
       </div>
       <div
-        v-if="products.length >= size && OnlineOnly"
+        v-if="products.length > 0"
         class="t-flex t-items-center t-flex-wrap t-justify-center t-mt-4"
         :class="{ 't-opacity-25': pleaseWait }"
       >
@@ -116,7 +119,6 @@ import MaterialIcon from 'theme/components/core/blocks/MaterialIcon'
 import TopButton from 'theme/components/core/blocks/AsyncSidebar/TopButton'
 import ButtonComponent from 'theme/components/core/blocks/Button'
 import LoaderBackground from 'theme/components/core/LoaderBackground'
-import VueOfflineMixin from 'vue-offline/mixin'
 
 import i18n from '@vue-storefront/i18n'
 import { mapGetters } from 'vuex'
@@ -146,7 +148,6 @@ export default {
     ButtonComponent,
     LoaderBackground
   },
-  mixins: [VueOfflineMixin],
   validations: {
     searchString: {
       required,
@@ -208,8 +209,8 @@ export default {
       if (this.searchString !== '') {
         if (this.$v.searchString.$invalid) {
           msg = i18n.t('Searched term should consist of at least 3 characters.')
-        } else if (this.emptyResults && !this.showPleaseWait) {
-          msg = i18n.t('No results were found.')
+        } else if (this.emptyResults && this.categories.length === 0 && !this.showPleaseWait) {
+          msg = i18n.t('No products were found.')
         }
       }
 
@@ -264,10 +265,10 @@ export default {
             use_cache: true
           })
           .then(response => {
-            const { hits, found, out_of, page } = response
+            const { hits, found, page } = response
             this.products = hits.map(h => h.document)
             this.emptyResults = hits.length < 1
-            this.moreProducts = found > this.size && (page * this.size) < out_of
+            this.moreProducts = found > this.size
             this.loadingProducts = false
             this.showPleaseWait = false
 
@@ -285,7 +286,7 @@ export default {
             this.loadingProducts = false
             this.showPleaseWait = false
             this.moreProducts = false
-            this.emptyResults = true
+            this.emptyResults = false
 
             Logger.error(err, 'components-search')()
           })
@@ -304,8 +305,7 @@ export default {
       this.productIndex.documents()
         .search({
           q: this.searchStringWithoutStopWords,
-          query_by: 'category.name,category.search_alias,name,search_alias,sku',
-          sort_by: '_text_match:desc,ranking_shop_bestseller:desc',
+          preset: 'product-default',
           per_page: this.size,
           page: this.page,
           use_cache: true
@@ -322,7 +322,7 @@ export default {
           this.loadingProducts = false
           this.showPleaseWait = false
           this.moreProducts = false
-          this.emptyResults = true
+          this.emptyResults = false
 
           Logger.error(err, 'components-search')()
         })

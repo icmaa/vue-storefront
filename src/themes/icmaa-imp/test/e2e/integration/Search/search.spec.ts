@@ -3,7 +3,8 @@ describe('Search', () => {
     cy.visitAsRecurringUser('/', { storeCode: 'de' })
 
     cy.openSidebar('[data-test-id="SearchInput"]')
-    cy.get('@sidebar').find('input').as('searchInput')
+    cy.get('@sidebar').findByTestId('SearchInput').as('searchInput')
+      .wait(500)
       .type('HSB')
 
     cy.get('@sidebar')

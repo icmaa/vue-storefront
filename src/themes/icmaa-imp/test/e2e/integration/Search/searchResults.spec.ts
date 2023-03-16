@@ -4,6 +4,7 @@ describe('Search', () => {
 
     cy.openSidebar('[data-test-id="SearchInput"]')
     cy.get('@sidebar').findByTestId('SearchInput').as('searchInput')
+      .wait(500)
       .type('HSB')
 
     cy.get('@sidebar')

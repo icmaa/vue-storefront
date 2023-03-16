@@ -100,7 +100,7 @@ jobs:
           yarn start:pm2 &
 
       - name: Cypress run
-        uses: cypress-io/github-action@v2
+        uses: cypress-io/github-action@v5.3.0
         id: cypress
         timeout-minutes: 5
         with:
@@ -108,14 +108,13 @@ jobs:
           wait-on: http://localhost:3000
           wait-on-timeout: 120
           browser: chrome
-          headless: true
           config: video=true
           # spec: integration/Cms/**/*
           record: true
           parallel: true
-          group: ${{ runner.os }}
+          group: ci-${{ runner.os }}-${{ github.sha }}-${{ github.run_id }}-${{ github.run_number }}-${{ github.sha }}
           tag: ${{ github.event_name }},${{ github.event_name }}/${{ github.event.action }}
-          ci-build-id: 'continous-integration-${{ github.sha }}-${{ github.run_id }}-${{ github.run_number }}'
+          ci-build-id: 'ci-${{ github.sha }}-${{ github.run_id }}-${{ github.run_number }}'
         env:
           COMMIT_INFO_MESSAGE: ${{ github.event.pull_request.title }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -135,9 +134,3 @@ jobs:
         with:
           name: build
           path: artifacts
-
-      - name: Trigger re-run manually if necessary
-        if: failure()
-        run: |
-          echo "Run the following command to trigger a rerun which sends metrics to Cypress.io dashboard:"
-          echo "git commit --no-verify --allow-empty -m \"Re-run CI tests\" && git push --no-verify origin ${{ github.head_ref }}"

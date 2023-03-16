@@ -602,11 +602,10 @@ Cypress.Commands.add('checkoutFillNewAddressForm', { prevSubject: 'element' }, (
 })
 
 Cypress.Commands.add('checkoutFillShipping', () => {
-  cy.getStoreCode().then(storeCode => {
-    if (storeCode === 'de') {
-      cy.get('#checkout .step-shipping .shipping').as('shipping')
+  cy.get('#checkout .step-shipping .shipping').as('shipping')
+  cy.get('@shipping').then($shipping => {
+    if ($shipping.find('[data-test-id="NextStepButton"]').length > 0) {
       cy.get('@shipping').find('label[for="priorityHandling"]').randomlyClickElement()
-
       cy.get('@shipping').checkoutGoToNextStep()
     }
   })
