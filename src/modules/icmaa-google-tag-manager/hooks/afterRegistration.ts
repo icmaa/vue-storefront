@@ -13,7 +13,7 @@ export const registerCustomPageEvents = () => {
   EventHooks.homeVisited(() => {
     const event = Object.assign(
       rootStore.getters['icmaaGoogleTagManager/gtmEventPayload'](),
-      { event: 'icmaa-home' }
+      { event: 'icmaa-home-view' }
     )
     IcmaaGoogleTagManagerExecutors.onGtmPageView({ type: event.event, event })
   })
