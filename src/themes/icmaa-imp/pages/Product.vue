@@ -94,7 +94,7 @@
         </div>
         <div class="reviews t-relative t-w-full t-p-8 t-bg-base-lighter lg:t-w-1/2" id="reviews">
           <lazyload data-test-id="ReviewsLoader">
-            <reviews :product="product" :product-name="product.translatedName" v-if="product" />
+            <reviews :product="product" :product-name="product.translatedName" v-if="product && product.translatedName" />
             <reviews-claim />
           </lazyload>
         </div>
