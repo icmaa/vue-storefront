@@ -9,6 +9,7 @@ import { getThumbnailPath } from '@vue-storefront/core/helpers'
 
 import pick from 'lodash-es/pick'
 import isEmpty from 'lodash-es/isEmpty'
+import camelCase from 'lodash-es/camelCase'
 
 export const icmaaGoogleTagManagerModule: Module<GoogleTagManagerState, any> = {
   namespaced: true,
@@ -54,6 +55,11 @@ export const icmaaGoogleTagManagerModule: Module<GoogleTagManagerState, any> = {
           const value = item[attributeField] || product[attributeName]
           if (value) {
             switch (attributeType) {
+              case 'inherit':
+                product[attributeName] = item[camelCase(`parent-${attributeField}`)] ||
+                  product[camelCase(`parent-${attributeName}`)] ||
+                  value
+                break
               case 'price':
                 product[attributeName] = formatValue(value, 'en-US')
                 break
