@@ -60,6 +60,8 @@ import LogoLine from 'theme/components/core/blocks/CategoryExtras/LogoLineBlock'
 import ProductListingWidget from 'icmaa-category/components/ProductListingWidget'
 import CmsBlock from 'icmaa-cms/components/Block'
 
+import { IcmaaGoogleTagManagerExecutors } from 'icmaa-google-tag-manager/hooks'
+
 export default {
   components: {
     Lazyload,
@@ -95,6 +97,8 @@ export default {
     }
   },
   mounted () {
+    IcmaaGoogleTagManagerExecutors.homeVisited()
+
     if (!this.isLoggedIn && localStorage.getItem('redirect')) {
       this.$store.dispatch('ui/showModal', 'modal-signup')
     }

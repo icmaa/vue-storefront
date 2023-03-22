@@ -12,7 +12,7 @@ import { afterRegistration } from './hooks/afterRegistration'
 
 import { isServer } from '@vue-storefront/core/helpers'
 
-export const disallowList = [ 'product', 'category', 'search', 'checkout', 'page-not-found' ]
+export const disallowList = [ 'home', 'product', 'category', 'search', 'checkout', 'page-not-found' ]
 
 export const IcmaaGoogleTagManagerModule: StorefrontModule = function ({ store, router, appConfig }) {
   store.registerModule('icmaaGoogleTagManager', icmaaGoogleTagManagerModule)
@@ -24,7 +24,7 @@ export const IcmaaGoogleTagManagerModule: StorefrontModule = function ({ store, 
 
   coreHooks.afterAppInit(() => {
     const config = appConfig.googleTagManager
-    const { id, debug, forceCookieAccept } = config
+    const { id, debug } = config
     const enabled = isEnabled(id)
 
     if (!enabled) {

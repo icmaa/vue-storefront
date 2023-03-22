@@ -14,6 +14,11 @@ const {
 } = createListenerHook<{ type: string, event: any }>()
 
 const {
+  hook: homeVisitedHook,
+  executor: homeVisitedExecutor
+} = createListenerHook<void>()
+
+const {
   hook: pageNotFoundHook,
   executor: pageNotFoundExecutor
 } = createListenerHook<void>()
@@ -70,6 +75,7 @@ const {
 
 const IcmaaGoogleTagManagerExecutors = {
   afterEach: afterEachExecutor,
+  homeVisited: homeVisitedExecutor,
   pageNotFound: pageNotFoundExecutor,
   onGtmPageView: onGtmPageViewExecutor,
   onSearchResult: onSearchResultExecutor,
@@ -86,6 +92,7 @@ const IcmaaGoogleTagManagerExecutors = {
 
 const IcmaaGoogleTagManager = {
   afterEach: afterEachHook,
+  homeVisited: homeVisitedHook,
   pageNotFound: pageNotFoundHook,
   onGtmPageView: onGtmPageViewHook,
   onSearchResult: onSearchResultHook,

@@ -10,6 +10,14 @@ import { IcmaaGoogleTagManager as EventHooks, IcmaaGoogleTagManagerExecutors } f
 import triggerPageView from '../helpers/pageView'
 
 export const registerCustomPageEvents = () => {
+  EventHooks.homeVisited(() => {
+    const event = Object.assign(
+      rootStore.getters['icmaaGoogleTagManager/gtmEventPayload'](),
+      { event: 'icmaa-home-view' }
+    )
+    IcmaaGoogleTagManagerExecutors.onGtmPageView({ type: event.event, event })
+  })
+
   catalogHooks.productPageVisited(() => {
     const event = rootStore.getters['icmaaGoogleTagManager/gtmEventPayload']('product')
     IcmaaGoogleTagManagerExecutors.onGtmPageView({ type: event.event, event })
