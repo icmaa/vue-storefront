@@ -13,7 +13,7 @@ const Tracking = () => import(/* webpackChunkName: "vsf-order-tracking" */ 'them
 const secureRoute = { meta: { isSecure: true } }
 
 let routes = [
-  { name: 'home', path: '/', component: Home },
+  { name: 'home', path: '/', component: Home, meta: { gtm: 'home' } },
   { name: 'home-pwa', path: '/pwa.html', component: Home },
   { name: 'virtual-product', path: '/p/:parentSku/:slug', component: Product }, // :sku param can be marked as optional with ":sku?" (https://github.com/vuejs/vue-router/blob/dev/examples/route-matching/app.js#L16), but it requires a lot of work to adjust the rest of the site
   { name: 'bundle-product', path: '/p/:parentSku/:slug', component: Product }, // :sku param can be marked as optional with ":sku?" (https://github.com/vuejs/vue-router/blob/dev/examples/route-matching/app.js#L16), but it requires a lot of work to adjust the rest of the site
