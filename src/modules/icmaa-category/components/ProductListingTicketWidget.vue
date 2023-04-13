@@ -43,11 +43,6 @@ export default {
       type: String,
       default: 'online:desc'
     },
-    filter: {
-      type: [Object, Boolean],
-      required: false,
-      default: false
-    },
     appearance: {
       type: String,
       default: 't-px-3 lg:t-px-4'
