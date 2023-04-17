@@ -7,7 +7,6 @@ const ServiceWiderrufComponent = () => import(/* webpackChunkName: "vsf-icmaa-cm
 const ServiceJobsComponent = () => import(/* webpackChunkName: "vsf-icmaa-cms-page-custom-service-jobs" */ 'theme/components/core/blocks/ICMAA/Cms/Pages/ServiceJobs.vue')
 const NewsletterComponent = () => import(/* webpackChunkName: "vsf-icmaa-cms-page-custom-newsletter-landingpage" */ 'icmaa-newsletter/pages/Newsletter.vue')
 const AffiliateComponent = () => import(/* webpackChunkName: "vsf-icmaa-cms-page-custom-affiliate" */ 'theme/components/core/blocks/ICMAA/Cms/Pages/Affiliate.vue')
-const TicketsComponent = () => import(/* webpackChunkName: "vsf-icmaa-cms-page-custom-tickets" */ 'theme/pages/Tickets.vue')
 const FestivalComponent = () => import(/* webpackChunkName: "vsf-icmaa-cms-page-custom-festival" */ 'theme/components/core/blocks/ICMAA/Cms/Pages/Festival.vue')
 const INSDComponent = () => import(/* webpackChunkName: "vsf-icmaa-cms-page-custom-impericon-never-say-die" */ 'theme/components/core/blocks/ICMAA/Cms/Pages/ImpericonNeverSayDie.vue')
 const DigitalEventsComponent = () => import(/* webpackChunkName: "vsf-icmaa-cms-page-custom-digital-events" */ 'theme/components/core/blocks/ICMAA/Cms/Pages/DigitalEvents.vue')
@@ -25,7 +24,6 @@ export const routes: any = [
   { name: 'service-jobs', path: '/:identifier', component: ServiceJobsComponent },
   { name: 'newsletter', path: '/:identifier', component: NewsletterComponent },
   { name: 'affiliate', path: '/:identifier', component: AffiliateComponent },
-  { name: 'tickets', path: '/:identifier', component: TicketsComponent },
   { name: 'festival', path: '/:identifier', component: FestivalComponent },
   { name: 'impericon-never-say-die', path: '/:identifier', component: INSDComponent },
   { name: 'digital-events', path: '/:identifier', component: DigitalEventsComponent },
