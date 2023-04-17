@@ -1,1 +1,0 @@
-export const SN_ICMAA_TWITTER_ADD_STATUS = 'ADD_STATUS'
