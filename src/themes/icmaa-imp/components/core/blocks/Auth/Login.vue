@@ -1,5 +1,5 @@
 <template>
-  <form class="" @submit.prevent="login" novalidate data-test-id="Login">
+  <form @submit.prevent="login" novalidate data-test-id="Login">
     <div v-if="hasRedirect" class="t-mb-4 t-text-sm">
       {{ $t('You need to be logged in to see this page') }}
     </div>
@@ -77,6 +77,7 @@
 
 <script>
 import i18n from '@vue-storefront/i18n'
+import { mapGetters } from 'vuex'
 import { Logger } from '@vue-storefront/core/lib/logger'
 
 import { required, email } from 'vuelidate/lib/validators'
@@ -119,6 +120,9 @@ export default {
     }
   },
   computed: {
+    ...mapGetters({
+      authRedirect: 'ui/getAuthRedirect'
+    }),
     showAll () {
       const hasInput = this.email.length > 0 || this.password.length > 0
       return this.isModal || (!this.isModal && (this.hasFocus || hasInput))
@@ -176,6 +180,11 @@ export default {
       this.$store.commit('ui/setAuthElem', 'forgot-pass')
     },
     onSuccess () {
+      if (this.authRedirect) {
+        this.$router.push(this.authRedirect)
+        this.$store.commit('ui/setAuthRedirect')
+      }
+
       this.$store.dispatch('notification/spawnNotification', {
         type: 'success',
         message: i18n.t('You are logged in!'),
