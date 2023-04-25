@@ -1,11 +1,10 @@
 <template>
   <div
     class="t-flex t-items-center t-flex-wrap t-cursor-pointer"
-    :data-test-id="'AdditionalCharges' + upperFirst(charge.key)"
     v-if="active"
   >
     <base-checkbox
-      :name="'additionalCharges' + upperFirst(charge.key)"
+      :name="'additionalCharges' + charge.key"
       :id="charge.key"
       v-model="selected"
       :checkbox-class="disabled ? '' : 't-self-start'"
@@ -26,7 +25,6 @@
 import { mapGetters } from 'vuex'
 import { price } from 'icmaa-config/helpers/price'
 import BaseCheckbox from 'theme/components/core/blocks/Form/BaseCheckbox'
-import upperFirst from 'lodash-es/upperFirst'
 
 export default {
   name: 'AdditionalShippingCharges',
@@ -62,8 +60,7 @@ export default {
     }
   },
   methods: {
-    price,
-    upperFirst
+    price
   },
   watch: {
     selected () {
