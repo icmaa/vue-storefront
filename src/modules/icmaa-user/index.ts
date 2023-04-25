@@ -27,7 +27,7 @@ export const IcmaaExtendedUserModule: StorefrontModule = async function ({ store
         const unwatch = store.watch(
           () => store.state.user.session_started,
           value => {
-            const unauthorizedRedirect = localizedRoute({ name: 'home', query: { fwd: 'login' } })
+            const unauthorizedRedirect = localizedRoute({ name: 'home', query: { fwd: 'login', redirect: to.name } })
             const timeout = setTimeout(() => {
               Logger.log('User is not authorized in time, redirect to login.', 'user')()
               next(unauthorizedRedirect)
