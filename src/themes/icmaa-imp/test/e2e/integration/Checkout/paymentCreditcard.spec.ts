@@ -35,7 +35,7 @@ describe('Checkout', () => {
 
     cy.checkoutPlaceOrder(true)
     cy.location('host', { log: true })
-      .should('contain', 'ckotech.co')
+      .should('contain', 'checkout.com')
 
     // cy.get('body')
     //   .getFrame('[name="cko-3ds2-iframe"]')
