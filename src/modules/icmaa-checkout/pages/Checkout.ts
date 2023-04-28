@@ -41,10 +41,13 @@ export default {
   },
   async beforeMount () {
     if (this.$route.query && this.$route.query.paymentGatewayFailure) {
-      const errorMsg = get(this.$route, 'query.message', 'Something went wrong. Payment was not successful.')
+      if (this.$route.query.message) {
+        Logger.error(`Payment was not successful: ${this.$route.query.message}`, 'checkout')()
+      }
+
       this.$store.dispatch('notification/spawnNotification', {
         type: 'error',
-        message: this.$t(errorMsg),
+        message: this.$t('Something went wrong. Payment was not successful.'),
         action1: { label: this.$t('OK') }
       })
 

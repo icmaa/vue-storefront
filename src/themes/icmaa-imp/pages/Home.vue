@@ -103,10 +103,12 @@ export default {
       this.$store.dispatch('ui/showModal', 'modal-signup')
     }
 
-    const { fwd } = this.$route.query
+    const { fwd, redirect } = this.$route.query
     if (fwd) {
       if (fwd === 'login' && !this.isLoggedIn) {
+        const redirectRoute = redirect ? { path: redirect } : undefined
         this.$store.commit('ui/setAuthElem', 'login')
+        this.$store.commit('ui/setAuthRedirect', redirectRoute)
         this.$store.dispatch('ui/showModal', 'modal-signup')
       } else if ((fwd === 'create' || fwd === 'register') && !this.isLoggedIn) {
         this.$store.commit('ui/setAuthElem', 'register')

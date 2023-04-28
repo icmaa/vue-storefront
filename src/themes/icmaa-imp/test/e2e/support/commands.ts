@@ -605,7 +605,14 @@ Cypress.Commands.add('checkoutFillShipping', () => {
   cy.get('#checkout .step-shipping .shipping').as('shipping')
   cy.get('@shipping').then($shipping => {
     if ($shipping.find('[data-test-id="NextStepButton"]').length > 0) {
-      cy.get('@shipping').find('label[for="priorityHandling"]').randomlyClickElement()
+      if ($shipping.find('[data-test-id="AdditionalChargesPriorityHandling"]').length > 0) {
+        cy.get('@shipping').find('label[for="priorityHandling"]').randomlyClickElement()
+      }
+
+      if ($shipping.find('[data-test-id="AdditionalChargesDhlGoGreen"]').length > 0) {
+        cy.get('@shipping').find('label[for="dhlGoGreen"]').randomlyClickElement()
+      }
+
       cy.get('@shipping').checkoutGoToNextStep()
     }
   })

@@ -12,7 +12,7 @@ RUN chmod +x /usr/local/bin/vue-storefront
 RUN apk add --no-cache \
     python3 make g++ ca-certificates \
     gcc libgcc libstdc++ linux-headers \
-    bash curl wget git rsync
+    bash curl wget git rsync github-cli
 
 RUN yarn global add @icmaa/config-sync
 

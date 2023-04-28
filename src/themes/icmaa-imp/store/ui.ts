@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import i18n from '@vue-storefront/i18n'
 import { clearAllBodyScrollLocks } from 'body-scroll-lock'
+import type { Route } from 'vue-router'
 
 const AsyncUserNavigation = () => import(/* webpackChunkName: "vsf-sidebar-user" */ '../components/core/blocks/MyAccount/NavigationSidebar.vue')
 
@@ -14,6 +15,7 @@ export const uiStore = {
       message: false
     },
     authElem: 'login',
+    authRedirect: false,
     /** Sidebar and modal type states: */
     modals: {},
     modalInitTimeout: true,
@@ -70,6 +72,9 @@ export const uiStore = {
     },
     setAuthElem (state, action: boolean) {
       state.authElem = action
+    },
+    setAuthRedirect (state, route?: Route) {
+      state.authRedirect = route || false
     },
     setModal (state, item: { name: string, visible: boolean, priority?: number, delayed?: boolean, queued?: boolean }) {
       let { name, priority, visible, delayed, queued } = item
@@ -215,6 +220,7 @@ export const uiStore = {
   getters: {
     getViewport: state => state.viewport,
     isTouchDevice: state => state.isTouchDevice,
+    getAuthRedirect: (state) => state.authRedirect,
     getSidebarPath: state => state.sidebarPath,
     getSidebarStatus: (state) => (key: string) => state.sidebars.hasOwnProperty(key) ? state.sidebars[key] : false,
     getSidebarNavigationGenderChange: (state): boolean => state.sidebarNavigationGenderChange,
