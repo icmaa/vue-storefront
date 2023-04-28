@@ -21,7 +21,7 @@ const actions: ActionTree<TeaserState, RootState> = {
     return elasticListAbstract<TeaserStateItem, TeaserState, RootState>({ entityType, mutationTypes, stateKey, context, query })
   },
   fetchTags: async ({ commit }): Promise<TagStateItem[]|boolean> => {
-    return CmsService.datasource<TagStateItem[]>({ code: 'tags' })
+    return CmsService.datasource<TagStateItem[]>({ code: 'teaser-tags' })
       .then(results => {
         if (results) {
           commit(types.ICMAA_TEASER_TAGS_SET, results)
