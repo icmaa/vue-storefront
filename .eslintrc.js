@@ -29,6 +29,7 @@ module.exports = {
     '@typescript-eslint/class-name-casing': 1,
     '@typescript-eslint/no-unused-vars': 0,
     '@typescript-eslint/explicit-function-return-type': 0,
+    '@typescript-eslint/prefer-interface': 0,
     'handle-callback-err': 1,
     'prefer-promise-reject-errors': 0,
     'import/no-duplicates': 1,

@@ -1,28 +1,33 @@
 import { SearchQuery } from 'storefront-query-builder'
 
-interface QueryOptions {
+export type QueryOptions = {
+  identifier?: string,
   tags?: string,
   category?: string,
-  size?: string
+  size?: string,
+  resolveUrl?: boolean
 }
 
-export default ({ tags, category, size }: QueryOptions): SearchQuery => {
+const applyOptionalFilter = (query: SearchQuery, resolveUrl: boolean, key: string, value?: string) => {
+  if (value) {
+    if (resolveUrl) {
+      query.applyFilter({ key, value: { or: value } })
+    } else {
+      query.applyFilter({ key, value })
+    }
+  }
+}
+
+export default ({ resolveUrl = false, identifier, tags, category, size }: QueryOptions): SearchQuery => {
   const query = new SearchQuery()
   query
     .applyFilter({ key: 'active', value: true })
     .applyFilter({ key: 'activeDateRange', value: { toField: 'showTo', fromField: 'showFrom' } })
 
-  if (tags) {
-    query.applyFilter({ key: 'tag', value: tags })
-  }
-
-  if (category) {
-    query.applyFilter({ key: 'categories', value: category })
-  }
-
-  if (size) {
-    query.applyFilter({ key: 'size', value: size })
-  }
+  applyOptionalFilter(query, resolveUrl, 'identifier', identifier)
+  applyOptionalFilter(query, resolveUrl, 'tag', tags)
+  applyOptionalFilter(query, resolveUrl, 'categories', category)
+  applyOptionalFilter(query, resolveUrl, 'size', size)
 
   query.applySort({ field: 'firstPublishedAt', options: 'desc' })
 

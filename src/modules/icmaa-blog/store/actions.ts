@@ -3,8 +3,8 @@ import { elasticList as elasticListAbstract, MutationTypesInterface } from 'icma
 
 import { stateKey } from './'
 import * as types from './mutation-types'
-import BlogState, { BlogArticle } from '../types/BlogState'
-import createQuery from '../helpers/queryBuilder'
+import BlogState, { BlogArticle, BlogRoute } from '../types/BlogState'
+import createQuery, { QueryOptions } from '../helpers/queryBuilder'
 import RootState from '@vue-storefront/core/types/RootState'
 
 const entityType = 'blog'
@@ -15,9 +15,19 @@ const mutationTypes: MutationTypesInterface = {
 }
 
 const actions: ActionTree<BlogState, RootState> = {
-  list: async (context, { tags, size, category }: { tags?: string, category?: string, size?: string }) => {
-    const query = createQuery({ tags, category, size })
+  list: async (context, { identifier, tags, size, category, resolveUrl }: QueryOptions) => {
+    const query = createQuery({ identifier, tags, category, size, resolveUrl })
     return elasticListAbstract<BlogArticle, BlogState, RootState>({ entityType, mutationTypes, stateKey, context, query })
+  },
+  resolveUrl: async ({ dispatch }, { route }: { route: BlogRoute }) => {
+    const { params } = route
+    const { identifier } = params
+
+    if (identifier) {
+      return dispatch('list', { resolveUrl: true, identifier, category: identifier })
+    }
+
+    return dispatch('list', { })
   }
 }
 
