@@ -1,29 +1,28 @@
 <template>
   <div>
-    <pre>
-    {{ article || articles }}
-    </pre>
+    <Article v-if="isArticle" />
+    <List v-else :articles="articles" headline="asdasd" />
   </div>
 </template>
 
 <script lang="ts">
-import { mapGetters } from 'vuex'
+import BlogMixin from 'icmaa-blog/mixins'
+import Article from 'icmaa-blog/components/Article.vue'
+import List from 'icmaa-blog/components/List.vue'
 
 export default {
-  computed: {
-    ...mapGetters({
-      articles: 'icmaaBlog/getArticles',
-      getArticle: 'icmaaBlog/getArticleBy'
-    }),
-    article () {
-      const { params } = this.$route
-      return this.getArticle(params.identifier)
-    }
+  name: 'BlogPage',
+  mixins: [ BlogMixin ],
+  components: {
+    Article,
+    List
   },
   async mounted () {
     await this.$store.dispatch('icmaaBlog/resolveUrl', { route: this.$route })
       .then(r => {
-        console.error(r)
+        if (r.items.length === 0) {
+          this.$router.replace(this.localizedRoute({ name: 'page-not-found' }))
+        }
       })
   }
 }

@@ -25,9 +25,9 @@ export default ({ resolveUrl = false, identifier, tags, category, size }: QueryO
     .applyFilter({ key: 'activeDateRange', value: { toField: 'showTo', fromField: 'showFrom' } })
 
   applyOptionalFilter(query, resolveUrl, 'identifier', identifier)
-  applyOptionalFilter(query, resolveUrl, 'tag', tags)
   applyOptionalFilter(query, resolveUrl, 'categories', category)
-  applyOptionalFilter(query, resolveUrl, 'size', size)
+  applyOptionalFilter(query, false, 'tag', tags)
+  applyOptionalFilter(query, false, 'size', size)
 
   query.applySort({ field: 'firstPublishedAt', options: 'desc' })
 

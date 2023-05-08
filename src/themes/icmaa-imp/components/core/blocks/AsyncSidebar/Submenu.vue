@@ -11,8 +11,8 @@
 import { mapGetters } from 'vuex'
 import Sidebar from 'theme/components/core/blocks/AsyncSidebar/Sidebar'
 import TopButton from 'theme/components/core/blocks/AsyncSidebar/TopButton'
-import LoadingSpinner from 'theme/components/core/blocks/AsyncSidebar/LoadingSpinner.vue'
-import LoadingError from 'theme/components/core/blocks/AsyncSidebar/LoadingError.vue'
+import LoadingSpinner from 'theme/components/core/blocks/AsyncSidebar/LoadingSpinner'
+import LoadingError from 'theme/components/core/blocks/AsyncSidebar/LoadingError'
 
 export default {
   name: 'AsyncSidebarSubmenu',
