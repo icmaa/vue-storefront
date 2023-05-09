@@ -6,6 +6,12 @@
       <div>{{ date(article.firstPublishedAt) }}</div>
       <Asset :image="article.image" :width="100" />
       <div>{{ article.preview }}</div>
+      <router-link
+        :to="{ name: 'icmaa-blog-articles', params: { identifier: article.identifier }}"
+        :title="article.title"
+      >
+        {{ $t('Read more') }}
+      </router-link>
     </div>
   </div>
 </template>
