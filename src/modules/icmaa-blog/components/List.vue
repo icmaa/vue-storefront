@@ -3,7 +3,7 @@
     <h1>{{ headline }}</h1>
     <div v-for="article in articles" :key="article.identifier" class="t-mb-8">
       <h2>{{ article.title }}</h2>
-      <div>{{ article.firstPublishedAt }}</div>
+      <div>{{ date(article.firstPublishedAt) }}</div>
       <Asset :image="article.image" :width="100" />
       <div>{{ article.preview }}</div>
     </div>
@@ -12,6 +12,7 @@
 
 <script lang="ts">
 import Asset from 'icmaa-cms/components/Storyblock/Asset.vue'
+import { toDate } from 'icmaa-config/helpers/datetime'
 
 export default {
   name: 'BlogList',
@@ -27,6 +28,11 @@ export default {
   },
   components: {
     Asset
+  },
+  methods: {
+    date (d) {
+      return toDate(d, undefined, undefined)
+    }
   }
 }
 </script>
