@@ -15,9 +15,12 @@ Load custom image provider to support external CDN services and add Cloudflare c
     "useExactUrlsNoProxy": true
   },
   "icmaa_cdn": {
-    "provider": "scalecommerce",
+    "provider": ["scalecommerce"],
     "scalecommerce": {
       "baseUrl": "https://www.base-url.com/",
+      "quality": 85
+    },
+    "storyblok": {
       "quality": 85
     }
   }
