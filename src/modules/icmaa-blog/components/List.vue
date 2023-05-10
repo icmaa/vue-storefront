@@ -1,6 +1,6 @@
 <template>
-  <div class="t-container">
-    <h1>{{ headline }}</h1>
+  <div class="t-container t-p-4">
+    <h1 v-if="headline" v-text="headline" />
     <div v-for="article in articles" :key="article.identifier" class="t-mb-8">
       <h2>{{ article.title }}</h2>
       <div>{{ date(article.firstPublishedAt) }}</div>
@@ -17,7 +17,7 @@
 </template>
 
 <script lang="ts">
-import Asset from 'icmaa-cms/components/Storyblock/Asset.vue'
+import Asset from 'icmaa-cms/components/Storyblok/Asset.vue'
 import { toDate } from 'icmaa-config/helpers/datetime'
 
 export default {

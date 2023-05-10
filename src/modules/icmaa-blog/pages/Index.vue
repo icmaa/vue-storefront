@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Article v-if="isArticle" />
+    <Article v-if="isArticle" :article="article" />
     <List v-else :articles="articles" headline="asdasd" />
   </div>
 </template>

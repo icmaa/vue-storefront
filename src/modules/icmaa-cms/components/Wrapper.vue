@@ -32,6 +32,11 @@ const AsyncProductlisting = () => import(/* webpackChunkName: "vsf-content-block
 const AsyncProductlistingticketposter = () => import(/* webpackChunkName: "vsf-content-block-productlistingticketposter" */ '../../icmaa-category/components/ProductListingTicketWidget')
 const AsyncCategorylist = () => import(/* webpackChunkName: "vsf-content-block-categorylist" */ 'icmaa-category/components/List/List')
 const AsyncLinkList = () => import(/* webpackChunkName: "vsf-content-block-linklist" */ 'theme/components/core/blocks/CategoryExtras/LinkList')
+const AsyncInstagramPost = () => import(/* webpackChunkName: "vsf-content-block-instagram-post" */ 'icmaa-cms/components/Storyblok/InstagramPost')
+const AsyncTikTokPost = () => import(/* webpackChunkName: "vsf-content-block-tiktok-post" */ 'icmaa-cms/components/Storyblok/TikTokPost')
+const AsyncTwitter = () => import(/* webpackChunkName: "vsf-content-block-twitter" */ 'icmaa-cms/components/Storyblok/Twitter')
+const AsyncYouTube = () => import(/* webpackChunkName: "vsf-content-block-youtube" */ 'icmaa-cms/components/Storyblok/YouTube')
+const AsyncSpotify = () => import(/* webpackChunkName: "vsf-content-block-spotify" */ 'icmaa-cms/components/Storyblok/Spotify')
 
 const rteComponentOptions = {
   component: AsyncText,
@@ -140,6 +145,41 @@ export default {
           propsDefaults: {},
           cssClass: 't-mb-4',
           padding: false
+        },
+        'component_instagram_post': {
+          component: AsyncInstagramPost,
+          propsTypes: {},
+          propsDefaults: {},
+          cssClass: 't-mb-4',
+          padding: true
+        },
+        'component_tiktok_post': {
+          component: AsyncTikTokPost,
+          propsTypes: {},
+          propsDefaults: {},
+          cssClass: 't-mb-4',
+          padding: true
+        },
+        'component_twitter': {
+          component: AsyncTwitter,
+          propsTypes: {},
+          propsDefaults: {},
+          cssClass: 't-mb-4',
+          padding: true
+        },
+        'component_youtube': {
+          component: AsyncYouTube,
+          propsTypes: {},
+          propsDefaults: {},
+          cssClass: 't-mb-4',
+          padding: true
+        },
+        'component_spotify': {
+          component: AsyncSpotify,
+          propsTypes: {},
+          propsDefaults: {},
+          cssClass: 't-mb-4',
+          padding: true
         }
       }
     },
