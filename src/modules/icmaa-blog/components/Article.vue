@@ -4,7 +4,7 @@
     <div>{{ date(article.firstPublishedAt) }}</div>
     <Asset :image="article.image" :width="100" />
     <block-wrapper :components="article.content" />
-    <List v-if="article.relatedArticles" :articles="article.relatedArticles" :headline="$t('Related articles')" />
+    <List v-if="article.relatedArticles.length > 0" :articles="article.relatedArticles" :headline="$t('Related articles')" />
   </div>
 </template>
 
