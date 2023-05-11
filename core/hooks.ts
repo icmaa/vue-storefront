@@ -23,7 +23,7 @@ const {
 const {
   hook: afterProductThumbnailPathGeneratedHook,
   executor: afterProductThumbnailPathGeneratedExecutor
-} = createMutatorHook<{ path: string, pathType: string, sizeX: number, sizeY: number }, { path: string }>()
+} = createMutatorHook<{ path: string, pathType: string, sizeX: number, sizeY: number }, { path }>()
 
 const {
   hook: beforeLogRenderedHook,
