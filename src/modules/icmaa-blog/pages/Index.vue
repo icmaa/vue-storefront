@@ -1,7 +1,8 @@
 <template>
   <div>
+    <Navigation :items="categories || []" />
     <Article v-if="isArticle" :article="article" />
-    <List v-else :articles="articles" headline="asdasd" />
+    <List v-else :articles="articles" :headline="isCategory ? category.name : identifier" />
   </div>
 </template>
 
@@ -9,21 +10,26 @@
 import BlogMixin from 'icmaa-blog/mixins'
 import Article from 'icmaa-blog/components/Article.vue'
 import List from 'icmaa-blog/components/List.vue'
+import Navigation from 'icmaa-blog/components/Navigation.vue'
 
 export default {
   name: 'BlogPage',
   mixins: [ BlogMixin ],
   components: {
     Article,
-    List
+    List,
+    Navigation
+  },
+  async serverPrefetch () {
+    return (this as any).fetchData()
   },
   async mounted () {
-    await this.$store.dispatch('icmaaBlog/resolveUrl', { route: this.$route })
-      .then(r => {
-        if (r.items.length === 0) {
-          this.$router.replace(this.localizedRoute({ name: 'page-not-found' }))
-        }
-      })
+    return this.fetchData()
+  },
+  watch: {
+    identifier () {
+      return this.fetchData()
+    }
   }
 }
 </script>

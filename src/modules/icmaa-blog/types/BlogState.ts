@@ -13,5 +13,12 @@ export interface BlogArticle extends AbstractStateItem {
 }
 
 export default interface BlogState {
+  urls: Record<string, string[]>,
   items: BlogArticle[]
+}
+
+export type BlogCategory = {
+  url: string,
+  name: string,
+  children?: BlogCategory[]
 }

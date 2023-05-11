@@ -13,6 +13,9 @@
         {{ $t('Read more') }}
       </router-link>
     </div>
+    <div v-if="articles.length === 0">
+      {{ $t('No articles found') }}
+    </div>
   </div>
 </template>
 

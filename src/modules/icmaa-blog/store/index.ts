@@ -11,6 +11,7 @@ export const storageKey = 'blog'
 export const BlogStore: Module<BlogState, RootState> = {
   namespaced: true,
   state: {
+    urls: {},
     items: []
   },
   getters,

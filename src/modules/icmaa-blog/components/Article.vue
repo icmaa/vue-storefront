@@ -4,12 +4,14 @@
     <div>{{ date(article.firstPublishedAt) }}</div>
     <Asset :image="article.image" :width="100" />
     <block-wrapper :components="article.content" />
+    <List v-if="article.relatedArticles" :articles="article.relatedArticles" :headline="$t('Related articles')" />
   </div>
 </template>
 
 <script lang="ts">
 import Asset from 'icmaa-cms/components/Storyblok/Asset.vue'
 import BlockWrapper from 'icmaa-cms/components/Wrapper.vue'
+import List from 'icmaa-blog/components/List.vue'
 import { toDate } from 'icmaa-config/helpers/datetime'
 
 export default {
@@ -22,7 +24,8 @@ export default {
   },
   components: {
     Asset,
-    BlockWrapper
+    BlockWrapper,
+    List
   },
   methods: {
     date (d) {

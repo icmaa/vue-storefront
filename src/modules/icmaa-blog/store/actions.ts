@@ -19,12 +19,23 @@ const actions: ActionTree<BlogState, RootState> = {
     const query = createQuery({ identifier, tags, category, size, resolveUrl })
     return elasticListAbstract<BlogArticle, BlogState, RootState>({ entityType, mutationTypes, stateKey, context, query })
   },
-  resolveUrl: async ({ dispatch }, { route }: { route: BlogRoute }) => {
+  fetchCategories: async ({ dispatch, rootGetters }) => {
+    await dispatch('icmaaCmsBlock/single', { value: 'blog-categories' }, { root: true })
+    return rootGetters['icmaaCmsBlock/getJsonBlockByIdentifier']('blog-categories')
+  },
+  resolveUrl: async ({ dispatch, commit, getters }, { route }: { route: BlogRoute }) => {
     const { params } = route
     const { identifier } = params
 
+    if (getters.isUrlResolved(identifier)) {
+      return
+    }
+
     if (identifier) {
       return dispatch('list', { resolveUrl: true, identifier, category: identifier })
+        .then((result) => {
+          commit(types.ICMAA_BLOG_URL_ADD, { url: identifier, ids: result.items.map(({ id }) => id) })
+        })
     }
 
     return dispatch('list', { })

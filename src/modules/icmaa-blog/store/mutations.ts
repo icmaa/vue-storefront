@@ -1,3 +1,4 @@
+import Vue from 'vue'
 import { MutationTree } from 'vuex'
 import { mutationsFactory } from 'icmaa-cms/store/abstract/mutations'
 import * as types from './mutation-types'
@@ -8,7 +9,15 @@ const mutations: MutationTree<TeaserState> = {
     add: types.ICMAA_BLOG_ADD,
     upd: types.ICMAA_BLOG_UPD,
     rmv: types.ICMAA_BLOG_RMV
-  }, 'uuid')
+  }, 'uuid'),
+  [types.ICMAA_BLOG_URL_ADD] (state, { url, ids }: { url: string, ids: string[] }) {
+    if (Object.keys(state.urls).includes(url)) {
+      Vue.set(state.urls, url, [state.urls[url], ...ids])
+      return
+    }
+
+    Vue.set(state.urls, url, ids)
+  }
 }
 
 export default mutations
