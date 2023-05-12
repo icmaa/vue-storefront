@@ -1,11 +1,13 @@
 <template>
   <div>
-    <h1
-      v-if="headline"
-      class="t-mb-8 t-pr-2 t-text-2xl t-font-light t-text-base-dark"
-      v-text="headline"
-    />
-    <div class="t--m-4 t-flex t-cursor-pointer t-flex-wrap t-items-start">
+    <slot>
+      <h1
+        v-if="headline"
+        class="t-mb-8 t-pr-2 t-text-2xl t-font-light t-text-base-dark"
+        v-text="headline"
+      />
+    </slot>
+    <div class="t--mx-4 t-flex t-cursor-pointer t-flex-wrap t-items-start">
       <router-link
         v-for="article in articles"
         :key="article.identifier"
