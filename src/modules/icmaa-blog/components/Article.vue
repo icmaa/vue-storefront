@@ -1,35 +1,36 @@
 <template>
-  <div class="t-container t-p-4">
+  <div>
     <h1>{{ article.title }}</h1>
-    <div>{{ date(article.firstPublishedAt) }}</div>
-    <Asset :image="article.image" :auto-reload="true" />
+    <div>{{ article.firstPublishedAt | date }}</div>
+    <Asset
+      :image="article.image"
+      :auto-reload="true"
+    />
     <block-wrapper :components="article.content" />
-    <List v-if="article.relatedArticles.length > 0" :articles="article.relatedArticles" :headline="$t('Related articles')" />
+    <List
+      v-if="article.relatedArticles.length > 0"
+      :articles="article.relatedArticles"
+      :headline="$t('Related articles')"
+    />
   </div>
 </template>
 
 <script lang="ts">
-import Asset from 'icmaa-cms/components/Storyblok/Asset.vue'
+import BlogMixin from 'icmaa-blog/mixins'
 import BlockWrapper from 'icmaa-cms/components/Wrapper.vue'
 import List from 'icmaa-blog/components/List.vue'
-import { toDate } from 'icmaa-config/helpers/datetime'
 
 export default {
   name: 'BlogArticle',
+  components: {
+    BlockWrapper,
+    List
+  },
+  mixins: [ BlogMixin ],
   props: {
     article: {
       type: Object,
       required: true
-    }
-  },
-  components: {
-    Asset,
-    BlockWrapper,
-    List
-  },
-  methods: {
-    date (d) {
-      return toDate(d, undefined, undefined)
     }
   }
 }

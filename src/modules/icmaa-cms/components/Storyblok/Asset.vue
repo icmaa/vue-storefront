@@ -1,7 +1,7 @@
 <template>
   <component
-    v-if="fieldType === 'asset'"
     :is="AsyncPicture"
+    v-if="fieldType === 'asset'"
     :path-type="pathType"
     :src="image.filename"
     :alt="image.alt"

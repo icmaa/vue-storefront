@@ -1,5 +1,9 @@
 <template>
-  <component :class="['cms-content']" :is="content" v-if="loaded && isValidComponent" />
+  <component
+    :is="content"
+    v-if="loaded && isValidComponent"
+    :class="['cms-content']"
+  />
 </template>
 
 <script>

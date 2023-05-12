@@ -1,6 +1,11 @@
 <template>
   <div>
-    <blockquote class="instagram-media" :data-instgrm-captioned="showCaption" :data-instgrm-permalink="link" data-instgrm-version="14" />
+    <blockquote
+      class="instagram-media"
+      :data-instgrm-captioned="showCaption"
+      :data-instgrm-permalink="link"
+      data-instgrm-version="14"
+    />
   </div>
 </template>
 

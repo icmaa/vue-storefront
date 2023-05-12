@@ -1,6 +1,10 @@
 <template>
   <div>
-    <blockquote class="tiktok-embed" :cite="postUrl" :data-video-id="videoId">
+    <blockquote
+      class="tiktok-embed"
+      :cite="postUrl"
+      :data-video-id="videoId"
+    >
       <section />
     </blockquote>
   </div>

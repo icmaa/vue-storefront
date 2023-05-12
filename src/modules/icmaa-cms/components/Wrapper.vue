@@ -1,14 +1,35 @@
 <template>
-  <div class="t-flex t-flex-wrap t--mx-4 t-flex-full">
-    <div v-for="(c, i) in aggregatedComponents" :key="`${c.name}-${i}`" class="t-flex-auto" :class="[{ 't-px-4': c.padding, 't-w-full': (c.size === 'full'), 'lg:t-w-1/2': (c.size === 'half') }, c.cssClass]">
-      <router-link v-if="c.hasLink" :to="localizedRoute(c.props.componentLink)">
-        <component :is="c.component" v-bind="c.props" :name="c.type" />
+  <div class="t--mx-4 t-flex t-flex-full t-flex-wrap">
+    <div
+      v-for="(c, i) in aggregatedComponents"
+      :key="`${c.name}-${i}`"
+      class="t-flex-auto"
+      :class="[{ 't-px-4': c.padding, 't-w-full': (c.size === 'full'), 'lg:t-w-1/2': (c.size === 'half') }, c.cssClass]"
+    >
+      <router-link
+        v-if="c.hasLink"
+        :to="localizedRoute(c.props.componentLink)"
+      >
+        <component
+          :is="c.component"
+          v-bind="c.props"
+          :name="c.type"
+        />
       </router-link>
       <template v-else>
         <lazyload v-if="c.lazyload">
-          <component :is="c.component" v-bind="c.props" :name="c.type" />
+          <component
+            :is="c.component"
+            v-bind="c.props"
+            :name="c.type"
+          />
         </lazyload>
-        <component :is="c.component" v-bind="c.props" :name="c.type" v-else />
+        <component
+          :is="c.component"
+          v-else
+          v-bind="c.props"
+          :name="c.type"
+        />
       </template>
     </div>
   </div>

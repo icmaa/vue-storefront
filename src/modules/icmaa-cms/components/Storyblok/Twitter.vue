@@ -25,13 +25,6 @@ export default {
       return this.getFromUrl(this.url, 'id')
     }
   },
-  methods: {
-    getFromUrl (url: string, key: 'screenName' | 'sourceType' | 'id'): string | boolean {
-      const regex = /twitter\.com\/(?<screenName>[\w\-_]+)(\/(?<sourceType>\w+)\/(?<id>\d+))*/
-      const result = regex.exec(url)
-      return result?.groups[key] || false
-    }
-  },
   mounted () {
     this.loadSdkScript('//platform.twitter.com/widgets.js', 'twttr')
       .then(() => {
@@ -60,6 +53,13 @@ export default {
             break
         }
       })
+  },
+  methods: {
+    getFromUrl (url: string, key: 'screenName' | 'sourceType' | 'id'): string | boolean {
+      const regex = /twitter\.com\/(?<screenName>[\w\-_]+)(\/(?<sourceType>\w+)\/(?<id>\d+))*/
+      const result = regex.exec(url)
+      return result?.groups[key] || false
+    }
   }
 }
 </script>
