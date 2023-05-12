@@ -2,7 +2,7 @@
   <div class="t-container t-p-4">
     <h1>{{ article.title }}</h1>
     <div>{{ date(article.firstPublishedAt) }}</div>
-    <Asset :image="article.image" :width="100" />
+    <Asset :image="article.image" :auto-reload="true" />
     <block-wrapper :components="article.content" />
     <List v-if="article.relatedArticles.length > 0" :articles="article.relatedArticles" :headline="$t('Related articles')" />
   </div>

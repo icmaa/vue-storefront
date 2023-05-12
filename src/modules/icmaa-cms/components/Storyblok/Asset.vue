@@ -10,6 +10,7 @@
     :sizes="sizes"
     :placeholder="!!ratio"
     :ratio="ratio"
+    :auto-reload="autoReload"
   />
 </template>
 
@@ -37,6 +38,10 @@ export default {
     height: {
       type: Number,
       default: 0
+    },
+    autoReload: {
+      type: Boolean,
+      default: false
     }
   },
   data () {
