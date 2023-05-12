@@ -26,10 +26,8 @@ export default {
     },
     sizes: {
       type: Array,
-      default: () => ([
-        { media: '(min-width: 415px)', width: 560 },
-        { media: '(max-width: 414px)', width: 415 }
-      ])
+      required: true,
+      default: () => ([])
     },
     width: {
       type: Number,
