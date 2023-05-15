@@ -1,9 +1,12 @@
 <template>
-  <div id="home" class="t-container">
+  <div
+    id="home"
+    class="t-container"
+  >
     <teaser
       tags="2"
       :show-split="false"
-      class="sm:t-pt-4 t-pb-8"
+      class="t-pb-8 sm:t-pt-4"
     />
     <teaser
       tags="21"
@@ -29,7 +32,7 @@
       class="t-pb-8"
     />
     <lazyload data-test-id="LogoLineBlockLoader">
-      <div class="t-flex t-flex-wrap t-px-4 t--mx-4 t-pb-4">
+      <div class="t--mx-4 t-flex t-flex-wrap t-px-4 t-pb-4">
         <logo-line
           v-for="({ path, title, logos }, i) in logolines"
           :key="path"
@@ -46,7 +49,10 @@
     <lazyload data-test-id="ProductListingWidgetLoader">
       <product-listing-widget :category-id="4251" />
     </lazyload>
-    <cms-block identifier="home-seo" class="t-mb-8 t-px-4 t-text-sm" />
+    <cms-block
+      identifier="home-seo"
+      class="t-mb-8 t-px-4 t-text-sm"
+    />
   </div>
 </template>
 
@@ -96,6 +102,15 @@ export default {
       })
     }
   },
+  async asyncData ({ store, context }) {
+    if (context) {
+      context.output.cacheTags
+        .add('home')
+        .add('cms')
+    }
+
+    await store.dispatch('icmaaCmsBlock/list', 'home-top-categories,home-logos,home-seo')
+  },
   mounted () {
     IcmaaGoogleTagManagerExecutors.homeVisited()
 
@@ -119,15 +134,6 @@ export default {
 
       this.$router.push(this.localizedHomeRoute)
     }
-  },
-  async asyncData ({ store, context }) {
-    if (context) {
-      context.output.cacheTags
-        .add('home')
-        .add('cms')
-    }
-
-    await store.dispatch('icmaaCmsBlock/list', 'home-top-categories,home-logos,home-seo')
   }
 }
 </script>

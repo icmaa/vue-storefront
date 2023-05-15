@@ -50,6 +50,9 @@ export default {
   async mounted () {
     return this.fetchData()
   },
+  async serverPrefetch () {
+    return (this as any).fetchData()
+  },
   methods: {
     fetchData () {
       return Promise.all([

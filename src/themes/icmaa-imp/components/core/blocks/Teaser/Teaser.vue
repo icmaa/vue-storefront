@@ -1,19 +1,40 @@
 <template>
   <div data-test-id="Teaser">
-    <teaser-skeleton v-if="loading" v-bind="{ isMobile, showLarge, showSplit, showSmallInRow }" />
+    <teaser-skeleton
+      v-if="loading"
+      v-bind="{ isMobile, showLarge, showSplit, showSmallInRow }"
+    />
     <template v-else>
       <template v-if="showLarge && teaserLarge">
-        <teaser-fullsize :teaser="teaserLarge" :redirect-to-edit="redirectToEdit" :class="{ 't-mb-8': showSplit }" />
+        <teaser-fullsize
+          :teaser="teaserLarge"
+          :redirect-to-edit="redirectToEdit"
+          :class="{ 't-mb-8': showSplit }"
+        />
       </template>
       <template v-if="showSplit && teaserSmall && teaserSmall.length > 0">
         <template v-if="showSmallInRow">
-          <div class="t-flex t-flex-wrap t--mb-8">
-            <teaser-small v-for="(teaser, index) in teaserSmall" :teaser="teaser" :index="index" :redirect-to-edit="redirectToEdit" :key="'small_' + teaser.storyId" class="t-mb-8" />
+          <div class="t--mb-8 t-flex t-flex-wrap">
+            <teaser-small
+              v-for="(teaser, index) in teaserSmall"
+              :key="'small_' + teaser.storyId"
+              :teaser="teaser"
+              :index="index"
+              :redirect-to-edit="redirectToEdit"
+              class="t-mb-8"
+            />
           </div>
         </template>
         <template v-else>
           <div class="t--mb-8">
-            <teaser-split v-for="(teaser, index) in teaserSmall" :teaser="teaser" :index="index" :redirect-to-edit="redirectToEdit" :key="'small_' + teaser.storyId" class="t-mb-8" />
+            <teaser-split
+              v-for="(teaser, index) in teaserSmall"
+              :key="'small_' + teaser.storyId"
+              :teaser="teaser"
+              :index="index"
+              :redirect-to-edit="redirectToEdit"
+              class="t-mb-8"
+            />
           </div>
         </template>
       </template>
@@ -31,6 +52,12 @@ import TeaserSmall from 'theme/components/core/blocks/Teaser/TeaserSmall'
 
 export default {
   name: 'Teaser',
+  components: {
+    TeaserSkeleton,
+    TeaserFullsize,
+    TeaserSplit,
+    TeaserSmall
+  },
   props: {
     tags: {
       type: String,
@@ -72,12 +99,6 @@ export default {
       loading: true
     }
   },
-  components: {
-    TeaserSkeleton,
-    TeaserFullsize,
-    TeaserSplit,
-    TeaserSmall
-  },
   computed: {
     ...mapGetters({
       teaserByType: 'icmaaTeaser/getTeaserByType',
@@ -104,12 +125,6 @@ export default {
       return this.customercluster || this.getUserSessionData('cluster')
     }
   },
-  methods: {
-    async fetchTeaser () {
-      const { tags, size, currentGender: gender, currentCluster: cluster } = this
-      await this.$store.dispatch('icmaaTeaser/list', { tags, size, cluster, gender })
-    }
-  },
   watch: {
     tags () {
       this.fetchTeaser()
@@ -126,6 +141,12 @@ export default {
       .then(() => {
         this.loading = false
       })
+  },
+  methods: {
+    async fetchTeaser () {
+      const { tags, size, currentGender: gender, currentCluster: cluster } = this
+      await this.$store.dispatch('icmaaTeaser/list', { tags, size, cluster, gender })
+    }
   }
 }
 </script>
