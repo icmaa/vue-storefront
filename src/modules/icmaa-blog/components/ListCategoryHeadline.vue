@@ -7,7 +7,7 @@
         <router-link
           v-for="c in category.children"
           :key="c.url"
-          :to="localizedRoute({ name: 'icmaa-blog-articles', params: { identifier: c.url } })"
+          :to="localizedRoute({ name: 'icmaa-blog', params: { identifier: c.url } })"
           class="t-px-3 t-text-base"
         >
           {{ c.name }}

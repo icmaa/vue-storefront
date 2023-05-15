@@ -9,7 +9,8 @@ export interface BlogRoute extends Route {
 }
 
 export interface BlogArticle extends AbstractStateItem {
-  title: string
+  title: string,
+  firstPublishedAt: string
 }
 
 export default interface BlogState {

@@ -30,7 +30,8 @@ export default {
   },
   computed: {
     ...mapGetters({
-      getArticle: 'icmaaBlog/getArticleBy',
+      getArticle: 'icmaaBlog/getArticleByQuery',
+      getArticles: 'icmaaBlog/getArticleByQuery',
       getResolvedUrlIds: 'icmaaBlog/getResolvedUrlIds',
       getCategoryBy: 'icmaaBlog/getCategoryBy'
     }),
@@ -38,15 +39,15 @@ export default {
       const { params } = this.$route
       return params.identifier
     },
-    article (): BlogArticle {
-      return this.getArticle(this.identifier)
+    article (): BlogArticle | null {
+      return this.getArticle({ identifier: this.identifier })
     },
     isArticle (): boolean {
       return !!this.article
     },
     articles (): BlogArticle[] {
       return this.getResolvedUrlIds(this.identifier)
-        .map(id => this.getArticle(id, 'id'))
+        .map(id => this.getArticles({ id }))
     },
     isCategory (): boolean {
       return !!this.category
@@ -68,11 +69,7 @@ export default {
       return Promise.all([
         this.$store.dispatch('icmaaBlog/fetchCategories'),
         this.$store.dispatch('icmaaBlog/resolveUrl', { route: this.$route })
-      ]).then(() => {
-        if (!this.isArticle && !this.isCategory) {
-          console.error('No article or category found for this route!')
-        }
-      })
+      ])
     }
   }
 }

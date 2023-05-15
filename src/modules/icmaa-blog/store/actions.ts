@@ -14,10 +14,14 @@ const mutationTypes: MutationTypesInterface = {
   rmv: types.ICMAA_BLOG_RMV
 }
 
+type ListOptions = { queryOptions: QueryOptions, size: number, start: number }
+
 const actions: ActionTree<BlogState, RootState> = {
-  list: async (context, { identifier, tags, size, category, resolveUrl }: QueryOptions) => {
-    const query = createQuery({ identifier, tags, category, size, resolveUrl })
-    return elasticListAbstract<BlogArticle, BlogState, RootState>({ entityType, mutationTypes, stateKey, context, query })
+  list: async (context, { queryOptions, size = 3, start = 0 }: ListOptions) => {
+    const query = createQuery(queryOptions)
+    return elasticListAbstract<BlogArticle, BlogState, RootState>(
+      { entityType, mutationTypes, stateKey, context, query, size, start }
+    )
   },
   fetchCategories: async ({ dispatch, rootGetters }) => {
     await dispatch('icmaaCmsBlock/single', { value: 'blog-categories' }, { root: true })
@@ -32,7 +36,7 @@ const actions: ActionTree<BlogState, RootState> = {
     }
 
     if (identifier) {
-      return dispatch('list', { resolveUrl: true, identifier, category: identifier })
+      return dispatch('list', { queryOptions: { resolveUrl: true, identifier, category: identifier } })
         .then((result) => {
           commit(types.ICMAA_BLOG_URL_ADD, { url: identifier, ids: result.items.map(({ id }) => id) })
         })

@@ -58,6 +58,7 @@ const AsyncTikTokPost = () => import(/* webpackChunkName: "vsf-content-block-tik
 const AsyncTwitter = () => import(/* webpackChunkName: "vsf-content-block-twitter" */ 'icmaa-cms/components/Storyblok/Twitter')
 const AsyncYouTube = () => import(/* webpackChunkName: "vsf-content-block-youtube" */ 'icmaa-cms/components/Storyblok/YouTube')
 const AsyncSpotify = () => import(/* webpackChunkName: "vsf-content-block-spotify" */ 'icmaa-cms/components/Storyblok/Spotify')
+const AsyncBlogList = () => import(/* webpackChunkName: "vsf-content-block-blog-list" */ 'icmaa-blog/components/ListWrapper')
 
 const rteComponentOptions = {
   component: AsyncText,
@@ -199,6 +200,18 @@ export default {
           component: AsyncSpotify,
           propsTypes: {},
           propsDefaults: {},
+          cssClass: 't-mb-4',
+          padding: true
+        },
+        'component_blog_list': {
+          component: AsyncBlogList,
+          propsTypes: {
+            size: 'number',
+            query: 'json'
+          },
+          propsDefaults: {
+            query: {}
+          },
           cssClass: 't-mb-4',
           padding: true
         }

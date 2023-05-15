@@ -12,7 +12,7 @@
         :key="article.identifier"
         tag="div"
         class="t-mb-8 t-w-full t-px-4 md:t-w-1/2 lg:t-w-1/3"
-        :to="{ name: 'icmaa-blog-articles', params: { identifier: article.identifier }}"
+        :to="{ name: 'icmaa-blog', params: { identifier: article.identifier }}"
       >
         <div class="t-mb-6">
           <Asset
@@ -42,7 +42,7 @@
           {{ article.preview }}
         </div>
         <router-link
-          :to="{ name: 'icmaa-blog-articles', params: { identifier: article.identifier }}"
+          :to="{ name: 'icmaa-blog', params: { identifier: article.identifier }}"
           :title="article.title"
           class="t-text-sm t-font-bold"
         >
@@ -75,12 +75,12 @@ export default {
       required: true
     },
     category: {
-      type: [Object, Boolean],
-      default: false
+      type: [Object, null],
+      default: null
     },
     headline: {
-      type: [String, Boolean],
-      default: false
+      type: [String, null],
+      default: null
     }
   }
 }
