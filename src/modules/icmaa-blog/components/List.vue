@@ -1,10 +1,9 @@
 <template>
   <div>
     <slot>
-      <h1
-        v-if="headline"
-        class="t-mb-8 t-pr-2 t-text-2xl t-font-light t-text-base-dark"
-        v-text="headline"
+      <CategoryHeadline
+        v-if="category || headline"
+        :category="category || { name: headline }"
       />
     </slot>
     <div class="t--mx-4 t-flex t-cursor-pointer t-flex-wrap t-items-start">
@@ -62,17 +61,25 @@
 
 <script lang="ts">
 import BlogMixin from 'icmaa-blog/mixins'
+import CategoryHeadline from 'icmaa-blog/components/ListCategoryHeadline.vue'
 
 export default {
   name: 'BlogList',
+  components: {
+    CategoryHeadline
+  },
   mixins: [ BlogMixin ],
   props: {
     articles: {
       type: Array,
       required: true
     },
+    category: {
+      type: [Object, Boolean],
+      default: false
+    },
     headline: {
-      type: String || Boolean,
+      type: [String, Boolean],
       default: false
     }
   }
