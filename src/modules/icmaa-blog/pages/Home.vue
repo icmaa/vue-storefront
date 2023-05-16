@@ -4,7 +4,7 @@
       <teaser
         v-if="i === 1"
         :key="'teaser-' + i"
-        tags="2"
+        tags="325"
         :show-split="false"
         class="t-mb-8 sm:t--mx-4"
       />

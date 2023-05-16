@@ -3,5 +3,6 @@ const HomeComponent = () => import(/* webpackChunkName: "vsf-blog-home" */ './pa
 
 export default [
   { name: 'icmaa-blog', path: '/mag/:identifier', component: ArticleComponent },
+  { name: 'icmaa-blog-tag', path: '/mag/t/:tag', component: ArticleComponent },
   { name: 'icmaa-blog-home', path: '/mag', component: HomeComponent }
 ]

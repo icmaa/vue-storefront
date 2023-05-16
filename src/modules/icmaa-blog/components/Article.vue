@@ -18,13 +18,22 @@
           {{ $t('by {author}', { author: article.author.firstname }) }}
         </div>
         <div class="t-grow">
-          <span
-            v-for="t in article.tags"
-            :key="t"
+          <router-link
+            v-for="identifier in article.categories"
+            :key="identifier"
+            :to="localizedRoute({ name: 'icmaa-blog', params: { identifier }})"
             class="t-mr-2 t-text-xs t-text-base-light"
           >
-            {{ t | tag }}
-          </span>
+            {{ identifier | tag }}
+          </router-link>
+          <router-link
+            v-for="tag in article.tags"
+            :key="tag"
+            :to="localizedRoute({ name: 'icmaa-blog-tag', params: { tag }})"
+            class="t-mr-2 t-text-xs t-text-base-light"
+          >
+            {{ tag | tag }}
+          </router-link>
         </div>
       </div>
       <web-share
@@ -44,6 +53,7 @@
       v-if="article.relatedArticles.length > 0"
       :articles="article.relatedArticles"
       :headline="$t('Related articles')"
+      class="t-mt-8"
     />
     <json-ld-loader type="article" />
   </div>

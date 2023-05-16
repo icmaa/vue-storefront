@@ -12,7 +12,7 @@ const mutations: MutationTree<TeaserState> = {
   }, 'uuid'),
   [types.ICMAA_BLOG_URL_ADD] (state, { url, ids }: { url: string, ids: string[] }) {
     if (Object.keys(state.urls).includes(url)) {
-      Vue.set(state.urls, url, [state.urls[url], ...ids])
+      Vue.set(state.urls, url, [...state.urls[url], ...ids].filter((v, i, a) => a.indexOf(v) === i))
       return
     }
 

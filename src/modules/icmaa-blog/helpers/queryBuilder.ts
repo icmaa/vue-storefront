@@ -30,7 +30,7 @@ export default ({ resolveUrl = false, identifier, tags, category, accounts, clus
   applyOptionalFilter(query, resolveUrl, 'categories', category)
 
   if (!resolveUrl) {
-    applyOptionalFilter(query, false, 'tag', tags)
+    applyOptionalFilter(query, false, 'tags', tags)
     applyOptionalFilter(query, false, 'accounts', accounts)
     applyOptionalFilter(query, false, 'cluster', cluster)
     applyOptionalFilter(query, false, 'clusterFashion', clusterFashion)

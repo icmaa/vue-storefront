@@ -29,7 +29,7 @@ const actions: ActionTree<BlogState, RootState> = {
   },
   resolveUrl: async ({ dispatch, commit, getters }, { route }: { route: BlogRoute }) => {
     const { params } = route
-    const { identifier } = params
+    const { identifier, tag } = params
 
     if (getters.isUrlResolved(identifier)) {
       return
@@ -39,6 +39,12 @@ const actions: ActionTree<BlogState, RootState> = {
       return dispatch('list', { queryOptions: { resolveUrl: true, identifier, category: identifier } })
         .then((result) => {
           commit(types.ICMAA_BLOG_URL_ADD, { url: identifier, ids: result.items.map(({ id }) => id) })
+        })
+    } else if (tag) {
+      return dispatch('list', { queryOptions: { tags: tag } })
+        .then((result) => {
+          console.error(result.items.map(({ id }) => id))
+          commit(types.ICMAA_BLOG_URL_ADD, { url: `tag-${tag}`, ids: result.items.map(({ id }) => id) })
         })
     }
 
