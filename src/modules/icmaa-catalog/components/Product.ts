@@ -70,10 +70,11 @@ export default {
       return price(this.product.price_incl_tax)
     },
     webshareText () {
-      return i18n.t(
-        'Checkout this out: {name} for {price}',
+      const title = i18n.t(
+        '{name} for {price}',
         { name: this.product.translatedName, price: this.formattedProductPrice }
       )
+      return i18n.t('Checkout this out: {title}', { title })
     },
     reviewRating () {
       if (!this.product.id) return 0

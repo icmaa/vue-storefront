@@ -1,5 +1,5 @@
 <template>
-  <div class="t-container t-my-8 t-px-4">
+  <div class="t-container t-my-4 t-px-4 md:t-my-8">
     <Article
       v-if="isArticle"
       :article="article"
