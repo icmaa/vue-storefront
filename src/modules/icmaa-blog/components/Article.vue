@@ -12,6 +12,7 @@
       :articles="article.relatedArticles"
       :headline="$t('Related articles')"
     />
+    <json-ld-loader type="article" />
   </div>
 </template>
 
@@ -19,12 +20,14 @@
 import BlogMixin from 'icmaa-blog/mixins'
 import BlockWrapper from 'icmaa-cms/components/Wrapper.vue'
 import List from 'icmaa-blog/components/List.vue'
+import JsonLdLoader from 'icmaa-google-tag-manager/components/jsonld/JsonLdLoader.vue'
 
 export default {
   name: 'BlogArticle',
   components: {
     BlockWrapper,
-    List
+    List,
+    JsonLdLoader
   },
   mixins: [ BlogMixin ],
   props: {
