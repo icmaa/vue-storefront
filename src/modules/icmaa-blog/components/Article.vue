@@ -36,7 +36,10 @@
     <h1 class="t-mb-4 t-flex t-flex-wrap t-items-baseline t-pr-2 t-text-2xl t-font-light t-text-base-dark">
       {{ article.title }}
     </h1>
-    <block-wrapper :components="article.content" />
+    <block-wrapper
+      :components="article.content"
+      class="block-article__content"
+    />
     <List
       v-if="article.relatedArticles.length > 0"
       :articles="article.relatedArticles"
@@ -82,3 +85,15 @@ export default {
   }
 }
 </script>
+
+<style lang="scss">
+
+.block-article__content {
+  p, ul, ol, blockquote {
+    &:not(:last-child) {
+      @apply t-mb-4;
+    }
+  }
+}
+
+</style>

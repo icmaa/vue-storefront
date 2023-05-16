@@ -1,5 +1,9 @@
 <template>
-  <div id="cms-landing-page" class="t-container t-p-4" v-if="page">
+  <div
+    v-if="page"
+    id="cms-landing-page"
+    class="t-container t-p-4"
+  >
     <block-wrapper :components="page.content" />
   </div>
 </template>
@@ -12,10 +16,10 @@ import CmsMetaMixin from 'icmaa-meta/mixins/cmsMeta'
 
 export default {
   name: 'LandingPage',
-  mixins: [ CmsMetaMixin ],
   components: {
     BlockWrapper
   },
+  mixins: [ CmsMetaMixin ],
   computed: {
     ...mapGetters({
       rawLandingPages: 'icmaaCmsLandingPages/getAll'

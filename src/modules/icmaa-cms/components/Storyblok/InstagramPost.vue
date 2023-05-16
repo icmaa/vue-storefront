@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="t-mx-auto t-max-w-lg">
     <blockquote
       class="instagram-media"
       :data-instgrm-captioned="showCaption"

@@ -1,5 +1,5 @@
 <template>
-  <div />
+  <div class="twitter t-mx-auto t-max-w-lg" />
 </template>
 
 <script lang="ts">
@@ -63,3 +63,11 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+
+div::v-deep .twitter-tweet,
+div::v-deep .twitter-timeline {
+  margin: 0 auto !important;
+}
+</style>

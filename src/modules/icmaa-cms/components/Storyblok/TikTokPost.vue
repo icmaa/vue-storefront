@@ -1,7 +1,7 @@
 <template>
-  <div>
+  <div class="t-mx-auto t-my-0 t-max-w-lg">
     <blockquote
-      class="tiktok-embed"
+      class="tiktok-embed !t-my-0"
       :cite="postUrl"
       :data-video-id="videoId"
     >
@@ -34,10 +34,3 @@ export default {
   }
 }
 </script>
-
-<style>
-.tiktok-embed {
-  max-width: 605px;
-  min-width: 325px;
-}
-</style>

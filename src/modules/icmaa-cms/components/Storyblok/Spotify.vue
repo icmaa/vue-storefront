@@ -9,6 +9,7 @@
       allowfullscreen=""
       allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
       loading="lazy"
+      class="t-mx-auto t-max-w-lg"
     />
   </div>
 </template>

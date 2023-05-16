@@ -49,8 +49,8 @@ const AsyncTeaser = () => import(/* webpackChunkName: "vsf-content-block-teaser"
 const AsyncHeadline = () => import(/* webpackChunkName: "vsf-content-block-headline" */ 'theme/components/core/blocks/Headline')
 const AsyncText = () => import(/* webpackChunkName: "vsf-content-block-text" */ 'theme/components/core/blocks/RichText')
 const AsyncPicture = () => import(/* webpackChunkName: "vsf-content-block-picture" */ 'theme/components/core/blocks/Picture')
-const AsyncProductlisting = () => import(/* webpackChunkName: "vsf-content-block-productlisting" */ '../../icmaa-category/components/ProductListingWidget')
-const AsyncProductlistingticketposter = () => import(/* webpackChunkName: "vsf-content-block-productlistingticketposter" */ '../../icmaa-category/components/ProductListingTicketWidget')
+const AsyncProductlisting = () => import(/* webpackChunkName: "vsf-content-block-productlisting" */ 'icmaa-category/components/ProductListingWidget')
+const AsyncProductlistingticketposter = () => import(/* webpackChunkName: "vsf-content-block-productlistingticketposter" */ 'icmaa-category/components/ProductListingTicketWidget')
 const AsyncCategorylist = () => import(/* webpackChunkName: "vsf-content-block-categorylist" */ 'icmaa-category/components/List/List')
 const AsyncLinkList = () => import(/* webpackChunkName: "vsf-content-block-linklist" */ 'theme/components/core/blocks/CategoryExtras/LinkList')
 const AsyncInstagramPost = () => import(/* webpackChunkName: "vsf-content-block-instagram-post" */ 'icmaa-cms/components/Storyblok/InstagramPost')
@@ -64,7 +64,7 @@ const rteComponentOptions = {
   component: AsyncText,
   propsTypes: {},
   propsDefaults: {
-    tagClasses: { h2: 't-any', img: 't-block t-mb-4 lg:t-float-right lg:t-ml-4 lg:t-mb-0' }
+    tagClasses: { img: 't-block t-mb-4 lg:t-float-right lg:t-ml-4 lg:t-mb-0' }
   },
   cssClass: 't-mb-4',
   padding: true

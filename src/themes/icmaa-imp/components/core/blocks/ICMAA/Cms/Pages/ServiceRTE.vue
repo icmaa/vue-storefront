@@ -1,5 +1,8 @@
 <template>
-  <layout id="cms-page-rte" :headline="content.headline">
+  <layout
+    id="cms-page-rte"
+    :headline="content.headline"
+  >
     <component :is="content" />
   </layout>
 </template>
@@ -10,10 +13,10 @@ import Layout from 'theme/components/core/blocks/ICMAA/Cms/Pages/Service/Layout'
 
 export default {
   name: 'ServiceRTE',
-  mixins: [ Page ],
   components: {
     Layout
   },
+  mixins: [ Page ],
   data () {
     return {
       dataType: 'markdown'

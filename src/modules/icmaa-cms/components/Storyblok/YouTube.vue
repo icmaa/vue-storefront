@@ -1,7 +1,7 @@
 <template>
   <div>
     <iframe
-      class="youtube-video"
+      class="youtube-video t-mx-auto t-max-w-lg"
       :src="src"
       title="YouTube video player"
       frameborder="0"

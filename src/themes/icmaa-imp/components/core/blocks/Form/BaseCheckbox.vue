@@ -1,30 +1,43 @@
 <template>
   <div>
-    <label :for="id" class="t-flex t-items-center t-cursor-pointer">
+    <label
+      :for="id"
+      class="t-flex t-cursor-pointer t-items-center"
+    >
       <input
+        :id="id"
         class="t-hidden"
         type="checkbox"
-        :id="id"
         :name="name"
         :checked="checked"
+        :disabled="disabled"
+        :value="inputValue"
         @keyup.enter="$emit('click')"
         @click="$emit('click')"
         @blur="$emit('blur')"
         @change="onChange"
-        :disabled="disabled"
-        :value="inputValue"
       >
       <div
-        class="t-flex t-flex-fix t-items-center t-justify-center t-h-6 t-w-6 t-my-2 t-mr-2 t-bg-white t-border t-rounded-sm t-appearance-none t-text-sm t-leading-tight"
+        class="t-my-2 t-mr-2 t-flex t-h-6 t-w-6 t-flex-fix t-appearance-none t-items-center t-justify-center t-rounded-sm t-border t-bg-white t-text-sm t-leading-tight"
         :class="[ checkboxClass, invalid ? 't-border-alert' : 't-border-base-light', { 't-opacity-75': disabled }, radio ? 't-rounded-full' : 't-rounded-sm' ]"
       >
-        <material-icon icon="check" size="sm" v-if="checked" />
+        <material-icon
+          v-if="checked"
+          icon="check"
+          size="sm"
+        />
       </div>
-      <div class="checkbox-label t-text-sm t-leading-tight" :class="{ 't-text-alert': invalid }">
+      <div
+        class="checkbox-label t-text-sm t-leading-tight"
+        :class="{ 't-text-alert': invalid }"
+      >
         <slot />
       </div>
     </label>
-    <ValidationMessages v-if="showValidationMessage" :validations="validations" />
+    <ValidationMessages
+      v-if="showValidationMessage"
+      :validations="validations"
+    />
   </div>
 </template>
 
@@ -120,7 +133,7 @@ export default {
 @import '~theme/css/base/global_vars';
 
 .checkbox-label {
-  >>> a:not([class*='t-']) {
+  &::v-deep a:not([class*='t-']) {
     color: $color-primary;
     text-decoration: underline;
   }

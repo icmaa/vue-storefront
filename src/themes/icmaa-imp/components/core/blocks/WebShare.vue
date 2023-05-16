@@ -6,7 +6,7 @@
       :href="shareUrl"
       target="_blank"
       rel="noopener noreferrer"
-      title="key | capitalize"
+      :title="key | capitalize"
       class="t-text-base-light"
       :class="{ 't-mr-4': key !== lastKey }"
     >
