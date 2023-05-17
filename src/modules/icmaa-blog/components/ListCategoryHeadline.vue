@@ -32,7 +32,7 @@
 </template>
 
 <script lang="ts">
-import Headline from 'icmaa-cms/components/Headline'
+import Headline from 'theme/components/core/blocks/Headline.vue'
 
 export default {
   name: 'ListCategoryHeadline',

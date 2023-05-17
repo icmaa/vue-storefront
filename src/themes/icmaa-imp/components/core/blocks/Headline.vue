@@ -1,16 +1,17 @@
-<template>
-  <h1 class="t-px-4 t-text-2xl t-font-medium t-leading-5" v-text="headline" />
-</template>
-
-<script>
-
+<script lang="ts">
 export default {
   name: 'Headline',
   props: {
-    headline: {
-      type: String,
+    level: {
+      type: Number,
       required: true
     }
+  },
+  render: function (createElement) {
+    return createElement(
+      'h' + this.level,
+      this.$slots.default
+    )
   }
 }
 </script>
