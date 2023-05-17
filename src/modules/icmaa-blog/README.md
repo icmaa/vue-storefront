@@ -4,7 +4,13 @@
 
 ## Configs
 
-...
+```
+{
+  "icmaa_blog": {
+    "ignoreStores": []
+  }
+}
+```
 
 ## Todo
 
