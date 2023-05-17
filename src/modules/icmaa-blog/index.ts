@@ -12,8 +12,8 @@ export const IcmaaBlogModule: StorefrontModule = function ({ store, appConfig, r
   store.registerModule(stateKey, BlogStore)
 
   const { storeCode } = currentStoreView()
-  const ignoredStores: string[] = appConfig?.icmaa_blog?.ignoreStores || []
-  if (!ignoredStores.includes(storeCode)) {
+  const allowedStores: string[] = appConfig?.icmaa_blog?.allowedStores || []
+  if (allowedStores.includes(storeCode)) {
     setupMultistoreRoutes(appConfig, router, moduleRoutes, 10)
   }
 }

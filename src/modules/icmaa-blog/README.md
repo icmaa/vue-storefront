@@ -7,7 +7,7 @@
 ```
 {
   "icmaa_blog": {
-    "ignoreStores": []
+    "allowedStores": []
   }
 }
 ```

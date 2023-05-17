@@ -3,37 +3,37 @@
     id="home"
     class="t-container"
   >
-    <teaser
+    <Teaser
       tags="2"
       :show-split="false"
       class="t-pb-8 sm:t-pt-4"
     />
-    <teaser
+    <Teaser
       tags="21"
       :show-large="false"
       :show-small-in-row="true"
       class="t-pb-8"
     />
-    <link-list
+    <LinkList
       :title="topCategories.title"
       :items="topCategories.items"
       class="t-pb-4"
     />
-    <teaser
+    <Teaser
       tags="2"
       :show-large="false"
       :limit="3"
       class="t-pb-8"
     />
-    <teaser
+    <Teaser
       tags="20"
       :show-large="false"
       :show-small-in-row="true"
       class="t-pb-8"
     />
-    <lazyload data-test-id="LogoLineBlockLoader">
+    <Lazyload data-test-id="LogoLineBlockLoader">
       <div class="t--mx-4 t-flex t-flex-wrap t-px-4 t-pb-4">
-        <logo-line
+        <LogoLine
           v-for="({ path, title, logos }, i) in logolines"
           :key="path"
           :path="path"
@@ -42,14 +42,20 @@
           :class="{ 't-mb-4 lg:t-mb-0': i < logolines.length - 1 }"
         />
       </div>
-    </lazyload>
-    <lazyload data-test-id="ProductListingWidgetLoader">
-      <product-listing-widget :category-id="3278" />
-    </lazyload>
-    <lazyload data-test-id="ProductListingWidgetLoader">
-      <product-listing-widget :category-id="4251" />
-    </lazyload>
-    <cms-block
+    </Lazyload>
+    <Lazyload data-test-id="ProductListingWidgetLoader">
+      <ProductListingWidget :category-id="3278" />
+    </Lazyload>
+    <Lazyload data-test-id="ProductListingWidgetLoader">
+      <ProductListingWidget :category-id="4251" />
+    </Lazyload>
+    <Lazyload data-test-id="BlogWidgetLoader">
+      <BlogList
+        :query="{}"
+        class="t-px-4"
+      />
+    </Lazyload>
+    <CmsBlock
       identifier="home-seo"
       class="t-mb-8 t-px-4 t-text-sm"
     />
@@ -65,6 +71,7 @@ import LinkList from 'theme/components/core/blocks/CategoryExtras/LinkList'
 import LogoLine from 'theme/components/core/blocks/CategoryExtras/LogoLineBlock'
 import ProductListingWidget from 'icmaa-category/components/ProductListingWidget'
 import CmsBlock from 'icmaa-cms/components/Block'
+import BlogList from 'icmaa-blog/components/ListWrapper'
 
 import { IcmaaGoogleTagManagerExecutors } from 'icmaa-google-tag-manager/hooks'
 
@@ -75,7 +82,8 @@ export default {
     LinkList,
     LogoLine,
     ProductListingWidget,
-    CmsBlock
+    CmsBlock,
+    BlogList
   },
   computed: {
     ...mapGetters({

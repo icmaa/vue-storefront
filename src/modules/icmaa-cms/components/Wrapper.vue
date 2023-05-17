@@ -4,7 +4,7 @@
       v-for="(c, i) in aggregatedComponents"
       :key="`${c.name}-${i}`"
       class="t-flex-auto"
-      :class="[{ 't-px-4': c.padding, 't-w-full': (c.size === 'full'), 'lg:t-w-1/2': (c.size === 'half') }, c.cssClass]"
+      :class="[{ 't-px-4': c.padding, 't-w-full': (c.size === 'full'), 'lg:t-w-1/2': (c.size === 'half') }, c.cssClass, c.type]"
     >
       <router-link
         v-if="c.hasLink"

@@ -10,7 +10,7 @@ export default {
       return toDate(d, undefined, undefined)
     },
     tag (tag) {
-      return `#${tag}`
+      return `#${tag}`.toLowerCase()
     }
   }
 }

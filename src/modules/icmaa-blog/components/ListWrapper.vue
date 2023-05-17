@@ -8,6 +8,7 @@
 </template>
 
 <script lang="ts">
+import i18n from '@vue-storefront/i18n'
 import { mapGetters } from 'vuex'
 import { BlogCategory } from 'icmaa-blog/types/BlogState'
 
@@ -30,17 +31,33 @@ export default {
     headline: {
       type: [String, null],
       default: null
+    },
+    headlineLevel: {
+      type: Number,
+      default: 2
     }
   },
   computed: {
     ...mapGetters({
+      getCategories: 'icmaaBlog/getCategories',
       getCategoryBy: 'icmaaBlog/getCategoryBy',
       getArticlesByQuery: 'icmaaBlog/getArticlesByQuery'
     }),
+    isRoot (): boolean {
+      return Object.keys(this.query).length === 0
+    },
     isCategory (): boolean {
-      return this.query?.categories && !!this.category
+      return (this.query?.categories || this.isRoot) && !!this.category
     },
     category (): BlogCategory {
+      if (this.isRoot) {
+        return {
+          name: i18n.t('Blog') as string,
+          url: 'root',
+          children: this.getCategories
+        }
+      }
+
       return this.getCategoryBy(this.query?.categories)
     },
     articles (): any {

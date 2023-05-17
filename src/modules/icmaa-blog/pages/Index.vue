@@ -1,8 +1,9 @@
 <template>
-  <div class="t-container t-my-4 t-px-4 md:t-my-8">
+  <div class="t-container t-mt-4 t-px-4 md:t-mt-8">
     <Article
       v-if="isArticle"
       :article="article"
+      class="t-mb-4"
     />
     <List
       v-else-if="isTag"

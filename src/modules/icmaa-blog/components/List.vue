@@ -4,6 +4,7 @@
       <CategoryHeadline
         v-if="category || headline"
         :category="category || { name: headline }"
+        :level="headlineLevel"
       />
     </slot>
     <div class="t--mx-4 t-flex t-cursor-pointer t-flex-wrap t-items-start">
@@ -81,6 +82,10 @@ export default {
     headline: {
       type: [String, null],
       default: null
+    },
+    headlineLevel: {
+      type: Number,
+      default: 2
     }
   }
 }
