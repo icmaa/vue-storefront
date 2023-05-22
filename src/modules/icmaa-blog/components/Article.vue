@@ -4,10 +4,10 @@
       <Asset
         :asset="article.image"
         :sizes="[
-          { media: '(min-width: 1024px)', width: 1248 },
-          { media: '(min-width: 768px)', width: 992 },
-          { media: '(min-width: 425px)', width: 736 },
-          { media: '(max-width: 424px)', width: 394 }
+          { media: 'lg', width: 1248 },
+          { media: 'md', width: 992 },
+          { media: 'xs', width: 736 },
+          { width: 394 }
         ]"
       />
     </div>

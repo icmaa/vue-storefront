@@ -19,9 +19,9 @@
           <Asset
             :asset="article.image"
             :sizes="[
-              { media: '(min-width: 620px)', width: 394 },
-              { media: '(min-width: 425px)', width: 352 },
-              { media: '(max-width: 424px)', width: 394 }
+              { media: 'sm', width: 394 },
+              { media: 'xs', width: 352 },
+              { width: 394 }
             ]"
             :width="394"
           />
