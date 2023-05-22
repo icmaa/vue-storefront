@@ -2,14 +2,13 @@
   <div>
     <div class="t-mb-4 md:t-mb-6">
       <Asset
-        :image="article.image"
+        :asset="article.image"
         :sizes="[
           { media: '(min-width: 1024px)', width: 1248 },
           { media: '(min-width: 768px)', width: 992 },
           { media: '(min-width: 425px)', width: 736 },
           { media: '(max-width: 424px)', width: 394 }
         ]"
-        :width="394"
       />
     </div>
     <div class="t-mb-8 t-flex t-max-w-3xl t-flex-wrap t-items-start t-justify-between lg:t-mx-auto">

@@ -59,6 +59,7 @@ const AsyncTwitter = () => import(/* webpackChunkName: "vsf-content-block-twitte
 const AsyncYouTube = () => import(/* webpackChunkName: "vsf-content-block-youtube" */ 'icmaa-cms/components/Storyblok/YouTube')
 const AsyncSpotify = () => import(/* webpackChunkName: "vsf-content-block-spotify" */ 'icmaa-cms/components/Storyblok/Spotify')
 const AsyncBlogList = () => import(/* webpackChunkName: "vsf-content-block-blog-list" */ 'icmaa-blog/components/ListWrapper')
+const AsyncStoryblokAsset = () => import(/* webpackChunkName: "vsf-content-block-storyblog-asset" */ 'icmaa-cms/components/Storyblok/Asset')
 
 const rteComponentOptions = {
   component: AsyncText,
@@ -214,6 +215,18 @@ export default {
           },
           cssClass: 't-mb-4',
           padding: true
+        },
+        'component_asset': {
+          component: AsyncStoryblokAsset,
+          propsTypes: {
+            asset: 'json',
+            sizes: 'json',
+            width: 'number',
+            height: 'number'
+          },
+          propsDefaults: {},
+          cssClass: 't-mb-4',
+          padding: true
         }
       }
     },
@@ -224,8 +237,8 @@ export default {
           const componentsMap = this.componentsMap[c.component]
           const { component, propsTypes, propsDefaults, cssClass, padding } = componentsMap
 
-          const size = c.hasOwnProperty('width') ? c.width : 'full'
-          const lazyload = c.hasOwnProperty('lazyload') ? c.lazyload : false
+          const size = (typeof c?.width === 'string' && c?.width) || 'full'
+          const lazyload = c?.lazyload || false
 
           let props = mapKeys(
             omit(c, ['_uid', 'component', 'width', 'lazyload']),

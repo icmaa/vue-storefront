@@ -17,7 +17,7 @@
       >
         <div class="t-mb-6">
           <Asset
-            :image="article.image"
+            :asset="article.image"
             :sizes="[
               { media: '(min-width: 620px)', width: 394 },
               { media: '(min-width: 425px)', width: 352 },

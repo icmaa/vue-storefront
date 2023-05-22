@@ -3,8 +3,8 @@
     :is="AsyncPicture"
     v-if="fieldType === 'asset'"
     :path-type="pathType"
-    :src="image.filename"
-    :alt="image.alt"
+    :src="asset.filename"
+    :alt="asset.alt"
     :width="imgWidth"
     :height="imgHeight"
     :sizes="sizes"
@@ -20,7 +20,7 @@ const AsyncPicture = () => import(/* webpackChunkName: "vsf-content-block-pictur
 export default {
   name: 'StoryblockAsset',
   props: {
-    image: {
+    asset: {
       type: Object,
       required: true
     },
@@ -51,7 +51,7 @@ export default {
     size () {
       if (this.pathType === 'storyblok') {
         const regex = /\/(?<width>\d+)x(?<height>\d+)\//m
-        const match = this.image.filename.match(regex)
+        const match = this.asset.filename.match(regex)
         if (match && match.groups) {
           const { width, height } = match.groups
           return { width: parseInt(width), height: parseInt(height) }
@@ -80,10 +80,10 @@ export default {
       return this.height || this.propSize?.height || 0
     },
     fieldType () {
-      return this.image.fieldtype
+      return this.asset.fieldtype
     },
     pathType () {
-      return this.image.is_external_url ? 'external' : 'storyblok'
+      return this.asset.is_external_url ? 'external' : 'storyblok'
     },
     ratio () {
       if (!this.size) return undefined
@@ -98,18 +98,6 @@ export default {
       }
       return `${width}:${height}`
     }
-  },
-  methods: {
-    calculateRatio (num_1, num_2): string {
-      for (let num = num_2; num > 1; num--) {
-        if ((num_1 % num) === 0 && (num_2 % num) === 0) {
-          num_1 = num_1 / num
-          num_2 = num_2 / num
-        }
-      }
-      return num_1 + ':' + num_2
-    }
-
   }
 }
 </script>
