@@ -1,6 +1,10 @@
 <template>
-  <div class="product-gallery t-overflow-hidden t-relative">
-    <img src="/assets/product-placeholder.svg" class="t-block t-w-full lg:t-w-2/3" v-if="!isOnline">
+  <div class="product-gallery t-relative t-overflow-hidden">
+    <img
+      v-if="!isOnline"
+      src="/assets/product-placeholder.svg"
+      class="t-block t-w-full lg:t-w-2/3"
+    >
     <template v-else>
       <div
         ref="zoom"
@@ -42,29 +46,32 @@
       </div>
       <template v-if="!zoom && imagesCount > 1">
         <div
-          class="t-hidden lg:t-flex t-absolute t-top-1/2 t-right-0 t-z-1 t--mt-6 t-items-center t-justify-center t-w-12 t-h-12 t-bg-black t-text-white t-rounded-full t-border t-border-white t-cursor-pointer t-mx-4"
           v-show="index < imagesCount"
+          class="t-absolute t-top-1/2 t-right-0 t-z-1 t-mx-4 t--mt-6 t-hidden t-h-12 t-w-12 t-cursor-pointer t-items-center t-justify-center t-rounded-full t-border t-border-white t-bg-black t-text-white lg:t-flex"
           @click="step(+1)"
         >
           <i class="material-icons t-text-2xl">keyboard_arrow_right</i>
         </div>
         <div
-          class="t-hidden lg:t-flex t-absolute t-top-1/2 t-left-0 t-z-1 t--mt-6 t-items-center t-justify-center t-w-12 t-h-12 t-bg-black t-text-white t-rounded-full t-border t-border-white t-cursor-pointer t-mx-4"
           v-show="index > 1"
+          class="t-absolute t-top-1/2 t-left-0 t-z-1 t-mx-4 t--mt-6 t-hidden t-h-12 t-w-12 t-cursor-pointer t-items-center t-justify-center t-rounded-full t-border t-border-white t-bg-black t-text-white lg:t-flex"
           @click="step(-1)"
         >
           <i class="material-icons t-text-2xl">keyboard_arrow_left</i>
         </div>
       </template>
       <div
-        class="lg:t-hidden t-absolute t-bottom-0 t-right-0 t-z-1 t-p-2 t-bg-white t-rounded-full t-flex t-mb-2 t-mr-2 t-cursor-pointer"
+        class="t-absolute t-bottom-0 t-right-0 t-z-1 t-mb-2 t-mr-2 t-flex t-cursor-pointer t-rounded-full t-bg-white t-p-2 lg:t-hidden"
         @click="initTouchZoom"
       >
-        <i class="material-icons t-text-4xl t-text-base-lighter" v-text="zoom ? 'zoom_out' : 'zoom_in'" />
+        <i
+          class="material-icons t-text-4xl t-text-base-lighter"
+          v-text="zoom ? 'zoom_out' : 'zoom_in'"
+        />
       </div>
       <div
-        class="lg:t-hidden t-absolute t-left-0 t-bottom-0 t-z-1 t-ml-4 t-mb-4 t-px-2 t-py-1 t-bg-white t-text-base-light t-text-sm"
         v-if="imagesCount > 1 && !zoom"
+        class="t-absolute t-left-0 t-bottom-0 t-z-1 t-ml-4 t-mb-4 t-bg-white t-px-2 t-py-1 t-text-sm t-text-base-light lg:t-hidden"
       >
         {{ index }} / {{ imagesCount }}
       </div>

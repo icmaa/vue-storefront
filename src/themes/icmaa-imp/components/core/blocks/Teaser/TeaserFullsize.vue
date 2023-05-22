@@ -1,14 +1,44 @@
 <template>
-  <div data-test-id="TeaserFullsize" class="teaser-fullsize t-mx-0 sm:t-mx-4 t-cursor-pointer t-webkit-tap-transparent" @click="redirect" @mouseover="onHover" @mouseleave="onHover">
+  <div
+    data-test-id="TeaserFullsize"
+    class="teaser-fullsize t-mx-0 t-cursor-pointer t-webkit-tap-transparent sm:t-mx-4"
+    @click="redirect"
+    @mouseover="onHover"
+    @mouseleave="onHover"
+  >
     <div class="t-relative">
-      <picture-component :alt="teaser.text1 | htmlDecode" :src="imageUrl" :width="size.width" :height="size.height" :placeholder="true" :sizes="sizes" :ratio="ratio" class="t-w-full" />
-      <h2 class="t-absolute t-bottom-0 t-inset-x-0 t-mb-6 t-text-sm t-text-small t-uppercase">
-        <router-link :to="link" @click.native="setGender" :title="teaser.text1 | htmlDecode" class="t-flex t-justify-center t-items-center" :class="{ 't-text-white': !textColor }" :style="{ color: textColor }">
+      <picture-component
+        :alt="teaser.text1 | htmlDecode"
+        :src="imageUrl"
+        :width="size.width"
+        :height="size.height"
+        :placeholder="true"
+        :sizes="sizes"
+        :ratio="ratio"
+        class="t-w-full"
+      />
+      <h2 class="t-text-small t-absolute t-inset-x-0 t-bottom-0 t-mb-6 t-text-sm t-uppercase">
+        <router-link
+          :to="link"
+          :title="teaser.text1 | htmlDecode"
+          class="t-flex t-items-center t-justify-center"
+          :class="{ 't-text-white': !textColor }"
+          :style="{ color: textColor }"
+          @click.native="setGender"
+        >
           {{ teaser.text1 }}
-          <material-icon icon="arrow_forward" size="sm" class="t-ml-2" />
+          <material-icon
+            icon="arrow_forward"
+            size="sm"
+            class="t-ml-2"
+          />
         </router-link>
       </h2>
-      <edit-button :edit-url="editUrl" class="t-left-0 t--ml-2 t--mt-2" :class="{ 't-hidden': !hover }" />
+      <edit-button
+        :edit-url="editUrl"
+        class="t-left-0 t--ml-2 t--mt-2"
+        :class="{ 't-hidden': !hover }"
+      />
     </div>
   </div>
 </template>
@@ -22,12 +52,12 @@ import EditButton from 'theme/components/core/blocks/Teaser/EditButton'
 
 export default {
   name: 'TeaserFullsize',
-  mixins: [ TeaserMixin ],
   components: {
     MaterialIcon,
     PictureComponent,
     EditButton
   },
+  mixins: [ TeaserMixin ],
   computed: {
     ...mapGetters({
       viewport: 'ui/getViewport'
@@ -38,11 +68,11 @@ export default {
     sizes () {
       return [
         // Order high-to-low is important
-        { media: '(min-width: 1280px)', width: 1248, src: this.teaser.imageUrlDesktop },
-        { media: '(min-width: 1024px)', width: 992, src: this.teaser.imageUrlDesktop },
-        { media: '(min-width: 640px)', width: 768, src: this.teaser.imageUrlDesktop },
-        { media: '(min-width: 415px)', width: 640 },
-        { media: '(max-width: 415px)', width: 415 }
+        { media: 'xl', width: 1248, src: this.teaser.imageUrlDesktop },
+        { media: 'lg', width: 992, src: this.teaser.imageUrlDesktop },
+        { media: 'md', width: 768, src: this.teaser.imageUrlDesktop },
+        { media: 'xs', width: 640 },
+        { width: 415 }
       ]
     },
     imageUrl () {

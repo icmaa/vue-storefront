@@ -1,10 +1,17 @@
 <template>
-  <div class="t-container" :class="identifier">
+  <div
+    class="t-container"
+    :class="identifier"
+  >
     <div class="lg:t-p-4">
       <div class="wrapper t-p-4">
-        <div class="t-grid t-grid-cols-2 sm:t-grid-cols-4 t-gap-4">
+        <div class="t-grid t-grid-cols-2 t-gap-4 sm:t-grid-cols-4">
           <template v-for="(day, i) in daysOrdered">
-            <div v-if="day === 'title'" :key="'title-' + i" class="t-col-span-2 sm:t-order-none t-flex t-items-center t-justify-center">
+            <div
+              v-if="day === 'title'"
+              :key="'title-' + i"
+              class="t-col-span-2 t-flex t-items-center t-justify-center sm:t-order-none"
+            >
               <picture-component
                 class="t-w-full"
                 :src="`${imgPath}/${title.imagePath}`"
@@ -16,8 +23,16 @@
                 ratio="2:1"
               />
             </div>
-            <div v-else-if="day === 'ad'" :key="'ad-' + i" class="t-col-span-2 t-row-span-2 t-flex t-items-center t-justify-center">
-              <router-link :to="localizedRoute(ad.link)" :title="ad.title" class="t-w-full">
+            <div
+              v-else-if="day === 'ad'"
+              :key="'ad-' + i"
+              class="t-col-span-2 t-row-span-2 t-flex t-items-center t-justify-center"
+            >
+              <router-link
+                :to="localizedRoute(ad.link)"
+                :title="ad.title"
+                class="t-w-full"
+              >
                 <picture-component
                   class="t-w-full"
                   :src="ad.imagePath"
@@ -42,7 +57,11 @@
               }"
               class="t-flex t-items-center t-justify-center"
             >
-              <router-link :to="localizedRoute(day.link)" class="t-w-full" v-if="day.status === 'open'">
+              <router-link
+                v-if="day.status === 'open'"
+                :to="localizedRoute(day.link)"
+                class="t-w-full"
+              >
                 <picture-component
                   class="t-w-full"
                   :src="`${imgPath}/opened/${day.imagePath}`"
@@ -82,11 +101,18 @@
             </div>
           </template>
         </div>
-        <div class="t-mt-4 t-grid t-grid-cols-3 sm:t-grid-cols-9 t-gap-4" v-if="sponsoreLogos && sponsoreLogos.length > 0">
-          <div class="t-col-span-2 sm:t-col-span-9 t-flex t-font-bold t-italic t-items-center t-text-white sm:t-pt-4 sm:t-pl-4">
+        <div
+          v-if="sponsoreLogos && sponsoreLogos.length > 0"
+          class="t-mt-4 t-grid t-grid-cols-3 t-gap-4 sm:t-grid-cols-9"
+        >
+          <div class="t-col-span-2 t-flex t-items-center t-font-bold t-italic t-text-white sm:t-col-span-9 sm:t-pt-4 sm:t-pl-4">
             Sponsored by
           </div>
-          <div v-for="(logo, i) in sponsoreLogos" :key="`logo-${i}`" class="t-flex t-items-center t-justify-center">
+          <div
+            v-for="(logo, i) in sponsoreLogos"
+            :key="`logo-${i}`"
+            class="t-flex t-items-center t-justify-center"
+          >
             <picture-component
               :img-full-size="false"
               :src="`${imgPath}/logos/${logo.imagePath}`"
@@ -114,10 +140,10 @@ import { toDayjsDate, getCurrentStoreviewDayjsDatetime } from 'icmaa-config/help
 
 export default {
   name: 'Calendar',
-  mixins: [ Page ],
   components: {
     PictureComponent
   },
+  mixins: [ Page ],
   data () {
     return {
       dataType: 'yaml'
