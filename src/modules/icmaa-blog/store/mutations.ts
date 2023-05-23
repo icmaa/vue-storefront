@@ -29,7 +29,7 @@ const mutations: MutationTree<TeaserState> = {
       collectIds = collectIds.filter((v, i, a) => a.indexOf(v) === i)
 
       Vue.set(state.urls, url, {
-        start: next || current.ids.length < (current.start + current.perPage) ? start : current.start,
+        start: start < current.start ? start : current.start,
         perPage,
         total,
         ids: collectIds

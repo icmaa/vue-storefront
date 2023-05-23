@@ -105,13 +105,13 @@ export default {
   computed: {
     showPrevPagination (): boolean {
       if (!this.pagination) return false
-      const { perPage, total, start, ids } = this.pagination
-      return total > perPage && ids.length < (start + perPage)
+      const { start } = this.pagination
+      return start > 0
     },
     showNextPagination (): boolean {
       if (!this.pagination) return false
-      const { perPage, total, start } = this.pagination
-      return total > perPage && (start + perPage) < total
+      const { perPage, total, start, ids } = this.pagination
+      return total > perPage && (start + ids.length) < total
     }
   }
 }
