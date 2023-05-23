@@ -7,8 +7,15 @@
         :level="headlineLevel"
       />
     </slot>
-    <div v-if="showPrevPagination">
-      <a @click.prevent="$emit('load-prev')">
+    <div
+      v-if="showPrevPagination"
+      class="t-mb-4 t-flex t-items-center t-justify-center"
+    >
+      <a
+        href="#"
+        class="t-flex t-min-h-10 t-w-2/3 t-items-center t-justify-center t-rounded-sm t-border t-border-base-darkest t-bg-transparent t-px-4 t-text-xs t-uppercase t-text-base-darkest t-webkit-tap-transparent lg:t-w-1/4"
+        @click.prevent="$emit('load-prev')"
+      >
         {{ $t('Load previous') }}
       </a>
     </div>
@@ -56,8 +63,15 @@
         </router-link>
       </router-link>
     </div>
-    <div v-if="showNextPagination">
-      <a @click.prevent="$emit('load-next')">
+    <div
+      v-if="showNextPagination"
+      class="t-mb-8 t-flex t-items-center t-justify-center"
+    >
+      <a
+        href="#"
+        class="t-flex t-min-h-10 t-w-2/3 t-items-center t-justify-center t-rounded-sm t-border t-border-base-darkest t-bg-transparent t-px-4 t-text-xs t-uppercase t-text-base-darkest t-webkit-tap-transparent lg:t-w-1/4"
+        @click.prevent="$emit('load-next')"
+      >
         {{ $t('Load more') }}
       </a>
     </div>
