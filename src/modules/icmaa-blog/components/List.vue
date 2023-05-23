@@ -7,6 +7,11 @@
         :level="headlineLevel"
       />
     </slot>
+    <div v-if="showPrevPagination">
+      <a @click.prevent="$emit('load-prev')">
+        {{ $t('Load previous') }}
+      </a>
+    </div>
     <div class="t--mx-4 t-flex t-cursor-pointer t-flex-wrap t-items-start">
       <router-link
         v-for="article in articles"
@@ -51,8 +56,10 @@
         </router-link>
       </router-link>
     </div>
-    <div v-if="pagination">
-      LOAD MORE [WIP]
+    <div v-if="showNextPagination">
+      <a @click.prevent="$emit('load-next')">
+        {{ $t('Load more') }}
+      </a>
     </div>
     <div
       v-if="articles.length === 0"
@@ -91,8 +98,20 @@ export default {
       default: 2
     },
     pagination: {
-      type: Boolean,
+      type: [Boolean, Object],
       default: false
+    }
+  },
+  computed: {
+    showPrevPagination (): boolean {
+      if (!this.pagination) return false
+      const { perPage, total, start, ids } = this.pagination
+      return total > perPage && ids.length < (start + perPage)
+    },
+    showNextPagination (): boolean {
+      if (!this.pagination) return false
+      const { perPage, total, start } = this.pagination
+      return total > perPage && (start + perPage) < total
     }
   }
 }

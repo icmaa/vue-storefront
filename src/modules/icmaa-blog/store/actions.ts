@@ -27,16 +27,17 @@ const actions: ActionTree<BlogState, RootState> = {
     await dispatch('icmaaCmsBlock/single', { value: 'blog-categories' }, { root: true })
     return rootGetters['icmaaCmsBlock/getJsonBlockByIdentifier']('blog-categories')
   },
-  resolveUrl: async ({ dispatch, commit, getters }, { route }: { route: BlogRoute }) => {
-    const { params } = route
-    const { identifier, tag, p } = params
+  resolveUrl: async ({ dispatch, commit, getters }, { route, size = 6 }: { route: BlogRoute, size?: number }) => {
+    const { params, query } = route
+    const { identifier, tag } = params
+    const { p } = query
 
-    if (getters.isUrlResolved(identifier)) {
-      return
-    }
+    const start = (parseInt(p as string) || 1) * size - size
 
     if (identifier) {
-      return dispatch('list', { queryOptions: { resolveUrl: true, identifier, categories: identifier }, size: 9 })
+      if (getters.isUrlResolved(identifier, start)) return
+
+      return dispatch('list', { queryOptions: { resolveUrl: true, identifier, categories: identifier }, size, start })
         .then((result) => {
           const { start, perPage, total } = result
           commit(
@@ -45,12 +46,15 @@ const actions: ActionTree<BlogState, RootState> = {
           )
         })
     } else if (tag) {
-      return dispatch('list', { queryOptions: { tags: tag }, size: 9 })
+      const url = `tag-${tag}`
+      if (getters.isUrlResolved(url, start)) return
+
+      return dispatch('list', { queryOptions: { tags: tag }, size, start })
         .then((result) => {
           const { start, perPage, total } = result
           commit(
             types.ICMAA_BLOG_URL_ADD,
-            { url: `tag-${tag}`, ids: result.items.map(({ id }) => id), start, perPage, total }
+            { url, ids: result.items.map(({ id }) => id), start, perPage, total }
           )
         })
     }

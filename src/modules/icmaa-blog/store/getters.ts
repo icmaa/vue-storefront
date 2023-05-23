@@ -1,11 +1,20 @@
 import { GetterTree } from 'vuex'
-import BlogState, { BlogCategory, BlogArticle } from '../types/BlogState'
+import BlogState, { BlogCategory, BlogArticle, BlogUrlEntry } from '../types/BlogState'
 import RootState from '@vue-storefront/core/types/RootState'
 import pick from 'lodash-es/pick'
 import { toDayjsDate } from 'icmaa-config/helpers/datetime'
 
 const getters: GetterTree<BlogState, RootState> = {
-  isUrlResolved: (state) => (key: string) => Object.keys(state.urls).includes(key),
+  isUrlResolved: (state) => (key: string, start: number) => {
+    if (!state.urls[key]) return false
+    const current: BlogUrlEntry = state.urls[key]
+    if (start === current.start) return true
+    if (start > current.start) {
+      return false
+    } else {
+      return current.ids.length < (current.start + current.perPage)
+    }
+  },
   getResolvedUrl: (state) => (key: string) => state.urls[key],
   getResolvedUrlIds: (state, getters) => (key: string) => getters.getResolvedUrl(key)?.ids || [],
   getArticles: (state) => state.items,

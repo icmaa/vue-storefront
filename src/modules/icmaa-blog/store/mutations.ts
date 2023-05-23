@@ -20,11 +20,19 @@ const mutations: MutationTree<TeaserState> = {
   }, 'uuid'),
   [types.ICMAA_BLOG_URL_ADD] (state, { url, ids, start, perPage, total }: AddBlogPayload) {
     if (Object.keys(state.urls).includes(url)) {
+      const current = state.urls[url]
+      const next = start > current.start
+      const action = next ? 'push' : 'unshift'
+
+      let collectIds = [...current.ids]
+      collectIds[action](...ids)
+      collectIds = collectIds.filter((v, i, a) => a.indexOf(v) === i)
+
       Vue.set(state.urls, url, {
-        start,
+        start: next || current.ids.length < (current.start + current.perPage) ? start : current.start,
         perPage,
         total,
-        ids: [...state.urls[url].ids, ...ids].filter((v, i, a) => a.indexOf(v) === i)
+        ids: collectIds
       })
       return
     }
