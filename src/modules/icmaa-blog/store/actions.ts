@@ -36,7 +36,7 @@ const actions: ActionTree<BlogState, RootState> = {
     }
 
     if (identifier) {
-      return dispatch('list', { queryOptions: { resolveUrl: true, identifier, category: identifier } })
+      return dispatch('list', { queryOptions: { resolveUrl: true, identifier, categories: identifier } })
         .then((result) => {
           commit(types.ICMAA_BLOG_URL_ADD, { url: identifier, ids: result.items.map(({ id }) => id) })
         })
