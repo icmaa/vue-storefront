@@ -9,11 +9,13 @@
       v-else-if="isTag"
       :articles="tagArticles"
       :headline="$t('Blog #{tag}', { tag })"
+      :pagination="true"
     />
     <List
       v-else
       :articles="articles"
       :category="category"
+      :pagination="true"
     />
   </div>
 </template>

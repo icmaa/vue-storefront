@@ -6,7 +6,8 @@ import { toDayjsDate } from 'icmaa-config/helpers/datetime'
 
 const getters: GetterTree<BlogState, RootState> = {
   isUrlResolved: (state) => (key: string) => Object.keys(state.urls).includes(key),
-  getResolvedUrlIds: (state) => (key: string) => state.urls[key] || [],
+  getResolvedUrl: (state) => (key: string) => state.urls[key],
+  getResolvedUrlIds: (state, getters) => (key: string) => getters.getResolvedUrl(key)?.ids || [],
   getArticles: (state) => state.items,
   getArticlesByQuery: (state) => (query: Record<string, (number|string)|(number|string)[]>): BlogArticle[] => {
     return state.items.filter(i => {

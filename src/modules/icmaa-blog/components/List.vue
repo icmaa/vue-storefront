@@ -51,6 +51,9 @@
         </router-link>
       </router-link>
     </div>
+    <div v-if="pagination">
+      LOAD MORE [WIP]
+    </div>
     <div
       v-if="articles.length === 0"
       class="t-text-sm t-font-light"
@@ -86,6 +89,10 @@ export default {
     headlineLevel: {
       type: Number,
       default: 2
+    },
+    pagination: {
+      type: Boolean,
+      default: false
     }
   }
 }

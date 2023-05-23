@@ -29,22 +29,29 @@ const actions: ActionTree<BlogState, RootState> = {
   },
   resolveUrl: async ({ dispatch, commit, getters }, { route }: { route: BlogRoute }) => {
     const { params } = route
-    const { identifier, tag } = params
+    const { identifier, tag, p } = params
 
     if (getters.isUrlResolved(identifier)) {
       return
     }
 
     if (identifier) {
-      return dispatch('list', { queryOptions: { resolveUrl: true, identifier, categories: identifier } })
+      return dispatch('list', { queryOptions: { resolveUrl: true, identifier, categories: identifier }, size: 9 })
         .then((result) => {
-          commit(types.ICMAA_BLOG_URL_ADD, { url: identifier, ids: result.items.map(({ id }) => id) })
+          const { start, perPage, total } = result
+          commit(
+            types.ICMAA_BLOG_URL_ADD,
+            { url: identifier, ids: result.items.map(({ id }) => id), start, perPage, total }
+          )
         })
     } else if (tag) {
-      return dispatch('list', { queryOptions: { tags: tag } })
+      return dispatch('list', { queryOptions: { tags: tag }, size: 9 })
         .then((result) => {
-          console.error(result.items.map(({ id }) => id))
-          commit(types.ICMAA_BLOG_URL_ADD, { url: `tag-${tag}`, ids: result.items.map(({ id }) => id) })
+          const { start, perPage, total } = result
+          commit(
+            types.ICMAA_BLOG_URL_ADD,
+            { url: `tag-${tag}`, ids: result.items.map(({ id }) => id), start, perPage, total }
+          )
         })
     }
 

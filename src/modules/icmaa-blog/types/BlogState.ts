@@ -13,8 +13,15 @@ export interface BlogArticle extends AbstractStateItem {
   firstPublishedAt: string
 }
 
+export interface BlogUrlEntry {
+  start: number,
+  perPage: number,
+  total: number,
+  ids: string[]
+}
+
 export default interface BlogState {
-  urls: Record<string, string[]>,
+  urls: Record<string, BlogUrlEntry>,
   items: BlogArticle[]
 }
 
