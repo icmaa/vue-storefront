@@ -36,6 +36,10 @@ export default {
       categories: 'icmaaBlog/getCategories'
     })
   },
+  async asyncData (c) {
+    c.context?.output.cacheTags
+      .add('blog')
+  },
   async mounted () {
     return this.fetchData()
   },

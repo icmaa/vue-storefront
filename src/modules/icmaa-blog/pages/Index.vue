@@ -79,6 +79,10 @@ export default {
       return this.fetchData()
     }
   },
+  async asyncData (c) {
+    c.context?.output.cacheTags
+      .add('blog')
+  },
   async mounted () {
     return this.fetchData()
   },

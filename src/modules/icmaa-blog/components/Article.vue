@@ -47,6 +47,7 @@
     </h1>
     <block-wrapper
       :components="article.content"
+      :defaults="cmsContentDefaults"
       class="block-article__content"
     />
     <List
@@ -91,6 +92,18 @@ export default {
     },
     image () {
       return this.article.image
+    },
+    cmsContentDefaults () {
+      return {
+        'component_asset': {
+          sizes: [
+            { media: 'lg', width: 1248 },
+            { media: 'md', width: 992 },
+            { media: 'xs', width: 736 },
+            { media: 'sm', width: 394 }
+          ]
+        }
+      }
     }
   }
 }

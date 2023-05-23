@@ -80,6 +80,11 @@ export default {
     components: {
       type: Array,
       required: true
+    },
+    defaults: {
+      type: Object,
+      required: false,
+      default: () => ({})
     }
   },
   computed: {
@@ -236,6 +241,7 @@ export default {
         .map(c => {
           const componentsMap = this.componentsMap[c.component]
           const { component, propsTypes, propsDefaults, cssClass, padding } = componentsMap
+          const propsDefaultsOverwrites = this.defaults[c.component] || {}
 
           const size = (typeof c?.width === 'string' && c?.width) || 'full'
           const lazyload = c?.lazyload || false
@@ -249,7 +255,7 @@ export default {
             return p !== '' || (propsTypes[k] && propsTypes[k] === 'number' && p === 0)
           })
 
-          props = Object.assign(propsDefaults, props)
+          props = Object.assign(propsDefaults, propsDefaultsOverwrites, props)
 
           props = mapValues(props, (p, k) => {
             if (Object.keys(propsTypes).includes(k)) {
