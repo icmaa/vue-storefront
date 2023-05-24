@@ -1,13 +1,13 @@
 <template>
   <div class="t-container t-my-8 t-px-4">
-    <template v-for="(category, i) in categories">
-      <Teaser
+    <template v-for="category in categories">
+      <!--Teaser
         v-if="i === 1"
         :key="'teaser-' + i"
         tags="325"
         :show-split="false"
         class="t-mb-8 sm:t--mx-4"
-      />
+      /-->
       <List
         :key="category.url"
         :query="{ categories: category.url }"
@@ -20,13 +20,11 @@
 import { mapGetters } from 'vuex'
 
 import List from 'icmaa-blog/components/ListWrapper.vue'
-import Teaser from 'theme/components/core/blocks/Teaser/Teaser.vue'
 
 export default {
   name: 'BlogHome',
   components: {
-    List,
-    Teaser
+    List
   },
   async asyncData (c) {
     c.context?.output.cacheTags
