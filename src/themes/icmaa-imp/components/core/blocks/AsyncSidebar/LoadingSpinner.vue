@@ -1,7 +1,24 @@
 <template functional>
-  <div class="t-flex t-justify-center t-items-center t-w-full t-min-h-screen-75 t-h-full">
-    <svg version="1.1" id="L4" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 52 12" enable-background="new 0 0 0 0" xml:space="preserve" class="t-w-16">
-      <circle fill="#CCC" stroke="none" cx="6" cy="6" r="6">
+  <div class="t-flex t-h-full t-min-h-screen-75 t-w-full t-items-center t-justify-center">
+    <svg
+      id="L4"
+      version="1.1"
+      xmlns="http://www.w3.org/2000/svg"
+      xmlns:xlink="http://www.w3.org/1999/xlink"
+      x="0px"
+      y="0px"
+      viewBox="0 0 52 12"
+      enable-background="new 0 0 0 0"
+      xml:space="preserve"
+      class="t-w-16"
+    >
+      <circle
+        fill="#CCC"
+        stroke="none"
+        cx="6"
+        cy="6"
+        r="6"
+      >
         <animate
           attributeName="opacity"
           dur="1s"
@@ -10,7 +27,13 @@
           begin="0.1"
         />
       </circle>
-      <circle fill="#CCC" stroke="none" cx="26" cy="6" r="6">
+      <circle
+        fill="#CCC"
+        stroke="none"
+        cx="26"
+        cy="6"
+        r="6"
+      >
         <animate
           attributeName="opacity"
           dur="1s"
@@ -19,7 +42,13 @@
           begin="0.2"
         />
       </circle>
-      <circle fill="#CCC" stroke="none" cx="46" cy="6" r="6">
+      <circle
+        fill="#CCC"
+        stroke="none"
+        cx="46"
+        cy="6"
+        r="6"
+      >
         <animate
           attributeName="opacity"
           dur="1s"

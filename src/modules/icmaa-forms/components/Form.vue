@@ -1,5 +1,11 @@
 <template>
-  <form-component v-if="form" :form-elements="formElements" v-bind="attrs" v-model="formData" @submit="submit" />
+  <form-component
+    v-if="form"
+    v-model="formData"
+    :form-elements="formElements"
+    v-bind="attrs"
+    @submit="submit"
+  />
 </template>
 
 <script>
@@ -52,13 +58,13 @@ export default {
       return omit($attrs, ['elements', 'value'])
     }
   },
+  async mounted () {
+    return this.$store.dispatch('icmaaForms/single', { value: this.formIdentifier })
+  },
   methods: {
     submit () {
       this.$emit('submit')
     }
-  },
-  async mounted () {
-    return this.$store.dispatch('icmaaForms/single', { value: this.formIdentifier })
   }
 }
 </script>

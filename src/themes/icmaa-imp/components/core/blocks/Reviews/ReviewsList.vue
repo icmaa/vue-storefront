@@ -1,19 +1,59 @@
 <template>
   <div class="reviews-list">
-    <div v-if="!itemsPerPage || itemsPerPage.length === 0" class="t-bg-white t-rounded-sm t-p-4 t-text-sm t-text-base-light">
+    <div
+      v-if="!itemsPerPage || itemsPerPage.length === 0"
+      class="t-rounded-sm t-bg-white t-p-4 t-text-sm t-text-base-light"
+    >
       {{ $t('No reviews have been posted yet. Please don\'t hesitate to share Your opinion and write the first review!') }}
     </div>
-    <div v-for="(item, index) in itemsPerPage" :key="index" class="t-bg-white t-rounded-sm t-p-4" :class="{ 't-mb-4': (index + 1) < perPage && (index + 1) < items.length }">
-      <meta :content="item.title" v-html="item.title">
+    <div
+      v-for="(item, index) in itemsPerPage"
+      :key="index"
+      class="t-rounded-sm t-bg-white t-p-4"
+      :class="{ 't-mb-4': (index + 1) < perPage && (index + 1) < items.length }"
+    >
+      <meta
+        :content="item.title"
+        v-html="item.title"
+      >
       <meta :content="productName | htmlDecode">
       <meta :content="item.detail | htmlDecode">
-      <reviews-stars :rating="item.ratings_total" stars-size="sm" class="t-flex t-items-center t-text-md t-text-base-light t-mt-2" />
-      <p class="t-text-sm t-my-4" v-html="item.detail" />
-      <p class="t-text-sm t-text-base-light" v-text="item.nickname + ' / ' + item.date" />
+      <reviews-stars
+        :rating="item.ratings_total"
+        stars-size="sm"
+        class="t-text-md t-mt-2 t-flex t-items-center t-text-base-light"
+      />
+      <p
+        class="t-my-4 t-text-sm"
+        v-html="item.detail"
+      />
+      <p
+        class="t-text-sm t-text-base-light"
+        v-text="item.nickname + ' / ' + item.date"
+      />
     </div>
-    <div class="t-flex t-justify-center t-mt-8" v-if="pageCount > 1">
-      <button-component type="ghost" icon="chevron_left" :icon-only="true" size="sm" class="t-mx-2" :class="{ 't-opacity-25': currentPage === 1, 't-bg-white': currentPage !== 1 }" @click.native="prevPage" />
-      <button-component type="ghost" icon="chevron_right" :icon-only="true" size="sm" class="t-mx-2" :class="{ 't-opacity-25': currentPage === pageCount, 't-bg-white': currentPage !== pageCount }" @click.native="nextPage" />
+    <div
+      v-if="pageCount > 1"
+      class="t-mt-8 t-flex t-justify-center"
+    >
+      <button-component
+        type="ghost"
+        icon="chevron_left"
+        :icon-only="true"
+        size="sm"
+        class="t-mx-2"
+        :class="{ 't-opacity-25': currentPage === 1, 't-bg-white': currentPage !== 1 }"
+        @click.native="prevPage"
+      />
+      <button-component
+        type="ghost"
+        icon="chevron_right"
+        :icon-only="true"
+        size="sm"
+        class="t-mx-2"
+        :class="{ 't-opacity-25': currentPage === pageCount, 't-bg-white': currentPage !== pageCount }"
+        @click.native="nextPage"
+      />
     </div>
   </div>
 </template>

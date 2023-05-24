@@ -1,6 +1,6 @@
 <template>
   <div class="t-container">
-    <div class="t-py-8 t-px-4">
+    <div class="t-px-4 t-py-8">
       <div v-if="!checkTrackingParam">
         {{ $t('Sorry, but we couldn\'t find a valid tracking-code in this tracking URL.') }}
       </div>
@@ -45,17 +45,6 @@ export default {
       return config.icmaa_tracking?.paqato?.customerId || false
     }
   },
-  methods: {
-    loadSdkScript () {
-      return new Promise(resolve => {
-        const script = document.createElement('script')
-        script.async = true
-        script.src = '//tracking.paqato.com/scripts/pqt-tracking.min.js'
-        script.onload = () => { resolve() }
-        document.body.appendChild(script)
-      })
-    }
-  },
   mounted () {
     if (!this.trackingCode || !this.checkTrackingParam) {
       this.$router.push(this.localizedHomeRoute)
@@ -72,6 +61,17 @@ export default {
       // eslint-disable-next-line
       pqtTracking(this.pqtCustomerId, this.store.storeCode)
     })
+  },
+  methods: {
+    loadSdkScript () {
+      return new Promise(resolve => {
+        const script = document.createElement('script')
+        script.async = true
+        script.src = '//tracking.paqato.com/scripts/pqt-tracking.min.js'
+        script.onload = () => { resolve() }
+        document.body.appendChild(script)
+      })
+    }
   }
 }
 </script>

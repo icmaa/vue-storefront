@@ -1,5 +1,14 @@
 <template>
-  <button-component v-if="visible" type="facebook" :icon="working ? '' : 'facebook'" icon-set="icmaa" icon-position="left" :disabled="disabled" :class="{ 't-relative': working, 't-opacity-75': disabled }" @click="toggleLogin">
+  <button-component
+    v-if="visible"
+    type="facebook"
+    :icon="working ? '' : 'facebook'"
+    icon-set="icmaa"
+    icon-position="left"
+    :disabled="disabled"
+    :class="{ 't-relative': working, 't-opacity-75': disabled }"
+    @click="toggleLogin"
+  >
     <template v-if="!connected">
       {{ $t(initialText) }}
     </template>
@@ -9,7 +18,11 @@
     <template v-else>
       {{ $t('Logout of Facebook') }}
     </template>
-    <loader-background v-if="working" bar="t-bg-white t-opacity-50" class="t-bottom-0" />
+    <loader-background
+      v-if="working"
+      bar="t-bg-white t-opacity-50"
+      class="t-bottom-0"
+    />
   </button-component>
 </template>
 
@@ -37,6 +50,10 @@ import { IcmaaGoogleTagManagerExecutors } from 'icmaa-google-tag-manager/hooks'
 
 export default {
   name: 'FacebookLoginButton',
+  components: {
+    ButtonComponent,
+    LoaderBackground
+  },
   props: {
     initialText: {
       type: String,
@@ -46,10 +63,6 @@ export default {
       type: Boolean,
       default: false
     }
-  },
-  components: {
-    ButtonComponent,
-    LoaderBackground
   },
   data () {
     const { enabled, appId, version, scope } = config.icmaa_facebook.login
@@ -71,6 +84,31 @@ export default {
     disabled () {
       return this.working === true
     }
+  },
+  created () {
+    if (!this.enabled) {
+      return
+    }
+
+    const created = new Promise(async resolve => {
+      const { appId, version, options } = this
+      const sdk = await this.getFbSdk({ appId, version, options })
+      const fbLoginStatus = await this.getFbLoginStatus()
+      this.connected = (fbLoginStatus.status === 'connected')
+      this.$emit('sdk-init', { FB: sdk })
+      resolve()
+    })
+
+    this.$bus.$on('user-after-logout', this.logout)
+    this.$once('hook:destroyed', () => {
+      this.$bus.$off('user-after-logout', this.logout)
+    })
+
+    this.process(created).then(() => {
+      if (this.connected && !this.isLoggedIn) {
+        this.logout()
+      }
+    })
   },
   methods: {
     onSuccess () {
@@ -184,31 +222,6 @@ export default {
         window.FB.logout(response => resolve(response))
       })
     }
-  },
-  created () {
-    if (!this.enabled) {
-      return
-    }
-
-    const created = new Promise(async resolve => {
-      const { appId, version, options } = this
-      const sdk = await this.getFbSdk({ appId, version, options })
-      const fbLoginStatus = await this.getFbLoginStatus()
-      this.connected = (fbLoginStatus.status === 'connected')
-      this.$emit('sdk-init', { FB: sdk })
-      resolve()
-    })
-
-    this.$bus.$on('user-after-logout', this.logout)
-    this.$once('hook:destroyed', () => {
-      this.$bus.$off('user-after-logout', this.logout)
-    })
-
-    this.process(created).then(() => {
-      if (this.connected && !this.isLoggedIn) {
-        this.logout()
-      }
-    })
   }
 }
 </script>

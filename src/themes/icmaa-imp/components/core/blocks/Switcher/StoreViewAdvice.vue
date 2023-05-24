@@ -1,21 +1,35 @@
 <template>
-  <modal name="modal-storeview-advice" :width="500" :compact="true" @close="onClose" data-test-id="ModalStoreViewAdvice">
+  <modal
+    name="modal-storeview-advice"
+    :width="500"
+    :compact="true"
+    data-test-id="ModalStoreViewAdvice"
+    @close="onClose"
+  >
     <div slot="header">
       {{ $t('Switched store?') }}
     </div>
-    <div class="t-flex t-flex-wrap t--mx-2 t--mb-4">
+    <div class="t--mx-2 t--mb-4 t-flex t-flex-wrap">
       <div class="t-w-full t-px-2 t-pb-4 t-text-sm">
         <div class="t-mb-2">
           {{ $t('You apperantly switched to another store. Did you intend to do so?') }}
         </div>
-        <div class="t-font-bold t-mb-4">
+        <div class="t-mb-4 t-font-bold">
           {{ $t('Please be aware that you might need to login again or refill your cart if you switch to a new language.') }}
         </div>
         <div class="t-flex t-flex-wrap">
-          <button-component type="primary" @click="goBack" class="t-w-full t-mb-2 lg:t-mb-0 lg:t-w-1/2">
+          <button-component
+            type="primary"
+            class="t-mb-2 t-w-full lg:t-mb-0 lg:t-w-1/2"
+            @click="goBack"
+          >
             {{ $t('Ok, take me back') }}
           </button-component>
-          <button-component type="transparent" @click="closeModal" class="t-w-full lg:t-w-1/2">
+          <button-component
+            type="transparent"
+            class="t-w-full lg:t-w-1/2"
+            @click="closeModal"
+          >
             {{ $t('Thanks, I\'ll stay') }}
           </button-component>
         </div>
@@ -55,6 +69,11 @@ export default {
       }))
     }
   },
+  mounted () {
+    this.$nextTick(() => {
+      this.$store.dispatch('ui/showModal', 'modal-storeview-advice')
+    })
+  },
   methods: {
     setLanguageAccepted (storeCode) {
       const value = { accepted: true, storeCode }
@@ -70,11 +89,6 @@ export default {
       this.$store.dispatch('ui/hideModal', 'modal-storeview-advice')
       this.setLanguageAccepted(this.currentStoreView.storeCode)
     }
-  },
-  mounted () {
-    this.$nextTick(() => {
-      this.$store.dispatch('ui/showModal', 'modal-storeview-advice')
-    })
   }
 }
 </script>

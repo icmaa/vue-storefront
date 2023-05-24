@@ -3,66 +3,115 @@
     <div class="t-bg-white t-py-6">
       <div class="t-container t-px-4">
         <div class="t--mx-4 md:t-flex">
-          <div class="t-mb-6 t-px-4 md:t-w-1/3 md:t-mb-0">
+          <div class="t-mb-6 t-px-4 md:t-mb-0 md:t-w-1/3">
             <div class="social-media">
-              <h2 class="t-hidden md:t-block t-text-sm t-text-base-tone t-mb-4">
+              <h2 class="t-mb-4 t-hidden t-text-sm t-text-base-tone md:t-block">
                 {{ $t("You can find us on") }}
               </h2>
               <div class="t-flex t-flex-wrap t-justify-between md:t-justify-start">
                 <template v-for="(icon, index) in socialMediaIcons">
-                  <a :key="index" :href="icon.href" :title="icon.name" target="_blank" rel="noopener noreferrer" class="t-flex t-flex-fix t-items-center t-justify-center t-w-10 t-h-10 t-rounded-full t-bg-base-light t-text-white md:t-w-8 md:t-h-8 lg:t-w-10 lg:t-h-10 t-mr-2 t-mb-2">
-                    <material-icon :icon="icon.icon" icon-set="icmaa" class="t-flex md:t-text-lg lg:t-text-2xl" />
+                  <a
+                    :key="index"
+                    :href="icon.href"
+                    :title="icon.name"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="t-mb-2 t-mr-2 t-flex t-h-10 t-w-10 t-flex-fix t-items-center t-justify-center t-rounded-full t-bg-base-light t-text-white md:t-h-8 md:t-w-8 lg:t-h-10 lg:t-w-10"
+                  >
+                    <material-icon
+                      :icon="icon.icon"
+                      icon-set="icmaa"
+                      class="t-flex md:t-text-lg lg:t-text-2xl"
+                    />
                   </a>
                 </template>
               </div>
             </div>
-            <div class="country t-hidden md:t-block t-mt-4" v-if="multistoreEnabled">
-              <h2 class="t-text-sm t-text-base-tone t-mb-4">
+            <div
+              v-if="multistoreEnabled"
+              class="country t-mt-4 t-hidden md:t-block"
+            >
+              <h2 class="t-mb-4 t-text-sm t-text-base-tone">
                 {{ $t('Choose your country') }}
               </h2>
-              <div class="t-flex t-flex-wrap t--mx-2">
+              <div class="t--mx-2 t-flex t-flex-wrap">
                 <template v-for="(store, index) in languages">
-                  <a :href="store.href" :title="store.label" :key="index" class="t-mx-2 t-mb-2">
-                    <flag-icon :iso="store['iso-code']" width="20" height="20" />
+                  <a
+                    :key="index"
+                    :href="store.href"
+                    :title="store.label"
+                    class="t-mx-2 t-mb-2"
+                  >
+                    <flag-icon
+                      :iso="store['iso-code']"
+                      width="20"
+                      height="20"
+                    />
                   </a>
                 </template>
               </div>
             </div>
           </div>
-          <div class="service-carrier t-px-4 t-mb-4 md:t-w-1/3 md:t-mb-0 md:t-justify-start md:t-content-start">
-            <h2 class="t-hidden md:t-block t-text-sm t-text-base-tone t-mb-4">
+          <div class="service-carrier t-mb-4 t-px-4 md:t-mb-0 md:t-w-1/3 md:t-content-start md:t-justify-start">
+            <h2 class="t-mb-4 t-hidden t-text-sm t-text-base-tone md:t-block">
               {{ $t("Payments & Shipping") }}
             </h2>
-            <div class="logos lazyload t-flex t-justify-between t-flex-wrap t--mx-2" ref="serviceLogos">
+            <div
+              ref="serviceLogos"
+              class="logos lazyload t--mx-2 t-flex t-flex-wrap t-justify-between"
+            >
               <template v-for="(logo, index) in carrierLogos">
-                <div :key="index" class="t-flex t-flex-initial t-w-1/3 t-justify-center t-px-2 t-pb-4">
-                  <div class="t-flex t-flex-initial t-h-12 t-w-full t-py-2 t-px-1 t-items-center t-justify-center t-border t-border-base-lighter t-rounded-sm">
-                    <router-link :to="localizedRoute(logo.route)" :title="$t('Service')">
-                      <div :class="logo.path" class="t-flex t-max-w-full" />
+                <div
+                  :key="index"
+                  class="t-flex t-w-1/3 t-flex-initial t-justify-center t-px-2 t-pb-4"
+                >
+                  <div class="t-flex t-h-12 t-w-full t-flex-initial t-items-center t-justify-center t-rounded-sm t-border t-border-base-lighter t-px-1 t-py-2">
+                    <router-link
+                      :to="localizedRoute(logo.route)"
+                      :title="$t('Service')"
+                    >
+                      <div
+                        :class="logo.path"
+                        class="t-flex t-max-w-full"
+                      />
                     </router-link>
                   </div>
                 </div>
               </template>
             </div>
           </div>
-          <newsletter class="t-px-4 md:t-w-1/3 md:t-mb-0" />
+          <newsletter class="t-px-4 md:t-mb-0 md:t-w-1/3" />
         </div>
       </div>
     </div>
-    <div class="footer-navigation t-bg-black t-py-4" ref="footerNavigation">
+    <div
+      ref="footerNavigation"
+      class="footer-navigation t-bg-black t-py-4"
+    >
       <div class="t-container t-px-4">
         <div class="t--mx-4 lg:t-flex">
           <div class="t-flex t-w-full t-flex-wrap t-items-center t-justify-center t-leading-looser">
             <template v-for="(link, index) in metaNavigation">
-              <router-link :to="localizedRoute(link.route)" class="t-flex-initial t-px-4 t-text-white t-text-xs t-uppercase" :key="index">
+              <router-link
+                :key="index"
+                :to="localizedRoute(link.route)"
+                class="t-flex-initial t-px-4 t-text-xs t-uppercase t-text-white"
+              >
                 {{ link.name }}
               </router-link>
             </template>
-            <a href="#" onClick="UC_UI.showSecondLayer(); return false;" class="t-flex-initial t-px-4 t-text-white t-text-xs t-uppercase">
+            <a
+              href="#"
+              onClick="UC_UI.showSecondLayer(); return false;"
+              class="t-flex-initial t-px-4 t-text-xs t-uppercase t-text-white"
+            >
               {{ $t("Privacy Settings") }}
             </a>
             <div class="t-hidden t-flex-expand lg:t-flex" />
-            <div class="copyright t-px-4 t-hidden lg:t-flex t-text-white t-text-xs t-uppercase" v-html="copyright" />
+            <div
+              class="copyright t-hidden t-px-4 t-text-xs t-uppercase t-text-white lg:t-flex"
+              v-html="copyright"
+            />
           </div>
         </div>
       </div>
@@ -121,11 +170,6 @@ export default {
       return this.footer.copyright
     }
   },
-  methods: {
-    setFooterNavigationOffset: throttle(function () {
-      this.footerNavigationOffset = this.$refs.footerNavigation.clientHeight
-    }, 500)
-  },
   mounted () {
     window.addEventListener('resize', this.setFooterNavigationOffset)
     this.$nextTick(this.setFooterNavigationOffset)
@@ -139,6 +183,11 @@ export default {
   },
   destroyed () {
     window.removeEventListener('resize', this.setFooterNavigationOffset)
+  },
+  methods: {
+    setFooterNavigationOffset: throttle(function () {
+      this.footerNavigationOffset = this.$refs.footerNavigation.clientHeight
+    }, 500)
   }
 }
 </script>

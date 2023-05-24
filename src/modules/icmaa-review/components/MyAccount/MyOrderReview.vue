@@ -1,15 +1,23 @@
 <template>
   <div>
-    <div class="t-p-4 t-bg-white">
+    <div class="t-bg-white t-p-4">
       <headline>
         {{ $t('Review order') }} {{ orderId }}
-        <span v-if="order" class="t-text-sm t-text-base-light t-flex-grow lg:t-flex-fix t-ml-8 lg:t-ml-4"># {{ order.increment_id }}</span>
+        <span
+          v-if="order"
+          class="t-ml-8 t-grow t-text-sm t-text-base-light lg:t-ml-4 lg:t-flex-fix"
+        ># {{ order.increment_id }}</span>
       </headline>
       <div class="t-text-sm t-text-base-tone">
         {{ $t('Write a product review of your last orders products.') }}
       </div>
     </div>
-    <product v-for="(product, i) in products" :key="i" :product="product" class="t-mt-4" />
+    <product
+      v-for="(product, i) in products"
+      :key="i"
+      :product="product"
+      class="t-mt-4"
+    />
   </div>
 </template>
 
@@ -55,6 +63,18 @@ export default {
       })
     }
   },
+  watch: {
+    async order () {
+      this.products = await this.fetchProducts()
+    }
+  },
+  beforeCreate () {
+    registerModule(ReviewModule)
+    registerModule(IcmaaExtendedReviewModule)
+  },
+  async mounted () {
+    this.products = await this.fetchProducts()
+  },
   methods: {
     async fetchProducts () {
       let { includeFields, excludeFields } = entities.productList
@@ -65,18 +85,6 @@ export default {
       return this.$store.dispatch('product/findProducts', { query, includeFields, excludeFields })
         .then(result => result.items)
     }
-  },
-  beforeCreate () {
-    registerModule(ReviewModule)
-    registerModule(IcmaaExtendedReviewModule)
-  },
-  watch: {
-    async order () {
-      this.products = await this.fetchProducts()
-    }
-  },
-  async mounted () {
-    this.products = await this.fetchProducts()
   }
 }
 </script>

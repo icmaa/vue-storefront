@@ -1,14 +1,40 @@
 <template>
   <div class="coupon-code t-flex t-items-end t-justify-between">
     <template v-if="hasCoupon">
-      <base-input :placeholder="$t('Discount code')" icon="receipt" icon-position="left" name="couponCode" :value="$t('Coupon') + ': ' + coupon" :disabled="true" class="t-flex-grow" />
-      <button-component icon="close" :icon-only="true" @click="removeCoupon" class="t-ml-2">
+      <base-input
+        :placeholder="$t('Discount code')"
+        icon="receipt"
+        icon-position="left"
+        name="couponCode"
+        :value="$t('Coupon') + ': ' + coupon"
+        :disabled="true"
+        class="t-grow"
+      />
+      <button-component
+        icon="close"
+        :icon-only="true"
+        class="t-ml-2"
+        @click="removeCoupon"
+      >
         {{ $t('Remove discount code') }}
       </button-component>
     </template>
     <template v-else>
-      <base-input :placeholder="label || $t('Discount code')" name="couponCode" v-model.trim="couponCode" @keyup.enter="applyCoupon" class="t-flex-grow" />
-      <button-component icon="keyboard_arrow_right" :icon-only="true" :disabled="!couponCode" @click="applyCoupon" class="t-ml-2" v-if="couponCode.length > 0">
+      <base-input
+        v-model.trim="couponCode"
+        :placeholder="label || $t('Discount code')"
+        name="couponCode"
+        class="t-grow"
+        @keyup.enter="applyCoupon"
+      />
+      <button-component
+        v-if="couponCode.length > 0"
+        icon="keyboard_arrow_right"
+        :icon-only="true"
+        :disabled="!couponCode"
+        class="t-ml-2"
+        @click="applyCoupon"
+      >
         {{ $t('Add discount code') }}
       </button-component>
     </template>

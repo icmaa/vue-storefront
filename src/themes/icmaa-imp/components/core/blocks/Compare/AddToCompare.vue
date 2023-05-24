@@ -1,9 +1,9 @@
 <template>
   <button
-    @click="isOnCompare ? removeProduct(product) : addProduct(product)"
     class="p0 inline-flex middle-xs bg-cl-transparent brdr-none action h5 pointer cl-secondary"
     type="button"
     data-test-id="addToCompare"
+    @click="isOnCompare ? removeProduct(product) : addProduct(product)"
   >
     <slot>
       <i class="pr5 material-icons">compare</i>

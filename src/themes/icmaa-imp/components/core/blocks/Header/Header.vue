@@ -1,23 +1,47 @@
 <template>
-  <div class="header" data-test-id="Header">
-    <header class="t-fixed t-w-full t-bg-white" :class="{ 'is-visible': navVisible }">
-      <div class="t-h-50px t-flex t-bg-black">
-        <div class="t-container t-px-2 t-flex-initial t-flex t-justify-between">
-          <button-ui-sidebar icon="dehaze" title="Menu" ui-state="sidebar" data-test-id="HeaderButtonSidebar" />
-          <div class="t-flex-auto sm:t-border-r t-border-base-tone " />
+  <div
+    class="header"
+    data-test-id="Header"
+  >
+    <header
+      class="t-fixed t-w-full t-bg-white"
+      :class="{ 'is-visible': navVisible }"
+    >
+      <div class="t-flex t-h-50px t-bg-black">
+        <div class="t-container t-flex t-flex-initial t-justify-between t-px-2">
+          <button-ui-sidebar
+            icon="dehaze"
+            title="Menu"
+            ui-state="sidebar"
+            data-test-id="HeaderButtonSidebar"
+          />
+          <div class="t-flex-auto t-border-base-tone sm:t-border-r " />
           <button-account data-test-id="HeaderButtonAccount" />
-          <button-ui-sidebar icon="favorite_border" title="Wishlist" ui-state="wishlist" qty-getter="wishlist/getWishlistItemsCount" data-test-id="HeaderButtonWishlist" />
-          <button-cart :last="true" data-test-id="HeaderButtonCart" />
+          <button-ui-sidebar
+            icon="favorite_border"
+            title="Wishlist"
+            ui-state="wishlist"
+            qty-getter="wishlist/getWishlistItemsCount"
+            data-test-id="HeaderButtonWishlist"
+          />
+          <button-cart
+            :last="true"
+            data-test-id="HeaderButtonCart"
+          />
           <language-switcher />
         </div>
       </div>
 
-      <div class="t-h-60px t-flex">
-        <div class="t-container t-px-4 t-flex t-items-center">
+      <div class="t-flex t-h-60px">
+        <div class="t-container t-flex t-items-center t-px-4">
           <search-input />
-          <div class="t-flex-expand t-w-4" />
+          <div class="t-w-4 t-flex-expand" />
           <meta-navigation />
-          <logo width="174" height="43" class="logo t-flex-fix t--mr-4 xl:t-mr-0" />
+          <logo
+            width="174"
+            height="43"
+            class="logo t--mr-4 t-flex-fix xl:t-mr-0"
+          />
         </div>
       </div>
     </header>

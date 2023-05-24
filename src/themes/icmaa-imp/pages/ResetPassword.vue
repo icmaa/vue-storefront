@@ -1,16 +1,18 @@
 <template>
   <div class="reset-password t-container t-p-4">
-    <div class="t-p-4 lg:t-p-8 t-bg-white">
+    <div class="t-bg-white t-p-4 lg:t-p-8">
       <h2 class="t-mb-2 t-text-xl t-text-base-tone">
         {{ $t('Reset password') }}
       </h2>
-      <form class="reset-password t-flex t-flex-wrap t--mx-4" @submit.prevent="resetPassword">
-        <div class="t-w-full lg:t-w-1/3 t-px-4 t-mb-4">
+      <form
+        class="reset-password t--mx-4 t-flex t-flex-wrap"
+        @submit.prevent="resetPassword"
+      >
+        <div class="t-mb-4 t-w-full t-px-4 lg:t-w-1/3">
           <base-input
+            v-model="password"
             type="password"
             name="password"
-            v-model="password"
-            @blur="$v.password.$touch()"
             :label="$t('Password') + ' *'"
             :placeholder="$t('Password')"
             :validations="[
@@ -23,14 +25,14 @@
                 text: $t('Password must have at least 8 letters.')
               }
             ]"
+            @blur="$v.password.$touch()"
           />
         </div>
-        <div class="t-w-full lg:t-w-1/3 t-px-4 t-mb-4">
+        <div class="t-mb-4 t-w-full t-px-4 lg:t-w-1/3">
           <base-input
+            v-model="rPassword"
             type="password"
             name="password-confirm"
-            v-model="rPassword"
-            @blur="$v.rPassword.$touch()"
             :label="$t('Repeat password') + ' *'"
             :placeholder="$t('Repeat password')"
             :validations="[
@@ -43,6 +45,7 @@
                 text: $t('Passwords must be identical.')
               }
             ]"
+            @blur="$v.rPassword.$touch()"
           />
         </div>
         <div class="t-w-full t-px-4">
@@ -63,16 +66,16 @@ import { required, minLength, sameAs } from 'vuelidate/lib/validators'
 
 export default {
   name: 'ResetPassword',
+  components: {
+    ButtonComponent,
+    BaseInput
+  },
   data () {
     return {
       email: this.$route.query.email,
       password: '',
       rPassword: ''
     }
-  },
-  components: {
-    ButtonComponent,
-    BaseInput
   },
   validations: {
     password: {

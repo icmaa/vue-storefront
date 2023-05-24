@@ -1,7 +1,11 @@
 <template>
-  <button class="t-flex t-flex-fix t-px-2 t-cursor-pointer">
+  <button class="t-flex t-flex-fix t-cursor-pointer t-px-2">
     <material-icon :icon="icon" />
-    <span class="t-sr-only t-sr-only-focusable" tabindex="0" :text="$t(text)" />
+    <span
+      class="t-sr-only t-sr-only-focusable"
+      tabindex="0"
+      :text="$t(text)"
+    />
   </button>
 </template>
 
@@ -10,6 +14,9 @@ import MaterialIcon from 'theme/components/core/blocks/MaterialIcon'
 
 export default {
   name: 'TopButton',
+  components: {
+    MaterialIcon
+  },
   props: {
     icon: {
       type: String,
@@ -19,9 +26,6 @@ export default {
       type: String,
       required: true
     }
-  },
-  components: {
-    MaterialIcon
   }
 }
 </script>

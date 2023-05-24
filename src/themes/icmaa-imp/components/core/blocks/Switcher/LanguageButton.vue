@@ -1,7 +1,20 @@
 <template>
-  <a :href="storeView.url" class="t-flex t-items-center t-rounded-sm t-border t-border-base-lightest t-p-2 t-cursor-pointer t-text-base-tone" :class="{ 't-bg-base-lightest': isCurrent }">
-    <flag-icon :iso="storeView.languageCode" class="t-flex-fix t-mr-2" format="4x3" width="40" height="30" />
-    <div class="t-text-sm t-leading-none" v-html="storeView.name" />
+  <a
+    :href="storeView.url"
+    class="t-flex t-cursor-pointer t-items-center t-rounded-sm t-border t-border-base-lightest t-p-2 t-text-base-tone"
+    :class="{ 't-bg-base-lightest': isCurrent }"
+  >
+    <flag-icon
+      :iso="storeView.languageCode"
+      class="t-mr-2 t-flex-fix"
+      format="4x3"
+      width="40"
+      height="30"
+    />
+    <div
+      class="t-text-sm t-leading-none"
+      v-html="storeView.name"
+    />
   </a>
 </template>
 

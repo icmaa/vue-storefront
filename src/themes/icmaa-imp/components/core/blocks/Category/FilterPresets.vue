@@ -1,6 +1,13 @@
 <template>
   <div>
-    <button-component v-for="(p, i) in presets" :key="'filter-' + i" size="sm" :icon="p.active ? 'clear' : false" @click.native="changeFilter(p)" class="t-flex-shrink-0 t-mr-2 t-opacity-75 hover:t-opacity-100">
+    <button-component
+      v-for="(p, i) in presets"
+      :key="'filter-' + i"
+      size="sm"
+      :icon="p.active ? 'clear' : false"
+      class="t-mr-2 t-shrink-0 t-opacity-75 hover:t-opacity-100"
+      @click.native="changeFilter(p)"
+    >
       {{ p.label }}
     </button-component>
   </div>
@@ -18,20 +25,13 @@ import orderBy from 'lodash-es/orderBy'
 
 export default {
   name: 'FilterPresets',
+  components: {
+    ButtonComponent
+  },
   data () {
     return {
       loaded: false
     }
-  },
-  beforeMount () {
-    registerGenericCmsStateModule('filter-presets', 'filter-preset')
-  },
-  async mounted () {
-    await this.$store.dispatch('icmaaCmsFilterPresets/list')
-    this.loaded = true
-  },
-  components: {
-    ButtonComponent
   },
   computed: {
     ...mapGetters({
@@ -93,6 +93,13 @@ export default {
 
       return presets
     }
+  },
+  beforeMount () {
+    registerGenericCmsStateModule('filter-presets', 'filter-preset')
+  },
+  async mounted () {
+    await this.$store.dispatch('icmaaCmsFilterPresets/list')
+    this.loaded = true
   },
   methods: {
     async changeFilter (preset) {

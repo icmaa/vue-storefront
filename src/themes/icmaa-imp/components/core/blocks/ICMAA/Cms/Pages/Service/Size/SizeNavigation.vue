@@ -1,7 +1,15 @@
 <template>
-  <div class="t-flex t-items-center t-justify-between t-flex-wrap t-cursor-pointer t-font-bold t-py-2 t-border-b-2" :class="{ 't-border-base-lightest': !show }" @click="toggle">
+  <div
+    class="t-flex t-cursor-pointer t-flex-wrap t-items-center t-justify-between t-border-b-2 t-py-2 t-font-bold"
+    :class="{ 't-border-base-lightest': !show }"
+    @click="toggle"
+  >
     <div>{{ headline }}</div>
-    <material-icon :icon="icon" size="lg" class="t-text-base-lighter t-ml-2" />
+    <material-icon
+      :icon="icon"
+      size="lg"
+      class="t-ml-2 t-text-base-lighter"
+    />
   </div>
 </template>
 

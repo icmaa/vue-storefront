@@ -1,43 +1,50 @@
 <template>
   <div class="addresses">
-    <div class="t-text-sm t-text-alert t-mb-4" v-text="error" v-if="error" />
+    <div
+      v-if="error"
+      class="t-mb-4 t-text-sm t-text-alert"
+      v-text="error"
+    />
     <form v-if="active">
       <address-component
+        ref="shippingAddress"
         v-model="shippingAddress"
         :enable-poststation="true"
-        ref="shippingAddress"
       />
       <base-checkbox
-        class="t-w-full t-mb-4"
-        name="use-for-billing"
         id="use-for-billing"
         v-model="billingAddressIsSameAsShipping"
+        class="t-mb-4 t-w-full"
+        name="use-for-billing"
       >
         {{ $t('Use also as billing address') }}
       </base-checkbox>
       <address-component
+        v-if="!billingAddressIsSameAsShipping"
+        ref="billingAddress"
+        v-model="billingAddress"
         type="billing"
         :label="$t('Billing address')"
-        v-model="billingAddress"
-        ref="billingAddress"
         class="t-mt-8"
-        v-if="!billingAddressIsSameAsShipping"
       />
       <button-component
-        class="t-w-full lg:t-w-auto t-mt-4"
+        class="t-mt-4 t-w-full lg:t-w-auto"
         type="primary"
-        @click.native.stop="submit"
         data-test-id="NextStepButton"
+        @click.native.stop="submit"
       >
         {{ $t(('Continue to shipping')) }}
       </button-component>
     </form>
-    <div v-if="!active && done" class="done t-text-sm">
+    <div
+      v-if="!active && done"
+      class="done t-text-sm"
+    >
       <div class="shipping-address">
         <h3
           v-if="!billingAddressIsSameAsShipping"
+          class="t-text-xs t-font-light t-text-base-light"
           v-text="$t('Shipping address')"
-          class="t-font-light t-text-xs t-text-base-light"
         />
         <address-preview
           v-if="shippingAddressDTO"
@@ -45,9 +52,9 @@
         />
         <base-checkbox
           v-if="billingAddressIsSameAsShipping"
-          class="t-w-full t-mt-4"
-          name="use-for-billing-read-only"
           id="use-for-billing-read-only"
+          class="t-mt-4 t-w-full"
+          name="use-for-billing-read-only"
           :value="true"
           disabled
         >
@@ -58,7 +65,10 @@
         v-if="!billingAddressIsSameAsShipping && billingAddressDTO"
         class="billing-address t-mt-4"
       >
-        <h3 v-text="$t('Billing address')" class="t-font-light t-text-xs t-text-base-light" />
+        <h3
+          class="t-text-xs t-font-light t-text-base-light"
+          v-text="$t('Billing address')"
+        />
         <address-preview :address="billingAddressDTO" />
       </div>
     </div>

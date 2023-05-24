@@ -1,78 +1,118 @@
 <template>
-  <sidebar :use-expander-in-title="false" ref="searchSidebar" data-test-id="SearchPanel">
+  <sidebar
+    ref="searchSidebar"
+    :use-expander-in-title="false"
+    data-test-id="SearchPanel"
+  >
     <template v-slot:top>
-      <div class="t-flex t-self-stretch t-items-center t-px-2 t-cursor-pointer" data-test-id="closeButton" @click="closeSidebar">
+      <div
+        class="t-flex t-cursor-pointer t-items-center t-self-stretch t-px-2"
+        data-test-id="closeButton"
+        @click="closeSidebar"
+      >
         <material-icon icon="keyboard_arrow_left" />
       </div>
-      <label for="search" class="t-flex t-self-stretch t-items-center">
+      <label
+        for="search"
+        class="t-flex t-items-center t-self-stretch"
+      >
         <span class="t-sr-only">{{ $t('Search') }}</span>
-        <material-icon icon="search" size="sm" class="t-text-base-light t-pl-2 t-pr-1" />
+        <material-icon
+          icon="search"
+          size="sm"
+          class="t-pl-2 t-pr-1 t-text-base-light"
+        />
       </label>
       <input
-        type="text"
-        v-model="searchString"
-        @input="onInput"
-        @blur="$v.searchString.$touch()"
         id="search"
+        ref="searchString"
+        v-model="searchString"
+        type="text"
         :placeholder="$t('Type what you are looking for...')"
         autocorrect="off"
         autocomplete="off"
         autofocus="true"
         data-test-id="SearchInput"
-        ref="searchString"
-        class="t-self-stretch t-flex-expand t-p-0 t-text-lg t-text-base-tone placeholder:t-text-base-lighter"
+        class="t-flex-expand t-self-stretch t-p-0 t-text-lg t-text-base-tone placeholder:t-text-base-lighter"
+        @input="onInput"
+        @blur="$v.searchString.$touch()"
       >
     </template>
     <template v-slot:top-right>
-      <top-button icon="close" text="Close" @click.native="emptySearchInput" v-show="searchString.length > 0" />
+      <top-button
+        v-show="searchString.length > 0"
+        icon="close"
+        text="Close"
+        @click.native="emptySearchInput"
+      />
     </template>
     <div class="t-pb-20">
-      <div v-if="getNoResultsMessage" class="t-px-2 t-mt-2 t-mb-4 t-text-sm">
+      <div
+        v-if="getNoResultsMessage"
+        class="t-mb-4 t-mt-2 t-px-2 t-text-sm"
+      >
         {{ getNoResultsMessage }}
       </div>
-      <div v-if="emptyResults && pleaseWait" class="t-px-2 t-pt-2 t-pb-4 t-text-sm">
+      <div
+        v-if="emptyResults && pleaseWait"
+        class="t-px-2 t-pb-4 t-pt-2 t-text-sm"
+      >
         {{ $t('Please wait') }} ...
       </div>
       <category-panel
+        v-if="!emptyResults && filteredProducts.length && categoryIds.length > 0"
         :category-ids="categoryIds"
         title="Categories"
-        v-if="!emptyResults && filteredProducts.length && categoryIds.length > 0"
-        class="t-pb-4 t-mb-4"
+        class="t-mb-4 t-pb-4"
         :class="{ 't-opacity-25': pleaseWait }"
       />
       <div
         v-if="!emptyResults && filteredProducts.length > 0"
-        class="product-listing t-flex t-flex-wrap t-bg-base-lightest t--mx-4 t--mt-4 t-px-3 t-py-4"
+        class="product-listing t--mx-4 t--mt-4 t-flex t-flex-wrap t-bg-base-lightest t-px-3 t-py-4"
         :class="{ 't-opacity-25': pleaseWait }"
       >
-        <div class="t-flex t-items-center t-justify-center t-w-full t-mx-1">
-          <button-component type="second" @click="goToResults()" class="t-w-full md:t-w-2/3 t-mb-4">
+        <div class="t-mx-1 t-flex t-w-full t-items-center t-justify-center">
+          <button-component
+            type="second"
+            class="t-mb-4 t-w-full md:t-w-2/3"
+            @click="goToResults()"
+          >
             {{ $t('View all results') }}
           </button-component>
         </div>
-        <product-tile v-for="product in filteredProducts" :key="product.sku + '-' + (product.parentId || 'parent')" :product="product" @click.native="closeSidebar" class="t-w-1/2 lg:t-w-1/3 t-px-1 t-mb-8" />
+        <product-tile
+          v-for="product in filteredProducts"
+          :key="product.sku + '-' + (product.parentId || 'parent')"
+          :product="product"
+          class="t-mb-8 t-w-1/2 t-px-1 lg:t-w-1/3"
+          @click.native="closeSidebar"
+        />
       </div>
       <div
         v-if="filteredProducts.length >= size && OnlineOnly"
-        class="t-flex t-items-center t-flex-wrap t-justify-center t-mt-4"
+        class="t-mt-4 t-flex t-flex-wrap t-items-center t-justify-center"
         :class="{ 't-opacity-25': pleaseWait }"
       >
         <button-component
-          type="ghost"
-          @click="loadMoreProducts"
           v-if="moreProducts"
-          class="t-w-full md:t-w-2/3 t-mb-2"
+          type="ghost"
+          class="t-mb-2 t-w-full md:t-w-2/3"
           :class="{ 't-relative t-opacity-60': loadingProducts }"
           data-test-id="LoadMoreButton"
+          @click="loadMoreProducts"
         >
           {{ $t('Load more') }}
-          <loader-background v-if="loadingProducts" bar="t-bg-base-darkest" class="t-bottom-0" />
+          <loader-background
+            v-if="loadingProducts"
+            bar="t-bg-base-darkest"
+            class="t-bottom-0"
+          />
         </button-component>
         <button-component
           type="second"
-          @click="goToResults()"
           class="t-w-full md:t-w-2/3"
           data-test-id="ShowAllButton"
+          @click="goToResults()"
         >
           {{ $t('View all results') }}
         </button-component>
@@ -135,13 +175,6 @@ export default {
       showPleaseWait: false
     }
   },
-  watch: {
-    searchString (a, b) {
-      // Don't search when only a whitespaces is entered
-      if (a.trim() === b.trim()) return
-      this.search()
-    }
-  },
   computed: {
     ...mapGetters({
       currentTerm: 'icmaaSearch/getCurrentTerm',
@@ -179,6 +212,50 @@ export default {
     pleaseWait () {
       return this.getNoResultsMessage.length === 0 && this.showPleaseWait
     }
+  },
+  watch: {
+    searchString (a, b) {
+      // Don't search when only a whitespaces is entered
+      if (a.trim() === b.trim()) return
+      this.search()
+    }
+  },
+  async mounted () {
+    this.$v.searchString.$touch()
+
+    this.$refs.searchString.focus()
+    disableBodyScroll(this.$refs.searchSidebar)
+
+    const lastSearchTime = await localStorage.getItem('shop/user/searchQueryTime') || null
+    if (lastSearchTime !== null) {
+      const lastSearchDayjsTime = toDayjsDate(lastSearchTime)
+      const searchTermTimeLimit = getCurrentStoreviewDayjsDatetime().subtract(30, 'minute')
+      if (lastSearchDayjsTime.isBefore(searchTermTimeLimit)) {
+        this.emptySearchInput()
+        await Promise.all(
+          localStorage.removeItem('shop/user/searchQueryTime'),
+          localStorage.setItem('shop/user/searchQuery', '')
+        )
+
+        return
+      }
+    }
+
+    this.searchString = await localStorage.getItem('shop/user/searchQuery') || ''
+    if (this.searchString) {
+      this.search()
+    }
+  },
+  beforeDestroy () {
+    const search = this.$v.searchString.$invalid ? '' : this.searchString
+    this.$bus.$emit('search-input-change', { search })
+
+    localStorage.setItem('shop/user/searchQuery', search)
+    if (search && !this.emptyResults) {
+      localStorage.setItem('shop/user/searchQueryTime', getCurrentStoreviewDatetime())
+    }
+
+    clearAllBodyScrollLocks()
   },
   methods: {
     onInput (e) {
@@ -315,43 +392,6 @@ export default {
         IcmaaGoogleTagManagerExecutors.onSearchResult({ term, results: this.products })
       }, 2000)
     }
-  },
-  async mounted () {
-    this.$v.searchString.$touch()
-
-    this.$refs.searchString.focus()
-    disableBodyScroll(this.$refs.searchSidebar)
-
-    const lastSearchTime = await localStorage.getItem('shop/user/searchQueryTime') || null
-    if (lastSearchTime !== null) {
-      const lastSearchDayjsTime = toDayjsDate(lastSearchTime)
-      const searchTermTimeLimit = getCurrentStoreviewDayjsDatetime().subtract(30, 'minute')
-      if (lastSearchDayjsTime.isBefore(searchTermTimeLimit)) {
-        this.emptySearchInput()
-        await Promise.all(
-          localStorage.removeItem('shop/user/searchQueryTime'),
-          localStorage.setItem('shop/user/searchQuery', '')
-        )
-
-        return
-      }
-    }
-
-    this.searchString = await localStorage.getItem('shop/user/searchQuery') || ''
-    if (this.searchString) {
-      this.search()
-    }
-  },
-  beforeDestroy () {
-    const search = this.$v.searchString.$invalid ? '' : this.searchString
-    this.$bus.$emit('search-input-change', { search })
-
-    localStorage.setItem('shop/user/searchQuery', search)
-    if (search && !this.emptyResults) {
-      localStorage.setItem('shop/user/searchQueryTime', getCurrentStoreviewDatetime())
-    }
-
-    clearAllBodyScrollLocks()
   }
 }
 </script>

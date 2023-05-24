@@ -105,7 +105,7 @@
           v-if="sponsoreLogos && sponsoreLogos.length > 0"
           class="t-mt-4 t-grid t-grid-cols-3 t-gap-4 sm:t-grid-cols-9"
         >
-          <div class="t-col-span-2 t-flex t-items-center t-font-bold t-italic t-text-white sm:t-col-span-9 sm:t-pt-4 sm:t-pl-4">
+          <div class="t-col-span-2 t-flex t-items-center t-font-bold t-italic t-text-white sm:t-col-span-9 sm:t-pl-4 sm:t-pt-4">
             Sponsored by
           </div>
           <div

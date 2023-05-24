@@ -1,6 +1,14 @@
 <template>
-  <div class="t-flex t-items-center" :class="statusClass" v-if="statusClass">
-    <material-icon icon="lens" size="sm" class="t-mr-1" />
+  <div
+    v-if="statusClass"
+    class="t-flex t-items-center"
+    :class="statusClass"
+  >
+    <material-icon
+      icon="lens"
+      size="sm"
+      class="t-mr-1"
+    />
     <slot>
       {{ $t(`orderStatus_${status}`) }}
     </slot>
@@ -15,6 +23,12 @@ export default {
   components: {
     MaterialIcon
   },
+  props: {
+    status: {
+      type: String,
+      required: true
+    }
+  },
   data () {
     return {
       statusMap: {
@@ -24,12 +38,6 @@ export default {
         preorder: 't-text-alt-1',
         processing: 't-text-alt-2'
       }
-    }
-  },
-  props: {
-    status: {
-      type: String,
-      required: true
     }
   },
   computed: {

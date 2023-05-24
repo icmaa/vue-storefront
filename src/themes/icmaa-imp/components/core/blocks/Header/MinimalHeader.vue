@@ -1,15 +1,25 @@
 <template>
   <div class="header">
-    <header class="t-fixed t-w-full t-bg-white is-visible">
+    <header class="is-visible t-fixed t-w-full t-bg-white">
       <div class="t-flex">
-        <div class="t-container t-pr-4 md:t-px-4 t-flex t-items-center">
-          <div class="t-flex t-w-full t-h-full t-flex-wrap t-items-stretch">
-            <router-link :to="localizedHomeRoute" class="t-flex t-items-center t-cursor-pointer t-text-base-tone t-bg-base-lightest t-px-3">
-              <material-icon icon="keyboard_backspace" class="t-flex t-flex-fix" />
+        <div class="t-container t-flex t-items-center t-pr-4 md:t-px-4">
+          <div class="t-flex t-h-full t-w-full t-flex-wrap t-items-stretch">
+            <router-link
+              :to="localizedHomeRoute"
+              class="t-flex t-cursor-pointer t-items-center t-bg-base-lightest t-px-3 t-text-base-tone"
+            >
+              <material-icon
+                icon="keyboard_backspace"
+                class="t-flex t-flex-fix"
+              />
               <span class="t-sr-only">{{ $t('Home Page') }}</span>
             </router-link>
           </div>
-          <logo width="174" height="43" class="t-no-underline logo t-flex-fix t--mr-4 xl:t-mr-0" />
+          <logo
+            width="174"
+            height="43"
+            class="logo t--mr-4 t-flex-fix t-no-underline xl:t-mr-0"
+          />
         </div>
       </div>
     </header>

@@ -1,8 +1,15 @@
 <template>
-  <router-link :to="to" v-if="!isExternal">
+  <router-link
+    v-if="!isExternal"
+    :to="to"
+  >
     <slot />
   </router-link>
-  <a :href="to" target="_blank" v-else>
+  <a
+    v-else
+    :href="to"
+    target="_blank"
+  >
     <slot />
   </a>
 </template>
@@ -10,7 +17,12 @@
 <script>
 export default {
   name: 'Link',
-  props: [ 'to' ],
+  props: {
+    to: {
+      type: [String, Object],
+      required: true
+    }
+  },
   computed: {
     isExternal () {
       return typeof this.to === 'string' && this.to.startsWith('http')

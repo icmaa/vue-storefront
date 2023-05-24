@@ -3,15 +3,27 @@
     <div
       v-show="visible"
       v-scroll-to="{ el: '#app', onDone: backToTop }"
-      class="back-to-top t-z-10 t-fixed t-right-0 t-cursor-pointer t-pb-4 t-pr-4"
+      class="back-to-top t-fixed t-right-0 t-z-10 t-cursor-pointer t-pb-4 t-pr-4"
       :style="{ bottom: `${bottom}px` }"
     >
       <slot>
-        <div class="t-h-12 t-w-12 t-flex t-items-center t-justify-center t-bg-base-dark">
-          <svg width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd">
-            <path d="M23.245 20l-11.245-14.374-11.219 14.374-.781-.619 12-15.381 12 15.391-.755.609z" fill="white" />
+        <div class="t-flex t-h-12 t-w-12 t-items-center t-justify-center t-bg-base-dark">
+          <svg
+            width="24"
+            height="24"
+            xmlns="http://www.w3.org/2000/svg"
+            fill-rule="evenodd"
+            clip-rule="evenodd"
+          >
+            <path
+              d="M23.245 20l-11.245-14.374-11.219 14.374-.781-.619 12-15.381 12 15.391-.755.609z"
+              fill="white"
+            />
           </svg>
-          <span class="t-sr-only" v-text="$t(text)" />
+          <span
+            class="t-sr-only"
+            v-text="$t(text)"
+          />
         </div>
       </slot>
     </div>

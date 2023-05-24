@@ -1,18 +1,24 @@
 <template>
-  <div class="t-flex t-flex-wrap t-flex-fix t-content-center t-justify-center" :class="[ widthClass, { 't-mb-2': marginBottom } ]">
+  <div
+    class="t-flex t-flex-fix t-flex-wrap t-content-center t-justify-center"
+    :class="[ widthClass, { 't-mb-2': marginBottom } ]"
+  >
     <template v-if="!hasChildren">
       <router-link
         :to="localizedRoute(route)"
         :title="name | htmlDecode"
-        class="t-cursor-pointer t-rounded-sm t-flex t-flex-wrap t-mx-1 t-w-full t-h-full t-text-center t-justify-center t-items-center t-text-sm"
+        class="t-mx-1 t-flex t-h-full t-w-full t-cursor-pointer t-flex-wrap t-items-center t-justify-center t-rounded-sm t-text-center t-text-sm"
         :class="[ icon ? 't-py-2' : 't-py-4', backgroundColorClass, textColorClass, backgroundImageClass ]"
         :style="[ backgroundImageStyle ]"
         :event="!hasSubNavigation ? 'click' : ''"
         @click.native="click"
       >
         <template v-if="icon">
-          <material-icon v-bind="{ icon, iconSet }" size="sm" />
-          <span class="t-block t-w-full t-text-xxs t-mt-1">
+          <material-icon
+            v-bind="{ icon, iconSet }"
+            size="sm"
+          />
+          <span class="t-mt-1 t-block t-w-full t-text-xxs">
             {{ name }}
           </span>
         </template>
@@ -21,7 +27,12 @@
         </template>
       </router-link>
     </template>
-    <navigation-item v-for="(child, index) in children" v-bind="child" :level="level + 1" :key="index" />
+    <navigation-item
+      v-for="(child, index) in children"
+      :key="index"
+      v-bind="child"
+      :level="level + 1"
+    />
   </div>
 </template>
 

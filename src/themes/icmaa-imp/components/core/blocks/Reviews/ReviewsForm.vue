@@ -1,13 +1,20 @@
 <template>
-  <div class="reviews-form" id="reviews-form">
-    <form name="review" action="#" @submit.prevent="outOfScope()">
+  <div
+    id="reviews-form"
+    class="reviews-form"
+  >
+    <form
+      name="review"
+      action="#"
+      @submit.prevent="outOfScope()"
+    >
       <div class="t-mb-4">
         <base-input
           id="name"
+          v-model="reviewForm.name"
           name="name"
           :label="$t('First name')"
           :placeholder="sampleName"
-          v-model="reviewForm.name"
           :validations="[
             {
               condition: $v.reviewForm.name.$error && !$v.reviewForm.name.required,
@@ -23,11 +30,11 @@
       <div class="t-mb-4">
         <base-input
           id="email"
+          v-model="reviewForm.email"
           name="email"
           type="email"
           :label="$t('Email address')"
           :placeholder="sampleEmail"
-          v-model="reviewForm.email"
           :validations="[
             {
               condition: $v.reviewForm.email.$error && !$v.reviewForm.email.required,
@@ -43,6 +50,7 @@
       <div class="t-mb-4">
         <base-select
           id="rating"
+          v-model="reviewForm.rating"
           name="rating"
           :options="ratingOptions"
           :label="$t('Rating')"
@@ -53,16 +61,15 @@
               text: $t('Field is required')
             }
           ]"
-          v-model="reviewForm.rating"
         />
       </div>
       <div class="t-mb-4">
         <base-input
           id="summary"
+          v-model="reviewForm.summary"
           name="summary"
           :label="$t('Summary')"
           :placeholder="$t('...')"
-          v-model="reviewForm.summary"
           :validations="[
             {
               condition: $v.reviewForm.summary.$error && !$v.reviewForm.summary.required,
@@ -74,10 +81,10 @@
       <div class="t-mb-4">
         <base-textarea
           id="review"
+          v-model="reviewForm.review"
           name="review"
           :label="$t('Review')"
           placeholder="..."
-          v-model="reviewForm.review"
           :validations="[
             {
               condition: $v.reviewForm.review.$error && !$v.reviewForm.review.required,
@@ -87,12 +94,24 @@
         />
       </div>
       <div>
-        <div class="t-mb-2 t-text-sm t-text-alert" v-if="$v.reviewForm.recaptcha.$error && !this.$v.reviewForm.recaptcha.required">
+        <div
+          v-if="$v.reviewForm.recaptcha.$error && !this.$v.reviewForm.recaptcha.required"
+          class="t-mb-2 t-text-sm t-text-alert"
+        >
           {{ $t('Your Google reCAPTCHA validation is invalid.') }}<br>
           {{ $t('Please try again or contact our customer-support.') }}
         </div>
-        <vue-recaptcha :sitekey="recaptchaWebsiteKey" :load-recaptcha-script="true" badge="inline" @verify="recaptchaVerify">
-          <button-component @click="validate()" class="t-mt-4" :class="{ 'w-auto': !currentUser }">
+        <vue-recaptcha
+          :sitekey="recaptchaWebsiteKey"
+          :load-recaptcha-script="true"
+          badge="inline"
+          @verify="recaptchaVerify"
+        >
+          <button-component
+            class="t-mt-4"
+            :class="{ 'w-auto': !currentUser }"
+            @click="validate()"
+          >
             {{ $t('Add review') }}
           </button-component>
         </vue-recaptcha>
@@ -115,6 +134,19 @@ import BaseSelect from 'theme/components/core/blocks/Form/BaseSelect'
 
 export default {
   name: 'ReviewsForm',
+  components: {
+    VueRecaptcha,
+    ButtonComponent,
+    BaseInput,
+    BaseTextarea,
+    BaseSelect
+  },
+  props: {
+    product: {
+      type: Object,
+      required: true
+    }
+  },
   data () {
     return {
       reviewForm: {
@@ -126,19 +158,6 @@ export default {
         recaptcha: ''
       }
     }
-  },
-  props: {
-    product: {
-      type: Object,
-      required: true
-    }
-  },
-  components: {
-    VueRecaptcha,
-    ButtonComponent,
-    BaseInput,
-    BaseTextarea,
-    BaseSelect
   },
   computed: {
     ...mapGetters({
@@ -171,6 +190,17 @@ export default {
     recaptchaWebsiteKey () {
       return config.icmaa.googleRecaptcha.websiteKey || false
     }
+  },
+  mounted () {
+    this.$bus.$on('clear-add-review-form', this.clearReviewForm)
+    this.$bus.$on('user-after-loggedin', this.fillInUserData)
+  },
+  destroyed () {
+    this.$bus.$off('clear-add-review-form', this.clearReviewForm)
+    this.$bus.$off('user-after-loggedin', this.fillInUserData)
+  },
+  beforeMount () {
+    this.fillInUserData()
   },
   methods: {
     recaptchaVerify (token) {
@@ -238,17 +268,6 @@ export default {
         this.reviewForm.email = this.currentUser.email
       }
     }
-  },
-  mounted () {
-    this.$bus.$on('clear-add-review-form', this.clearReviewForm)
-    this.$bus.$on('user-after-loggedin', this.fillInUserData)
-  },
-  destroyed () {
-    this.$bus.$off('clear-add-review-form', this.clearReviewForm)
-    this.$bus.$off('user-after-loggedin', this.fillInUserData)
-  },
-  beforeMount () {
-    this.fillInUserData()
   },
   validations: {
     reviewForm: {

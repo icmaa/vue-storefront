@@ -1,13 +1,24 @@
 <template>
   <div class="t-mb-4">
-    <div class="t-font-bold t-mb-4" v-if="headline">
+    <div
+      v-if="headline"
+      class="t-mb-4 t-font-bold"
+    >
       {{ table.headline }}
     </div>
-    <table class="t-w-full t-text-xs t-table-auto">
+    <table class="t-w-full t-table-auto t-text-xs">
       <thead />
       <tbody>
-        <tr v-for="rowKey in tableRowKeys" :key="rowKey" class="t-border-b t-border-base-lighter">
-          <td class="t-border t-border-base-lighter t-p-1" v-for="(value, key) in table[rowKey]" :key="key">
+        <tr
+          v-for="rowKey in tableRowKeys"
+          :key="rowKey"
+          class="t-border-b t-border-base-lighter"
+        >
+          <td
+            v-for="(value, key) in table[rowKey]"
+            :key="key"
+            class="t-border t-border-base-lighter t-p-1"
+          >
             {{ value }}
           </td>
         </tr>

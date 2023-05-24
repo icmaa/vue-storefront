@@ -1,7 +1,7 @@
-import { transformProductUrl, transformCategoryUrl } from '@vue-storefront/core/modules/url/helpers/transformUrl';
-import { isServer } from '@vue-storefront/core/helpers';
+import { transformProductUrl, transformCategoryUrl } from '@vue-storefront/core/modules/url/helpers/transformUrl'
+import { isServer, processURLAddress } from '@vue-storefront/core/helpers'
 import { UrlState } from '../types/UrlState'
-import { ActionTree } from 'vuex';
+import { ActionTree } from 'vuex'
 import { StorageManager } from '@vue-storefront/core/lib/storage-manager'
 import queryString from 'query-string'
 import config from 'config'
@@ -11,13 +11,13 @@ import { removeLocalization, adjustMultistoreApiUrl } from '@vue-storefront/core
 import storeCodeFromRoute from '@vue-storefront/core/lib/storeCodeFromRoute'
 import fetch from 'isomorphic-fetch'
 import { Logger } from '@vue-storefront/core/lib/logger'
-import { processURLAddress } from '@vue-storefront/core/helpers';
+
 import * as categoryMutationTypes from '@vue-storefront/core/modules/catalog-next/store/category/mutation-types'
 import isEqual from 'lodash-es/isEqual'
 import * as types from './mutation-types'
 import omit from 'lodash-es/omit'
-import { storeProductToCache } from '@vue-storefront/core/modules/catalog/helpers/search';
-import { prepareProducts } from '@vue-storefront/core/modules/catalog/helpers/prepare';
+import { storeProductToCache } from '@vue-storefront/core/modules/catalog/helpers/search'
+import { prepareProducts } from '@vue-storefront/core/modules/catalog/helpers/prepare'
 
 // it's a good practice for all actions to return Promises with effect of their execution
 export const actions: ActionTree<UrlState, any> = {

@@ -1,13 +1,22 @@
 <template>
   <div class="t-container t-p-4">
-    <h1 v-if="!isDetail" class="t-mb-4 t-mt-2 t-ml-4 t-text-primary t-text-1xl t-font-normal">
+    <h1
+      v-if="!isDetail"
+      class="t-mb-4 t-ml-4 t-mt-2 t-text-1xl t-font-normal t-text-primary"
+    >
       {{ $t('Look of the week') }}
     </h1>
-    <look :look="current" v-if="current" />
+    <look
+      v-if="current"
+      :look="current"
+    />
     <h2 class="t-mb-4 t-text-1xl t-font-normal">
       {{ $t('More looks') }}
     </h2>
-    <look-list :looks="looks" :per-page="perPage" />
+    <look-list
+      :looks="looks"
+      :per-page="perPage"
+    />
   </div>
 </template>
 

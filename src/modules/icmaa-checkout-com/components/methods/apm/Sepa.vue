@@ -1,10 +1,10 @@
 <template>
   <form>
     <base-input
-      type="text"
       id="iban"
-      name="iban"
       v-model="additionalData.iban"
+      type="text"
+      name="iban"
       :placeholder="$t('IBAN')"
       :validations="[
         {
@@ -19,10 +19,10 @@
       class="t-mb-4"
     />
     <base-input
-      type="text"
       id="bic"
-      name="bic"
       v-model="additionalData.bic"
+      type="text"
+      name="bic"
       :placeholder="$t('BIC')"
       :validations="[
         {
@@ -33,9 +33,9 @@
       class="t-mb-4"
     />
     <base-checkbox
-      name="terms"
       id="terms"
       v-model="additionalData.terms"
+      name="terms"
       :validations="[{
         condition: $v.additionalData.terms.$error && (!$v.additionalData.terms.required || !$v.additionalData.terms.notFalse),
         text: $t('Field is required')
@@ -58,11 +58,11 @@ import BaseCheckbox from 'theme/components/core/blocks/Form/BaseCheckbox'
 
 export default {
   name: 'CheckoutComSepaInfo',
-  mixins: [ ApmMethod ],
   components: {
     BaseInput,
     BaseCheckbox
   },
+  mixins: [ ApmMethod ],
   data () {
     return {
       additionalData: {

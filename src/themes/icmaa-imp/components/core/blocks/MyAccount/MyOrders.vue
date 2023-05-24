@@ -1,46 +1,78 @@
 <template>
   <div>
-    <div class="t-p-4 t-bg-white t-mb-3">
+    <div class="t-mb-3 t-bg-white t-p-4">
       <headline>
         {{ $t('My orders') }}
       </headline>
-      <p v-if="!isHistoryEmpty" class="t-text-sm">
+      <p
+        v-if="!isHistoryEmpty"
+        class="t-text-sm"
+      >
         {{ $t('These are your recent orders. Click for more details and options.') }}
       </p>
-      <p v-else class="t-text-sm">
+      <p
+        v-else
+        class="t-text-sm"
+      >
         {{ $t('Sorry, but you don\'t have any orders yet.') }}
       </p>
     </div>
     <template v-if="!isHistoryEmpty">
-      <router-link tag="div" v-for="order in ordersHistory" :key="order.entity_id" class="t-flex t-items-center t-p-4 t-mt-1 t-bg-white t-text-sm t-text-base-tone t-cursor-pointer" :to="localizedRoute(`/my-account/orders/${order.id}`)">
-        <div class="t-flex t-flex-grow t-flex-wrap t-items-center t-justify-between">
-          <div class="t-w-1/2 lg:t-w-1/4 lg:t-order-4 t-mb-2 lg:t-mb-0">
+      <router-link
+        v-for="order in ordersHistory"
+        :key="order.entity_id"
+        tag="div"
+        class="t-mt-1 t-flex t-cursor-pointer t-items-center t-bg-white t-p-4 t-text-sm t-text-base-tone"
+        :to="localizedRoute(`/my-account/orders/${order.id}`)"
+      >
+        <div class="t-flex t-grow t-flex-wrap t-items-center t-justify-between">
+          <div class="t-mb-2 t-w-1/2 lg:t-order-4 lg:t-mb-0 lg:t-w-1/4">
             <status-icon :status="order.status" />
           </div>
-          <div class="t-w-1/2 lg:t-w-1/4 lg:t-order-3 t-text-2xl t-text-base-darkest t-mb-2 lg:t-mb-0">
+          <div class="t-mb-2 t-w-1/2 t-text-2xl t-text-base-darkest lg:t-order-3 lg:t-mb-0 lg:t-w-1/4">
             {{ order.grand_total | round | price }}
           </div>
-          <div class="t-w-1/2 lg:t-w-1/4 lg:t-order-1">
-            <div class="t-font-bold t-mb-1 t-text-base-lighter t-text-xxs t-uppercase">
+          <div class="t-w-1/2 lg:t-order-1 lg:t-w-1/4">
+            <div class="t-mb-1 t-text-xxs t-font-bold t-uppercase t-text-base-lighter">
               {{ $t('Date') }}
             </div>
             {{ order.created_at | date }}
           </div>
-          <div class="t-w-1/2 lg:t-w-1/4 lg:t-order-2">
-            <div class="t-font-bold t-mb-1 t-text-base-lighter t-text-xxs t-uppercase">
+          <div class="t-w-1/2 lg:t-order-2 lg:t-w-1/4">
+            <div class="t-mb-1 t-text-xxs t-font-bold t-uppercase t-text-base-lighter">
               {{ $t('Order number') }}
             </div>
             #{{ order.increment_id }}
           </div>
         </div>
-        <router-link :to="localizedRoute(`/my-account/orders/${order.id}`)" class="t-hidden sm:t-block t-flex-fix">
-          <material-icon icon="chevron_right" size="lg" class="t-align-middle" />
+        <router-link
+          :to="localizedRoute(`/my-account/orders/${order.id}`)"
+          class="t-hidden t-flex-fix sm:t-block"
+        >
+          <material-icon
+            icon="chevron_right"
+            size="lg"
+            class="t-align-middle"
+          />
         </router-link>
       </router-link>
-      <div class="t-flex t-items-center t-justify-center t-mt-4 t-mb-8" v-if="loadMoreEnabled">
-        <button-component type="ghost" @click.native="loadMore" :disabled="loading" class="t-w-full md:t-w-2/3 lg:t-w-1/4" :class="{ 't-relative t-opacity-60': loading }">
+      <div
+        v-if="loadMoreEnabled"
+        class="t-mb-8 t-mt-4 t-flex t-items-center t-justify-center"
+      >
+        <button-component
+          type="ghost"
+          :disabled="loading"
+          class="t-w-full md:t-w-2/3 lg:t-w-1/4"
+          :class="{ 't-relative t-opacity-60': loading }"
+          @click.native="loadMore"
+        >
           {{ $t('Load more') }}
-          <loader-background v-if="loading" bar="t-bg-base-darkest" class="t-bottom-0" />
+          <loader-background
+            v-if="loading"
+            bar="t-bg-base-darkest"
+            class="t-bottom-0"
+          />
         </button-component>
       </div>
     </template>

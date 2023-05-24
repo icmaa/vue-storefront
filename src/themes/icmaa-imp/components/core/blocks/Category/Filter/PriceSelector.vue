@@ -1,9 +1,21 @@
 <template>
   <div>
-    <div v-for="option in values" :key="'price-filter-' + option.id" @click="$emit('change', option)" class="t-cursor-pointer t-border-b t-border-base-lighter t-px-2 t-py-3">
-      <button :aria-label="option.label" class="t-w-full t-text-sm t-flex t-items-center t-justify-between">
+    <div
+      v-for="option in values"
+      :key="'price-filter-' + option.id"
+      class="t-cursor-pointer t-border-b t-border-base-lighter t-px-2 t-py-3"
+      @click="$emit('change', option)"
+    >
+      <button
+        :aria-label="option.label"
+        class="t-flex t-w-full t-items-center t-justify-between t-text-sm"
+      >
         {{ option.label }}
-        <material-icon icon="check" class="t-leading-1-rem" v-if="isActiveOption(option)" />
+        <material-icon
+          v-if="isActiveOption(option)"
+          icon="check"
+          class="t-leading-1-rem"
+        />
       </button>
     </div>
   </div>
@@ -18,13 +30,10 @@ import { price } from 'icmaa-config/helpers/price'
 
 export default {
   name: 'PriceSelector',
-  mixins: [filterMixin],
   components: {
     MaterialIcon
   },
-  mounted () {
-    this.value = [this.startFromValue, this.startToValue]
-  },
+  mixins: [filterMixin],
   props: {
     options: {
       type: Array,
@@ -53,6 +62,9 @@ export default {
         return o
       })
     }
+  },
+  mounted () {
+    this.value = [this.startFromValue, this.startToValue]
   }
 }
 </script>

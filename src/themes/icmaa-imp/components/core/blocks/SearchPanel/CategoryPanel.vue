@@ -1,15 +1,15 @@
 <template>
   <div class="categories">
-    <h4 class="t-mb-2 t-text-base-light t-text-xs t-uppercase">
+    <h4 class="t-mb-2 t-text-xs t-uppercase t-text-base-light">
       {{ $t(title) }}
     </h4>
-    <div class="t-flex t--mx-4 t-px-2 t-overflow-scroll t-scrolling-touch t-hide-scrollbar">
+    <div class="t--mx-4 t-flex t-overflow-scroll t-px-2 t-hide-scrollbar t-scrolling-touch">
       <button-component
         v-for="category in categories"
         :key="category.id"
         type="tag"
         size="sm"
-        class="t-flex-fix t-mx-2"
+        class="t-mx-2 t-flex-fix"
         @click="goToCategory(category)"
       >
         {{ category.name }}

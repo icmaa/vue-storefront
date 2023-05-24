@@ -1,17 +1,27 @@
 <template>
-  <div class="t-container" id="checkout">
+  <div
+    id="checkout"
+    class="t-container"
+  >
     <div class="t-flex t-justify-center lg:t-px-4 lg:t-py-8">
-      <div class="t-w-full t-p-6 t-pt-4 sm:t-w-2/3 lg:t-w-1/2 xl:t-w-2/5 lg:t-p-0 lg:t-py-8">
-        <div class="t-flex t-items-center t-justify-between t-mb-6 lg:t-mb-8">
+      <div class="t-w-full t-p-6 t-pt-4 sm:t-w-2/3 lg:t-w-1/2 lg:t-p-0 lg:t-py-8 xl:t-w-2/5">
+        <div class="t-mb-6 t-flex t-items-center t-justify-between lg:t-mb-8">
           <h1 class="t-flex t-items-center t-text-1xl t-font-bold">
-            <span class="t-flex t-items-center t-justify-center t-w-8 t-mr-4">
-              <material-icon icon="credit_card" size="lg" />
+            <span class="t-mr-4 t-flex t-w-8 t-items-center t-justify-center">
+              <material-icon
+                icon="credit_card"
+                size="lg"
+              />
             </span>
             <span class="title">
               {{ $t('Checkout') }}
             </span>
           </h1>
-          <logo width="174" height="43" class="logo t-flex-fix t--mr-6 lg:t-mr-0" />
+          <logo
+            width="174"
+            height="43"
+            class="logo t--mr-6 t-flex-fix lg:t-mr-0"
+          />
         </div>
         <step
           v-for="(step, index) in steps"
@@ -24,16 +34,19 @@
           :last="(index + 1) === steps.length"
         >
           <component
-            v-if="loaded"
             :is="step.component"
+            v-if="loaded"
             :active="step.active"
             :done="step.done"
           />
         </step>
       </div>
-      <div class="t-hidden lg:t-block lg:t-w-1/2 xl:t-w-2/5 t-pl-8">
-        <div class="t-min-h-full t-flex t-items-stretch t-bg-base-lightest t-p-4">
-          <cart class="t-bg-white t-w-full t-p-4" v-if="!isMobile" />
+      <div class="t-hidden t-pl-8 lg:t-block lg:t-w-1/2 xl:t-w-2/5">
+        <div class="t-flex t-min-h-full t-items-stretch t-bg-base-lightest t-p-4">
+          <cart
+            v-if="!isMobile"
+            class="t-w-full t-bg-white t-p-4"
+          />
         </div>
       </div>
     </div>

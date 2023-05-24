@@ -1,13 +1,24 @@
 <template>
   <div class="t-w-full">
-    <div class="t-bg-alert t-p-4 t-mb-4 t-text-white t-text-sm t-flex" v-if="isChildOutOfStock">
-      <material-icon icon="report_problem" class="t-mr-2" />
+    <div
+      v-if="isChildOutOfStock"
+      class="t-mb-4 t-flex t-bg-alert t-p-4 t-text-sm t-text-white"
+    >
+      <material-icon
+        icon="report_problem"
+        class="t-mr-2"
+      />
       <div>
         {{ $t('Sorry, but some required bundle items are currently out-of-stock.') }}
       </div>
     </div>
-    <div v-for="(option, i) in bundleOptions" :key="'bundleOption_' + option.option_id" class="t-w-full t-flex t-flex-col" :class="{ 't-mt-4': i !== 0 }">
-      <h4 class="t-uppercase t-text-xs t-px-2 t-text-base-lighter t-font-bold">
+    <div
+      v-for="(option, i) in bundleOptions"
+      :key="'bundleOption_' + option.option_id"
+      class="t-flex t-w-full t-flex-col"
+      :class="{ 't-mt-4': i !== 0 }"
+    >
+      <h4 class="t-px-2 t-text-xs t-font-bold t-uppercase t-text-base-lighter">
         {{ option.title }}
       </h4>
       <default-selector
@@ -97,6 +108,14 @@ export default {
       })
     }
   },
+  mounted () {
+    // Select first option if only one is found for a bundle option
+    this.bundleOptions.forEach(option => {
+      if (option.selectorOptions.length === 1 && option.selectorOptions[0].available === true) {
+        this.$store.dispatch('product/updateBundleOptions', option.selectorOptions[0])
+      }
+    })
+  },
   methods: {
     optionChanged (option) {
       if (option.available !== true) {
@@ -108,14 +127,6 @@ export default {
         this.$emit('change', option)
       }
     }
-  },
-  mounted () {
-    // Select first option if only one is found for a bundle option
-    this.bundleOptions.forEach(option => {
-      if (option.selectorOptions.length === 1 && option.selectorOptions[0].available === true) {
-        this.$store.dispatch('product/updateBundleOptions', option.selectorOptions[0])
-      }
-    })
   }
 }
 </script>

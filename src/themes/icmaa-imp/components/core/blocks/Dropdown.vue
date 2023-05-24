@@ -1,12 +1,35 @@
 <template>
-  <div class="t-relative" v-outside="outsideClick">
-    <div class="t-cursor-pointer" @click="toggle">
+  <div
+    v-outside="outsideClick"
+    class="t-relative"
+  >
+    <div
+      class="t-cursor-pointer"
+      @click="toggle"
+    >
       <slot />
     </div>
-    <div class="t-absolute t-top-full t-z-1 t-flex t-flex-wrap t-shadow t-bg-white t-border t-border-base-light t-rounded-sm" :class="[`t-${position}-0`, ...dropdownClassObject]" v-show="open">
-      <label v-for="(o, i) in filteredOptions" :key="'option-' + i + '-' + o.value" class="t-flex t-w-full t-border-base-lighter t-px-3 t-py-2 t-text-left t-text-sm t-cursor-pointer hover:t-bg-base-lightest hover:t-text-primary" :class="[{ 't-bg-base-lighter t-text-primary': isCurrent(o.value) }, { 't-border-b': isLast(i) }]">
+    <div
+      v-show="open"
+      class="t-absolute t-top-full t-z-1 t-flex t-flex-wrap t-rounded-sm t-border t-border-base-light t-bg-white t-shadow"
+      :class="[`t-${position}-0`, ...dropdownClassObject]"
+    >
+      <label
+        v-for="(o, i) in filteredOptions"
+        :key="'option-' + i + '-' + o.value"
+        class="t-flex t-w-full t-cursor-pointer t-border-base-lighter t-px-3 t-py-2 t-text-left t-text-sm hover:t-bg-base-lightest hover:t-text-primary"
+        :class="[{ 't-bg-base-lighter t-text-primary': isCurrent(o.value) }, { 't-border-b': isLast(i) }]"
+      >
         {{ o.label }}
-        <input type="radio" v-model="value" :name="name" :value="o.value" :selected="o.selected" class="t-hidden" @change="select">
+        <input
+          v-model="value"
+          type="radio"
+          :name="name"
+          :value="o.value"
+          :selected="o.selected"
+          class="t-hidden"
+          @change="select"
+        >
       </label>
     </div>
   </div>
@@ -17,12 +40,6 @@ import outsideClickMixin from 'theme/mixins/outsideClickMixin'
 
 export default {
   mixins: [ outsideClickMixin ],
-  data () {
-    return {
-      value: this.current,
-      open: false
-    }
-  },
   props: {
     name: {
       type: String,
@@ -48,6 +65,12 @@ export default {
       type: String,
       default: 'left',
       validation: (v) => ['left', 'right'].includes(v)
+    }
+  },
+  data () {
+    return {
+      value: this.current,
+      open: false
     }
   },
   computed: {

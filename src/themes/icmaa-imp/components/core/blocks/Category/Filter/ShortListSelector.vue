@@ -1,8 +1,22 @@
 <template>
   <div>
     <div class="t-flex t-flex-wrap">
-      <generic-selector v-for="(option, index) in filteredOptions" :key="index" :option="option" @change="changeFilter" class="t-mb-2" :class="{ 't-mr-2': index !== option.length - 1 }" />
-      <button-component @click="toggleFold" v-if="showMore" type="tag" size="sm" :aria-label="$t(folded ? 'Show more' : 'Show less')" class="t-mb-2 t-opacity-50">
+      <generic-selector
+        v-for="(option, index) in filteredOptions"
+        :key="index"
+        :option="option"
+        class="t-mb-2"
+        :class="{ 't-mr-2': index !== option.length - 1 }"
+        @change="changeFilter"
+      />
+      <button-component
+        v-if="showMore"
+        type="tag"
+        size="sm"
+        :aria-label="$t(folded ? 'Show more' : 'Show less')"
+        class="t-mb-2 t-opacity-50"
+        @click="toggleFold"
+      >
         {{ folded ? '...' : $t('Show less') }}
       </button-component>
     </div>
@@ -15,11 +29,6 @@ import ButtonComponent from 'theme/components/core/blocks/Button'
 
 export default {
   name: 'ShortListSelector',
-  data () {
-    return {
-      folded: true
-    }
-  },
   components: {
     GenericSelector,
     ButtonComponent
@@ -28,6 +37,11 @@ export default {
     options: {
       type: Array,
       required: true
+    }
+  },
+  data () {
+    return {
+      folded: true
     }
   },
   computed: {

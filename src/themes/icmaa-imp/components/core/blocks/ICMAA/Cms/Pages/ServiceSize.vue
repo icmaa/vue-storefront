@@ -1,15 +1,21 @@
 <template>
-  <layout id="cms-page" :headline="content.headline">
+  <layout
+    id="cms-page"
+    :headline="content.headline"
+  >
     <size-layout :content="content.headgear" />
     <size-layout :content="content.tops" />
     <size-layout :content="content.pants" />
     <shoe-layout :content="content.shoes.boys" />
     <shoe-layout :content="content.shoes.girls" />
-    <h2 class="t-mt-8 t-pb-4 t-border-b-2">
+    <h2 class="t-mt-8 t-border-b-2 t-pb-4">
       {{ content.blanks.headline }}
     </h2>
     <template v-for="(obj, index) in blanksContent">
-      <shoe-layout :content="obj" :key="index" />
+      <shoe-layout
+        :key="index"
+        :content="obj"
+      />
     </template>
   </layout>
 </template>
@@ -24,12 +30,12 @@ import omit from 'lodash-es/omit'
 
 export default {
   name: 'ServiceSize',
-  mixins: [Page],
   components: {
     Layout,
     SizeLayout,
     ShoeLayout
   },
+  mixins: [Page],
   data () {
     return {
       dataType: 'yaml'

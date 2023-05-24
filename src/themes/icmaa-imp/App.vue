@@ -14,6 +14,11 @@ const EmptyLayout = () => import(/* webpackChunkName: "vsf-layout-empty" */ './l
 const MinimalLayout = () => import(/* webpackChunkName: "vsf-layout-minimal" */ './layouts/Minimal')
 
 export default {
+  components: {
+    DefaultLayout,
+    EmptyLayout,
+    MinimalLayout
+  },
   data () {
     return {
       ordersData: []
@@ -26,11 +31,6 @@ export default {
     layout () {
       return `${(this.$route.meta.layout || 'default')}-layout`
     }
-  },
-  components: {
-    DefaultLayout,
-    EmptyLayout,
-    MinimalLayout
   }
 }
 </script>

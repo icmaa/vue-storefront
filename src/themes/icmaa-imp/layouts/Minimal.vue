@@ -1,7 +1,10 @@
 <template>
   <div class="minimal-layout">
     <loader />
-    <div id="viewport" class="t-w-full">
+    <div
+      id="viewport"
+      class="t-w-full"
+    >
       <minimal-header />
       <slot />
       <minimal-footer />
@@ -16,14 +19,19 @@ import MinimalFooter from 'theme/components/core/blocks/Footer/MinimalFooter.vue
 import Loader from 'theme/components/core/Loader'
 
 export default {
+  components: {
+    MinimalHeader,
+    MinimalFooter,
+    Loader
+  },
+  mounted () {
+    this.$store.dispatch('ui/initModalDelay')
+  },
   methods: {
     ...mapGetters({ getMetaData: 'icmaaMeta/getData' }),
     fetchMetaData () {
       return this.$store.dispatch('icmaaMeta/load')
     }
-  },
-  mounted () {
-    this.$store.dispatch('ui/initModalDelay')
   },
   serverPrefetch () {
     return Promise.all([
@@ -32,11 +40,6 @@ export default {
   },
   metaInfo () {
     return this.getMetaData()
-  },
-  components: {
-    MinimalHeader,
-    MinimalFooter,
-    Loader
   }
 }
 </script>

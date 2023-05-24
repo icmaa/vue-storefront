@@ -47,14 +47,14 @@
       <template v-if="!zoom && imagesCount > 1">
         <div
           v-show="index < imagesCount"
-          class="t-absolute t-top-1/2 t-right-0 t-z-1 t-mx-4 t--mt-6 t-hidden t-h-12 t-w-12 t-cursor-pointer t-items-center t-justify-center t-rounded-full t-border t-border-white t-bg-black t-text-white lg:t-flex"
+          class="t-absolute t-right-0 t-top-1/2 t-z-1 t-mx-4 t--mt-6 t-hidden t-h-12 t-w-12 t-cursor-pointer t-items-center t-justify-center t-rounded-full t-border t-border-white t-bg-black t-text-white lg:t-flex"
           @click="step(+1)"
         >
           <i class="material-icons t-text-2xl">keyboard_arrow_right</i>
         </div>
         <div
           v-show="index > 1"
-          class="t-absolute t-top-1/2 t-left-0 t-z-1 t-mx-4 t--mt-6 t-hidden t-h-12 t-w-12 t-cursor-pointer t-items-center t-justify-center t-rounded-full t-border t-border-white t-bg-black t-text-white lg:t-flex"
+          class="t-absolute t-left-0 t-top-1/2 t-z-1 t-mx-4 t--mt-6 t-hidden t-h-12 t-w-12 t-cursor-pointer t-items-center t-justify-center t-rounded-full t-border t-border-white t-bg-black t-text-white lg:t-flex"
           @click="step(-1)"
         >
           <i class="material-icons t-text-2xl">keyboard_arrow_left</i>
@@ -71,7 +71,7 @@
       </div>
       <div
         v-if="imagesCount > 1 && !zoom"
-        class="t-absolute t-left-0 t-bottom-0 t-z-1 t-ml-4 t-mb-4 t-bg-white t-px-2 t-py-1 t-text-sm t-text-base-light lg:t-hidden"
+        class="t-absolute t-bottom-0 t-left-0 t-z-1 t-mb-4 t-ml-4 t-bg-white t-px-2 t-py-1 t-text-sm t-text-base-light lg:t-hidden"
       >
         {{ index }} / {{ imagesCount }}
       </div>

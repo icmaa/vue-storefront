@@ -1,7 +1,20 @@
 <template>
-  <div v-if="editUrl" class="t-absolute t-top-0 t-mt-2">
-    <a :href="editUrl" @click.stop="/** Don't call parent redirect */" target="_blank" rel="noopener noreferrer" class="t-block t-bg-white t-p-2 t-text-xs t-font-mono t-text-base-tone">
-      <material-icon icon="edit" size="lg" class="t-align-middle" />
+  <div
+    v-if="editUrl"
+    class="t-absolute t-top-0 t-mt-2"
+  >
+    <a
+      :href="editUrl"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="t-block t-bg-white t-p-2 t-font-mono t-text-xs t-text-base-tone"
+      @click.stop="/** Don't call parent redirect */"
+    >
+      <material-icon
+        icon="edit"
+        size="lg"
+        class="t-align-middle"
+      />
     </a>
   </div>
 </template>

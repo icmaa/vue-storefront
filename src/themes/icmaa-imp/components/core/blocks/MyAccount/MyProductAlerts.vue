@@ -1,19 +1,30 @@
 <template>
   <div>
-    <div class="t-p-4 t-bg-white">
+    <div class="t-bg-white t-p-4">
       <headline class="t-mb-0">
         {{ $t('My product-alerts') }}
       </headline>
-      <div class="t-text-sm t-text-base-light" v-if="stockItems.length === 0">
+      <div
+        v-if="stockItems.length === 0"
+        class="t-text-sm t-text-base-light"
+      >
         {{ $t('You aren\'t subscribed to any product alerts.') }}
       </div>
-      <div class="t-text-sm t-text-base-tone" v-if="isLoaded && stockItems.length > 0">
+      <div
+        v-if="isLoaded && stockItems.length > 0"
+        class="t-text-sm t-text-base-tone"
+      >
         {{ $t('You\'re subscribed to the following products and will be notified as soon as they are back in stock.') }}
       </div>
     </div>
     <template v-if="isLoaded && stockItems.length > 0">
-      <div class="t-flex t-flex-wrap t-justify-start t--mx-1 lg:t--mx-2 t-mt-4">
-        <product v-for="(stockItemId, i) in stockItems" :key="i" :stock-item-id="stockItemId" class="t-w-1/2 lg:t-w-1/3 t-px-1 lg:t-px-2 t-mb-8" />
+      <div class="t--mx-1 t-mt-4 t-flex t-flex-wrap t-justify-start lg:t--mx-2">
+        <product
+          v-for="(stockItemId, i) in stockItems"
+          :key="i"
+          :stock-item-id="stockItemId"
+          class="t-mb-8 t-w-1/2 t-px-1 lg:t-w-1/3 lg:t-px-2"
+        />
       </div>
     </template>
   </div>

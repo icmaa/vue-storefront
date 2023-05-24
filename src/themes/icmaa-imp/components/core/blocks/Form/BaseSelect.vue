@@ -1,13 +1,22 @@
 <template>
   <div class="base-select">
-    <base-label v-if="hasLabel && !isFloating" :class="{ 't-sr-only': hideLabel }" :id="id">
+    <base-label
+      v-if="hasLabel && !isFloating"
+      :id="id"
+      :class="{ 't-sr-only': hideLabel }"
+    >
       <slot>
         {{ label }}
       </slot>
     </base-label>
-    <div class="t-relative" :class="{ 'floating-label': isFloating }">
+    <div
+      class="t-relative"
+      :class="{ 'floating-label': isFloating }"
+    >
       <select
-        class="t-w-full t-border t-rounded-sm t-text-sm t-leading-tight t-bg-white t-appearance-none t-cursor-pointer focus:outline-none focus:ring"
+        :id="id"
+        :ref="name"
+        class="focus:outline-none focus:ring t-w-full t-cursor-pointer t-appearance-none t-rounded-sm t-border t-bg-white t-text-sm t-leading-tight"
         :class="[
           sizeClasses,
           invalid ? 't-border-alert' : 't-border-base-light',
@@ -18,15 +27,19 @@
           }
         ]"
         :name="name"
-        :ref="name"
-        :id="id"
         :disabled="disabled"
         @focus="$emit('focus')"
         @blur="$emit('blur')"
         @change="$emit('change', $event.target.value)"
         @input="$emit('input', $event.target.value)"
       >
-        <option disabled :selected="!value" v-if="selected === ''" value="" v-html="isFloating ? '' : initialOptionText" />
+        <option
+          v-if="selected === ''"
+          disabled
+          :selected="!value"
+          value=""
+          v-html="isFloating ? '' : initialOptionText"
+        />
         <option
           v-for="(option, key) in options"
           :key="key"
@@ -36,17 +49,30 @@
           {{ option.label }}
         </option>
       </select>
-      <floating-label v-if="hasLabel && isFloating" :id="id || name" class="t-pointer-events-none">
+      <floating-label
+        v-if="hasLabel && isFloating"
+        :id="id || name"
+        class="t-pointer-events-none"
+      >
         <slot>
           {{ label || initialOptionText }}
         </slot>
       </floating-label>
-      <div class="t-pointer-events-none t-absolute t-inset-y-0 t-right-0 t-flex t-items-center" :class="[ size === 'sm' ? 't-px-1' : 't-px-2' ]">
+      <div
+        class="t-pointer-events-none t-absolute t-inset-y-0 t-right-0 t-flex t-items-center"
+        :class="[ size === 'sm' ? 't-px-1' : 't-px-2' ]"
+      >
         <material-icon icon="keyboard_arrow_down" />
       </div>
-      <loader-background v-if="loading" class="t-bottom-0" />
+      <loader-background
+        v-if="loading"
+        class="t-bottom-0"
+      />
     </div>
-    <ValidationMessages v-if="invalid" :validations="validations" />
+    <ValidationMessages
+      v-if="invalid"
+      :validations="validations"
+    />
   </div>
 </template>
 
@@ -58,11 +84,11 @@ import LoaderBackground from 'theme/components/core/LoaderBackground'
 
 export default {
   name: 'BaseSelect',
-  mixins: [ InputMixin ],
   components: {
     MaterialIcon,
     LoaderBackground
   },
+  mixins: [ InputMixin ],
   props: {
     options: {
       type: Array,

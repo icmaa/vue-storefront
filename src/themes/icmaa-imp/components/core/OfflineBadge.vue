@@ -2,7 +2,7 @@
   <no-ssr>
     <div
       v-show="OfflineOnly"
-      class="t-fixed t-bottom-0 t-left-0 t-w-full t-p-4 t-z-1 t-bg-alert t-text-white t-text-md"
+      class="t-text-md t-fixed t-bottom-0 t-left-0 t-z-1 t-w-full t-bg-alert t-p-4 t-text-white"
     >
       {{ $t('You are offline. Some features might not be available.') }}
     </div>

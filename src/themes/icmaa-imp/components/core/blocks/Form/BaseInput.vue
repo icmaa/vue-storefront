@@ -1,14 +1,32 @@
 <template>
   <div :class="{ 't-relative': validationsAsTooltip }">
-    <base-label v-if="hasLabel && !isFloating" :class="{ 't-sr-only': hideLabel }" :id="id || name">
+    <base-label
+      v-if="hasLabel && !isFloating"
+      :id="id || name"
+      :class="{ 't-sr-only': hideLabel }"
+    >
       <slot>
         {{ label || placeholder }}
       </slot>
     </base-label>
-    <div class="base-input t-relative t-flex t-flex-wrap" :class="{ 'floating-label': isFloating }">
-      <material-icon :icon="passTypeIcon" v-if="passIconActive" @click.native="togglePassType()" class="t-absolute t-flex t-self-center t-p-2 t-cursor-pointer t-text-base-lighter" :class="[`t-${iconPosition}-0`]" :aria-label="$t('Toggle password visibility')" :title="$t('Toggle password visibility')" />
+    <div
+      class="base-input t-relative t-flex t-flex-wrap"
+      :class="{ 'floating-label': isFloating }"
+    >
+      <material-icon
+        v-if="passIconActive"
+        :icon="passTypeIcon"
+        class="t-absolute t-flex t-cursor-pointer t-self-center t-p-2 t-text-base-lighter"
+        :class="[`t-${iconPosition}-0`]"
+        :aria-label="$t('Toggle password visibility')"
+        :title="$t('Toggle password visibility')"
+        @click.native="togglePassType()"
+      />
       <input
-        class="t-h-10 t-w-full t-px-3 t-border t-rounded-sm t-appearance-none t-text-sm t-leading-tigh placeholder:t-text-base-light"
+        :id="id || null"
+        :ref="name"
+        v-mask="maskSettings"
+        class="t-leading-tigh t-h-10 t-w-full t-appearance-none t-rounded-sm t-border t-px-3 t-text-sm placeholder:t-text-base-light"
         :class="[
           invalid ? 't-border-alert' : 't-border-base-light',
           {
@@ -19,28 +37,37 @@
         :placeholder="placeholder"
         :type="type === 'password' ? passType : type"
         :name="name || null"
-        :id="id || null"
         :autocomplete="autocomplete"
         :value="value"
         :autofocus="autofocus"
         :disabled="disabled"
         :maxlength="maxLength"
-        :ref="name"
-        v-mask="maskSettings"
         @input="$emit('input', $event.target.value)"
         @focus="$emit('focus')"
         @blur="$emit('blur')"
         @keyup.enter="$emit('keyup.enter', $event.target.value)"
         @keyup="$emit('keyup', $event)"
       >
-      <floating-label v-if="hasLabel && isFloating" :id="id || name" @click.prevent="setFocus">
+      <floating-label
+        v-if="hasLabel && isFloating"
+        :id="id || name"
+        @click.prevent="setFocus"
+      >
         <slot>
           {{ label || placeholder }}
         </slot>
       </floating-label>
-      <material-icon v-if="icon" :icon="icon" class="t-absolute t-flex t-self-center t-p-2" :class="[`t-${iconPosition}-0`]" />
+      <material-icon
+        v-if="icon"
+        :icon="icon"
+        class="t-absolute t-flex t-self-center t-p-2"
+        :class="[`t-${iconPosition}-0`]"
+      />
     </div>
-    <validation-messages :validations="validations" :validations-as-tooltip="validationsAsTooltip" />
+    <validation-messages
+      :validations="validations"
+      :validations-as-tooltip="validationsAsTooltip"
+    />
   </div>
 </template>
 
@@ -52,7 +79,6 @@ import { currentStoreView } from '@vue-storefront/core/lib/multistore'
 
 export default {
   name: 'BaseInput',
-  mixins: [ InputMixin ],
   components: {
     MaterialIcon
   },
@@ -68,13 +94,7 @@ export default {
       maskDirective(e, b)
     }
   },
-  data () {
-    return {
-      passType: 'password',
-      passTypeIcon: 'visibility_off',
-      passIconActive: false
-    }
-  },
+  mixins: [ InputMixin ],
   props: {
     type: {
       type: String,
@@ -124,6 +144,13 @@ export default {
       default: false
     }
   },
+  data () {
+    return {
+      passType: 'password',
+      passTypeIcon: 'visibility_off',
+      passIconActive: false
+    }
+  },
   computed: {
     invalid () {
       return this.validations.filter(v => v.condition).length > 0
@@ -135,6 +162,16 @@ export default {
       return this.mask
     }
   },
+  created () {
+    if (this.type === 'password') {
+      this.passIconActive = true
+    }
+  },
+  mounted () {
+    if (this.focus) {
+      this.setFocus()
+    }
+  },
   methods: {
     togglePassType () {
       if (this.passType === 'password') {
@@ -144,16 +181,6 @@ export default {
         this.passType = 'password'
         this.passTypeIcon = 'visibility_off'
       }
-    }
-  },
-  created () {
-    if (this.type === 'password') {
-      this.passIconActive = true
-    }
-  },
-  mounted () {
-    if (this.focus) {
-      this.setFocus()
     }
   }
 }

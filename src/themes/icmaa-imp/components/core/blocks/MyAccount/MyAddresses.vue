@@ -1,31 +1,67 @@
 <template>
-  <div class="t-p-4 t-bg-white" data-test-id="MyAddresses">
+  <div
+    class="t-bg-white t-p-4"
+    data-test-id="MyAddresses"
+  >
     <headline>
       {{ $t('My addresses') }}
     </headline>
 
-    <div class="list t-flex t-flex-wrap t-flex-grow t--mx-2" v-if="!edit">
-      <div v-for="(a, i) in addresses" :key="i" class="t-flex t-w-full sm:t-w-1/2 lg:t-w-1/3 t-px-2 t-mb-4 t-cursor-pointer" @click="editAddress(a.entity_id)" data-test-id="AddressBox">
-        <div class="t-w-full t-text-sm t-leading-snug t-border t-border-base-lightest t-p-4">
-          <p v-if="a.company" v-text="a.company" />
+    <div
+      v-if="!edit"
+      class="list t--mx-2 t-flex t-grow t-flex-wrap"
+    >
+      <div
+        v-for="(a, i) in addresses"
+        :key="i"
+        class="t-mb-4 t-flex t-w-full t-cursor-pointer t-px-2 sm:t-w-1/2 lg:t-w-1/3"
+        data-test-id="AddressBox"
+        @click="editAddress(a.entity_id)"
+      >
+        <div class="t-w-full t-border t-border-base-lightest t-p-4 t-text-sm t-leading-snug">
+          <p
+            v-if="a.company"
+            v-text="a.company"
+          />
           <p>{{ a.prefix }} {{ a.firstname }} {{ a.lastname }} {{ a.suffix }}</p>
           <p>{{ a.street }}</p>
           <p>{{ a.postcode }} {{ a.city }}</p>
           {{ a.country.name }}
-          <div v-if="a.is_default_billing || a.is_default_shipping" class="t-mt-2">
-            <div v-if="a.is_default_billing" class="t-text-xs t-text-base-light">
-              <material-icon icon="check" size="xs" class="t-inline-flex t-align-bottom" />
+          <div
+            v-if="a.is_default_billing || a.is_default_shipping"
+            class="t-mt-2"
+          >
+            <div
+              v-if="a.is_default_billing"
+              class="t-text-xs t-text-base-light"
+            >
+              <material-icon
+                icon="check"
+                size="xs"
+                class="t-inline-flex t-align-bottom"
+              />
               {{ $t('Default billing address') }}
             </div>
-            <div v-if="a.is_default_shipping" class="t-text-xs t-text-base-light">
-              <material-icon icon="check" size="xs" class="t-inline-flex t-align-bottom" />
+            <div
+              v-if="a.is_default_shipping"
+              class="t-text-xs t-text-base-light"
+            >
+              <material-icon
+                icon="check"
+                size="xs"
+                class="t-inline-flex t-align-bottom"
+              />
               {{ $t('Default shipping address') }}
             </div>
           </div>
         </div>
       </div>
-      <div v-if="addresses.length === 0" class="t-flex t-w-full sm:t-w-1/2 lg:t-w-1/3 t-px-2 t-mb-4 t-cursor-pointer" @click="editAddress(true)">
-        <div class="t-w-full t-text-sm t-leading-snug t-border t-border-base-lightest t-p-4 t-h-32 t-flex t-flex-wrap t-items-center">
+      <div
+        v-if="addresses.length === 0"
+        class="t-mb-4 t-flex t-w-full t-cursor-pointer t-px-2 sm:t-w-1/2 lg:t-w-1/3"
+        @click="editAddress(true)"
+      >
+        <div class="t-flex t-h-32 t-w-full t-flex-wrap t-items-center t-border t-border-base-lightest t-p-4 t-text-sm t-leading-snug">
           <div class="t-w-full">
             <div>{{ $t('There are no addresses yet.') }}</div>
             <div class="t-text-base-light">
@@ -35,19 +71,30 @@
         </div>
       </div>
       <div class="t-w-full t-px-2">
-        <button-component @click="editAddress(true)" data-test-id="AddNewAddressButton">
+        <button-component
+          data-test-id="AddNewAddressButton"
+          @click="editAddress(true)"
+        >
           {{ $t('New address') }}
         </button-component>
       </div>
     </div>
 
-    <div class="form" v-if="edit" data-test-id="MyAddressesForm">
-      <form @submit.prevent="submit" novalidate class="t-flex t-flex-wrap t--mx-2">
+    <div
+      v-if="edit"
+      class="form"
+      data-test-id="MyAddressesForm"
+    >
+      <form
+        novalidate
+        class="t--mx-2 t-flex t-flex-wrap"
+        @submit.prevent="submit"
+      >
         <base-input
-          name="firstname"
           id="firstname"
-          autocomplete="given-name"
           v-model="address.firstname"
+          name="firstname"
+          autocomplete="given-name"
           :label="$t('First name') + ' *'"
           :validations="[
             {
@@ -59,13 +106,13 @@
               text: $t('Invalid characters')
             }
           ]"
-          class="t-w-1/2 lg:t-w-1/4 t-px-2 t-mb-4"
+          class="t-mb-4 t-w-1/2 t-px-2 lg:t-w-1/4"
         />
         <base-input
-          name="lastname"
           id="lastname"
-          autocomplete="family-name"
           v-model="address.lastname"
+          name="lastname"
+          autocomplete="family-name"
           :label="$t('Last name') + ' *'"
           :validations="[
             {
@@ -77,27 +124,28 @@
               text: $t('Invalid characters')
             }
           ]"
-          class="t-w-1/2 lg:t-w-1/4 t-px-2 t-mb-4"
+          class="t-mb-4 t-w-1/2 t-px-2 lg:t-w-1/4"
         />
         <base-input
-          name="company"
           id="company"
-          autocomplete="company"
           v-model="address.company"
+          name="company"
+          autocomplete="company"
           :label="$t('Company name')"
           :validations="[{
             condition: !validation.company.latin && validation.company.$error,
             text: $t('Invalid characters')
           }]"
-          class="t-w-full lg:t-w-1/2 t-px-2 t-mb-4"
+          class="t-mb-4 t-w-full t-px-2 lg:t-w-1/2"
         />
-        <div class="t-w-full lg:t-w-1/2 t-px-2">
+        <div class="t-w-full t-px-2 lg:t-w-1/2">
           <base-input
-            v-for="(street,i) in address.street" :key="i"
-            :name="`street[${i}]`"
+            v-for="(street,i) in address.street"
             :id="`street-${i}`"
-            autocomplete="street"
+            :key="i"
             v-model="address.street[i]"
+            :name="`street[${i}]`"
+            autocomplete="street"
             :label="i === 0 ? $t('Street') + ' *' : false"
             :validations="[
               {
@@ -122,10 +170,10 @@
           />
         </div>
         <base-input
-          name="city"
           id="city"
-          autocomplete="city"
           v-model="address.city"
+          name="city"
+          autocomplete="city"
           :label="$t('City') + ' *'"
           :validations="[
             {
@@ -137,13 +185,13 @@
               text: $t('Invalid characters')
             }
           ]"
-          class="t-w-full lg:t-w-1/2 t-px-2 t-mb-4"
+          class="t-mb-4 t-w-full t-px-2 lg:t-w-1/2"
         />
         <base-input
-          name="postcode"
           id="postcode"
-          autocomplete="postcode"
           v-model="address.postcode"
+          name="postcode"
+          autocomplete="postcode"
           :label="$t('Postcode') + ' *'"
           :validations="[
             {
@@ -155,12 +203,13 @@
             }
           ]"
           :class="[ hasState ? 't-w-full lg:t-w-1/2' : 't-w-1/2 lg:t-w-1/4']"
-          class="t-px-2 t-mb-4"
+          class="t-mb-4 t-px-2"
         />
         <base-select
-          name="region_id"
+          v-if="hasState"
           id="region_id"
           v-model="address.region_id"
+          name="region_id"
           :initial-option-text="$t('State / Region')"
           :label="$t('State / Region') + ' *'"
           :options="states"
@@ -168,42 +217,47 @@
             condition: !validation.region_id.required && validation.region_id.$error,
             text: $t('Field is required')
           }]"
-          class="t-w-1/2 lg:t-w-1/4 t-px-2 t-mb-4"
-          v-if="hasState"
+          class="t-mb-4 t-w-1/2 t-px-2 lg:t-w-1/4"
         />
         <country-select
-          name="country_id"
           id="country_id"
           v-model="address.country_id"
+          name="country_id"
           :label="$t('Country') + ' *'"
           :validations="[{
             condition: !validation.country_id.required && validation.country_id.$error,
             text: $t('Field is required')
           }]"
-          class="t-w-1/2 lg:t-w-1/4 t-px-2 t-mb-4"
+          class="t-mb-4 t-w-1/2 t-px-2 lg:t-w-1/4"
         />
-        <div class="t-w-full lg:t-w-1/2 t-px-2 t-mb-4">
+        <div class="t-mb-4 t-w-full t-px-2 lg:t-w-1/2">
           <base-input
-            name="telephone"
             id="telephone"
-            autocomplete="telephone"
             v-model="address.telephone"
+            name="telephone"
+            autocomplete="telephone"
             :label="$t('Telephone')"
             :validations="[{
               condition: !validation.telephone.unicodeAlphaNum && validation.telephone.$error,
               text: $t('Only alphanumeric characters are allowed.')
             }]"
           />
-          <div class="t-mt-2 t-text-xs t-text-base-light t-leading-snug" v-if="['FR'].includes(countryId)">
+          <div
+            v-if="['FR'].includes(countryId)"
+            class="t-mt-2 t-text-xs t-leading-snug t-text-base-light"
+          >
             Votre numéro de téléphone peut être nécessaire au livreur pour vous contacter en cas de soucis.
           </div>
         </div>
-        <div v-if="hasVatId" class="t-w-full t-mb-4">
+        <div
+          v-if="hasVatId"
+          class="t-mb-4 t-w-full"
+        >
           <base-input
-            name="vat_id"
             id="vat_id"
-            autocomplete="vat_id"
             v-model="address.vat_id"
+            name="vat_id"
+            autocomplete="vat_id"
             :label="$t('VAT number') + ' *'"
             :validations="[
               {
@@ -211,39 +265,62 @@
                 text: $t('Field is required')
               }
             ]"
-            class="t-w-full lg:t-w-1/2 t-px-2"
+            class="t-w-full t-px-2 lg:t-w-1/2"
           />
         </div>
         <div class="t-w-full" />
         <base-checkbox
-          name="is_default_billing"
           id="is_default_billing"
           v-model="address.is_default_billing"
-          class="t-w-full lg:t-w-1/2 t-px-2"
+          name="is_default_billing"
+          class="t-w-full t-px-2 lg:t-w-1/2"
           :disabled="customerAddress && customerAddress.is_default_billing"
           data-test-id="IsDefaultBillingCheckbox"
         >
           {{ $t('Use as my default billing address') }}
         </base-checkbox>
         <base-checkbox
-          name="is_default_shipping"
           id="is_default_shipping"
           v-model="address.is_default_shipping"
-          class="t-w-full lg:t-w-1/2 t-px-2 t-mb-4"
+          name="is_default_shipping"
+          class="t-mb-4 t-w-full t-px-2 lg:t-w-1/2"
           :disabled="customerAddress && customerAddress.is_default_shipping"
           data-test-id="IsDefaultShippingCheckbox"
         >
           {{ $t('Use as my default shipping address') }}
         </base-checkbox>
-        <div class="t-px-2 t-w-full t-flex t-flex-wrap t-justify-between">
-          <button-component :submit="true" type="primary" class="t-w-full lg:t-w-auto lg:t-order-3" data-test-id="SubmitButton">
+        <div class="t-flex t-w-full t-flex-wrap t-justify-between t-px-2">
+          <button-component
+            :submit="true"
+            type="primary"
+            class="t-w-full lg:t-order-3 lg:t-w-auto"
+            data-test-id="SubmitButton"
+          >
             {{ $t('Save address') }}
           </button-component>
-          <button-component type="ghost" icon="keyboard_arrow_left" icon-position="left" class="t-flex-1 lg:t-flex-fix t-w-1/2 t-mt-4 lg:t-mt-0 lg:t-w-auto lg:t-order-1" @click="back" data-test-id="BackButton">
+          <button-component
+            type="ghost"
+            icon="keyboard_arrow_left"
+            icon-position="left"
+            class="t-mt-4 t-w-1/2 t-flex-1 lg:t-order-1 lg:t-mt-0 lg:t-w-auto lg:t-flex-fix"
+            data-test-id="BackButton"
+            @click="back"
+          >
             {{ $t('Back') }}
           </button-component>
-          <div v-if="!isNewAddress && !isDefaultAddress && address.entity_id" class="t-flex-1 t-w-1/2 t-pl-4 lg:t-order-2">
-            <button-component type="ghost" icon="delete" icon-position="left" class="t-w-full t-mt-4 lg:t-mt-0 lg:t-w-auto " :confirm="true" @click="deleteAddress(address.entity_id)" data-test-id="DeleteButton">
+          <div
+            v-if="!isNewAddress && !isDefaultAddress && address.entity_id"
+            class="t-w-1/2 t-flex-1 t-pl-4 lg:t-order-2"
+          >
+            <button-component
+              type="ghost"
+              icon="delete"
+              icon-position="left"
+              class="t-mt-4 t-w-full lg:t-mt-0 lg:t-w-auto "
+              :confirm="true"
+              data-test-id="DeleteButton"
+              @click="deleteAddress(address.entity_id)"
+            >
               {{ $t('Delete') }}
             </button-component>
           </div>
@@ -273,15 +350,6 @@ import MaterialIcon from 'theme/components/core/blocks/MaterialIcon'
 
 export default {
   name: 'MyAdresses',
-  mixins: [ AddressMixin ],
-  data () {
-    return {
-      edit: false,
-      isNewAddress: false,
-      isDelete: false,
-      address: {}
-    }
-  },
   components: {
     Headline,
     BaseInput,
@@ -290,6 +358,15 @@ export default {
     ButtonComponent,
     CountrySelect,
     MaterialIcon
+  },
+  mixins: [ AddressMixin ],
+  data () {
+    return {
+      edit: false,
+      isNewAddress: false,
+      isDelete: false,
+      address: {}
+    }
   },
   computed: {
     ...mapGetters({
@@ -314,6 +391,15 @@ export default {
       let address = this.customerAddress
       return address && (address.is_default_billing === true || address.is_default_shipping === true)
     }
+  },
+  beforeMount () {
+    this.$bus.$on('myAccount-after-updateUser-success', this.onAfterUpdateUserSuccess)
+  },
+  mounted () {
+    this.setAddressDefaults()
+  },
+  destroyed () {
+    this.$bus.$off('myAccount-after-updateUser-success', this.onAfterUpdateUserSuccess)
   },
   methods: {
     editAddress (entity_id) {
@@ -412,15 +498,6 @@ export default {
 
       this.editAddress(this.address.entity_id)
     }
-  },
-  beforeMount () {
-    this.$bus.$on('myAccount-after-updateUser-success', this.onAfterUpdateUserSuccess)
-  },
-  mounted () {
-    this.setAddressDefaults()
-  },
-  destroyed () {
-    this.$bus.$off('myAccount-after-updateUser-success', this.onAfterUpdateUserSuccess)
   },
   validations () {
     const vatId = this.hasVatId ? {

@@ -1,9 +1,15 @@
 <template>
   <div class="order-review">
     <div v-if="active">
-      <cart class="t-mb-6" v-if="isMobile">
+      <cart
+        v-if="isMobile"
+        class="t-mb-6"
+      >
         <template v-slot:headline>
-          <h3 v-text="$t('Shopping cart')" class="t-w-full t-mb-2 t-font-light" />
+          <h3
+            class="t-mb-2 t-w-full t-font-light"
+            v-text="$t('Shopping cart')"
+          />
         </template>
       </cart>
       <additional-products class="t-mb-6" />
@@ -11,45 +17,63 @@
         {{ $t('Please check if your order data is correct.') }}
       </p>
       <base-checkbox
-        name="newsletter"
+        v-if="!isSubscribedToNewsletter"
         id="newsletter"
         v-model="newsletter"
+        name="newsletter"
         checkbox-class="t-self-start"
         class="t-mb-2"
-        v-if="!isSubscribedToNewsletter"
       >
         {{ $t("I would like to receive the newsletter as well as a {value} voucher.", { value: newsletterVoucherValue }) }}
       </base-checkbox>
       <template v-if="hasAgreements">
         <base-checkbox
-          name="terms"
           id="terms"
           v-model="terms"
+          name="terms"
           :validations="[{
             condition: $v.terms.$error && (!$v.terms.required || !$v.terms.notFalse),
             text: $t('Field is required')
           }]"
           checkbox-class="t-self-start"
         >
-          <i18n path="I have read and agree with the {toc}, {privacy-policy} and {return-instructions}." tag="p">
+          <i18n
+            path="I have read and agree with the {toc}, {privacy-policy} and {return-instructions}."
+            tag="p"
+          >
             <template v-slot:toc>
-              <a :href="localizedRoutePath('/service-conditions')" target="_blank" class="t-text-base-tone t-underline" v-text="$t('Terms and Conditions')" />
+              <a
+                :href="localizedRoutePath('/service-conditions')"
+                target="_blank"
+                class="t-text-base-tone t-underline"
+                v-text="$t('Terms and Conditions')"
+              />
             </template>
             <template v-slot:privacy-policy>
-              <a :href="localizedRoutePath('/service-privacy')" target="_blank" class="t-text-base-tone t-underline" v-text="$t('Privacy Policy')" />
+              <a
+                :href="localizedRoutePath('/service-privacy')"
+                target="_blank"
+                class="t-text-base-tone t-underline"
+                v-text="$t('Privacy Policy')"
+              />
             </template>
             <template v-slot:return-instructions>
-              <a :href="localizedRoutePath('/service-conditions')" target="_blank" class="t-text-base-tone t-underline" v-text="$t('Return instructions')" />
+              <a
+                :href="localizedRoutePath('/service-conditions')"
+                target="_blank"
+                class="t-text-base-tone t-underline"
+                v-text="$t('Return instructions')"
+              />
             </template>
           </i18n>
         </base-checkbox>
       </template>
       <button-component
-        class="t-w-full lg:t-w-auto t-mt-8"
+        class="t-mt-8 t-w-full lg:t-w-auto"
         :class="{ 't-opacity-50': $v.$dirty && $v.$invalid }"
         type="primary"
-        @click.native.stop="submit"
         data-test-id="PlaceOrderButton"
+        @click.native.stop="submit"
       >
         {{ $t(('Place order')) }}
       </button-component>
@@ -69,13 +93,13 @@ import BaseCheckbox from 'theme/components/core/blocks/Form/BaseCheckbox'
 import ButtonComponent from 'theme/components/core/blocks/Button'
 
 export default {
-  mixins: [ Review ],
   components: {
     AdditionalProducts,
     BaseCheckbox,
     ButtonComponent,
     Cart
   },
+  mixins: [ Review ],
   validations () {
     let agreements = {}
     if (this.hasAgreements) {

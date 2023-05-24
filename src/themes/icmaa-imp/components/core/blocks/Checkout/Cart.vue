@@ -1,7 +1,7 @@
 <template>
   <div>
     <slot name="headline">
-      <h2 class="t-font-light t-text-xl t-mb-4">
+      <h2 class="t-mb-4 t-text-xl t-font-light">
         {{ $t('Shopping cart') }}
       </h2>
     </slot>

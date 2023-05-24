@@ -1,19 +1,25 @@
 <template>
-  <div class="t-px-4 t--mx-4 t-flex t-flex-wrap">
-    <h4 v-if="!!title && title !== ''" class="t-w-full t-px-4 t-flex t-justify-between t-items-center t-text-xl t-text-base-dark t-mb-4">
+  <div class="t--mx-4 t-flex t-flex-wrap t-px-4">
+    <h4
+      v-if="!!title && title !== ''"
+      class="t-mb-4 t-flex t-w-full t-items-center t-justify-between t-px-4 t-text-xl t-text-base-dark"
+    >
       {{ title }}
-      <span class="t-inline-block t-l t-text-primary t-text-xs t-leading-loose t-cursor-pointer" @click="openSidebarNavigation">
+      <span
+        class="t-l t-inline-block t-cursor-pointer t-text-xs t-leading-loose t-text-primary"
+        @click="openSidebarNavigation"
+      >
         {{ $t('View all') }}
       </span>
     </h4>
     <div
       v-for="(item, i) in mappedItems"
       :key="item.text + '-' + i"
-      class="t-flex t-w-1/2 lg:t-w-1/4 t-px-4 t-mb-4"
+      class="t-mb-4 t-flex t-w-1/2 t-px-4 lg:t-w-1/4"
     >
       <router-link
         :to="localizedRoute(item.link)"
-        class="t-px-4 t-py-3 t-w-full t-bg-white t-text-sm t-align-middle"
+        class="t-w-full t-bg-white t-px-4 t-py-3 t-align-middle t-text-sm"
       >
         {{ item.text }}
       </router-link>
