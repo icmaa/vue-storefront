@@ -61,7 +61,7 @@ export default {
       return this.getCategoryBy(this.query?.categories)
     },
     articles (): any {
-      return this.getArticlesByQuery(this.query)
+      return this.getArticlesByQuery(this.query).slice(0, this.size)
     }
   },
   async mounted () {
