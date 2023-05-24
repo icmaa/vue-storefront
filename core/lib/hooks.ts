@@ -30,23 +30,23 @@ function createListenerHook<T> () {
   @return hook: a hook function to use in modules
   @return executor: a function that will apply all hooks on a given value
  */
-function createMutatorHook<T, R> () {
-  const mutators: ((arg: T) => R)[] = []
+function createMutatorHook<T, R = T> () {
+  const mutators: ((arg: T, output?: R) => R)[] = []
 
-  function hook (mutator: (arg: T) => R) {
+  function hook (mutator: (arg: T, output?: R) => R) {
     mutators.push(mutator)
   }
 
-  function executor (rawOutput: T): T | R {
+  function executor (arg: T): R {
+    let output: R = arg as unknown as R
+
     if (mutators.length > 0) {
-      let modifiedOutput: R = null
       for (let mutatorFn of mutators) {
-        modifiedOutput = mutatorFn(rawOutput);
+        output = mutatorFn(arg, output)
       }
-      return modifiedOutput
-    } else {
-      return rawOutput
     }
+
+    return output
   }
 
   return {
@@ -66,7 +66,7 @@ function createAsyncMutatorHook<T, R> () {
     if (mutators.length > 0) {
       let modifiedOutput: R = null
       for (let mutatorFn of mutators) {
-        modifiedOutput = await mutatorFn(rawOutput);
+        modifiedOutput = await mutatorFn(rawOutput)
       }
       return modifiedOutput
     } else {

@@ -1,15 +1,50 @@
 <template>
   <div v-if="isVisible">
-    <div class="category-header t-relative" :class="{ 'loaded': !bannerLoading }">
-      <picture-component :src="banner" :width="bannerWidth" :height="bannerHeight" :sizes="bannerSizes" :placeholder="true" :ratio="`${bannerWidth}:${bannerHeight}`" :auto-reload="true" :preload-in-header="true" @load="onBannerLoad" @error="onBannerError" @click="goToCategory()" :alt="category.name" v-if="banner" img-class="t-w-screen" placeholder-class="t-w-screen lg:t-w-auto" :class="{ 't-cursor-pointer': linkedBanner }" />
-      <div class="t-flex t-items-center t-justify-end t-absolute t-bottom-0 t-left-0 t-pb-6 t-px-6 t-w-full" v-if="!!$slots.default">
+    <div
+      class="category-header t-relative"
+      :class="{ 'loaded': !bannerLoading }"
+    >
+      <picture-component
+        v-if="banner"
+        :src="banner"
+        :width="bannerWidth"
+        :height="bannerHeight"
+        :sizes="bannerSizes"
+        :placeholder="true"
+        :ratio="`${bannerWidth}:${bannerHeight}`"
+        :auto-reload="true"
+        :preload-in-header="true"
+        :alt="category.name"
+        img-class="t-w-screen"
+        placeholder-class="t-w-screen lg:t-w-auto"
+        :class="{ 't-cursor-pointer': linkedBanner }"
+        @load="onBannerLoad"
+        @error="onBannerError"
+        @click="goToCategory()"
+      />
+      <div
+        v-if="!!$slots.default"
+        class="t-absolute t-bottom-0 t-left-0 t-flex t-w-full t-items-center t-justify-end t-px-6 t-pb-6"
+      >
         <slot />
       </div>
     </div>
-    <div class="t-px-4 t-py-2" v-if="(showRelatedCategories && (!relatedCategoryLogosLoaded || logoItems.length > 0)) || (isSpotifyCategory && (!isSpotifyLoaded || logoItems.length > 0))">
-      <div class="t-flex t-justify-between" style="height: 38px;">
-        <span class="t-flex t-flex-fix t-hidden xl:t-inline-block t-self-center t-text-base-light t-text-sm t-mr-8">{{ isSpotifyCategory ? $t('Similar bands:') : $t('Similar brands:') }}</span>
-        <department-logo v-for="(logo, index) in logoItems" :key="index" v-bind="logo.data()" class="t-flex-fix t-opacity-60 hover:t-opacity-100" :class="{ 't-mr-4': isLast(index, logoItems)}" />
+    <div
+      v-if="(showRelatedCategories && (!relatedCategoryLogosLoaded || logoItems.length > 0)) || (isSpotifyCategory && (!isSpotifyLoaded || logoItems.length > 0))"
+      class="t-px-4 t-py-2"
+    >
+      <div
+        class="t-flex t-justify-between"
+        style="height: 38px;"
+      >
+        <span class="t-mr-8 t-hidden t-flex-fix t-self-center t-text-sm t-text-base-light xl:t-inline-block">{{ isSpotifyCategory ? $t('Similar bands:') : $t('Similar brands:') }}</span>
+        <department-logo
+          v-for="(logo, index) in logoItems"
+          :key="index"
+          v-bind="logo.data()"
+          class="t-flex-fix t-opacity-60 hover:t-opacity-100"
+          :class="{ 't-mr-4': isLast(index, logoItems)}"
+        />
       </div>
     </div>
   </div>
@@ -44,11 +79,11 @@ export default {
       type: [Array],
       default: () => [
         // Order high-to-low is important
-        { media: '(min-width: 1280px)', width: 1280 },
-        { media: '(min-width: 1024px)', width: 992 },
-        { media: '(min-width: 640px)', width: 736 },
-        { media: '(min-width: 415px)', width: 640 },
-        { media: '(max-width: 415px)', width: 415 }
+        { media: 'xl', width: 1280 },
+        { media: 'lg', width: 992 },
+        { media: 'sm', width: 736 },
+        { media: 'xs', width: 640 },
+        { width: 415 }
       ]
     },
     logoLimit: {
@@ -114,6 +149,14 @@ export default {
       return viewportLimits[this.viewport] || 4
     }
   },
+  watch: {
+    'category.id' () {
+      this.loadRelatedCategoryLogos()
+    }
+  },
+  mounted () {
+    this.loadRelatedCategoryLogos()
+  },
   methods: {
     isLast (index, array) {
       return index !== (array.length - 1)
@@ -157,14 +200,6 @@ export default {
 
       this.relatedCategoryLogos = this.getLogolineItems(fetchedCategories)
       this.relatedCategoryLogosLoaded = true
-    }
-  },
-  mounted () {
-    this.loadRelatedCategoryLogos()
-  },
-  watch: {
-    'category.id' () {
-      this.loadRelatedCategoryLogos()
     }
   }
 }

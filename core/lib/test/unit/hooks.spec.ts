@@ -16,16 +16,22 @@ describe('Hooks', () => {
 
   describe('createMutatorHook', () => {
     it('executes functions added by hook', () => {
-      const { hook, executor } = createMutatorHook();
-      const mockedFn = jest.fn(arg => `${arg} / test`)
+      const { hook, executor } = createMutatorHook<string>();
+      const mockedFn = jest.fn((arg, o) => `${o || arg} / test`)
       const mockedRawOutput = 'abc'
-      const expectedResult = 'abc / test'
+      const expectedResultFirst = 'abc / test'
+      const expectedResultSecond = 'abc / test / test'
 
       hook(mockedFn)
-      executor(mockedRawOutput)
+      hook(mockedFn)
 
-      expect(mockedFn).toHaveBeenCalledWith(mockedRawOutput);
-      expect(mockedFn(mockedRawOutput)).toBe(expectedResult);
+      const result = executor(mockedRawOutput)
+
+      expect(mockedFn).toBeCalledTimes(2)
+      expect(mockedFn).toHaveBeenCalledWith(mockedRawOutput, mockedRawOutput)
+      expect(mockedFn).toHaveBeenCalledWith(mockedRawOutput, expectedResultFirst)
+
+      expect(result).toBe(expectedResultSecond)
     })
   })
 

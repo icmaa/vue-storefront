@@ -1,5 +1,8 @@
 <template>
-  <JsonLd :dto="jsonld" v-if="product.id" />
+  <JsonLd
+    v-if="product.id"
+    :dto="jsonld"
+  />
 </template>
 
 <script>

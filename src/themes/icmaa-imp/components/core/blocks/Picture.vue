@@ -1,19 +1,25 @@
 <template>
   <picture>
-    <source v-for="(sImage, i) in sourceImages" :key="sImage.srcset + '-' + i" :media="sImage.media" :data-srcset="sImage.srcset" :alt="alt + (sImage.alt || '')">
+    <source
+      v-for="(sImage, i) in sourceImages"
+      :key="sImage.srcset + '-' + i"
+      :media="sImage.media"
+      :data-srcset="sImage.srcset"
+      :alt="alt + (sImage.alt || '')"
+    >
     <img
+      ref="image"
       :data-src="defaultImage.src"
       :data-srcset="`${defaultImage.src} 1x, ${defaultImage.srcAt2x} 2x`"
       :class="[{ 't-hidden': (placeholder && loading), 't-w-full': imgFullSize }, ...imgClassTransformed]"
       v-bind="{ ...$attrs, ...dimensions }"
+      :alt="alt"
       v-on="$listeners"
       @error="loading = true"
-      ref="image"
-      :alt="alt"
     >
     <placeholder
-      :ratio="ratio"
       v-if="placeholder && loading"
+      :ratio="ratio"
       :class="placeholderClassTransformed"
     />
   </picture>
@@ -22,15 +28,16 @@
 <script>
 import Placeholder from 'theme/components/core/blocks/Placeholder'
 import LozadMixin from 'theme/mixins/lozadMixin'
+import { viewportSizes } from 'theme/store/ui'
 import cloneDeep from 'lodash-es/cloneDeep'
 
 export default {
   name: 'Picture',
-  mixins: [ LozadMixin ],
-  inheritAttrs: false,
   components: {
     Placeholder
   },
+  mixins: [ LozadMixin ],
+  inheritAttrs: false,
   props: {
     src: {
       type: String,
@@ -109,13 +116,15 @@ export default {
        * @see https://medium.com/@gamshan001/javascript-deep-copy-for-array-and-object-97e3d4bc401a
        */
       return cloneDeep(this.sizeMap).map(image => {
-        image.height = Math.ceil((this.height / this.width) * image.width)
+        image.height = image?.height || Math.ceil((this.height / this.width) * image.width)
         const src = image.src ? this.preparePath(image.src) : this.image
 
         const image1x = this.getImageWithSize(src, image.width, image.height)
         const image2x = this.getImageWithSize(src, image.width * 2, image.height * 2)
         const image3x = this.getImageWithSize(src, image.width * 3, image.height * 3)
         image.srcset = `${image1x} 1x, ${image2x} 2x, ${image3x} 3x`
+
+        image.media = this.prepareMedia(image.media)
 
         return image
       })
@@ -133,6 +142,20 @@ export default {
       return dimensions
     }
   },
+  mounted () {
+    this.lazyload(
+      this.$el,
+      {
+        enableAutoReload: this.autoReload,
+        loaded: () => {
+          this.$refs.image.addEventListener('load', this.loaded)
+          this.$once('hook:destroyed', () => {
+            document.removeEventListener('load', this.onLoaded)
+          })
+        }
+      }
+    )
+  },
   methods: {
     preparePath (path) {
       if (!path.startsWith('http') && !path.startsWith('/')) {
@@ -143,6 +166,28 @@ export default {
     },
     getImageWithSize (src, width = 0, height = 0) {
       return this.getThumbnail(src, width, height, this.pathType || 'media')
+    },
+    prepareMedia (media) {
+      const sizes = viewportSizes
+
+      if (!media) return `(max-width: ${sizes.xs}px)`
+
+      if (Object.keys(sizes).includes(media)) {
+        return `(min-width: ${sizes[media]}px)`
+      }
+
+      // eslint-disable-next-line no-useless-escape
+      const regex = new RegExp(`\\(*(?<scope>min|max)-(?<dimension>width|height):\\s*(?<size>${Object.keys(sizes).join('|')}|\\w+(px|%|vw|vh))\\)*`, 'gm')
+
+      const result = regex.exec(media)
+      if (!result) return media
+
+      const { scope, dimension, size } = result.groups
+      if (Object.keys(sizes).includes(size)) {
+        return media.replace(regex, `(${scope}-${dimension}: ${sizes[size]}px)`)
+      }
+
+      return `(${scope}-${dimension}: ${size})`
     },
     prepareClassProp (value) {
       if (typeof value === 'string') {
@@ -161,20 +206,6 @@ export default {
         this.$emit('load')
       }
     }
-  },
-  mounted () {
-    this.lazyload(
-      this.$el,
-      {
-        enableAutoReload: this.autoReload,
-        loaded: () => {
-          this.$refs.image.addEventListener('load', this.loaded)
-          this.$once('hook:destroyed', () => {
-            document.removeEventListener('load', this.onLoaded)
-          })
-        }
-      }
-    )
   },
   metaInfo () {
     if (!this.preloadInHeader) return {}

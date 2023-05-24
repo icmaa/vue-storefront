@@ -1,76 +1,156 @@
 <template>
-  <div id="product" data-test-id="product">
+  <div
+    id="product"
+    data-test-id="product"
+  >
     <div class="t-container t-px-4">
-      <div class="t--mx-4 lg:t-px-4 t-flex t-flex-wrap">
-        <breadcrumbs :show-active-route="false" class="breadcrumbs t-w-full t-my-4 md:t-my-8 t-px-4 md:t-px-0" />
+      <div class="t--mx-4 t-flex t-flex-wrap lg:t-px-4">
+        <breadcrumbs
+          :show-active-route="false"
+          class="breadcrumbs t-my-4 t-w-full t-px-4 md:t-my-8 md:t-px-0"
+        />
         <product-gallery
-          class="t-w-full t-border-base-lightest t-border-b t-bg-white lg:t-w-1/2 lg:t-border-b-0"
+          :key="`product-gallery-${product.parentId}`"
+          class="t-w-full t-border-b t-border-base-lightest t-bg-white lg:t-w-1/2 lg:t-border-b-0"
           :gallery="gallery.map(i => i.src)"
           :product="product"
-          :key="`product-gallery-${product.parentId}`"
         />
-        <div class="t-w-full t-p-8 t-bg-white lg:t-w-1/2" :class="{ 'lg:t-flex lg:t-flex-col lg:t-justify-between': isPreorder }">
-          <category-extras-header class="t--mx-8 t--mt-8 t-mb-8 lg:t-pl-px t-border-b t-border-base-lightest" :linked-banner="true" :banner-sizes="categoryHeaderBannerSizes" :logo-limit="departmentLogoLimit">
-            <div class="t-flex" v-if="category">
-              <button-component size="sm" @click="goToDepartmentCategory()">
+        <div
+          class="t-w-full t-bg-white t-p-8 lg:t-w-1/2"
+          :class="{ 'lg:t-flex lg:t-flex-col lg:t-justify-between': isPreorder }"
+        >
+          <category-extras-header
+            class="t--mx-8 t--mt-8 t-mb-8 t-border-b t-border-base-lightest lg:t-pl-px"
+            :linked-banner="true"
+            :banner-sizes="categoryHeaderBannerSizes"
+            :logo-limit="departmentLogoLimit"
+          >
+            <div
+              v-if="category"
+              class="t-flex"
+            >
+              <button-component
+                size="sm"
+                @click="goToDepartmentCategory()"
+              >
                 {{ $t('More products') }}
               </button-component>
             </div>
           </category-extras-header>
           <div class="t-flex t-flex-wrap">
-            <h1 data-test-id="productName" class="t-flex-grow t-w-1/2 t-mb-0 t-leading-snug">
-              <department-logo v-bind="departmentLogo.data()" v-if="departmentLogo" class="t-float-right t-pl-4" />
+            <h1
+              data-test-id="productName"
+              class="t-mb-0 t-w-1/2 t-grow t-leading-snug"
+            >
+              <department-logo
+                v-if="departmentLogo"
+                v-bind="departmentLogo.data()"
+                class="t-float-right t-pl-4"
+              />
               <template v-if="typeof productName === 'object'">
-                <span class="t-block t-text-2xl t-font-extralight t-leading-relaxed t-mb-2">{{ productName.mandant | htmlDecode }}</span>
+                <span class="t-mb-2 t-block t-text-2xl t-font-extralight t-leading-relaxed">{{ productName.mandant | htmlDecode }}</span>
                 <span class="t-block t-text-lg t-font-bold">{{ productName.product | htmlDecode }}</span>
               </template>
               <template v-else>
-                <span class="t-block t-text-2xl t-font-extralight t-mb-2">{{ productName | htmlDecode }}</span>
+                <span class="t-mb-2 t-block t-text-2xl t-font-extralight">{{ productName | htmlDecode }}</span>
               </template>
             </h1>
-            <reviews-short :rating="reviewRating" :count="reviewCount" class="t-flex-fix t-w-full t-mt-4 lg:t-flex-expand lg:t-w-2/3" />
-            <web-share :webshare-text="webshareText" :webshare-image="image.src" class="t-flex-fix t-w-full t-mt-4 t-text-base-light lg:t-w-auto" />
+            <reviews-short
+              :rating="reviewRating"
+              :count="reviewCount"
+              class="t-mt-4 t-w-full t-flex-fix lg:t-w-2/3 lg:t-flex-expand"
+            />
+            <web-share
+              :webshare-text="webshareText"
+              :webshare-image="image.src"
+              class="t-mt-4 t-w-full t-flex-fix t-text-base-light lg:t-w-auto"
+            />
 
             <div class="t-w-full">
-              <div v-if="product.type_id !== 'grouped'" class="price t-mt-5 t-mb-8 t-text-1xl" data-test-id="price">
+              <div
+                v-if="product.type_id !== 'grouped'"
+                class="price t-mt-5 t-mb-8 t-text-1xl"
+                data-test-id="price"
+              >
                 <template v-if="product.special_price && product.price_incl_tax && product.original_price_incl_tax">
                   <span class="price-original t-text-base-tone t-line-through">{{ price(product.original_price_incl_tax * product.qty) }}</span>
                   &nbsp;
-                  <span class="price-special t-text-sale t-font-bold">
-                    <span v-if="hasMultiplePrices" v-text="$t('as low as')" class="t-text-sm" />
+                  <span class="price-special t-font-bold t-text-sale">
+                    <span
+                      v-if="hasMultiplePrices"
+                      class="t-text-sm"
+                      v-text="$t('as low as')"
+                    />
                     {{ price(product.price_incl_tax * product.qty) }}
                   </span>
                 </template>
-                <span class="price t-font-bold" v-if="!product.special_price && product.price_incl_tax">
-                  <span v-if="hasMultiplePrices" v-text="$t('as low as')" class="t-text-sm" />
+                <span
+                  v-if="!product.special_price && product.price_incl_tax"
+                  class="price t-font-bold"
+                >
+                  <span
+                    v-if="hasMultiplePrices"
+                    class="t-text-sm"
+                    v-text="$t('as low as')"
+                  />
                   {{ price(product.qty > 0 ? product.price_incl_tax * product.qty : product.price_incl_tax) }}
                 </span>
-                <div class="t-mt-1 t-text-xs t-text-base-light" v-html="taxDisclaimer" />
+                <div
+                  class="t-mt-1 t-text-xs t-text-base-light"
+                  v-html="taxDisclaimer"
+                />
               </div>
 
               <div class="t-flex t-flex-wrap">
-                <div v-if="['configurable', 'bundle'].includes(product.type_id) && !isOnesizeProduct" class="t-flex t-flex-grow t-w-full t-mb-4 xl:t-w-3/6 xl:t-mr-4">
-                  <button-component type="select" icon="arrow_forward" data-test-id="AddToCartSize" class="t-w-full" @click.native="openAddtocart">
+                <div
+                  v-if="['configurable', 'bundle'].includes(product.type_id) && !isOnesizeProduct"
+                  class="t-mb-4 t-flex t-w-full t-grow xl:t-mr-4 xl:t-w-3/6"
+                >
+                  <button-component
+                    type="select"
+                    icon="arrow_forward"
+                    data-test-id="AddToCartSize"
+                    class="t-w-full"
+                    @click.native="openAddtocart"
+                  >
                     {{ productOptionsLabel }}
                   </button-component>
                 </div>
-                <button-component :type="loading || !isAddToCartDisabled ? 'primary' : 'second'" data-test-id="AddToCart" class="t-flex-grow xl:t-w-2/6 disabled:t-opacity-50 t-relative t-mb-4 t-mr-4" :disabled="isAddToCartDisabled" @click.native="addToCartButtonClick">
+                <button-component
+                  :type="loading || !isAddToCartDisabled ? 'primary' : 'second'"
+                  data-test-id="AddToCart"
+                  class="t-relative t-mb-4 t-mr-4 t-grow disabled:t-opacity-50 xl:t-w-2/6"
+                  :disabled="isAddToCartDisabled"
+                  @click.native="addToCartButtonClick"
+                >
                   {{ userHasSelectedVariant && isAddToCartDisabled && !loading ? $t('Out of stock') : $t('Add to cart') }}
-                  <loader-background v-if="loading" class="t-bottom-0" height="t-h-1" bar="t-bg-base-lightest t-opacity-25" />
+                  <loader-background
+                    v-if="loading"
+                    class="t-bottom-0"
+                    height="t-h-1"
+                    bar="t-bg-base-lightest t-opacity-25"
+                  />
                 </button-component>
-                <wishlist-button :product="wishlistProduct" class="t-flex-fix t-mb-4" data-test-id="CurrentProductWishlistButton" />
+                <wishlist-button
+                  :product="wishlistProduct"
+                  class="t-mb-4 t-flex-fix"
+                  data-test-id="CurrentProductWishlistButton"
+                />
               </div>
               <product-trust-signals />
             </div>
           </div>
-          <product-preorder v-if="isPreorder" :product="product" />
+          <product-preorder
+            v-if="isPreorder"
+            :product="product"
+          />
         </div>
       </div>
     </div>
 
-    <div class="t-container t-px-4 t-mt-8">
-      <div class="t--mx-4 lg:t-px-4 t-flex t-flex-wrap">
-        <div class="product-details t-w-full t-p-8 t-bg-white lg:t-w-1/2">
+    <div class="t-container t-mt-8 t-px-4">
+      <div class="t--mx-4 t-flex t-flex-wrap lg:t-px-4">
+        <div class="product-details t-w-full t-bg-white t-p-8 lg:t-w-1/2">
           <details-tabs :tabs="detailsTabs">
             <template #pill-details>
               {{ $t('Product details') }}
@@ -92,9 +172,16 @@
             </template>
           </details-tabs>
         </div>
-        <div class="reviews t-relative t-w-full t-p-8 t-bg-base-lighter lg:t-w-1/2" id="reviews">
+        <div
+          id="reviews"
+          class="reviews t-relative t-w-full t-bg-base-lighter t-p-8 lg:t-w-1/2"
+        >
           <lazyload data-test-id="ReviewsLoader">
-            <reviews :product="product" :product-name="product.translatedName || product.name" v-if="product" />
+            <reviews
+              v-if="product"
+              :product="product"
+              :product-name="product.translatedName || product.name"
+            />
             <reviews-claim />
           </lazyload>
         </div>
@@ -105,10 +192,20 @@
 
     <div class="t-container t-px-4">
       <lazyload data-test-id="RecommendationsLoader">
-        <recommendations :key="'crosssell-' + product.id" type="crosssell" :title="$t('You may like these too')" class="lg:t-mb-8" />
+        <recommendations
+          :key="'crosssell-' + product.id"
+          type="crosssell"
+          :title="$t('You may like these too')"
+          class="lg:t-mb-8"
+        />
       </lazyload>
       <lazyload data-test-id="RecommendationsLoader">
-        <recommendations :key="'upsell-' + product.id" type="upsell" :title="$t('Similar products')" class="lg:t-mb-8" />
+        <recommendations
+          :key="'upsell-' + product.id"
+          type="upsell"
+          :title="$t('Similar products')"
+          class="lg:t-mb-8"
+        />
       </lazyload>
     </div>
 
@@ -119,7 +216,10 @@
     />
 
     <json-ld-loader type="product" />
-    <json-ld-loader type="ticket" v-if="isTicket" />
+    <json-ld-loader
+      v-if="isTicket"
+      type="ticket"
+    />
   </div>
 </template>
 
@@ -194,28 +294,12 @@ export default {
     Lazyload
   },
   mixins: [IcmaaProduct, ProductMetaMixin, ProductPriceMixin, ProductOptionsMixin, ProductAddToCartMixin, FeaturesMixin, ClusterMixin],
-  beforeCreate () {
-    registerModule(ReviewModule)
-    registerModule(IcmaaExtendedReviewModule)
-  },
   data () {
     return {
       AddToCartSidebar,
       quantity: 0,
       loading: false,
       userHasSelectedVariant: false
-    }
-  },
-  watch: {
-    product (nProduct, oProduct) {
-      if (nProduct && nProduct.id && nProduct.id !== oProduct.id) {
-        this.getQuantity()
-        this.userHasSelectedVariant = false
-      }
-
-      if (nProduct.parentId) {
-        catalogHooksExecutors.productPageVisited(nProduct)
-      }
     }
   },
   computed: {
@@ -304,12 +388,49 @@ export default {
     categoryHeaderBannerSizes () {
       return [
         // Order high-to-low is important
-        { media: '(min-width: 1280px)', width: 624 },
-        { media: '(min-width: 1024px)', width: 496 },
-        { media: '(min-width: 640px)', width: 768 },
-        { media: '(min-width: 415px)', width: 640 },
-        { media: '(max-width: 415px)', width: 415 }
+        { media: 'xl', width: 624 },
+        { media: 'lg', width: 496 },
+        { media: 'sm', width: 768 },
+        { media: 'xs', width: 640 },
+        { width: 415 }
       ]
+    }
+  },
+  watch: {
+    product (nProduct, oProduct) {
+      if (nProduct && nProduct.id && nProduct.id !== oProduct.id) {
+        this.getQuantity()
+        this.userHasSelectedVariant = false
+      }
+
+      if (nProduct.parentId) {
+        catalogHooksExecutors.productPageVisited(nProduct)
+      }
+    }
+  },
+  async asyncData ({ store, route }) {
+    store.commit('product/' + productMutationTypes.PRODUCT_RESET_CURRENT, {})
+    const product = await store.dispatch('product/loadProduct', { parentSku: route.params.parentSku, childSku: route && route.params && route.params.childSku ? route.params.childSku : null })
+    const loadBreadcrumbsPromise = store.dispatch('product/loadProductBreadcrumbs', { product })
+    if (isServer) {
+      await loadBreadcrumbsPromise
+    }
+  },
+  beforeCreate () {
+    registerModule(ReviewModule)
+    registerModule(IcmaaExtendedReviewModule)
+  },
+  async mounted () {
+    await this.getQuantity()
+    catalogHooksExecutors.productPageVisited(this.product)
+  },
+  created () {
+    if (!isServer) {
+      const selectVariantCallback = () => { this.userHasSelectedVariant = true }
+      this.$bus.$on('user-has-selected-product-variant', selectVariantCallback)
+      this.$once('hook:beforeDestroy', () => {
+        this.$bus.$off('user-has-selected-product-variant', selectVariantCallback)
+      })
     }
   },
   methods: {
@@ -332,27 +453,6 @@ export default {
     },
     goToDepartmentCategory () {
       this.$router.push(formatCategoryLink(this.departmentCategory))
-    }
-  },
-  async asyncData ({ store, route }) {
-    store.commit('product/' + productMutationTypes.PRODUCT_RESET_CURRENT, {})
-    const product = await store.dispatch('product/loadProduct', { parentSku: route.params.parentSku, childSku: route && route.params && route.params.childSku ? route.params.childSku : null })
-    const loadBreadcrumbsPromise = store.dispatch('product/loadProductBreadcrumbs', { product })
-    if (isServer) {
-      await loadBreadcrumbsPromise
-    }
-  },
-  async mounted () {
-    await this.getQuantity()
-    catalogHooksExecutors.productPageVisited(this.product)
-  },
-  created () {
-    if (!isServer) {
-      const selectVariantCallback = () => { this.userHasSelectedVariant = true }
-      this.$bus.$on('user-has-selected-product-variant', selectVariantCallback)
-      this.$once('hook:beforeDestroy', () => {
-        this.$bus.$off('user-has-selected-product-variant', selectVariantCallback)
-      })
     }
   }
 }

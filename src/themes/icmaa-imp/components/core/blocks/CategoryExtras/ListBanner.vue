@@ -1,9 +1,33 @@
 <template>
   <div v-if="isVisible">
-    <router-link :to="localizedRoute(link)" :title="category.name" v-if="link" class="t-block">
-      <picture-component :alt="category.name | stripHTML" :src="banner" :width="624" :height="172" :placeholder="true" :sizes="sizes" ratio="1:1" class="t-w-screen" />
+    <router-link
+      v-if="link"
+      :to="localizedRoute(link)"
+      :title="category.name"
+      class="t-block"
+    >
+      <picture-component
+        :alt="category.name | stripHTML"
+        :src="banner"
+        :width="624"
+        :height="172"
+        :placeholder="true"
+        :sizes="sizes"
+        ratio="1:1"
+        class="t-w-screen"
+      />
     </router-link>
-    <picture-component v-else :alt="category.name | stripHTML" :src="banner" :width="624" :height="172" :placeholder="true" :sizes="sizes" ratio="1:1" class="t-w-screen" />
+    <picture-component
+      v-else
+      :alt="category.name | stripHTML"
+      :src="banner"
+      :width="624"
+      :height="172"
+      :placeholder="true"
+      :sizes="sizes"
+      ratio="1:1"
+      class="t-w-screen"
+    />
   </div>
 </template>
 
@@ -45,11 +69,11 @@ export default {
     sizes () {
       return [
         // Order high-to-low is important
-        { media: '(min-width: 1280px)', width: 1280 },
-        { media: '(min-width: 1024px)', width: 992 },
-        { media: '(min-width: 640px)', width: 736 },
-        { media: '(min-width: 415px)', width: 640 },
-        { media: '(max-width: 415px)', width: 415 }
+        { media: 'xl', width: 1280 },
+        { media: 'lg', width: 992 },
+        { media: 'sm', width: 736 },
+        { media: 'xs', width: 640 },
+        { width: 415 }
       ]
     }
   }

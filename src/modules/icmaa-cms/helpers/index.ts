@@ -34,7 +34,7 @@ const cssClassesDefaults: CssClasses = {
 }
 
 interface ImageOptions {
-  sizes?: { media: string, width: number }[] | null,
+  sizes?: { media?: string, width: number }[] | null,
   width?: number,
   height?: number,
   [key: string]: any
@@ -42,10 +42,10 @@ interface ImageOptions {
 
 const imageOptionsDefaults: ImageOptions = {
   sizes: [
-    { media: '(min-width: 1280px)', width: 360 },
-    { media: '(min-width: 1024px)', width: 236 },
-    { media: '(min-width: 415px)', width: 364 },
-    { media: '(max-width: 414px)', width: 188 }
+    { media: 'xl', width: 360 },
+    { media: 'lg', width: 236 },
+    { media: 'xs', width: 364 },
+    { width: 188 }
   ],
   width: 360,
   height: 500

@@ -1,5 +1,8 @@
 <template>
-  <component :is="htmlContent" class="t-text-sm t-leading-relaxed t-text-base-tone" />
+  <component
+    :is="htmlContent"
+    class="t-text-sm t-leading-relaxed t-text-base-tone"
+  />
 </template>
 
 <script>

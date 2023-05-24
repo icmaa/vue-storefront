@@ -1,14 +1,42 @@
 <template>
   <div class="t--mx-2 t-flex t-flex-wrap">
-    <div v-for="look in looksList" :key="`look-list-${look.uid}`" class="t-w-1/2 md:t-w-1/4 t-px-2 t-mb-4">
-      <router-link :to="localizedRoute({ name: 'icmaa-looks-detail', params: { identifier: look.identifier }})" :title="look.title | htmlDecode">
-        <picture-component :src="look.image" :width="imageWidth" :height="imageHeight" :sizes="imageSizes" :placeholder="true" :ratio="`${imageWidth}:${imageHeight}`" :alt="look.title | htmlDecode" />
+    <div
+      v-for="look in looksList"
+      :key="`look-list-${look.uid}`"
+      class="t-mb-4 t-w-1/2 t-px-2 md:t-w-1/4"
+    >
+      <router-link
+        :to="localizedRoute({ name: 'icmaa-looks-detail', params: { identifier: look.identifier }})"
+        :title="look.title | htmlDecode"
+      >
+        <picture-component
+          :src="look.image"
+          :width="imageWidth"
+          :height="imageHeight"
+          :sizes="imageSizes"
+          :placeholder="true"
+          :ratio="`${imageWidth}:${imageHeight}`"
+          :alt="look.title | htmlDecode"
+        />
       </router-link>
     </div>
-    <div class="t-w-full t-flex t-items-center t-justify-center t-mb-8" v-if="!finalPage">
-      <button-component type="ghost" @click.native="loadMore" :disabled="loading" class="t-w-2/3 lg:t-w-1/4" :class="{ 't-relative t-opacity-60': loading }">
+    <div
+      v-if="!finalPage"
+      class="t-mb-8 t-flex t-w-full t-items-center t-justify-center"
+    >
+      <button-component
+        type="ghost"
+        :disabled="loading"
+        class="t-w-2/3 lg:t-w-1/4"
+        :class="{ 't-relative t-opacity-60': loading }"
+        @click.native="loadMore"
+      >
         {{ $t('Load more') }}
-        <loader-background v-if="loading" bar="t-bg-base-darkest" class="t-bottom-0" />
+        <loader-background
+          v-if="loading"
+          bar="t-bg-base-darkest"
+          class="t-bottom-0"
+        />
       </button-component>
     </div>
   </div>
@@ -23,6 +51,11 @@ import LoaderBackground from 'theme/components/core/LoaderBackground'
 
 export default {
   name: 'LookList',
+  components: {
+    PictureComponent,
+    ButtonComponent,
+    LoaderBackground
+  },
   props: {
     looks: {
       type: [Array],
@@ -32,11 +65,6 @@ export default {
       type: Number,
       default: 4
     }
-  },
-  components: {
-    PictureComponent,
-    ButtonComponent,
-    LoaderBackground
   },
   data () {
     return {
@@ -57,10 +85,10 @@ export default {
     },
     imageSizes () {
       return [
-        { media: '(min-width: 1280px)', width: 360 },
-        { media: '(min-width: 1024px)', width: 236 },
-        { media: '(min-width: 415px)', width: 364 },
-        { media: '(max-width: 414px)', width: 188 }
+        { media: 'xl', width: 360 },
+        { media: 'lg', width: 236 },
+        { media: 'xs', width: 364 },
+        { width: 188 }
       ]
     }
   },

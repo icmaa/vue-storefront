@@ -5,10 +5,6 @@ export interface ImageHookProperties {
   sizeY: number
 }
 
-export interface ImageHookReturn {
-  path: string
-}
-
 export interface ImageHook {
-  afterProductThumbnailPathGenerate(params: ImageHookProperties): ImageHookReturn
+  afterProductThumbnailPathGenerate(params: ImageHookProperties, output: unknown)
 }

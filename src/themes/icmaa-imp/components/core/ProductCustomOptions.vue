@@ -1,46 +1,72 @@
 <template>
   <form class="custom-options">
-    <div v-for="option in product.custom_options" :key="('customOption_' + option.option_id)">
+    <div
+      v-for="option in product.custom_options"
+      :key="('customOption_' + option.option_id)"
+    >
       <div class="custom-option mb15">
         <h4>{{ option.title }}</h4>
         <input
+          v-if="option.type === 'field'"
+          v-model="inputValues[('customOption_' + option.option_id)]"
           class="
             py10 w-100 border-box brdr-none brdr-bottom-1
             brdr-cl-primary h4 sans-serif
           "
-          v-if="option.type === 'field'"
           type="text"
           :name="('customOption_' + option.option_id)"
           focus
-          v-model="inputValues[('customOption_' + option.option_id)]"
           :placeholder="option.title"
           @change="optionChanged(option)"
         >
-        <div class="m5 relative" v-for="opval in option.values" :key="opval.option_type_id" v-if="option.type === 'radio' || option.type === 'select' || option.type === 'drop_down'">
-          <input
-            @change="optionChanged(option)"
-            type="radio"
-            class="m0 no-outline"
-            :name="('customOption_' + option.option_id)"
-            :id="('customOption_' + opval.option_type_id)"
-            focus
-            :value="opval.option_type_id"
-            v-model="inputValues[('customOption_' + option.option_id)]"
-          ><label class="pl10 lh20 h4 pointer" :for="('customOption_' + opval.option_type_id)" v-html="opval.title" />
-        </div>
-        <div class="m5 relative" v-for="opval in option.values" :key="opval.option_type_id" v-if="option.type === 'checkbox'">
-          <input
-            @change="optionChanged(option)"
-            type="checkbox"
-            class="m0 no-outline"
-            :name="('customOption_' + option.option_id)"
-            :id="('customOption_' + opval.option_type_id)"
-            focus
-            :value="opval.option_type_id"
-            v-model="inputValues[('customOption_' + option.option_id)]"
-          ><label class="pl10 lh20 h4 pointer" :for="('customOption_' + opval.option_type_id)" v-html="opval.title" />
-        </div>
-        <span class="error" v-if="validation.results[('customOption_' + option.option_id)].error">{{ validation.results[('customOption_' + option.option_id)].message }}</span>
+        <template v-if="option.type === 'radio' || option.type === 'select' || option.type === 'drop_down'">
+          <div
+            v-for="opval in option.values"
+            :key="opval.option_type_id"
+            class="m5 relative"
+          >
+            <input
+              :id="('customOption_' + opval.option_type_id)"
+              v-model="inputValues[('customOption_' + option.option_id)]"
+              type="radio"
+              class="m0 no-outline"
+              :name="('customOption_' + option.option_id)"
+              focus
+              :value="opval.option_type_id"
+              @change="optionChanged(option)"
+            ><label
+              class="pl10 lh20 h4 pointer"
+              :for="('customOption_' + opval.option_type_id)"
+              v-html="opval.title"
+            />
+          </div>
+        </template>
+        <template v-if="option.type === 'checkbox'">
+          <div
+            v-for="opval in option.values"
+            :key="opval.option_type_id"
+            class="m5 relative"
+          >
+            <input
+              :id="('customOption_' + opval.option_type_id)"
+              v-model="inputValues[('customOption_' + option.option_id)]"
+              type="checkbox"
+              class="m0 no-outline"
+              :name="('customOption_' + option.option_id)"
+              focus
+              :value="opval.option_type_id"
+              @change="optionChanged(option)"
+            ><label
+              class="pl10 lh20 h4 pointer"
+              :for="('customOption_' + opval.option_type_id)"
+              v-html="opval.title"
+            />
+          </div>
+        </template>
+        <span
+          v-if="validation.results[('customOption_' + option.option_id)].error"
+          class="error"
+        >{{ validation.results[('customOption_' + option.option_id)].message }}</span>
       </div>
     </div>
   </form>

@@ -236,7 +236,7 @@ app.get('*', async (req, res, next) => {
         isProd
       })
 
-      if (typeof beforeOutputRenderedResponse.output === 'string') {
+      if (typeof beforeOutputRenderedResponse === 'object' && typeof beforeOutputRenderedResponse.output === 'string') {
         output = beforeOutputRenderedResponse.output
       } else if (typeof beforeOutputRenderedResponse === 'string') {
         output = beforeOutputRenderedResponse

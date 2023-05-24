@@ -1,14 +1,35 @@
 <template>
-  <div class="t-flex t-flex-wrap t--mx-4 t-flex-full">
-    <div v-for="(c, i) in aggregatedComponents" :key="`${c.name}-${i}`" class="t-flex-auto" :class="[{ 't-px-4': c.padding, 't-w-full': (c.size === 'full'), 'lg:t-w-1/2': (c.size === 'half') }, c.cssClass]">
-      <router-link v-if="c.hasLink" :to="localizedRoute(c.props.componentLink)">
-        <component :is="c.component" v-bind="c.props" :name="c.type" />
+  <div class="t--mx-4 t-flex t-flex-full t-flex-wrap">
+    <div
+      v-for="(c, i) in aggregatedComponents"
+      :key="`${c.name}-${i}`"
+      class="t-flex-auto"
+      :class="[{ 't-px-4': c.padding, 't-w-full': (c.size === 'full'), 'lg:t-w-1/2': (c.size === 'half') }, c.cssClass, c.type]"
+    >
+      <router-link
+        v-if="c.hasLink"
+        :to="localizedRoute(c.props.componentLink)"
+      >
+        <component
+          :is="c.component"
+          v-bind="c.props"
+          :name="c.type"
+        />
       </router-link>
       <template v-else>
         <lazyload v-if="c.lazyload">
-          <component :is="c.component" v-bind="c.props" :name="c.type" />
+          <component
+            :is="c.component"
+            v-bind="c.props"
+            :name="c.type"
+          />
         </lazyload>
-        <component :is="c.component" v-bind="c.props" :name="c.type" v-else />
+        <component
+          :is="c.component"
+          v-else
+          v-bind="c.props"
+          :name="c.type"
+        />
       </template>
     </div>
   </div>
@@ -28,16 +49,23 @@ const AsyncTeaser = () => import(/* webpackChunkName: "vsf-content-block-teaser"
 const AsyncHeadline = () => import(/* webpackChunkName: "vsf-content-block-headline" */ 'theme/components/core/blocks/Headline')
 const AsyncText = () => import(/* webpackChunkName: "vsf-content-block-text" */ 'theme/components/core/blocks/RichText')
 const AsyncPicture = () => import(/* webpackChunkName: "vsf-content-block-picture" */ 'theme/components/core/blocks/Picture')
-const AsyncProductlisting = () => import(/* webpackChunkName: "vsf-content-block-productlisting" */ '../../icmaa-category/components/ProductListingWidget')
-const AsyncProductlistingticketposter = () => import(/* webpackChunkName: "vsf-content-block-productlistingticketposter" */ '../../icmaa-category/components/ProductListingTicketWidget')
+const AsyncProductlisting = () => import(/* webpackChunkName: "vsf-content-block-productlisting" */ 'icmaa-category/components/ProductListingWidget')
+const AsyncProductlistingticketposter = () => import(/* webpackChunkName: "vsf-content-block-productlistingticketposter" */ 'icmaa-category/components/ProductListingTicketWidget')
 const AsyncCategorylist = () => import(/* webpackChunkName: "vsf-content-block-categorylist" */ 'icmaa-category/components/List/List')
 const AsyncLinkList = () => import(/* webpackChunkName: "vsf-content-block-linklist" */ 'theme/components/core/blocks/CategoryExtras/LinkList')
+const AsyncInstagramPost = () => import(/* webpackChunkName: "vsf-content-block-instagram-post" */ 'icmaa-cms/components/Storyblok/InstagramPost')
+const AsyncTikTokPost = () => import(/* webpackChunkName: "vsf-content-block-tiktok-post" */ 'icmaa-cms/components/Storyblok/TikTokPost')
+const AsyncTwitter = () => import(/* webpackChunkName: "vsf-content-block-twitter" */ 'icmaa-cms/components/Storyblok/Twitter')
+const AsyncYouTube = () => import(/* webpackChunkName: "vsf-content-block-youtube" */ 'icmaa-cms/components/Storyblok/YouTube')
+const AsyncSpotify = () => import(/* webpackChunkName: "vsf-content-block-spotify" */ 'icmaa-cms/components/Storyblok/Spotify')
+const AsyncBlogList = () => import(/* webpackChunkName: "vsf-content-block-blog-list" */ 'icmaa-blog/components/ListWrapper')
+const AsyncStoryblokAsset = () => import(/* webpackChunkName: "vsf-content-block-storyblog-asset" */ 'icmaa-cms/components/Storyblok/Asset')
 
 const rteComponentOptions = {
   component: AsyncText,
   propsTypes: {},
   propsDefaults: {
-    tagClasses: { h2: 't-any', img: 't-block t-mb-4 lg:t-float-right lg:t-ml-4 lg:t-mb-0' }
+    tagClasses: { img: 't-block t-mb-4 lg:t-float-right lg:t-ml-4 lg:t-mb-0' }
   },
   cssClass: 't-mb-4',
   padding: true
@@ -52,6 +80,11 @@ export default {
     components: {
       type: Array,
       required: true
+    },
+    defaults: {
+      type: Object,
+      required: false,
+      default: () => ({})
     }
   },
   computed: {
@@ -140,6 +173,65 @@ export default {
           propsDefaults: {},
           cssClass: 't-mb-4',
           padding: false
+        },
+        'component_instagram_post': {
+          component: AsyncInstagramPost,
+          propsTypes: {},
+          propsDefaults: {},
+          cssClass: 't-mb-4',
+          padding: true
+        },
+        'component_tiktok_post': {
+          component: AsyncTikTokPost,
+          propsTypes: {},
+          propsDefaults: {},
+          cssClass: 't-mb-4',
+          padding: true
+        },
+        'component_twitter': {
+          component: AsyncTwitter,
+          propsTypes: {},
+          propsDefaults: {},
+          cssClass: 't-mb-4',
+          padding: true
+        },
+        'component_youtube': {
+          component: AsyncYouTube,
+          propsTypes: {},
+          propsDefaults: {},
+          cssClass: 't-mb-4',
+          padding: true
+        },
+        'component_spotify': {
+          component: AsyncSpotify,
+          propsTypes: {},
+          propsDefaults: {},
+          cssClass: 't-mb-4',
+          padding: true
+        },
+        'component_blog_list': {
+          component: AsyncBlogList,
+          propsTypes: {
+            size: 'number',
+            query: 'json'
+          },
+          propsDefaults: {
+            query: {}
+          },
+          cssClass: 't-mb-4',
+          padding: true
+        },
+        'component_asset': {
+          component: AsyncStoryblokAsset,
+          propsTypes: {
+            asset: 'json',
+            sizes: 'json',
+            width: 'number',
+            height: 'number'
+          },
+          propsDefaults: {},
+          cssClass: 't-mb-4',
+          padding: true
         }
       }
     },
@@ -149,9 +241,10 @@ export default {
         .map(c => {
           const componentsMap = this.componentsMap[c.component]
           const { component, propsTypes, propsDefaults, cssClass, padding } = componentsMap
+          const propsDefaultsOverwrites = this.defaults[c.component] || {}
 
-          const size = c.hasOwnProperty('width') ? c.width : 'full'
-          const lazyload = c.hasOwnProperty('lazyload') ? c.lazyload : false
+          const size = (typeof c?.width === 'string' && c?.width) || 'full'
+          const lazyload = c?.lazyload || false
 
           let props = mapKeys(
             omit(c, ['_uid', 'component', 'width', 'lazyload']),
@@ -162,7 +255,7 @@ export default {
             return p !== '' || (propsTypes[k] && propsTypes[k] === 'number' && p === 0)
           })
 
-          props = Object.assign(propsDefaults, props)
+          props = Object.assign(propsDefaults, propsDefaultsOverwrites, props)
 
           props = mapValues(props, (p, k) => {
             if (Object.keys(propsTypes).includes(k)) {

@@ -35,6 +35,14 @@ module.exports = {
         sans: [ 'Roboto', ...defaultTheme.fontFamily.sans ]
       },
       colors,
+      screens: {
+        'xs': '415px' // (min-width: 415px)
+        /* These are the default breakpoints */
+        // 'sm': '640px', // (min-width: 640px)
+        // 'md': '768px', // (min-width: 768px)
+        // 'lg': '1024px', // (min-width: 1024px)
+        // 'xl': '1280px' // (min-width: 1280px)
+      },
       cursor: {
         'zoom-in': 'zoom-in'
       },
