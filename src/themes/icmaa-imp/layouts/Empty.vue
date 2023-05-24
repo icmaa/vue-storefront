@@ -1,14 +1,14 @@
 <template>
   <div class="empty-layout">
-    <overlay v-if="overlayActive" />
-    <loader />
+    <Overlay v-if="overlayActive" />
+    <Loader />
     <div
       id="viewport"
       class="t-w-full"
     >
       <slot />
-      <auth-modal />
-      <notifications />
+      <AuthModal />
+      <Notifications />
     </div>
   </div>
 </template>

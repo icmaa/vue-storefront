@@ -1,6 +1,6 @@
 <template>
   <form>
-    <base-input
+    <BaseInput
       id="iban"
       v-model="additionalData.iban"
       type="text"
@@ -18,7 +18,7 @@
       ]"
       class="t-mb-4"
     />
-    <base-input
+    <BaseInput
       id="bic"
       v-model="additionalData.bic"
       type="text"
@@ -32,7 +32,7 @@
       ]"
       class="t-mb-4"
     />
-    <base-checkbox
+    <BaseCheckbox
       id="terms"
       v-model="additionalData.terms"
       name="terms"
@@ -43,7 +43,7 @@
       checkbox-class="t-self-start"
     >
       {{ info.terms }}
-    </base-checkbox>
+    </BaseCheckbox>
   </form>
 </template>
 

@@ -9,7 +9,7 @@
       <div
         ref="zoom"
         class="zoom"
-        :class="{ 'animate': animate, 't-cursor-zoom-in': !zoom, 't-cursor-move enabled': zoom }"
+        :class="{ 'animate': animate, 't-cursor-zoom-in': !zoom, 'enabled t-cursor-move': zoom }"
         :style="{ '--z': currentZoomFactor, '--zx': `${zoomPosition.x}px`, '--zy': `${zoomPosition.y}px` }"
         @click="onZoomClick"
         @mousemove="onMouseZoomMove"
@@ -29,7 +29,7 @@
           @touchend="swipeEnd"
           @touchchancel="swipeEnd"
         >
-          <product-image
+          <ProductImage
             v-for="(image, i) in images"
             :key="'zoom-' + product.sku + '-' + i"
             :image="image"

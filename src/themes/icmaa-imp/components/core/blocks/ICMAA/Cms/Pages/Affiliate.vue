@@ -15,7 +15,7 @@
       {{ content.description }}
     </div>
     <div class="t-mb-8 t-flex t-w-full t-justify-center">
-      <material-icon
+      <MaterialIcon
         icon="arrow_drop_down_circle"
         size="xl"
         class=""

@@ -5,13 +5,13 @@
         v-if="active"
         class="t-absolute t-z-1 t-flex t-h-full t-w-full t-items-center t-justify-center t-border t-border-base-lightest t-bg-white t-opacity-75"
       >
-        <material-icon
+        <MaterialIcon
           icon="check"
           size="xl"
           class="t-text-alt-3"
         />
       </div>
-      <product-image
+      <ProductImage
         :image="product.image"
         :alt="product.translatedName | htmlDecode"
         data-test-id="productImage"
@@ -22,7 +22,7 @@
       class="t-mb-1 t-text-xs t-leading-tight"
       v-text="product.translatedName"
     />
-    <product-price
+    <ProductPrice
       :product="product"
       :alt="product.name | htmlDecode"
       class="t-text-xs"

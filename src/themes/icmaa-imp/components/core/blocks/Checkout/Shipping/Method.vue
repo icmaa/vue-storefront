@@ -4,13 +4,13 @@
     :class="{ 't-opacity-50': !active }"
     @click="onClick"
   >
-    <retina-image
+    <RetinaImage
       v-if="method.image"
       :image="method.image"
       :placeholder="true"
       ratio="70:32"
       class="t-mr-2"
-      :class="{ 't-grayscale t-opacity-75': !active }"
+      :class="{ 't-opacity-75 t-grayscale': !active }"
     />
     <div class="t-leading-4">
       <h3 class="t-font-bold">

@@ -1,5 +1,5 @@
 <template>
-  <navigation
+  <Navigation
     class="customer-account t--mx-4 t--mt-4 t-flex"
     @click="close"
   />

@@ -10,7 +10,7 @@
       class="t-block t-bg-white t-p-2 t-font-mono t-text-xs t-text-base-tone"
       @click.stop="/** Don't call parent redirect */"
     >
-      <material-icon
+      <MaterialIcon
         icon="edit"
         size="lg"
         class="t-align-middle"

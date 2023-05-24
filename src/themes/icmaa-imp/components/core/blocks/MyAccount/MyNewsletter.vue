@@ -1,24 +1,24 @@
 <template>
   <div class="t-bg-white t-p-4">
-    <headline>
+    <Headline>
       {{ $t('My newsletter') }}
-    </headline>
-    <base-checkbox
+    </Headline>
+    <BaseCheckbox
       id="generalAgreement"
       v-model="isSubscribed"
       class="t-mb-4 t-w-full t-px-2"
       name="generalAgreement"
     >
       {{ $t('I want to receive a newsletter, and agree to its terms') }}
-    </base-checkbox>
+    </BaseCheckbox>
     <div class="t-w-full t-px-2">
-      <button-component
+      <ButtonComponent
         type="primary"
         class="t-w-full lg:t-w-auto"
         @click.native="updateNewsletter"
       >
         {{ $t('Update my preferences') }}
-      </button-component>
+      </ButtonComponent>
     </div>
   </div>
 </template>

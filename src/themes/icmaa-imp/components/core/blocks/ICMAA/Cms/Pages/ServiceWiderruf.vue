@@ -1,5 +1,5 @@
 <template>
-  <layout
+  <Layout
     id="cms-page"
     :headline="content.headline"
   >
@@ -12,7 +12,7 @@
         class="t-mb-4"
         v-html="content.subtext"
       />
-      <form-component
+      <FormComponent
         v-model="formData"
         form-identifier="widerruf-formular"
         @submit="submit"
@@ -24,7 +24,7 @@
       </p>
       <p>{{ $t('Your revocation is now in progress.') }}</p>
     </div>
-  </layout>
+  </Layout>
 </template>
 
 <script>
@@ -45,6 +45,9 @@ export default {
     FormComponent
   },
   mixins: [ Page ],
+  asyncData ({ store }) {
+    return store.dispatch('icmaaCmsBlock/single', { value: 'service-navigation' })
+  },
   data () {
     return {
       dataType: 'yaml',
@@ -84,9 +87,6 @@ export default {
         .map(l => `<strong>${l.label}</strong><br> ${l.value}`)
         .join(`<br><br>`)
     }
-  },
-  asyncData ({ store }) {
-    return store.dispatch('icmaaCmsBlock/single', { value: 'service-navigation' })
   },
   beforeCreate () {
     registerModule(MailerModule)

@@ -1,13 +1,13 @@
 <template>
-  <sidebar
+  <Sidebar
     :title="$t('Filter')"
     :close-icon="closeIcon"
   >
-    <template v-slot:top-after-title>
+    <template #top-after-title>
       <span class="t-pl-2 t-pt-1 t-text-sm t-font-extralight t-leading-7 t-text-base-light">
         <span data-test-id="productsTotal">{{ productsTotal }}</span> {{ $t('items') }}
       </span>
-      <button-component
+      <ButtonComponent
         v-if="hasActiveFilters"
         type="transparent"
         size="sm"
@@ -16,24 +16,24 @@
         @click="resetAllFilters"
       >
         {{ $t('Clear filters') }}
-      </button-component>
+      </ButtonComponent>
     </template>
     <div class="t-pb-24">
-      <button-component
+      <ButtonComponent
         icon="arrow_forward"
         type="select"
         class="t-mb-4 t-w-full"
         @click="openSortMenu()"
       >
         {{ $t('Sorting') }}
-      </button-component>
+      </ButtonComponent>
       <div
         v-for="(group, groupKey) in groupedFilters"
         :key="groupKey"
       >
         <div
           v-if="groupKey === 1"
-          :class="{ 't-border-t t-border-base-lighter t-mt-8 t-pt-6': groupedFilters[0].length > 0 }"
+          :class="{ 't-mt-8 t-border-t t-border-base-lighter t-pt-6': groupedFilters[0].length > 0 }"
         >
           <h4 class="t-mb-6 t-text-sm">
             {{ $t('Productdetails') }}
@@ -46,7 +46,7 @@
           :data-attribute-key="filter.attributeKey"
         >
           <template v-if="filter.submenu">
-            <button-component
+            <ButtonComponent
               icon="arrow_forward"
               type="select"
               class="t-w-full"
@@ -59,7 +59,7 @@
                   v-if="isActiveFilterAttribute(filter.attributeKey)"
                   class="t-ml-2 t-text-xs t-text-base-light"
                 >
-                  <material-icon
+                  <MaterialIcon
                     class="t-align-middle"
                     icon="check"
                     size="xs"
@@ -67,12 +67,12 @@
                   {{ currentFilters(filter.attributeKey) }}
                 </span>
               </span>
-            </button-component>
+            </ButtonComponent>
           </template>
           <template v-else>
             <h5 class="t-mb-3 t-flex t-items-center t-text-xs t-text-base-tone">
               {{ filter.attributeLabel }}
-              <button-component
+              <ButtonComponent
                 v-if="isActiveFilterAttribute(filter.attributeKey)"
                 type="transparent"
                 size="sm"
@@ -82,9 +82,9 @@
                 @click="unsetFilter(filter.attributeKey)"
               >
                 {{ $t('Unset {label} filter', { label: filter.attributeLabel }) }}
-              </button-component>
+              </ButtonComponent>
             </h5>
-            <filter-wrapper
+            <FilterWrapper
               :attribute-key="filter.attributeKey"
               :attribute-label="filter.attributeLabel"
               :options="filter.options"
@@ -93,7 +93,7 @@
         </div>
       </div>
     </div>
-  </sidebar>
+  </Sidebar>
 </template>
 
 <script>

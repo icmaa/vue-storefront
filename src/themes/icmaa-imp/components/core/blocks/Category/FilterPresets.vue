@@ -1,6 +1,6 @@
 <template>
   <div>
-    <button-component
+    <ButtonComponent
       v-for="(p, i) in presets"
       :key="'filter-' + i"
       size="sm"
@@ -9,7 +9,7 @@
       @click.native="changeFilter(p)"
     >
       {{ p.label }}
-    </button-component>
+    </ButtonComponent>
   </div>
 </template>
 

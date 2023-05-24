@@ -1,6 +1,6 @@
 <template>
   <div class="t--mx-8 t--mb-8 t-mt-4 t-bg-base-tone t-px-8 t-py-4 t-text-sm t-text-white">
-    <material-icon
+    <MaterialIcon
       icon="alarm"
       size="sm"
       class="t-absolute t--ml-6"

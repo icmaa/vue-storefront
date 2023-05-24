@@ -1,9 +1,9 @@
 <template>
   <div>
     <div class="t-mb-3 t-bg-white t-p-4">
-      <headline>
+      <Headline>
         {{ $t('My orders') }}
-      </headline>
+      </Headline>
       <p
         v-if="!isHistoryEmpty"
         class="t-text-sm"
@@ -27,7 +27,7 @@
       >
         <div class="t-flex t-grow t-flex-wrap t-items-center t-justify-between">
           <div class="t-mb-2 t-w-1/2 lg:t-order-4 lg:t-mb-0 lg:t-w-1/4">
-            <status-icon :status="order.status" />
+            <StatusIcon :status="order.status" />
           </div>
           <div class="t-mb-2 t-w-1/2 t-text-2xl t-text-base-darkest lg:t-order-3 lg:t-mb-0 lg:t-w-1/4">
             {{ order.grand_total | round | price }}
@@ -49,7 +49,7 @@
           :to="localizedRoute(`/my-account/orders/${order.id}`)"
           class="t-hidden t-flex-fix sm:t-block"
         >
-          <material-icon
+          <MaterialIcon
             icon="chevron_right"
             size="lg"
             class="t-align-middle"
@@ -60,7 +60,7 @@
         v-if="loadMoreEnabled"
         class="t-mb-8 t-mt-4 t-flex t-items-center t-justify-center"
       >
-        <button-component
+        <ButtonComponent
           type="ghost"
           :disabled="loading"
           class="t-w-full md:t-w-2/3 lg:t-w-1/4"
@@ -68,12 +68,12 @@
           @click.native="loadMore"
         >
           {{ $t('Load more') }}
-          <loader-background
+          <LoaderBackground
             v-if="loading"
             bar="t-bg-base-darkest"
             class="t-bottom-0"
           />
-        </button-component>
+        </ButtonComponent>
       </div>
     </template>
   </div>

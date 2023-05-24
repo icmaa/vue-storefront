@@ -1,5 +1,5 @@
 <template>
-  <modal
+  <Modal
     name="modal-switcher"
     :width="500"
     :compact="true"
@@ -29,13 +29,13 @@
         class="t-w-1/2 t-px-2 t-pb-4"
         @click="setLanguageAccepted(storeView.storeCode)"
       >
-        <language-button
+        <LanguageButton
           :store-view="storeView"
           :is-current="storeView.storeCode === currentStoreView.storeCode"
         />
       </div>
     </div>
-  </modal>
+  </Modal>
 </template>
 
 <script>

@@ -18,7 +18,7 @@
     </ul>
     <ul class="letters t-px-6">
       <template v-for="letter in categoriesGroupedByFirstLetter">
-        <letter
+        <Letter
           :id="letter.anchor"
           :key="`${categoryId}-${letter.letter}`"
           :letter="letter"

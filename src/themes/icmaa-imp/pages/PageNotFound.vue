@@ -44,12 +44,12 @@
             :to="localizedHomeRoute"
             :title="$t('Home')"
           >
-            <button-component
+            <ButtonComponent
               class="t-w-full"
               type="primary"
             >
               <i class="material-icons t-mr-2">keyboard_backspace</i> {{ $t('Home') }}
-            </button-component>
+            </ButtonComponent>
           </router-link>
         </div>
       </div>

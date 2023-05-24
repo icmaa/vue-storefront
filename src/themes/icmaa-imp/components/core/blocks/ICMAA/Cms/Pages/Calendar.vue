@@ -12,7 +12,7 @@
               :key="'title-' + i"
               class="t-col-span-2 t-flex t-items-center t-justify-center sm:t-order-none"
             >
-              <picture-component
+              <PictureComponent
                 class="t-w-full"
                 :src="`${imgPath}/${title.imagePath}`"
                 :title="title.title"
@@ -33,7 +33,7 @@
                 :title="ad.title"
                 class="t-w-full"
               >
-                <picture-component
+                <PictureComponent
                   class="t-w-full"
                   :src="ad.imagePath"
                   :alt="ad.title"
@@ -62,7 +62,7 @@
                 :to="localizedRoute(day.link)"
                 class="t-w-full"
               >
-                <picture-component
+                <PictureComponent
                   class="t-w-full"
                   :src="`${imgPath}/opened/${day.imagePath}`"
                   :alt="`Door # ${day.int}`"
@@ -74,7 +74,7 @@
                 />
               </router-link>
               <template v-else-if="day.status === 'done'">
-                <picture-component
+                <PictureComponent
                   class="t-w-full t-opacity-75"
                   style="filter: grayscale(1); mix-blend-mode: multiply;"
                   :src="`${imgPath}/opened/${day.imagePath}`"
@@ -87,7 +87,7 @@
                 />
               </template>
               <template v-else>
-                <picture-component
+                <PictureComponent
                   class="t-w-full"
                   :src="`${imgPath}/closed/${day.prefixInt}.jpg`"
                   :alt="`Door # ${day.int}`"
@@ -113,7 +113,7 @@
             :key="`logo-${i}`"
             class="t-flex t-items-center t-justify-center"
           >
-            <picture-component
+            <PictureComponent
               :img-full-size="false"
               :src="`${imgPath}/logos/${logo.imagePath}`"
               :alt="logo.title"

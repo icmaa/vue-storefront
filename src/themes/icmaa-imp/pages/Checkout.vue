@@ -8,7 +8,7 @@
         <div class="t-mb-6 t-flex t-items-center t-justify-between lg:t-mb-8">
           <h1 class="t-flex t-items-center t-text-1xl t-font-bold">
             <span class="t-mr-4 t-flex t-w-8 t-items-center t-justify-center">
-              <material-icon
+              <MaterialIcon
                 icon="credit_card"
                 size="lg"
               />
@@ -17,13 +17,13 @@
               {{ $t('Checkout') }}
             </span>
           </h1>
-          <logo
+          <Logo
             width="174"
             height="43"
             class="logo t--mr-6 t-flex-fix lg:t-mr-0"
           />
         </div>
-        <step
+        <Step
           v-for="(step, index) in steps"
           :key="`${step.name}-${index}`"
           :name="step.name"
@@ -39,11 +39,11 @@
             :active="step.active"
             :done="step.done"
           />
-        </step>
+        </Step>
       </div>
       <div class="t-hidden t-pl-8 lg:t-block lg:t-w-1/2 xl:t-w-2/5">
         <div class="t-flex t-min-h-full t-items-stretch t-bg-base-lightest t-p-4">
-          <cart
+          <Cart
             v-if="!isMobile"
             class="t-w-full t-bg-white t-p-4"
           />

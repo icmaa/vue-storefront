@@ -5,7 +5,7 @@
         v-for="(tab, key) in tabs"
         :key="'pill-' + key"
         class="t-flex-fix t-cursor-pointer t-select-none t-border-b t-px-4 t-pb-3 t-text-sm t-webkit-tap-transparent"
-        :class="{ 't-text-primary t-border-primary': isActive(tab), 't-border-base-lightest': !isActive(tab), 't-pl-2': key === 0, 't-mr-2px': tab !== last }"
+        :class="{ 't-border-primary t-text-primary': isActive(tab), 't-border-base-lightest': !isActive(tab), 't-pl-2': key === 0, 't-mr-2px': tab !== last }"
         @click="setCurrent(tab)"
       >
         <slot :name="'pill-' + tab" />

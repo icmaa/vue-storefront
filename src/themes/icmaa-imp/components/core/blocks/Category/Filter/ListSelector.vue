@@ -1,7 +1,7 @@
 <template>
   <ul>
     <li v-if="searchable">
-      <base-input
+      <BaseInput
         v-model="filterString"
         :placeholder="$t('Filter {label}', { label: attributeLabel }) + ' ...'"
         icon="search"
@@ -28,7 +28,7 @@
         @click="$emit('change', option)"
       >
         {{ option.label }}
-        <material-icon
+        <MaterialIcon
           v-if="isActiveOption(option)"
           icon="check"
           class="t-leading-1-rem"

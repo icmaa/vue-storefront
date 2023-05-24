@@ -1,13 +1,13 @@
 <template>
   <div class="minimal-layout">
-    <loader />
+    <Loader />
     <div
       id="viewport"
       class="t-w-full"
     >
-      <minimal-header />
+      <MinimalHeader />
       <slot />
-      <minimal-footer />
+      <MinimalFooter />
     </div>
   </div>
 </template>

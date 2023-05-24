@@ -1,22 +1,22 @@
 <template>
   <div class="order-review">
     <div v-if="active">
-      <cart
+      <Cart
         v-if="isMobile"
         class="t-mb-6"
       >
-        <template v-slot:headline>
+        <template #headline>
           <h3
             class="t-mb-2 t-w-full t-font-light"
             v-text="$t('Shopping cart')"
           />
         </template>
-      </cart>
-      <additional-products class="t-mb-6" />
+      </Cart>
+      <AdditionalProducts class="t-mb-6" />
       <p class="t-mb-4 t-text-sm">
         {{ $t('Please check if your order data is correct.') }}
       </p>
-      <base-checkbox
+      <BaseCheckbox
         v-if="!isSubscribedToNewsletter"
         id="newsletter"
         v-model="newsletter"
@@ -25,9 +25,9 @@
         class="t-mb-2"
       >
         {{ $t("I would like to receive the newsletter as well as a {value} voucher.", { value: newsletterVoucherValue }) }}
-      </base-checkbox>
+      </BaseCheckbox>
       <template v-if="hasAgreements">
-        <base-checkbox
+        <BaseCheckbox
           id="terms"
           v-model="terms"
           name="terms"
@@ -41,7 +41,7 @@
             path="I have read and agree with the {toc}, {privacy-policy} and {return-instructions}."
             tag="p"
           >
-            <template v-slot:toc>
+            <template #toc>
               <a
                 :href="localizedRoutePath('/service-conditions')"
                 target="_blank"
@@ -49,7 +49,7 @@
                 v-text="$t('Terms and Conditions')"
               />
             </template>
-            <template v-slot:privacy-policy>
+            <template #privacy-policy>
               <a
                 :href="localizedRoutePath('/service-privacy')"
                 target="_blank"
@@ -57,7 +57,7 @@
                 v-text="$t('Privacy Policy')"
               />
             </template>
-            <template v-slot:return-instructions>
+            <template #return-instructions>
               <a
                 :href="localizedRoutePath('/service-conditions')"
                 target="_blank"
@@ -66,9 +66,9 @@
               />
             </template>
           </i18n>
-        </base-checkbox>
+        </BaseCheckbox>
       </template>
-      <button-component
+      <ButtonComponent
         class="t-mt-8 t-w-full lg:t-w-auto"
         :class="{ 't-opacity-50': $v.$dirty && $v.$invalid }"
         type="primary"
@@ -76,7 +76,7 @@
         @click.native.stop="submit"
       >
         {{ $t(('Place order')) }}
-      </button-component>
+      </ButtonComponent>
     </div>
   </div>
 </template>

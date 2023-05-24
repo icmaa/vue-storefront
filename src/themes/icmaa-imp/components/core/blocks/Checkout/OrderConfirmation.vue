@@ -1,5 +1,5 @@
 <template>
-  <modal
+  <Modal
     name="modal-order-confirmation"
     :width="640"
   >
@@ -81,13 +81,13 @@
           >{{ $t('Cancel') }}</a>
         </div>
         <div class="col-xs-12 col-sm-6">
-          <button-component @click="confirmOrders()">
+          <ButtonComponent @click="confirmOrders()">
             {{ $t('Confirm your order') }}
-          </button-component>
+          </ButtonComponent>
         </div>
       </div>
     </div>
-  </modal>
+  </Modal>
 </template>
 
 <script>

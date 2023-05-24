@@ -1,5 +1,5 @@
 <template>
-  <paypal-checkout-button
+  <PaypalCheckoutButton
     v-if="isLoaded"
     :color="color"
   />

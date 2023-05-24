@@ -15,7 +15,7 @@
             :key="`placeholder-${i}`"
             class="t-w-32 t-flex-fix t-px-1 lg:t-px-2"
           >
-            <placeholder
+            <Placeholder
               ratio="30:43"
               :plain="false"
               class="t-mb-3 t-bg-base-lightest"
@@ -25,7 +25,7 @@
             <div class="t-my-2 t-mt-4 t-h-2 t-w-1/3 t-bg-base-lightest t-leading-tight" />
           </div>
         </template>
-        <additional-product
+        <AdditionalProduct
           v-for="(product, i) in products"
           :key="i"
           class="product t-w-32 t-flex-fix t-cursor-pointer t-px-1 lg:t-px-2"

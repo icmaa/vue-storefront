@@ -18,7 +18,7 @@
       class="t-flex t-cursor-pointer t-items-center t-border-b t-border-base-light"
       @click="toggleSearchpanel"
     >
-      <material-icon
+      <MaterialIcon
         icon="search"
         class="t-pr-1"
       />

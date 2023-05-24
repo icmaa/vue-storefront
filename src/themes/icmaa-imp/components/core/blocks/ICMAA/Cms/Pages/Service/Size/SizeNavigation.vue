@@ -5,7 +5,7 @@
     @click="toggle"
   >
     <div>{{ headline }}</div>
-    <material-icon
+    <MaterialIcon
       :icon="icon"
       size="lg"
       class="t-ml-2 t-text-base-lighter"

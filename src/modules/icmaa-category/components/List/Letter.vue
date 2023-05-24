@@ -3,7 +3,7 @@
     <h2 class="t-w-2/12 t-px-2 t-py-1 t-pr-6 t-text-right t-text-3xl t-font-bold lg:t-w-1/12">
       {{ letter.letter }}
     </h2>
-    <lazyload
+    <Lazyload
       class="t-flex-auto"
       @visible="visible"
     >
@@ -16,12 +16,13 @@
             :to="localizedRoute(category.url_path)"
             data-testid="categoryLink"
             class="t-block"
-            :class="[ category.ceCluster === cluster ? 't-text-primary t-font-bold' : 't-text-base-tone' ]"
-            v-html="category.name"
-          />
+            :class="[ category.ceCluster === cluster ? 't-font-bold t-text-primary' : 't-text-base-tone' ]"
+          >
+            {{ category.name }}
+          </router-link>
         </li>
       </ul>
-    </lazyload>
+    </Lazyload>
   </li>
 </template>
 

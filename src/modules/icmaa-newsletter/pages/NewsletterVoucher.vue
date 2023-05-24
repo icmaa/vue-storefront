@@ -17,22 +17,22 @@
         />
         <div class="t--mx-2 t-flex t-flex-wrap">
           <div class="t-mb-2 t-w-full t-px-2 lg:t-mb-0 lg:t-w-1/2">
-            <button-component
+            <ButtonComponent
               type="primary"
               class="t-w-full"
               @click="$router.push(localizedRoute(`/checkout`))"
             >
               {{ $t('Go to checkout') }}
-            </button-component>
+            </ButtonComponent>
           </div>
           <div class="t-w-full t-px-2 lg:t-w-1/2">
-            <button-component
+            <ButtonComponent
               type="transparent"
               class="t-w-full"
               @click="$store.dispatch('ui/setSidebar', { key: 'microcart' })"
             >
               {{ $t('Edit your cart') }}
-            </button-component>
+            </ButtonComponent>
           </div>
         </div>
       </template>
@@ -55,7 +55,7 @@
       v-if="voucher && voucher.code"
       class="t-m-4 t-text-sm t-text-base-light lg:t-mx-auto lg:t-mb-8 lg:t-w-1/2"
     >
-      <material-icon
+      <MaterialIcon
         icon="asterisk"
         icon-set="icmaa"
         size="xxs"

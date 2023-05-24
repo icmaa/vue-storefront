@@ -1,14 +1,14 @@
 <template>
-  <modal
+  <Modal
     name="modal-signup"
     :title="$t(title)"
     :width="width"
     @close="onClose"
   >
-    <login v-if="activeElem === 'login'" />
-    <register v-if="activeElem === 'register'" />
-    <forgot-pass v-if="activeElem === 'forgot-pass'" />
-  </modal>
+    <Login v-if="activeElem === 'login'" />
+    <Register v-if="activeElem === 'register'" />
+    <ForgotPass v-if="activeElem === 'forgot-pass'" />
+  </Modal>
 </template>
 
 <script>

@@ -5,7 +5,7 @@
   >
     <div class="t-mb-8 t-px-4 t-pt-4 lg:t-pt-8">
       <div class="t-mb-8 t-flex t-flex-wrap t-items-start lg:t-items-stretch">
-        <picture-component
+        <PictureComponent
           :alt="competition.headline | stripHTML"
           :src="image"
           :width="624"
@@ -26,12 +26,12 @@
             class="description t-text-sm t-leading-relaxed t-text-base-tone"
           />
           <div class="t-mt-8">
-            <button-component
+            <ButtonComponent
               v-scroll-to="'#competition-form'"
               type="ghost"
             >
               {{ competition.buttonText || $t('Participate now!') }}
-            </button-component>
+            </ButtonComponent>
           </div>
         </div>
       </div>
@@ -53,11 +53,11 @@
         </div>
         <div class="t-flex t-w-full t-pt-px lg:t-w-1/2 lg:t-pl-px lg:t-pt-0">
           <div class="t-relative t-flex-1 t-bg-white">
-            <universal-link
+            <UniversalLink
               :to="competition.bannerLink"
               class="t-flex"
             >
-              <picture-component
+              <PictureComponent
                 :alt="competition.bannerLinkText | stripHTML"
                 :src="bannerImage"
                 :width="624"
@@ -67,8 +67,8 @@
                 ratio="1:1"
                 class="t-flex-1 t-self-start"
               />
-            </universal-link>
-            <universal-link
+            </UniversalLink>
+            <UniversalLink
               :to="competition.bannerLink"
               class="t-flex t-w-full t-items-center t-bg-white t-p-4 t-text-xl t-text-primary lg:t-absolute lg:t-bottom-0 lg:t-px-6 lg:t-py-8"
             >
@@ -76,16 +76,16 @@
                 class="t-flex-1"
                 v-text="competition.bannerLinkText"
               />
-              <material-icon
+              <MaterialIcon
                 icon="keyboard_arrow_right"
                 size="lg"
                 class="t-ml-2 t-text-base-lighter"
               />
-            </universal-link>
+            </UniversalLink>
           </div>
         </div>
       </div>
-      <form-component
+      <FormComponent
         v-if="isActive && !isSend"
         id="competition-form"
         v-model="form"
@@ -105,7 +105,7 @@
         class="t-bg-white t-p-4"
       >
         <div class="t-mb-2 t-flex t-items-center t-text-1xl t-font-bold t-text-alt-3">
-          <material-icon
+          <MaterialIcon
             icon="check"
             size="lg"
             class="t-mr-2"
@@ -124,7 +124,7 @@
           class="t-flex t-w-full"
         >
           <div class="lg:t-w-1/2">
-            <picture-component
+            <PictureComponent
               :src="successImage"
               :width="624"
               :height="312"
@@ -141,7 +141,7 @@
         class="t-pt-4 t-text-sm t-text-base-light"
       >
         <p v-if="showTo">
-          <material-icon
+          <MaterialIcon
             icon="asterisk"
             icon-set="icmaa"
             size="xxs"
@@ -150,13 +150,13 @@
           {{ $t('Deadline for entries is {showTo}. The decision is final.', { showTo }) }}
         </p>
         <p>
-          <material-icon
+          <MaterialIcon
             v-if="showTo"
             icon="asterisk"
             icon-set="icmaa"
             size="xxs"
           />
-          <material-icon
+          <MaterialIcon
             icon="asterisk"
             icon-set="icmaa"
             size="xxs"
@@ -198,6 +198,15 @@ export default {
     PictureComponent,
     UniversalLink,
     MaterialIcon
+  },
+  async asyncData ({ store, route, context }) {
+    if (context) {
+      context.output.cacheTags
+        .add('competition')
+    }
+
+    const value = route.params.identifier
+    await store.dispatch('icmaaCompetitions/single', { value })
   },
   data () {
     return {
@@ -254,15 +263,6 @@ export default {
         { width: 415 }
       ]
     }
-  },
-  async asyncData ({ store, route, context }) {
-    if (context) {
-      context.output.cacheTags
-        .add('competition')
-    }
-
-    const value = route.params.identifier
-    await store.dispatch('icmaaCompetitions/single', { value })
   },
   methods: {
     async submit () {

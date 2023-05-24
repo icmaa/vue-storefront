@@ -1,27 +1,27 @@
 <template>
   <div class="default-layout">
-    <overlay v-if="overlayActive" />
-    <loader />
+    <Overlay v-if="overlayActive" />
+    <Loader />
     <div id="viewport">
-      <main-header />
-      <no-ssr>
-        <advice />
-      </no-ssr>
-      <async-sidebar
+      <MainHeader />
+      <NoSsr>
+        <Advice />
+      </NoSsr>
+      <AsyncSidebar
         :state-key="'searchpanel'"
         :async-component="SearchPanel"
         :wide="true"
       />
-      <async-sidebar
+      <AsyncSidebar
         :state-key="'microcart'"
         :async-component="Microcart"
       />
-      <async-sidebar
+      <AsyncSidebar
         :state-key="'sidebar'"
         :async-component="NavigationSidebar"
         direction="left"
       />
-      <async-sidebar
+      <AsyncSidebar
         :state-key="'wishlist'"
         :async-component="Wishlist"
       />
@@ -30,12 +30,12 @@
         <slot />
         <div class="t-flow-root" />
       </main>
-      <main-footer />
-      <no-ssr>
-        <auth-modal />
-        <notifications />
-        <offline-badge />
-      </no-ssr>
+      <MainFooter />
+      <NoSsr>
+        <AuthModal />
+        <Notifications />
+        <OfflineBadge />
+      </NoSsr>
     </div>
     <vue-progress-bar />
   </div>
@@ -72,7 +72,7 @@ export default {
     AuthModal,
     OfflineBadge,
     AsyncSidebar,
-    'no-ssr': NoSSR
+    NoSsr: NoSSR
   },
   mixins: [ viewportMixin ],
   data () {

@@ -9,7 +9,7 @@
         :to="productLink"
         @click.native="$store.dispatch('ui/setSidebar', { key: 'microcart', status: false })"
       >
-        <product-image
+        <ProductImage
           :key="product.sku"
           :image="thumbnail"
           :alt="product.translatedName | htmlDecode"
@@ -34,7 +34,7 @@
           v-if="totals.length > 0 || isFree"
           class="t-mb-2 t-flex t-w-full t-flex-wrap t-items-center"
         >
-          <button-component
+          <ButtonComponent
             v-for="opt in totals"
             :key="opt.label"
             class="t-mb-2 t-mr-2"
@@ -43,7 +43,7 @@
             :cursor-pointer="false"
           >
             {{ opt.value }}
-          </button-component>
+          </ButtonComponent>
           <div
             v-if="isFree"
             class="t-mb-2 t-text-xs t-font-bold t-uppercase t-text-sale"
@@ -60,7 +60,7 @@
         </div>
       </div>
 
-      <product-price
+      <ProductPrice
         :product="product"
         class="t-mb-4 t-w-full"
       />
@@ -70,7 +70,7 @@
         class="t-flex t-flex-wrap t-items-center t-justify-between t-text-base-light"
       >
         <div class="t-flex t-items-center">
-          <base-select
+          <BaseSelect
             v-if="!isFree"
             :id="`qty-${product.id}`"
             class="t-w-16 t-text-base-tone"
@@ -88,7 +88,7 @@
             class="t-ml-2 t-text-sm t-text-base-tone"
           >{{ $t('Pcs.') }}</label>
         </div>
-        <button-component
+        <ButtonComponent
           type="transparent"
           :size="'sm'"
           :icon="'remove_shopping_cart'"
@@ -96,7 +96,7 @@
           @click="removeItem"
         >
           {{ $t('Delete') }}
-        </button-component>
+        </ButtonComponent>
       </div>
       <div
         v-else

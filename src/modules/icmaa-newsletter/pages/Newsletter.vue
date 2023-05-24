@@ -5,7 +5,7 @@
   >
     <div class="t-container">
       <div class="t--mx-4 t-mb-8 t-flex t-flex-wrap t-px-4 md:t-mx-0 md:t-mt-4 lg:t-w-full">
-        <picture-component
+        <PictureComponent
           :alt="content.header.alt"
           :src="content.header.img"
           :width="780"
@@ -50,7 +50,7 @@
           class="t-flex t-items-center t-rounded-none t-rounded-r-sm t-border t-border-l-0 t-border-base-light t-bg-white t-pr-2 t-text-base-tone"
           @click="showNewsletterPopup"
         >
-          <material-icon icon="send" />
+          <MaterialIcon icon="send" />
           <span class="t-sr-only">{{ $t('Submit') }}</span>
         </button>
       </div>
@@ -69,7 +69,7 @@
           </router-link>
         </template>
       </i18n>
-      <newsletter-popup v-if="loadNewsletterPopup" />
+      <NewsletterPopup v-if="loadNewsletterPopup" />
     </div>
   </div>
 </template>

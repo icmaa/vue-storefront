@@ -17,13 +17,13 @@
         />
       </router-link>
       <template v-else>
-        <lazyload v-if="c.lazyload">
+        <Lazyload v-if="c.lazyload">
           <component
             :is="c.component"
             v-bind="c.props"
             :name="c.type"
           />
-        </lazyload>
+        </Lazyload>
         <component
           :is="c.component"
           v-else

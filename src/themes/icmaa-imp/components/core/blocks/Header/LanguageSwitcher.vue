@@ -4,7 +4,7 @@
       class="t-flex t-cursor-pointer t-items-center  t-px-4"
       @click="showLanguagesModal"
     >
-      <flag-icon
+      <FlagIcon
         :iso="languageCode"
         width="20"
         height="20"

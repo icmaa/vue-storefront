@@ -9,7 +9,7 @@
         :key="i"
         class="t-flex t-text-xs t-font-light t-leading-4 t-text-base-light"
       >
-        <material-icon
+        <MaterialIcon
           icon="check"
           size="sm"
           class="t-mr-1 t-align-middle t-leading-4 t-text-primary"

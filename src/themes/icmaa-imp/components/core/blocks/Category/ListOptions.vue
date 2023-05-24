@@ -5,7 +5,7 @@
         <label class="t-mr-2 t-text-sm">
           {{ $t('Items per page') }}:
         </label>
-        <button-component
+        <ButtonComponent
           v-for="size in pageSizes"
           :key="size"
           type="tag"
@@ -16,9 +16,9 @@
           @click="changePageSize(size)"
         >
           {{ size }}
-        </button-component>
+        </ButtonComponent>
       </div>
-      <sort-by
+      <SortBy
         class="t-w-full t-px-2"
         @change="changeSorting"
       />

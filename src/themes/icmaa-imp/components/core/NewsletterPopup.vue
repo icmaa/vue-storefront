@@ -1,5 +1,5 @@
 <template>
-  <modal
+  <Modal
     name="modal-newsletter"
     :title="$t('Newsletter')"
     :width="400"
@@ -12,7 +12,7 @@
       <p class="t-mb-4 t-text-sm">
         {{ $t('Sign up to our newsletter and receive a coupon for {voucher_value} off!', { voucher_value: newsletterVoucherValue }) }}
       </p>
-      <base-input
+      <BaseInput
         v-model="email"
         focus
         type="email"
@@ -30,14 +30,14 @@
           }
         ]"
       />
-      <button-component
+      <ButtonComponent
         class="t-w-full"
         type="primary"
         :submit="true"
         @click="$v.email.$touch"
       >
         {{ $t('Subscribe') }}
-      </button-component>
+      </ButtonComponent>
     </form>
     <div v-else>
       {{ $t('Oh great, you are already subscribed.') }}
@@ -56,7 +56,7 @@
         </template>
       </i18n>
     </div>
-  </modal>
+  </Modal>
 </template>
 <script>
 import i18n from '@vue-storefront/i18n'

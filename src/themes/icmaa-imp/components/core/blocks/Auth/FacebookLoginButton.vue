@@ -1,5 +1,5 @@
 <template>
-  <button-component
+  <ButtonComponent
     v-if="visible"
     type="facebook"
     :icon="working ? '' : 'facebook'"
@@ -18,12 +18,12 @@
     <template v-else>
       {{ $t('Logout of Facebook') }}
     </template>
-    <loader-background
+    <LoaderBackground
       v-if="working"
       bar="t-bg-white t-opacity-50"
       class="t-bottom-0"
     />
-  </button-component>
+  </ButtonComponent>
 </template>
 
 <script>

@@ -1,8 +1,8 @@
 <template>
   <div class="t-bg-white t-p-4">
-    <headline>
+    <Headline>
       {{ $t('My coupons') }}
-    </headline>
+    </Headline>
 
     <div
       v-if="number && number.length > 0"
@@ -36,7 +36,7 @@
 
     <div class="t--mx-2 t-flex t-w-full t-flex-wrap">
       <div class="t-mb-4 t-w-full t-px-2 lg:t-w-1/2">
-        <base-input
+        <BaseInput
           v-model="giftCert.number"
           type="text"
           name="code"
@@ -52,13 +52,13 @@
       </div>
 
       <div class="t-mb-4 t-w-full t-px-2">
-        <button-component
+        <ButtonComponent
           type="primary"
           class="t-flex-1 lg:t-flex-fix"
           @click="fetchGiftcert"
         >
           {{ $t('Check balance') }}
-        </button-component>
+        </ButtonComponent>
       </div>
     </div>
   </div>

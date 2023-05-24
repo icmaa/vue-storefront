@@ -1,10 +1,10 @@
 <template>
-  <sidebar
+  <Sidebar
     :title="$t('Wishlist')"
     :close-on-click="true"
   >
-    <template v-slot:top-after-title>
-      <button-component
+    <template #top-after-title>
+      <ButtonComponent
         v-if="items.length"
         type="transparent"
         size="sm"
@@ -13,7 +13,7 @@
         @click="clearWishlist"
       >
         {{ $t('Clear wishlist') }}
-      </button-component>
+      </ButtonComponent>
     </template>
     <div
       v-if="!loading"
@@ -30,7 +30,7 @@
         class="t-container"
       >
         <ul>
-          <product
+          <Product
             v-for="(item, i) in items"
             :key="item.id"
             :product="item.product"
@@ -39,7 +39,7 @@
         </ul>
       </div>
     </div>
-  </sidebar>
+  </Sidebar>
 </template>
 
 <script>

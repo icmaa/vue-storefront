@@ -85,6 +85,15 @@ export default {
     CmsBlock,
     BlogList
   },
+  async asyncData ({ store, context }) {
+    if (context) {
+      context.output.cacheTags
+        .add('home')
+        .add('cms')
+    }
+
+    await store.dispatch('icmaaCmsBlock/list', 'home-top-categories,home-logos,home-seo')
+  },
   computed: {
     ...mapGetters({
       isLoggedIn: 'user/isLoggedIn',
@@ -109,15 +118,6 @@ export default {
         return Object.assign(line, { logos })
       })
     }
-  },
-  async asyncData ({ store, context }) {
-    if (context) {
-      context.output.cacheTags
-        .add('home')
-        .add('cms')
-    }
-
-    await store.dispatch('icmaaCmsBlock/list', 'home-top-categories,home-logos,home-seo')
   },
   mounted () {
     IcmaaGoogleTagManagerExecutors.homeVisited()

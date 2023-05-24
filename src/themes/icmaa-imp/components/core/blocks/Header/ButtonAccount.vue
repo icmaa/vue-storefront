@@ -1,5 +1,5 @@
 <template>
-  <button-icon
+  <ButtonIcon
     icon="person"
     :title="title"
     :class="[ isLoggedIn ? 'logged-in' : 'logged-out']"

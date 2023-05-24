@@ -8,12 +8,12 @@
         v-if="!['xs','sm','md'].includes(viewport)"
         class="t-hidden t-w-1/4 t-px-2 xl:t-flex"
       >
-        <navigation />
+        <Navigation />
       </div>
       <div class="t-w-full t-px-2 xl:t-w-3/4">
-        <no-ssr>
+        <NoSsr>
           <component
-            :is="this.$props.activeBlock"
+            :is="$props.activeBlock"
             v-if="isLoggedIn"
           />
           <div slot="placeholder">
@@ -21,7 +21,7 @@
               {{ $t('Please wait') }} ...
             </div>
           </div>
-        </no-ssr>
+        </NoSsr>
       </div>
     </div>
   </div>
@@ -56,12 +56,18 @@ export default {
     MyOrder,
     MyProductAlerts,
     MyOrderReview,
-    'no-ssr': NoSSR
+    NoSsr: NoSSR
   },
   props: {
     activeBlock: {
       type: String,
       default: 'MyProfile'
+    }
+  },
+  async asyncData ({ context }) {
+    if (context) {
+      context.output.cacheTags
+        .add(`my-account`)
     }
   },
   computed: {
@@ -82,12 +88,6 @@ export default {
       }
 
       return i18n.t(titleMap[this.activeBlock] || 'My Account')
-    }
-  },
-  async asyncData ({ context }) {
-    if (context) {
-      context.output.cacheTags
-        .add(`my-account`)
     }
   },
   beforeMount () {

@@ -7,7 +7,7 @@
     @mouseleave="onHover"
   >
     <div class="t-relative">
-      <picture-component
+      <PictureComponent
         :alt="teaser.text1 | htmlDecode"
         :src="imageUrl"
         :width="size.width"
@@ -27,14 +27,14 @@
           @click.native="setGender"
         >
           {{ teaser.text1 }}
-          <material-icon
+          <MaterialIcon
             icon="arrow_forward"
             size="sm"
             class="t-ml-2"
           />
         </router-link>
       </h2>
-      <edit-button
+      <EditButton
         :edit-url="editUrl"
         class="t-left-0 t--ml-2 t--mt-2"
         :class="{ 't-hidden': !hover }"

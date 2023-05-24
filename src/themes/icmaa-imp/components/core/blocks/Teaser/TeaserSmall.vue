@@ -14,7 +14,7 @@
     >
       {{ teaser.buttonText }}
     </div>
-    <picture-component
+    <PictureComponent
       :src="imageUrl"
       :alt="teaser.text1 | htmlDecode"
       :width="288"
@@ -34,7 +34,7 @@
         {{ teaser.text1 }}
       </router-link>
     </h2>
-    <edit-button
+    <EditButton
       :edit-url="editUrl"
       class="t-left-0 t--mt-2 t-ml-2"
       :class="{ 't-hidden': !hover }"

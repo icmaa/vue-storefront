@@ -20,16 +20,16 @@
         {{ phrase }}
       </li>
     </ul>
-    <model
+    <Model
       :product="product"
       class="t-mt-2"
     />
-    <no-ssr>
+    <NoSsr>
       <ul
         v-if="attributes.length > 0"
         class="attributes t-mt-6"
       >
-        <product-attributes
+        <ProductAttributes
           v-for="(attr, i) in attributes"
           :key="'product-attribute-' + attr.attribute_code + '-' + i"
           :product="product"
@@ -37,7 +37,7 @@
           class="t-mb-3"
         />
       </ul>
-    </no-ssr>
+    </NoSsr>
     <div
       v-if="blank"
       class="blank t-mt-6"
@@ -55,7 +55,7 @@
       v-if="departmentAdvice"
       class="department-advice t-mt-8 t-text-base-lighter"
     >
-      <material-icon
+      <MaterialIcon
         icon="asterisk"
         icon-set="icmaa"
         size="icon"
@@ -78,7 +78,7 @@ export default {
     Model,
     ProductAttributes,
     MaterialIcon,
-    'no-ssr': NoSSR
+    NoSsr: NoSSR
   },
   props: {
     product: {

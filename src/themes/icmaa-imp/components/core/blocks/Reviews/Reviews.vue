@@ -6,7 +6,7 @@
       </h2>
       <div class="t-mb-4 t-flex t-items-center t-justify-between">
         <div class="t-flex t-items-center t-text-sm">
-          <reviews-stars
+          <ReviewsStars
             :rating="reviewsTotalRating"
             stars-size="sm"
             stars-color="t-text-base-dark"
@@ -14,21 +14,21 @@
           />
           <span class="t-ml-2 t-hidden sm:t-block">({{ total }})</span>
         </div>
-        <button-component
+        <ButtonComponent
           v-model="formVisible"
           size="sm"
           @click.native="toggleForm"
         >
           {{ $t('Add review') }}
-        </button-component>
+        </ButtonComponent>
       </div>
     </div>
-    <reviews-form
+    <ReviewsForm
       v-if="formVisible"
       :product="product"
       class="t-mb-8 t-bg-white t-p-4"
     />
-    <reviews-list
+    <ReviewsList
       :product-name="productName"
       :per-page="4"
     />

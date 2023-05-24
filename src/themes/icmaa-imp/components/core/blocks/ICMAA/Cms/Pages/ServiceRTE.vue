@@ -1,10 +1,10 @@
 <template>
-  <layout
+  <Layout
     id="cms-page-rte"
     :headline="content.headline"
   >
     <component :is="content" />
-  </layout>
+  </Layout>
 </template>
 
 <script>
@@ -17,13 +17,13 @@ export default {
     Layout
   },
   mixins: [ Page ],
+  asyncData ({ store }) {
+    return store.dispatch('icmaaCmsBlock/single', { value: 'service-navigation' })
+  },
   data () {
     return {
       dataType: 'markdown'
     }
-  },
-  asyncData ({ store }) {
-    return store.dispatch('icmaaCmsBlock/single', { value: 'service-navigation' })
   }
 }
 </script>

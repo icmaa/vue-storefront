@@ -9,7 +9,7 @@
       @submit.prevent="outOfScope()"
     >
       <div class="t-mb-4">
-        <base-input
+        <BaseInput
           id="name"
           v-model="reviewForm.name"
           name="name"
@@ -28,7 +28,7 @@
         />
       </div>
       <div class="t-mb-4">
-        <base-input
+        <BaseInput
           id="email"
           v-model="reviewForm.email"
           name="email"
@@ -48,7 +48,7 @@
         />
       </div>
       <div class="t-mb-4">
-        <base-select
+        <BaseSelect
           id="rating"
           v-model="reviewForm.rating"
           name="rating"
@@ -64,7 +64,7 @@
         />
       </div>
       <div class="t-mb-4">
-        <base-input
+        <BaseInput
           id="summary"
           v-model="reviewForm.summary"
           name="summary"
@@ -79,7 +79,7 @@
         />
       </div>
       <div class="t-mb-4">
-        <base-textarea
+        <BaseTextarea
           id="review"
           v-model="reviewForm.review"
           name="review"
@@ -95,26 +95,26 @@
       </div>
       <div>
         <div
-          v-if="$v.reviewForm.recaptcha.$error && !this.$v.reviewForm.recaptcha.required"
+          v-if="$v.reviewForm.recaptcha.$error && !$v.reviewForm.recaptcha.required"
           class="t-mb-2 t-text-sm t-text-alert"
         >
           {{ $t('Your Google reCAPTCHA validation is invalid.') }}<br>
           {{ $t('Please try again or contact our customer-support.') }}
         </div>
-        <vue-recaptcha
+        <VueRecaptcha
           :sitekey="recaptchaWebsiteKey"
           :load-recaptcha-script="true"
           badge="inline"
           @verify="recaptchaVerify"
         >
-          <button-component
+          <ButtonComponent
             class="t-mt-4"
             :class="{ 'w-auto': !currentUser }"
             @click="validate()"
           >
             {{ $t('Add review') }}
-          </button-component>
-        </vue-recaptcha>
+          </ButtonComponent>
+        </VueRecaptcha>
       </div>
     </form>
   </div>

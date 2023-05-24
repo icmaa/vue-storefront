@@ -1,6 +1,6 @@
 <template>
   <div class="t-container t-mt-4 t-px-4 md:t-mt-8">
-    <Article
+    <ArticleComponent
       v-if="isArticle"
       :article="article"
       class="t-mb-4"
@@ -28,16 +28,20 @@ import { BlogArticle, BlogCategory, BlogUrlEntry } from 'icmaa-blog/types/BlogSt
 import { Route } from 'vue-router'
 
 import BlogMixin from 'icmaa-blog/mixins'
-import Article from 'icmaa-blog/components/Article.vue'
+import ArticleComponent from 'icmaa-blog/components/Article.vue'
 import List from 'icmaa-blog/components/List.vue'
 
 export default {
   name: 'BlogPage',
   components: {
-    Article,
+    ArticleComponent,
     List
   },
   mixins: [ BlogMixin ],
+  async asyncData (c) {
+    c.context?.output.cacheTags
+      .add('blog')
+  },
   async serverPrefetch () {
     return (this as any).fetchData()
   },
@@ -93,10 +97,6 @@ export default {
     page () {
       return this.fetchData()
     }
-  },
-  async asyncData (c) {
-    c.context?.output.cacheTags
-      .add('blog')
   },
   async mounted () {
     return this.fetchData()

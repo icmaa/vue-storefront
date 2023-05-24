@@ -18,7 +18,7 @@
         class="t-mr-4 t-flex t-h-8 t-w-8 t-items-center t-justify-center t-rounded-full t-bg-base-lightest t-font-mono t-text-sm t-font-bold t-leading-1-em t-text-white"
         :class="{ 't-text-base-tone': active || done }"
       >
-        <material-icon
+        <MaterialIcon
           v-if="done"
           icon="check"
           size="sm"
@@ -42,9 +42,9 @@
       v-if="active || done"
       class="t-pb-8 t-pl-12 t-pt-4"
     >
-      <no-ssr>
+      <NoSsr>
         <slot />
-      </no-ssr>
+      </NoSsr>
     </div>
   </div>
 </template>

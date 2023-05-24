@@ -1,10 +1,10 @@
 <template>
   <div class="t-mb-4 t-border-b t-border-base-lightest t-pb-4">
-    <coupon-field
+    <CouponField
       :coupon="currentCouponCodes"
       :class="{ 't-mb-4': coupon }"
     />
-    <coupon-field
+    <CouponField
       v-if="coupon"
       :label="$t('Add another discount code')"
     />

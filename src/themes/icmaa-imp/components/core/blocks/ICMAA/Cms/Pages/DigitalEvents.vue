@@ -33,13 +33,13 @@
           class="t-mb-4 t-flex t-flex-auto t-justify-center"
         >
           <a :href="buttonLink">
-            <button-component
+            <ButtonComponent
               type="primary"
               size="md"
               class="t-block t-w-full t-px-4 t-py-2 t-text-white"
             >
               {{ buttonText }}
-            </button-component>
+            </ButtonComponent>
           </a>
         </div>
 
@@ -212,7 +212,7 @@
           >
         </router-link>
         <div class="t--mx-4 t-flex t-flex-full t-flex-wrap">
-          <teaser
+          <Teaser
             :tags="content.teaser.tag"
             :show-large="false"
             :show-small-in-row="true"
@@ -223,19 +223,19 @@
       <!-- Products -->
       <h2 v-html="content.productsheadline" />
       <div class="t--mx-4 t-mb-4 t-flex t-flex-full t-flex-wrap">
-        <teaser
+        <Teaser
           :tags="content.products.teasertag"
           :show-large="false"
           :show-small-in-row="true"
         />
       </div>
-      <lazy-hydrate when-visible>
-        <product-listing-widget
+      <LazyHydrate when-visible>
+        <ProductListingWidget
           appearance="lg:t-p-0 t-p-0"
           :category-id="content.products.category_id"
           :limit="content.products.limit"
         />
-      </lazy-hydrate>
+      </LazyHydrate>
     </div>
   </div>
 </template>

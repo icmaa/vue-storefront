@@ -11,7 +11,7 @@
         :class="{ 'lg:t-w-1/2': ['half', 'half-single'].includes(element.width) }"
       >
         <template v-if="element.component === 'form_input'">
-          <base-input
+          <BaseInput
             :id="element.name"
             v-model="form[element.name]"
             :name="element.name"
@@ -23,7 +23,7 @@
           />
         </template>
         <template v-else-if="element.component === 'form_textarea'">
-          <base-textarea
+          <BaseTextarea
             :id="element.name"
             v-model="form[element.name]"
             :name="element.name"
@@ -34,7 +34,7 @@
           />
         </template>
         <template v-else-if="element.component === 'form_checkbox'">
-          <base-checkbox
+          <BaseCheckbox
             :id="element.name"
             v-model="form[element.name]"
             :name="element.name"
@@ -48,10 +48,10 @@
             <template v-else>
               {{ element.label }}
             </template>
-          </base-checkbox>
+          </BaseCheckbox>
         </template>
         <template v-else-if="element.component === 'form_select'">
-          <base-select
+          <BaseSelect
             :id="element.name"
             v-model="form[element.name]"
             :name="element.name"
@@ -62,7 +62,7 @@
           />
         </template>
         <template v-else-if="element.component === 'form_select_country'">
-          <country-select
+          <CountrySelect
             :id="element.name"
             v-model="form[element.name]"
             :name="element.name"
@@ -86,7 +86,7 @@
         {{ $t('Your Google reCAPTCHA validation is invalid.') }}<br>
         {{ $t('Please try again or contact our customer-support.') }}
       </div>
-      <vue-recaptcha
+      <VueRecaptcha
         v-if="recaptcha"
         :sitekey="recaptchaWebsiteKey"
         :load-recaptcha-script="true"
@@ -94,22 +94,22 @@
         class="t-w-full"
         @verify="recaptchaVerify"
       >
-        <button-component
+        <ButtonComponent
           type="primary"
           class="t-mt-4 t-w-full lg:t-w-auto"
           @click="submit()"
         >
           {{ submitButtonText }}
-        </button-component>
-      </vue-recaptcha>
-      <button-component
+        </ButtonComponent>
+      </VueRecaptcha>
+      <ButtonComponent
         v-else
         :submit="true"
         type="primary"
         class="t-flex-1 lg:t-flex-fix"
       >
         {{ submitButtonText }}
-      </button-component>
+      </ButtonComponent>
     </div>
   </form>
 </template>
@@ -132,7 +132,7 @@ import ButtonComponent from 'theme/components/core/blocks/Button'
 import VueRecaptcha from 'vue-recaptcha'
 
 export default {
-  name: 'Form',
+  name: 'FormComponent',
   components: {
     BaseInput,
     BaseSelect,

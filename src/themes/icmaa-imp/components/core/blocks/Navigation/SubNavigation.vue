@@ -1,18 +1,18 @@
 <template>
   <div v-if="loading">
-    <loading-spinner />
+    <LoadingSpinner />
   </div>
   <div
     v-else-if="navigation"
     class="t-pb-24"
   >
-    <gender-navigation
+    <GenderNavigation
       v-if="genderNavigationItems"
       :items="genderNavigationItems"
       class="t--mx-4 t--mt-4 t-mb-4"
     />
     <div class="t--mx-1 t-flex t-flex-wrap">
-      <navigation-item
+      <NavigationItem
         v-for="link in mainNavigationItems"
         :key="link.id"
         v-bind="link"
@@ -29,15 +29,16 @@
         class="t-w-full t-border-base-lightest t-px-4 t-py-3 t-text-sm"
         :class="{ 't-border-b': i !== (filteredNavigation.length - 1) }"
         @click.native="closeMenu"
-        v-text="item.name"
-      />
+      >
+        {{ item.name }}
+      </router-link>
     </div>
     <div
       v-if="logos"
       class="t-flex t-flex-wrap"
       @click="closeMenu"
     >
-      <logo-line
+      <LogoLine
         v-bind="logoLineProps"
         :placeholder="true"
         column-class="t-mb-8"

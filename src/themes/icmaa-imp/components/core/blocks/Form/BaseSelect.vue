@@ -62,9 +62,9 @@
         class="t-pointer-events-none t-absolute t-inset-y-0 t-right-0 t-flex t-items-center"
         :class="[ size === 'sm' ? 't-px-1' : 't-px-2' ]"
       >
-        <material-icon icon="keyboard_arrow_down" />
+        <MaterialIcon icon="keyboard_arrow_down" />
       </div>
-      <loader-background
+      <LoaderBackground
         v-if="loading"
         class="t-bottom-0"
       />

@@ -1,12 +1,12 @@
 <template>
   <div data-test-id="Teaser">
-    <teaser-skeleton
+    <TeaserSkeleton
       v-if="loading"
       v-bind="{ isMobile, showLarge, showSplit, showSmallInRow }"
     />
     <template v-else>
       <template v-if="showLarge && teaserLarge">
-        <teaser-fullsize
+        <TeaserFullsize
           :teaser="teaserLarge"
           :redirect-to-edit="redirectToEdit"
           :class="{ 't-mb-8': showSplit }"
@@ -15,7 +15,7 @@
       <template v-if="showSplit && teaserSmall && teaserSmall.length > 0">
         <template v-if="showSmallInRow">
           <div class="t--mb-8 t-flex t-flex-wrap">
-            <teaser-small
+            <TeaserSmall
               v-for="(teaser, index) in teaserSmall"
               :key="'small_' + teaser.storyId"
               :teaser="teaser"
@@ -27,7 +27,7 @@
         </template>
         <template v-else>
           <div class="t--mb-8">
-            <teaser-split
+            <TeaserSplit
               v-for="(teaser, index) in teaserSmall"
               :key="'small_' + teaser.storyId"
               :teaser="teaser"

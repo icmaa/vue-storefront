@@ -4,7 +4,7 @@
     :aria-label="$t(title)"
     @click="$emit('click')"
   >
-    <material-icon
+    <MaterialIcon
       :icon="icon"
       class="t-flex t-flex-fix"
     />

@@ -5,20 +5,20 @@
         v-if="!isLoggedIn"
         class="t-mb-8 t-flex"
       >
-        <login
+        <Login
           v-if="!showRegistration"
           :is-modal="false"
           class="t-w-full"
           @call-register="toggleRegistration(true)"
         />
-        <button-component
+        <ButtonComponent
           v-else
           size="lg"
           class="t-w-full lg:t-w-auto"
           @click="toggleRegistration(true)"
         >
           {{ $t('Login') }}
-        </button-component>
+        </ButtonComponent>
       </div>
       <div v-if="!isLoggedIn">
         <div class="t-mb-4 t-font-light">
@@ -29,16 +29,16 @@
           class="t-flex t-flex-wrap"
         >
           <div class="t-w-full">
-            <button-component
+            <ButtonComponent
               type="ghost"
               class="t-w-full"
               data-test-id="guestCheckoutButton"
               @click="toggleRegistration(false)"
             >
               {{ $t('Proceed as guest') }}
-            </button-component>
+            </ButtonComponent>
           </div>
-          <paypal-checkout-button
+          <PaypalCheckoutButton
             color="white"
             class="t-z-0 t-mt-2 t-flex-1"
           />
@@ -49,7 +49,7 @@
         class="t--mx-2 t-flex t-flex-wrap"
         data-test-id="RegistrationForm"
       >
-        <base-input
+        <BaseInput
           id="email"
           v-model="details.email"
           class="t-mb-4 t-w-full t-px-2"
@@ -69,7 +69,7 @@
             }
           ]"
         />
-        <base-input
+        <BaseInput
           id="first-name"
           v-model.trim="details.firstname"
           class="t-mb-4 t-w-full t-px-2 lg:t-w-1/2"
@@ -88,7 +88,7 @@
             }
           ]"
         />
-        <base-input
+        <BaseInput
           id="last-name"
           v-model.trim="details.lastname"
           class="t-mb-4 t-w-full t-px-2 lg:t-w-1/2"
@@ -107,7 +107,7 @@
             }
           ]"
         />
-        <base-checkbox
+        <BaseCheckbox
           v-if="!isLoggedIn"
           id="create-account"
           v-model="details.createAccount"
@@ -116,9 +116,9 @@
           data-test-id="CreateAccountCheckbox"
         >
           {{ $t('I want to create an account') }}
-        </base-checkbox>
+        </BaseCheckbox>
         <template v-if="details.createAccount">
-          <gender-select
+          <GenderSelect
             id="gender"
             v-model="details.gender"
             class="t-mb-4 t-w-full t-px-2 lg:t-w-1/2"
@@ -128,7 +128,7 @@
               text: $t('Field is required')
             }]"
           />
-          <base-input
+          <BaseInput
             id="dob"
             v-model="details.dob"
             class="t-mb-4 t-w-full t-px-2 lg:t-w-1/2"
@@ -144,7 +144,7 @@
               text: $t('Use a valid date.')
             }]"
           />
-          <base-input
+          <BaseInput
             id="password"
             ref="password"
             v-model="details.password"
@@ -163,7 +163,7 @@
               }
             ]"
           />
-          <base-input
+          <BaseInput
             id="password-confirm"
             v-model="rPassword"
             class="t-mb-4 t-w-full t-px-2"
@@ -184,14 +184,14 @@
           />
         </template>
         <div class="t-w-full t-px-2">
-          <button-component
+          <ButtonComponent
             class="t-w-full lg:t-w-auto"
             type="primary"
             data-test-id="NextStepButton"
             @click.native.stop="submit"
           >
             {{ $t(('Continue to address')) }}
-          </button-component>
+          </ButtonComponent>
         </div>
       </div>
     </form>
@@ -204,14 +204,14 @@
         v-if="details.createAccount && !isLoggedIn"
         class="t-mt-2"
       >
-        <base-checkbox
+        <BaseCheckbox
           id="create-account-info-box"
           v-model="details.createAccount"
           name="create-account-info-box"
           disabled
         >
           {{ $t('Create a new account') }}
-        </base-checkbox>
+        </BaseCheckbox>
       </div>
     </div>
   </div>

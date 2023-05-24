@@ -18,7 +18,7 @@
                     rel="noopener noreferrer"
                     class="t-mb-2 t-mr-2 t-flex t-h-10 t-w-10 t-flex-fix t-items-center t-justify-center t-rounded-full t-bg-base-light t-text-white md:t-h-8 md:t-w-8 lg:t-h-10 lg:t-w-10"
                   >
-                    <material-icon
+                    <MaterialIcon
                       :icon="icon.icon"
                       icon-set="icmaa"
                       class="t-flex md:t-text-lg lg:t-text-2xl"
@@ -42,7 +42,7 @@
                     :title="store.label"
                     class="t-mx-2 t-mb-2"
                   >
-                    <flag-icon
+                    <FlagIcon
                       :iso="store['iso-code']"
                       width="20"
                       height="20"
@@ -80,7 +80,7 @@
               </template>
             </div>
           </div>
-          <newsletter class="t-px-4 md:t-mb-0 md:t-w-1/3" />
+          <Newsletter class="t-px-4 md:t-mb-0 md:t-w-1/3" />
         </div>
       </div>
     </div>
@@ -116,8 +116,8 @@
         </div>
       </div>
     </div>
-    <back-to-top :visible-offset-bottom="footerNavigationOffset" />
-    <language-switcher v-if="multistoreEnabled" />
+    <BackToTop :visible-offset-bottom="footerNavigationOffset" />
+    <LanguageSwitcher v-if="multistoreEnabled" />
   </footer>
 </template>
 

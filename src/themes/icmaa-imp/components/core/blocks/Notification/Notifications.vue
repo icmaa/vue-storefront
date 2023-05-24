@@ -4,7 +4,7 @@
     data-test-id="Notifications"
   >
     <transition-group name="fade-down">
-      <notification
+      <Notification
         v-for="(notification, index) in notifications"
         :key="`${notification.type}_${index}`"
         class="lg:t-mb-4"

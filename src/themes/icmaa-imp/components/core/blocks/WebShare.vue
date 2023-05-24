@@ -10,7 +10,7 @@
       class="t-text-base-light"
       :class="{ 't-mr-4': key !== lastKey }"
     >
-      <material-icon
+      <MaterialIcon
         icon-set="icmaa"
         :icon="key"
         size="sm"

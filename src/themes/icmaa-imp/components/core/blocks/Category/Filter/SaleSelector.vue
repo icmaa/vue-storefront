@@ -1,5 +1,5 @@
 <template>
-  <button-component
+  <ButtonComponent
     type="sale"
     :icon="isActive ? 'check' : 'local_offer'"
     icon-position="left"
@@ -7,7 +7,7 @@
     @click="$emit('change', option)"
   >
     {{ $t('In sale') }}
-  </button-component>
+  </ButtonComponent>
 </template>
 
 <script>

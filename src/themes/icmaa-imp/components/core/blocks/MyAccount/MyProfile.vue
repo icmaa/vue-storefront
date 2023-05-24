@@ -1,14 +1,14 @@
 <template>
   <div class="t-bg-white t-p-4">
-    <headline>
+    <Headline>
       {{ $t('My profile') }}
-    </headline>
+    </Headline>
     <form
       novalidate
       class="t--mx-2 t-flex t-flex-wrap"
       @submit.prevent="submit"
     >
-      <base-input
+      <BaseInput
         id="email"
         v-model="profile.email"
         type="email"
@@ -29,7 +29,7 @@
         class="t-mb-4 t-w-full t-px-2 lg:t-w-1/2"
         :disabled="true"
       />
-      <base-input
+      <BaseInput
         id="first-name"
         v-model="profile.firstname"
         name="first-name"
@@ -43,7 +43,7 @@
         ]"
         class="t-mb-4 t-w-full t-px-2 lg:t-w-1/2"
       />
-      <base-input
+      <BaseInput
         id="last-name"
         v-model="profile.lastname"
         name="last-name"
@@ -55,7 +55,7 @@
         }]"
         class="t-mb-4 t-w-full t-px-2 lg:t-w-1/2"
       />
-      <gender-select
+      <GenderSelect
         id="gender"
         v-model="profile.gender"
         name="gender"
@@ -66,7 +66,7 @@
         }]"
         class="t-mb-4 t-w-full t-px-2 lg:t-w-1/2"
       />
-      <base-input
+      <BaseInput
         id="dob"
         v-model="profile.dob"
         name="dob"
@@ -86,19 +86,19 @@
         ]"
         class="t-mb-4 t-w-full t-px-2 lg:t-w-1/2"
       />
-      <base-checkbox
+      <BaseCheckbox
         id="changePassword"
         v-model="profile.changePassword"
         name="changePassword"
         class="t-mb-4 t-w-full t-px-2"
       >
         {{ $t('Change my password') }}
-      </base-checkbox>
+      </BaseCheckbox>
       <div
         v-if="profile.changePassword"
         class="t-flex t-grow t-flex-wrap"
       >
-        <base-input
+        <BaseInput
           id="oldPassword"
           ref="oldPassword"
           v-model="profile.oldPassword"
@@ -119,7 +119,7 @@
           class="t-mb-4 t-w-full t-px-2 lg:t-w-1/2"
         />
         <div class="t-w-full" />
-        <base-input
+        <BaseInput
           id="password"
           ref="password"
           v-model="profile.password"
@@ -139,7 +139,7 @@
           ]"
           class="t-mb-4 t-w-full t-px-2 lg:t-w-1/2"
         />
-        <base-input
+        <BaseInput
           id="rPassword"
           v-model="profile.rPassword"
           type="password"
@@ -160,13 +160,13 @@
         />
       </div>
       <div class="t-w-full t-px-2">
-        <button-component
+        <ButtonComponent
           :submit="true"
           type="primary"
           class="t-w-full lg:t-w-auto"
         >
           {{ $t('Update my profile') }}
-        </button-component>
+        </ButtonComponent>
       </div>
     </form>
   </div>

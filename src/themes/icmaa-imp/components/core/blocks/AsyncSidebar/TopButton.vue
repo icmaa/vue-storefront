@@ -1,6 +1,6 @@
 <template>
   <button class="t-flex t-flex-fix t-cursor-pointer t-px-2">
-    <material-icon :icon="icon" />
+    <MaterialIcon :icon="icon" />
     <span
       class="t-sr-only t-sr-only-focusable"
       tabindex="0"

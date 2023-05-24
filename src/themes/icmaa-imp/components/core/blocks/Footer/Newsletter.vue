@@ -27,7 +27,7 @@
         class="t-flex t-items-center t-rounded-none t-rounded-r-sm t-border t-border-l-0 t-border-base-light t-pr-2 t-text-base-tone"
         @click="showNewsletterPopup"
       >
-        <material-icon icon="send" />
+        <MaterialIcon icon="send" />
         <span class="t-sr-only">{{ $t('Submit') }}</span>
       </button>
     </div>
@@ -42,7 +42,7 @@
         </router-link>
       </template>
     </i18n>
-    <newsletter-popup v-if="loadNewsletterPopup" />
+    <NewsletterPopup v-if="loadNewsletterPopup" />
   </div>
 </template>
 

@@ -17,7 +17,7 @@
         v-if="description"
         class="category-footer__description"
       />
-      <block-wrapper
+      <BlockWrapper
         v-if="footerContent"
         class="category-footer__description"
         :components="footerContent"

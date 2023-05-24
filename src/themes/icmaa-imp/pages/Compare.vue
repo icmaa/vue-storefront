@@ -5,7 +5,7 @@
   >
     <div class="bg-cl-secondary py35 pl20">
       <div class="container">
-        <breadcrumbs
+        <Breadcrumbs
           :with-homepage="true"
           active-route="Compare"
         />
@@ -43,7 +43,7 @@
                 >
                   <div class="compare__top-info">
                     <div class="check" />
-                    <product-tile
+                    <ProductTile
                       class="col-md-12 collection-product"
                       :product="product"
                     />
@@ -54,7 +54,7 @@
                       :key="attIndex"
                       class="compare__features-item"
                     >
-                      <product-attribute
+                      <ProductAttribute
                         :key="attr.attribute_code"
                         :product="product"
                         :attribute="attr"

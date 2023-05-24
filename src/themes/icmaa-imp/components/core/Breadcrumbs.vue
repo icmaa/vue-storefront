@@ -9,7 +9,7 @@
         :class="{ 't-hidden md:t-inline': !link.visible }"
       >
         <template v-if="index === 0">
-          <material-icon
+          <MaterialIcon
             icon="home"
             size="xs"
             class="t-align-middle"
@@ -37,7 +37,7 @@
       class="t-text-base-tone"
       :class="{ 't-hidden md:t-inline': !showActiveRoute }"
     >{{ current | htmlDecode }}</span>
-    <json-ld-loader type="breadcrumbs" />
+    <JsonLdLoader type="breadcrumbs" />
   </div>
 </template>
 

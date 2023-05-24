@@ -1,5 +1,5 @@
 <template>
-  <base-select
+  <BaseSelect
     :options="countryOptions"
     :initial-option-text="$t('Country')"
     v-bind="{ ...$props, ...$attrs }"

@@ -8,7 +8,7 @@
       :class="{ 't-mb-4': !onlyImage }"
     >
       <slot name="imageOverlay">
-        <wishlist-button
+        <WishlistButton
           class="t-absolute t-bottom-0 t-left-0 t-z-1"
           :is-overlay="true"
           :product="product"
@@ -19,7 +19,7 @@
           data-test-id="QuickAddToCart"
           @click="openAddToCartSidebar"
         >
-          <material-icon
+          <MaterialIcon
             icon="shopping_cart"
             class="t-text-white"
           />
@@ -31,11 +31,11 @@
         data-test-id="productLink"
         class="product-link t-z-0 t-block"
       >
-        <promo-banner
+        <PromoBanner
           :product="product"
           class="t-absolute t-right-0 t-top-0"
         />
-        <product-image
+        <ProductImage
           :image="thumbnail"
           :alt="product.translatedName | htmlDecode"
           data-test-id="productImage"
@@ -55,7 +55,7 @@
       >
         {{ product.translatedName | htmlDecode }}
       </p>
-      <price
+      <Price
         v-if="showPrice"
         :product="product"
       />

@@ -6,7 +6,7 @@
       :title="category.name"
       class="t-block"
     >
-      <picture-component
+      <PictureComponent
         :alt="category.name | stripHTML"
         :src="banner"
         :width="624"
@@ -17,7 +17,7 @@
         class="t-w-screen"
       />
     </router-link>
-    <picture-component
+    <PictureComponent
       v-else
       :alt="category.name | stripHTML"
       :src="banner"

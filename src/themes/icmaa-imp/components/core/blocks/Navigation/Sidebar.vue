@@ -1,7 +1,7 @@
 <template>
-  <sidebar class="t-min-h-screen">
-    <template v-slot:top>
-      <top-button
+  <Sidebar class="t-min-h-screen">
+    <template #top>
+      <TopButton
         icon="person"
         :text="loginButtonText"
         :tab-index="2"
@@ -9,20 +9,20 @@
         @click.native="login"
       />
     </template>
-    <template v-slot:default>
-      <gender-navigation
+    <template #default>
+      <GenderNavigation
         :items="genderNavigationItems"
         class="t--mx-4 t--mt-4 t-mb-4"
       />
       <div class="t--mx-1 t--mb-2 t-flex t-flex-wrap">
-        <navigation-item
+        <NavigationItem
           v-for="link in mainNavigationItems"
           :key="link.id"
           v-bind="link"
         />
       </div>
     </template>
-    <template v-slot:footer>
+    <template #footer>
       <div
         class="t-flex-expand t-bg-base-lightest t-p-4 t-pb-32"
         data-test-id="SidebarMenuFooter"
@@ -56,7 +56,7 @@
             </template>
           </div>
           <div class="t-ml-4 t-flex t-h-8 t-flex-initial t-items-center t-border-l t-border-base-lighter t-pl-4">
-            <flag-icon
+            <FlagIcon
               :iso="languageCode"
               width="20"
               height="20"
@@ -67,7 +67,7 @@
         </div>
       </div>
     </template>
-  </sidebar>
+  </Sidebar>
 </template>
 
 <script>

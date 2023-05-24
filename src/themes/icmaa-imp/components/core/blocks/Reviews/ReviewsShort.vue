@@ -1,6 +1,6 @@
 <template>
   <div class="reviews t-flex t-items-center t-text-sm t-text-base-light">
-    <reviews-stars
+    <ReviewsStars
       :rating="rating"
       :max-rating="maxRating"
     />

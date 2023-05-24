@@ -24,7 +24,7 @@
           />
           <slot name="header" />
           <div class="t-flex-expand" />
-          <top-button
+          <TopButton
             v-if="showCloseButton"
             icon="close"
             text="Close"

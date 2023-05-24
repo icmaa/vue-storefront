@@ -36,7 +36,7 @@
           </router-link>
         </div>
       </div>
-      <web-share
+      <WebShare
         :webshare-text="webshareText"
         :webshare-image="article.image.filename"
         class="t-flex-fix"
@@ -45,7 +45,7 @@
     <h1 class="t-mb-4 t-flex t-max-w-3xl t-flex-wrap t-items-baseline t-text-2xl t-font-light t-text-base-dark lg:t-mx-auto">
       {{ article.title }}
     </h1>
-    <block-wrapper
+    <BlockWrapper
       :components="article.content"
       :defaults="cmsContentDefaults"
       class="block-article__content"
@@ -56,7 +56,7 @@
       :headline="$t('Related articles')"
       class="t-mt-8"
     />
-    <json-ld-loader type="article" />
+    <JsonLdLoader type="article" />
   </div>
 </template>
 

@@ -8,14 +8,14 @@
               :to="localizedHomeRoute"
               class="t-flex t-cursor-pointer t-items-center t-bg-base-lightest t-px-3 t-text-base-tone"
             >
-              <material-icon
+              <MaterialIcon
                 icon="keyboard_backspace"
                 class="t-flex t-flex-fix"
               />
               <span class="t-sr-only">{{ $t('Home Page') }}</span>
             </router-link>
           </div>
-          <logo
+          <Logo
             width="174"
             height="43"
             class="logo t--mr-4 t-flex-fix t-no-underline xl:t-mr-0"

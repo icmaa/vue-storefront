@@ -2,7 +2,7 @@
   <div class="t-bg-white">
     <!-- Header -->
     <div>
-      <picture-component
+      <PictureComponent
         :src="headerImage.src"
         :width="headerImage.width"
         :height="headerImage.height"
@@ -30,7 +30,7 @@
         class="t-mt-4 t-w-1/2 t-self-center t-p-4 t-text-center md:t-w-1/4"
       >
         <div class="t-relative">
-          <picture-component
+          <PictureComponent
             :src="voting.img.src"
             :width="voting.img.width"
             :height="voting.img.height"
@@ -79,7 +79,7 @@
             :title="voting.name | htmlDecode"
             class="t-ml-4 t-align-text-bottom"
           >
-            <material-icon
+            <MaterialIcon
               :icon="voting.icon"
               icon-set="icmaa"
               size="xs"

@@ -1,11 +1,11 @@
 <template>
-  <sidebar
+  <Sidebar
     :title="$t('Shopping cart')"
     class="microcart t-relative"
     data-test-id="MicroCart"
   >
-    <template v-slot:top-after-title>
-      <button-component
+    <template #top-after-title>
+      <ButtonComponent
         v-if="productsInCart.length"
         type="transparent"
         size="sm"
@@ -14,7 +14,7 @@
         @click="clearCart"
       >
         {{ $t('Clear cart') }}
-      </button-component>
+      </ButtonComponent>
     </template>
     <div class="t-pb-24">
       <h4
@@ -24,35 +24,35 @@
         {{ $t('Your shopping cart is empty.') }}
       </h4>
       <template v-if="productsInCart.length">
-        <coupon />
+        <Coupon />
         <ul class="t-mb-4">
-          <product
+          <Product
             v-for="(product, i) in productsInCart"
             :key="`cart-${i}-${product.checksum || product.sku}`"
             :product="product"
           />
         </ul>
-        <totals class="t-mb-4" />
+        <Totals class="t-mb-4" />
         <template v-if="!isCheckoutMode">
-          <button-component
+          <ButtonComponent
             type="primary"
             class="t-w-full"
             data-test-id="GoToCheckout"
             @click.native="continueShopping(true)"
           >
             {{ $t('Go to checkout') }}
-          </button-component>
-          <button-component
+          </ButtonComponent>
+          <ButtonComponent
             type="transparent"
             class="t-mt-2 t-w-full"
             @click.native="continueShopping()"
           >
             {{ $t('Continue shopping') }}
-          </button-component>
+          </ButtonComponent>
         </template>
       </template>
     </div>
-  </sidebar>
+  </Sidebar>
 </template>
 
 <script>

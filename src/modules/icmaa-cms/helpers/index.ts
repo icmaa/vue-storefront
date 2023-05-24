@@ -131,7 +131,7 @@ export const stringToComponent = (text: string, options?: Options): object => {
               const alt = img.getAttribute('alt') || img.getAttribute('title')
               if (alt) Object.assign(propsData, { alt })
 
-              const Picture = Vue.component('Picture', PictureComp)
+              const Picture = Vue.component('PictureComponent', PictureComp)
               const picture = new Picture({ propsData, parent })
 
               picture.$mount(img)

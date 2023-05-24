@@ -6,7 +6,7 @@
       v-text="info.description"
     />
     <div class="card-frame t-mt-4 t-h-10 t-rounded-sm t-border t-border-base-light" />
-    <validation-messages
+    <ValidationMessages
       :validations="[
         {
           condition: $v.isValid.$error && (!$v.isValid.notFalse || !$v.isValid.required),

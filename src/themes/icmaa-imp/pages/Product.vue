@@ -5,44 +5,44 @@
   >
     <div class="t-container t-px-4">
       <div class="t--mx-4 t-flex t-flex-wrap lg:t-px-4">
-        <breadcrumbs
+        <Breadcrumbs
           :show-active-route="false"
           class="breadcrumbs t-my-4 t-w-full t-px-4 md:t-my-8 md:t-px-0"
         />
-        <product-gallery
+        <ProductGallery
           :key="`product-gallery-${product.parentId}`"
-          class="t-w-full t-border-b t-border-base-lightest t-bg-white lg:t-w-1/2 lg:t-border-b-0"
           :gallery="gallery.map(i => i.src)"
           :product="product"
+          class="t-w-full t-border-b t-border-base-lightest t-bg-white lg:t-w-1/2 lg:t-border-b-0"
         />
         <div
-          class="t-w-full t-bg-white t-p-8 lg:t-w-1/2"
           :class="{ 'lg:t-flex lg:t-flex-col lg:t-justify-between': isPreorder }"
+          class="t-w-full t-bg-white t-p-8 lg:t-w-1/2"
         >
-          <category-extras-header
-            class="t--mx-8 t--mt-8 t-mb-8 t-border-b t-border-base-lightest lg:t-pl-px"
+          <CategoryExtrasHeader
             :linked-banner="true"
             :banner-sizes="categoryHeaderBannerSizes"
             :logo-limit="departmentLogoLimit"
+            class="t--mx-8 t--mt-8 t-mb-8 t-border-b t-border-base-lightest lg:t-pl-px"
           >
             <div
               v-if="category"
               class="t-flex"
             >
-              <button-component
+              <ButtonComponent
                 size="sm"
                 @click="goToDepartmentCategory()"
               >
                 {{ $t('More products') }}
-              </button-component>
+              </ButtonComponent>
             </div>
-          </category-extras-header>
+          </CategoryExtrasHeader>
           <div class="t-flex t-flex-wrap">
             <h1
               data-test-id="productName"
               class="t-mb-0 t-w-1/2 t-grow t-leading-snug"
             >
-              <department-logo
+              <DepartmentLogo
                 v-if="departmentLogo"
                 v-bind="departmentLogo.data()"
                 class="t-float-right t-pl-4"
@@ -55,12 +55,12 @@
                 <span class="t-mb-2 t-block t-text-2xl t-font-extralight">{{ productName | htmlDecode }}</span>
               </template>
             </h1>
-            <reviews-short
+            <ReviewsShort
               :rating="reviewRating"
               :count="reviewCount"
               class="t-mt-4 t-w-full t-flex-fix lg:t-w-2/3 lg:t-flex-expand"
             />
-            <web-share
+            <WebShare
               :webshare-text="webshareText"
               :webshare-image="image.src"
               class="t-mt-4 t-w-full t-flex-fix t-text-base-light lg:t-w-auto"
@@ -106,7 +106,7 @@
                   v-if="['configurable', 'bundle'].includes(product.type_id) && !isOnesizeProduct"
                   class="t-mb-4 t-flex t-w-full t-grow xl:t-mr-4 xl:t-w-3/6"
                 >
-                  <button-component
+                  <ButtonComponent
                     type="select"
                     icon="arrow_forward"
                     data-test-id="AddToCartSize"
@@ -114,33 +114,33 @@
                     @click.native="openAddtocart"
                   >
                     {{ productOptionsLabel }}
-                  </button-component>
+                  </ButtonComponent>
                 </div>
-                <button-component
+                <ButtonComponent
                   :type="loading || !isAddToCartDisabled ? 'primary' : 'second'"
+                  :disabled="isAddToCartDisabled"
                   data-test-id="AddToCart"
                   class="t-relative t-mb-4 t-mr-4 t-grow disabled:t-opacity-50 xl:t-w-2/6"
-                  :disabled="isAddToCartDisabled"
                   @click.native="addToCartButtonClick"
                 >
                   {{ userHasSelectedVariant && isAddToCartDisabled && !loading ? $t('Out of stock') : $t('Add to cart') }}
-                  <loader-background
+                  <LoaderBackground
                     v-if="loading"
                     class="t-bottom-0"
                     height="t-h-1"
                     bar="t-bg-base-lightest t-opacity-25"
                   />
-                </button-component>
-                <wishlist-button
+                </ButtonComponent>
+                <WishlistButton
                   :product="wishlistProduct"
                   class="t-mb-4 t-flex-fix"
                   data-test-id="CurrentProductWishlistButton"
                 />
               </div>
-              <product-trust-signals />
+              <ProductTrustSignals />
             </div>
           </div>
-          <product-preorder
+          <ProductPreorder
             v-if="isPreorder"
             :product="product"
           />
@@ -151,39 +151,39 @@
     <div class="t-container t-mt-8 t-px-4">
       <div class="t--mx-4 t-flex t-flex-wrap lg:t-px-4">
         <div class="product-details t-w-full t-bg-white t-p-8 lg:t-w-1/2">
-          <details-tabs :tabs="detailsTabs">
+          <DetailsTabs :tabs="detailsTabs">
             <template #pill-details>
               {{ $t('Product details') }}
             </template>
             <template #tab-details>
-              <product-details :product="product" />
+              <ProductDetails :product="product" />
             </template>
             <template #pill-features>
               {{ $t('Features') }}
             </template>
             <template #tab-features>
-              <product-features :product="product" />
+              <ProductFeatures :product="product" />
             </template>
             <template #pill-care-instructions>
               {{ $t('Care instructions') }}
             </template>
             <template #tab-care-instructions>
-              <product-care-instructions :product="product" />
+              <ProductCareInstructions :product="product" />
             </template>
-          </details-tabs>
+          </DetailsTabs>
         </div>
         <div
           id="reviews"
           class="reviews t-relative t-w-full t-bg-base-lighter t-p-8 lg:t-w-1/2"
         >
-          <lazyload data-test-id="ReviewsLoader">
-            <reviews
+          <Lazyload data-test-id="ReviewsLoader">
+            <Reviews
               v-if="product"
               :product="product"
               :product-name="product.translatedName || product.name"
             />
-            <reviews-claim />
-          </lazyload>
+            <ReviewsClaim />
+          </Lazyload>
         </div>
       </div>
     </div>
@@ -191,32 +191,32 @@
     <div class="spacer t-h-8" />
 
     <div class="t-container t-px-4">
-      <lazyload data-test-id="RecommendationsLoader">
-        <recommendations
+      <Lazyload data-test-id="RecommendationsLoader">
+        <Recommendations
           :key="'crosssell-' + product.id"
-          type="crosssell"
           :title="$t('You may like these too')"
+          type="crosssell"
           class="lg:t-mb-8"
         />
-      </lazyload>
-      <lazyload data-test-id="RecommendationsLoader">
-        <recommendations
+      </Lazyload>
+      <Lazyload data-test-id="RecommendationsLoader">
+        <Recommendations
           :key="'upsell-' + product.id"
-          type="upsell"
           :title="$t('Similar products')"
+          type="upsell"
           class="lg:t-mb-8"
         />
-      </lazyload>
+      </Lazyload>
     </div>
 
-    <async-sidebar
+    <AsyncSidebar
       :state-key="'addtocart'"
       :async-component="AddToCartSidebar"
       :async-component-props="{ showAddToCartButton: true, closeOnSelect: false }"
     />
 
-    <json-ld-loader type="product" />
-    <json-ld-loader
+    <JsonLdLoader type="product" />
+    <JsonLdLoader
       v-if="isTicket"
       type="ticket"
     />
@@ -294,6 +294,14 @@ export default {
     Lazyload
   },
   mixins: [IcmaaProduct, ProductMetaMixin, ProductPriceMixin, ProductOptionsMixin, ProductAddToCartMixin, FeaturesMixin, ClusterMixin],
+  async asyncData ({ store, route }) {
+    store.commit('product/' + productMutationTypes.PRODUCT_RESET_CURRENT, {})
+    const product = await store.dispatch('product/loadProduct', { parentSku: route.params.parentSku, childSku: route && route.params && route.params.childSku ? route.params.childSku : null })
+    const loadBreadcrumbsPromise = store.dispatch('product/loadProductBreadcrumbs', { product })
+    if (isServer) {
+      await loadBreadcrumbsPromise
+    }
+  },
   data () {
     return {
       AddToCartSidebar,
@@ -406,14 +414,6 @@ export default {
       if (nProduct.parentId) {
         catalogHooksExecutors.productPageVisited(nProduct)
       }
-    }
-  },
-  async asyncData ({ store, route }) {
-    store.commit('product/' + productMutationTypes.PRODUCT_RESET_CURRENT, {})
-    const product = await store.dispatch('product/loadProduct', { parentSku: route.params.parentSku, childSku: route && route.params && route.params.childSku ? route.params.childSku : null })
-    const loadBreadcrumbsPromise = store.dispatch('product/loadProductBreadcrumbs', { product })
-    if (isServer) {
-      await loadBreadcrumbsPromise
     }
   },
   beforeCreate () {

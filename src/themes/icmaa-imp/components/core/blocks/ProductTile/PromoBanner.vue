@@ -2,11 +2,11 @@
   <div
     v-if="promo"
     class="t-flex t-h-6 t-items-center t-text-xxs t-uppercase t-text-white lg:t-h-8 lg:t-text-xs"
-    :class="[ background, hasBackground ? ' t-px-2' : 't-font-bold t-bg-base-light' ]"
+    :class="[ background, hasBackground ? ' t-px-2' : 't-bg-base-light t-font-bold' ]"
     :style="backgroundStyle"
   >
     <template v-if="!hasBackground">
-      <retina-image
+      <RetinaImage
         :image="`/assets/catalog/promo-flags/${promo.key}.png`"
         :alt="promo.label"
         class="t-blend-hard-light"

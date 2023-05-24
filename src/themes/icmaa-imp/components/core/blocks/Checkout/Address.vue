@@ -9,7 +9,7 @@
         class="t-mb-4 t-w-full t-px-2 t-font-light"
         v-text="label"
       />
-      <address-select
+      <AddressSelect
         v-if="hasAddresses"
         v-model="selectedAddress"
         class="t-mb-4 t-w-full t-px-2"
@@ -23,7 +23,7 @@
         ]"
       />
       <template v-if="isNewAddress">
-        <base-checkbox
+        <BaseCheckbox
           v-if="hasPoststation"
           id="poststation"
           v-model="address.poststation"
@@ -31,9 +31,9 @@
           name="poststation"
         >
           {{ $t('Send to post station?') }}
-        </base-checkbox>
+        </BaseCheckbox>
         <template v-if="address.poststation">
-          <base-input
+          <BaseInput
             id="company"
             v-model.trim="address.company"
             class="t-mb-4 t-w-full t-px-2"
@@ -54,7 +54,7 @@
             ]"
           />
           <div class="t-mb-4 t-w-full t-px-2">
-            <base-input
+            <BaseInput
               v-for="(street,i) in address.street"
               :id="`street-${i}`"
               :key="i"
@@ -77,7 +77,7 @@
             />
           </div>
         </template>
-        <base-input
+        <BaseInput
           v-if="!address.poststation"
           id="company"
           v-model.trim="address.company"
@@ -94,7 +94,7 @@
             }
           ]"
         />
-        <base-input
+        <BaseInput
           id="firstname"
           v-model.trim="address.firstname"
           class="t-mb-4 t-w-full t-px-2 lg:t-w-1/2"
@@ -114,7 +114,7 @@
             }
           ]"
         />
-        <base-input
+        <BaseInput
           id="lastname"
           v-model.trim="address.lastname"
           class="t-mb-4 t-w-full t-px-2 lg:t-w-1/2"
@@ -138,7 +138,7 @@
           v-if="!address.poststation"
           class="t-mb-4 t-w-full t-px-2"
         >
-          <base-input
+          <BaseInput
             v-for="(street,i) in address.street"
             :id="`street-${i}`"
             :key="i"
@@ -168,7 +168,7 @@
             class="t-w-full"
           />
         </div>
-        <base-input
+        <BaseInput
           id="postcode"
           v-model.trim="address.postcode"
           class="t-mb-4 t-w-full t-px-2 lg:t-w-1/2"
@@ -187,7 +187,7 @@
             }
           ]"
         />
-        <base-input
+        <BaseInput
           id="city"
           v-model.trim="address.city"
           class="t-mb-4 t-w-full t-px-2 lg:t-w-1/2"
@@ -207,7 +207,7 @@
             }
           ]"
         />
-        <base-select
+        <BaseSelect
           v-if="hasState"
           id="region_id"
           v-model="address.region_id"
@@ -220,7 +220,7 @@
           }]"
           class="t-mb-4 t-w-full t-px-2 lg:t-w-1/2"
         />
-        <country-select
+        <CountrySelect
           v-model="address.country_id"
           class="t-mb-4 t-w-full t-px-2"
           :class="{ 'lg:t-w-1/2': hasState }"
@@ -235,7 +235,7 @@
           ]"
         />
         <div class="t-mb-4 t-w-full t-px-2">
-          <base-input
+          <BaseInput
             id="telephone"
             v-model.trim="address.telephone"
             type="text"
@@ -261,7 +261,7 @@
           v-if="hasVatId"
           class="t-mb-4 t-w-full t-px-2"
         >
-          <base-input
+          <BaseInput
             id="vat_id"
             v-model="address.vat_id"
             name="vat_id"
