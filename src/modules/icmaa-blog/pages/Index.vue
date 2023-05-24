@@ -10,6 +10,7 @@
       :articles="articles"
       :headline="$t('Blog #{tag}', { tag })"
       :pagination="pagination"
+      @load-prev="loadPrev"
     />
     <List
       v-else
@@ -17,7 +18,6 @@
       :category="category"
       :pagination="pagination"
       @load-prev="loadPrev"
-      @load-next="loadNext"
     />
   </div>
 </template>
@@ -110,14 +110,6 @@ export default {
         }
       }
       return this.$store.dispatch('icmaaBlog/resolveUrl', { route })
-    },
-    loadNext () {
-      this.$router.push({
-        ...this.$route,
-        query: {
-          p: this.page + 1
-        }
-      })
     },
     fetchData (route: Route) {
       return Promise.all([
