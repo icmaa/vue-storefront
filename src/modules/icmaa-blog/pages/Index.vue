@@ -117,6 +117,31 @@ export default {
         this.$store.dispatch('icmaaBlog/resolveUrl', { route: this.$route })
       ])
     }
+  },
+  metaInfo () {
+    if (this.isArticle) {
+      const { title, preview } = this.article
+      return {
+        title: `${title} | ${this.$t('Magazine')}`,
+        meta: [
+          { vmid: 'description', name: 'description', content: preview }
+        ]
+      }
+    } else if (this.isCategory || this.isTag) {
+      const meta = [
+        {
+          vmid: 'description',
+          name: 'description',
+          content: this.$t('Impericon Mag – your magazine with the latest news, albums & videos from metalcore, hardcore, deathcore, rock, metal & pop punk.')
+        }
+      ]
+
+      const title = this.isCategory
+        ? `${this.category.name} | ${this.$t('Magazine')}`
+        : `#${this.tag} | ${this.$t('Magazine')}`
+
+      return { title, meta }
+    }
   }
 }
 </script>

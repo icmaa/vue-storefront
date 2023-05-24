@@ -47,6 +47,18 @@ export default {
         this.$store.dispatch('icmaaBlog/fetchCategories')
       ])
     }
+  },
+  metaInfo () {
+    return {
+      title: this.$t('Magazine'),
+      meta: [
+        {
+          vmid: 'description',
+          name: 'description',
+          content: this.$t('Impericon Mag – your magazine with the latest news, albums & videos from metalcore, hardcore, deathcore, rock, metal & pop punk.')
+        }
+      ]
+    }
   }
 }
 </script>
