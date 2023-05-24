@@ -8,7 +8,7 @@
   >
     <div
       v-if="teaser.buttonText"
-      class="t-absolute t-top-0 t-right-0 t-mr-4 t-py-2 t-px-3 t-text-sm"
+      class="t-absolute t-right-0 t-top-0 t-mr-4 t-px-3 t-py-2 t-text-sm"
       :class="{ 't-text-white': !textColor, 't-bg-base-primary': !backgroundColor }"
       :style="{ 'background-color': backgroundColor, 'color': textColor }"
     >
@@ -36,7 +36,7 @@
     </h2>
     <edit-button
       :edit-url="editUrl"
-      class="t-left-0 t-ml-2 t--mt-2"
+      class="t-left-0 t--mt-2 t-ml-2"
       :class="{ 't-hidden': !hover }"
     />
   </div>

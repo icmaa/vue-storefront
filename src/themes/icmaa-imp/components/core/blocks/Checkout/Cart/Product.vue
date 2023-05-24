@@ -1,30 +1,49 @@
 <template>
-  <li class="t-flex t-py-2 t-border-b t-border-base-lightest">
-    <div class="t-w-1/3 t-mr-4">
-      <product-image :image="thumbnail" :alt="product.translatedName | htmlDecode" />
+  <li class="t-flex t-border-b t-border-base-lightest t-py-2">
+    <div class="t-mr-4 t-w-1/3">
+      <product-image
+        :image="thumbnail"
+        :alt="product.translatedName | htmlDecode"
+      />
     </div>
 
-    <div class="t-w-2/3 t-flex t-flex-col t-py-2">
-      <div class="t-mb-4 t-leading-tight t-text-sm">
+    <div class="t-flex t-w-2/3 t-flex-col t-py-2">
+      <div class="t-mb-4 t-text-sm t-leading-tight">
         {{ product.translatedName | htmlDecode }}
       </div>
 
-      <div class="t-flex-grow">
-        <div class="t-flex t-w-full t-flex-wrap t-items-center t-mb-2" v-if="totals.length > 0 || isFree">
-          <button-component class="t-mr-2 t-mb-2" type="tag" size="xs" :cursor-pointer="false" v-for="opt in totals" :key="opt.label">
+      <div class="t-grow">
+        <div
+          v-if="totals.length > 0 || isFree"
+          class="t-mb-2 t-flex t-w-full t-flex-wrap t-items-center"
+        >
+          <button-component
+            v-for="opt in totals"
+            :key="opt.label"
+            class="t-mb-2 t-mr-2"
+            type="tag"
+            size="xs"
+            :cursor-pointer="false"
+          >
             {{ opt.value }}
           </button-component>
-          <div class="t-text-xs t-text-sale t-font-bold t-uppercase t-mb-2" v-if="isFree">
+          <div
+            v-if="isFree"
+            class="t-mb-2 t-text-xs t-font-bold t-uppercase t-text-sale"
+          >
             {{ $t('Free') }}
           </div>
         </div>
 
-        <div class="t-text-sm" v-if="hasProductErrors">
+        <div
+          v-if="hasProductErrors"
+          class="t-text-sm"
+        >
           {{ product.errors | formatProductMessages }}
         </div>
       </div>
 
-      <div class="t-flex t-items-center t-flex-wrap t-justify-between">
+      <div class="t-flex t-flex-wrap t-items-center t-justify-between">
         <div class="t-text-sm">
           {{ productQty }} {{ $t('Pcs.') }}
         </div>

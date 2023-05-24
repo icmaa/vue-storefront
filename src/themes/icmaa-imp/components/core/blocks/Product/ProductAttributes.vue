@@ -1,13 +1,33 @@
 <template>
-  <li class="t-flex" v-if="values.length > 0">
-    <span class="t-w-5/12 lg:t-w-2/6 t-font-bold t-overflow-auto t-scrolling-touch">{{ label|htmlDecode }}</span>
-    <span class="t-w-7/12 lg:t-w-4/6 t-pl-2">
+  <li
+    v-if="values.length > 0"
+    class="t-flex"
+  >
+    <span class="t-w-5/12 t-overflow-auto t-font-bold t-scrolling-touch lg:t-w-2/6">{{ label|htmlDecode }}</span>
+    <span class="t-w-7/12 t-pl-2 lg:t-w-4/6">
       <template v-for="(value, index) in values">
         <template v-if="value.optionLink">
-          <router-link :to="value.optionLink" :title="label + ' - ' + value.optionLabel" class="t-text-base-dark t-border-b t-border-base-dark" v-text="value.optionLabel" :key="'key-' + index" /><span v-if="valuesCount !== index" v-text="', '" :key="'spacer-' + index" />
+          <router-link
+            :key="'key-' + index"
+            :to="value.optionLink"
+            :title="label + ' - ' + value.optionLabel"
+            class="t-border-b t-border-base-dark t-text-base-dark"
+            v-text="value.optionLabel"
+          /><span
+            v-if="valuesCount !== index"
+            :key="'spacer-' + index"
+            v-text="', '"
+          />
         </template>
         <template v-else>
-          <span v-text="value.optionLabel" :key="'key-' + index" /><span v-if="valuesCount !== index" v-text="', '" :key="'spacer-' + index" />
+          <span
+            :key="'key-' + index"
+            v-text="value.optionLabel"
+          /><span
+            v-if="valuesCount !== index"
+            :key="'spacer-' + index"
+            v-text="', '"
+          />
         </template>
       </template>
     </span>
@@ -21,11 +41,6 @@ import { date } from '@vue-storefront/core/filters/date'
 
 export default {
   name: 'ProductAttributes',
-  data: function () {
-    return {
-      map: config.icmaa.catalog.attribute.category_links
-    }
-  },
   props: {
     product: {
       type: Object,
@@ -34,6 +49,11 @@ export default {
     attribute: {
       type: null,
       required: true
+    }
+  },
+  data: function () {
+    return {
+      map: config.icmaa.catalog.attribute.category_links
     }
   },
   computed: {

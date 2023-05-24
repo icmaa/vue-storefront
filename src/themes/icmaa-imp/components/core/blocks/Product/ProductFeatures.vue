@@ -1,6 +1,11 @@
 <template>
-  <ul class="t-text-sm t-list-disc t-list-outside t-pl-6">
-    <li v-for="(feature, index) in features" :key="index" :class="{ 't-mb-2': features.length -1 !== index }" v-html="feature" />
+  <ul class="t-list-outside t-list-disc t-pl-6 t-text-sm">
+    <li
+      v-for="(feature, index) in features"
+      :key="index"
+      :class="{ 't-mb-2': features.length -1 !== index }"
+      v-html="feature"
+    />
   </ul>
 </template>
 

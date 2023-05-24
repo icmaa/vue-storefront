@@ -1,5 +1,11 @@
 <template>
-  <button-icon icon="shopping_cart" title="Shopping cart" :qty="quantity" @click="toggleMicrocart" :last="last" />
+  <button-icon
+    icon="shopping_cart"
+    title="Shopping cart"
+    :qty="quantity"
+    :last="last"
+    @click="toggleMicrocart"
+  />
 </template>
 
 <script>
@@ -18,11 +24,6 @@ export default {
       default: false
     }
   },
-  methods: {
-    toggleMicrocart () {
-      this.$store.dispatch('ui/setSidebar', { key: 'microcart' })
-    }
-  },
   computed: {
     ...mapGetters({
       quantity: 'cart/getItemsTotalQuantity'
@@ -33,6 +34,11 @@ export default {
     this.$once('hook:beforeDestroy', () => {
       syncCartWhenLocalStorageChange.removeEventListener()
     })
+  },
+  methods: {
+    toggleMicrocart () {
+      this.$store.dispatch('ui/setSidebar', { key: 'microcart' })
+    }
   }
 }
 </script>

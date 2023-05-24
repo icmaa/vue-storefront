@@ -1,28 +1,34 @@
 <template>
-  <div v-if="loading || products && products.length > 0" data-test-id="AdditionalProducts">
-    <h3 v-text="$t('Take me with you')" class="t-w-full t-mb-2 t-font-light" />
-    <div class="t-overflow-auto t-scrolling-touch t-hide-scrollbar t--mr-6 md:t-mr-0">
-      <div class="t-flex t--mx-1 lg:t--mx-2 t-webkit-tap-transparent">
+  <div
+    v-if="loading || products && products.length > 0"
+    data-test-id="AdditionalProducts"
+  >
+    <h3
+      class="t-mb-2 t-w-full t-font-light"
+      v-text="$t('Take me with you')"
+    />
+    <div class="t--mr-6 t-overflow-auto t-hide-scrollbar t-scrolling-touch md:t-mr-0">
+      <div class="t--mx-1 t-flex t-webkit-tap-transparent lg:t--mx-2">
         <template v-if="loading">
           <div
             v-for="i in 4"
             :key="`placeholder-${i}`"
-            class="t-flex-fix t-px-1 lg:t-px-2 t-w-32"
+            class="t-w-32 t-flex-fix t-px-1 lg:t-px-2"
           >
             <placeholder
               ratio="30:43"
               :plain="false"
-              class="t-bg-base-lightest t-mb-3"
+              class="t-mb-3 t-bg-base-lightest"
             />
-            <div class="t-leading-tight t-w-10/12 t-h-2 t-my-2 t-bg-base-lightest" />
-            <div class="t-leading-tight t-w-2/3 t-h-2 t-my-2 t-bg-base-lightest" />
-            <div class="t-leading-tight t-w-1/3 t-h-2 t-my-2 t-mt-4 t-bg-base-lightest" />
+            <div class="t-my-2 t-h-2 t-w-10/12 t-bg-base-lightest t-leading-tight" />
+            <div class="t-my-2 t-h-2 t-w-2/3 t-bg-base-lightest t-leading-tight" />
+            <div class="t-my-2 t-mt-4 t-h-2 t-w-1/3 t-bg-base-lightest t-leading-tight" />
           </div>
         </template>
         <additional-product
-          class="product t-cursor-pointer t-flex-fix t-px-1 lg:t-px-2 t-w-32"
           v-for="(product, i) in products"
           :key="i"
+          class="product t-w-32 t-flex-fix t-cursor-pointer t-px-1 lg:t-px-2"
           :product="product"
           @add-to-cart="addToCart"
           @remove-from-cart="removeFromCart"
@@ -63,6 +69,33 @@ export default {
     productsConfigArray () {
       return this.getJsonBlockByIdentifier('checkout-additional-products')
     }
+  },
+  async mounted () {
+    await this.$store.dispatch('icmaaCmsBlock/list', 'checkout-additional-products')
+    const skus = this.productsConfigArray.map(p => p.sku)
+
+    const query = new SearchQuery()
+    addDefaultProductFilter(query)
+    query.applyFilter({ key: 'sku', value: { 'in': skus } })
+
+    const { includeFields, excludeFields } = config.entities.productList
+    const options = {
+      separateSelectedVariant: this.separateSelectedVariant,
+      assignProductConfiguration: true,
+      setConfigurableProductOptions: true,
+      filterUnavailableVariants: true
+    }
+
+    let products = await this.$store.dispatch(
+      'product/findProducts',
+      { query, includeFields, excludeFields, options }
+    )
+
+    products = products.items || []
+    products = products.sort((a, b) => skus.indexOf(a.sku) - skus.indexOf(b.sku))
+
+    this.products = products
+    this.loading = false
   },
   methods: {
     async addToCart (product) {
@@ -106,33 +139,6 @@ export default {
 
       this.$store.dispatch('ui/loader', false)
     }
-  },
-  async mounted () {
-    await this.$store.dispatch('icmaaCmsBlock/list', 'checkout-additional-products')
-    const skus = this.productsConfigArray.map(p => p.sku)
-
-    const query = new SearchQuery()
-    addDefaultProductFilter(query)
-    query.applyFilter({ key: 'sku', value: { 'in': skus } })
-
-    const { includeFields, excludeFields } = config.entities.productList
-    const options = {
-      separateSelectedVariant: this.separateSelectedVariant,
-      assignProductConfiguration: true,
-      setConfigurableProductOptions: true,
-      filterUnavailableVariants: true
-    }
-
-    let products = await this.$store.dispatch(
-      'product/findProducts',
-      { query, includeFields, excludeFields, options }
-    )
-
-    products = products.items || []
-    products = products.sort((a, b) => skus.indexOf(a.sku) - skus.indexOf(b.sku))
-
-    this.products = products
-    this.loading = false
   }
 }
 </script>

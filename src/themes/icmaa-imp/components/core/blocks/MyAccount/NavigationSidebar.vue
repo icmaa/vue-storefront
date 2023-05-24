@@ -1,5 +1,8 @@
 <template>
-  <navigation class="customer-account t-flex t--mx-4 t--mt-4" @click="close" />
+  <navigation
+    class="customer-account t--mx-4 t--mt-4 t-flex"
+    @click="close"
+  />
 </template>
 
 <script>

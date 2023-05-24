@@ -1,28 +1,55 @@
 <template>
   <div id="category">
     <header class="t-container">
-      <div class="t-flex t-flex-wrap t-px-4 t-mb-8">
-        <category-extras-header class="t-bg-white t--mx-4 md:t-mx-0 md:t-mt-4 lg:t-w-full" />
-        <breadcrumbs :active-route="currentRouteName" class="t-w-full t-my-4 md:t-my-8" />
-        <block-wrapper :components="contentHeader" v-if="contentHeader" />
+      <div class="t-mb-8 t-flex t-flex-wrap t-px-4">
+        <category-extras-header class="t--mx-4 t-bg-white md:t-mx-0 md:t-mt-4 lg:t-w-full" />
+        <breadcrumbs
+          :active-route="currentRouteName"
+          class="t-my-4 t-w-full md:t-my-8"
+        />
+        <block-wrapper
+          v-if="contentHeader"
+          :components="contentHeader"
+        />
         <div class="t-w-full">
-          <div class="t-flex t-flex-wrap t-items-center t--mx-1 lg:t--mx-2">
-            <div class="t-flex t-items-baseline t-w-full t-px-1 md:t-px-2 t-mb-4">
-              <h1 class="category-title t-font-light t-text-2xl t-text-base-dark t-pr-2">
+          <div class="t--mx-1 t-flex t-flex-wrap t-items-center lg:t--mx-2">
+            <div class="t-mb-4 t-flex t-w-full t-items-baseline t-px-1 md:t-px-2">
+              <h1 class="category-title t-pr-2 t-text-2xl t-font-light t-text-base-dark">
                 {{ category.name | htmlDecode }}
               </h1>
-              <span class="t-inline-block t-font-extralight t-text-base-light t-text-sm t-leading-7">
+              <span class="t-inline-block t-text-sm t-font-extralight t-leading-7 t-text-base-light">
                 <span data-test-id="productsTotal">{{ productsTotal }}</span> {{ $t('items') }}
               </span>
             </div>
-            <div class="t-w-full t-px-1 md:t-px-2 t-flex t-flex-wrap t-items-center">
-              <button-component style="second" align="center" :icon="activeFilterCount > 0 ? 'check' : 'filter_list'" @click.native="openFilters" class="t-w-full lg:t-w-auto" data-test-id="ButtonFilter">
+            <div class="t-flex t-w-full t-flex-wrap t-items-center t-px-1 md:t-px-2">
+              <button-component
+                style="second"
+                align="center"
+                :icon="activeFilterCount > 0 ? 'check' : 'filter_list'"
+                class="t-w-full lg:t-w-auto"
+                data-test-id="ButtonFilter"
+                @click.native="openFilters"
+              >
                 {{ $t('Filters') }}
-                <span v-if="activeFilterCount > 0" v-text="`(${activeFilterCount})`" class="t-flex-grow t-text-left t-pl-2 t-opacity-75" />
+                <span
+                  v-if="activeFilterCount > 0"
+                  class="t-grow t-pl-2 t-text-left t-opacity-75"
+                  v-text="`(${activeFilterCount})`"
+                />
               </button-component>
-              <div class="t-w-full lg:t-flex-1 t-mt-2 lg:t-mt-0 t-overflow-x-auto t-hide-scrollbar t-flex t-items-center t-h-8" v-if="shouldLoadPresets || filterCategories.length > 0">
-                <filter-presets class="t-flex t-items-center md:t-ml-2" v-if="shouldLoadPresets" />
-                <category-links :categories="filterCategories" class="t-flex t-items-center lg:t-ml-2" v-else />
+              <div
+                v-if="shouldLoadPresets || filterCategories.length > 0"
+                class="t-mt-2 t-flex t-h-8 t-w-full t-items-center t-overflow-x-auto t-hide-scrollbar lg:t-mt-0 lg:t-flex-1"
+              >
+                <filter-presets
+                  v-if="shouldLoadPresets"
+                  class="t-flex t-items-center md:t-ml-2"
+                />
+                <category-links
+                  v-else
+                  :categories="filterCategories"
+                  class="t-flex t-items-center lg:t-ml-2"
+                />
               </div>
             </div>
           </div>
@@ -31,12 +58,15 @@
     </header>
 
     <div class="t-container">
-      <div class="t-flex t-items-center t-justify-center t-mb-8" v-if="prevProductsInSearchResults">
+      <div
+        v-if="prevProductsInSearchResults"
+        class="t-mb-8 t-flex t-items-center t-justify-center"
+      >
         <a
           :href="prevPageUrl"
-          @click.prevent="loadMoreProducts(true)"
-          class="t-flex t-items-center t-webkit-tap-transparent t-w-2/3 lg:t-w-1/4 t-uppercase t-rounded-sm t-min-h-10 t-px-4 t-text-xs t-border t-border-base-darkest t-bg-transparent t-text-base-darkest t-justify-center"
+          class="t-flex t-min-h-10 t-w-2/3 t-items-center t-justify-center t-rounded-sm t-border t-border-base-darkest t-bg-transparent t-px-4 t-text-xs t-uppercase t-text-base-darkest t-webkit-tap-transparent lg:t-w-1/4"
           :class="{ 't-relative t-opacity-60': loadingProducts }"
+          @click.prevent="loadMoreProducts(true)"
         >
           {{ $t('Load previous') }}
           <loader-background
@@ -46,25 +76,47 @@
           />
         </a>
       </div>
-      <lazy-hydrate :trigger-hydration="!loading" v-if="isLazyHydrateEnabled">
-        <component v-if="isInTicketWhitelist" :is="ProductListingTicket" :products="getCategoryProducts" />
-        <product-listing v-else :products="getCategoryProducts" :show-add-to-cart="true" />
+      <lazy-hydrate
+        v-if="isLazyHydrateEnabled"
+        :trigger-hydration="!loading"
+      >
+        <component
+          :is="ProductListingTicket"
+          v-if="isInTicketWhitelist"
+          :products="getCategoryProducts"
+        />
+        <product-listing
+          v-else
+          :products="getCategoryProducts"
+          :show-add-to-cart="true"
+        />
       </lazy-hydrate>
       <div v-else>
-        <component v-if="isInTicketWhitelist" :is="ProductListingTicket" :products="getCategoryProducts" />
-        <product-listing v-else :products="getCategoryProducts" :show-add-to-cart="true" />
+        <component
+          :is="ProductListingTicket"
+          v-if="isInTicketWhitelist"
+          :products="getCategoryProducts"
+        />
+        <product-listing
+          v-else
+          :products="getCategoryProducts"
+          :show-add-to-cart="true"
+        />
       </div>
-      <div class="t-flex t-flex-wrap t-items-center t-justify-center t-mb-16" v-if="moreProductsInSearchResults">
-        <div class="t-mb-4 t-text-base-tone t-text-sm">
+      <div
+        v-if="moreProductsInSearchResults"
+        class="t-mb-16 t-flex t-flex-wrap t-items-center t-justify-center"
+      >
+        <div class="t-mb-4 t-text-sm t-text-base-tone">
           <div class="t-mb-2">
             {{ $t(
               'You\'ve viewed {count} of {total} products',
               { count: visibleProductCount, total: stats.total })
             }}
           </div>
-          <div class="t-flex t-grow t-h-1 t-bg-base-lighter t-mx-4 t-rounded">
+          <div class="t-mx-4 t-flex t-h-1 t-grow t-rounded t-bg-base-lighter">
             <div
-              class="t-h-full t-bg-base-light t-rounded"
+              class="t-h-full t-rounded t-bg-base-light"
               :style="{ width: (visibleProductCount * 100 / stats.total) + '%' }"
             />
           </div>
@@ -72,10 +124,10 @@
         <div class="t-w-full" />
         <a
           :href="nextPageUrl"
-          @click.prevent="loadMoreProducts()"
           :disabled="loadingProducts"
-          class="t-flex t-items-center t-webkit-tap-transparent t-w-2/3 lg:t-w-1/4 t-uppercase t-rounded-sm t-min-h-10 t-px-4 t-text-xs t-border t-border-base-darkest t-bg-transparent t-text-base-darkest t-justify-center"
+          class="t-flex t-min-h-10 t-w-2/3 t-items-center t-justify-center t-rounded-sm t-border t-border-base-darkest t-bg-transparent t-px-4 t-text-xs t-uppercase t-text-base-darkest t-webkit-tap-transparent lg:t-w-1/4"
           :class="{ 't-relative t-opacity-60': loadingProducts }"
+          @click.prevent="loadMoreProducts()"
         >
           {{ $t('Load more') }}
           <loader-background
@@ -85,9 +137,15 @@
           />
         </a>
       </div>
-      <div class="t-mb-8" v-if="isCategoryEmpty">
-        <div class="t-bg-white t-mx-4 t-p-4 t-py-10 t-text-center">
-          <h4 class="t-text-base t-bold" data-test-id="noProductsInfo">
+      <div
+        v-if="isCategoryEmpty"
+        class="t-mb-8"
+      >
+        <div class="t-mx-4 t-bg-white t-p-4 t-py-10 t-text-center">
+          <h4
+            class="t-bold t-text-base"
+            data-test-id="noProductsInfo"
+          >
             {{ $t('No products found!') }}
           </h4>
           <p class="t-text-sm t-text-base-light">
@@ -96,7 +154,10 @@
         </div>
       </div>
       <lazy-hydrate when-idle>
-        <category-extras-footer id="category-info-footer" class="t-mb-8" />
+        <category-extras-footer
+          id="category-info-footer"
+          class="t-mb-8"
+        />
       </lazy-hydrate>
     </div>
 

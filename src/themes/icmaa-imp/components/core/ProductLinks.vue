@@ -1,7 +1,14 @@
 <template>
   <div class="links py10">
-    <div class="between-md" v-for="(productLink, index) in products" :key="index">
-      <div class="py10" v-if="productLink.product">
+    <div
+      v-for="(productLink, index) in products"
+      :key="index"
+      class="between-md"
+    >
+      <div
+        v-if="productLink.product"
+        class="py10"
+      >
         <div class="row middle-xs h4 mb10">
           <p class="col-xs-7 serif m0">
             {{ productLink.product.name | htmlDecode }}
@@ -17,16 +24,19 @@
           </div>
         </div>
 
-        <div v-if="productLink.product" class="py5">
+        <div
+          v-if="productLink.product"
+          class="py5"
+        >
           <p class="h6 cl-bg-tertiary m0">
             {{ $t('Quantity') }}
           </p>
           <input
+            v-model.number="productLink.product.qty"
             type="number"
             class="product-qty py10 brdr-cl-primary bg-cl-transparent h4"
             min="1"
             autofocus
-            v-model.number="productLink.product.qty"
           >
         </div>
       </div>

@@ -1,5 +1,9 @@
 <template>
-  <div id="cms-page" class="t-container t-p-4" v-if="page">
+  <div
+    v-if="page"
+    id="cms-page"
+    class="t-container t-p-4"
+  >
     <component :is="content" />
   </div>
 </template>

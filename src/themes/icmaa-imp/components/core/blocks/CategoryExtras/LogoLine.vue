@@ -1,12 +1,35 @@
 <template>
-  <div class="t-flex t-flex-wrap t-justify-between t--mx-2" data-test-id="LogoLine">
-    <div v-for="(logo, index) in logoLineItems" :key="'logo-' + index" class="t-flex-fix t-px-2" :class="[...columnClassObj]">
-      <department-logo v-bind="logo.data()" class="t-flex t-justify-center t-px-4 t-py-2" :class="[ ...logoClassObj, white ? 't-bg-white' : 't-border-base-lightest t-border-b' ]" />
+  <div
+    class="t--mx-2 t-flex t-flex-wrap t-justify-between"
+    data-test-id="LogoLine"
+  >
+    <div
+      v-for="(logo, index) in logoLineItems"
+      :key="'logo-' + index"
+      class="t-flex-fix t-px-2"
+      :class="[...columnClassObj]"
+    >
+      <department-logo
+        v-bind="logo.data()"
+        class="t-flex t-justify-center t-px-4 t-py-2"
+        :class="[ ...logoClassObj, white ? 't-bg-white' : 't-border-base-lightest t-border-b' ]"
+      />
     </div>
     <template v-if="placeholder">
-      <div v-for="i in placeholderCount" :key="`placeholder-${i}`" class="t-flex-fix t-px-2" :class="[...columnClassObj]">
-        <div class="t-flex t-justify-center t-px-4 t-py-2" :class="[ ...logoClassObj, white ? 't-bg-white' : 't-border-base-lightest t-border-b' ]">
-          <div class="t-w-full" :style="{ maxWidth: '74px' }">
+      <div
+        v-for="i in placeholderCount"
+        :key="`placeholder-${i}`"
+        class="t-flex-fix t-px-2"
+        :class="[...columnClassObj]"
+      >
+        <div
+          class="t-flex t-justify-center t-px-4 t-py-2"
+          :class="[ ...logoClassObj, white ? 't-bg-white' : 't-border-base-lightest t-border-b' ]"
+        >
+          <div
+            class="t-w-full"
+            :style="{ maxWidth: '74px' }"
+          >
             <placeholder ratio="53:27" />
           </div>
         </div>
@@ -98,6 +121,19 @@ export default {
       return this.staticItems.map(c => new Logo({ category: c.name, link: c.link }))
     }
   },
+  watch: {
+    async parentId () {
+      await this.fetchData()
+    },
+    logoLineItems (items) {
+      if (items.length > 0) {
+        this.$emit('loaded')
+      }
+    }
+  },
+  async mounted () {
+    await this.fetchData()
+  },
   methods: {
     async fetchData () {
       if (this.hasStaticItems) {
@@ -137,19 +173,6 @@ export default {
     },
     setCategories () {
       this.categories = this.allCategories.filter(c => this.categoryIds.includes(c.id) && !c.isGenericSubcategory)
-    }
-  },
-  async mounted () {
-    await this.fetchData()
-  },
-  watch: {
-    async parentId () {
-      await this.fetchData()
-    },
-    logoLineItems (items) {
-      if (items.length > 0) {
-        this.$emit('loaded')
-      }
     }
   }
 }

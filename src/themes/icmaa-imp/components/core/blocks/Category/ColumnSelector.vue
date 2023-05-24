@@ -1,12 +1,16 @@
 <template>
   <div class="columns">
     <select
+      v-model="column"
       name="column"
       class="cl-secondary"
-      v-model="column"
       @change="changeColumn"
     >
-      <option v-for="(option) in productsColumns" :value="option" :key="option">
+      <option
+        v-for="(option) in productsColumns"
+        :key="option"
+        :value="option"
+      >
         {{ option }}
       </option>
     </select>
@@ -16,16 +20,16 @@
 <script>
 export default {
   name: 'ColumnSelector',
-  data () {
-    return {
-      column: this.defaultColumn,
-      productsColumns: [3, 4, 6]
-    }
-  },
   props: {
     defaultColumn: {
       type: Number,
       default: 4
+    }
+  },
+  data () {
+    return {
+      column: this.defaultColumn,
+      productsColumns: [3, 4, 6]
     }
   },
   methods: {

@@ -1,5 +1,8 @@
 <template>
-  <div id="paypal-button-container" class="t-flex" />
+  <div
+    id="paypal-button-container"
+    class="t-flex"
+  />
 </template>
 
 <script>
@@ -9,16 +12,16 @@ import { Logger } from '@vue-storefront/core/lib/logger'
 
 export default {
   name: 'PayPalButton',
-  data () {
-    return {
-      shippingMethodsLoaded: false
-    }
-  },
   props: {
     color: {
       type: String,
       default: 'gold',
       validator: (v) => ['gold', 'blue', 'silver', 'white', 'black'].includes(v)
+    }
+  },
+  data () {
+    return {
+      shippingMethodsLoaded: false
     }
   },
   computed: {

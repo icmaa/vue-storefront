@@ -1,9 +1,22 @@
 <template>
-  <layout id="cms-page" :headline="content.headline">
+  <layout
+    id="cms-page"
+    :headline="content.headline"
+  >
     <template v-if="!isSend">
-      <p class="t-mb-2" v-html="content.text" />
-      <p class="t-mb-4" v-html="content.subtext" />
-      <form-component form-identifier="widerruf-formular" v-model="formData" @submit="submit" />
+      <p
+        class="t-mb-2"
+        v-html="content.text"
+      />
+      <p
+        class="t-mb-4"
+        v-html="content.subtext"
+      />
+      <form-component
+        v-model="formData"
+        form-identifier="widerruf-formular"
+        @submit="submit"
+      />
     </template>
     <div v-else>
       <p class="t-font-bold t-text-alt-3">
@@ -27,11 +40,11 @@ import { MailerModule } from '@vue-storefront/core/modules/mailer'
 
 export default {
   name: 'ServiceWiderruf',
-  mixins: [ Page ],
   components: {
     Layout,
     FormComponent
   },
+  mixins: [ Page ],
   data () {
     return {
       dataType: 'yaml',
@@ -71,6 +84,12 @@ export default {
         .map(l => `<strong>${l.label}</strong><br> ${l.value}`)
         .join(`<br><br>`)
     }
+  },
+  asyncData ({ store }) {
+    return store.dispatch('icmaaCmsBlock/single', { value: 'service-navigation' })
+  },
+  beforeCreate () {
+    registerModule(MailerModule)
   },
   methods: {
     submit (success, failure) {
@@ -122,12 +141,6 @@ export default {
       this.formData = {}
       this.isSend = true
     }
-  },
-  asyncData ({ store }) {
-    return store.dispatch('icmaaCmsBlock/single', { value: 'service-navigation' })
-  },
-  beforeCreate () {
-    registerModule(MailerModule)
   }
 }
 </script>

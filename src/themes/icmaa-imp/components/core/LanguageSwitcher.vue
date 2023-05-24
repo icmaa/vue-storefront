@@ -1,7 +1,13 @@
 <template>
   <div>
-    <modal-switcher :store-recommendation-advice="storeRecommendationAdvice" :change-store-advice="isStoreAdviceVisible" />
-    <modal-advice v-if="loadLanguageAdviceModal" :current="claim.value" />
+    <modal-switcher
+      :store-recommendation-advice="storeRecommendationAdvice"
+      :change-store-advice="isStoreAdviceVisible"
+    />
+    <modal-advice
+      v-if="loadLanguageAdviceModal"
+      :current="claim.value"
+    />
   </div>
 </template>
 
@@ -67,24 +73,6 @@ export default {
       return this.languageAccepted
     }
   },
-  methods: {
-    async getClaim () {
-      return this.$store.dispatch('claims/check', { claimCode: 'languageAccepted' })
-    },
-    async onStoreViewChanged (fetchClaim = false) {
-      if (fetchClaim) {
-        await this.getClaim()
-      }
-
-      if (
-        this.isStoreAdviceVisible &&
-        this.storeView.storeCode !== this.claim.value.storeCode
-      ) {
-        Logger.log('Toggle store-view advice', 'icmaa-imp-theme', this.claim)()
-        this.loadLanguageAdviceModal = true
-      }
-    }
-  },
   async mounted () {
     this.claim = await this.getClaim()
     if (!this.claim) {
@@ -110,6 +98,24 @@ export default {
       this.storeRecommendationAdvice = true
       this.$store.dispatch('ui/setModalDelay', { name: 'modal-switcher' })
       this.$store.dispatch('ui/showModal', 'modal-switcher')
+    }
+  },
+  methods: {
+    async getClaim () {
+      return this.$store.dispatch('claims/check', { claimCode: 'languageAccepted' })
+    },
+    async onStoreViewChanged (fetchClaim = false) {
+      if (fetchClaim) {
+        await this.getClaim()
+      }
+
+      if (
+        this.isStoreAdviceVisible &&
+        this.storeView.storeCode !== this.claim.value.storeCode
+      ) {
+        Logger.log('Toggle store-view advice', 'icmaa-imp-theme', this.claim)()
+        this.loadLanguageAdviceModal = true
+      }
     }
   }
 }

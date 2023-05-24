@@ -1,5 +1,8 @@
 <template>
-  <div v-if="isVisible" v-text="text" />
+  <div
+    v-if="isVisible"
+    v-text="text"
+  />
 </template>
 
 <script>

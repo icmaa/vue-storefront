@@ -1,11 +1,15 @@
 <template>
-  <div class="t-flex t-flex-wrap t--mx-2">
-    <div class="t-hidden lg:t-block lg:t-w-1/3 t-px-2 t-mb-4">
+  <div class="t--mx-2 t-flex t-flex-wrap">
+    <div class="t-mb-4 t-hidden t-px-2 lg:t-block lg:t-w-1/3">
       <product-tile :product="product" />
     </div>
-    <div class="t-w-full lg:t-w-2/3 t-px-2">
-      <div class="t-p-4 t-bg-white">
-        <router-link :to="productLink" :title="product.name" class="t-block t-mb-4 t-text-primary t-text-lg">
+    <div class="t-w-full t-px-2 lg:t-w-2/3">
+      <div class="t-bg-white t-p-4">
+        <router-link
+          :to="productLink"
+          :title="product.name"
+          class="t-mb-4 t-block t-text-lg t-text-primary"
+        >
           {{ product.translatedName }}
         </router-link>
         <review-form :product="product" />

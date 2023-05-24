@@ -5,10 +5,10 @@ import EventBus from '@vue-storefront/core/compatibility/plugins/event-bus/index
 import { Logger } from '@vue-storefront/core/lib/logger'
 import rootStore from '@vue-storefront/core/store'
 import i18n from '@vue-storefront/i18n'
-import { serial, onlineHelper, processURLAddress } from '@vue-storefront/core/helpers'
+import { serial, onlineHelper, processURLAddress, isServer } from '@vue-storefront/core/helpers'
 import { StorageManager } from '@vue-storefront/core/lib/storage-manager'
-import { isServer } from '@vue-storefront/core/helpers'
-import { StorefrontModule } from '@vue-storefront/core/lib/modules';
+
+import { StorefrontModule } from '@vue-storefront/core/lib/modules'
 
 export const OrderModule: StorefrontModule = function ({ store }) {
   StorageManager.init('orders')

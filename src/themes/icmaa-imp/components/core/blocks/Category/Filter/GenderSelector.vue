@@ -1,6 +1,10 @@
 <template>
-  <div class="t-flex t-flex-grow t-w-1/3 t-max-w-1/2 t-px-1 t-mb-2">
-    <generic-selector v-bind="$props" v-on="$listeners" class="t-w-full">
+  <div class="t-mb-2 t-flex t-w-1/3 t-max-w-1/2 t-grow t-px-1">
+    <generic-selector
+      v-bind="$props"
+      class="t-w-full"
+      v-on="$listeners"
+    >
       {{ option.label }}
     </generic-selector>
   </div>
@@ -12,9 +16,9 @@ import GenericSelector from 'theme/components/core/blocks/Category/Filter/Generi
 
 export default {
   name: 'GenderSelector',
-  mixins: [filterMixin],
   components: {
     GenericSelector
-  }
+  },
+  mixins: [filterMixin]
 }
 </script>

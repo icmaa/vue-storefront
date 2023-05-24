@@ -1,12 +1,16 @@
 <template>
-  <form @submit.prevent="sendEmail" novalidate v-if="!passwordSent">
-    <p class="t-text-sm t-mb-4">
+  <form
+    v-if="!passwordSent"
+    novalidate
+    @submit.prevent="sendEmail"
+  >
+    <p class="t-mb-4 t-text-sm">
       {{ $t('Enter your email address. After submit you will receive an email with an reset-link.') }}
     </p>
     <base-input
+      v-model="email"
       type="email"
       name="email"
-      v-model="email"
       focus
       :placeholder="$t('E-mail address *')"
       :validations="[
@@ -21,10 +25,18 @@
       ]"
       class="t-mb-4"
     />
-    <button-component :submit="true" type="primary" class="t-w-full t-mb-2">
+    <button-component
+      :submit="true"
+      type="primary"
+      class="t-mb-2 t-w-full"
+    >
       {{ $t('Reset password') }}
     </button-component>
-    <button-component type="transparent" class="t-w-full t--mb-2" @click="switchElem">
+    <button-component
+      type="transparent"
+      class="t--mb-2 t-w-full"
+      @click="switchElem"
+    >
       {{ $t('Return to log in') }}
     </button-component>
   </form>
@@ -32,7 +44,10 @@
     <p class="t-mb-4">
       {{ $t("We've sent password reset instructions to your email. Check your inbox and follow the link.") }}
     </p>
-    <button-component class="t-w-full" @click="switchElem">
+    <button-component
+      class="t-w-full"
+      @click="switchElem"
+    >
       {{ $t('Back to login') }}
     </button-component>
   </div>
@@ -48,15 +63,15 @@ import ButtonComponent from 'theme/components/core/blocks/Button'
 
 export default {
   name: 'ForgotPass',
+  components: {
+    BaseInput,
+    ButtonComponent
+  },
   data () {
     return {
       email: '',
       passwordSent: false
     }
-  },
-  components: {
-    BaseInput,
-    ButtonComponent
   },
   validations: {
     email: {

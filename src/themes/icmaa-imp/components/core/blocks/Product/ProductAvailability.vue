@@ -1,6 +1,13 @@
 <template>
-  <div class="t-flex t-items-center t-text-sm" :class="[stockStatus.color]">
-    <material-icon icon="lens" size="sm" class="t-mr-1" />
+  <div
+    class="t-flex t-items-center t-text-sm"
+    :class="[stockStatus.color]"
+  >
+    <material-icon
+      icon="lens"
+      size="sm"
+      class="t-mr-1"
+    />
     {{ $t(stockStatus.text) }}
   </div>
 </template>

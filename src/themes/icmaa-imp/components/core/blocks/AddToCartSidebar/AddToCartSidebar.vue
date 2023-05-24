@@ -2,21 +2,28 @@
   <sidebar :title="productOptionsLabelPlaceholder">
     <div class="t-flex t-flex-wrap t-pb-20">
       <template v-if="product.type_id === 'configurable'">
-        <div class="error t-w-full " v-if="product.errors && Object.keys(product.errors).length > 0">
+        <div
+          v-if="product.errors && Object.keys(product.errors).length > 0"
+          class="error t-w-full "
+        >
           {{ product.errors | formatProductMessages }}
         </div>
-        <div v-for="option in productOptions" :key="option.id" class="t-w-full t-flex t-flex-col">
+        <div
+          v-for="option in productOptions"
+          :key="option.id"
+          class="t-flex t-w-full t-flex-col"
+        >
           <default-selector
             v-for="(filter, key) in availableFilters[option.attribute_code]"
             :key="key"
             :option="filter"
-            @change="onSelect"
             :price="getOptionPrice(filter)"
             :is-last="key === Object.keys(availableFilters[option.attribute_code]).length - 1"
             :is-loading="loading"
             :is-active="selectedOption && selectedOption.id === filter.id"
             :is-disabled="disableSelection"
             :ticked="!closeOnSelect && !loading && userSelection && selectedOption && selectedOption.id === filter.id"
+            @change="onSelect"
           />
         </div>
       </template>
@@ -27,17 +34,42 @@
           @change="onBundleSelect"
         />
       </template>
-      <div class="t-flex t-flex-wrap t-mt-4 t-w-full">
-        <model :product="product" class="t-w-full t-p-4 t-mb-px t-bg-base-lightest t-text-sm t-text-base-tone" />
-        <router-link :to="localizedRoute('/service-size')" class="t-w-full t-p-4 t-bg-base-lightest t-text-sm t-text-primary" @click.native="close()">
+      <div class="t-mt-4 t-flex t-w-full t-flex-wrap">
+        <model
+          :product="product"
+          class="t-mb-px t-w-full t-bg-base-lightest t-p-4 t-text-sm t-text-base-tone"
+        />
+        <router-link
+          :to="localizedRoute('/service-size')"
+          class="t-w-full t-bg-base-lightest t-p-4 t-text-sm t-text-primary"
+          @click.native="close()"
+        >
           {{ $t('Which size fits me?') }}
-          <material-icon icon="call_made" size="md" class="t-float-right t-align-middle" />
+          <material-icon
+            icon="call_made"
+            size="md"
+            class="t-float-right t-align-middle"
+          />
         </router-link>
       </div>
-      <div class="t-flex t-flex-wrap t-mt-4 t-w-full" v-if="showAddToCartButton">
-        <button-component :type="!selectedOption || !isAddToCartDisabled ? 'primary' : 'second'" data-test-id="AddToCart" class="t-flex-grow disabled:t-opacity-50 t-relative" :disabled="isAddToCartDisabled" @click.native="addToCartButtonClick">
+      <div
+        v-if="showAddToCartButton"
+        class="t-mt-4 t-flex t-w-full t-flex-wrap"
+      >
+        <button-component
+          :type="!selectedOption || !isAddToCartDisabled ? 'primary' : 'second'"
+          data-test-id="AddToCart"
+          class="t-relative t-grow disabled:t-opacity-50"
+          :disabled="isAddToCartDisabled"
+          @click.native="addToCartButtonClick"
+        >
           {{ userSelection && isAddToCartDisabled && !loading ? $t('Out of stock') : $t('Add to cart') }}
-          <loader-background v-if="isAddingToCart" class="t-bottom-0" height="t-h-1" bar="t-bg-base-lightest t-opacity-25" />
+          <loader-background
+            v-if="isAddingToCart"
+            class="t-bottom-0"
+            height="t-h-1"
+            bar="t-bg-base-lightest t-opacity-25"
+          />
         </button-component>
       </div>
     </div>
@@ -62,7 +94,6 @@ import LoaderBackground from 'theme/components/core/LoaderBackground'
 
 export default {
   name: 'AddToCartSidebar',
-  mixins: [ ProductOptionsMixin, ProductAddToCartMixin, ProductPriceMixin, ProductStockAlertMixin ],
   components: {
     Sidebar,
     DefaultSelector,
@@ -72,6 +103,7 @@ export default {
     ButtonComponent,
     LoaderBackground
   },
+  mixins: [ ProductOptionsMixin, ProductAddToCartMixin, ProductPriceMixin, ProductStockAlertMixin ],
   props: {
     showAddToCartButton: {
       type: Boolean,
@@ -91,9 +123,6 @@ export default {
       quantity: 0
     }
   },
-  async mounted () {
-    this.setSelectedOptionByCurrentConfiguration()
-  },
   computed: {
     ...mapGetters({
       product: 'product/getCurrentProduct',
@@ -111,6 +140,9 @@ export default {
     hasConfiguration () {
       return this.configuration && Object.keys(this.configuration).length > 0 && this.userSelection
     }
+  },
+  async mounted () {
+    this.setSelectedOptionByCurrentConfiguration()
   },
   methods: {
     setSelectedOptionByCurrentConfiguration () {

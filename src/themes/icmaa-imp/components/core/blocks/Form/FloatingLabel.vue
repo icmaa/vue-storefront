@@ -1,8 +1,8 @@
 <template>
   <label
     :for="id"
+    class="t-absolute t-cursor-pointer t-text-sm"
     @click="$emit('click', $event)"
-    class="t-absolute t-text-sm t-cursor-pointer"
   >
     <slot />
   </label>

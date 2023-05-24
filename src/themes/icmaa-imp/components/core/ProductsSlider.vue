@@ -15,7 +15,10 @@
           <div class="col-md-12">
             <div class="center-xs cool-stuff-collection">
               <no-ssr>
-                <carousel v-bind="config" @pageChange="setMuted">
+                <carousel
+                  v-bind="config"
+                  @pageChange="setMuted"
+                >
                   <slide
                     v-for="product in products"
                     :key="product.id"
@@ -43,6 +46,12 @@ import ProductTile from 'theme/components/core/ProductTile'
 
 export default {
   name: 'ProductsSlider',
+  components: {
+    'Carousel': () => import('vue-carousel').then(Slider => Slider.Carousel),
+    'Slide': () => import('vue-carousel').then(Slider => Slider.Slide),
+    ProductTile,
+    'no-ssr': NoSSR
+  },
   props: {
     title: {
       type: String,
@@ -56,12 +65,6 @@ export default {
       type: Object,
       required: true
     }
-  },
-  components: {
-    'Carousel': () => import('vue-carousel').then(Slider => Slider.Carousel),
-    'Slide': () => import('vue-carousel').then(Slider => Slider.Slide),
-    ProductTile,
-    'no-ssr': NoSSR
   },
   data () {
     return {

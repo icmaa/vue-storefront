@@ -1,36 +1,72 @@
 <template>
-  <router-link :to="productLink" tag="li" class="t-flex t-flex-wrap t-px-2 t-bg-white t-py-4 t-cursor-pointer">
-    <div class="t-w-full md:t-w-7/12 t-px-2 t-flex-grow">
-      <div class="t-text-primary t-mb-2 md:t-mb-0 t-leading-tight md:t-leading-normal">
+  <router-link
+    :to="productLink"
+    tag="li"
+    class="t-flex t-cursor-pointer t-flex-wrap t-bg-white t-px-2 t-py-4"
+  >
+    <div class="t-w-full t-grow t-px-2 md:t-w-7/12">
+      <div class="t-mb-2 t-leading-tight t-text-primary md:t-mb-0 md:t-leading-normal">
         {{ product.translatedName }}
       </div>
       <div class="t-text-sm">
         <span v-text="product.ticket_city" />
-        <span class="t-uppercase" v-if="product.ticket_venue && product.ticket_venue.length > 0" v-text="`@ ${product.ticket_venue}`" />
+        <span
+          v-if="product.ticket_venue && product.ticket_venue.length > 0"
+          class="t-uppercase"
+          v-text="`@ ${product.ticket_venue}`"
+        />
       </div>
     </div>
-    <div class="t-flex md:t-block t-w-full md:t-w-2/12 t-px-2 t-items-baseline t-text-sm md:t-text-base t-mb-2 md:t-mb-0">
-      <div class="t-mr-2" v-text="ticketEventdate" />
-      <div class="md:t-text-sm" v-text="product.ticket_start" />
+    <div class="t-mb-2 t-flex t-w-full t-items-baseline t-px-2 t-text-sm md:t-mb-0 md:t-block md:t-w-2/12 md:t-text-base">
+      <div
+        class="t-mr-2"
+        v-text="ticketEventdate"
+      />
+      <div
+        class="md:t-text-sm"
+        v-text="product.ticket_start"
+      />
     </div>
-    <div class="t-flex md:t-block t-w-full md:t-w-2/12 t-px-2">
-      <div class="t-flex-grow t-order-2 md:t-order-0 t-text-right md:t-text-left">
-        <span class="price-original t-text-base-light t-line-through t-mr-2" v-if="product.special_price && parseFloat(product.original_price_incl_tax) > 0">
+    <div class="t-flex t-w-full t-px-2 md:t-block md:t-w-2/12">
+      <div class="md:t-order-0 t-order-2 t-grow t-text-right md:t-text-left">
+        <span
+          v-if="product.special_price && parseFloat(product.original_price_incl_tax) > 0"
+          class="price-original t-mr-2 t-text-base-light t-line-through"
+        >
           {{ price(product.original_price_incl_tax) }}
         </span>
-        <span class="price-special t-text-sale t-font-bold" v-if="product.special_price && parseFloat(product.special_price) > 0">
-          <span v-if="hasMultiplePrices" v-text="$t('as low as')" />
+        <span
+          v-if="product.special_price && parseFloat(product.special_price) > 0"
+          class="price-special t-font-bold t-text-sale"
+        >
+          <span
+            v-if="hasMultiplePrices"
+            v-text="$t('as low as')"
+          />
           {{ price(product.price_incl_tax) }}
         </span>
-        <span class="price t-text-base-dark t-font-bold" v-if="!product.special_price && parseFloat(product.price_incl_tax) > 0">
-          <span v-if="hasMultiplePrices" v-text="$t('as low as')" />
+        <span
+          v-if="!product.special_price && parseFloat(product.price_incl_tax) > 0"
+          class="price t-font-bold t-text-base-dark"
+        >
+          <span
+            v-if="hasMultiplePrices"
+            v-text="$t('as low as')"
+          />
           {{ price(product.price_incl_tax) }}
         </span>
       </div>
-      <ProductAvailability :product="product" class="t-order-1 md:t-order-0" />
+      <ProductAvailability
+        :product="product"
+        class="md:t-order-0 t-order-1"
+      />
     </div>
-    <div class="t-hidden md:t-block md:t-w-1/12 t-px-2 t-flex-1 t-self-center">
-      <button-component type="transparent" icon="keyboard_arrow_right" :icon-only="true">
+    <div class="t-hidden t-flex-1 t-self-center t-px-2 md:t-block md:t-w-1/12">
+      <button-component
+        type="transparent"
+        icon="keyboard_arrow_right"
+        :icon-only="true"
+      >
         {{ $t('Show product') }}
       </button-component>
     </div>
@@ -46,11 +82,11 @@ import { toDate } from 'icmaa-config/helpers/datetime'
 
 export default {
   name: 'ProductTicketTile',
-  mixins: [ProductTileMixin, ProductPriceMixin],
   components: {
     ProductAvailability,
     ButtonComponent
   },
+  mixins: [ProductTileMixin, ProductPriceMixin],
   computed: {
     ticketEventdate () {
       return toDate(this.product.ticket_eventdate)

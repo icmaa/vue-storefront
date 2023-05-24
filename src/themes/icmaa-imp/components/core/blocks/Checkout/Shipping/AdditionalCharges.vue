@@ -1,19 +1,22 @@
 <template>
   <div
-    class="t-flex t-items-center t-flex-wrap t-cursor-pointer"
-    :data-test-id="'AdditionalCharges' + upperFirst(charge.key)"
     v-if="active"
+    class="t-flex t-cursor-pointer t-flex-wrap t-items-center"
+    :data-test-id="'AdditionalCharges' + upperFirst(charge.key)"
   >
     <base-checkbox
-      :name="'additionalCharges' + upperFirst(charge.key)"
       :id="charge.key"
       v-model="selected"
+      :name="'additionalCharges' + upperFirst(charge.key)"
       :checkbox-class="disabled ? '' : 't-self-start'"
     >
       <p :class="{ 't-font-bold': !disabled }">
         {{ charge.title }}
       </p>
-      <p class="t-text-base-tone t-text-xs" v-if="!disabled">
+      <p
+        v-if="!disabled"
+        class="t-text-xs t-text-base-tone"
+      >
         {{ charge.description }},
         {{ price(charge.fee) }}
       </p>
@@ -61,10 +64,6 @@ export default {
       return this.charge.enabled
     }
   },
-  methods: {
-    price,
-    upperFirst
-  },
   watch: {
     selected () {
       if (this.disabled) return
@@ -73,6 +72,10 @@ export default {
   },
   beforeMount () {
     this.selected = this.hasAdditionalShipping(this.charge.key)
+  },
+  methods: {
+    price,
+    upperFirst
   }
 }
 </script>

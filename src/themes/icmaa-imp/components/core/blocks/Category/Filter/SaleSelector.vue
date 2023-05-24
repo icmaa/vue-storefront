@@ -1,5 +1,11 @@
 <template>
-  <button-component @click="$emit('change', option)" type="sale" :icon="isActive ? 'check' : 'local_offer'" icon-position="left" :aria-label="option.label">
+  <button-component
+    type="sale"
+    :icon="isActive ? 'check' : 'local_offer'"
+    icon-position="left"
+    :aria-label="option.label"
+    @click="$emit('change', option)"
+  >
     {{ $t('In sale') }}
   </button-component>
 </template>
@@ -10,9 +16,9 @@ import ButtonComponent from 'theme/components/core/blocks/Button'
 
 export default {
   name: 'GenericSelector',
-  mixins: [filterMixin],
   components: {
     ButtonComponent
-  }
+  },
+  mixins: [filterMixin]
 }
 </script>

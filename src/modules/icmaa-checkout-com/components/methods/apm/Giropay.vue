@@ -1,10 +1,10 @@
 <template>
   <div>
     <base-input
-      type="text"
       id="bic"
-      name="bic"
       v-model="additionalData.bic"
+      type="text"
+      name="bic"
       :placeholder="$t('BIC')"
       :validations="[
         {
@@ -28,10 +28,10 @@ import BaseInput from 'theme/components/core/blocks/Form/BaseInput.vue'
 
 export default {
   name: 'CheckoutComGirpayInfo',
-  mixins: [ ApmMethod ],
   components: {
     BaseInput
   },
+  mixins: [ ApmMethod ],
   data () {
     return {
       additionalData: {

@@ -1,5 +1,9 @@
 <template>
-  <router-link :to="localizedHomeRoute" :title="$t('Home Page')" class="t-no-underline">
+  <router-link
+    :to="localizedHomeRoute"
+    :title="$t('Home Page')"
+    class="t-no-underline"
+  >
     <img
       :width="width"
       :height="height"

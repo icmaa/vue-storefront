@@ -19,7 +19,7 @@
     </div>
 
     <div
-      class="newsletter t-m-4 t-bg-white t-p-4 lg:t-container lg:t-my-8 lg:t-mx-auto lg:t-w-1/2 lg:t-p-8"
+      class="newsletter t-m-4 t-bg-white t-p-4 lg:t-container lg:t-mx-auto lg:t-my-8 lg:t-w-1/2 lg:t-p-8"
       data-test-id="Newsletter"
     >
       <h1 class="t-text-2xl t-leading-7 t-text-primary">

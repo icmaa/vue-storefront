@@ -1,15 +1,19 @@
 <template>
-  <div class="t-p-4 t-bg-white">
+  <div class="t-bg-white t-p-4">
     <headline>
       {{ $t('My profile') }}
     </headline>
-    <form @submit.prevent="submit" novalidate class="t-flex t-flex-wrap t--mx-2">
+    <form
+      novalidate
+      class="t--mx-2 t-flex t-flex-wrap"
+      @submit.prevent="submit"
+    >
       <base-input
+        id="email"
+        v-model="profile.email"
         type="email"
         name="email"
-        id="email"
         autocomplete="email"
-        v-model="profile.email"
         focus
         :label="$t('E-mail address') + ' *'"
         :validations="[
@@ -22,14 +26,14 @@
             text: $t('Please provide valid e-mail address.')
           }
         ]"
-        class="t-w-full lg:t-w-1/2 t-px-2 t-mb-4"
+        class="t-mb-4 t-w-full t-px-2 lg:t-w-1/2"
         :disabled="true"
       />
       <base-input
-        name="first-name"
         id="first-name"
-        autocomplete="given-name"
         v-model="profile.firstname"
+        name="first-name"
+        autocomplete="given-name"
         :label="$t('First name') + ' *'"
         :validations="[
           {
@@ -37,37 +41,37 @@
             text: $t('Field is required')
           }
         ]"
-        class="t-w-full lg:t-w-1/2 t-px-2 t-mb-4"
+        class="t-mb-4 t-w-full t-px-2 lg:t-w-1/2"
       />
       <base-input
-        name="last-name"
         id="last-name"
-        autocomplete="family-name"
         v-model="profile.lastname"
+        name="last-name"
+        autocomplete="family-name"
         :label="$t('Last name') + ' *'"
         :validations="[{
           condition: !validation.lastname.required && validation.lastname.$error,
           text: $t('Field is required')
         }]"
-        class="t-w-full lg:t-w-1/2 t-px-2 t-mb-4"
+        class="t-mb-4 t-w-full t-px-2 lg:t-w-1/2"
       />
       <gender-select
-        name="gender"
         id="gender"
         v-model="profile.gender"
+        name="gender"
         :label="$t('Gender') + ' *'"
         :validations="[{
           condition: !validation.gender.required && validation.gender.$error,
           text: $t('Field is required')
         }]"
-        class="t-w-full lg:t-w-1/2 t-px-2 t-mb-4"
+        class="t-mb-4 t-w-full t-px-2 lg:t-w-1/2"
       />
       <base-input
-        name="dob"
         id="dob"
+        v-model="profile.dob"
+        name="dob"
         autocomplete="bday"
         mask="date"
-        v-model="profile.dob"
         :label="$t('Date of birth') + ' *'"
         :placeholder="dateFormat"
         :validations="[
@@ -80,24 +84,27 @@
             text: $t('Use a valid date.')
           }
         ]"
-        class="t-w-full lg:t-w-1/2 t-px-2 t-mb-4"
+        class="t-mb-4 t-w-full t-px-2 lg:t-w-1/2"
       />
       <base-checkbox
-        name="changePassword"
         id="changePassword"
         v-model="profile.changePassword"
-        class="t-w-full t-px-2 t-mb-4"
+        name="changePassword"
+        class="t-mb-4 t-w-full t-px-2"
       >
         {{ $t('Change my password') }}
       </base-checkbox>
-      <div v-if="profile.changePassword" class="t-flex t-flex-wrap t-flex-grow">
+      <div
+        v-if="profile.changePassword"
+        class="t-flex t-grow t-flex-wrap"
+      >
         <base-input
-          type="password"
-          name="oldPassword"
           id="oldPassword"
           ref="oldPassword"
-          autocomplete="old-password"
           v-model="profile.oldPassword"
+          type="password"
+          name="oldPassword"
+          autocomplete="old-password"
           :label="$t('Current password') + ' *'"
           :validations="[
             {
@@ -109,16 +116,16 @@
               text: $t('Password must have at least 8 letters.')
             }
           ]"
-          class="t-w-full lg:t-w-1/2 t-px-2 t-mb-4"
+          class="t-mb-4 t-w-full t-px-2 lg:t-w-1/2"
         />
         <div class="t-w-full" />
         <base-input
-          type="password"
-          name="password"
           id="password"
           ref="password"
-          autocomplete="new-password"
           v-model="profile.password"
+          type="password"
+          name="password"
+          autocomplete="new-password"
           :label="$t('Password') + ' *'"
           :validations="[
             {
@@ -130,14 +137,14 @@
               text: $t('Password must have at least 8 letters.')
             }
           ]"
-          class="t-w-full lg:t-w-1/2 t-px-2 t-mb-4"
+          class="t-mb-4 t-w-full t-px-2 lg:t-w-1/2"
         />
         <base-input
+          id="rPassword"
+          v-model="profile.rPassword"
           type="password"
           name="rPassword"
-          id="rPassword"
           autocomplete="new-password"
-          v-model="profile.rPassword"
           :label="$t('Repeat password') + ' *'"
           :validations="[
             {
@@ -149,11 +156,15 @@
               text: $t('Passwords must be identical.')
             }
           ]"
-          class="t-w-full lg:t-w-1/2 t-px-2 t-mb-4"
+          class="t-mb-4 t-w-full t-px-2 lg:t-w-1/2"
         />
       </div>
-      <div class="t-px-2 t-w-full">
-        <button-component :submit="true" type="primary" class="t-w-full lg:t-w-auto">
+      <div class="t-w-full t-px-2">
+        <button-component
+          :submit="true"
+          type="primary"
+          class="t-w-full lg:t-w-auto"
+        >
           {{ $t('Update my profile') }}
         </button-component>
       </div>
@@ -217,6 +228,15 @@ export default {
       return currentStoreView().i18n.dateFormat
     }
   },
+  mounted () {
+    this.initCustomer()
+  },
+  beforeMount () {
+    this.$bus.$on('user-after-loggedin', this.initCustomer)
+  },
+  beforeDestroy () {
+    this.$bus.$off('user-after-loggedin', this.initCustomer)
+  },
   methods: {
     submit () {
       this.validation.$touch()
@@ -259,15 +279,6 @@ export default {
         }
       }
     }
-  },
-  mounted () {
-    this.initCustomer()
-  },
-  beforeMount () {
-    this.$bus.$on('user-after-loggedin', this.initCustomer)
-  },
-  beforeDestroy () {
-    this.$bus.$off('user-after-loggedin', this.initCustomer)
   },
   validations () {
     const password = this.profile.changePassword ? {

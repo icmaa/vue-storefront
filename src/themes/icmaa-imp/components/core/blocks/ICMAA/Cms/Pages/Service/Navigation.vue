@@ -1,20 +1,41 @@
 <template>
   <nav role="service-navigation">
     <ul>
-      <li class="t-w-full t-relative">
-        <a class="t-block lg:t-hidden t-bg-white t-border-base-light t-border t-px-3 t-py-2 t-appearance-none focus:outline-none t-text-black focus:ring t-cursor-pointer" @click="toggleView">Service
+      <li class="t-relative t-w-full">
+        <a
+          class="focus:outline-none focus:ring t-block t-cursor-pointer t-appearance-none t-border t-border-base-light t-bg-white t-px-3 t-py-2 t-text-black lg:t-hidden"
+          @click="toggleView"
+        >Service
           <div class="t-pointer-events-none t-absolute t-inset-y-0 t-right-0 t-flex t-items-center t-px-2"><i class="material-icons t-text-2xl">keyboard_arrow_down</i></div>
         </a>
-        <ul class="t-hidden lg:t-block lg:t-bg-transparent t-relative t-w-full">
-          <li v-for="(item, index) in navigation" :key="index" class="t-border-b t-border-base-lighter">
-            <router-link :to="localizedRoute(item.path)" class="t-flex t-text-black t-px-3 t-py-2 t-text-sm">
+        <ul class="t-relative t-hidden t-w-full lg:t-block lg:t-bg-transparent">
+          <li
+            v-for="(item, index) in navigation"
+            :key="index"
+            class="t-border-b t-border-base-lighter"
+          >
+            <router-link
+              :to="localizedRoute(item.path)"
+              class="t-flex t-px-3 t-py-2 t-text-sm t-text-black"
+            >
               {{ item.label }}
             </router-link>
           </li>
         </ul>
-        <ul v-if="show" class="lg:t-hidden t-bg-white t-absolute t-w-full t-z-10 t-border-l t-border-r t-border-base-light">
-          <li v-for="(item, index) in navigation" :key="index" class="t-border-b t-border-base-light" @click="toggleView">
-            <router-link :to="localizedRoute(item.path)" class="t-flex t-text-black t-px-3 t-py-2 t-text-sm">
+        <ul
+          v-if="show"
+          class="t-absolute t-z-10 t-w-full t-border-x t-border-base-light t-bg-white lg:t-hidden"
+        >
+          <li
+            v-for="(item, index) in navigation"
+            :key="index"
+            class="t-border-b t-border-base-light"
+            @click="toggleView"
+          >
+            <router-link
+              :to="localizedRoute(item.path)"
+              class="t-flex t-px-3 t-py-2 t-text-sm t-text-black"
+            >
               {{ item.label }}
             </router-link>
           </li>

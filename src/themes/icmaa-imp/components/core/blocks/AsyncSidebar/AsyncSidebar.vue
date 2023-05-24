@@ -1,16 +1,28 @@
 <template>
   <transition :name="direction === 'right' ? 'slide-left' : direction === 'left' ? 'slide-right' : null">
     <div
-      class="sidebar t-max-w-90pc t-fixed t-scrolling-touch t-bg-white"
+      v-if="isOpen"
+      ref="sidebar"
+      class="sidebar t-fixed t-max-w-90pc t-bg-white t-scrolling-touch"
       :class="[direction === 'left' ? 'left-sidebar' : direction === 'right' ? 'right-sidebar' : null, { 'wide': wide }]"
       data-test-id="Sidebar"
-      ref="sidebar"
-      v-if="isOpen"
     >
       <div class="submenu-wrapper t-relative">
-        <component :is="component" @close="$emit('close')" v-bind="asyncComponentProps" @reload="getComponent" v-show="!hasSubmenu" :key="'sidebar-home'" />
+        <component
+          :is="component"
+          v-show="!hasSubmenu"
+          :key="'sidebar-home'"
+          v-bind="asyncComponentProps"
+          @close="$emit('close')"
+          @reload="getComponent"
+        />
         <template v-for="(item, i) in sidebarPath">
-          <submenu :key="'submenu-' + i" :index="i" :async-component="item.component" v-show="i === sidebarLastIndex" />
+          <submenu
+            v-show="i === sidebarLastIndex"
+            :key="'submenu-' + i"
+            :index="i"
+            :async-component="item.component"
+          />
         </template>
       </div>
     </div>
@@ -54,6 +66,29 @@ export default {
       default: false
     }
   },
+  data () {
+    return {
+      component: null
+    }
+  },
+  computed: {
+    ...mapGetters({
+      getSidebarStatus: 'ui/getSidebarStatus',
+      sidebarPath: 'ui/getSidebarPath'
+    }),
+    isOpen () {
+      return this.getSidebarStatus(this.stateKey)
+    },
+    hasSubmenu () {
+      return this.sidebarPath.length > 0
+    },
+    sidebarLength () {
+      return this.sidebarPath.length
+    },
+    sidebarLastIndex () {
+      return this.sidebarLength - 1
+    }
+  },
   watch: {
     isOpen (status) {
       if (status === false) {
@@ -68,11 +103,6 @@ export default {
           clearAllBodyScrollLocks()
         }
       })
-    }
-  },
-  data () {
-    return {
-      component: null
     }
   },
   beforeMount () {
@@ -96,24 +126,6 @@ export default {
     },
     onHistoryBack () {
       this.$store.dispatch('ui/closeAll')
-    }
-  },
-  computed: {
-    ...mapGetters({
-      getSidebarStatus: 'ui/getSidebarStatus',
-      sidebarPath: 'ui/getSidebarPath'
-    }),
-    isOpen () {
-      return this.getSidebarStatus(this.stateKey)
-    },
-    hasSubmenu () {
-      return this.sidebarPath.length > 0
-    },
-    sidebarLength () {
-      return this.sidebarPath.length
-    },
-    sidebarLastIndex () {
-      return this.sidebarLength - 1
     }
   }
 }

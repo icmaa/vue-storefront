@@ -1,32 +1,47 @@
 <template>
   <div class="base-textarea">
-    <base-label v-if="hasLabel && !isFloating" :class="{ 't-sr-only': hideLabel }" :id="id">
+    <base-label
+      v-if="hasLabel && !isFloating"
+      :id="id"
+      :class="{ 't-sr-only': hideLabel }"
+    >
       <slot>
         {{ label || placeholder }}
       </slot>
     </base-label>
-    <div class="t-relative" :class="{ 'floating-label': isFloating }">
+    <div
+      class="t-relative"
+      :class="{ 'floating-label': isFloating }"
+    >
       <textarea
-        class="t-w-full t-h-40 t-px-3 t-py-2 t-border t-rounded-sm t-appearance-none t-text-sm placeholder:t-text-base-light"
+        :id="id"
+        :ref="name"
+        class="t-h-40 t-w-full t-appearance-none t-rounded-sm t-border t-px-3 t-py-2 t-text-sm placeholder:t-text-base-light"
         :class="[ invalid ? 't-border-alert' : 't-border-base-light' ]"
         :placeholder="placeholder"
         :name="name"
-        :id="id"
         :autocomplete="autocomplete"
         :value="value"
         :autofocus="autofocus"
-        :ref="name"
         @input="$emit('input', $event.target.value)"
         @blur="$emit('blur')"
         @keyup.enter="$emit('keyup.enter', $event.target.value)"
         @keyup="$emit('keyup', $event)"
       />
-      <floating-label v-if="hasLabel && isFloating" :id="id || name" @click.prevent="setFocus">
+      <floating-label
+        v-if="hasLabel && isFloating"
+        :id="id || name"
+        @click.prevent="setFocus"
+      >
         <slot>
           {{ label || placeholder }}
         </slot>
       </floating-label>
-      <ValidationMessages v-if="invalid" :validations="validations" :validations-as-tooltip="validationsAsTooltip" />
+      <ValidationMessages
+        v-if="invalid"
+        :validations="validations"
+        :validations-as-tooltip="validationsAsTooltip"
+      />
     </div>
   </div>
 </template>
@@ -37,12 +52,6 @@ import InputMixin from 'theme/mixins/form/InputMixin'
 export default {
   name: 'BaseTextarea',
   mixins: [ InputMixin ],
-  data () {
-    return {
-      iconActive: false,
-      icon: 'visibility'
-    }
-  },
   props: {
     autocomplete: {
       type: String,
@@ -66,6 +75,12 @@ export default {
     validationsAsTooltip: {
       type: Boolean,
       default: false
+    }
+  },
+  data () {
+    return {
+      iconActive: false,
+      icon: 'visibility'
     }
   },
   computed: {

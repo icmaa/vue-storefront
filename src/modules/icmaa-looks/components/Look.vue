@@ -3,7 +3,7 @@
     <div class="t-mb-4 t-w-full t-px-2 md:t-w-1/3">
       <div class="t-bg-white">
         <div class="t-p-4">
-          <div class="t-mt-2 t-mb-3 t-text-xs t-font-light t-text-base-light">
+          <div class="t-mb-3 t-mt-2 t-text-xs t-font-light t-text-base-light">
             {{ createdAt }}
           </div>
           <h3 class="t-text-2xl t-font-semibold t-leading-tight">

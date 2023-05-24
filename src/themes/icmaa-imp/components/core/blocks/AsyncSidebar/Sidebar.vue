@@ -1,16 +1,37 @@
 <template>
-  <div class="sidebar-menu t-w-full t-flex t-flex-col" ref="container">
-    <div class="header t-fixed t-z-1 t-w-full t-max-w-90pc t-h-60px t-flex-fix t-px-2 t-bg-white t-border-b t-border-base-lighter t-flex t-items-center">
+  <div
+    ref="container"
+    class="sidebar-menu t-flex t-w-full t-flex-col"
+  >
+    <div class="header t-fixed t-z-1 t-flex t-h-60px t-w-full t-max-w-90pc t-flex-fix t-items-center t-border-b t-border-base-lighter t-bg-white t-px-2">
       <slot name="top" />
-      <h2 class="t-pl-2 t-text-lg t-text-base-dark" v-if="title" v-text="title" />
+      <h2
+        v-if="title"
+        class="t-pl-2 t-text-lg t-text-base-dark"
+        v-text="title"
+      />
       <slot name="top-after-title" />
-      <div class="t-flex-expand" v-if="useExpanderInTitle" />
+      <div
+        v-if="useExpanderInTitle"
+        class="t-flex-expand"
+      />
       <slot name="top-right">
-        <top-button data-test-id="closeButton" :icon="closeIcon" text="Close" :tab-index="1" @click.native="closeMenu" class="t-text-base" v-if="closeIcon !== false" />
+        <top-button
+          v-if="closeIcon !== false"
+          data-test-id="closeButton"
+          :icon="closeIcon"
+          text="Close"
+          :tab-index="1"
+          class="t-text-base"
+          @click.native="closeMenu"
+        />
       </slot>
     </div>
     <div class="spacer t-h-60px" />
-    <div @click="closeAfterClick" class="sidebar-content t-p-4">
+    <div
+      class="sidebar-content t-p-4"
+      @click="closeAfterClick"
+    >
       <slot />
     </div>
     <slot name="footer" />
@@ -24,6 +45,10 @@ import TopButton from 'theme/components/core/blocks/AsyncSidebar/TopButton'
 
 export default {
   name: 'Sidebar',
+  components: {
+    TopButton
+  },
+  mixins: [ onEscapePress ],
   props: {
     title: {
       type: [Boolean, String],
@@ -42,10 +67,6 @@ export default {
       default: false
     }
   },
-  components: {
-    TopButton
-  },
-  mixins: [ onEscapePress ],
   methods: {
     closeMenu () {
       this.$store.dispatch('ui/closeAll')

@@ -69,7 +69,7 @@
             <div class="t-w-full">
               <div
                 v-if="product.type_id !== 'grouped'"
-                class="price t-mt-5 t-mb-8 t-text-1xl"
+                class="price t-mb-8 t-mt-5 t-text-1xl"
                 data-test-id="price"
               >
                 <template v-if="product.special_price && product.price_incl_tax && product.original_price_incl_tax">

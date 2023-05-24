@@ -1,5 +1,8 @@
 <template>
-  <div v-if="!!trackingId" @click="followTracking">
+  <div
+    v-if="!!trackingId"
+    @click="followTracking"
+  >
     <slot>
       {{ $t('Shipment tracking') }}
     </slot>

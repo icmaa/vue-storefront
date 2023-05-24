@@ -3,19 +3,30 @@
     <div :class="{ 't-relative': active }">
       <div
         v-if="active"
-        class="t-absolute t-z-1 t-w-full t-h-full t-flex t-items-center t-justify-center t-bg-white t-border t-border-base-lightest t-opacity-75"
+        class="t-absolute t-z-1 t-flex t-h-full t-w-full t-items-center t-justify-center t-border t-border-base-lightest t-bg-white t-opacity-75"
       >
-        <material-icon icon="check" size="xl" class="t-text-alt-3" />
+        <material-icon
+          icon="check"
+          size="xl"
+          class="t-text-alt-3"
+        />
       </div>
       <product-image
         :image="product.image"
         :alt="product.translatedName | htmlDecode"
         data-test-id="productImage"
-        class="t-block t-border t-border-base-lightest t-mb-2"
+        class="t-mb-2 t-block t-border t-border-base-lightest"
       />
     </div>
-    <p class="t-text-xs t-leading-tight t-mb-1" v-text="product.translatedName" />
-    <product-price :product="product" :alt="product.name | htmlDecode" class="t-text-xs" />
+    <p
+      class="t-mb-1 t-text-xs t-leading-tight"
+      v-text="product.translatedName"
+    />
+    <product-price
+      :product="product"
+      :alt="product.name | htmlDecode"
+      class="t-text-xs"
+    />
   </div>
 </template>
 

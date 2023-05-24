@@ -1,9 +1,9 @@
 <template>
   <base-select
+    v-model="gender"
     :options="genderOptions"
     :initial-option-text="$t('Gender')"
     v-bind="{ ...$props, ...$attrs }"
-    v-model="gender"
     @input="$emit('input', $event)"
   />
 </template>
@@ -14,10 +14,10 @@ import BaseSelect from 'theme/components/core/blocks/Form/BaseSelect'
 
 export default {
   name: 'GenderSelect',
-  mixins: [ GenderMixin ],
   components: {
     BaseSelect
   },
+  mixins: [ GenderMixin ],
   props: {
     value: {
       type: String,

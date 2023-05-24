@@ -1,19 +1,42 @@
 <template>
   <div class="t-flex t-flex-wrap t-items-center t-text-sm t-text-base-tone">
     <template v-for="(link, index) in paths">
-      <router-link :to="link.route_link" :key="index" class="t-text-base-tone hover:t-text-base-dark" :class="{ 't-hidden md:t-inline': !link.visible }" v-if="link.route_link">
+      <router-link
+        v-if="link.route_link"
+        :key="index"
+        :to="link.route_link"
+        class="t-text-base-tone hover:t-text-base-dark"
+        :class="{ 't-hidden md:t-inline': !link.visible }"
+      >
         <template v-if="index === 0">
-          <material-icon icon="home" size="xs" class="t-align-middle" />
+          <material-icon
+            icon="home"
+            size="xs"
+            class="t-align-middle"
+          />
           <span class="t-sr-only">{{ link.name | htmlDecode }}</span>
         </template>
         <template v-else>
           {{ link.name | htmlDecode }}
         </template>
       </router-link>
-      <span v-else :key="index" class="t-text-base-tone" :class="{ 't-hidden md:t-inline': !link.visible, 'md:t-hidden': link.placeholder }">{{ link.name | htmlDecode }}</span>
-      <span class="t-mx-3 lg:t-mx-4 t-text-xs t-font-extralight" :class="{ 't-hidden md:t-inline': !link.visible || (!showActiveRoute && link.isLast), 'md:t-hidden': link.placeholder }" :key="'bullet-' + index" v-text="spacerCharacter" />
+      <span
+        v-else
+        :key="index"
+        class="t-text-base-tone"
+        :class="{ 't-hidden md:t-inline': !link.visible, 'md:t-hidden': link.placeholder }"
+      >{{ link.name | htmlDecode }}</span>
+      <span
+        :key="'bullet-' + index"
+        class="t-mx-3 t-text-xs t-font-extralight lg:t-mx-4"
+        :class="{ 't-hidden md:t-inline': !link.visible || (!showActiveRoute && link.isLast), 'md:t-hidden': link.placeholder }"
+        v-text="spacerCharacter"
+      />
     </template>
-    <span class="t-text-base-tone" :class="{ 't-hidden md:t-inline': !showActiveRoute }">{{ current | htmlDecode }}</span>
+    <span
+      class="t-text-base-tone"
+      :class="{ 't-hidden md:t-inline': !showActiveRoute }"
+    >{{ current | htmlDecode }}</span>
     <json-ld-loader type="breadcrumbs" />
   </div>
 </template>

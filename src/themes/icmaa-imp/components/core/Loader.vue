@@ -1,8 +1,15 @@
 <template>
-  <div v-if="active" class="loader-overlay t-z-50 t-fixed t-top-0 t-left-0 t-w-full t-h-full t-flex t-items-center t-justify-center" data-test-id="Loader">
-    <div class="t-flex t-flex-wrap t-item-center t-justify-center">
+  <div
+    v-if="active"
+    class="loader-overlay t-fixed t-left-0 t-top-0 t-z-50 t-flex t-h-full t-w-full t-items-center t-justify-center"
+    data-test-id="Loader"
+  >
+    <div class="t-item-center t-flex t-flex-wrap t-justify-center">
       <div class="loader color-pulse-ball t-bg-primary" />
-      <div class="t-w-full t-text-center t-text-sm t-text-primary t-max-w-screen-75 t--mt-3 t-bg-white t-px-4 t-py-2" v-if="message">
+      <div
+        v-if="message"
+        class="t--mt-3 t-w-full t-max-w-screen-75 t-bg-white t-px-4 t-py-2 t-text-center t-text-sm t-text-primary"
+      >
         {{ message }}
       </div>
     </div>

@@ -1,7 +1,7 @@
 import { Store } from 'vuex'
 import RootState from '@vue-storefront/core/types/RootState'
 import Vue from 'vue'
-import { isServer } from '@vue-storefront/core/helpers'
+import { isServer, once } from '@vue-storefront/core/helpers'
 import EventBus from '@vue-storefront/core/compatibility/plugins/event-bus'
 import i18n from '@vue-storefront/i18n'
 import VueRouter from 'vue-router'
@@ -16,7 +16,7 @@ import { prepareStoreView, currentStoreView } from '@vue-storefront/core/lib/mul
 import * as coreMixins from '@vue-storefront/core/mixins'
 import * as coreFilters from '@vue-storefront/core/filters'
 import * as corePlugins from '@vue-storefront/core/compatibility/plugins'
-import { once } from '@vue-storefront/core/helpers'
+
 import store from '@vue-storefront/core/store'
 import { enabledModules } from './modules-entry'
 import globalConfig from 'config'

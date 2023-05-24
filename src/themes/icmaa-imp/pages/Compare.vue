@@ -1,13 +1,22 @@
 <template>
-  <div class="compare" data-test-id="Compare">
+  <div
+    class="compare"
+    data-test-id="Compare"
+  >
     <div class="bg-cl-secondary py35 pl20">
       <div class="container">
-        <breadcrumbs :with-homepage="true" active-route="Compare" />
+        <breadcrumbs
+          :with-homepage="true"
+          active-route="Compare"
+        />
         <h2>{{ title }}</h2>
       </div>
     </div>
     <div class="py35">
-      <div class="row" v-if="items.length">
+      <div
+        v-if="items.length"
+        class="row"
+      >
         <div class="col-xs-12">
           <div class="compare__products-table">
             <div class="compare__features">
@@ -34,7 +43,10 @@
                 >
                   <div class="compare__top-info">
                     <div class="check" />
-                    <product-tile class="col-md-12 collection-product" :product="product" />
+                    <product-tile
+                      class="col-md-12 collection-product"
+                      :product="product"
+                    />
                   </div>
                   <ul class="compare__features-list">
                     <li
@@ -56,7 +68,10 @@
           </div>
         </div>
       </div>
-      <div class="container" v-else>
+      <div
+        v-else
+        class="container"
+      >
         <div class="row">
           <div class="col-xs-12">
             <h4 class="cl-accent ml30">

@@ -4,7 +4,7 @@
       v-for="c in categories"
       :key="'filter-' + c.slug"
       size="sm"
-      class="t-flex t-items-center t-webkit-tap-transparent t-flex-shrink-0 t-mr-2 t-opacity-75 hover:t-opacity-100 t-uppercase t-rounded-sm t-min-h-8 t-px-4 t-text-xs t-bg-base-darkest t-text-white t-justify-center"
+      class="t-mr-2 t-flex t-min-h-8 t-shrink-0 t-items-center t-justify-center t-rounded-sm t-bg-base-darkest t-px-4 t-text-xs t-uppercase t-text-white t-opacity-75 t-webkit-tap-transparent hover:t-opacity-100"
       :to="localizedRoute(c.url_path)"
     >
       {{ c.label }}

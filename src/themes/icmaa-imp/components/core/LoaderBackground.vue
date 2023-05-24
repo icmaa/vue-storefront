@@ -1,6 +1,12 @@
 <template>
-  <div class="loader t-absolute t-left-0 t-w-full t-overflow-hidden" :class="[ background, height] ">
-    <div class="bar t-w-1/2 t-h-full" :class="[ bar ]" />
+  <div
+    class="loader t-absolute t-left-0 t-w-full t-overflow-hidden"
+    :class="[ background, height] "
+  >
+    <div
+      class="bar t-h-full t-w-1/2"
+      :class="[ bar ]"
+    />
   </div>
 </template>
 

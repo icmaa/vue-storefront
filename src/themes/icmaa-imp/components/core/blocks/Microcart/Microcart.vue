@@ -1,25 +1,52 @@
 <template>
-  <sidebar :title="$t('Shopping cart')" class="microcart t-relative" data-test-id="MicroCart">
+  <sidebar
+    :title="$t('Shopping cart')"
+    class="microcart t-relative"
+    data-test-id="MicroCart"
+  >
     <template v-slot:top-after-title>
-      <button-component v-if="productsInCart.length" type="transparent" size="sm" icon="delete" :icon-only="true" @click="clearCart">
+      <button-component
+        v-if="productsInCart.length"
+        type="transparent"
+        size="sm"
+        icon="delete"
+        :icon-only="true"
+        @click="clearCart"
+      >
         {{ $t('Clear cart') }}
       </button-component>
     </template>
     <div class="t-pb-24">
-      <h4 v-if="!productsInCart.length" class="t-text-sm">
+      <h4
+        v-if="!productsInCart.length"
+        class="t-text-sm"
+      >
         {{ $t('Your shopping cart is empty.') }}
       </h4>
       <template v-if="productsInCart.length">
         <coupon />
         <ul class="t-mb-4">
-          <product v-for="(product, i) in productsInCart" :key="`cart-${i}-${product.checksum || product.sku}`" :product="product" />
+          <product
+            v-for="(product, i) in productsInCart"
+            :key="`cart-${i}-${product.checksum || product.sku}`"
+            :product="product"
+          />
         </ul>
         <totals class="t-mb-4" />
         <template v-if="!isCheckoutMode">
-          <button-component type="primary" class="t-w-full" @click.native="continueShopping(true)" data-test-id="GoToCheckout">
+          <button-component
+            type="primary"
+            class="t-w-full"
+            data-test-id="GoToCheckout"
+            @click.native="continueShopping(true)"
+          >
             {{ $t('Go to checkout') }}
           </button-component>
-          <button-component type="transparent" class="t-w-full t-mt-2" @click.native="continueShopping()">
+          <button-component
+            type="transparent"
+            class="t-mt-2 t-w-full"
+            @click.native="continueShopping()"
+          >
             {{ $t('Continue shopping') }}
           </button-component>
         </template>
