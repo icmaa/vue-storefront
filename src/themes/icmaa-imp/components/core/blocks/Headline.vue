@@ -4,7 +4,7 @@ export default {
   props: {
     level: {
       type: Number,
-      required: true
+      default: 2
     }
   },
   render: function (createElement) {

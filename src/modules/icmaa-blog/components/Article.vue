@@ -119,7 +119,9 @@ export default {
   }
 
   & > .rte, & > .text, & > .headline {
-    @apply t-max-w-3xl lg:t-mx-auto lg:t-px-0;
+    & > *:not([name=""]) {
+      @apply t-max-w-3xl lg:t-mx-auto;
+    }
   }
 }
 
