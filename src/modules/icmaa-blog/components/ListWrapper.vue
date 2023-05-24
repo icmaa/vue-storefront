@@ -52,7 +52,7 @@ export default {
     category (): BlogCategory {
       if (this.isRoot) {
         return {
-          name: i18n.t('Blog') as string,
+          name: i18n.t('Magazine') as string,
           url: 'root',
           children: this.getCategories
         }
