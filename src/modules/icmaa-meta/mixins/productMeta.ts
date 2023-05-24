@@ -20,11 +20,14 @@ export default {
     productFinalPrice () {
       return this.product.price_incl_tax
     },
-    productBandOrBrand () {
-      return this.product.brand ? this.product.brand : this.product.band
+    accountType () {
+      const p = this.product
+      return (p?.band && `band`) ||
+        (p?.brand && `brand`) ||
+        (p?.entertainment && `entertainment`)
     },
-    productBandOrBrandCode () {
-      return this.product.brand ? 'brand' : 'band'
+    account () {
+      return this.product?.brand || this.product?.band || this.product?.entertainment
     },
     productFbImages () {
       if (!this.product.media_gallery) {
@@ -57,7 +60,7 @@ export default {
         { name: 'product:availability', content: this.product.stock ? this.product.stock.is_in_stock : false },
         { name: 'product:price:currency', content: this.storeConfig.i18n.currencyCode },
         { name: 'product:price:amount', content: this.productFinalPrice },
-        { name: 'product:brand', content: this.getOptionLabel({ attributeKey: this.productBandOrBrandCode, optionId: this.productBandOrBrand }) },
+        { name: 'product:brand', content: this.getOptionLabel({ attributeKey: this.accountType, optionId: this.account }) },
         ...this.productFbImages
       ]
     }
