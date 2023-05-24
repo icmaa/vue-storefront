@@ -13,7 +13,7 @@ const getters: GetterTree<BlogState, RootState> = {
       return false
     } else {
       const length = current.ids.length
-      return (length === (current.start + current.perPage) && length === current.total) || length < current.perPage
+      return start + length === current.start + length
     }
   },
   getResolvedUrl: (state) => (key: string) => state.urls[key],
