@@ -2,7 +2,7 @@
   <div
     v-if="filteredValidations.length > 0"
     class="validation-message t-w-full"
-    :class="[ validationsAsTooltip ? 't-hidden t-absolute t-mt-10 t-p-2 t-top-0 t-z-10 t-bg-white' : 't-mt-2' ]"
+    :class="[ validationsAsTooltip ? 't-absolute t-top-0 t-z-10 t-mt-10 t-hidden t-bg-white t-p-2' : 't-mt-2' ]"
     data-test-id="ValidationMessages"
   >
     <span

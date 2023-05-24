@@ -5,14 +5,14 @@
     data-test-id="wishlistButton"
     @click="toggleWishlist"
   >
-    <material-icon
+    <MaterialIcon
       :icon="favoriteIcon"
       class="t-text-white"
       :class="{ 't-animate-spin': loading }"
     />
     <span class="t-sr-only">{{ !isActive ? $t('Add to favorite') : $t('Remove') }}</span>
   </div>
-  <button-component
+  <ButtonComponent
     v-else
     :type="buttonType"
     :icon="favoriteIcon"
@@ -24,7 +24,7 @@
     <slot>
       {{ !isActive ? $t('Add to favorite') : $t('Remove') }}
     </slot>
-  </button-component>
+  </ButtonComponent>
 </template>
 
 <script>

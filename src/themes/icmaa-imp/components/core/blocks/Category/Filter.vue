@@ -4,7 +4,7 @@
       v-if="type === 'color'"
       class="t-mb-4 t-flex t-flex-wrap"
     >
-      <color-selector
+      <ColorSelector
         v-for="(option, index) in options"
         :key="index"
         :option="option"
@@ -15,7 +15,7 @@
       v-else-if="type === 'gender'"
       class="t--mx-1 t-mb-4 t-flex t-flex-wrap"
     >
-      <gender-selector
+      <GenderSelector
         v-for="(option, index) in options"
         :key="index"
         :option="option"
@@ -26,7 +26,7 @@
       v-else-if="type === 'shortList'"
       class="t-mb-4 t-flex t-flex-wrap"
     >
-      <short-list-selector
+      <ShortListSelector
         :options="options"
         @change="changeFilter"
       />
@@ -35,7 +35,7 @@
       v-else-if="['list', 'searchableList'].includes(type)"
       class="t-mb-4"
     >
-      <list-selector
+      <ListSelector
         v-bind="$props"
         :searchable="type === 'searchableList'"
         :use-links="attributeKey === 'category'"
@@ -46,7 +46,7 @@
       v-else-if="type === 'price'"
       class="t-mb-6"
     >
-      <price-selector
+      <PriceSelector
         v-bind="$props"
         @change="changeFilter"
       />
@@ -55,7 +55,7 @@
       v-else-if="type === 'sale'"
       class="t-mb-4 t-flex t-flex-wrap"
     >
-      <sale-selector
+      <SaleSelector
         v-for="(option, index) in options"
         :key="index"
         :option="option"
@@ -67,7 +67,7 @@
       v-else
       class="t-mb-4 t-flex t-flex-wrap"
     >
-      <generic-selector
+      <GenericSelector
         v-for="(option, index) in options"
         :key="index"
         :option="option"

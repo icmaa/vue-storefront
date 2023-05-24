@@ -2,7 +2,7 @@
   <li class="t-mr-4 t-flex t-w-full t-py-2">
     <div class="t-mr-4 t-w-1/3">
       <router-link :to="productLink">
-        <product-image
+        <ProductImage
           :image="thumbnail"
           :alt="product.translatedName | htmlDecode"
         />
@@ -32,14 +32,14 @@
         >{{ product.price_incl_tax | price }}</span>
       </div>
       <div class="t-flex t-grow t-items-end">
-        <button-component
+        <ButtonComponent
           type="primary"
           class="t-grow"
           @click.native="redirect"
         >
           {{ $t('Add to cart') }}
-        </button-component>
-        <wishlist-button
+        </ButtonComponent>
+        <WishlistButton
           :product="product"
           :icon-remove="'delete'"
           :button-type="'transparent'"

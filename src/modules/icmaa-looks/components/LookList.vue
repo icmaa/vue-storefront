@@ -9,7 +9,7 @@
         :to="localizedRoute({ name: 'icmaa-looks-detail', params: { identifier: look.identifier }})"
         :title="look.title | htmlDecode"
       >
-        <picture-component
+        <PictureComponent
           :src="look.image"
           :width="imageWidth"
           :height="imageHeight"
@@ -24,7 +24,7 @@
       v-if="!finalPage"
       class="t-mb-8 t-flex t-w-full t-items-center t-justify-center"
     >
-      <button-component
+      <ButtonComponent
         type="ghost"
         :disabled="loading"
         class="t-w-2/3 lg:t-w-1/4"
@@ -32,12 +32,12 @@
         @click.native="loadMore"
       >
         {{ $t('Load more') }}
-        <loader-background
+        <LoaderBackground
           v-if="loading"
           bar="t-bg-base-darkest"
           class="t-bottom-0"
         />
-      </button-component>
+      </ButtonComponent>
     </div>
   </div>
 </template>

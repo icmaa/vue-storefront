@@ -7,7 +7,7 @@
     <p class="t-mb-4 t-text-sm">
       {{ $t('Enter your email address. After submit you will receive an email with an reset-link.') }}
     </p>
-    <base-input
+    <BaseInput
       v-model="email"
       type="email"
       name="email"
@@ -25,31 +25,31 @@
       ]"
       class="t-mb-4"
     />
-    <button-component
+    <ButtonComponent
       :submit="true"
       type="primary"
       class="t-mb-2 t-w-full"
     >
       {{ $t('Reset password') }}
-    </button-component>
-    <button-component
+    </ButtonComponent>
+    <ButtonComponent
       type="transparent"
       class="t--mb-2 t-w-full"
       @click="switchElem"
     >
       {{ $t('Return to log in') }}
-    </button-component>
+    </ButtonComponent>
   </form>
   <div v-else>
     <p class="t-mb-4">
       {{ $t("We've sent password reset instructions to your email. Check your inbox and follow the link.") }}
     </p>
-    <button-component
+    <ButtonComponent
       class="t-w-full"
       @click="switchElem"
     >
       {{ $t('Back to login') }}
-    </button-component>
+    </ButtonComponent>
   </div>
 </template>
 

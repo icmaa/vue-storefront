@@ -1,5 +1,5 @@
 <template>
-  <form-component
+  <FormComponent
     v-if="form"
     v-model="formData"
     :form-elements="formElements"
@@ -29,11 +29,6 @@ export default {
       formData: {}
     }
   },
-  watch: {
-    formData (data) {
-      this.$emit('input', data)
-    }
-  },
   computed: {
     ...mapGetters({
       getFormByIdentifier: 'icmaaForms/getFormByIdentifier'
@@ -56,6 +51,11 @@ export default {
       }
 
       return omit($attrs, ['elements', 'value'])
+    }
+  },
+  watch: {
+    formData (data) {
+      this.$emit('input', data)
     }
   },
   async mounted () {

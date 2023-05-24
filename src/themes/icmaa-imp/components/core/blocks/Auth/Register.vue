@@ -11,7 +11,7 @@
           name="cluster"
           :value="cluster"
         >
-        <base-input
+        <BaseInput
           id="email"
           v-model="email"
           type="email"
@@ -31,7 +31,7 @@
           ]"
           class="t-mb-4 t-w-full t-px-2"
         />
-        <base-input
+        <BaseInput
           id="first-name"
           v-model="firstName"
           name="first-name"
@@ -45,7 +45,7 @@
           ]"
           class="t-mb-4 t-w-full t-px-2 sm:t-w-1/2"
         />
-        <base-input
+        <BaseInput
           id="last-name"
           v-model="lastName"
           name="last-name"
@@ -57,7 +57,7 @@
           }]"
           class="t-mb-4 t-w-full t-px-2 sm:t-w-1/2"
         />
-        <gender-select
+        <GenderSelect
           id="gender"
           v-model="gender"
           name="gender"
@@ -68,7 +68,7 @@
           }]"
           class="t-mb-4 t-w-full t-px-2 sm:t-w-1/2"
         />
-        <base-input
+        <BaseInput
           id="dob"
           v-model="dob"
           name="dob"
@@ -87,7 +87,7 @@
           ]"
           class="t-mb-4 t-w-full t-px-2 sm:t-w-1/2"
         />
-        <base-input
+        <BaseInput
           id="password"
           ref="password"
           v-model="password"
@@ -107,7 +107,7 @@
           ]"
           class="t-mb-4 t-w-full t-px-2 sm:t-w-1/2"
         />
-        <base-input
+        <BaseInput
           id="password-confirm"
           v-model="rPassword"
           type="password"
@@ -126,7 +126,7 @@
           ]"
           class="t-mb-4 t-w-full t-px-2 sm:t-w-1/2"
         />
-        <base-checkbox
+        <BaseCheckbox
           id="newsletter"
           v-model="newsletter"
           name="newsletter"
@@ -134,16 +134,16 @@
           data-test-id="newsletterCheckbox"
         >
           {{ $t('I want to receive a newsletter') }}
-        </base-checkbox>
+        </BaseCheckbox>
         <div class="t-w-full t-px-2">
           <div
-            v-if="$v.recaptcha.$error && !this.$v.recaptcha.required"
+            v-if="$v.recaptcha.$error && !$v.recaptcha.required"
             class="t-mb-2 t-text-sm t-text-alert"
           >
             {{ $t('Your Google reCAPTCHA validation is invalid.') }}<br>
             {{ $t('Please try again or contact our customer-support.') }}
           </div>
-          <vue-recaptcha
+          <VueRecaptcha
             ref="recaptcha"
             :sitekey="recaptchaWebsiteKey"
             :load-recaptcha-script="true"
@@ -152,27 +152,27 @@
             @verify="recaptchaVerify"
             @expired="recaptchaError"
           />
-          <button-component
+          <ButtonComponent
             :submit="true"
             type="primary"
             class="t-mb-2 t-w-full"
             data-test-id="registerSubmit"
           >
             {{ $t('Register') }} <sup class="t-ml-1">1, 2</sup>
-          </button-component>
-          <no-ssr>
-            <facebook-login-button
+          </ButtonComponent>
+          <NoSsr>
+            <FacebookLoginButton
               initial-text="Register with Facebook"
               class="t-mb-2 t-w-full"
             />
-          </no-ssr>
-          <button-component
+          </NoSsr>
+          <ButtonComponent
             type="transparent"
             class="t-mb-4 t-w-full t-flex-wrap"
             @click="switchElem"
           >
             {{ $t('Already have an account?') }} <span class="t-ml-1">– {{ $t('Login to your account') }}</span>
-          </button-component>
+          </ButtonComponent>
           <div class="t-w-full t-text-xs t-leading-1-rem t-text-base-lighter">
             <sup class="t-mr-1 t-font-bold">1)</sup>
             <i18n
@@ -184,24 +184,27 @@
                   :to="localizedRoute('/service-conditions')"
                   class="t-text-base-lighter t-underline"
                   @click.native="close()"
-                  v-html="$t('Terms and Conditions')"
-                />
+                >
+                  {{ $t('Terms and Conditions') }}
+                </router-link>
               </template>
               <template #policy>
                 <router-link
                   :to="localizedRoute('/service-imprint')"
                   class="t-text-base-lighter t-underline"
                   @click.native="close()"
-                  v-html="$t('Privacy Policy')"
-                />
+                >
+                  {{ $t('Privacy Policy') }}
+                </router-link>
               </template>
               <template #return>
                 <router-link
                   :to="localizedRoute('/service-return')"
                   class="t-text-base-lighter t-underline"
                   @click.native="close()"
-                  v-html="$t('Return Instructions')"
-                />
+                >
+                  {{ $t('Return Instructions') }}
+                </router-link>
               </template>
             </i18n>
           </div>
@@ -250,7 +253,7 @@ export default {
     ButtonComponent,
     FacebookLoginButton,
     VueRecaptcha,
-    'no-ssr': NoSSR
+    NoSsr: NoSSR
   },
   data () {
     return {

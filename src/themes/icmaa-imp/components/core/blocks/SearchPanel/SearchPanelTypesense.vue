@@ -1,23 +1,23 @@
 <template>
-  <sidebar
+  <Sidebar
     ref="searchSidebar"
     :use-expander-in-title="false"
     data-test-id="SearchPanel"
   >
-    <template v-slot:top>
+    <template #top>
       <div
         class="t-flex t-cursor-pointer t-items-center t-self-stretch t-px-2"
         data-test-id="closeButton"
         @click="closeSidebar"
       >
-        <material-icon icon="keyboard_arrow_left" />
+        <MaterialIcon icon="keyboard_arrow_left" />
       </div>
       <label
         for="search"
         class="t-flex t-items-center t-self-stretch"
       >
         <span class="t-sr-only">{{ $t('Search') }}</span>
-        <material-icon
+        <MaterialIcon
           icon="search"
           size="sm"
           class="t-pl-2 t-pr-1 t-text-base-light"
@@ -38,8 +38,8 @@
         @blur="$v.searchString.$touch()"
       >
     </template>
-    <template v-slot:top-right>
-      <top-button
+    <template #top-right>
+      <TopButton
         v-show="searchString.length > 0"
         icon="close"
         text="Close"
@@ -67,7 +67,7 @@
           {{ $t('Categories') }}
         </h4>
         <div class="t--mx-4 t-flex t-overflow-scroll t-px-2 t-hide-scrollbar t-scrolling-touch">
-          <button-component
+          <ButtonComponent
             v-for="category in categories"
             :key="category.id"
             type="tag"
@@ -76,7 +76,7 @@
             @click="goToCategory(category)"
           >
             {{ category.name }}
-          </button-component>
+          </ButtonComponent>
         </div>
       </div>
       <div
@@ -100,15 +100,15 @@
         :class="{ 't-opacity-25': pleaseWait }"
       >
         <div class="t-mx-1 t-flex t-w-full t-items-center t-justify-center">
-          <button-component
+          <ButtonComponent
             type="second"
             class="t-mb-4 t-w-full md:t-w-2/3"
             @click="goToResults()"
           >
             {{ $t('View all results') }}
-          </button-component>
+          </ButtonComponent>
         </div>
-        <product-tile
+        <ProductTile
           v-for="product in products"
           :key="product.sku + '-' + (product.parentId || 'parent')"
           :product="product"
@@ -121,7 +121,7 @@
         class="t-mt-4 t-flex t-flex-wrap t-items-center t-justify-center"
         :class="{ 't-opacity-25': pleaseWait }"
       >
-        <button-component
+        <ButtonComponent
           v-if="moreProducts"
           type="ghost"
           class="t-mb-2 t-w-full md:t-w-2/3"
@@ -130,23 +130,23 @@
           @click="loadMore"
         >
           {{ $t('Load more') }}
-          <loader-background
+          <LoaderBackground
             v-if="loadingProducts"
             bar="t-bg-base-darkest"
             class="t-bottom-0"
           />
-        </button-component>
-        <button-component
+        </ButtonComponent>
+        <ButtonComponent
           type="second"
           class="t-w-full md:t-w-2/3"
           data-test-id="ShowAllButton"
           @click="goToResults()"
         >
           {{ $t('View all results') }}
-        </button-component>
+        </ButtonComponent>
       </div>
     </div>
-  </sidebar>
+  </Sidebar>
 </template>
 
 <script>

@@ -1,6 +1,6 @@
 <template>
   <span class="t-text-reset t-leading-none">
-    <material-icon
+    <MaterialIcon
       v-for="(star,i) in stars"
       :key="i"
       :icon="star"

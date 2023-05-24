@@ -1,7 +1,7 @@
 <template>
   <div class="t-container">
     <div class="t-flex t-flex-wrap t-py-4">
-      <navigation class="service-navigation t-mb-4 t-w-full t-px-4 lg:t-mt-4 lg:t-w-2/12" />
+      <Navigation class="service-navigation t-mb-4 t-w-full t-px-4 lg:t-mt-4 lg:t-w-2/12" />
       <div class="cms-page-rte t-w-full t-px-4 lg:t-w-10/12">
         <div class="t-bg-white t-p-4 lg:t-p-8">
           <h1

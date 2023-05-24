@@ -99,13 +99,13 @@
     <!-- Press -->
     <div class="t-flex t-justify-center">
       <a :href="content.press.link">
-        <button-component
+        <ButtonComponent
           type="primary"
           size="sm"
           class="t-bg-festival t-my-6 t-block t-w-full t-px-4 t-py-2 t-text-white"
         >
           {{ content.press.button }}
-        </button-component>
+        </ButtonComponent>
       </a>
     </div>
 
@@ -116,7 +116,7 @@
         :key="galleryitem.img"
         class="t-w-1/2 md:t-w-1/3 lg:t-w-1/6"
       >
-        <picture-component
+        <PictureComponent
           :src="galleryitem.img"
           :width="600"
           :height="400"

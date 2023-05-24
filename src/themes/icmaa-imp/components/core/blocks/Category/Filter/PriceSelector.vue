@@ -11,7 +11,7 @@
         class="t-flex t-w-full t-items-center t-justify-between t-text-sm"
       >
         {{ option.label }}
-        <material-icon
+        <MaterialIcon
           v-if="isActiveOption(option)"
           icon="check"
           class="t-leading-1-rem"

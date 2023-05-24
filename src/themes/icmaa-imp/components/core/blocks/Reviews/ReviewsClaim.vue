@@ -3,7 +3,7 @@
     <div
       v-if="isOpen"
       class="reviews-claim t-bg-alt-1 t-p-8 t-text-xs t-text-white"
-      :class="[ reviewsCount > 0 ? 't-w-full t-absolute t-left-0 t-bottom-0' : 't--mx-8 t--mb-8 t-mt-8' ]"
+      :class="[ reviewsCount > 0 ? 't-absolute t-bottom-0 t-left-0 t-w-full' : 't--mx-8 t--mb-8 t-mt-8' ]"
       data-test-id="ReviewsClaim"
     >
       <h4 class="t-mb-2 t-text-lg">
@@ -13,21 +13,21 @@
         {{ $t('Leave us a 50 words review and win one of three {voucher} vouchers each month.', { voucher }) }}
       </p>
       <div class="t-flex">
-        <button-component
+        <ButtonComponent
           type="ghost-white"
           data-test-id="ReviewsClaimAccept"
           @click.native="accept"
         >
           {{ $t('Add review') }}
-        </button-component>
-        <button-component
+        </ButtonComponent>
+        <ButtonComponent
           type="transparent-white"
           icon="close"
           :icon-only="true"
           @click.native="close"
         >
           {{ $t('Close') }}
-        </button-component>
+        </ButtonComponent>
       </div>
     </div>
   </transition>

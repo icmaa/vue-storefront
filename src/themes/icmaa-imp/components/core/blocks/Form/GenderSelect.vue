@@ -1,5 +1,5 @@
 <template>
-  <base-select
+  <BaseSelect
     v-model="gender"
     :options="genderOptions"
     :initial-option-text="$t('Gender')"

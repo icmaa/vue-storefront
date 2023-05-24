@@ -6,20 +6,20 @@
       v-text="error"
     />
     <form v-if="active">
-      <address-component
+      <AddressComponent
         ref="shippingAddress"
         v-model="shippingAddress"
         :enable-poststation="true"
       />
-      <base-checkbox
+      <BaseCheckbox
         id="use-for-billing"
         v-model="billingAddressIsSameAsShipping"
         class="t-mb-4 t-w-full"
         name="use-for-billing"
       >
         {{ $t('Use also as billing address') }}
-      </base-checkbox>
-      <address-component
+      </BaseCheckbox>
+      <AddressComponent
         v-if="!billingAddressIsSameAsShipping"
         ref="billingAddress"
         v-model="billingAddress"
@@ -27,14 +27,14 @@
         :label="$t('Billing address')"
         class="t-mt-8"
       />
-      <button-component
+      <ButtonComponent
         class="t-mt-4 t-w-full lg:t-w-auto"
         type="primary"
         data-test-id="NextStepButton"
         @click.native.stop="submit"
       >
         {{ $t(('Continue to shipping')) }}
-      </button-component>
+      </ButtonComponent>
     </form>
     <div
       v-if="!active && done"
@@ -46,11 +46,11 @@
           class="t-text-xs t-font-light t-text-base-light"
           v-text="$t('Shipping address')"
         />
-        <address-preview
+        <AddressPreview
           v-if="shippingAddressDTO"
           :address="shippingAddressDTO"
         />
-        <base-checkbox
+        <BaseCheckbox
           v-if="billingAddressIsSameAsShipping"
           id="use-for-billing-read-only"
           class="t-mt-4 t-w-full"
@@ -59,7 +59,7 @@
           disabled
         >
           {{ $t('Use also as billing address') }}
-        </base-checkbox>
+        </BaseCheckbox>
       </div>
       <div
         v-if="!billingAddressIsSameAsShipping && billingAddressDTO"
@@ -69,7 +69,7 @@
           class="t-text-xs t-font-light t-text-base-light"
           v-text="$t('Billing address')"
         />
-        <address-preview :address="billingAddressDTO" />
+        <AddressPreview :address="billingAddressDTO" />
       </div>
     </div>
   </div>

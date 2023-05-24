@@ -1,6 +1,6 @@
 <template>
   <div v-if="placeholder && loading">
-    <placeholder :ratio="ratio" />
+    <Placeholder :ratio="ratio" />
     <img
       :src="src"
       :srcset="srcset"

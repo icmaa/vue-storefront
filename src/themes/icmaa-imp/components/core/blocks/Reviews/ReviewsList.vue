@@ -18,7 +18,7 @@
       >
       <meta :content="productName | htmlDecode">
       <meta :content="item.detail | htmlDecode">
-      <reviews-stars
+      <ReviewsStars
         :rating="item.ratings_total"
         stars-size="sm"
         class="t-text-md t-mt-2 t-flex t-items-center t-text-base-light"
@@ -36,7 +36,7 @@
       v-if="pageCount > 1"
       class="t-mt-8 t-flex t-justify-center"
     >
-      <button-component
+      <ButtonComponent
         type="ghost"
         icon="chevron_left"
         :icon-only="true"
@@ -45,7 +45,7 @@
         :class="{ 't-opacity-25': currentPage === 1, 't-bg-white': currentPage !== 1 }"
         @click.native="prevPage"
       />
-      <button-component
+      <ButtonComponent
         type="ghost"
         icon="chevron_right"
         :icon-only="true"

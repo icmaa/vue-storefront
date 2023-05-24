@@ -4,9 +4,9 @@
       <h1 class="t-mb-4 t-px-2 t-text-1xl t-font-bold">
         Teaser Quality Assurance
       </h1>
-      <no-ssr>
+      <NoSsr>
         <div class="t-mx-2 t-flex t-flex-wrap t-bg-white t-px-2 t-py-4">
-          <base-select
+          <BaseSelect
             id="type"
             v-model="type"
             :options="typeOptions"
@@ -14,7 +14,7 @@
             label="View by"
             class="t-w-full t-px-2 t-pb-4 lg:t-w-1/3 lg:t-pb-0"
           />
-          <base-select
+          <BaseSelect
             v-show="type === 'tag'"
             id="tag"
             v-model="tag"
@@ -23,7 +23,7 @@
             label="Tag"
             class="t-w-full t-px-2 t-pb-4 lg:t-w-1/3 lg:t-pb-0"
           />
-          <base-select
+          <BaseSelect
             v-show="type === 'cluster'"
             id="cluster"
             v-model="cluster"
@@ -32,16 +32,16 @@
             label="Cluster"
             class="t-w-full t-px-2 t-pb-4 lg:t-w-1/3 lg:t-pb-0"
           />
-          <base-checkbox
+          <BaseCheckbox
             id="showAsSplitTeaser"
             v-model="showAsSplitTeaser"
             name="showAsSplitTeaser"
             class="t-w-full t-px-2 lg:t-mt-6 lg:t-w-1/3"
           >
             Show small teaser as split-teaser
-          </base-checkbox>
+          </BaseCheckbox>
         </div>
-      </no-ssr>
+      </NoSsr>
       <div
         v-for="(teaser, i) in teaserList"
         :key="getUniqueKey('wrap', i, teaser)"
@@ -59,14 +59,14 @@
         >
           {{ teaser.customerclusterLabel }}
         </div>
-        <lazyload>
-          <template v-slot:loading>
-            <teaser-skeleton
+        <Lazyload>
+          <template #loading>
+            <TeaserSkeleton
               v-bind="{ isMobile, showSmallInRow: !showAsSplitTeaser }"
               class="t--mx-4"
             />
           </template>
-          <teaser
+          <Teaser
             :key="getUniqueKey('teaser', i, teaser)"
             :tags="`${teaser.tags}`"
             :customercluster="`${teaser.customercluster}`"
@@ -74,7 +74,7 @@
             :redirect-to-edit="true"
             class="t--mx-4"
           />
-        </lazyload>
+        </Lazyload>
       </div>
     </div>
   </div>
@@ -98,7 +98,7 @@ export default {
     Teaser,
     BaseSelect,
     BaseCheckbox,
-    'no-ssr': NoSSR
+    NoSsr: NoSSR
   },
   data () {
     return {

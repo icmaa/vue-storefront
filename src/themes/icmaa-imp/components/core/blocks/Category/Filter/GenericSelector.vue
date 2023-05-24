@@ -1,11 +1,11 @@
 <template>
-  <button-component
+  <ButtonComponent
     :type="isActive ? 'tag-active' : 'tag'"
     :aria-label="option.label"
     @click="$emit('change', option)"
   >
     {{ option.label }}
-  </button-component>
+  </ButtonComponent>
 </template>
 
 <script>

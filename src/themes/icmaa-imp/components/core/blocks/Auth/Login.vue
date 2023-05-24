@@ -10,7 +10,7 @@
     >
       {{ $t('You need to be logged in to see this page') }}
     </div>
-    <base-input
+    <BaseInput
       id="email"
       ref="emailInput"
       v-model="email"
@@ -30,7 +30,7 @@
       ]"
       @focus="hasFocus=true"
     />
-    <base-input
+    <BaseInput
       v-show="showAll"
       id="password"
       v-model="password"
@@ -62,34 +62,34 @@
         class="t-w-full t-px-1"
         :class="{ 'lg:t-w-auto lg:t-min-w-1/3': !isModal }"
       >
-        <button-component
+        <ButtonComponent
           :submit="true"
           type="primary"
           class="t-mb-2 t-w-full"
           data-test-id="loginSubmit"
         >
           {{ $t('Login') }}
-        </button-component>
+        </ButtonComponent>
       </div>
-      <no-ssr>
+      <NoSsr>
         <div
           class="t-w-full t-px-1"
           :class="{ 'lg:t-flex-1': !isModal }"
         >
-          <facebook-login-button
+          <FacebookLoginButton
             class="t-mb-2 t-w-full"
           />
         </div>
-      </no-ssr>
+      </NoSsr>
       <div class="t-w-full t-px-1">
-        <button-component
+        <ButtonComponent
           :type="isModal ? 'transparent' : 'primary'"
           class="t--mb-2 t-w-full t-flex-wrap"
           data-test-id="registerLink"
           @click="callRegister"
         >
           {{ $t('Not yet an account?') }} <span class="t-ml-1">{{ $t('Register now') }}</span>
-        </button-component>
+        </ButtonComponent>
       </div>
     </div>
   </form>
@@ -113,7 +113,7 @@ export default {
     BaseInput,
     ButtonComponent,
     FacebookLoginButton,
-    'no-ssr': NoSSR
+    NoSsr: NoSSR
   },
   props: {
     isModal: {

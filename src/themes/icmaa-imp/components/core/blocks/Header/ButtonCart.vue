@@ -1,5 +1,5 @@
 <template>
-  <button-icon
+  <ButtonIcon
     icon="shopping_cart"
     title="Shopping cart"
     :qty="quantity"

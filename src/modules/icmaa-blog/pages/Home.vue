@@ -1,7 +1,7 @@
 <template>
   <div class="t-container t-my-8 t-px-4">
     <template v-for="(category, i) in categories">
-      <teaser
+      <Teaser
         v-if="i === 1"
         :key="'teaser-' + i"
         tags="325"
@@ -28,6 +28,10 @@ export default {
     List,
     Teaser
   },
+  async asyncData (c) {
+    c.context?.output.cacheTags
+      .add('blog')
+  },
   async serverPrefetch () {
     return (this as any).fetchData()
   },
@@ -35,10 +39,6 @@ export default {
     ...mapGetters({
       categories: 'icmaaBlog/getCategories'
     })
-  },
-  async asyncData (c) {
-    c.context?.output.cacheTags
-      .add('blog')
   },
   async mounted () {
     return this.fetchData()

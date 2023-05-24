@@ -12,8 +12,7 @@
             :to="value.optionLink"
             :title="label + ' - ' + value.optionLabel"
             class="t-border-b t-border-base-dark t-text-base-dark"
-            v-text="value.optionLabel"
-          /><span
+          >{{ value.optionLabel }}</router-link><span
             v-if="valuesCount !== index"
             :key="'spacer-' + index"
             v-text="', '"

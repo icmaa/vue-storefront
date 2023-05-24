@@ -1,5 +1,5 @@
 <template>
-  <sidebar :title="productOptionsLabelPlaceholder">
+  <Sidebar :title="productOptionsLabelPlaceholder">
     <div class="t-flex t-flex-wrap t-pb-20">
       <template v-if="product.type_id === 'configurable'">
         <div
@@ -13,7 +13,7 @@
           :key="option.id"
           class="t-flex t-w-full t-flex-col"
         >
-          <default-selector
+          <DefaultSelector
             v-for="(filter, key) in availableFilters[option.attribute_code]"
             :key="key"
             :option="filter"
@@ -28,14 +28,14 @@
         </div>
       </template>
       <template v-if="product.type_id === 'bundle'">
-        <bundle-selector
+        <BundleSelector
           :product="product"
           :disable-selection="disableSelection"
           @change="onBundleSelect"
         />
       </template>
       <div class="t-mt-4 t-flex t-w-full t-flex-wrap">
-        <model
+        <Model
           :product="product"
           class="t-mb-px t-w-full t-bg-base-lightest t-p-4 t-text-sm t-text-base-tone"
         />
@@ -45,7 +45,7 @@
           @click.native="close()"
         >
           {{ $t('Which size fits me?') }}
-          <material-icon
+          <MaterialIcon
             icon="call_made"
             size="md"
             class="t-float-right t-align-middle"
@@ -56,7 +56,7 @@
         v-if="showAddToCartButton"
         class="t-mt-4 t-flex t-w-full t-flex-wrap"
       >
-        <button-component
+        <ButtonComponent
           :type="!selectedOption || !isAddToCartDisabled ? 'primary' : 'second'"
           data-test-id="AddToCart"
           class="t-relative t-grow disabled:t-opacity-50"
@@ -64,16 +64,16 @@
           @click.native="addToCartButtonClick"
         >
           {{ userSelection && isAddToCartDisabled && !loading ? $t('Out of stock') : $t('Add to cart') }}
-          <loader-background
+          <LoaderBackground
             v-if="isAddingToCart"
             class="t-bottom-0"
             height="t-h-1"
             bar="t-bg-base-lightest t-opacity-25"
           />
-        </button-component>
+        </ButtonComponent>
       </div>
     </div>
-  </sidebar>
+  </Sidebar>
 </template>
 
 <script>

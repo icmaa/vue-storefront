@@ -4,7 +4,7 @@
     class="t-flex t-cursor-pointer t-items-center t-rounded-sm t-border t-border-base-lightest t-p-2 t-text-base-tone"
     :class="{ 't-bg-base-lightest': isCurrent }"
   >
-    <flag-icon
+    <FlagIcon
       :iso="storeView.languageCode"
       class="t-mr-2 t-flex-fix"
       format="4x3"

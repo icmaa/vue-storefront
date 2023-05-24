@@ -11,15 +11,15 @@
           class="t-leading-tight"
           v-text="advice.text"
         />
-        <button-component
+        <ButtonComponent
           class="t-t-text-xs t-ml-4 t-hidden t-flex-fix t-uppercase t-text-white lg:t-flex"
           type="ghost-custom"
           custom-color="white"
           size="sm"
         >
           {{ advice.buttonText }}
-        </button-component>
-        <button-component
+        </ButtonComponent>
+        <ButtonComponent
           type="transparent-white"
           icon="close"
           :icon-only="true"
@@ -27,7 +27,7 @@
           @click.stop.native="close"
         >
           {{ $t('Close') }}
-        </button-component>
+        </ButtonComponent>
       </div>
       <div />
     </div>

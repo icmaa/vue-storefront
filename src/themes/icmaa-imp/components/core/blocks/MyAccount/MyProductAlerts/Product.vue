@@ -1,11 +1,11 @@
 <template>
   <div v-if="product">
-    <product-tile
+    <ProductTile
       :product="product"
       :show-price="false"
     >
-      <template v-slot:imageOverlay>
-        <button-component
+      <template #imageOverlay>
+        <ButtonComponent
           type="transparent"
           :rounded="false"
           icon="close"
@@ -17,9 +17,9 @@
           @click="removeAlert"
         >
           {{ $t('Delete') }}
-        </button-component>
+        </ButtonComponent>
       </template>
-    </product-tile>
+    </ProductTile>
     <div
       v-if="options.length > 0"
       class="t-mt-2"
@@ -33,13 +33,14 @@
           class="t-mr-2 t-text-xs"
           v-text="option.label + ':'"
         />
-        <button-component
+        <ButtonComponent
           type="tag"
           size="xs"
           :cursor-pointer="false"
           class="t-mr-2"
-          v-text="option.value"
-        />
+        >
+          {{ option.value }}
+        </ButtonComponent>
       </div>
     </div>
   </div>

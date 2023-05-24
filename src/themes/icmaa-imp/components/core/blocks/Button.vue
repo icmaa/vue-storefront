@@ -6,7 +6,7 @@
     :style="customColorStyle"
     @click="click"
   >
-    <material-icon
+    <MaterialIcon
       v-if="icon && iconPosition === 'left'"
       :icon="icon"
       :icon-set="iconSet"
@@ -33,7 +33,7 @@
         <slot />
       </template>
     </template>
-    <material-icon
+    <MaterialIcon
       v-if="icon && iconPosition === 'right'"
       :icon="icon"
       :icon-set="iconSet"
@@ -48,7 +48,7 @@
 import MaterialIcon from 'theme/components/core/blocks/MaterialIcon'
 
 export default {
-  name: 'Button',
+  name: 'ButtonComponent',
   components: {
     MaterialIcon
   },

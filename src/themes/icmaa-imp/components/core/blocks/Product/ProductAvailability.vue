@@ -3,7 +3,7 @@
     class="t-flex t-items-center t-text-sm"
     :class="[stockStatus.color]"
   >
-    <material-icon
+    <MaterialIcon
       icon="lens"
       size="sm"
       class="t-mr-1"

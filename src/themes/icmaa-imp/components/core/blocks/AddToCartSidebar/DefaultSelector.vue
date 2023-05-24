@@ -1,7 +1,7 @@
 <template>
   <div
     class="t-flex t-cursor-pointer t-items-center t-border-base-lightest t-px-4 t-text-sm t-text-base-tone t-webkit-tap-transparent"
-    :class="[ optionLabel.length > 45 ? 't-py-2' : 't-h-12', {'t-flex t-text-base-light': !option.available}, {'t-bg-base-lightest t-text-black t-relative': isActive && isLoading}, {'t-text-base-light': !isActive && isLoading}, isLast ? 't-border-b-0' : 't-border-b', option.available ? 'available' : 'unavailable']"
+    :class="[ optionLabel.length > 45 ? 't-py-2' : 't-h-12', {'t-flex t-text-base-light': !option.available}, {'t-relative t-bg-base-lightest t-text-black': isActive && isLoading}, {'t-text-base-light': !isActive && isLoading}, isLast ? 't-border-b-0' : 't-border-b', option.available ? 'available' : 'unavailable']"
     :aria-label="$t('Select') + ' ' + optionLabel"
     data-test-id="DefaultSelector"
     @click="selectVariant"
@@ -10,7 +10,7 @@
       {{ optionLabel }}
     </span>
     <template v-if="option.available">
-      <material-icon
+      <MaterialIcon
         v-if="ticked"
         icon="done"
         class="t-ml-2 t-flex-fix t-text-alt-1"
@@ -28,13 +28,13 @@
         data-test-id="StockAlertSubscribe"
         v-html="$t(isStockAlertSubscrided ? 'Size requested' : 'Request size')"
       />
-      <material-icon
+      <MaterialIcon
         :icon="isStockAlertSubscrided ? 'check' : 'mail_outline'"
         class="t-ml-2 t-flex-fix"
         :class="{ 't-text-alt-3': isStockAlertSubscrided }"
       />
     </template>
-    <loader-background
+    <LoaderBackground
       v-if="isActive && isLoading"
       class="t-bottom-0"
     />

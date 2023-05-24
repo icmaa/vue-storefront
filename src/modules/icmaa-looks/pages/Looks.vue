@@ -6,14 +6,14 @@
     >
       {{ $t('Look of the week') }}
     </h1>
-    <look
+    <Look
       v-if="current"
       :look="current"
     />
     <h2 class="t-mb-4 t-text-1xl t-font-normal">
       {{ $t('More looks') }}
     </h2>
-    <look-list
+    <LookList
       :looks="looks"
       :per-page="perPage"
     />
@@ -31,6 +31,17 @@ export default {
   components: {
     Look,
     LookList
+  },
+  async asyncData ({ store, route }) {
+    const identifier = route.params.identifier
+    if (identifier && !store.getters['icmaaLooks/getByIdentifier'](identifier)) {
+      await store.dispatch('icmaaLooks/single', { value: identifier })
+    }
+
+    const { perPage } = this.data()
+    if (store.getters['icmaaLooks/getLooks'].length < perPage) {
+      await store.dispatch('icmaaLooks/list', { size: perPage })
+    }
   },
   data () {
     return {
@@ -52,17 +63,6 @@ export default {
       }
 
       return this.looks[0]
-    }
-  },
-  async asyncData ({ store, route }) {
-    const identifier = route.params.identifier
-    if (identifier && !store.getters['icmaaLooks/getByIdentifier'](identifier)) {
-      await store.dispatch('icmaaLooks/single', { value: identifier })
-    }
-
-    const { perPage } = this.data()
-    if (store.getters['icmaaLooks/getLooks'].length < perPage) {
-      await store.dispatch('icmaaLooks/list', { size: perPage })
     }
   }
 }

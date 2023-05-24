@@ -16,7 +16,7 @@
 
 <script>
 export default {
-  name: 'Link',
+  name: 'LinkComponent',
   props: {
     to: {
       type: [String, Object],

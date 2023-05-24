@@ -1,5 +1,5 @@
 <template>
-  <layout
+  <Layout
     id="cms-page"
     :headline="content.headline"
   >
@@ -36,7 +36,7 @@
         </div>
       </div>
     </div>
-  </layout>
+  </Layout>
 </template>
 
 <script>
@@ -49,13 +49,13 @@ export default {
     Layout
   },
   mixins: [ Page ],
+  asyncData ({ store }) {
+    return store.dispatch('icmaaCmsBlock/single', { value: 'service-navigation' })
+  },
   data () {
     return {
       dataType: 'yaml'
     }
-  },
-  asyncData ({ store }) {
-    return store.dispatch('icmaaCmsBlock/single', { value: 'service-navigation' })
   }
 }
 </script>

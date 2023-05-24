@@ -15,7 +15,7 @@
         :title="ticket.category.name"
         class="t-mb-4 t-block"
       >
-        <picture-component
+        <PictureComponent
           :alt="ticket.category.name | stripHTML"
           :src="ticket.poster"
           :width="263"
@@ -32,13 +32,13 @@
         class="t-block t-text-sm t-leading-tight t-text-primary"
       >
         {{ ticket.category.name }}
-        <button-component
+        <ButtonComponent
           type="primary"
           size="sm"
           class="t-mt-2"
         >
           {{ $t('Buy tickets') }}
-        </button-component>
+        </ButtonComponent>
       </router-link>
     </div>
   </div>

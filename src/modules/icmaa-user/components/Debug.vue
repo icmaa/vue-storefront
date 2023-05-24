@@ -1,6 +1,6 @@
 <template>
   <div class="t-my-4 t-flex t-w-full t-justify-end">
-    <button-component
+    <ButtonComponent
       v-for="(o, i) in values"
       :key="i"
       :type="currentValue == o.value ? 'ghost' : 'second'"
@@ -8,8 +8,8 @@
       @click="setValue(o.value)"
     >
       {{ o.label }}
-    </button-component>
-    <button-component
+    </ButtonComponent>
+    <ButtonComponent
       type="ghost"
       icon="delete"
       :icon-only="true"

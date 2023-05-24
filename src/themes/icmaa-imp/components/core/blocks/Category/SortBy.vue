@@ -11,7 +11,7 @@
           @click="sort(sortOpt)"
         >
           {{ $t('Sort by') }} {{ sortOpt.label }}
-          <material-icon
+          <MaterialIcon
             v-if="currentOption && currentOption.id === sortOpt.id"
             icon="check"
             class="t-leading-1-rem"

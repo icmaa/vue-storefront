@@ -1,9 +1,9 @@
 <template>
   <div>
     <div class="t-bg-white t-p-4">
-      <headline class="t-mb-0">
+      <Headline class="t-mb-0">
         {{ $t('My product-alerts') }}
-      </headline>
+      </Headline>
       <div
         v-if="stockItems.length === 0"
         class="t-text-sm t-text-base-light"
@@ -19,7 +19,7 @@
     </div>
     <template v-if="isLoaded && stockItems.length > 0">
       <div class="t--mx-1 t-mt-4 t-flex t-flex-wrap t-justify-start lg:t--mx-2">
-        <product
+        <Product
           v-for="(stockItemId, i) in stockItems"
           :key="i"
           :stock-item-id="stockItemId"

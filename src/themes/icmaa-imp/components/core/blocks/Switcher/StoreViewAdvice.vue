@@ -1,5 +1,5 @@
 <template>
-  <modal
+  <Modal
     name="modal-storeview-advice"
     :width="500"
     :compact="true"
@@ -18,24 +18,24 @@
           {{ $t('Please be aware that you might need to login again or refill your cart if you switch to a new language.') }}
         </div>
         <div class="t-flex t-flex-wrap">
-          <button-component
+          <ButtonComponent
             type="primary"
             class="t-mb-2 t-w-full lg:t-mb-0 lg:t-w-1/2"
             @click="goBack"
           >
             {{ $t('Ok, take me back') }}
-          </button-component>
-          <button-component
+          </ButtonComponent>
+          <ButtonComponent
             type="transparent"
             class="t-w-full lg:t-w-1/2"
             @click="closeModal"
           >
             {{ $t('Thanks, I\'ll stay') }}
-          </button-component>
+          </ButtonComponent>
         </div>
       </div>
     </div>
-  </modal>
+  </Modal>
 </template>
 
 <script>

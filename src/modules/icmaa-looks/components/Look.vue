@@ -15,7 +15,7 @@
               target="_blank"
               :title="`@${look.modelInstagram}` | htmlDecode"
             >
-              <material-icon
+              <MaterialIcon
                 icon="instagram"
                 icon-set="icmaa"
                 size="xs"
@@ -31,7 +31,7 @@
             {{ look.description }}
           </div>
         </div>
-        <picture-component
+        <PictureComponent
           :key="look.image"
           :src="look.image"
           :width="imageWidth"
@@ -45,7 +45,7 @@
     </div>
     <div class="t-w-full t-px-2 md:t-w-2/3">
       <div class="t--mx-2 t-flex t-flex-wrap">
-        <product-tile
+        <ProductTile
           v-for="(p, i) in products"
           :key="`look-product-${look.uid}-${i}`"
           :product="p"

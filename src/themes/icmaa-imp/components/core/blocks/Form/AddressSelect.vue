@@ -1,5 +1,5 @@
 <template>
-  <base-select
+  <BaseSelect
     v-if="hasAddresses"
     v-model.number="addressId"
     :options="addressOptions"

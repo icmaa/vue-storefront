@@ -17,7 +17,7 @@
           @reload="getComponent"
         />
         <template v-for="(item, i) in sidebarPath">
-          <submenu
+          <Submenu
             v-show="i === sidebarLastIndex"
             :key="'submenu-' + i"
             :index="i"

@@ -19,7 +19,7 @@
         class="col-md-6"
         :class="[ method.code ]"
       >
-        <base-checkbox
+        <BaseCheckbox
           :id="`payment-method-${kebabCase(method.code)}`"
           v-model="selected"
           :name="`paymentMethod[${kebabCase(method.code)}]`"
@@ -34,7 +34,7 @@
             />
             <div>{{ method.title || method.name }}</div>
           </div>
-        </base-checkbox>
+        </BaseCheckbox>
         <div
           v-if="method.code === selected && infoComponent"
           class="t-mb-4 t-ml-8"
@@ -47,14 +47,14 @@
           />
         </div>
       </div>
-      <button-component
+      <ButtonComponent
         class="t-mt-8 t-w-full lg:t-w-auto"
         type="primary"
         data-test-id="NextStepButton"
         @click.native.stop="submit"
       >
         {{ $t(('Go review the order')) }}
-      </button-component>
+      </ButtonComponent>
     </template>
     <template v-else-if="!active && done">
       <div

@@ -1,10 +1,10 @@
 <template>
   <div v-if="isVisible">
     <div
-      class="category-header t-relative"
       :class="{ 'loaded': !bannerLoading }"
+      class="category-header t-relative"
     >
-      <picture-component
+      <PictureComponent
         v-if="banner"
         :src="banner"
         :width="bannerWidth"
@@ -15,9 +15,9 @@
         :auto-reload="true"
         :preload-in-header="true"
         :alt="category.name"
+        :class="{ 't-cursor-pointer': linkedBanner }"
         img-class="t-w-screen"
         placeholder-class="t-w-screen lg:t-w-auto"
-        :class="{ 't-cursor-pointer': linkedBanner }"
         @load="onBannerLoad"
         @error="onBannerError"
         @click="goToCategory()"
@@ -38,12 +38,12 @@
         style="height: 38px;"
       >
         <span class="t-mr-8 t-hidden t-flex-fix t-self-center t-text-sm t-text-base-light xl:t-inline-block">{{ isSpotifyCategory ? $t('Similar bands:') : $t('Similar brands:') }}</span>
-        <department-logo
+        <DepartmentLogo
           v-for="(logo, index) in logoItems"
           :key="index"
           v-bind="logo.data()"
-          class="t-flex-fix t-opacity-60 hover:t-opacity-100"
           :class="{ 't-mr-4': isLast(index, logoItems)}"
+          class="t-flex-fix t-opacity-60 hover:t-opacity-100"
         />
       </div>
     </div>

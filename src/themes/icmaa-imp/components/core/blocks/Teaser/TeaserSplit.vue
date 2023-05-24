@@ -8,7 +8,7 @@
     @mouseover="onHover"
     @mouseleave="onHover"
   >
-    <picture-component
+    <PictureComponent
       v-if="showLeft"
       :src="imageUrl"
       :width="624"
@@ -40,13 +40,13 @@
           {{ teaser.text2 }}
         </div>
         <div class="t-w-full">
-          <button-component
+          <ButtonComponent
             class="t-truncate t-text-xs t-uppercase"
             :type="textColor ? 'ghost-custom' : 'ghost'"
             :custom-color="textColor"
           >
             {{ teaser.buttonText }}
-          </button-component>
+          </ButtonComponent>
         </div>
         <div
           v-if="teaser.text3"
@@ -58,7 +58,7 @@
         </div>
       </div>
     </div>
-    <picture-component
+    <PictureComponent
       v-if="!showLeft"
       :src="imageUrl"
       :width="624"
@@ -69,7 +69,7 @@
       class="t-w-full md:t-h-full md:t-w-1/2"
       :alt="teaser.text1 | htmlDecode"
     />
-    <edit-button
+    <EditButton
       :edit-url="editUrl"
       :class="[ showLeft ? 't-left-0 t--ml-2 t--mt-2' : 't-right-0 t--mr-2 t--mt-2', { 't-hidden': !hover }]"
     />

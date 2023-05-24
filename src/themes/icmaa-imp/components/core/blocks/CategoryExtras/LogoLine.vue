@@ -9,10 +9,10 @@
       class="t-flex-fix t-px-2"
       :class="[...columnClassObj]"
     >
-      <department-logo
+      <DepartmentLogo
         v-bind="logo.data()"
         class="t-flex t-justify-center t-px-4 t-py-2"
-        :class="[ ...logoClassObj, white ? 't-bg-white' : 't-border-base-lightest t-border-b' ]"
+        :class="[ ...logoClassObj, white ? 't-bg-white' : 't-border-b t-border-base-lightest' ]"
       />
     </div>
     <template v-if="placeholder">
@@ -24,13 +24,13 @@
       >
         <div
           class="t-flex t-justify-center t-px-4 t-py-2"
-          :class="[ ...logoClassObj, white ? 't-bg-white' : 't-border-base-lightest t-border-b' ]"
+          :class="[ ...logoClassObj, white ? 't-bg-white' : 't-border-b t-border-base-lightest' ]"
         >
           <div
             class="t-w-full"
             :style="{ maxWidth: '74px' }"
           >
-            <placeholder ratio="53:27" />
+            <Placeholder ratio="53:27" />
           </div>
         </div>
       </div>

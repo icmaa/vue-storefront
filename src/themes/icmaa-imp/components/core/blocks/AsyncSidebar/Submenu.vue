@@ -1,11 +1,11 @@
 <template>
-  <sidebar
+  <Sidebar
     class="t-absolute t-top-0"
     :title="sidebar.title"
     :close-icon="sidebar.closeIcon"
   >
-    <template v-slot:top>
-      <top-button
+    <template #top>
+      <TopButton
         icon="keyboard_arrow_left"
         text="Back"
         :tab-index="1"
@@ -19,7 +19,7 @@
       @close="close"
       @reload="getComponent"
     />
-  </sidebar>
+  </Sidebar>
 </template>
 
 <script>

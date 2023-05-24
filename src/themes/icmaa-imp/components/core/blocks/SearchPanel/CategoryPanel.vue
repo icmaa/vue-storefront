@@ -4,7 +4,7 @@
       {{ $t(title) }}
     </h4>
     <div class="t--mx-4 t-flex t-overflow-scroll t-px-2 t-hide-scrollbar t-scrolling-touch">
-      <button-component
+      <ButtonComponent
         v-for="category in categories"
         :key="category.id"
         type="tag"
@@ -13,7 +13,7 @@
         @click="goToCategory(category)"
       >
         {{ category.name }}
-      </button-component>
+      </ButtonComponent>
     </div>
   </div>
 </template>

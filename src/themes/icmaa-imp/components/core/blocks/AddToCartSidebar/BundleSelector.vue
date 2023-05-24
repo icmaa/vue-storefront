@@ -4,7 +4,7 @@
       v-if="isChildOutOfStock"
       class="t-mb-4 t-flex t-bg-alert t-p-4 t-text-sm t-text-white"
     >
-      <material-icon
+      <MaterialIcon
         icon="report_problem"
         class="t-mr-2"
       />
@@ -21,7 +21,7 @@
       <h4 class="t-px-2 t-text-xs t-font-bold t-uppercase t-text-base-lighter">
         {{ option.title }}
       </h4>
-      <default-selector
+      <DefaultSelector
         v-for="(selectorOption, j) in option.selectorOptions"
         :key="`productLink_${selectorOption.optionId}_${selectorOption.productLink.id}`"
         :option="selectorOption"

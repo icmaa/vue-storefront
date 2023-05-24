@@ -13,7 +13,7 @@
       class="base-input t-relative t-flex t-flex-wrap"
       :class="{ 'floating-label': isFloating }"
     >
-      <material-icon
+      <MaterialIcon
         v-if="passIconActive"
         :icon="passTypeIcon"
         class="t-absolute t-flex t-cursor-pointer t-self-center t-p-2 t-text-base-lighter"
@@ -57,7 +57,7 @@
           {{ label || placeholder }}
         </slot>
       </floating-label>
-      <material-icon
+      <MaterialIcon
         v-if="icon"
         :icon="icon"
         class="t-absolute t-flex t-self-center t-p-2"

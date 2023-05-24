@@ -12,7 +12,7 @@
         {{ $t('View all') }}
       </router-link>
     </h4>
-    <logo-line
+    <LogoLine
       :static-items="items"
       :limit="9"
       :placeholder="true"

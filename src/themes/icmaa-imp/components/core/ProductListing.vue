@@ -4,14 +4,14 @@
     class="product-listing t-flex t-flex-wrap t-justify-start t-px-3 lg:t--mx-2 lg:t-px-4"
   >
     <template v-for="(product, i) in products">
-      <product-tile
+      <ProductTile
         :key="`product-${i}-${product.sku}`"
         :product="product"
         :show-add-to-cart="showAddToCart"
         class="t-mb-8 t-px-1 lg:t-px-2"
         :class="[ 't-w-1/2 lg:t-w-1/' + columns ]"
       />
-      <list-banner
+      <ListBanner
         v-if="i === 7 || i%28 === 27"
         :key="`listbanner-${i}`"
         class="t-mb-8 t-w-full t-px-1 lg:t-px-2"

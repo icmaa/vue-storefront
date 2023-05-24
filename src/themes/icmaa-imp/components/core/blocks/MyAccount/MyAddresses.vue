@@ -3,9 +3,9 @@
     class="t-bg-white t-p-4"
     data-test-id="MyAddresses"
   >
-    <headline>
+    <Headline>
       {{ $t('My addresses') }}
-    </headline>
+    </Headline>
 
     <div
       v-if="!edit"
@@ -35,7 +35,7 @@
               v-if="a.is_default_billing"
               class="t-text-xs t-text-base-light"
             >
-              <material-icon
+              <MaterialIcon
                 icon="check"
                 size="xs"
                 class="t-inline-flex t-align-bottom"
@@ -46,7 +46,7 @@
               v-if="a.is_default_shipping"
               class="t-text-xs t-text-base-light"
             >
-              <material-icon
+              <MaterialIcon
                 icon="check"
                 size="xs"
                 class="t-inline-flex t-align-bottom"
@@ -71,12 +71,12 @@
         </div>
       </div>
       <div class="t-w-full t-px-2">
-        <button-component
+        <ButtonComponent
           data-test-id="AddNewAddressButton"
           @click="editAddress(true)"
         >
           {{ $t('New address') }}
-        </button-component>
+        </ButtonComponent>
       </div>
     </div>
 
@@ -90,7 +90,7 @@
         class="t--mx-2 t-flex t-flex-wrap"
         @submit.prevent="submit"
       >
-        <base-input
+        <BaseInput
           id="firstname"
           v-model="address.firstname"
           name="firstname"
@@ -108,7 +108,7 @@
           ]"
           class="t-mb-4 t-w-1/2 t-px-2 lg:t-w-1/4"
         />
-        <base-input
+        <BaseInput
           id="lastname"
           v-model="address.lastname"
           name="lastname"
@@ -126,7 +126,7 @@
           ]"
           class="t-mb-4 t-w-1/2 t-px-2 lg:t-w-1/4"
         />
-        <base-input
+        <BaseInput
           id="company"
           v-model="address.company"
           name="company"
@@ -139,7 +139,7 @@
           class="t-mb-4 t-w-full t-px-2 lg:t-w-1/2"
         />
         <div class="t-w-full t-px-2 lg:t-w-1/2">
-          <base-input
+          <BaseInput
             v-for="(street,i) in address.street"
             :id="`street-${i}`"
             :key="i"
@@ -169,7 +169,7 @@
             :class="[ i === address.street.length - 1 ? 't-mb-4' : 't-mb-2' ]"
           />
         </div>
-        <base-input
+        <BaseInput
           id="city"
           v-model="address.city"
           name="city"
@@ -187,7 +187,7 @@
           ]"
           class="t-mb-4 t-w-full t-px-2 lg:t-w-1/2"
         />
-        <base-input
+        <BaseInput
           id="postcode"
           v-model="address.postcode"
           name="postcode"
@@ -205,7 +205,7 @@
           :class="[ hasState ? 't-w-full lg:t-w-1/2' : 't-w-1/2 lg:t-w-1/4']"
           class="t-mb-4 t-px-2"
         />
-        <base-select
+        <BaseSelect
           v-if="hasState"
           id="region_id"
           v-model="address.region_id"
@@ -219,7 +219,7 @@
           }]"
           class="t-mb-4 t-w-1/2 t-px-2 lg:t-w-1/4"
         />
-        <country-select
+        <CountrySelect
           id="country_id"
           v-model="address.country_id"
           name="country_id"
@@ -231,7 +231,7 @@
           class="t-mb-4 t-w-1/2 t-px-2 lg:t-w-1/4"
         />
         <div class="t-mb-4 t-w-full t-px-2 lg:t-w-1/2">
-          <base-input
+          <BaseInput
             id="telephone"
             v-model="address.telephone"
             name="telephone"
@@ -253,7 +253,7 @@
           v-if="hasVatId"
           class="t-mb-4 t-w-full"
         >
-          <base-input
+          <BaseInput
             id="vat_id"
             v-model="address.vat_id"
             name="vat_id"
@@ -269,7 +269,7 @@
           />
         </div>
         <div class="t-w-full" />
-        <base-checkbox
+        <BaseCheckbox
           id="is_default_billing"
           v-model="address.is_default_billing"
           name="is_default_billing"
@@ -278,8 +278,8 @@
           data-test-id="IsDefaultBillingCheckbox"
         >
           {{ $t('Use as my default billing address') }}
-        </base-checkbox>
-        <base-checkbox
+        </BaseCheckbox>
+        <BaseCheckbox
           id="is_default_shipping"
           v-model="address.is_default_shipping"
           name="is_default_shipping"
@@ -288,17 +288,17 @@
           data-test-id="IsDefaultShippingCheckbox"
         >
           {{ $t('Use as my default shipping address') }}
-        </base-checkbox>
+        </BaseCheckbox>
         <div class="t-flex t-w-full t-flex-wrap t-justify-between t-px-2">
-          <button-component
+          <ButtonComponent
             :submit="true"
             type="primary"
             class="t-w-full lg:t-order-3 lg:t-w-auto"
             data-test-id="SubmitButton"
           >
             {{ $t('Save address') }}
-          </button-component>
-          <button-component
+          </ButtonComponent>
+          <ButtonComponent
             type="ghost"
             icon="keyboard_arrow_left"
             icon-position="left"
@@ -307,12 +307,12 @@
             @click="back"
           >
             {{ $t('Back') }}
-          </button-component>
+          </ButtonComponent>
           <div
             v-if="!isNewAddress && !isDefaultAddress && address.entity_id"
             class="t-w-1/2 t-flex-1 t-pl-4 lg:t-order-2"
           >
-            <button-component
+            <ButtonComponent
               type="ghost"
               icon="delete"
               icon-position="left"
@@ -322,7 +322,7 @@
               @click="deleteAddress(address.entity_id)"
             >
               {{ $t('Delete') }}
-            </button-component>
+            </ButtonComponent>
           </div>
         </div>
       </form>

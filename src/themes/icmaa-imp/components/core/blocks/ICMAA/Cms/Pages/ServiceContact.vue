@@ -1,5 +1,5 @@
 <template>
-  <layout
+  <Layout
     id="cms-page"
     :headline="content.headline"
   >
@@ -19,11 +19,11 @@
             :class="{ 't-opacity-50': !isSelectedSubject(s.name) && selectedSubject}"
             @click="toggleSubject(s)"
           >
-            <material-icon
+            <MaterialIcon
               v-if="isSelectedSubject(s.name)"
               icon="indeterminate_check_box"
             />
-            <material-icon
+            <MaterialIcon
               v-else
               icon="check_box_outline_blank"
               class=" t-text-base-lighter"
@@ -45,11 +45,11 @@
               data-test-id="ServiceContactChildrenSelector"
               @click="toggleSubject(c, true)"
             >
-              <material-icon
+              <MaterialIcon
                 v-if="isSelectedChildSubject(c.name)"
                 icon="indeterminate_check_box"
               />
-              <material-icon
+              <MaterialIcon
                 v-else
                 icon="check_box_outline_blank"
                 class="t-text-base-lighter"
@@ -61,7 +61,7 @@
           </div>
         </div>
       </div>
-      <form-component
+      <FormComponent
         v-if="formVisible"
         v-model="formData"
         form-identifier="service-contact"
@@ -74,7 +74,7 @@
       </p>
       <p>{{ $t('We are going to reach out to you as soon as possible.') }}</p>
     </div>
-  </layout>
+  </Layout>
 </template>
 
 <script>
@@ -97,6 +97,9 @@ export default {
     MaterialIcon
   },
   mixins: [Page],
+  asyncData ({ store }) {
+    return store.dispatch('icmaaCmsBlock/single', { value: 'service-navigation' })
+  },
   data () {
     return {
       dataType: 'yaml',
@@ -147,9 +150,6 @@ export default {
         .map(l => `<strong>${l.label}</strong><br> ${l.value}`)
         .join(`<br><br>`)
     }
-  },
-  asyncData ({ store }) {
-    return store.dispatch('icmaaCmsBlock/single', { value: 'service-navigation' })
   },
   beforeCreate () {
     registerModule(MailerModule)

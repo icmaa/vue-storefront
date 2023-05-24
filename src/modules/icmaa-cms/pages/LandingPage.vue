@@ -4,7 +4,7 @@
     id="cms-landing-page"
     class="t-container t-p-4"
   >
-    <block-wrapper :components="page.content" />
+    <BlockWrapper :components="page.content" />
   </div>
 </template>
 
@@ -20,6 +20,16 @@ export default {
     BlockWrapper
   },
   mixins: [ CmsMetaMixin ],
+  async asyncData ({ store, context, route }) {
+    if (context) {
+      context.output.cacheTags
+        .add('landingpage')
+        .add('category')
+        .add('product')
+    }
+
+    await store.dispatch('icmaaCmsLandingPages/single', { value: route.params.identifier })
+  },
   computed: {
     ...mapGetters({
       rawLandingPages: 'icmaaCmsLandingPages/getAll'
@@ -30,16 +40,6 @@ export default {
     page () {
       return this.rawLandingPages && this.rawLandingPages.find(p => p.identifier === this.identifier)
     }
-  },
-  async asyncData ({ store, context, route }) {
-    if (context) {
-      context.output.cacheTags
-        .add('landingpage')
-        .add('category')
-        .add('product')
-    }
-
-    await store.dispatch('icmaaCmsLandingPages/single', { value: route.params.identifier })
   }
 }
 </script>

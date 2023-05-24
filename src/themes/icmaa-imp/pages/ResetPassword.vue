@@ -9,7 +9,7 @@
         @submit.prevent="resetPassword"
       >
         <div class="t-mb-4 t-w-full t-px-4 lg:t-w-1/3">
-          <base-input
+          <BaseInput
             v-model="password"
             type="password"
             name="password"
@@ -29,7 +29,7 @@
           />
         </div>
         <div class="t-mb-4 t-w-full t-px-4 lg:t-w-1/3">
-          <base-input
+          <BaseInput
             v-model="rPassword"
             type="password"
             name="password-confirm"
@@ -49,9 +49,9 @@
           />
         </div>
         <div class="t-w-full t-px-4">
-          <button-component :submit="true">
+          <ButtonComponent :submit="true">
             {{ $t('Reset password') }}
-          </button-component>
+          </ButtonComponent>
         </div>
       </form>
     </div>

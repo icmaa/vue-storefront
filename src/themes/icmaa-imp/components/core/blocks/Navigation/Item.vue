@@ -14,7 +14,7 @@
         @click.native="click"
       >
         <template v-if="icon">
-          <material-icon
+          <MaterialIcon
             v-bind="{ icon, iconSet }"
             size="sm"
           />
@@ -27,7 +27,7 @@
         </template>
       </router-link>
     </template>
-    <navigation-item
+    <NavigationItem
       v-for="(child, index) in children"
       :key="index"
       v-bind="child"

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <base-select
+    <BaseSelect
       id="bic"
       v-model="additionalData.bic"
       type="text"

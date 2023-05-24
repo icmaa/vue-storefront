@@ -5,7 +5,7 @@
     :class="[ appearance ] "
   >
     <template v-for="(product) in products">
-      <product-tile
+      <ProductTile
         :key="`product-${product.sku}`"
         :product="product"
         class="t-mb-8 t-px-1 lg:t-px-2"

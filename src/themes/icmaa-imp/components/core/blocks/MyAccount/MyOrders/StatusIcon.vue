@@ -4,7 +4,7 @@
     class="t-flex t-items-center"
     :class="statusClass"
   >
-    <material-icon
+    <MaterialIcon
       icon="lens"
       size="sm"
       class="t-mr-1"

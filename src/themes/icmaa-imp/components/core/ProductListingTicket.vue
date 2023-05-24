@@ -2,12 +2,12 @@
   <div class="product-listing t-mb-8 t-px-4">
     <ul>
       <template v-for="(product, i) in products">
-        <product-tile-ticket
+        <ProductTileTicket
           :key="`product-${i}`"
           :product="product"
           class="t-mb-1"
         />
-        <list-banner
+        <ListBanner
           v-if="i === 7 || i%28 === 27"
           :key="`listbanner-${i}`"
           class="t-mb-1 t-w-full"

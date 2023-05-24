@@ -1,5 +1,5 @@
 <template>
-  <button-icon
+  <ButtonIcon
     :icon="icon"
     :title="title"
     :qty="quantity"

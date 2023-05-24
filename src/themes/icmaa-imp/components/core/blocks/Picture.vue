@@ -17,7 +17,7 @@
       v-on="$listeners"
       @error="loading = true"
     >
-    <placeholder
+    <Placeholder
       v-if="placeholder && loading"
       :ratio="ratio"
       :class="placeholderClassTransformed"
@@ -32,7 +32,7 @@ import { viewportSizes } from 'theme/store/ui'
 import cloneDeep from 'lodash-es/cloneDeep'
 
 export default {
-  name: 'Picture',
+  name: 'PictureComponent',
   components: {
     Placeholder
   },

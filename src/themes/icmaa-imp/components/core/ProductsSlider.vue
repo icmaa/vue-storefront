@@ -14,24 +14,24 @@
         <div class="row">
           <div class="col-md-12">
             <div class="center-xs cool-stuff-collection">
-              <no-ssr>
-                <carousel
+              <NoSsr>
+                <Carousel
                   v-bind="config"
                   @pageChange="setMuted"
                 >
-                  <slide
+                  <Slide
                     v-for="product in products"
                     :key="product.id"
                   >
-                    <product-tile
+                    <ProductTile
                       class="collection-product"
                       :product="product"
                       :labels-active="false"
                       :only-image="true"
                     />
-                  </slide>
-                </carousel>
-              </no-ssr>
+                  </Slide>
+                </Carousel>
+              </NoSsr>
             </div>
           </div>
         </div>
@@ -50,7 +50,7 @@ export default {
     'Carousel': () => import('vue-carousel').then(Slider => Slider.Carousel),
     'Slide': () => import('vue-carousel').then(Slider => Slider.Slide),
     ProductTile,
-    'no-ssr': NoSSR
+    NoSsr: NoSSR
   },
   props: {
     title: {

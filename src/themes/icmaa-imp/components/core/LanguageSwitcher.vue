@@ -1,10 +1,10 @@
 <template>
   <div>
-    <modal-switcher
+    <ModalSwitcher
       :store-recommendation-advice="storeRecommendationAdvice"
       :change-store-advice="isStoreAdviceVisible"
     />
-    <modal-advice
+    <ModalAdvice
       v-if="loadLanguageAdviceModal"
       :current="claim.value"
     />

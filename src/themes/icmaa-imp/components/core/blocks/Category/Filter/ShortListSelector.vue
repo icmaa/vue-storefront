@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="t-flex t-flex-wrap">
-      <generic-selector
+      <GenericSelector
         v-for="(option, index) in filteredOptions"
         :key="index"
         :option="option"
@@ -9,7 +9,7 @@
         :class="{ 't-mr-2': index !== option.length - 1 }"
         @change="changeFilter"
       />
-      <button-component
+      <ButtonComponent
         v-if="showMore"
         type="tag"
         size="sm"
@@ -18,7 +18,7 @@
         @click="toggleFold"
       >
         {{ folded ? '...' : $t('Show less') }}
-      </button-component>
+      </ButtonComponent>
     </div>
   </div>
 </template>

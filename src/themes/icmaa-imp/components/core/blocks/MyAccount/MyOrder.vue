@@ -4,13 +4,13 @@
       v-if="order && (typeof order !== 'undefined')"
       class="t-mb-4 t-bg-white t-p-4"
     >
-      <headline>
+      <Headline>
         {{ $t('Order') }}
         <span
           v-if="order"
           class="t-ml-4 t-grow t-text-sm t-text-base-light lg:t-flex-fix"
         ># {{ order.increment_id }}</span>
-      </headline>
+      </Headline>
       <div class="t-flex t-flex-wrap t-justify-between t-text-sm t-text-base-tone">
         <div class="t-mb-4 t-w-1/2 lg:t-mb-0 lg:t-w-1/4">
           <div class="t-mb-1 t-text-xxs t-font-bold t-uppercase t-text-base-lighter">
@@ -22,7 +22,7 @@
           <div class="t-mb-1 t-text-xxs t-font-bold t-uppercase t-text-base-lighter">
             {{ $t('Status') }}
           </div>
-          <status-icon :status="order.status" />
+          <StatusIcon :status="order.status" />
         </div>
         <div class="t-flex t-w-full t-flex-wrap t-items-center t-justify-between lg:t-w-2/4 lg:t-justify-end">
           <router-link
@@ -31,12 +31,12 @@
           >
             {{ $t('Are there any questions left?') }}
           </router-link>
-          <button-component
+          <ButtonComponent
             type="ghost"
             @click="goToReview"
           >
             {{ $t('Review order') }}
-          </button-component>
+          </ButtonComponent>
         </div>
       </div>
     </div>
@@ -84,17 +84,17 @@
             v-if="hasDhlGoGreen"
             v-text="order.dhl_go_green_fee_description || $t('DHL GoGreen')"
           />
-          <tracking-link
+          <TrackingLink
             :order-id="order.id"
             class="t-mt-2"
           >
-            <button-component
+            <ButtonComponent
               type="ghost"
               icon="local_shipping"
             >
               {{ $t('Shipment tracking') }}
-            </button-component>
-          </tracking-link>
+            </ButtonComponent>
+          </TrackingLink>
         </div>
       </div>
     </div>

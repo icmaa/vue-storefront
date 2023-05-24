@@ -6,7 +6,7 @@
     @click="$emit('change', option)"
   >
     <span class="t-sr-only">{{ option.label }}</span>
-    <material-icon
+    <MaterialIcon
       v-if="isActive"
       icon="check"
       size="sm"

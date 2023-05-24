@@ -5,7 +5,7 @@
   >
     <div class="t-flex t-flex-wrap t-bg-white">
       <div class="t-flex t-flex-expand t-p-6">
-        <material-icon
+        <MaterialIcon
           icon="account_circle"
           size="xl"
           class="t-mr-3 t-text-primary"
@@ -40,13 +40,13 @@
             :data-test-id="page.testId"
             @click.native="onClick"
           >
-            <button-component
+            <ButtonComponent
               icon="arrow_forward"
               type="select"
               class="t-w-full"
             >
               {{ page.title }}
-            </button-component>
+            </ButtonComponent>
           </router-link>
         </li>
         <li class="t-flex t-w-full t-pt-2">
@@ -56,12 +56,12 @@
             data-test-id="logoutButton"
             @click.native="logout"
           >
-            <button-component
+            <ButtonComponent
               type="second"
               class="t-w-full"
             >
               {{ $t('Logout') }}
-            </button-component>
+            </ButtonComponent>
           </router-link>
         </li>
       </ul>
@@ -71,7 +71,7 @@
         @click="visible = !visible"
       >
         {{ $t('Swap navigation') }}
-        <material-icon
+        <MaterialIcon
           :icon="visible ? 'keyboard_arrow_up' : 'keyboard_arrow_down'"
           size="sm"
           class="t-ml-4"

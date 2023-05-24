@@ -16,7 +16,7 @@
         class="t-flex-expand"
       />
       <slot name="top-right">
-        <top-button
+        <TopButton
           v-if="closeIcon !== false"
           data-test-id="closeButton"
           :icon="closeIcon"

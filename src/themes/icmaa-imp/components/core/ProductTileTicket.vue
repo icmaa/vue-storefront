@@ -62,13 +62,13 @@
       />
     </div>
     <div class="t-hidden t-flex-1 t-self-center t-px-2 md:t-block md:t-w-1/12">
-      <button-component
+      <ButtonComponent
         type="transparent"
         icon="keyboard_arrow_right"
         :icon-only="true"
       >
         {{ $t('Show product') }}
-      </button-component>
+      </ButtonComponent>
     </div>
   </router-link>
 </template>

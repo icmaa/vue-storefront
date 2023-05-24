@@ -2,12 +2,12 @@
   <div id="category">
     <header class="t-container">
       <div class="t-mb-8 t-flex t-flex-wrap t-px-4">
-        <category-extras-header class="t--mx-4 t-bg-white md:t-mx-0 md:t-mt-4 lg:t-w-full" />
-        <breadcrumbs
+        <CategoryExtrasHeader class="t--mx-4 t-bg-white md:t-mx-0 md:t-mt-4 lg:t-w-full" />
+        <Breadcrumbs
           :active-route="currentRouteName"
           class="t-my-4 t-w-full md:t-my-8"
         />
-        <block-wrapper
+        <BlockWrapper
           v-if="contentHeader"
           :components="contentHeader"
         />
@@ -22,7 +22,7 @@
               </span>
             </div>
             <div class="t-flex t-w-full t-flex-wrap t-items-center t-px-1 md:t-px-2">
-              <button-component
+              <ButtonComponent
                 style="second"
                 align="center"
                 :icon="activeFilterCount > 0 ? 'check' : 'filter_list'"
@@ -36,16 +36,16 @@
                   class="t-grow t-pl-2 t-text-left t-opacity-75"
                   v-text="`(${activeFilterCount})`"
                 />
-              </button-component>
+              </ButtonComponent>
               <div
                 v-if="shouldLoadPresets || filterCategories.length > 0"
                 class="t-mt-2 t-flex t-h-8 t-w-full t-items-center t-overflow-x-auto t-hide-scrollbar lg:t-mt-0 lg:t-flex-1"
               >
-                <filter-presets
+                <FilterPresets
                   v-if="shouldLoadPresets"
                   class="t-flex t-items-center md:t-ml-2"
                 />
-                <category-links
+                <CategoryLinks
                   v-else
                   :categories="filterCategories"
                   class="t-flex t-items-center lg:t-ml-2"
@@ -69,14 +69,14 @@
           @click.prevent="loadMoreProducts(true)"
         >
           {{ $t('Load previous') }}
-          <loader-background
+          <LoaderBackground
             v-if="loadingProducts"
             bar="t-bg-base-darkest"
             class="t-bottom-0"
           />
         </a>
       </div>
-      <lazy-hydrate
+      <LazyHydrate
         v-if="isLazyHydrateEnabled"
         :trigger-hydration="!loading"
       >
@@ -85,19 +85,19 @@
           v-if="isInTicketWhitelist"
           :products="getCategoryProducts"
         />
-        <product-listing
+        <ProductListing
           v-else
           :products="getCategoryProducts"
           :show-add-to-cart="true"
         />
-      </lazy-hydrate>
+      </LazyHydrate>
       <div v-else>
         <component
           :is="ProductListingTicket"
           v-if="isInTicketWhitelist"
           :products="getCategoryProducts"
         />
-        <product-listing
+        <ProductListing
           v-else
           :products="getCategoryProducts"
           :show-add-to-cart="true"
@@ -130,7 +130,7 @@
           @click.prevent="loadMoreProducts()"
         >
           {{ $t('Load more') }}
-          <loader-background
+          <LoaderBackground
             v-if="loadingProducts"
             bar="t-bg-base-darkest"
             class="t-bottom-0"
@@ -153,20 +153,20 @@
           </p>
         </div>
       </div>
-      <lazy-hydrate when-idle>
-        <category-extras-footer
+      <LazyHydrate when-idle>
+        <CategoryExtrasFooter
           id="category-info-footer"
           class="t-mb-8"
         />
-      </lazy-hydrate>
+      </LazyHydrate>
     </div>
 
-    <async-sidebar
+    <AsyncSidebar
       :state-key="'categoryfilter'"
       :async-component="FilterSidebar"
       direction="left"
     />
-    <async-sidebar
+    <AsyncSidebar
       :state-key="'addtocart'"
       :async-component="AddToCartSidebar"
       :async-component-props="{ showAddToCartButton: true, closeOnSelect: false }"

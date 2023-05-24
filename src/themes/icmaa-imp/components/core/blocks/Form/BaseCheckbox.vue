@@ -21,7 +21,7 @@
         class="t-my-2 t-mr-2 t-flex t-h-6 t-w-6 t-flex-fix t-appearance-none t-items-center t-justify-center t-rounded-sm t-border t-bg-white t-text-sm t-leading-tight"
         :class="[ checkboxClass, invalid ? 't-border-alert' : 't-border-base-light', { 't-opacity-75': disabled }, radio ? 't-rounded-full' : 't-rounded-sm' ]"
       >
-        <material-icon
+        <MaterialIcon
           v-if="checked"
           icon="check"
           size="sm"

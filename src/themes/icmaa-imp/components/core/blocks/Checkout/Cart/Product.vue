@@ -1,7 +1,7 @@
 <template>
   <li class="t-flex t-border-b t-border-base-lightest t-py-2">
     <div class="t-mr-4 t-w-1/3">
-      <product-image
+      <ProductImage
         :image="thumbnail"
         :alt="product.translatedName | htmlDecode"
       />
@@ -17,7 +17,7 @@
           v-if="totals.length > 0 || isFree"
           class="t-mb-2 t-flex t-w-full t-flex-wrap t-items-center"
         >
-          <button-component
+          <ButtonComponent
             v-for="opt in totals"
             :key="opt.label"
             class="t-mb-2 t-mr-2"
@@ -26,7 +26,7 @@
             :cursor-pointer="false"
           >
             {{ opt.value }}
-          </button-component>
+          </ButtonComponent>
           <div
             v-if="isFree"
             class="t-mb-2 t-text-xs t-font-bold t-uppercase t-text-sale"
@@ -47,7 +47,7 @@
         <div class="t-text-sm">
           {{ productQty }} {{ $t('Pcs.') }}
         </div>
-        <product-price :product="product" />
+        <ProductPrice :product="product" />
       </div>
     </div>
   </li>

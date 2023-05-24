@@ -2,14 +2,14 @@
   <div id="category">
     <header class="t-container">
       <div class="t-mb-8 t-flex t-flex-wrap t-px-4">
-        <breadcrumbs class="t-my-8 t-w-full" />
+        <Breadcrumbs class="t-my-8 t-w-full" />
         <div class="t-w-full">
           <div class="t--mx-1 t-flex t-flex-wrap t-items-center lg:t--mx-2">
             <h1 class="category-title t-mb-4 t-hidden t-w-full t-px-1 t-text-2xl t-font-light t-text-base-dark lg:t-block lg:t-px-2">
               <span data-test-id="productsTotal">{{ productsTotal }}</span> {{ $t('Search results for: {term}', { term }) }}
             </h1>
             <div class="t-flex t-w-full t-flex-wrap t-items-stretch t-px-1 md:t-px-2">
-              <button-component
+              <ButtonComponent
                 style="second"
                 align="center"
                 :icon="activeFilterCount > 0 ? 'check' : 'filter_list'"
@@ -23,9 +23,9 @@
                   class="t-grow t-pl-2 t-text-left t-opacity-75"
                   v-text="`(${activeFilterCount})`"
                 />
-              </button-component>
+              </ButtonComponent>
               <div class="t-mt-2 t-flex t-w-full t-items-center t-overflow-x-auto t-hide-scrollbar md:t-mt-0 md:t-flex-1">
-                <filter-presets class="t-flex t-items-center md:t-ml-2" />
+                <FilterPresets class="t-flex t-items-center md:t-ml-2" />
               </div>
             </div>
           </div>
@@ -38,7 +38,7 @@
         v-if="prevProductsInSearchResults"
         class="t-mb-8 t-flex t-items-center t-justify-center"
       >
-        <button-component
+        <ButtonComponent
           type="ghost"
           :disabled="loadingProducts"
           class="t-w-2/3 lg:t-w-1/4"
@@ -46,30 +46,30 @@
           @click.native="loadMoreProducts(true)"
         >
           {{ $t('Load previous') }}
-          <loader-background
+          <LoaderBackground
             v-if="loadingProducts"
             bar="t-bg-base-darkest"
             class="t-bottom-0"
           />
-        </button-component>
+        </ButtonComponent>
       </div>
-      <lazy-hydrate
+      <LazyHydrate
         v-if="isLazyHydrateEnabled"
         :trigger-hydration="!loading"
       >
-        <product-listing
+        <ProductListing
           :products="getCategoryProducts"
           :show-add-to-cart="true"
         />
-      </lazy-hydrate>
+      </LazyHydrate>
       <div v-else>
-        <product-listing :products="getCategoryProducts" />
+        <ProductListing :products="getCategoryProducts" />
       </div>
       <div
         v-if="moreProductsInSearchResults"
         class="t-mb-8 t-flex t-items-center t-justify-center"
       >
-        <button-component
+        <ButtonComponent
           type="ghost"
           :disabled="loadingProducts"
           class="t-w-2/3 lg:t-w-1/4"
@@ -77,12 +77,12 @@
           @click.native="loadMoreProducts()"
         >
           {{ $t('Load more') }}
-          <loader-background
+          <LoaderBackground
             v-if="loadingProducts"
             bar="t-bg-base-darkest"
             class="t-bottom-0"
           />
-        </button-component>
+        </ButtonComponent>
       </div>
       <div
         v-if="isCategoryEmpty"
@@ -102,12 +102,12 @@
       </div>
     </div>
 
-    <async-sidebar
+    <AsyncSidebar
       :state-key="'categoryfilter'"
       :async-component="FilterSidebar"
       direction="left"
     />
-    <async-sidebar
+    <AsyncSidebar
       :state-key="'addtocart'"
       :async-component="AddToCartSidebar"
       :async-component-props="{ showAddToCartButton: true, closeOnSelect: false }"
@@ -146,6 +146,11 @@ export default {
     FilterPresets,
     ProductListing,
     Breadcrumbs
+  },
+  async asyncData ({ context }) {
+    if (context) {
+      context.output.cacheTags.add(`search`)
+    }
   },
   data () {
     return {
@@ -201,11 +206,6 @@ export default {
     '$route': function (a, b) {
       if (a.query?.p !== b.query?.p) return
       this.fetchAsyncData(this.$route)
-    }
-  },
-  async asyncData ({ context }) {
-    if (context) {
-      context.output.cacheTags.add(`search`)
     }
   },
   async mounted () {

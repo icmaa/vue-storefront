@@ -13,7 +13,7 @@
             {{ $t('Please select a shipping method.') }}
           </template>
         </div>
-        <shipping-method
+        <ShippingMethod
           v-for="method in shippingMethods"
           :key="method.code"
           v-model="selected"
@@ -24,7 +24,7 @@
           v-if="additionalCharges"
           class="t-my-4"
         >
-          <additional-charges
+          <AdditionalCharges
             v-for="additional in additionalCharges"
             :key="additional.key"
             v-model="selectedAdditionalCharges[additional.key]"
@@ -32,7 +32,7 @@
             class="t-mt-2 lg:t-mt-0"
           />
         </div>
-        <button-component
+        <ButtonComponent
           v-if="!isLoading"
           class="t-mt-8 t-w-full lg:t-w-auto"
           type="primary"
@@ -40,7 +40,7 @@
           @click.native.stop="submit"
         >
           {{ $t(('Continue to payment')) }}
-        </button-component>
+        </ButtonComponent>
       </div>
       <div
         v-else
@@ -55,7 +55,7 @@
       </div>
     </template>
     <template v-else-if="!active && done">
-      <shipping-method
+      <ShippingMethod
         v-model="selected"
         :method="selectedMethod"
         :disabled="true"
@@ -64,7 +64,7 @@
         v-if="additionalCharges"
         class="t-mt-4"
       >
-        <additional-charges
+        <AdditionalCharges
           v-for="(additional, i) in additionalCharges"
           :key="additional.key"
           v-model="selectedAdditionalCharges[i]"

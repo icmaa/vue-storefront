@@ -1,6 +1,6 @@
 <template>
   <div>
-    <base-input
+    <BaseInput
       id="bic"
       v-model="additionalData.bic"
       type="text"

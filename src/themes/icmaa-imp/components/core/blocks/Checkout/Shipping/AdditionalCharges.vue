@@ -4,7 +4,7 @@
     class="t-flex t-cursor-pointer t-flex-wrap t-items-center"
     :data-test-id="'AdditionalCharges' + upperFirst(charge.key)"
   >
-    <base-checkbox
+    <BaseCheckbox
       :id="charge.key"
       v-model="selected"
       :name="'additionalCharges' + upperFirst(charge.key)"
@@ -20,7 +20,7 @@
         {{ charge.description }},
         {{ price(charge.fee) }}
       </p>
-    </base-checkbox>
+    </BaseCheckbox>
   </div>
 </template>
 

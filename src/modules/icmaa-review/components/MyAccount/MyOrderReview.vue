@@ -1,18 +1,18 @@
 <template>
   <div>
     <div class="t-bg-white t-p-4">
-      <headline>
+      <Headline>
         {{ $t('Review order') }} {{ orderId }}
         <span
           v-if="order"
           class="t-ml-8 t-grow t-text-sm t-text-base-light lg:t-ml-4 lg:t-flex-fix"
         ># {{ order.increment_id }}</span>
-      </headline>
+      </Headline>
       <div class="t-text-sm t-text-base-tone">
         {{ $t('Write a product review of your last orders products.') }}
       </div>
     </div>
-    <product
+    <Product
       v-for="(product, i) in products"
       :key="i"
       :product="product"

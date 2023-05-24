@@ -9,7 +9,7 @@
       v-text="title"
     />
     <div class="t--mx-2 t-flex t-flex-wrap">
-      <product-tile
+      <ProductTile
         v-for="(recommended, i) in products"
         :key="i"
         :product="recommended"

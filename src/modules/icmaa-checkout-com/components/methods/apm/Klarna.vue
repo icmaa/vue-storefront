@@ -1,6 +1,6 @@
 <template>
   <div class="t-text-sm">
-    <validation-messages
+    <ValidationMessages
       class="t-mb-4"
       :validations="[
         {

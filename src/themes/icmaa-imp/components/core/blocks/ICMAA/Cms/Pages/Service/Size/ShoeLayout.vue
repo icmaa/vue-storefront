@@ -1,6 +1,6 @@
 <template>
   <div>
-    <size-navigation
+    <SizeNavigation
       :headline="content.headline"
       :show="show"
       @toggle="toggle"
@@ -37,7 +37,7 @@
         v-for="(table, index) in tables"
         :key="table"
       >
-        <size-table
+        <SizeTable
           v-show="selected==index"
           :table="content[table]"
         />

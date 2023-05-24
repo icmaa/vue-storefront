@@ -2,7 +2,7 @@
   <div class="t-bg-white">
     <!-- Header -->
     <div>
-      <picture-component
+      <PictureComponent
         :src="headerImage.src"
         :width="headerImage.width"
         :height="headerImage.height"
@@ -27,7 +27,7 @@
         :key="category.name"
         class="t-w-full t-self-center t-p-10 t-text-center md:t-w-1/2"
       >
-        <picture-component
+        <PictureComponent
           :src="category.img.src"
           :width="category.img.width"
           :height="category.img.height"
@@ -50,18 +50,18 @@
             class="t-font-bold"
             v-text="content.jury_price"
           /><span v-text="category.price_jury" />
-          <universal-link
+          <UniversalLink
             :to="category.link"
             class="t-container t-my-4 t-block t-w-1/2 t-bg-base-dark t-p-2 t-px-4 t-text-center t-text-white"
           >
             {{ content.button_text }}
-          </universal-link>
+          </UniversalLink>
         </div>
       </div>
     </div>
     <!-- Footer -->
     <div>
-      <picture-component
+      <PictureComponent
         :src="footerImage.src"
         :width="footerImage.width"
         :height="footerImage.height"
