@@ -1,4 +1,4 @@
-import { createListenerHook, createMutatorHook, createAsyncMutatorHook } from '@vue-storefront/core/lib/hooks'
+import { createAsyncMutatorHook } from '@vue-storefront/core/lib/hooks'
 
 const {
   hook: authorizedSessionStartedHook,

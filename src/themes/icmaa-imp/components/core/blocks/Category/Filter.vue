@@ -1,25 +1,80 @@
 <template>
-  <div class="filter">
-    <div class="t-flex t-flex-wrap t-mb-4" v-if="type === 'color'">
-      <color-selector v-for="(option, index) in options" :key="index" :option="option" @change="changeFilter" />
+  <div class="">
+    <div
+      v-if="type === 'color'"
+      class="t-mb-4 t-flex t-flex-wrap"
+    >
+      <ColorSelector
+        v-for="(option, index) in options"
+        :key="index"
+        :option="option"
+        @change="changeFilter"
+      />
     </div>
-    <div class="t-flex t-flex-wrap t-mb-4 t--mx-1" v-else-if="type === 'gender'">
-      <gender-selector v-for="(option, index) in options" :key="index" :option="option" @change="changeFilter" />
+    <div
+      v-else-if="type === 'gender'"
+      class="t--mx-1 t-mb-4 t-flex t-flex-wrap"
+    >
+      <GenderSelector
+        v-for="(option, index) in options"
+        :key="index"
+        :option="option"
+        @change="changeFilter"
+      />
     </div>
-    <div class="t-flex t-flex-wrap t-mb-4" v-else-if="type === 'shortList'">
-      <short-list-selector :options="options" @change="changeFilter" />
+    <div
+      v-else-if="type === 'shortList'"
+      class="t-mb-4 t-flex t-flex-wrap"
+    >
+      <ShortListSelector
+        :options="options"
+        @change="changeFilter"
+      />
     </div>
-    <div class="t-mb-4" v-else-if="['list', 'searchableList'].includes(type)">
-      <list-selector v-bind="$props" @change="changeFilter" :searchable="type === 'searchableList'" :use-links="attributeKey === 'category'" />
+    <div
+      v-else-if="['list', 'searchableList'].includes(type)"
+      class="t-mb-4"
+    >
+      <ListSelector
+        v-bind="$props"
+        :searchable="type === 'searchableList'"
+        :use-links="attributeKey === 'category'"
+        @change="changeFilter"
+      />
     </div>
-    <div class="t-mb-6" v-else-if="type === 'price'">
-      <price-selector v-bind="$props" @change="changeFilter" />
+    <div
+      v-else-if="type === 'price'"
+      class="t-mb-6"
+    >
+      <PriceSelector
+        v-bind="$props"
+        @change="changeFilter"
+      />
     </div>
-    <div class="t-flex t-flex-wrap t-mb-4" v-else-if="type === 'sale'">
-      <sale-selector v-for="(option, index) in options" :key="index" :option="option" @change="changeFilter" class="t-mb-2" />
+    <div
+      v-else-if="type === 'sale'"
+      class="t-mb-4 t-flex t-flex-wrap"
+    >
+      <SaleSelector
+        v-for="(option, index) in options"
+        :key="index"
+        :option="option"
+        class="t-mb-2"
+        @change="changeFilter"
+      />
     </div>
-    <div class="t-flex t-flex-wrap t-mb-4" v-else>
-      <generic-selector v-for="(option, index) in options" :key="index" :option="option" @change="changeFilter" class="t-mb-2" :class="{ 't-mr-2': index !== option.length - 1 }" />
+    <div
+      v-else
+      class="t-mb-4 t-flex t-flex-wrap"
+    >
+      <GenericSelector
+        v-for="(option, index) in options"
+        :key="index"
+        :option="option"
+        class="t-mb-2"
+        :class="{ 't-mr-2': index !== option.length - 1 }"
+        @change="changeFilter"
+      />
     </div>
   </div>
 </template>

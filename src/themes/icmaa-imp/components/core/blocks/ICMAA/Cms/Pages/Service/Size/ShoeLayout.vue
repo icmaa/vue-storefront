@@ -1,20 +1,46 @@
 <template>
   <div>
-    <size-navigation @toggle="toggle" :headline="content.headline" :show="show" />
+    <SizeNavigation
+      :headline="content.headline"
+      :show="show"
+      @toggle="toggle"
+    />
     <template v-if="show">
-      <div class="t-flex t-flex-wrap t-my-4">
-        <div class="t-w-1/2 t-text-sm" v-if="content.description">
+      <div class="t-my-4 t-flex t-flex-wrap">
+        <div
+          v-if="content.description"
+          class="t-w-1/2 t-text-sm"
+        >
           {{ content.description }}
         </div>
-        <img class="t-w-1/2 lg:t-w-1/3" v-if="content.icon" :src="getMediaThumbnail(content.icon, 0, 0)">
+        <img
+          v-if="content.icon"
+          class="t-w-1/2 lg:t-w-1/3"
+          :src="getMediaThumbnail(content.icon, 0, 0)"
+        >
       </div>
-      <div class="t-w-full t-flex t-flex-wrap t-justify-center">
-        <div v-for="(table, index) in tables" :key="table" class="t-bg-white t-mr-4 t-mb-4 t-p-1">
-          <img :src="getMediaThumbnail(content[table].icon, 0, 0)" @click="selected=index" class="t-opacity-25 t-cursor-pointer t-p-1 t-border t-border-base-lighter" :class="{ 't-opacity-100': selected == index }">
+      <div class="t-flex t-w-full t-flex-wrap t-justify-center">
+        <div
+          v-for="(table, index) in tables"
+          :key="table"
+          class="t-mb-4 t-mr-4 t-bg-white t-p-1"
+        >
+          <img
+            :src="getMediaThumbnail(content[table].icon, 0, 0)"
+            class="t-cursor-pointer t-border t-border-base-lighter t-p-1 t-opacity-25"
+            :class="{ 't-opacity-100': selected == index }"
+            @click="selected=index"
+          >
         </div>
       </div>
-      <div v-for="(table, index) in tables" :key="table">
-        <size-table v-show="selected==index" :table="content[table]" />
+      <div
+        v-for="(table, index) in tables"
+        :key="table"
+      >
+        <SizeTable
+          v-show="selected==index"
+          :table="content[table]"
+        />
       </div>
     </template>
   </div>

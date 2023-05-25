@@ -1,6 +1,6 @@
 <template>
   <div class="t-text-sm">
-    <validation-messages
+    <ValidationMessages
       class="t-mb-4"
       :validations="[
         {
@@ -27,10 +27,10 @@ import ValidationMessages from 'theme/components/core/blocks/Form/ValidationMess
 
 export default {
   name: 'CheckoutComKlarnaInfo',
-  mixins: [ ApmMethod ],
   components: {
     ValidationMessages
   },
+  mixins: [ ApmMethod ],
   data () {
     return {
       sdkLoaded: false,

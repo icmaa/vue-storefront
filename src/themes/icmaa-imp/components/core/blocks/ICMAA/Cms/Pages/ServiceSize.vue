@@ -1,17 +1,23 @@
 <template>
-  <layout id="cms-page" :headline="content.headline">
-    <size-layout :content="content.headgear" />
-    <size-layout :content="content.tops" />
-    <size-layout :content="content.pants" />
-    <shoe-layout :content="content.shoes.boys" />
-    <shoe-layout :content="content.shoes.girls" />
-    <h2 class="t-mt-8 t-pb-4 t-border-b-2">
+  <Layout
+    id="cms-page"
+    :headline="content.headline"
+  >
+    <SizeLayout :content="content.headgear" />
+    <SizeLayout :content="content.tops" />
+    <SizeLayout :content="content.pants" />
+    <ShoeLayout :content="content.shoes.boys" />
+    <ShoeLayout :content="content.shoes.girls" />
+    <h2 class="t-mt-8 t-border-b-2 t-pb-4">
       {{ content.blanks.headline }}
     </h2>
     <template v-for="(obj, index) in blanksContent">
-      <shoe-layout :content="obj" :key="index" />
+      <ShoeLayout
+        :key="index"
+        :content="obj"
+      />
     </template>
-  </layout>
+  </Layout>
 </template>
 
 <script>
@@ -24,11 +30,14 @@ import omit from 'lodash-es/omit'
 
 export default {
   name: 'ServiceSize',
-  mixins: [Page],
   components: {
     Layout,
     SizeLayout,
     ShoeLayout
+  },
+  mixins: [Page],
+  asyncData ({ store }) {
+    return store.dispatch('icmaaCmsBlock/single', { value: 'service-navigation' })
   },
   data () {
     return {
@@ -39,9 +48,6 @@ export default {
     blanksContent () {
       return omit(this.content.blanks, ['headline'])
     }
-  },
-  asyncData ({ store }) {
-    return store.dispatch('icmaaCmsBlock/single', { value: 'service-navigation' })
   }
 }
 </script>

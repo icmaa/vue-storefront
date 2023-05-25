@@ -1,57 +1,107 @@
 <template>
-  <li class="t-flex t-py-2 t-border-b t-border-base-lightest" :class="{ 't-opacity-75': loading }" data-test-id="MicroCartProduct">
-    <div class="t-w-1/3 t-mr-4">
-      <router-link :to="productLink" @click.native="$store.dispatch('ui/setSidebar', { key: 'microcart', status: false })">
-        <product-image :image="thumbnail" :alt="product.translatedName | htmlDecode" :key="product.sku" />
+  <li
+    class="t-flex t-border-b t-border-base-lightest t-py-2"
+    :class="{ 't-opacity-75': loading }"
+    data-test-id="MicroCartProduct"
+  >
+    <div class="t-mr-4 t-w-1/3">
+      <router-link
+        :to="productLink"
+        @click.native="$store.dispatch('ui/setSidebar', { key: 'microcart', status: false })"
+      >
+        <ProductImage
+          :key="product.sku"
+          :image="thumbnail"
+          :alt="product.translatedName | htmlDecode"
+        />
       </router-link>
     </div>
 
-    <div class="t-w-2/3 t-flex t-flex-col t-py-2">
+    <div class="t-flex t-w-2/3 t-flex-col t-py-2">
       <div class="t-mb-4 t-leading-tight">
-        <router-link class="t-text-primary t-text-sm" :to="productLink" data-test-id="productLink" @click.native="$store.dispatch('ui/setSidebar', { key: 'microcart', status: false })">
+        <router-link
+          class="t-text-sm t-text-primary"
+          :to="productLink"
+          data-test-id="productLink"
+          @click.native="$store.dispatch('ui/setSidebar', { key: 'microcart', status: false })"
+        >
           {{ product.translatedName | htmlDecode }}
         </router-link>
       </div>
 
-      <div class="t-flex-grow">
-        <div class="t-flex t-w-full t-flex-wrap t-items-center t-mb-2" v-if="totals.length > 0 || isFree">
-          <button-component class="t-mr-2 t-mb-2" type="tag" size="xs" :cursor-pointer="false" v-for="opt in totals" :key="opt.label">
+      <div class="t-grow">
+        <div
+          v-if="totals.length > 0 || isFree"
+          class="t-mb-2 t-flex t-w-full t-flex-wrap t-items-center"
+        >
+          <ButtonComponent
+            v-for="opt in totals"
+            :key="opt.label"
+            class="t-mb-2 t-mr-2"
+            type="tag"
+            size="xs"
+            :cursor-pointer="false"
+          >
             {{ opt.value }}
-          </button-component>
-          <div class="t-text-xs t-text-sale t-font-bold t-uppercase t-mb-2" v-if="isFree">
+          </ButtonComponent>
+          <div
+            v-if="isFree"
+            class="t-mb-2 t-text-xs t-font-bold t-uppercase t-text-sale"
+          >
             {{ $t('Free') }}
           </div>
         </div>
 
-        <div class="t-text-sm" v-if="hasProductErrors">
+        <div
+          v-if="hasProductErrors"
+          class="t-text-sm"
+        >
           {{ product.errors | formatProductMessages }}
         </div>
       </div>
 
-      <product-price :product="product" class="t-w-full t-mb-4" />
+      <ProductPrice
+        :product="product"
+        class="t-mb-4 t-w-full"
+      />
 
-      <div class="t-flex t-items-center t-flex-wrap t-justify-between t-text-base-light" v-if="!isFree">
+      <div
+        v-if="!isFree"
+        class="t-flex t-flex-wrap t-items-center t-justify-between t-text-base-light"
+      >
         <div class="t-flex t-items-center">
-          <base-select
+          <BaseSelect
+            v-if="!isFree"
+            :id="`qty-${product.id}`"
             class="t-w-16 t-text-base-tone"
             size="sm"
             name="qty"
-            :id="`qty-${product.id}`"
             :options="qtyOptions"
             :value="productQty"
             :disabled="loading || isAddingToCart"
             :loading="loading || isAddingToCart"
             :hide-label="true"
             @change="updateQty"
-            v-if="!isFree"
           />
-          <label :for="`#qty-${product.id}`" class="t-ml-2 t-text-sm t-text-base-tone">{{ $t('Pcs.') }}</label>
+          <label
+            :for="`#qty-${product.id}`"
+            class="t-ml-2 t-text-sm t-text-base-tone"
+          >{{ $t('Pcs.') }}</label>
         </div>
-        <button-component type="transparent" :size="'sm'" :icon="'remove_shopping_cart'" :icon-only="true" @click="removeItem">
+        <ButtonComponent
+          type="transparent"
+          :size="'sm'"
+          :icon="'remove_shopping_cart'"
+          :icon-only="true"
+          @click="removeItem"
+        >
           {{ $t('Delete') }}
-        </button-component>
+        </ButtonComponent>
       </div>
-      <div class="t-text-sm t-text-base-tone" v-else>
+      <div
+        v-else
+        class="t-text-sm t-text-base-tone"
+      >
         {{ productQty }} {{ $t('Pcs.') }}
       </div>
     </div>

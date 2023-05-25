@@ -1,7 +1,10 @@
 <template>
-  <layout id="cms-page-rte" :headline="content.headline">
+  <Layout
+    id="cms-page-rte"
+    :headline="content.headline"
+  >
     <component :is="content" />
-  </layout>
+  </Layout>
 </template>
 
 <script>
@@ -10,17 +13,17 @@ import Layout from 'theme/components/core/blocks/ICMAA/Cms/Pages/Service/Layout'
 
 export default {
   name: 'ServiceRTE',
-  mixins: [ Page ],
   components: {
     Layout
+  },
+  mixins: [ Page ],
+  asyncData ({ store }) {
+    return store.dispatch('icmaaCmsBlock/single', { value: 'service-navigation' })
   },
   data () {
     return {
       dataType: 'markdown'
     }
-  },
-  asyncData ({ store }) {
-    return store.dispatch('icmaaCmsBlock/single', { value: 'service-navigation' })
   }
 }
 </script>

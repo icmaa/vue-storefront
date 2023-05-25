@@ -1,31 +1,31 @@
 <template>
   <div>
     <slot name="headline">
-      <h2 class="t-font-light t-text-xl t-mb-4">
+      <h2 class="t-mb-4 t-text-xl t-font-light">
         {{ $t('Shopping cart') }}
       </h2>
     </slot>
-    <no-ssr>
+    <NoSsr>
       <div v-if="productsInCart.length">
-        <coupon />
+        <Coupon />
         <ul class="t-mb-4">
-          <product
+          <Product
             v-for="product in productsInCart"
             :key="product.sku"
             :product="product"
           />
         </ul>
-        <totals />
-        <button-component
+        <Totals />
+        <ButtonComponent
           class="t-mt-6"
           size="sm"
           type="ghost"
           @click="editCart"
         >
           {{ $t('Edit your cart') }}
-        </button-component>
+        </ButtonComponent>
       </div>
-    </no-ssr>
+    </NoSsr>
   </div>
 </template>
 

@@ -1,27 +1,27 @@
 <template>
   <div class="default-layout">
-    <overlay v-if="overlayActive" />
-    <loader />
+    <Overlay v-if="overlayActive" />
+    <Loader />
     <div id="viewport">
-      <main-header />
-      <no-ssr>
-        <advice />
-      </no-ssr>
-      <async-sidebar
+      <MainHeader />
+      <NoSsr>
+        <Advice />
+      </NoSsr>
+      <AsyncSidebar
         :state-key="'searchpanel'"
         :async-component="SearchPanel"
         :wide="true"
       />
-      <async-sidebar
+      <AsyncSidebar
         :state-key="'microcart'"
         :async-component="Microcart"
       />
-      <async-sidebar
+      <AsyncSidebar
         :state-key="'sidebar'"
         :async-component="NavigationSidebar"
         direction="left"
       />
-      <async-sidebar
+      <AsyncSidebar
         :state-key="'wishlist'"
         :async-component="Wishlist"
       />
@@ -30,12 +30,12 @@
         <slot />
         <div class="t-flow-root" />
       </main>
-      <main-footer />
-      <no-ssr>
-        <auth-modal />
-        <notifications />
-        <offline-badge />
-      </no-ssr>
+      <MainFooter />
+      <NoSsr>
+        <AuthModal />
+        <Notifications />
+        <OfflineBadge />
+      </NoSsr>
     </div>
     <vue-progress-bar />
   </div>
@@ -62,6 +62,19 @@ const Wishlist = () => import(/* webpackPreload: true */ /* webpackChunkName: "v
 const SearchPanel = () => import(/* webpackChunkName: "vsf-search-panel" */ 'theme/components/core/blocks/SearchPanel/SearchPanelTypesense')
 
 export default {
+  components: {
+    MainHeader,
+    Advice,
+    MainFooter,
+    Overlay,
+    Loader,
+    Notifications,
+    AuthModal,
+    OfflineBadge,
+    AsyncSidebar,
+    NoSsr: NoSSR
+  },
+  mixins: [ viewportMixin ],
   data () {
     return {
       Microcart,
@@ -70,21 +83,10 @@ export default {
       NavigationSidebar
     }
   },
-  mixins: [ viewportMixin ],
   computed: {
     ...mapState({
       overlayActive: state => state.ui.overlay
     })
-  },
-  methods: {
-    ...mapGetters({ getMetaData: 'icmaaMeta/getData' }),
-    fetchMetaData () {
-      return this.$store.dispatch('icmaaMeta/load')
-    },
-    fetchCmsData () {
-      const defaultBlocks = [ 'navigation-main', 'navigation-meta', 'footer', 'pdp-trust-signals' ]
-      return this.$store.dispatch('icmaaCmsBlock/list', defaultBlocks.join(','))
-    }
   },
   serverPrefetch () {
     return Promise.all([
@@ -106,6 +108,16 @@ export default {
     this.$store.dispatch('ui/initModalDelay')
     this.fetchCmsData()
   },
+  methods: {
+    ...mapGetters({ getMetaData: 'icmaaMeta/getData' }),
+    fetchMetaData () {
+      return this.$store.dispatch('icmaaMeta/load')
+    },
+    fetchCmsData () {
+      const defaultBlocks = [ 'navigation-main', 'navigation-meta', 'footer', 'pdp-trust-signals' ]
+      return this.$store.dispatch('icmaaCmsBlock/list', defaultBlocks.join(','))
+    }
+  },
   metaInfo () {
     let metaData = this.getMetaData()
 
@@ -124,18 +136,6 @@ export default {
     }
 
     return metaData
-  },
-  components: {
-    MainHeader,
-    Advice,
-    MainFooter,
-    Overlay,
-    Loader,
-    Notifications,
-    AuthModal,
-    OfflineBadge,
-    AsyncSidebar,
-    'no-ssr': NoSSR
   }
 }
 </script>

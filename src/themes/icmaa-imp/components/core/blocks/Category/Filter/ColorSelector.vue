@@ -1,7 +1,17 @@
 <template>
-  <button class="t-flex t-items-center t-justify-center t-border t-border-base-lighter t-rounded-full t-w-10 t-h-10 t-mr-4 t-mb-2 hover:t-border-base-tone" @click="$emit('change', option)" :aria-label="option.label" :style="colorFrom(option)">
+  <button
+    class="t-mb-2 t-mr-4 t-flex t-h-10 t-w-10 t-items-center t-justify-center t-rounded-full t-border t-border-base-lighter hover:t-border-base-tone"
+    :aria-label="option.label"
+    :style="colorFrom(option)"
+    @click="$emit('change', option)"
+  >
     <span class="t-sr-only">{{ option.label }}</span>
-    <material-icon icon="check" size="sm" class="t-bg-white t-rounded-full t-p-1" v-if="isActive" />
+    <MaterialIcon
+      v-if="isActive"
+      icon="check"
+      size="sm"
+      class="t-rounded-full t-bg-white t-p-1"
+    />
   </button>
 </template>
 
@@ -12,10 +22,10 @@ import MaterialIcon from 'theme/components/core/blocks/MaterialIcon'
 
 export default {
   name: 'ColorSelector',
-  mixins: [ filterMixin ],
   components: {
     MaterialIcon
   },
+  mixins: [ filterMixin ],
   methods: {
     colorFrom (option) {
       if (config.products.colorMappings && typeof config.products.colorMappings[option.id] !== 'undefined') {

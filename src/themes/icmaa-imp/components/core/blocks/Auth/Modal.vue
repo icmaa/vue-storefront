@@ -1,9 +1,14 @@
 <template>
-  <modal name="modal-signup" :title="$t(title)" :width="width" @close="onClose">
-    <login v-if="activeElem === 'login'" />
-    <register v-if="activeElem === 'register'" />
-    <forgot-pass v-if="activeElem === 'forgot-pass'" />
-  </modal>
+  <Modal
+    name="modal-signup"
+    :title="$t(title)"
+    :width="width"
+    @close="onClose"
+  >
+    <Login v-if="activeElem === 'login'" />
+    <Register v-if="activeElem === 'register'" />
+    <ForgotPass v-if="activeElem === 'forgot-pass'" />
+  </Modal>
 </template>
 
 <script>
@@ -16,6 +21,12 @@ const ForgotPass = () => import(/* webpackChunkName: "vsf-forgotpass" */ 'theme/
 
 export default {
   name: 'AuthModal',
+  components: {
+    Modal,
+    Login,
+    Register,
+    ForgotPass
+  },
   computed: {
     ...mapState({
       activeElem: state => state.ui.authElem
@@ -36,12 +47,6 @@ export default {
 
       return 400
     }
-  },
-  components: {
-    Modal,
-    Login,
-    Register,
-    ForgotPass
   },
   methods: {
     onClose () {

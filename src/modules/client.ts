@@ -36,6 +36,7 @@ import { IcmaaSpotifyModule } from 'icmaa-spotify'
 import { IcmaaProductAlertModule } from 'icmaa-product-alert'
 import { IcmaaGiftcertModule } from 'icmaa-giftcert'
 import { IcmaaLooksModule } from 'icmaa-looks'
+import { IcmaaBlogModule } from 'icmaa-blog'
 import { IcmaaGoogleTagManagerModule } from 'icmaa-google-tag-manager'
 
 // TODO:distributed across proper pages BEFORE 1.11
@@ -77,6 +78,7 @@ export function registerClientModules () {
   registerModule(IcmaaSpotifyModule)
   registerModule(IcmaaProductAlertModule)
   registerModule(IcmaaGiftcertModule)
+  registerModule(IcmaaBlogModule)
   registerModule(IcmaaLooksModule)
 }
 

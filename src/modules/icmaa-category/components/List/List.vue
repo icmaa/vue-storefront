@@ -1,23 +1,29 @@
 <template>
-  <div id="category-list" v-if="notEmpty">
-    <ul class="slingrope t-flex t-overflow-auto t-scrolling-touch t-mx-4">
-      <li :key="letter.letter" v-for="letter in categoriesGroupedByFirstLetter">
+  <div
+    v-if="notEmpty"
+    id="category-list"
+  >
+    <ul class="slingrope t-mx-4 t-flex t-overflow-auto t-scrolling-touch">
+      <li
+        v-for="letter in categoriesGroupedByFirstLetter"
+        :key="letter.letter"
+      >
         <a
           :href="`#${ letter.anchor }`"
+          class="t-flex t-border-b t-border-r t-border-base-lightest t-bg-white t-px-4 t-py-2 t-font-mono"
           @click.prevent="scroll(letter)"
           v-html="letter.letter"
-          class="t-flex t-px-4 t-py-2 t-bg-white t-border-r t-border-b t-border-base-lightest t-font-mono"
         />
       </li>
     </ul>
     <ul class="letters t-px-6">
       <template v-for="letter in categoriesGroupedByFirstLetter">
-        <letter
-          :key="`${categoryId}-${letter.letter}`"
+        <Letter
           :id="letter.anchor"
+          :key="`${categoryId}-${letter.letter}`"
           :letter="letter"
+          class="t--mx-2 t-my-4 t-flex t-bg-white t-p-4 t-py-8"
           @visible="visible"
-          class="t-p-4 t-py-8 t-bg-white t-my-4 t-flex t--mx-2"
         />
       </template>
     </ul>
@@ -82,6 +88,14 @@ export default {
       return groups
     }
   },
+  watch: {
+    categoryId () {
+      this.fetchData()
+    }
+  },
+  mounted () {
+    this.fetchData()
+  },
   methods: {
     async fetchData () {
       return this.$store.dispatch(
@@ -104,14 +118,6 @@ export default {
         })
       }
     }
-  },
-  watch: {
-    categoryId () {
-      this.fetchData()
-    }
-  },
-  mounted () {
-    this.fetchData()
   },
   async serverPrefetch () {
     await this.fetchData()

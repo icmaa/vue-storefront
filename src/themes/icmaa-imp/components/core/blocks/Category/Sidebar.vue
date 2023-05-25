@@ -1,48 +1,99 @@
 <template>
-  <sidebar :title="$t('Filter')" :close-icon="closeIcon">
-    <template v-slot:top-after-title>
-      <span class="t-font-extralight t-text-base-light t-text-sm t-leading-7 t-pt-1 t-pl-2">
+  <Sidebar
+    :title="$t('Filter')"
+    :close-icon="closeIcon"
+  >
+    <template #top-after-title>
+      <span class="t-pl-2 t-pt-1 t-text-sm t-font-extralight t-leading-7 t-text-base-light">
         <span data-test-id="productsTotal">{{ productsTotal }}</span> {{ $t('items') }}
       </span>
-      <button-component v-if="hasActiveFilters" type="transparent" size="sm" icon="delete_sweep" :icon-only="true" @click="resetAllFilters">
+      <ButtonComponent
+        v-if="hasActiveFilters"
+        type="transparent"
+        size="sm"
+        icon="delete_sweep"
+        :icon-only="true"
+        @click="resetAllFilters"
+      >
         {{ $t('Clear filters') }}
-      </button-component>
+      </ButtonComponent>
     </template>
     <div class="t-pb-24">
-      <button-component icon="arrow_forward" type="select" class="t-w-full t-mb-4" @click="openSortMenu()">
+      <ButtonComponent
+        icon="arrow_forward"
+        type="select"
+        class="t-mb-4 t-w-full"
+        @click="openSortMenu()"
+      >
         {{ $t('Sorting') }}
-      </button-component>
-      <div v-for="(group, groupKey) in groupedFilters" :key="groupKey">
-        <div v-if="groupKey === 1" :class="{ 't-border-t t-border-base-lighter t-mt-8 t-pt-6': groupedFilters[0].length > 0 }">
-          <h4 class="t-text-sm t-mb-6">
+      </ButtonComponent>
+      <div
+        v-for="(group, groupKey) in groupedFilters"
+        :key="groupKey"
+      >
+        <div
+          v-if="groupKey === 1"
+          :class="{ 't-mt-8 t-border-t t-border-base-lighter t-pt-6': groupedFilters[0].length > 0 }"
+        >
+          <h4 class="t-mb-6 t-text-sm">
             {{ $t('Productdetails') }}
           </h4>
         </div>
-        <div v-for="filter in group" :key="filter.attributeKey" class="t-w-full" :data-attribute-key="filter.attributeKey">
+        <div
+          v-for="filter in group"
+          :key="filter.attributeKey"
+          class="t-w-full"
+          :data-attribute-key="filter.attributeKey"
+        >
           <template v-if="filter.submenu">
-            <button-component icon="arrow_forward" type="select" class="t-w-full" :class="[ groupKey === 0 ? 't-mb-4' : 't-mb-6']" @click="openSubmenuFilter(filter)">
+            <ButtonComponent
+              icon="arrow_forward"
+              type="select"
+              class="t-w-full"
+              :class="[ groupKey === 0 ? 't-mb-4' : 't-mb-6']"
+              @click="openSubmenuFilter(filter)"
+            >
               <span>
                 {{ filter.attributeLabel }}
-                <span class="t-ml-2 t-text-xs t-text-base-light" v-if="isActiveFilterAttribute(filter.attributeKey)">
-                  <material-icon class="t-align-middle" icon="check" size="xs" />
+                <span
+                  v-if="isActiveFilterAttribute(filter.attributeKey)"
+                  class="t-ml-2 t-text-xs t-text-base-light"
+                >
+                  <MaterialIcon
+                    class="t-align-middle"
+                    icon="check"
+                    size="xs"
+                  />
                   {{ currentFilters(filter.attributeKey) }}
                 </span>
               </span>
-            </button-component>
+            </ButtonComponent>
           </template>
           <template v-else>
-            <h5 class="t-flex t-items-center t-text-xs t-text-base-tone t-mb-3">
+            <h5 class="t-mb-3 t-flex t-items-center t-text-xs t-text-base-tone">
               {{ filter.attributeLabel }}
-              <button-component v-if="isActiveFilterAttribute(filter.attributeKey)" type="transparent" size="sm" icon="delete_sweep" :icon-only="true" @click="unsetFilter(filter.attributeKey)" class="t--my-4">
+              <ButtonComponent
+                v-if="isActiveFilterAttribute(filter.attributeKey)"
+                type="transparent"
+                size="sm"
+                icon="delete_sweep"
+                :icon-only="true"
+                class="t--my-4"
+                @click="unsetFilter(filter.attributeKey)"
+              >
                 {{ $t('Unset {label} filter', { label: filter.attributeLabel }) }}
-              </button-component>
+              </ButtonComponent>
             </h5>
-            <filter-wrapper :attribute-key="filter.attributeKey" :attribute-label="filter.attributeLabel" :options="filter.options" />
+            <FilterWrapper
+              :attribute-key="filter.attributeKey"
+              :attribute-label="filter.attributeLabel"
+              :options="filter.options"
+            />
           </template>
         </div>
       </div>
     </div>
-  </sidebar>
+  </Sidebar>
 </template>
 
 <script>
@@ -146,6 +197,11 @@ export default {
       return (this.currentCategory?.ceShowFiltersFor || []).length > 0
     }
   },
+  watch: {
+    closeIcon (closeIcon) {
+      this.$store.dispatch('ui/mapSidebarPathItems', sidebar => Object.assign(sidebar, { closeIcon }))
+    }
+  },
   methods: {
     sortOptions (filter) {
       const { options, attributeKey } = filter
@@ -200,11 +256,6 @@ export default {
       const sidebarProps = { title: i18n.t('Sorting') }
       const sidebar = { component: AsyncListOptions, ...sidebarProps, props: {} }
       this.$store.dispatch('ui/addSidebarPath', { sidebar })
-    }
-  },
-  watch: {
-    closeIcon (closeIcon) {
-      this.$store.dispatch('ui/mapSidebarPathItems', sidebar => Object.assign(sidebar, { closeIcon }))
     }
   }
 }

@@ -1,36 +1,48 @@
 <template>
   <div v-if="loading">
-    <loading-spinner />
+    <LoadingSpinner />
   </div>
-  <div v-else-if="navigation" class="t-pb-24">
-    <gender-navigation :items="genderNavigationItems" class="t--mx-4 t--mt-4 t-mb-4" v-if="genderNavigationItems" />
-    <div class="t-flex t-flex-wrap t--mx-1">
-      <navigation-item v-for="link in mainNavigationItems" v-bind="link" :key="link.id" />
+  <div
+    v-else-if="navigation"
+    class="t-pb-24"
+  >
+    <GenderNavigation
+      v-if="genderNavigationItems"
+      :items="genderNavigationItems"
+      class="t--mx-4 t--mt-4 t-mb-4"
+    />
+    <div class="t--mx-1 t-flex t-flex-wrap">
+      <NavigationItem
+        v-for="link in mainNavigationItems"
+        :key="link.id"
+        v-bind="link"
+      />
     </div>
     <div
       v-if="navigation && filteredNavigation.length > 0"
-      class="t-flex t-flex-wrap t-mb-4"
+      class="t-mb-4 t-flex t-flex-wrap"
     >
       <router-link
         v-for="(item, i) in filteredNavigation"
         :key="`nav-${i}`"
         :to="localizedRoute(item.route)"
-        class="t-w-full t-py-3 t-px-4 t-border-base-lightest t-text-sm"
+        class="t-w-full t-border-base-lightest t-px-4 t-py-3 t-text-sm"
         :class="{ 't-border-b': i !== (filteredNavigation.length - 1) }"
         @click.native="closeMenu"
-        v-text="item.name"
-      />
+      >
+        {{ item.name }}
+      </router-link>
     </div>
     <div
       v-if="logos"
       class="t-flex t-flex-wrap"
       @click="closeMenu"
     >
-      <logo-line
+      <LogoLine
         v-bind="logoLineProps"
         :placeholder="true"
         column-class="t-mb-8"
-        class="t-justify-evenly t--mx-4 t--mb-4 t-py-8 t-pb-0 t-bg-base-lightest"
+        class="t--mx-4 t--mb-4 t-justify-evenly t-bg-base-lightest t-py-8 t-pb-0"
       />
     </div>
   </div>
@@ -112,14 +124,14 @@ export default {
       }
     }
   },
+  async mounted () {
+    await this.$store.dispatch('icmaaCmsBlock/list', 'navigation-main-sub-' + this.subNavigationKey)
+    this.loading = false
+  },
   methods: {
     closeMenu () {
       this.$store.dispatch('ui/closeAll')
     }
-  },
-  async mounted () {
-    await this.$store.dispatch('icmaaCmsBlock/list', 'navigation-main-sub-' + this.subNavigationKey)
-    this.loading = false
   }
 }
 

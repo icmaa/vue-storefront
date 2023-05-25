@@ -1,28 +1,43 @@
 <template>
   <div
-    class="t-flex t-items-center t-px-4 t-text-base-tone t-text-sm t-border-base-lightest t-cursor-pointer t-webkit-tap-transparent"
-    :class="[ optionLabel.length > 45 ? 't-py-2' : 't-h-12', {'t-flex t-text-base-light': !option.available}, {'t-bg-base-lightest t-text-black t-relative': isActive && isLoading}, {'t-text-base-light': !isActive && isLoading}, isLast ? 't-border-b-0' : 't-border-b', option.available ? 'available' : 'unavailable']"
-    @click="selectVariant"
+    class="t-flex t-cursor-pointer t-items-center t-border-base-lightest t-px-4 t-text-sm t-text-base-tone t-webkit-tap-transparent"
+    :class="[ optionLabel.length > 45 ? 't-py-2' : 't-h-12', {'t-flex t-text-base-light': !option.available}, {'t-relative t-bg-base-lightest t-text-black': isActive && isLoading}, {'t-text-base-light': !isActive && isLoading}, isLast ? 't-border-b-0' : 't-border-b', option.available ? 'available' : 'unavailable']"
     :aria-label="$t('Select') + ' ' + optionLabel"
     data-test-id="DefaultSelector"
+    @click="selectVariant"
   >
     <span class="t-flex-auto">
       {{ optionLabel }}
     </span>
     <template v-if="option.available">
-      <material-icon icon="done" class="t-flex-fix t-ml-2 t-text-alt-1" :class="{ 't-mr-2': price }" v-if="ticked" />
-      <span v-if="price" class="t-flex-fix t-text-base-light">{{ price | price }}</span>
+      <MaterialIcon
+        v-if="ticked"
+        icon="done"
+        class="t-ml-2 t-flex-fix t-text-alt-1"
+        :class="{ 't-mr-2': price }"
+      />
+      <span
+        v-if="price"
+        class="t-flex-fix t-text-base-light"
+      >{{ price | price }}</span>
     </template>
     <template v-else-if="productAlert">
       <span
-        class="t-flex-fix t-text-xs t-leading-1-em t-text-right"
+        class="t-flex-fix t-text-right t-text-xs t-leading-1-em"
         :class="{ 't-text-alt-3': isStockAlertSubscrided }"
-        v-html="$t(isStockAlertSubscrided ? 'Size requested' : 'Request size')"
         data-test-id="StockAlertSubscribe"
+        v-html="$t(isStockAlertSubscrided ? 'Size requested' : 'Request size')"
       />
-      <material-icon :icon="isStockAlertSubscrided ? 'check' : 'mail_outline'" class="t-flex-fix t-ml-2" :class="{ 't-text-alt-3': isStockAlertSubscrided }" />
+      <MaterialIcon
+        :icon="isStockAlertSubscrided ? 'check' : 'mail_outline'"
+        class="t-ml-2 t-flex-fix"
+        :class="{ 't-text-alt-3': isStockAlertSubscrided }"
+      />
     </template>
-    <loader-background v-if="isActive && isLoading" class="t-bottom-0" />
+    <LoaderBackground
+      v-if="isActive && isLoading"
+      class="t-bottom-0"
+    />
   </div>
 </template>
 

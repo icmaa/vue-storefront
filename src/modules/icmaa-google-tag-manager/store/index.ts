@@ -67,7 +67,9 @@ export const icmaaGoogleTagManagerModule: Module<GoogleTagManagerState, any> = {
                 product[attributeName] = rootGetters['attribute/getOptionLabel']({ attributeKey: attributeField, optionId: value })
                 break
               case 'children':
-                product[attributeName] = value.map(v => pick(v, ['name', 'id', 'price', 'sku']))
+                product[attributeName] = value
+                  .map(v => pick(v, ['name', 'id', 'price', 'sku']))
+                  .map(p => ({ ...p, m_id: p.id, id: p.sku }))
                 break
               case 'category':
                 product[attributeName] = value.map(v => pick(v, ['name', 'id']))

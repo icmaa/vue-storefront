@@ -1,18 +1,27 @@
 <template>
-  <div id="my_account" class="t-container t-px-4">
-    <div class="t-flex t--mx-2 t-py-4">
-      <div class="t-hidden xl:t-flex t-w-1/4 t-px-2" v-if="!['xs','sm','md'].includes(viewport)">
-        <navigation />
+  <div
+    id="my_account"
+    class="t-container t-px-4"
+  >
+    <div class="t--mx-2 t-flex t-py-4">
+      <div
+        v-if="!['xs','sm','md'].includes(viewport)"
+        class="t-hidden t-w-1/4 t-px-2 xl:t-flex"
+      >
+        <Navigation />
       </div>
-      <div class="t-w-full xl:t-w-3/4 t-px-2">
-        <no-ssr>
-          <component :is="this.$props.activeBlock" v-if="isLoggedIn" />
+      <div class="t-w-full t-px-2 xl:t-w-3/4">
+        <NoSsr>
+          <component
+            :is="$props.activeBlock"
+            v-if="isLoggedIn"
+          />
           <div slot="placeholder">
-            <div class="t-p-4 t-bg-white t-text-base-light">
+            <div class="t-bg-white t-p-4 t-text-base-light">
               {{ $t('Please wait') }} ...
             </div>
           </div>
-        </no-ssr>
+        </NoSsr>
       </div>
     </div>
   </div>
@@ -37,12 +46,6 @@ const MyOrderReview = () => import(/* webpackChunkName: "vsf-myaccount-myorderre
 
 export default {
   name: 'MyAccount',
-  props: {
-    activeBlock: {
-      type: String,
-      default: 'MyProfile'
-    }
-  },
   components: {
     Navigation,
     MyProfile,
@@ -53,13 +56,19 @@ export default {
     MyOrder,
     MyProductAlerts,
     MyOrderReview,
-    'no-ssr': NoSSR
+    NoSsr: NoSSR
   },
-  beforeMount () {
-    this.$bus.$on('myAccount-before-updateUser', this.onBeforeUpdateUser)
+  props: {
+    activeBlock: {
+      type: String,
+      default: 'MyProfile'
+    }
   },
-  destroyed () {
-    this.$bus.$off('myAccount-before-updateUser', this.onBeforeUpdateUser)
+  async asyncData ({ context }) {
+    if (context) {
+      context.output.cacheTags
+        .add(`my-account`)
+    }
   },
   computed: {
     ...mapGetters({
@@ -80,6 +89,12 @@ export default {
 
       return i18n.t(titleMap[this.activeBlock] || 'My Account')
     }
+  },
+  beforeMount () {
+    this.$bus.$on('myAccount-before-updateUser', this.onBeforeUpdateUser)
+  },
+  destroyed () {
+    this.$bus.$off('myAccount-before-updateUser', this.onBeforeUpdateUser)
   },
   methods: {
     async onBeforeUpdateUser (updatedData, passwordData = false, message = false) {
@@ -141,12 +156,6 @@ export default {
         { vmid: 'robots', name: 'robots', content: 'noindex, nofollow' },
         ...description
       ]
-    }
-  },
-  async asyncData ({ context }) {
-    if (context) {
-      context.output.cacheTags
-        .add(`my-account`)
     }
   }
 }

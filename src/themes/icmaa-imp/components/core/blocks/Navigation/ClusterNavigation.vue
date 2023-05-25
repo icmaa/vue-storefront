@@ -1,6 +1,6 @@
 <template>
   <div
-    class="t-h-32 t-pb-4 t-bg-base-lightest t-flex t-items-end t-justify-evenly t-bg-cover t-bg-no-repeat t-bg-center"
+    class="t-flex t-h-32 t-items-end t-justify-evenly t-bg-base-lightest t-bg-cover t-bg-center t-bg-no-repeat t-pb-4"
     :style="`background-image: url(${backgroundImage})`"
   >
     <div
@@ -9,11 +9,11 @@
       class="t-cursor-pointer"
     >
       <div
+        class="t-block t-bg-white t-px-3 t-pb-2 t-pt-1"
         @click="setSessionValue(item[attributeCode])"
-        class="t-block t-bg-white t-px-3 t-pt-1 t-pb-2"
       >
         <span
-          class="t-font-black t-text-sm t-uppercase t-border-b-2"
+          class="t-border-b-2 t-text-sm t-font-black t-uppercase"
           :class="{
             't-text-base-tone': item[attributeCode] !== false,
             't-border-primary': current !== false && item[attributeCode] === current,
@@ -68,6 +68,13 @@ export default {
       return this.getMediaThumbnail(this.currentNavigationItem.background, 920, 920)
     }
   },
+  mounted () {
+    this.items.forEach(i => {
+      const img = new Image()
+      img.src = this.getMediaThumbnail(i.background, 920, 920)
+      lozad(img).triggerLoad(img)
+    })
+  },
   methods: {
     setSessionValue (value) {
       if (value === false) {
@@ -78,13 +85,6 @@ export default {
 
       this.$store.dispatch('ui/setSidebarNavigationGenderChange', true)
     }
-  },
-  mounted () {
-    this.items.forEach(i => {
-      const img = new Image()
-      img.src = this.getMediaThumbnail(i.background, 920, 920)
-      lozad(img).triggerLoad(img)
-    })
   }
 }
 </script>

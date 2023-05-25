@@ -1,67 +1,176 @@
 <template>
-  <div class="competition t-container" v-if="competition && hasStarted">
-    <div class="t-px-4 t-pt-4 lg:t-pt-8 t-mb-8">
-      <div class="t-flex t-flex-wrap t-items-start lg:t-items-stretch t-mb-8">
-        <picture-component :alt="competition.headline | stripHTML" :src="image" :width="624" :height="624" :placeholder="true" :sizes="sizes" ratio="1:1" class="t-w-full lg:t-w-1/2" />
-        <div class="t-w-full lg:t-w-1/2 t-bg-white t-p-8 t-flex t-flex-col t-justify-center">
-          <h1 class="t-font-light t-leading-tight t-mb-8 t-text-3xl t-text-primary lg:t-whitespace-pre-line" v-html="competition.headline" v-if="competition.headline" />
-          <component :is="description" class="description t-text-sm t-leading-relaxed t-text-base-tone" />
+  <div
+    v-if="competition && hasStarted"
+    class="competition t-container"
+  >
+    <div class="t-mb-8 t-px-4 t-pt-4 lg:t-pt-8">
+      <div class="t-mb-8 t-flex t-flex-wrap t-items-start lg:t-items-stretch">
+        <PictureComponent
+          :alt="competition.headline | stripHTML"
+          :src="image"
+          :width="624"
+          :height="624"
+          :placeholder="true"
+          :sizes="sizes"
+          ratio="1:1"
+          class="t-w-full lg:t-w-1/2"
+        />
+        <div class="t-flex t-w-full t-flex-col t-justify-center t-bg-white t-p-8 lg:t-w-1/2">
+          <h1
+            v-if="competition.headline"
+            class="t-mb-8 t-text-3xl t-font-light t-leading-tight t-text-primary lg:t-whitespace-pre-line"
+            v-html="competition.headline"
+          />
+          <component
+            :is="description"
+            class="description t-text-sm t-leading-relaxed t-text-base-tone"
+          />
           <div class="t-mt-8">
-            <button-component type="ghost" v-scroll-to="'#competition-form'" v-text="competition.buttonText || $t('Participate now!')" />
+            <ButtonComponent
+              v-scroll-to="'#competition-form'"
+              type="ghost"
+            >
+              {{ competition.buttonText || $t('Participate now!') }}
+            </ButtonComponent>
           </div>
         </div>
       </div>
-      <div class="t-flex t-flex-wrap t-mb-8">
+      <div class="t-mb-8 t-flex t-flex-wrap">
         <div class="t-w-full lg:t-w-1/2">
-          <div class="t-relative t-w-full t-bg-white" style="padding-top: 56.25%">
-            <iframe class="t-absolute t-top-0" width="100%" height="100%" :src="youtubeVideoUrl" frameborder="0" allowfullscreen />
+          <div
+            class="t-relative t-w-full t-bg-white"
+            style="padding-top: 56.25%"
+          >
+            <iframe
+              class="t-absolute t-top-0"
+              width="100%"
+              height="100%"
+              :src="youtubeVideoUrl"
+              frameborder="0"
+              allowfullscreen
+            />
           </div>
         </div>
-        <div class="t-w-full lg:t-w-1/2 t-pt-px lg:t-pl-px lg:t-pt-0 t-flex">
+        <div class="t-flex t-w-full t-pt-px lg:t-w-1/2 lg:t-pl-px lg:t-pt-0">
           <div class="t-relative t-flex-1 t-bg-white">
-            <universal-link :to="competition.bannerLink" class="t-flex">
-              <picture-component :alt="competition.bannerLinkText | stripHTML" :src="bannerImage" :width="624" :height="312" :placeholder="true" :sizes="sizes" ratio="1:1" class="t-flex-1 t-self-start" />
-            </universal-link>
-            <universal-link :to="competition.bannerLink" class="t-flex t-items-center t-w-full lg:t-absolute lg:t-bottom-0 t-bg-white t-p-4 lg:t-px-6 lg:t-py-8 t-text-primary t-text-xl">
-              <span v-text="competition.bannerLinkText" class="t-flex-1" />
-              <material-icon icon="keyboard_arrow_right" size="lg" class="t-text-base-lighter t-ml-2" />
-            </universal-link>
+            <UniversalLink
+              :to="competition.bannerLink"
+              class="t-flex"
+            >
+              <PictureComponent
+                :alt="competition.bannerLinkText | stripHTML"
+                :src="bannerImage"
+                :width="624"
+                :height="312"
+                :placeholder="true"
+                :sizes="sizes"
+                ratio="1:1"
+                class="t-flex-1 t-self-start"
+              />
+            </UniversalLink>
+            <UniversalLink
+              :to="competition.bannerLink"
+              class="t-flex t-w-full t-items-center t-bg-white t-p-4 t-text-xl t-text-primary lg:t-absolute lg:t-bottom-0 lg:t-px-6 lg:t-py-8"
+            >
+              <span
+                class="t-flex-1"
+                v-text="competition.bannerLinkText"
+              />
+              <MaterialIcon
+                icon="keyboard_arrow_right"
+                size="lg"
+                class="t-ml-2 t-text-base-lighter"
+              />
+            </UniversalLink>
           </div>
         </div>
       </div>
-      <form-component v-if="isActive && !isSend" :form-elements="competition.form" :submit-button-text="$t('Submit') + (competition.disclaimer ? ' *' : '')" v-model="form" @submit="submit" id="competition-form" />
-      <div v-if="!isActive && !isSend" id="competition-form" class="t-p-4 t-bg-white">
+      <FormComponent
+        v-if="isActive && !isSend"
+        id="competition-form"
+        v-model="form"
+        :form-elements="competition.form"
+        :submit-button-text="$t('Submit') + (competition.disclaimer ? ' *' : '')"
+        @submit="submit"
+      />
+      <div
+        v-if="!isActive && !isSend"
+        id="competition-form"
+        class="t-bg-white t-p-4"
+      >
         {{ $t('Sorry, but this competition is already over.') }}
       </div>
-      <div v-if="isSend" class="t-p-4 t-bg-white">
-        <div class="t-flex t-items-center t-text-1xl t-font-bold t-text-alt-3 t-mb-2">
-          <material-icon icon="check" size="lg" class="t-mr-2" />
+      <div
+        v-if="isSend"
+        class="t-bg-white t-p-4"
+      >
+        <div class="t-mb-2 t-flex t-items-center t-text-1xl t-font-bold t-text-alt-3">
+          <MaterialIcon
+            icon="check"
+            size="lg"
+            class="t-mr-2"
+          />
           {{ $t('Done') }}
         </div>
         {{ $t('Thank you. We successfully received your data and will inform you about further steps.') }}
-        <div v-if="successHeadline" class="t-flex t-items-center t-text-1xl t-text-primary t-mb-2 t-mt-8">
+        <div
+          v-if="successHeadline"
+          class="t-mb-2 t-mt-8 t-flex t-items-center t-text-1xl t-text-primary"
+        >
           {{ successHeadline }}
         </div>
-        <div class="t-flex t-w-full" v-if="successImage">
+        <div
+          v-if="successImage"
+          class="t-flex t-w-full"
+        >
           <div class="lg:t-w-1/2">
-            <picture-component :src="successImage" :width="624" :height="312" :placeholder="true" :sizes="sizes" ratio="1:1" class="t-flex-1 t-self-start" />
+            <PictureComponent
+              :src="successImage"
+              :width="624"
+              :height="312"
+              :placeholder="true"
+              :sizes="sizes"
+              ratio="1:1"
+              class="t-flex-1 t-self-start"
+            />
           </div>
         </div>
       </div>
-      <div v-if="isActive && !isSend && competition.disclaimer" class="t-pt-4 t-text-sm t-text-base-light">
+      <div
+        v-if="isActive && !isSend && competition.disclaimer"
+        class="t-pt-4 t-text-sm t-text-base-light"
+      >
         <p v-if="showTo">
-          <material-icon icon="asterisk" icon-set="icmaa" size="xxs" class="t-mr-1" />
+          <MaterialIcon
+            icon="asterisk"
+            icon-set="icmaa"
+            size="xxs"
+            class="t-mr-1"
+          />
           {{ $t('Deadline for entries is {showTo}. The decision is final.', { showTo }) }}
         </p>
         <p>
-          <material-icon icon="asterisk" icon-set="icmaa" size="xxs" v-if="showTo" />
-          <material-icon icon="asterisk" icon-set="icmaa" size="xxs" class="t-mr-1" />
+          <MaterialIcon
+            v-if="showTo"
+            icon="asterisk"
+            icon-set="icmaa"
+            size="xxs"
+          />
+          <MaterialIcon
+            icon="asterisk"
+            icon-set="icmaa"
+            size="xxs"
+            class="t-mr-1"
+          />
           {{ competition.disclaimer }}
         </p>
       </div>
     </div>
   </div>
-  <div v-else class="t-container">
+  <div
+    v-else
+    class="t-container"
+  >
     <div class="t-p-4 lg:t-py-8">
       {{ $t('Sorry, but this competition has not yet started.') }}
     </div>
@@ -89,6 +198,15 @@ export default {
     PictureComponent,
     UniversalLink,
     MaterialIcon
+  },
+  async asyncData ({ store, route, context }) {
+    if (context) {
+      context.output.cacheTags
+        .add('competition')
+    }
+
+    const value = route.params.identifier
+    await store.dispatch('icmaaCompetitions/single', { value })
   },
   data () {
     return {
@@ -138,11 +256,11 @@ export default {
     sizes () {
       return [
         // Order high-to-low is important
-        { media: '(min-width: 1280px)', width: 1248 },
-        { media: '(min-width: 1024px)', width: 992 },
-        { media: '(min-width: 640px)', width: 768 },
-        { media: '(min-width: 415px)', width: 640 },
-        { media: '(max-width: 415px)', width: 415 }
+        { media: 'xl', width: 1248 },
+        { media: 'lg', width: 992 },
+        { media: 'sm', width: 768 },
+        { media: 'xs', width: 640 },
+        { width: 415 }
       ]
     }
   },
@@ -191,15 +309,6 @@ export default {
         Logger.error('Error during newsletter-subscription after submit in: ' + this.competition.identifier, 'icmaa-competitions', err)()
       })
     }
-  },
-  async asyncData ({ store, route, context }) {
-    if (context) {
-      context.output.cacheTags
-        .add('competition')
-    }
-
-    const value = route.params.identifier
-    await store.dispatch('icmaaCompetitions/single', { value })
   }
 }
 </script>

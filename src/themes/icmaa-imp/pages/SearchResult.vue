@@ -1,20 +1,31 @@
 <template>
   <div id="category">
     <header class="t-container">
-      <div class="t-flex t-flex-wrap t-px-4 t-mb-8">
-        <breadcrumbs class="t-w-full t-my-8" />
+      <div class="t-mb-8 t-flex t-flex-wrap t-px-4">
+        <Breadcrumbs class="t-my-8 t-w-full" />
         <div class="t-w-full">
-          <div class="t-flex t-flex-wrap t-items-center t--mx-1 lg:t--mx-2">
-            <h1 class="category-title t-hidden lg:t-block t-w-full t-px-1 lg:t-px-2 t-mb-4 t-font-light t-text-2xl t-text-base-dark">
+          <div class="t--mx-1 t-flex t-flex-wrap t-items-center lg:t--mx-2">
+            <h1 class="category-title t-mb-4 t-hidden t-w-full t-px-1 t-text-2xl t-font-light t-text-base-dark lg:t-block lg:t-px-2">
               <span data-test-id="productsTotal">{{ productsTotal }}</span> {{ $t('Search results for: {term}', { term }) }}
             </h1>
-            <div class="t-w-full t-px-1 md:t-px-2 t-flex t-flex-wrap t-items-stretch">
-              <button-component style="second" align="center" :icon="activeFilterCount > 0 ? 'check' : 'filter_list'" @click.native="openFilters" class="t-w-full lg:t-w-auto" data-test-id="ButtonFilter">
+            <div class="t-flex t-w-full t-flex-wrap t-items-stretch t-px-1 md:t-px-2">
+              <ButtonComponent
+                style="second"
+                align="center"
+                :icon="activeFilterCount > 0 ? 'check' : 'filter_list'"
+                class="t-w-full lg:t-w-auto"
+                data-test-id="ButtonFilter"
+                @click.native="openFilters"
+              >
                 {{ $t('Filters') }}
-                <span v-if="activeFilterCount > 0" v-text="`(${activeFilterCount})`" class="t-flex-grow t-text-left t-pl-2 t-opacity-75" />
-              </button-component>
-              <div class="t-w-full md:t-flex-1 t-mt-2 md:t-mt-0 t-overflow-x-auto t-hide-scrollbar t-flex t-items-center">
-                <filter-presets class="t-flex t-items-center md:t-ml-2" />
+                <span
+                  v-if="activeFilterCount > 0"
+                  class="t-grow t-pl-2 t-text-left t-opacity-75"
+                  v-text="`(${activeFilterCount})`"
+                />
+              </ButtonComponent>
+              <div class="t-mt-2 t-flex t-w-full t-items-center t-overflow-x-auto t-hide-scrollbar md:t-mt-0 md:t-flex-1">
+                <FilterPresets class="t-flex t-items-center md:t-ml-2" />
               </div>
             </div>
           </div>
@@ -23,27 +34,65 @@
     </header>
 
     <div class="t-container">
-      <div class="t-flex t-items-center t-justify-center t-mb-8" v-if="prevProductsInSearchResults">
-        <button-component type="ghost" @click.native="loadMoreProducts(true)" :disabled="loadingProducts" class="t-w-2/3 lg:t-w-1/4" :class="{ 't-relative t-opacity-60': loadingProducts }">
+      <div
+        v-if="prevProductsInSearchResults"
+        class="t-mb-8 t-flex t-items-center t-justify-center"
+      >
+        <ButtonComponent
+          type="ghost"
+          :disabled="loadingProducts"
+          class="t-w-2/3 lg:t-w-1/4"
+          :class="{ 't-relative t-opacity-60': loadingProducts }"
+          @click.native="loadMoreProducts(true)"
+        >
           {{ $t('Load previous') }}
-          <loader-background v-if="loadingProducts" bar="t-bg-base-darkest" class="t-bottom-0" />
-        </button-component>
+          <LoaderBackground
+            v-if="loadingProducts"
+            bar="t-bg-base-darkest"
+            class="t-bottom-0"
+          />
+        </ButtonComponent>
       </div>
-      <lazy-hydrate :trigger-hydration="!loading" v-if="isLazyHydrateEnabled">
-        <product-listing :products="getCategoryProducts" :show-add-to-cart="true" />
-      </lazy-hydrate>
+      <LazyHydrate
+        v-if="isLazyHydrateEnabled"
+        :trigger-hydration="!loading"
+      >
+        <ProductListing
+          :products="getCategoryProducts"
+          :show-add-to-cart="true"
+        />
+      </LazyHydrate>
       <div v-else>
-        <product-listing :products="getCategoryProducts" />
+        <ProductListing :products="getCategoryProducts" />
       </div>
-      <div class="t-flex t-items-center t-justify-center t-mb-8" v-if="moreProductsInSearchResults">
-        <button-component type="ghost" @click.native="loadMoreProducts()" :disabled="loadingProducts" class="t-w-2/3 lg:t-w-1/4" :class="{ 't-relative t-opacity-60': loadingProducts }">
+      <div
+        v-if="moreProductsInSearchResults"
+        class="t-mb-8 t-flex t-items-center t-justify-center"
+      >
+        <ButtonComponent
+          type="ghost"
+          :disabled="loadingProducts"
+          class="t-w-2/3 lg:t-w-1/4"
+          :class="{ 't-relative t-opacity-60': loadingProducts }"
+          @click.native="loadMoreProducts()"
+        >
           {{ $t('Load more') }}
-          <loader-background v-if="loadingProducts" bar="t-bg-base-darkest" class="t-bottom-0" />
-        </button-component>
+          <LoaderBackground
+            v-if="loadingProducts"
+            bar="t-bg-base-darkest"
+            class="t-bottom-0"
+          />
+        </ButtonComponent>
       </div>
-      <div class="t-mb-8" v-if="isCategoryEmpty">
-        <div class="t-bg-white t-mx-4 t-p-4 t-py-10 t-text-center">
-          <h4 class="t-text-base t-bold" data-test-id="noProductsInfo">
+      <div
+        v-if="isCategoryEmpty"
+        class="t-mb-8"
+      >
+        <div class="t-mx-4 t-bg-white t-p-4 t-py-10 t-text-center">
+          <h4
+            class="t-bold t-text-base"
+            data-test-id="noProductsInfo"
+          >
             {{ $t('No products found!') }}
           </h4>
           <p class="t-text-sm t-text-base-light">
@@ -53,12 +102,12 @@
       </div>
     </div>
 
-    <async-sidebar
+    <AsyncSidebar
       :state-key="'categoryfilter'"
       :async-component="FilterSidebar"
       direction="left"
     />
-    <async-sidebar
+    <AsyncSidebar
       :state-key="'addtocart'"
       :async-component="AddToCartSidebar"
       :async-component-props="{ showAddToCartButton: true, closeOnSelect: false }"
@@ -97,6 +146,11 @@ export default {
     FilterPresets,
     ProductListing,
     Breadcrumbs
+  },
+  async asyncData ({ context }) {
+    if (context) {
+      context.output.cacheTags.add(`search`)
+    }
   },
   data () {
     return {
@@ -148,6 +202,16 @@ export default {
       return Object.keys(this.getCurrentFilters).length
     }
   },
+  watch: {
+    '$route': function (a, b) {
+      if (a.query?.p !== b.query?.p) return
+      this.fetchAsyncData(this.$route)
+    }
+  },
+  async mounted () {
+    await this.fetchAsyncData()
+    IcmaaGoogleTagManagerExecutors.searchResultVisited({ term: this.term, products: this.getCategoryProducts })
+  },
   methods: {
     ...mapMutations('product', {
       resetCurrentProduct: productMutationTypes.PRODUCT_RESET_CURRENT
@@ -198,21 +262,6 @@ export default {
         Logger.error('Problem with setting SearchResult initial data!', 'search', e)()
       }
     }
-  },
-  watch: {
-    '$route': function (a, b) {
-      if (a.query?.p !== b.query?.p) return
-      this.fetchAsyncData(this.$route)
-    }
-  },
-  async asyncData ({ context }) {
-    if (context) {
-      context.output.cacheTags.add(`search`)
-    }
-  },
-  async mounted () {
-    await this.fetchAsyncData()
-    IcmaaGoogleTagManagerExecutors.searchResultVisited({ term: this.term, products: this.getCategoryProducts })
   },
   serverPrefetch () {
     return this.fetchAsyncData()

@@ -1,16 +1,43 @@
 <template>
   <transition name="fade-in-down">
-    <div class="modal" v-if="visible" data-test-id="Modal">
-      <div class="modal-backdrop" @click="close" />
-      <div class="modal-container t-bg-white t-scrolling-touch sm:t-pb-0" :class="[ compact ? 'compact' : 't-pb-20' ]" ref="modal-container" :style="style">
-        <div class="t-h-60px t-flex-fix t-px-4 t-bg-white t-border-b t-border-base-lighter t-flex t-items-center">
+    <div
+      v-if="visible"
+      class="modal"
+      data-test-id="Modal"
+    >
+      <div
+        class="modal-backdrop"
+        @click="close"
+      />
+      <div
+        ref="modal-container"
+        class="modal-container t-bg-white t-scrolling-touch sm:t-pb-0"
+        :class="[ compact ? 'compact' : 't-pb-20' ]"
+        :style="style"
+      >
+        <div class="t-flex t-h-60px t-flex-fix t-items-center t-border-b t-border-base-lighter t-bg-white t-px-4">
           <slot name="header-before" />
-          <h2 class="t-text-lg t-text-base-dark" v-if="title" v-text="title" />
+          <h2
+            v-if="title"
+            class="t-text-lg t-text-base-dark"
+            v-text="title"
+          />
           <slot name="header" />
           <div class="t-flex-expand" />
-          <top-button icon="close" text="Close" :tab-index="1" @click.native="close" data-test-id="ModalClose" class="t--mr-2 t-text-base" v-if="showCloseButton" />
+          <TopButton
+            v-if="showCloseButton"
+            icon="close"
+            text="Close"
+            :tab-index="1"
+            data-test-id="ModalClose"
+            class="t--mr-2 t-text-base"
+            @click.native="close"
+          />
         </div>
-        <div class="modal-content" :class="[ padding ]">
+        <div
+          class="modal-content"
+          :class="[ padding ]"
+        >
           <slot />
         </div>
       </div>
@@ -28,10 +55,10 @@ import TopButton from 'theme/components/core/blocks/AsyncSidebar/TopButton'
 
 export default {
   name: 'Modal',
-  mixins: [onEscapePress],
   components: {
     TopButton
   },
+  mixins: [onEscapePress],
   props: {
     name: {
       required: true,
@@ -81,6 +108,13 @@ export default {
       }
     }
   },
+  mounted () {
+    // Close this if browser-back button is called
+    window.addEventListener('popstate', this.onHistoryBack)
+  },
+  beforeDestroy () {
+    window.removeEventListener('popstate', this.onHistoryBack)
+  },
   methods: {
     close () {
       this.$store.dispatch('ui/hideModal', this.name)
@@ -93,13 +127,6 @@ export default {
     onHistoryBack () {
       this.close()
     }
-  },
-  mounted () {
-    // Close this if browser-back button is called
-    window.addEventListener('popstate', this.onHistoryBack)
-  },
-  beforeDestroy () {
-    window.removeEventListener('popstate', this.onHistoryBack)
   }
 }
 </script>

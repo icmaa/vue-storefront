@@ -1,8 +1,20 @@
 <template>
-  <div v-if="products && products.length > 0" data-test-id="Recommendations">
-    <h3 v-if="title" v-text="title" class="t-text-sm t-uppercase t-text-center t-mb-4 t-text-base-tone" />
-    <div class="t-flex t-flex-wrap t--mx-2">
-      <product-tile v-for="(recommended, i) in products" :key="i" :product="recommended" class="product t-cursor-pointer t-px-1 lg:t-px-2 t-mb-8 t-w-1/2 lg:t-w-1/4 lg:t-mb-0" />
+  <div
+    v-if="products && products.length > 0"
+    data-test-id="Recommendations"
+  >
+    <h3
+      v-if="title"
+      class="t-mb-4 t-text-center t-text-sm t-uppercase t-text-base-tone"
+      v-text="title"
+    />
+    <div class="t--mx-2 t-flex t-flex-wrap">
+      <ProductTile
+        v-for="(recommended, i) in products"
+        :key="i"
+        :product="recommended"
+        class="product t-mb-8 t-w-1/2 t-cursor-pointer t-px-1 lg:t-mb-0 lg:t-w-1/4 lg:t-px-2"
+      />
     </div>
   </div>
 </template>
@@ -45,14 +57,6 @@ export default {
       return this.recommendations ? this.recommendations.products : []
     }
   },
-  methods: {
-    async fetchRelated () {
-      await this.$store.dispatch(
-        'icmaaRecommendations/single',
-        { product: this.product, type: this.type, size: this.limit }
-      )
-    }
-  },
   watch: {
     async product (product) {
       return this.fetchRelated()
@@ -60,6 +64,14 @@ export default {
   },
   async mounted () {
     return this.fetchRelated()
+  },
+  methods: {
+    async fetchRelated () {
+      await this.$store.dispatch(
+        'icmaaRecommendations/single',
+        { product: this.product, type: this.type, size: this.limit }
+      )
+    }
   }
 }
 </script>

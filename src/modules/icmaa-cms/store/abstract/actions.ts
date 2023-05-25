@@ -39,7 +39,9 @@ export interface ElasticOptionsInterface<S, R> {
   query: SearchQuery,
   entityType: string,
   mutationTypes: MutationTypesInterface,
-  stateKey: string
+  stateKey: string,
+  size?: number,
+  start?: number
 }
 
 const listSortOptionsParamKeys = [ 'sort', 'size', 'page' ]
@@ -93,10 +95,10 @@ export const listQueue = async <T>(options: OptionsInterface): Promise<Task> => 
 }
 
 export const elasticList = async <T, S, R>(options: ElasticOptionsInterface<S, R>): Promise<SearchServiceResponse<T>> => {
-  const { entityType, query, context, mutationTypes } = options
+  const { entityType, query, size, start, context, mutationTypes } = options
   const { commit } = context
 
-  return searchByQuery<T>({ entityType, query })
+  return searchByQuery<T>({ entityType, query, size, start })
     .then(resp => {
       commit(mutationTypes.add, resp.items)
       return resp

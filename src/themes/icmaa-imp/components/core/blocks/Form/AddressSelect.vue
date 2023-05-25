@@ -1,10 +1,10 @@
 <template>
-  <base-select
+  <BaseSelect
+    v-if="hasAddresses"
+    v-model.number="addressId"
     :options="addressOptions"
     :initial-option-text="$t('Select an address')"
-    v-if="hasAddresses"
     v-bind="{ ...$props, ...$attrs }"
-    v-model.number="addressId"
     @input="input"
   />
 </template>
@@ -34,20 +34,6 @@ export default {
       addressId: ''
     }
   },
-  mounted () {
-    if (!this.hasAddresses || this.addressId) return
-
-    if (this.value || this.value === 0) {
-      this.addressId = this.value
-      return
-    }
-
-    const defaultAddress = this.addresses.find(a => a['is_default_' + this.type])
-    if (defaultAddress) {
-      this.addressId = defaultAddress.id
-      this.$emit('input', this.addressId)
-    }
-  },
   computed: {
     ...mapGetters({
       addresses: 'user/getAddresses',
@@ -74,6 +60,20 @@ export default {
       })
 
       return addresses
+    }
+  },
+  mounted () {
+    if (!this.hasAddresses || this.addressId) return
+
+    if (this.value || this.value === 0) {
+      this.addressId = this.value
+      return
+    }
+
+    const defaultAddress = this.addresses.find(a => a['is_default_' + this.type])
+    if (defaultAddress) {
+      this.addressId = defaultAddress.id
+      this.$emit('input', this.addressId)
     }
   },
   methods: {

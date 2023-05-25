@@ -1,16 +1,16 @@
 <template>
   <div :class="{ 't-pt-2': !!info.description }">
     <div
+      v-if="!!info.description"
       class="t-text-sm"
       v-text="info.description"
-      v-if="!!info.description"
     />
     <component
+      :is="methods[apmMethodCode]"
+      v-if="hasChildComponent"
       :code="code"
       :apm-method-code="apmMethodCode"
       :method="method"
-      :is="methods[apmMethodCode]"
-      v-if="hasChildComponent"
       :class="[ !!info.description ? 't-mt-4' : 't-mt-2' ]"
     />
   </div>

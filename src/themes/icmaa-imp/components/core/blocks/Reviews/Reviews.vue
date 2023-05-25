@@ -1,21 +1,37 @@
 <template>
   <section>
     <div data-test-id="Reviews">
-      <h2 class="t-text-lg t-text-base-dark t-font-bold t-mb-4">
+      <h2 class="t-mb-4 t-text-lg t-font-bold t-text-base-dark">
         {{ $t('Reviews') }}
       </h2>
-      <div class="t-flex t-items-center t-justify-between t-mb-4">
+      <div class="t-mb-4 t-flex t-items-center t-justify-between">
         <div class="t-flex t-items-center t-text-sm">
-          <reviews-stars :rating="reviewsTotalRating" stars-size="sm" stars-color="t-text-base-dark" class="t-text-base-dark" />
+          <ReviewsStars
+            :rating="reviewsTotalRating"
+            stars-size="sm"
+            stars-color="t-text-base-dark"
+            class="t-text-base-dark"
+          />
           <span class="t-ml-2 t-hidden sm:t-block">({{ total }})</span>
         </div>
-        <button-component size="sm" v-model="formVisible" @click.native="toggleForm">
+        <ButtonComponent
+          v-model="formVisible"
+          size="sm"
+          @click.native="toggleForm"
+        >
           {{ $t('Add review') }}
-        </button-component>
+        </ButtonComponent>
       </div>
     </div>
-    <reviews-form :product="product" v-if="formVisible" class="t-bg-white t-p-4 t-mb-8" />
-    <reviews-list :product-name="productName" :per-page="4" />
+    <ReviewsForm
+      v-if="formVisible"
+      :product="product"
+      class="t-mb-8 t-bg-white t-p-4"
+    />
+    <ReviewsList
+      :product-name="productName"
+      :per-page="4"
+    />
   </section>
 </template>
 
@@ -31,10 +47,11 @@ import ButtonComponent from 'theme/components/core/blocks/Button'
 
 export default {
   name: 'Reviews',
-  data () {
-    return {
-      formVisible: false
-    }
+  components: {
+    ReviewsList,
+    ReviewsForm,
+    ReviewsStars,
+    ButtonComponent
   },
   props: {
     product: {
@@ -46,11 +63,10 @@ export default {
       required: true
     }
   },
-  components: {
-    ReviewsList,
-    ReviewsForm,
-    ReviewsStars,
-    ButtonComponent
+  data () {
+    return {
+      formVisible: false
+    }
   },
   computed: {
     ...mapGetters({
@@ -68,6 +84,17 @@ export default {
       return this.$store.state.user.current
     }
   },
+  mounted () {
+    this.$bus.$on('product-after-load', this.refreshList)
+    this.$bus.$on('reviews-open-form', this.goToForm)
+  },
+  destroyed () {
+    this.$bus.$off('product-after-load', this.refreshList)
+    this.$bus.$off('reviews-open-form', this.goToForm)
+  },
+  beforeMount () {
+    this.refreshList()
+  },
   methods: {
     goToForm () {
       this.formVisible = 1
@@ -79,17 +106,6 @@ export default {
     refreshList () {
       this.$store.dispatch('review/list', { productId: this.productId })
     }
-  },
-  mounted () {
-    this.$bus.$on('product-after-load', this.refreshList)
-    this.$bus.$on('reviews-open-form', this.goToForm)
-  },
-  destroyed () {
-    this.$bus.$off('product-after-load', this.refreshList)
-    this.$bus.$off('reviews-open-form', this.goToForm)
-  },
-  beforeMount () {
-    this.refreshList()
   }
 }
 </script>

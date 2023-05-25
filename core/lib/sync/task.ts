@@ -10,10 +10,10 @@ import { Logger } from '@vue-storefront/core/lib/logger'
 import { TaskQueue } from '@vue-storefront/core/lib/sync'
 import * as entities from '@vue-storefront/core/lib/store/entities'
 import { StorageManager } from '@vue-storefront/core/lib/storage-manager'
-import { processURLAddress } from '@vue-storefront/core/helpers'
-import { serial } from '@vue-storefront/core/helpers'
+import { processURLAddress, serial, onlineHelper } from '@vue-storefront/core/helpers'
+
 import config from 'config'
-import { onlineHelper } from '@vue-storefront/core/helpers'
+
 import { hasResponseError, getResponseMessage } from '@vue-storefront/core/lib/sync/helpers'
 import queryString from 'query-string'
 
@@ -47,7 +47,7 @@ function getUrl (task, currentToken, currentCartId) {
 
   let url = queryString.stringifyUrl(parsedUrl)
 
-  url = processURLAddress(url); // use relative url paths
+  url = processURLAddress(url) // use relative url paths
   if (config.storeViews.multistore) {
     url = adjustMultistoreApiUrl(url)
   }

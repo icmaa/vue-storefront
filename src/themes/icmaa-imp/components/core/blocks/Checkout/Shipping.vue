@@ -4,7 +4,7 @@
       <div v-if="hasShippingMethod">
         <div
           v-if="($v.selected.$error && (!$v.selected.required || !$v.selected.notFalse)) || (message && message.length > 0)"
-          class="t-text-sm t-text-alert t-mb-4"
+          class="t-mb-4 t-text-sm t-text-alert"
         >
           <template v-if="message">
             {{ $t(message) }}
@@ -13,33 +13,39 @@
             {{ $t('Please select a shipping method.') }}
           </template>
         </div>
-        <shipping-method
+        <ShippingMethod
           v-for="method in shippingMethods"
           :key="method.code"
-          :method="method"
           v-model="selected"
+          :method="method"
           class="t-mb-4"
         />
-        <div v-if="additionalCharges" class="t-my-4">
-          <additional-charges
+        <div
+          v-if="additionalCharges"
+          class="t-my-4"
+        >
+          <AdditionalCharges
             v-for="additional in additionalCharges"
             :key="additional.key"
-            :charge="additional"
             v-model="selectedAdditionalCharges[additional.key]"
+            :charge="additional"
             class="t-mt-2 lg:t-mt-0"
           />
         </div>
-        <button-component
-          class="t-w-full lg:t-w-auto t-mt-8"
-          type="primary"
-          @click.native.stop="submit"
+        <ButtonComponent
           v-if="!isLoading"
+          class="t-mt-8 t-w-full lg:t-w-auto"
+          type="primary"
           data-test-id="NextStepButton"
+          @click.native.stop="submit"
         >
           {{ $t(('Continue to payment')) }}
-        </button-component>
+        </ButtonComponent>
       </div>
-      <div v-else class="t-mb-4 t-text-sm">
+      <div
+        v-else
+        class="t-mb-4 t-text-sm"
+      >
         <template v-if="message">
           {{ message }}
         </template>
@@ -49,17 +55,20 @@
       </div>
     </template>
     <template v-else-if="!active && done">
-      <shipping-method
-        :method="selectedMethod"
+      <ShippingMethod
         v-model="selected"
+        :method="selectedMethod"
         :disabled="true"
       />
-      <div v-if="additionalCharges" class="t-mt-4">
-        <additional-charges
+      <div
+        v-if="additionalCharges"
+        class="t-mt-4"
+      >
+        <AdditionalCharges
           v-for="(additional, i) in additionalCharges"
           :key="additional.key"
-          :charge="additional"
           v-model="selectedAdditionalCharges[i]"
+          :charge="additional"
           :disabled="true"
           class="t-mt-2 lg:t-mt-0"
         />

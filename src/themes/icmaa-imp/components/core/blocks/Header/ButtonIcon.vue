@@ -1,8 +1,22 @@
 <template>
-  <button class="t-flex t-items-center t-cursor-pointer t-text-white t-relative" :aria-label="$t(title)" @click="$emit('click')">
-    <material-icon :icon="icon" class="t-flex t-flex-fix" />
-    <span v-show="qty > 0" class="qty t-flex t-justify-center t-items-center t-absolute t-bg-alt-3 t-border-2 t-border-base-darkest t-h-3-1/2 t-w-3-1/2 t-rounded-full" />
-    <span v-html="$t(title)" class="t-hidden lg:t-flex-auto lg:t-flex t--ml-1 t-text-white t-text-sm" :class="[last ? 't-mr-4' : 't-mr-2']" />
+  <button
+    class="t-relative t-flex t-cursor-pointer t-items-center t-text-white"
+    :aria-label="$t(title)"
+    @click="$emit('click')"
+  >
+    <MaterialIcon
+      :icon="icon"
+      class="t-flex t-flex-fix"
+    />
+    <span
+      v-show="qty > 0"
+      class="qty t-absolute t-flex t-h-3-1/2 t-w-3-1/2 t-items-center t-justify-center t-rounded-full t-border-2 t-border-base-darkest t-bg-alt-3"
+    />
+    <span
+      class="t--ml-1 t-hidden t-text-sm t-text-white lg:t-flex lg:t-flex-auto"
+      :class="[last ? 't-mr-4' : 't-mr-2']"
+      v-html="$t(title)"
+    />
   </button>
 </template>
 

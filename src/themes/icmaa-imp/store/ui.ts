@@ -5,6 +5,15 @@ import type { Route } from 'vue-router'
 
 const AsyncUserNavigation = () => import(/* webpackChunkName: "vsf-sidebar-user" */ '../components/core/blocks/MyAccount/NavigationSidebar.vue')
 
+export const viewportSizes = {
+  'xs': 415, // (min-width: 415px)
+  /** These are the defaults of Tailwind CSS */
+  'sm': 640, // (min-width: 640px)
+  'md': 768, // (min-width: 768px)
+  'lg': 1024, // (min-width: 1024px)
+  'xl': 1280 // (min-width: 1280px)
+}
+
 export const uiStore = {
   namespaced: true,
   state: {
@@ -110,9 +119,9 @@ export const uiStore = {
        * Breakpoints of TailwindCSS:
        * @see https://tailwindcss.com/docs/breakpoints/#app
        */
-      type viewport = [string, number]
-      const viewports: viewport[] = [ ['xl', 1280], ['lg', 1024], ['md', 768], ['sm', 640], ['xs', 375] ]
-      let viewport: viewport = viewports.find(vp => window.matchMedia(`(min-width: ${vp[1]}px)`).matches)
+      type Viewport = [string, number]
+      const viewports: Viewport[] = Object.entries(viewportSizes).map(([key, value]) => [key, value])
+      let viewport: Viewport = viewports.find(vp => window.matchMedia(`(min-width: ${vp[1]}px)`).matches)
 
       /** If no viewport is found because its the smallest viewport */
       if (!viewport) {
@@ -126,6 +135,7 @@ export const uiStore = {
     setIsTouchDevice ({ commit }, { window, navigator }: { window: Window, navigator: Navigator }) {
       const isTouchDevice = 'ontouchstart' in window ||
         navigator.maxTouchPoints > 0 ||
+        // @ts-ignore
         navigator.msMaxTouchPoints > 0
       commit('setIsTouchDevice', isTouchDevice)
     },

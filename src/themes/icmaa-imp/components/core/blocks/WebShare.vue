@@ -1,18 +1,33 @@
 <template>
   <div>
-    <a v-for="(shareUrl, key) in shareUrls" :key="key" :href="shareUrl" target="_blank" rel="noopener noreferrer" title="key | capitalize" class="t-text-base-light" :class="{ 't-mr-4': key !== lastKey }">
-      <material-icon icon-set="icmaa" :icon="key" size="sm" />
+    <a
+      v-for="(shareUrl, key) in shareUrls"
+      :key="key"
+      :href="shareUrl"
+      target="_blank"
+      rel="noopener noreferrer"
+      :title="key | capitalize"
+      class="t-text-base-light"
+      :class="{ 't-mr-4': key !== lastKey }"
+    >
+      <MaterialIcon
+        icon-set="icmaa"
+        :icon="key"
+        size="sm"
+      />
     </a>
   </div>
 </template>
 
 <script>
-import i18n from '@vue-storefront/i18n'
 import { isServer } from '@vue-storefront/core/helpers'
 import MaterialIcon from 'theme/components/core/blocks/MaterialIcon'
 
 export default {
   name: 'WebShare',
+  components: {
+    MaterialIcon
+  },
   props: {
     webshareText: {
       type: String,
@@ -22,9 +37,6 @@ export default {
       type: String,
       default: ''
     }
-  },
-  components: {
-    MaterialIcon
   },
   computed: {
     url () {
@@ -38,9 +50,9 @@ export default {
     },
     shareUrls () {
       return {
-        'facebook-square': `https://facebook.com/sharer/sharer.php?u=${this.url}`,
         'twitter': `https://twitter.com/intent/tweet/?text=${this.text}&amp;url=${this.url}`,
         'pinterest': `https://pinterest.com/pin/create/button/?url=${this.url}&amp;media=${this.image}&amp;description=${this.text}`,
+        'telegram': `https://t.me/share/url?url=${this.url}&amp;text=${this.text}`,
         'whatsapp': `whatsapp://send?text=${this.url}%20${this.text}`
       }
     },

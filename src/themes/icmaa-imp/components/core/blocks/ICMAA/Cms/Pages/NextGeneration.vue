@@ -2,30 +2,74 @@
   <div class="t-bg-white">
     <!-- Header -->
     <div>
-      <picture-component :src="headerImage.src" :width="headerImage.width" :height="headerImage.height" :sizes="headerImage.sizes" :placeholder="true" :ratio="`${headerImage.width}:${headerImage.height}`" :alt="headerImage.alt | htmlDecode" />
+      <PictureComponent
+        :src="headerImage.src"
+        :width="headerImage.width"
+        :height="headerImage.height"
+        :sizes="headerImage.sizes"
+        :placeholder="true"
+        :ratio="`${headerImage.width}:${headerImage.height}`"
+        :alt="headerImage.alt | htmlDecode"
+      />
     </div>
     <!-- Text -->
-    <div class="t-container t-text-center t-w-3/4 md:t-w-1/2">
-      <h2 class="t-text-black t-m-5 t-uppercase t-text-xl" v-html="content.info.headline" />
+    <div class="t-container t-w-3/4 t-text-center md:t-w-1/2">
+      <h2
+        class="t-m-5 t-text-xl t-uppercase t-text-black"
+        v-html="content.info.headline"
+      />
       <p v-html="content.info.text" />
     </div>
     <!-- Categories -->
     <div class="t-container t-flex t-flex-wrap">
-      <div v-for="category in categories" :key="category.name" class="t-w-full t-text-center md:t-w-1/2 t-p-10 t-self-center">
-        <picture-component :src="category.img.src" :width="category.img.width" :height="category.img.height" :sizes="category.img.sizes" :placeholder="true" :ratio="`${category.img.width}:${category.img.height}`" :alt="category.img.alt | htmlDecode" class="t-w-full" />
+      <div
+        v-for="category in categories"
+        :key="category.name"
+        class="t-w-full t-self-center t-p-10 t-text-center md:t-w-1/2"
+      >
+        <PictureComponent
+          :src="category.img.src"
+          :width="category.img.width"
+          :height="category.img.height"
+          :sizes="category.img.sizes"
+          :placeholder="true"
+          :ratio="`${category.img.width}:${category.img.height}`"
+          :alt="category.img.alt | htmlDecode"
+          class="t-w-full"
+        />
         <div v-if="category.text">
-          <p class="t-font-bold t-my-4" v-text="category.text" />
-          <p class="t-font-bold" v-text="content.voting_price" /><span v-text="category.price_voting" />
-          <p class="t-font-bold" v-text="content.jury_price" /><span v-text="category.price_jury" />
-          <universal-link :to="category.link" class="t-w-1/2 t-p-2 t-block t-text-center t-bg-base-dark t-container t-text-white t-px-4 t-my-4">
+          <p
+            class="t-my-4 t-font-bold"
+            v-text="category.text"
+          />
+          <p
+            class="t-font-bold"
+            v-text="content.voting_price"
+          /><span v-text="category.price_voting" />
+          <p
+            class="t-font-bold"
+            v-text="content.jury_price"
+          /><span v-text="category.price_jury" />
+          <UniversalLink
+            :to="category.link"
+            class="t-container t-my-4 t-block t-w-1/2 t-bg-base-dark t-p-2 t-px-4 t-text-center t-text-white"
+          >
             {{ content.button_text }}
-          </universal-link>
+          </UniversalLink>
         </div>
       </div>
     </div>
     <!-- Footer -->
     <div>
-      <picture-component :src="footerImage.src" :width="footerImage.width" :height="footerImage.height" :sizes="footerImage.sizes" :placeholder="true" :ratio="`${footerImage.width}:${footerImage.height}`" :alt="footerImage.alt | htmlDecode" />
+      <PictureComponent
+        :src="footerImage.src"
+        :width="footerImage.width"
+        :height="footerImage.height"
+        :sizes="footerImage.sizes"
+        :placeholder="true"
+        :ratio="`${footerImage.width}:${footerImage.height}`"
+        :alt="footerImage.alt | htmlDecode"
+      />
     </div>
   </div>
 </template>
@@ -37,11 +81,11 @@ import UniversalLink from 'theme/components/core/blocks/Link'
 
 export default {
   name: 'NextGeneration',
-  mixins: [ Page ],
   components: {
     PictureComponent,
     UniversalLink
   },
+  mixins: [ Page ],
   data () {
     return {
       dataType: 'yaml'
@@ -61,8 +105,8 @@ export default {
           width: 610,
           height: 460,
           sizes: [
-            { media: '(min-width: 415px)', width: 560 },
-            { media: '(max-width: 414px)', width: 415 }
+            { media: 'xs', width: 560 },
+            { width: 415 }
           ]
         }
 

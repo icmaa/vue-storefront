@@ -1,17 +1,18 @@
 <template>
   <div class="t-pt-2">
     <div
+      v-if="info.description"
       class="t-text-sm"
       v-text="info.description"
-      v-if="info.description"
     />
-    <div class="card-frame t-h-10 t-border t-border-base-light t-rounded-sm t-mt-4" />
-    <validation-messages :validations="[
-      {
-        condition: $v.isValid.$error && (!$v.isValid.notFalse || !$v.isValid.required),
-        text: $t('Please validate your card information')
-      }
-    ]"
+    <div class="card-frame t-mt-4 t-h-10 t-rounded-sm t-border t-border-base-light" />
+    <ValidationMessages
+      :validations="[
+        {
+          condition: $v.isValid.$error && (!$v.isValid.notFalse || !$v.isValid.required),
+          text: $t('Please validate your card information')
+        }
+      ]"
     />
   </div>
 </template>

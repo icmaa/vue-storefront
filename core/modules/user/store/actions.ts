@@ -5,8 +5,8 @@ import RootState from '@vue-storefront/core/types/RootState'
 import UserState from '../types/UserState'
 import { Logger } from '@vue-storefront/core/lib/logger'
 import { UserProfile } from '../types/UserProfile'
-import { onlineHelper } from '@vue-storefront/core/helpers'
-import { isServer } from '@vue-storefront/core/helpers'
+import { onlineHelper, isServer } from '@vue-storefront/core/helpers'
+
 import { UserService } from '@vue-storefront/core/data-resolver'
 import EventBus from '@vue-storefront/core/compatibility/plugins/event-bus'
 import { StorageManager } from '@vue-storefront/core/lib/storage-manager'
@@ -274,8 +274,8 @@ const actions: ActionTree<UserState, RootState> = {
     const resp = await UserService.getOrdersHistory(pageSize, currentPage)
 
     if (resp.code === 200) {
-      const oldOrders = getters.getOrdersHistory;
-      let orders = resp.result;
+      const oldOrders = getters.getOrdersHistory
+      let orders = resp.result
       if (oldOrders && orders.items) orders.items = uniqBy([...oldOrders, ...orders.items], 'increment_id')
 
       commit(types.USER_ORDERS_HISTORY_LOADED, orders)

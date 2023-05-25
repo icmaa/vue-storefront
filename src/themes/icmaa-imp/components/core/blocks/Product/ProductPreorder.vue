@@ -1,8 +1,15 @@
 <template>
-  <div class="t-mt-4 t--mb-8 t--mx-8 t-bg-base-tone t-px-8 t-py-4 t-text-sm t-text-white">
-    <material-icon icon="alarm" size="sm" class="t--ml-6 t-absolute" />
+  <div class="t--mx-8 t--mb-8 t-mt-4 t-bg-base-tone t-px-8 t-py-4 t-text-sm t-text-white">
+    <MaterialIcon
+      icon="alarm"
+      size="sm"
+      class="t-absolute t--ml-6"
+    />
     <span class="t-font-bold">{{ $t('Notice') }}: </span>
-    <span class="description" v-text="preorderText" />
+    <span
+      class="description"
+      v-text="preorderText"
+    />
   </div>
 </template>
 
@@ -12,14 +19,14 @@ import { toDate } from 'icmaa-config/helpers/datetime'
 import i18n from '@vue-storefront/i18n'
 
 export default {
+  components: {
+    MaterialIcon
+  },
   props: {
     product: {
       type: Object,
       required: true
     }
-  },
-  components: {
-    MaterialIcon
   },
   computed: {
     preorderText () {

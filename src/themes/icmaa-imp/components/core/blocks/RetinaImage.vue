@@ -1,9 +1,21 @@
 <template>
   <div v-if="placeholder && loading">
-    <placeholder :ratio="ratio" />
-    <img :src="src" :srcset="srcset" @load="loaded" @error="error" class="t-hidden">
+    <Placeholder :ratio="ratio" />
+    <img
+      :src="src"
+      :srcset="srcset"
+      class="t-hidden"
+      @load="loaded"
+      @error="error"
+    >
   </div>
-  <img :src="src" :srcset="srcset" @load="loaded" @error="error" v-else>
+  <img
+    v-else
+    :src="src"
+    :srcset="srcset"
+    @load="loaded"
+    @error="error"
+  >
 </template>
 
 <script>

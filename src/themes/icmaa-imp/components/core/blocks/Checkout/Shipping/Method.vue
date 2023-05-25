@@ -1,22 +1,22 @@
 <template>
   <div
-    class="t-flex t-items-start t-cursor-pointer"
+    class="t-flex t-cursor-pointer t-items-start"
     :class="{ 't-opacity-50': !active }"
     @click="onClick"
   >
-    <retina-image
+    <RetinaImage
+      v-if="method.image"
       :image="method.image"
       :placeholder="true"
       ratio="70:32"
       class="t-mr-2"
-      :class="{ 't-grayscale t-opacity-75': !active }"
-      v-if="method.image"
+      :class="{ 't-opacity-75 t-grayscale': !active }"
     />
     <div class="t-leading-4">
       <h3 class="t-font-bold">
         {{ method.title }}
       </h3>
-      <p class="t-text-base-tone t-text-xs">
+      <p class="t-text-xs t-text-base-tone">
         {{ method.description }}<span>, {{ price(method.amount) }}</span>
       </p>
     </div>

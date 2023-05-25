@@ -1,14 +1,22 @@
 <template>
-  <modal name="modal-newsletter" :title="$t('Newsletter')" :width="400">
-    <form @submit.prevent="subscribe(onSuccesfulSubmission)" novalidate v-if="!isSubscribedToNewsletter">
-      <p class="t-text-sm t-mb-4">
+  <Modal
+    name="modal-newsletter"
+    :title="$t('Newsletter')"
+    :width="400"
+  >
+    <form
+      v-if="!isSubscribedToNewsletter"
+      novalidate
+      @submit.prevent="subscribe(onSuccesfulSubmission)"
+    >
+      <p class="t-mb-4 t-text-sm">
         {{ $t('Sign up to our newsletter and receive a coupon for {voucher_value} off!', { voucher_value: newsletterVoucherValue }) }}
       </p>
-      <base-input
+      <BaseInput
+        v-model="email"
         focus
         type="email"
         name="email"
-        v-model="email"
         class="t-mb-4"
         :placeholder="$t('E-mail address *')"
         :validations="[
@@ -22,21 +30,33 @@
           }
         ]"
       />
-      <button-component class="t-w-full" type="primary" :submit="true" @click="$v.email.$touch">
+      <ButtonComponent
+        class="t-w-full"
+        type="primary"
+        :submit="true"
+        @click="$v.email.$touch"
+      >
         {{ $t('Subscribe') }}
-      </button-component>
+      </ButtonComponent>
     </form>
     <div v-else>
       {{ $t('Oh great, you are already subscribed.') }}
-      <i18n path="You can manage your subscription in your {account-settings}." tag="div" class="t-text-xs t-text-base-light">
+      <i18n
+        path="You can manage your subscription in your {account-settings}."
+        tag="div"
+        class="t-text-xs t-text-base-light"
+      >
         <template #account-settings>
-          <router-link :to="localizedRoute('/my-account/newsletter')" class="t-text-base-light t-underline">
+          <router-link
+            :to="localizedRoute('/my-account/newsletter')"
+            class="t-text-base-light t-underline"
+          >
             {{ $t('account settings') }}
           </router-link>
         </template>
       </i18n>
     </div>
-  </modal>
+  </Modal>
 </template>
 <script>
 import i18n from '@vue-storefront/i18n'
@@ -49,12 +69,12 @@ import ButtonComponent from 'theme/components/core/blocks/Button'
 
 export default {
   name: 'NewsletterPopup',
-  mixins: [ NewsletterMixin ],
   components: {
     Modal,
     BaseInput,
     ButtonComponent
   },
+  mixins: [ NewsletterMixin ],
   data () {
     return {
       email: '',

@@ -1,17 +1,32 @@
 <template>
   <div class="wrapper">
-    <div class="row" v-if="OnlineOnly">
+    <div
+      v-if="OnlineOnly"
+      class="row"
+    >
       <i class="material-icons icon">error</i>
       <span>An error occured while loading the component. </span>
       <div>
-        <span class="link" @click="reload">Try again</span> /
-        <span class="link" @click="close"> Close</span>
+        <span
+          class="link"
+          @click="reload"
+        >Try again</span> /
+        <span
+          class="link"
+          @click="close"
+        > Close</span>
       </div>
     </div>
-    <div class="row" v-if="OfflineOnly">
+    <div
+      v-if="OfflineOnly"
+      class="row"
+    >
       <i class="material-icons icon">error</i>
       <span>Component couldn't be loaded due to lack of network connectivity.</span>
-      <span class="link" @click="close">Close</span>
+      <span
+        class="link"
+        @click="close"
+      >Close</span>
     </div>
   </div>
 </template>

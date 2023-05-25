@@ -1,16 +1,46 @@
 <template>
   <div v-if="product">
-    <product-tile :product="product" :show-price="false">
-      <template v-slot:imageOverlay>
-        <button-component type="transparent" :rounded="false" icon="close" icon-position="right" :icon-only="true" :confirm="true" padding-x="t-px-2 lg:t-px-3" @click="removeAlert" class="t-absolute t-bottom-0 t-right-0 t-z-1 lg:t-h-12 t-bg-white">
+    <ProductTile
+      :product="product"
+      :show-price="false"
+    >
+      <template #imageOverlay>
+        <ButtonComponent
+          type="transparent"
+          :rounded="false"
+          icon="close"
+          icon-position="right"
+          :icon-only="true"
+          :confirm="true"
+          padding-x="t-px-2 lg:t-px-3"
+          class="t-absolute t-bottom-0 t-right-0 t-z-1 t-bg-white lg:t-h-12"
+          @click="removeAlert"
+        >
           {{ $t('Delete') }}
-        </button-component>
+        </ButtonComponent>
       </template>
-    </product-tile>
-    <div v-if="options.length > 0" class="t-mt-2">
-      <div v-for="(option, i) in options" :key="i" class="t-flex t-items-center">
-        <span v-text="option.label + ':'" class="t-text-xs t-mr-2" />
-        <button-component type="tag" size="xs" :cursor-pointer="false" v-text="option.value" class="t-mr-2" />
+    </ProductTile>
+    <div
+      v-if="options.length > 0"
+      class="t-mt-2"
+    >
+      <div
+        v-for="(option, i) in options"
+        :key="i"
+        class="t-flex t-items-center"
+      >
+        <span
+          class="t-mr-2 t-text-xs"
+          v-text="option.label + ':'"
+        />
+        <ButtonComponent
+          type="tag"
+          size="xs"
+          :cursor-pointer="false"
+          class="t-mr-2"
+        >
+          {{ option.value }}
+        </ButtonComponent>
       </div>
     </div>
   </div>

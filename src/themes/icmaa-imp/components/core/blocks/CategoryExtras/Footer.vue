@@ -1,11 +1,32 @@
 <template>
-  <div class="category-footer" v-if="isVisible && (description || footerContent || footerDescription)">
-    <div class="t-mb-8 md:t-mb-0 t-px-4" v-if="description || footerContent">
-      <h2 class="t-any category-footer__headline" v-text="categoryExtras.title" v-if="categoryExtras.title" />
-      <component v-if="description" :is="descriptionComponent" class="category-footer__description" />
-      <block-wrapper class="category-footer__description" :components="footerContent" v-if="footerContent" />
+  <div
+    v-if="isVisible && (description || footerContent || footerDescription)"
+    class="category-footer"
+  >
+    <div
+      v-if="description || footerContent"
+      class="t-mb-8 t-px-4 md:t-mb-0"
+    >
+      <h2
+        v-if="categoryExtras.title"
+        class="t-any category-footer__headline"
+        v-text="categoryExtras.title"
+      />
+      <component
+        :is="descriptionComponent"
+        v-if="description"
+        class="category-footer__description"
+      />
+      <BlockWrapper
+        v-if="footerContent"
+        class="category-footer__description"
+        :components="footerContent"
+      />
     </div>
-    <div class="t-mt-8 t-text-xs t-text-base-lighter t-leading-snug" v-if="footerDescription">
+    <div
+      v-if="footerDescription"
+      class="t-mt-8 t-text-xs t-leading-snug t-text-base-lighter"
+    >
       {{ footerDescription }}
     </div>
   </div>

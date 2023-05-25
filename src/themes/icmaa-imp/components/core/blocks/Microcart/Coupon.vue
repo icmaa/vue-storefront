@@ -1,7 +1,13 @@
 <template>
-  <div class="t-mb-4 t-pb-4 t-border-b t-border-base-lightest">
-    <coupon-field :coupon="currentCouponCodes" :class="{ 't-mb-4': coupon }" />
-    <coupon-field v-if="coupon" :label="$t('Add another discount code')" />
+  <div class="t-mb-4 t-border-b t-border-base-lightest t-pb-4">
+    <CouponField
+      :coupon="currentCouponCodes"
+      :class="{ 't-mb-4': coupon }"
+    />
+    <CouponField
+      v-if="coupon"
+      :label="$t('Add another discount code')"
+    />
   </div>
 </template>
 

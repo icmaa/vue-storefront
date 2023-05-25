@@ -1,5 +1,11 @@
 <template>
-  <button-icon :icon="icon" :title="title" :qty="quantity" @click="openSidebarNavigation" data-test-id="ButtonUiSidebar" />
+  <ButtonIcon
+    :icon="icon"
+    :title="title"
+    :qty="quantity"
+    data-test-id="ButtonUiSidebar"
+    @click="openSidebarNavigation"
+  />
 </template>
 
 <script>

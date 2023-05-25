@@ -1,53 +1,62 @@
 <template>
   <div class="personal-details">
     <form v-if="active">
-      <div v-if="!isLoggedIn" class="t-flex t-mb-8">
-        <login
-          :is-modal="false"
-          @call-register="toggleRegistration(true)"
-          class="t-w-full"
+      <div
+        v-if="!isLoggedIn"
+        class="t-mb-8 t-flex"
+      >
+        <Login
           v-if="!showRegistration"
+          :is-modal="false"
+          class="t-w-full"
+          @call-register="toggleRegistration(true)"
         />
-        <button-component
+        <ButtonComponent
           v-else
           size="lg"
           class="t-w-full lg:t-w-auto"
           @click="toggleRegistration(true)"
         >
           {{ $t('Login') }}
-        </button-component>
+        </ButtonComponent>
       </div>
       <div v-if="!isLoggedIn">
         <div class="t-mb-4 t-font-light">
           {{ details.createAccount ? $t('Proceed as new user') : $t('Proceed without login') }}
         </div>
-        <div class="t-flex t-flex-wrap" v-if="!showRegistration">
+        <div
+          v-if="!showRegistration"
+          class="t-flex t-flex-wrap"
+        >
           <div class="t-w-full">
-            <button-component
+            <ButtonComponent
               type="ghost"
               class="t-w-full"
-              @click="toggleRegistration(false)"
               data-test-id="guestCheckoutButton"
+              @click="toggleRegistration(false)"
             >
               {{ $t('Proceed as guest') }}
-            </button-component>
+            </ButtonComponent>
           </div>
-          <paypal-checkout-button color="white" class="t-flex-1 t-mt-2 t-z-0" />
+          <PaypalCheckoutButton
+            color="white"
+            class="t-z-0 t-mt-2 t-flex-1"
+          />
         </div>
       </div>
       <div
-        class="t-flex t-flex-wrap t--mx-2"
         v-if="isLoggedIn || (!isLoggedIn && showRegistration)"
+        class="t--mx-2 t-flex t-flex-wrap"
         data-test-id="RegistrationForm"
       >
-        <base-input
-          class="t-w-full t-px-2 t-mb-4"
+        <BaseInput
+          id="email"
+          v-model="details.email"
+          class="t-mb-4 t-w-full t-px-2"
           type="email"
           autocomplete="email"
-          id="email"
           name="email"
           :placeholder="$t('Email address')"
-          v-model="details.email"
           :disabled="isLoggedIn"
           :validations="[
             {
@@ -60,14 +69,14 @@
             }
           ]"
         />
-        <base-input
-          class="t-w-full lg:t-w-1/2 t-px-2 t-mb-4"
+        <BaseInput
+          id="first-name"
+          v-model.trim="details.firstname"
+          class="t-mb-4 t-w-full t-px-2 lg:t-w-1/2"
           type="text"
           autocomplete="given-name"
-          id="first-name"
           name="first-name"
           :placeholder="$t('First name')"
-          v-model.trim="details.firstname"
           :validations="[
             {
               condition: $v.details.firstname.$error && !$v.details.firstname.required,
@@ -79,14 +88,14 @@
             }
           ]"
         />
-        <base-input
-          class="t-w-full lg:t-w-1/2 t-px-2 t-mb-4"
+        <BaseInput
+          id="last-name"
+          v-model.trim="details.lastname"
+          class="t-mb-4 t-w-full t-px-2 lg:t-w-1/2"
           type="text"
           autocomplete="family-name"
-          id="last-name"
           name="last-name"
           :placeholder="$t('Last name')"
-          v-model.trim="details.lastname"
           :validations="[
             {
               condition: $v.details.lastname.$error && !$v.details.lastname.required,
@@ -98,35 +107,35 @@
             }
           ]"
         />
-        <base-checkbox
-          class="t-w-full t-px-2 t-mb-4"
-          id="create-account"
-          name="create-account"
-          v-model="details.createAccount"
-          data-test-id="CreateAccountCheckbox"
+        <BaseCheckbox
           v-if="!isLoggedIn"
+          id="create-account"
+          v-model="details.createAccount"
+          class="t-mb-4 t-w-full t-px-2"
+          name="create-account"
+          data-test-id="CreateAccountCheckbox"
         >
           {{ $t('I want to create an account') }}
-        </base-checkbox>
+        </BaseCheckbox>
         <template v-if="details.createAccount">
-          <gender-select
-            class="t-w-full lg:t-w-1/2 t-px-2 t-mb-4"
+          <GenderSelect
             id="gender"
-            name="gender"
             v-model="details.gender"
+            class="t-mb-4 t-w-full t-px-2 lg:t-w-1/2"
+            name="gender"
             :validations="[{
               condition: !$v.details.gender.required && $v.details.gender.$error,
               text: $t('Field is required')
             }]"
           />
-          <base-input
-            class="t-w-full lg:t-w-1/2 t-px-2 t-mb-4"
+          <BaseInput
             id="dob"
+            v-model="details.dob"
+            class="t-mb-4 t-w-full t-px-2 lg:t-w-1/2"
             name="dob"
             autocomplete="bday"
             mask="date"
             :placeholder="`${$t('Date of birth')} (${dateFormat})`"
-            v-model="details.dob"
             :validations="[{
               condition: !$v.details.dob.required && $v.details.dob.$error,
               text: $t('Field is required')
@@ -135,15 +144,15 @@
               text: $t('Use a valid date.')
             }]"
           />
-          <base-input
-            class="t-w-full t-px-2 t-mb-4"
+          <BaseInput
+            id="password"
+            ref="password"
+            v-model="details.password"
+            class="t-mb-4 t-w-full t-px-2"
             type="password"
             autocomplete="new-password"
-            ref="password"
-            id="password"
             name="password"
             :placeholder="$t('Password')"
-            v-model="details.password"
             :validations="[
               {
                 condition: $v.details.password.$error && !$v.details.password.required,
@@ -154,14 +163,14 @@
               }
             ]"
           />
-          <base-input
-            class="t-w-full t-px-2 t-mb-4"
+          <BaseInput
+            id="password-confirm"
+            v-model="rPassword"
+            class="t-mb-4 t-w-full t-px-2"
             type="password"
             autocomplete="new-password"
-            id="password-confirm"
             name="password-confirm"
             :placeholder="$t('Repeat password')"
-            v-model="rPassword"
             :validations="[
               {
                 condition: $v.rPassword.$error && !$v.rPassword.required,
@@ -175,14 +184,14 @@
           />
         </template>
         <div class="t-w-full t-px-2">
-          <button-component
+          <ButtonComponent
             class="t-w-full lg:t-w-auto"
             type="primary"
-            @click.native.stop="submit"
             data-test-id="NextStepButton"
+            @click.native.stop="submit"
           >
             {{ $t(('Continue to address')) }}
-          </button-component>
+          </ButtonComponent>
         </div>
       </div>
     </form>
@@ -191,15 +200,18 @@
         {{ details.firstname }} {{ details.lastname }}<br>
         {{ details.email }}
       </div>
-      <div v-if="details.createAccount && !isLoggedIn" class="t-mt-2">
-        <base-checkbox
+      <div
+        v-if="details.createAccount && !isLoggedIn"
+        class="t-mt-2"
+      >
+        <BaseCheckbox
           id="create-account-info-box"
-          name="create-account-info-box"
           v-model="details.createAccount"
+          name="create-account-info-box"
           disabled
         >
           {{ $t('Create a new account') }}
-        </base-checkbox>
+        </BaseCheckbox>
       </div>
     </div>
   </div>

@@ -1,6 +1,10 @@
 <template>
-  <div id="cms-landing-page" class="t-container t-p-4" v-if="page">
-    <block-wrapper :components="page.content" />
+  <div
+    v-if="page"
+    id="cms-landing-page"
+    class="t-container t-p-4"
+  >
+    <BlockWrapper :components="page.content" />
   </div>
 </template>
 
@@ -12,9 +16,19 @@ import CmsMetaMixin from 'icmaa-meta/mixins/cmsMeta'
 
 export default {
   name: 'LandingPage',
-  mixins: [ CmsMetaMixin ],
   components: {
     BlockWrapper
+  },
+  mixins: [ CmsMetaMixin ],
+  async asyncData ({ store, context, route }) {
+    if (context) {
+      context.output.cacheTags
+        .add('landingpage')
+        .add('category')
+        .add('product')
+    }
+
+    await store.dispatch('icmaaCmsLandingPages/single', { value: route.params.identifier })
   },
   computed: {
     ...mapGetters({
@@ -26,16 +40,6 @@ export default {
     page () {
       return this.rawLandingPages && this.rawLandingPages.find(p => p.identifier === this.identifier)
     }
-  },
-  async asyncData ({ store, context, route }) {
-    if (context) {
-      context.output.cacheTags
-        .add('landingpage')
-        .add('category')
-        .add('product')
-    }
-
-    await store.dispatch('icmaaCmsLandingPages/single', { value: route.params.identifier })
   }
 }
 </script>

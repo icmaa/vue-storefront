@@ -1,14 +1,22 @@
 <template>
   <div data-test-id="Register">
     <div class="modal-content">
-      <form @submit.prevent="validate" novalidate class="t-flex t-flex-wrap t--mx-2">
-        <input type="hidden" name="cluster" :value="cluster">
-        <base-input
-          type="email"
+      <form
+        novalidate
+        class="t--mx-2 t-flex t-flex-wrap"
+        @submit.prevent="validate"
+      >
+        <input
+          type="hidden"
+          name="cluster"
+          :value="cluster"
+        >
+        <BaseInput
           id="email"
+          v-model="email"
+          type="email"
           name="email"
           autocomplete="email"
-          v-model="email"
           focus
           :placeholder="$t('E-mail address') + ' *'"
           :validations="[
@@ -21,13 +29,13 @@
               text: $t('Please provide valid e-mail address.')
             }
           ]"
-          class="t-w-full t-px-2 t-mb-4"
+          class="t-mb-4 t-w-full t-px-2"
         />
-        <base-input
+        <BaseInput
           id="first-name"
+          v-model="firstName"
           name="first-name"
           autocomplete="given-name"
-          v-model="firstName"
           :placeholder="$t('First name') + ' *'"
           :validations="[
             {
@@ -35,37 +43,37 @@
               text: $t('Field is required')
             }
           ]"
-          class="t-w-full sm:t-w-1/2 t-px-2 t-mb-4"
+          class="t-mb-4 t-w-full t-px-2 sm:t-w-1/2"
         />
-        <base-input
+        <BaseInput
           id="last-name"
+          v-model="lastName"
           name="last-name"
           autocomplete="family-name"
-          v-model="lastName"
           :placeholder="$t('Last name') + ' *'"
           :validations="[{
             condition: !$v.lastName.required && $v.lastName.$error,
             text: $t('Field is required')
           }]"
-          class="t-w-full sm:t-w-1/2 t-px-2 t-mb-4"
+          class="t-mb-4 t-w-full t-px-2 sm:t-w-1/2"
         />
-        <gender-select
+        <GenderSelect
           id="gender"
-          name="gender"
           v-model="gender"
+          name="gender"
           :initial-option-text="$t('Gender') + ' *'"
           :validations="[{
             condition: !$v.gender.required && $v.gender.$error,
             text: $t('Field is required')
           }]"
-          class="t-w-full sm:t-w-1/2 t-px-2 t-mb-4"
+          class="t-mb-4 t-w-full t-px-2 sm:t-w-1/2"
         />
-        <base-input
+        <BaseInput
           id="dob"
+          v-model="dob"
           name="dob"
           autocomplete="bday"
           mask="date"
-          v-model="dob"
           :placeholder="`${$t('Date of birth')} (${dateFormat}) *`"
           :validations="[
             {
@@ -77,15 +85,15 @@
               text: $t('Use a valid date.')
             }
           ]"
-          class="t-w-full sm:t-w-1/2 t-px-2 t-mb-4"
+          class="t-mb-4 t-w-full t-px-2 sm:t-w-1/2"
         />
-        <base-input
-          type="password"
+        <BaseInput
           id="password"
-          name="password"
           ref="password"
-          autocomplete="new-password"
           v-model="password"
+          type="password"
+          name="password"
+          autocomplete="new-password"
           :placeholder="$t('Password') + ' *'"
           :validations="[
             {
@@ -97,14 +105,14 @@
               text: $t('Password must have at least 8 letters.')
             }
           ]"
-          class="t-w-full sm:t-w-1/2 t-px-2 t-mb-4"
+          class="t-mb-4 t-w-full t-px-2 sm:t-w-1/2"
         />
-        <base-input
-          type="password"
+        <BaseInput
           id="password-confirm"
+          v-model="rPassword"
+          type="password"
           name="password-confirm"
           autocomplete="new-password"
-          v-model="rPassword"
           :placeholder="$t('Repeat password') + ' *'"
           :validations="[
             {
@@ -116,51 +124,103 @@
               text: $t('Passwords must be identical.')
             }
           ]"
-          class="t-w-full sm:t-w-1/2 t-px-2 t-mb-4"
+          class="t-mb-4 t-w-full t-px-2 sm:t-w-1/2"
         />
-        <base-checkbox
-          name="newsletter"
+        <BaseCheckbox
           id="newsletter"
           v-model="newsletter"
-          class="t-w-full t-px-2 t-mb-4"
+          name="newsletter"
+          class="t-mb-4 t-w-full t-px-2"
           data-test-id="newsletterCheckbox"
         >
           {{ $t('I want to receive a newsletter') }}
-        </base-checkbox>
+        </BaseCheckbox>
         <div class="t-w-full t-px-2">
-          <div class="t-mb-2 t-text-sm t-text-alert" v-if="$v.recaptcha.$error && !this.$v.recaptcha.required">
+          <div
+            v-if="$v.recaptcha.$error && !$v.recaptcha.required"
+            class="t-mb-2 t-text-sm t-text-alert"
+          >
             {{ $t('Your Google reCAPTCHA validation is invalid.') }}<br>
             {{ $t('Please try again or contact our customer-support.') }}
           </div>
-          <vue-recaptcha ref="recaptcha" :sitekey="recaptchaWebsiteKey" :load-recaptcha-script="true" badge="inline" size="invisible" @verify="recaptchaVerify" @expired="recaptchaError" />
-          <button-component :submit="true" type="primary" class="t-w-full t-mb-2" data-test-id="registerSubmit">
+          <VueRecaptcha
+            ref="recaptcha"
+            :sitekey="recaptchaWebsiteKey"
+            :load-recaptcha-script="true"
+            badge="inline"
+            size="invisible"
+            @verify="recaptchaVerify"
+            @expired="recaptchaError"
+          />
+          <ButtonComponent
+            :submit="true"
+            type="primary"
+            class="t-mb-2 t-w-full"
+            data-test-id="registerSubmit"
+          >
             {{ $t('Register') }} <sup class="t-ml-1">1, 2</sup>
-          </button-component>
-          <no-ssr>
-            <facebook-login-button initial-text="Register with Facebook" class="t-w-full t-mb-2" />
-          </no-ssr>
-          <button-component type="transparent" @click="switchElem" class="t-w-full t-mb-4 t-flex-wrap">
+          </ButtonComponent>
+          <NoSsr>
+            <FacebookLoginButton
+              initial-text="Register with Facebook"
+              class="t-mb-2 t-w-full"
+            />
+          </NoSsr>
+          <ButtonComponent
+            type="transparent"
+            class="t-mb-4 t-w-full t-flex-wrap"
+            @click="switchElem"
+          >
             {{ $t('Already have an account?') }} <span class="t-ml-1">– {{ $t('Login to your account') }}</span>
-          </button-component>
-          <div class="t-w-full t-text-xs t-text-base-lighter t-leading-1-rem">
-            <sup class="t-font-bold t-mr-1">1)</sup>
-            <i18n path="I have read and agree with the {terms}, {policy} and {return}." tag="span">
+          </ButtonComponent>
+          <div class="t-w-full t-text-xs t-leading-1-rem t-text-base-lighter">
+            <sup class="t-mr-1 t-font-bold">1)</sup>
+            <i18n
+              path="I have read and agree with the {terms}, {policy} and {return}."
+              tag="span"
+            >
               <template #terms>
-                <router-link :to="localizedRoute('/service-conditions')" v-html="$t('Terms and Conditions')" class="t-text-base-lighter t-underline" @click.native="close()" />
+                <router-link
+                  :to="localizedRoute('/service-conditions')"
+                  class="t-text-base-lighter t-underline"
+                  @click.native="close()"
+                >
+                  {{ $t('Terms and Conditions') }}
+                </router-link>
               </template>
               <template #policy>
-                <router-link :to="localizedRoute('/service-imprint')" v-html="$t('Privacy Policy')" class="t-text-base-lighter t-underline" @click.native="close()" />
+                <router-link
+                  :to="localizedRoute('/service-imprint')"
+                  class="t-text-base-lighter t-underline"
+                  @click.native="close()"
+                >
+                  {{ $t('Privacy Policy') }}
+                </router-link>
               </template>
               <template #return>
-                <router-link :to="localizedRoute('/service-return')" v-html="$t('Return Instructions')" class="t-text-base-lighter t-underline" @click.native="close()" />
+                <router-link
+                  :to="localizedRoute('/service-return')"
+                  class="t-text-base-lighter t-underline"
+                  @click.native="close()"
+                >
+                  {{ $t('Return Instructions') }}
+                </router-link>
               </template>
             </i18n>
           </div>
-          <div class="t-w-full t-text-xs t-text-base-lighter t-leading-1-rem t-mt-2">
-            <sup class="t-font-bold t-mr-1">2)</sup>
+          <div class="t-mt-2 t-w-full t-text-xs t-leading-1-rem t-text-base-lighter">
+            <sup class="t-mr-1 t-font-bold">2)</sup>
             This site is protected by reCAPTCHA and the Google
-            <a href="https://policies.google.com/privacy" target="_blank" class="t-underline">Privacy Policy</a> and
-            <a href="https://policies.google.com/terms" target="_blank" class="t-underline">Terms of Service</a> apply.
+            <a
+              href="https://policies.google.com/privacy"
+              target="_blank"
+              class="t-underline"
+            >Privacy Policy</a> and
+            <a
+              href="https://policies.google.com/terms"
+              target="_blank"
+              class="t-underline"
+            >Terms of Service</a> apply.
           </div>
         </div>
       </form>
@@ -193,7 +253,7 @@ export default {
     ButtonComponent,
     FacebookLoginButton,
     VueRecaptcha,
-    'no-ssr': NoSSR
+    NoSsr: NoSSR
   },
   data () {
     return {

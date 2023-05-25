@@ -1,11 +1,14 @@
 <template>
   <div class="empty-layout">
-    <overlay v-if="overlayActive" />
-    <loader />
-    <div id="viewport" class="t-w-full">
+    <Overlay v-if="overlayActive" />
+    <Loader />
+    <div
+      id="viewport"
+      class="t-w-full"
+    >
       <slot />
-      <auth-modal />
-      <notifications />
+      <AuthModal />
+      <Notifications />
     </div>
   </div>
 </template>
@@ -32,14 +35,14 @@ export default {
       overlayActive: state => state.ui.overlay
     })
   },
+  mounted () {
+    this.$store.dispatch('ui/initModalDelay')
+  },
   methods: {
     ...mapGetters({ getMetaData: 'icmaaMeta/getData' }),
     fetchMetaData () {
       return this.$store.dispatch('icmaaMeta/load')
     }
-  },
-  mounted () {
-    this.$store.dispatch('ui/initModalDelay')
   },
   serverPrefetch () {
     return Promise.all([

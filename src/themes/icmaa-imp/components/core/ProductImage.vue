@@ -8,14 +8,16 @@
       :alt="alt + ` - ${sImage.width}px`"
     >
     <img
+      ref="image"
       :src="placeholder"
       :data-src="defaultImage.src"
       :data-srcset="`${defaultImage.src} 1x, ${defaultImage.srcAt2x} 2x`"
       class="product-image t-w-full"
       v-bind="$attrs"
-      v-on="$listeners" :alt="alt" ref="image"
+      :alt="alt"
       :width="width"
       :height="height"
+      v-on="$listeners"
     >
   </picture>
 </template>
@@ -72,8 +74,8 @@ export default {
         { media: '(min-width: 1280px)', width: 300 },
         { media: '(min-width: 1024px)', width: 236 },
         { media: '(min-width: 620px)', width: 364 },
-        { media: '(min-width: 425px)', width: 255 },
-        { media: '(max-width: 424px)', width: 193 }
+        { media: '(min-width: 415px)', width: 255 },
+        { media: '(max-width: 415px)', width: 193 }
       ]
     },
     sourceImages () {
@@ -113,6 +115,20 @@ export default {
       return this.type === 'fullsize'
     }
   },
+  mounted () {
+    this.lazyload(
+      this.$el,
+      {
+        enableAutoReload: this.enableAutoReload,
+        loaded: () => {
+          this.$refs.image.addEventListener('load', this.onLoaded)
+          this.$once('hook:destroyed', () => {
+            document.removeEventListener('load', this.onLoaded)
+          })
+        }
+      }
+    )
+  },
   methods: {
     getImageWithSize (width = 0, height = 0) {
       const src = this.image || ''
@@ -133,20 +149,6 @@ export default {
         )
       }
     }
-  },
-  mounted () {
-    this.lazyload(
-      this.$el,
-      {
-        enableAutoReload: this.enableAutoReload,
-        loaded: () => {
-          this.$refs.image.addEventListener('load', this.onLoaded)
-          this.$once('hook:destroyed', () => {
-            document.removeEventListener('load', this.onLoaded)
-          })
-        }
-      }
-    )
   }
 }
 </script>

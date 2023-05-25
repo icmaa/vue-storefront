@@ -1,7 +1,7 @@
 <template>
   <component
-    v-if="isFirstPageCall"
     :is="asyncJsonLdComponent"
+    v-if="isFirstPageCall"
   />
 </template>
 
@@ -11,21 +11,23 @@ import { mapGetters } from 'vuex'
 
 const productComp = () => import(/* webpackChunkName: "vsf-jsonld-product" */ './Product')
 const ticketComp = () => import(/* webpackChunkName: "vsf-jsonld-ticket" */ './Ticket')
+const articleComp = () => import(/* webpackChunkName: "vsf-jsonld-article" */ './Article')
 const breadcrumbsComp = () => import(/* webpackChunkName: "vsf-jsonld-breadcrumbs" */ './Breadcrumbs')
 
 export default {
   name: 'JsonLdLoader',
-  data () {
-    return {
-      productComp,
-      ticketComp,
-      breadcrumbsComp
-    }
-  },
   props: {
     type: {
       type: String,
       default: 'product'
+    }
+  },
+  data () {
+    return {
+      productComp,
+      ticketComp,
+      breadcrumbsComp,
+      articleComp
     }
   },
   computed: {

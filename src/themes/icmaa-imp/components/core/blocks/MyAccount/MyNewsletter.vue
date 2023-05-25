@@ -1,15 +1,24 @@
 <template>
-  <div class="t-p-4 t-bg-white">
-    <headline>
+  <div class="t-bg-white t-p-4">
+    <Headline>
       {{ $t('My newsletter') }}
-    </headline>
-    <base-checkbox class="t-w-full t-px-2 t-mb-4" id="generalAgreement" name="generalAgreement" v-model="isSubscribed">
+    </Headline>
+    <BaseCheckbox
+      id="generalAgreement"
+      v-model="isSubscribed"
+      class="t-mb-4 t-w-full t-px-2"
+      name="generalAgreement"
+    >
       {{ $t('I want to receive a newsletter, and agree to its terms') }}
-    </base-checkbox>
+    </BaseCheckbox>
     <div class="t-w-full t-px-2">
-      <button-component type="primary" @click.native="updateNewsletter" class="t-w-full lg:t-w-auto">
+      <ButtonComponent
+        type="primary"
+        class="t-w-full lg:t-w-auto"
+        @click.native="updateNewsletter"
+      >
         {{ $t('Update my preferences') }}
-      </button-component>
+      </ButtonComponent>
     </div>
   </div>
 </template>
@@ -35,14 +44,14 @@ export default {
       text_subscribe: 'We are almost done. A confirmation email has been send to your email address.'
     }
   },
-  mounted () {
-    this.isSubscribed = this.customer ? this.getIsSubscribed : false
-  },
   computed: {
     ...mapGetters({
       getIsSubscribed: 'newsletter/isSubscribed',
       customer: 'user/getCustomer'
     })
+  },
+  mounted () {
+    this.isSubscribed = this.customer ? this.getIsSubscribed : false
   },
   methods: {
     updateNewsletter () {

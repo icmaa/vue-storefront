@@ -1,7 +1,12 @@
 import config from 'config'
-import { ImageHookProperties, ImageHookReturn } from '../types/HookTypes'
+import { ImageHookProperties } from '../types/HookTypes'
 
-const afterProductThumbnailPathGenerate = ({ path, sizeX, sizeY }: ImageHookProperties): ImageHookReturn => {
+const afterProductThumbnailPathGenerate = (props: ImageHookProperties, output): Partial<ImageHookProperties> => {
+  let { path, sizeX, sizeY, pathType } = props
+  if (!['product', 'media'].includes(pathType)) {
+    return output
+  }
+
   let { baseUrl, quality } = config.icmaa_cdn['scalecommerce']
 
   baseUrl = baseUrl.replace(/\/*$/, '')

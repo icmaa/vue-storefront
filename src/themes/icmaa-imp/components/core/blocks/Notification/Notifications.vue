@@ -1,10 +1,13 @@
 <template>
-  <div class="notifications t-fixed t-z-1000 t-w-full t-bottom-0 t-left-0 sm:t-w-3/12 sm:t-ml-4" data-test-id="Notifications">
+  <div
+    class="notifications t-fixed t-bottom-0 t-left-0 t-z-1000 t-w-full sm:t-ml-4 sm:t-w-3/12"
+    data-test-id="Notifications"
+  >
     <transition-group name="fade-down">
-      <notification
-        class="lg:t-mb-4"
+      <Notification
         v-for="(notification, index) in notifications"
         :key="`${notification.type}_${index}`"
+        class="lg:t-mb-4"
         :index="index"
         :is-last="index === (notifications.length - 1)"
         v-bind="notification"
@@ -19,10 +22,10 @@ import Notification from 'theme/components/core/blocks/Notification/Notification
 
 export default {
   name: 'Notifications',
-  mixins: [NotificationMixin],
   components: {
     Notification
-  }
+  },
+  mixins: [NotificationMixin]
 }
 </script>
 

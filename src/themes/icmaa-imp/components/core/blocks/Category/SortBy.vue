@@ -7,11 +7,15 @@
         class="t-border-t t-border-base-lighter t-px-2 t-py-3"
       >
         <button
+          class="t-flex t-w-full t-items-center t-justify-between t-text-sm"
           @click="sort(sortOpt)"
-          class="t-w-full t-text-sm t-flex t-items-center t-justify-between"
         >
           {{ $t('Sort by') }} {{ sortOpt.label }}
-          <material-icon icon="check" class="t-leading-1-rem" v-if="currentOption && currentOption.id === sortOpt.id" />
+          <MaterialIcon
+            v-if="currentOption && currentOption.id === sortOpt.id"
+            icon="check"
+            class="t-leading-1-rem"
+          />
         </button>
       </li>
     </ul>
@@ -74,9 +78,6 @@ export default {
       return this.query.sort
     }
   },
-  mounted () {
-    this.initSelected()
-  },
   watch: {
     category () {
       this.initSelected()
@@ -84,6 +85,9 @@ export default {
     routerSortParam () {
       this.initSelected()
     }
+  },
+  mounted () {
+    this.initSelected()
   },
   methods: {
     initSelected () {

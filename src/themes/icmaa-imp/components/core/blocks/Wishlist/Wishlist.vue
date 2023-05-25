@@ -1,21 +1,45 @@
 <template>
-  <sidebar :title="$t('Wishlist')" :close-on-click="true">
-    <template v-slot:top-after-title>
-      <button-component v-if="items.length" type="transparent" size="sm" icon="delete" :icon-only="true" @click="clearWishlist">
+  <Sidebar
+    :title="$t('Wishlist')"
+    :close-on-click="true"
+  >
+    <template #top-after-title>
+      <ButtonComponent
+        v-if="items.length"
+        type="transparent"
+        size="sm"
+        icon="delete"
+        :icon-only="true"
+        @click="clearWishlist"
+      >
         {{ $t('Clear wishlist') }}
-      </button-component>
+      </ButtonComponent>
     </template>
-    <div class="t-pb-24" v-if="!loading">
-      <h4 v-if="!items.length" class="t-text-sm">
+    <div
+      v-if="!loading"
+      class="t-pb-24"
+    >
+      <h4
+        v-if="!items.length"
+        class="t-text-sm"
+      >
         {{ $t('Your wishlist is empty.') }}
       </h4>
-      <div class="t-container" v-else>
+      <div
+        v-else
+        class="t-container"
+      >
         <ul>
-          <product v-for="(item, i) in items" :key="item.id" :product="item.product" :class="{ 't-border-b': items.length !== (i + 1) }" />
+          <Product
+            v-for="(item, i) in items"
+            :key="item.id"
+            :product="item.product"
+            :class="{ 't-border-b': items.length !== (i + 1) }"
+          />
         </ul>
       </div>
     </div>
-  </sidebar>
+  </Sidebar>
 </template>
 
 <script>
@@ -40,6 +64,11 @@ export default {
       'items': 'wishlist/getWishlistItemsWithProduct'
     })
   },
+  async mounted () {
+    this.loading = true
+    await this.$store.dispatch('wishlist/getProducts')
+    this.loading = false
+  },
   methods: {
     clearWishlist () {
       this.$store.dispatch('notification/spawnNotification', {
@@ -53,11 +82,6 @@ export default {
         hasNoTimeout: true
       })
     }
-  },
-  async mounted () {
-    this.loading = true
-    await this.$store.dispatch('wishlist/getProducts')
-    this.loading = false
   }
 }
 </script>

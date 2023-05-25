@@ -1,7 +1,19 @@
 <template>
   <div class="t-flex t-flex-wrap">
-    <div v-for="(care, index) in careInstructions" :key="index" class="t-w-full t-flex t-items-center t-text-sm" :class="{ 't-mb-4': index !== careInstructions.length - 1 }">
-      <img :src="care.image" :srcset="`${care.image} 1x, ${care.imageAt2x} 2x`" :title="care.title" class="t-mr-4" width="24" height="24">
+    <div
+      v-for="(care, index) in careInstructions"
+      :key="index"
+      class="t-flex t-w-full t-items-center t-text-sm"
+      :class="{ 't-mb-4': index !== careInstructions.length - 1 }"
+    >
+      <img
+        :src="care.image"
+        :srcset="`${care.image} 1x, ${care.imageAt2x} 2x`"
+        :title="care.title"
+        class="t-mr-4"
+        width="24"
+        height="24"
+      >
       <span>{{ care.title }}</span>
     </div>
   </div>

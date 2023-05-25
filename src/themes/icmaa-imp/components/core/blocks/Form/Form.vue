@@ -1,41 +1,46 @@
 <template>
-  <form @submit.prevent="submit" novalidate class="form-component t-flex t-flex-wrap t--mx-2 t-pb-4">
+  <form
+    novalidate
+    class="form-component t--mx-2 t-flex t-flex-wrap t-pb-4"
+    @submit.prevent="submit"
+  >
     <template v-for="(element, i) in formElements">
-      <div :key="i"
-           class="t-flex t-w-full t-px-2 t-mb-4"
-           :class="{ 'lg:t-w-1/2': ['half', 'half-single'].includes(element.width) }"
+      <div
+        :key="i"
+        class="t-mb-4 t-flex t-w-full t-px-2"
+        :class="{ 'lg:t-w-1/2': ['half', 'half-single'].includes(element.width) }"
       >
         <template v-if="element.component === 'form_input'">
-          <base-input
-            :name="element.name"
+          <BaseInput
             :id="element.name"
+            v-model="form[element.name]"
+            :name="element.name"
             :label="element.label"
             :placeholder="element.placeholder"
             :mask="element.mask || undefined"
             :validations="validation[element.name]"
-            v-model="form[element.name]"
             class="t-w-full"
           />
         </template>
         <template v-else-if="element.component === 'form_textarea'">
-          <base-textarea
-            :name="element.name"
+          <BaseTextarea
             :id="element.name"
+            v-model="form[element.name]"
+            :name="element.name"
             :label="element.label"
             :placeholder="element.placeholder"
             :validations="validation[element.name]"
-            v-model="form[element.name]"
             class="t-w-full"
           />
         </template>
         <template v-else-if="element.component === 'form_checkbox'">
-          <base-checkbox
-            :name="element.name"
+          <BaseCheckbox
             :id="element.name"
+            v-model="form[element.name]"
+            :name="element.name"
             :validations="validation[element.name]"
             :class="{ 'lg:t-mt-4': ['half', 'half-single'].includes(element.width) }"
             class="t-w-full"
-            v-model="form[element.name]"
           >
             <template v-if="containsHtml(element.label)">
               <component :is="stringToComponent(element.label)" />
@@ -43,45 +48,68 @@
             <template v-else>
               {{ element.label }}
             </template>
-          </base-checkbox>
+          </BaseCheckbox>
         </template>
         <template v-else-if="element.component === 'form_select'">
-          <base-select
-            :name="element.name"
+          <BaseSelect
             :id="element.name"
+            v-model="form[element.name]"
+            :name="element.name"
             :label="element.label"
             :options="element.options"
             :validations="validation[element.name]"
-            v-model="form[element.name]"
             class="t-w-full"
           />
         </template>
         <template v-else-if="element.component === 'form_select_country'">
-          <country-select
-            :name="element.name"
+          <CountrySelect
             :id="element.name"
+            v-model="form[element.name]"
+            :name="element.name"
             :label="element.label"
             :validations="validation[element.name]"
-            v-model="form[element.name]"
             class="t-w-full"
           />
         </template>
       </div>
-      <div class="lg:t-w-1/2" v-if="['half-single'].includes(element.width)" :key="'spacer-' + i" />
+      <div
+        v-if="['half-single'].includes(element.width)"
+        :key="'spacer-' + i"
+        class="lg:t-w-1/2"
+      />
     </template>
     <div class="t-flex t-w-full t-px-2">
-      <div class="t-w-full t-mb-2 t-text-sm t-text-alert" v-if="recaptcha && $v.form.recaptcha.$error && !$v.form.recaptcha.required">
+      <div
+        v-if="recaptcha && $v.form.recaptcha.$error && !$v.form.recaptcha.required"
+        class="t-mb-2 t-w-full t-text-sm t-text-alert"
+      >
         {{ $t('Your Google reCAPTCHA validation is invalid.') }}<br>
         {{ $t('Please try again or contact our customer-support.') }}
       </div>
-      <vue-recaptcha v-if="recaptcha" :sitekey="recaptchaWebsiteKey" :load-recaptcha-script="true" badge="inline" @verify="recaptchaVerify" class="t-w-full">
-        <button-component @click="submit()" type="primary" class="t-w-full lg:t-w-auto t-mt-4">
+      <VueRecaptcha
+        v-if="recaptcha"
+        :sitekey="recaptchaWebsiteKey"
+        :load-recaptcha-script="true"
+        badge="inline"
+        class="t-w-full"
+        @verify="recaptchaVerify"
+      >
+        <ButtonComponent
+          type="primary"
+          class="t-mt-4 t-w-full lg:t-w-auto"
+          @click="submit()"
+        >
           {{ submitButtonText }}
-        </button-component>
-      </vue-recaptcha>
-      <button-component v-else :submit="true" type="primary" class="t-flex-1 lg:t-flex-fix">
+        </ButtonComponent>
+      </VueRecaptcha>
+      <ButtonComponent
+        v-else
+        :submit="true"
+        type="primary"
+        class="t-flex-1 lg:t-flex-fix"
+      >
         {{ submitButtonText }}
-      </button-component>
+      </ButtonComponent>
     </div>
   </form>
 </template>
@@ -104,7 +132,7 @@ import ButtonComponent from 'theme/components/core/blocks/Button'
 import VueRecaptcha from 'vue-recaptcha'
 
 export default {
-  name: 'Form',
+  name: 'FormComponent',
   components: {
     BaseInput,
     BaseSelect,
@@ -136,11 +164,6 @@ export default {
         email: 'Please provide valid e-mail address.',
         required: 'Field is required'
       }
-    }
-  },
-  watch: {
-    form (data) {
-      this.$emit('input', data)
     }
   },
   computed: {
@@ -249,6 +272,14 @@ export default {
       return config.icmaa.googleRecaptcha.websiteKey || false
     }
   },
+  watch: {
+    form (data) {
+      this.$emit('input', data)
+    }
+  },
+  created () {
+    this.form = this.defaults
+  },
   methods: {
     containsHtml (string) {
       return /<\/?[a-z][\s\S]*>/i.test(string)
@@ -275,9 +306,6 @@ export default {
     return {
       form: this.validator
     }
-  },
-  created () {
-    this.form = this.defaults
   }
 }
 </script>

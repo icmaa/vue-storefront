@@ -11,7 +11,7 @@ export default {
     }
 
     const product = store.getters['product/getCurrentProduct']
-    const account = product.band || product.brand
+    const account = product?.band || product?.brand || product?.entertainment
 
     if (account) {
       await store.dispatch('category-next/loadCategoryWithExtras', { filters: { 'ceAccount': account } })
@@ -37,28 +37,31 @@ export default {
       categoryExtras: 'icmaaCategoryExtras/getCategoryExtrasByCurrentCategory',
       departmentCategory: 'icmaaCategoryExtras/getCurrentProductDepartmentCategory'
     }),
-    departmentBrandType () {
-      return this.product.brand ? 'brand' : 'band'
+    accountType () {
+      const p = this.product
+      return (p?.band && `band`) ||
+        (p?.brand && `brand`) ||
+        (p?.entertainment && `entertainment`)
     },
-    departmentBrandValue () {
-      return this.product.brand || this.product.band
+    account () {
+      return this.product?.brand || this.product?.band || this.product?.entertainment
     },
-    departmentBrandOptionLabel () {
+    accountOptionLabel () {
       return this.getOptionLabel({
-        attributeKey: this.departmentBrandValue,
-        optionId: this.product[this.departmentBrandType]
+        attributeKey: this.account,
+        optionId: this.product[this.accountType]
       })
     },
     departmentLogo () {
       return (this.categoryExtras && this.categoryExtras.hasLogo) ? new Logo({ category: this.departmentCategory }) : false
     },
-    hasDepartmentBrandOptionLabel () {
-      return this.departmentBrandOptionLabel !== this.departmentBrandValue
+    hasAccountOptionLabel () {
+      return this.accountOptionLabel !== this.account
     },
     productName () {
       let name = this.product.translatedName
-      const regex = this.hasDepartmentBrandOptionLabel
-        ? new RegExp('/^(' + this.departmentBrandOptionLabel + '*?)(\\s-\\s)/')
+      const regex = this.hasAccountOptionLabel
+        ? new RegExp('/^(' + this.accountOptionLabel + '*?)(\\s-\\s)/')
         : /^(.*?)(\s-\s)/
 
       return !regex.test(name) ? name : {
@@ -70,10 +73,11 @@ export default {
       return price(this.product.price_incl_tax)
     },
     webshareText () {
-      return i18n.t(
-        'Checkout this out: {name} for {price}',
+      const title = i18n.t(
+        '{name} for {price}',
         { name: this.product.translatedName, price: this.formattedProductPrice }
       )
+      return i18n.t('Checkout this out: {title}', { title })
     },
     reviewRating () {
       if (!this.product.id) return 0

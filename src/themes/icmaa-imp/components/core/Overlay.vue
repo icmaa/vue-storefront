@@ -1,5 +1,9 @@
 <template>
-  <div class="overlay t-fixed t-w-full" @click="close" v-if="isVisible" />
+  <div
+    v-if="isVisible"
+    class="overlay t-fixed t-w-full"
+    @click="close"
+  />
 </template>
 
 <script>

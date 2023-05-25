@@ -1,11 +1,27 @@
 <template>
-  <button :type="submit ? 'submit' : 'button'" class="t-flex t-items-center t-webkit-tap-transparent" :class="[ { 't-uppercase': !['select', 'tag', 'tag-active'].includes(type) }, { 't-rounded-sm': rounded }, { 't-cursor-default': !cursorPointer }, sizeClass, colorClass, alignClass ]" :style="customColorStyle" @click="click">
-    <material-icon v-if="icon && iconPosition === 'left'" :icon="icon" :icon-set="iconSet" :size="size === 'md' ? 'md' : 'xs'" class="t-align-middle" :class="[{ 't-mr-4': !iconOnly || unconfirmed }, iconClass ]" />
+  <button
+    :type="submit ? 'submit' : 'button'"
+    class="t-flex t-items-center t-webkit-tap-transparent"
+    :class="[ { 't-uppercase': !['select', 'tag', 'tag-active'].includes(type) }, { 't-rounded-sm': rounded }, { 't-cursor-default': !cursorPointer }, sizeClass, colorClass, alignClass ]"
+    :style="customColorStyle"
+    @click="click"
+  >
+    <MaterialIcon
+      v-if="icon && iconPosition === 'left'"
+      :icon="icon"
+      :icon-set="iconSet"
+      :size="size === 'md' ? 'md' : 'xs'"
+      class="t-align-middle"
+      :class="[{ 't-mr-4': !iconOnly || unconfirmed }, iconClass ]"
+    />
     <template v-if="iconOnly">
       <template v-if="confirm && unconfirmed">
         {{ $t('Are you sure?') }}
       </template>
-      <span class="t-sr-only" v-else>
+      <span
+        v-else
+        class="t-sr-only"
+      >
         <slot />
       </span>
     </template>
@@ -17,7 +33,14 @@
         <slot />
       </template>
     </template>
-    <material-icon v-if="icon && iconPosition === 'right'" :icon="icon" :icon-set="iconSet" :size="size === 'md' ? 'md' : 'xs'" class="t-align-middle" :class="[{ 't-ml-4': !iconOnly || unconfirmed }, iconClass ]" />
+    <MaterialIcon
+      v-if="icon && iconPosition === 'right'"
+      :icon="icon"
+      :icon-set="iconSet"
+      :size="size === 'md' ? 'md' : 'xs'"
+      class="t-align-middle"
+      :class="[{ 't-ml-4': !iconOnly || unconfirmed }, iconClass ]"
+    />
   </button>
 </template>
 
@@ -25,7 +48,7 @@
 import MaterialIcon from 'theme/components/core/blocks/MaterialIcon'
 
 export default {
-  name: 'Button',
+  name: 'ButtonComponent',
   components: {
     MaterialIcon
   },

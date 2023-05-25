@@ -3,23 +3,45 @@
     <!-- Header -->
     <div>
       <router-link :to="content.header.link">
-        <img :src="getMediaThumbnail(content.header.img, 0, 0)" :alt="content.header.alt" :title="content.header.alt">
+        <img
+          :src="getMediaThumbnail(content.header.img, 0, 0)"
+          :alt="content.header.alt"
+          :title="content.header.alt"
+        >
       </router-link>
     </div>
 
     <!-- Cities -->
-    <ul class="t-flex t-justify-center t-mt-4 t-bg-festival">
-      <li class="city-item" v-for="(city, index) in content.cities" :key="index" @click="currentTab = index" :class="{active: currentTab === index}">
-        <router-link :to="'#' + index" class="t-text-white t-block t-p-2 md:t-p-5 t-uppercase t-text-sm md:t-text-xl">
+    <ul class="t-bg-festival t-mt-4 t-flex t-justify-center">
+      <li
+        v-for="(city, index) in content.cities"
+        :key="index"
+        class="city-item"
+        :class="{active: currentTab === index}"
+        @click="currentTab = index"
+      >
+        <router-link
+          :to="'#' + index"
+          class="t-block t-p-2 t-text-sm t-uppercase t-text-white md:t-p-5 md:t-text-xl"
+        >
           {{ city.name }}
         </router-link>
       </li>
     </ul>
 
     <div class="tab-content">
-      <div v-for="(city, index) in content.cities" :key="index" :class="{active: currentTab === index}" v-show="currentTab === index">
+      <div
+        v-for="(city, index) in content.cities"
+        v-show="currentTab === index"
+        :key="index"
+        :class="{active: currentTab === index}"
+      >
         <router-link :to="city.link">
-          <img :src="getMediaThumbnail(city.img, 0, 0)" :alt="city.name" :title="city.name">
+          <img
+            :src="getMediaThumbnail(city.img, 0, 0)"
+            :alt="city.name"
+            :title="city.name"
+          >
         </router-link>
       </div>
     </div>
@@ -27,22 +49,49 @@
     <!-- Extras -->
     <div class="t-mt-8">
       <router-link :to="content.extra.link">
-        <img :src="getMediaThumbnail(content.extra.img, 0, 0)" :alt="content.extra.alt" :title="content.extra.alt">
+        <img
+          :src="getMediaThumbnail(content.extra.img, 0, 0)"
+          :alt="content.extra.alt"
+          :title="content.extra.alt"
+        >
       </router-link>
     </div>
     <!-- Video -->
     <div class="t-container t-w-full">
-      <h2 class="t-text-white t-text-center t-text-4xl t-my-4" v-html="content.video.headline" />
-      <div class="t-relative t-w-full t-bg-white" style="padding-top: 56.25%">
-        <iframe class="t-absolute t-top-0" width="100%" height="100%" :src="content.video.link" title="YouTube Video" frameborder="0" allowfullscreen />
+      <h2
+        class="t-my-4 t-text-center t-text-4xl t-text-white"
+        v-html="content.video.headline"
+      />
+      <div
+        class="t-relative t-w-full t-bg-white"
+        style="padding-top: 56.25%"
+      >
+        <iframe
+          class="t-absolute t-top-0"
+          width="100%"
+          height="100%"
+          :src="content.video.link"
+          title="YouTube Video"
+          frameborder="0"
+          allowfullscreen
+        />
       </div>
     </div>
 
     <!-- Sponsors -->
-    <div class="t-flex t-justify-center t-flex t-flex-wrap">
-      <div v-for="sponsor in content.sponsors" :key="sponsor.name" class="t-block t-my-6">
+    <div class="t-flex t-flex-wrap t-justify-center">
+      <div
+        v-for="sponsor in content.sponsors"
+        :key="sponsor.name"
+        class="t-my-6 t-block"
+      >
         <a :href="sponsor.link">
-          <img :src="getMediaThumbnail(sponsor.img, 0, 0)" :alt="sponsor.name" :title="sponsor.name" width="120">
+          <img
+            :src="getMediaThumbnail(sponsor.img, 0, 0)"
+            :alt="sponsor.name"
+            :title="sponsor.name"
+            width="120"
+          >
         </a>
       </div>
     </div>
@@ -50,16 +99,33 @@
     <!-- Press -->
     <div class="t-flex t-justify-center">
       <a :href="content.press.link">
-        <button-component type="primary" size="sm" class="t-w-full t-my-6 t-block t-bg-festival t-text-white t-px-4 t-py-2">
+        <ButtonComponent
+          type="primary"
+          size="sm"
+          class="t-bg-festival t-my-6 t-block t-w-full t-px-4 t-py-2 t-text-white"
+        >
           {{ content.press.button }}
-        </button-component>
+        </ButtonComponent>
       </a>
     </div>
 
     <!-- Gallery-->
     <div class="t-flex t-flex-wrap">
-      <div v-for="galleryitem in content.gallery" :key="galleryitem.img" class="t-w-1/2 md:t-w-1/3 lg:t-w-1/6">
-        <picture-component :src="galleryitem.img" :width="600" :height="400" :sizes="galleryImgSizes" :placeholder="true" ratio="3:2" :alt="galleryitem.name" :title="galleryitem.name" />
+      <div
+        v-for="galleryitem in content.gallery"
+        :key="galleryitem.img"
+        class="t-w-1/2 md:t-w-1/3 lg:t-w-1/6"
+      >
+        <PictureComponent
+          :src="galleryitem.img"
+          :width="600"
+          :height="400"
+          :sizes="galleryImgSizes"
+          :placeholder="true"
+          ratio="3:2"
+          :alt="galleryitem.name"
+          :title="galleryitem.name"
+        />
       </div>
     </div>
   </div>
@@ -72,11 +138,11 @@ import PictureComponent from 'theme/components/core/blocks/Picture'
 
 export default {
   name: 'Festival',
-  mixins: [ Page ],
   components: {
     ButtonComponent,
     PictureComponent
   },
+  mixins: [ Page ],
   data () {
     return {
       dataType: 'yaml',
@@ -86,9 +152,9 @@ export default {
   computed: {
     galleryImgSizes () {
       return [
-        { media: '(min-width: 1024px)', width: 240 },
-        { media: '(min-width: 768px)', width: 300 },
-        { media: '(max-width: 414px)', width: 220 }
+        { media: 'lg', width: 240 },
+        { media: 'md', width: 300 },
+        { width: 220 }
       ]
     }
   }

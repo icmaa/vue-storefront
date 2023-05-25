@@ -1,14 +1,21 @@
 <template>
-  <form @submit.prevent="login" novalidate data-test-id="Login">
-    <div v-if="hasRedirect" class="t-mb-4 t-text-sm">
+  <form
+    novalidate
+    data-test-id="Login"
+    @submit.prevent="login"
+  >
+    <div
+      v-if="hasRedirect"
+      class="t-mb-4 t-text-sm"
+    >
       {{ $t('You need to be logged in to see this page') }}
     </div>
-    <base-input
+    <BaseInput
+      id="email"
+      ref="emailInput"
+      v-model="email"
       type="email"
       name="email"
-      ref="emailInput"
-      id="email"
-      v-model="email"
       :class="[ showAll ? 't-mb-4' : 't-mb-2' ]"
       :placeholder="$t('E-mail address') + ' *'"
       :validations="[
@@ -23,12 +30,13 @@
       ]"
       @focus="hasFocus=true"
     />
-    <base-input
+    <BaseInput
+      v-show="showAll"
+      id="password"
+      v-model="password"
       class="t-mb-4"
       type="password"
       name="password"
-      id="password"
-      v-model="password"
       :placeholder="$t('Password') + ' *'"
       :validations="[
         {
@@ -36,40 +44,52 @@
           text: $t('Field is required')
         }
       ]"
-      v-show="showAll"
     />
-    <div class="t-flex t-items-center t-justify-between t-mb-4" v-show="showAll">
-      <div href="#" @click.prevent="callForgotPassword" class="t-text-sm t-cursor-pointer">
+    <div
+      v-show="showAll"
+      class="t-mb-4 t-flex t-items-center t-justify-between"
+    >
+      <div
+        href="#"
+        class="t-cursor-pointer t-text-sm"
+        @click.prevent="callForgotPassword"
+      >
         {{ $t('Forgot the password?') }}
       </div>
     </div>
-    <div class="t-flex t-flex-wrap t--mx-1">
-      <div class="t-w-full t-px-1" :class="{ 'lg:t-w-auto lg:t-min-w-1/3': !isModal }">
-        <button-component
+    <div class="t--mx-1 t-flex t-flex-wrap">
+      <div
+        class="t-w-full t-px-1"
+        :class="{ 'lg:t-w-auto lg:t-min-w-1/3': !isModal }"
+      >
+        <ButtonComponent
           :submit="true"
           type="primary"
-          class="t-w-full t-mb-2"
+          class="t-mb-2 t-w-full"
           data-test-id="loginSubmit"
         >
           {{ $t('Login') }}
-        </button-component>
+        </ButtonComponent>
       </div>
-      <no-ssr>
-        <div class="t-w-full t-px-1" :class="{ 'lg:t-flex-1': !isModal }">
-          <facebook-login-button
-            class="t-w-full t-mb-2"
+      <NoSsr>
+        <div
+          class="t-w-full t-px-1"
+          :class="{ 'lg:t-flex-1': !isModal }"
+        >
+          <FacebookLoginButton
+            class="t-mb-2 t-w-full"
           />
         </div>
-      </no-ssr>
+      </NoSsr>
       <div class="t-w-full t-px-1">
-        <button-component
+        <ButtonComponent
           :type="isModal ? 'transparent' : 'primary'"
-          class="t-w-full t--mb-2 t-flex-wrap"
-          @click="callRegister"
+          class="t--mb-2 t-w-full t-flex-wrap"
           data-test-id="registerLink"
+          @click="callRegister"
         >
           {{ $t('Not yet an account?') }} <span class="t-ml-1">{{ $t('Register now') }}</span>
-        </button-component>
+        </ButtonComponent>
       </div>
     </div>
   </form>
@@ -93,7 +113,14 @@ export default {
     BaseInput,
     ButtonComponent,
     FacebookLoginButton,
-    'no-ssr': NoSSR
+    NoSsr: NoSSR
+  },
+  props: {
+    isModal: {
+      type: Boolean,
+      default: true,
+      required: false
+    }
   },
   data () {
     return {
@@ -101,13 +128,6 @@ export default {
       password: '',
       hasRedirect: !!localStorage.getItem('redirect'),
       hasFocus: false
-    }
-  },
-  props: {
-    isModal: {
-      type: Boolean,
-      default: true,
-      required: false
     }
   },
   validations: {

@@ -3,13 +3,13 @@
     <template v-if="active">
       <div
         v-if="$v.selected.$error && (!$v.selected.required || !$v.selected.notFalse)"
-        class="t-text-sm t-text-alert t-mb-4"
+        class="t-mb-4 t-text-sm t-text-alert"
       >
         {{ $t('Please select a payment method.') }}
       </div>
       <div
         v-if="paymentMethods.length === 0"
-        class="t-text-sm t-mb-4"
+        class="t-mb-4 t-text-sm"
       >
         {{ $t('We are sorry but there are no payment-methods available.') }}
       </div>
@@ -19,39 +19,52 @@
         class="col-md-6"
         :class="[ method.code ]"
       >
-        <base-checkbox
-          :name="`paymentMethod[${kebabCase(method.code)}]`"
+        <BaseCheckbox
           :id="`payment-method-${kebabCase(method.code)}`"
+          v-model="selected"
+          :name="`paymentMethod[${kebabCase(method.code)}]`"
           :input-value="method.code"
           :data-test-id="upperCamelCase(method.code) + 'Checkbox'"
           :radio="true"
-          v-model="selected"
         >
           <div class="t-flex t-items-center">
-            <span class="method-icon t-mr-2" :class="[ method.code ]" />
+            <span
+              class="method-icon t-mr-2"
+              :class="[ method.code ]"
+            />
             <div>{{ method.title || method.name }}</div>
           </div>
-        </base-checkbox>
+        </BaseCheckbox>
         <div
           v-if="method.code === selected && infoComponent"
-          class="t-ml-8 t-mb-4"
+          class="t-mb-4 t-ml-8"
           :data-test-id="upperCamelCase(method.code) + 'Form'"
         >
-          <component :is="infoComponent" :code="method.code" :method="selectedMethod" />
+          <component
+            :is="infoComponent"
+            :code="method.code"
+            :method="selectedMethod"
+          />
         </div>
       </div>
-      <button-component
-        class="t-w-full lg:t-w-auto t-mt-8"
+      <ButtonComponent
+        class="t-mt-8 t-w-full lg:t-w-auto"
         type="primary"
-        @click.native.stop="submit"
         data-test-id="NextStepButton"
+        @click.native.stop="submit"
       >
         {{ $t(('Go review the order')) }}
-      </button-component>
+      </ButtonComponent>
     </template>
     <template v-else-if="!active && done">
-      <div class="t-flex t-items-center t-text-sm" v-if="selectedMethod">
-        <span class="method-icon t-mr-2" :class="[ selectedMethod.code ]" />
+      <div
+        v-if="selectedMethod"
+        class="t-flex t-items-center t-text-sm"
+      >
+        <span
+          class="method-icon t-mr-2"
+          :class="[ selectedMethod.code ]"
+        />
         <div>{{ selectedMethod.title || selectedMethod.name }}</div>
       </div>
     </template>
@@ -68,11 +81,11 @@ import ButtonComponent from 'theme/components/core/blocks/Button'
 import caseFormatMixin from 'theme/mixins/caseFormatMixin'
 
 export default {
-  mixins: [ Payment, caseFormatMixin ],
   components: {
     BaseCheckbox,
     ButtonComponent
   },
+  mixins: [ Payment, caseFormatMixin ],
   validations: {
     selected: {
       required,

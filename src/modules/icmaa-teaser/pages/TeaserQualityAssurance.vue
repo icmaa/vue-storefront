@@ -1,32 +1,80 @@
 <template>
   <div class="t-container">
     <div class="t-p-2 t-py-8">
-      <h1 class="t-px-2 t-text-1xl t-mb-4 t-font-bold">
+      <h1 class="t-mb-4 t-px-2 t-text-1xl t-font-bold">
         Teaser Quality Assurance
       </h1>
-      <no-ssr>
-        <div class="t-flex t-flex-wrap t-px-2 t-mx-2 t-py-4 t-bg-white">
-          <base-select :options="typeOptions" name="type" id="type" v-model="type" label="View by" class="t-w-full lg:t-w-1/3 t-px-2 t-pb-4 lg:t-pb-0" />
-          <base-select :options="tagOptions" name="tag" id="tag" v-model="tag" label="Tag" class="t-w-full lg:t-w-1/3 t-px-2 t-pb-4 lg:t-pb-0" v-show="type === 'tag'" />
-          <base-select :options="customerclusterOptions" name="cluster" id="cluster" v-model="cluster" label="Cluster" class="t-w-full lg:t-w-1/3 t-px-2 t-pb-4 lg:t-pb-0" v-show="type === 'cluster'" />
-          <base-checkbox name="showAsSplitTeaser" id="showAsSplitTeaser" v-model="showAsSplitTeaser" class="t-w-full lg:t-w-1/3 lg:t-mt-6 t-px-2">
+      <NoSsr>
+        <div class="t-mx-2 t-flex t-flex-wrap t-bg-white t-px-2 t-py-4">
+          <BaseSelect
+            id="type"
+            v-model="type"
+            :options="typeOptions"
+            name="type"
+            label="View by"
+            class="t-w-full t-px-2 t-pb-4 lg:t-w-1/3 lg:t-pb-0"
+          />
+          <BaseSelect
+            v-show="type === 'tag'"
+            id="tag"
+            v-model="tag"
+            :options="tagOptions"
+            name="tag"
+            label="Tag"
+            class="t-w-full t-px-2 t-pb-4 lg:t-w-1/3 lg:t-pb-0"
+          />
+          <BaseSelect
+            v-show="type === 'cluster'"
+            id="cluster"
+            v-model="cluster"
+            :options="customerclusterOptions"
+            name="cluster"
+            label="Cluster"
+            class="t-w-full t-px-2 t-pb-4 lg:t-w-1/3 lg:t-pb-0"
+          />
+          <BaseCheckbox
+            id="showAsSplitTeaser"
+            v-model="showAsSplitTeaser"
+            name="showAsSplitTeaser"
+            class="t-w-full t-px-2 lg:t-mt-6 lg:t-w-1/3"
+          >
             Show small teaser as split-teaser
-          </base-checkbox>
+          </BaseCheckbox>
         </div>
-      </no-ssr>
-      <div class="t-pt-8 t-px-2" v-for="(teaser, i) in teaserList" :key="getUniqueKey('wrap', i, teaser)">
-        <div v-if="type === 'cluster'" class="t-font-bold t-mb-4 t-text-1xl t-font-mono">
+      </NoSsr>
+      <div
+        v-for="(teaser, i) in teaserList"
+        :key="getUniqueKey('wrap', i, teaser)"
+        class="t-px-2 t-pt-8"
+      >
+        <div
+          v-if="type === 'cluster'"
+          class="t-mb-4 t-font-mono t-text-1xl t-font-bold"
+        >
           {{ teaser.tagsLabel }}
         </div>
-        <div v-if="type === 'tag'" class="t-font-bold t-mb-4 t-text-1xl t-font-mono">
+        <div
+          v-if="type === 'tag'"
+          class="t-mb-4 t-font-mono t-text-1xl t-font-bold"
+        >
           {{ teaser.customerclusterLabel }}
         </div>
-        <lazyload>
-          <template v-slot:loading>
-            <teaser-skeleton v-bind="{ isMobile, showSmallInRow: !showAsSplitTeaser }" class="t--mx-4" />
+        <Lazyload>
+          <template #loading>
+            <TeaserSkeleton
+              v-bind="{ isMobile, showSmallInRow: !showAsSplitTeaser }"
+              class="t--mx-4"
+            />
           </template>
-          <teaser :key="getUniqueKey('teaser', i, teaser)" :tags="`${teaser.tags}`" :customercluster="`${teaser.customercluster}`" :show-small-in-row="!showAsSplitTeaser" :redirect-to-edit="true" class="t--mx-4" />
-        </lazyload>
+          <Teaser
+            :key="getUniqueKey('teaser', i, teaser)"
+            :tags="`${teaser.tags}`"
+            :customercluster="`${teaser.customercluster}`"
+            :show-small-in-row="!showAsSplitTeaser"
+            :redirect-to-edit="true"
+            class="t--mx-4"
+          />
+        </Lazyload>
       </div>
     </div>
   </div>
@@ -50,7 +98,7 @@ export default {
     Teaser,
     BaseSelect,
     BaseCheckbox,
-    'no-ssr': NoSSR
+    NoSsr: NoSSR
   },
   data () {
     return {
@@ -111,15 +159,6 @@ export default {
       return ['xs', 'sm'].includes(this.viewport)
     }
   },
-  methods: {
-    getOptionLabel (options, value) {
-      const option = options.find(o => o.value === value)
-      return option ? option.label : value
-    },
-    getUniqueKey (prefix, index, teaser) {
-      return [prefix, index, teaser.tags, teaser.customercluster].join('_')
-    }
-  },
   mounted () {
     Promise.all([
       this.$store.dispatch('attribute/list', { filterValues: [ 'customercluster' ] }),
@@ -134,6 +173,15 @@ export default {
         this.tag = tag
       }
     })
+  },
+  methods: {
+    getOptionLabel (options, value) {
+      const option = options.find(o => o.value === value)
+      return option ? option.label : value
+    },
+    getUniqueKey (prefix, index, teaser) {
+      return [prefix, index, teaser.tags, teaser.customercluster].join('_')
+    }
   }
 }
 </script>

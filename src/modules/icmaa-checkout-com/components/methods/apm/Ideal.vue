@@ -1,10 +1,10 @@
 <template>
   <div>
-    <base-select
-      type="text"
+    <BaseSelect
       id="bic"
-      name="bic"
       v-model="additionalData.bic"
+      type="text"
+      name="bic"
       :initial-option-text="$t('BIC')"
       :options="issuer"
       :validations="[
@@ -29,10 +29,10 @@ import BaseSelect from 'theme/components/core/blocks/Form/BaseSelect'
 
 export default {
   name: 'CheckoutComIdealInfo',
-  mixins: [ ApmMethod ],
   components: {
     BaseSelect
   },
+  mixins: [ ApmMethod ],
   data () {
     return {
       additionalData: {

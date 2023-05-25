@@ -1,26 +1,30 @@
 <template>
   <div
     v-if="isOverlay"
-    class="t-w-10 t-h-10 lg:t-w-12 lg:t-h-12 t-bg-base-lighter t-flex t-items-center t-justify-center t-cursor-pointer"
-    @click="toggleWishlist"
+    class="t-flex t-h-10 t-w-10 t-cursor-pointer t-items-center t-justify-center t-bg-base-lighter lg:t-h-12 lg:t-w-12"
     data-test-id="wishlistButton"
+    @click="toggleWishlist"
   >
-    <material-icon :icon="favoriteIcon" class="t-text-white" :class="{ 't-animate-spin': loading }" />
+    <MaterialIcon
+      :icon="favoriteIcon"
+      class="t-text-white"
+      :class="{ 't-animate-spin': loading }"
+    />
     <span class="t-sr-only">{{ !isActive ? $t('Add to favorite') : $t('Remove') }}</span>
   </div>
-  <button-component
+  <ButtonComponent
     v-else
     :type="buttonType"
     :icon="favoriteIcon"
     :icon-only="true"
     :icon-class="loading ? 't-animate-spin' : false"
-    @click.native="toggleWishlist"
     data-test-id="wishlistButton"
+    @click.native="toggleWishlist"
   >
     <slot>
       {{ !isActive ? $t('Add to favorite') : $t('Remove') }}
     </slot>
-  </button-component>
+  </ButtonComponent>
 </template>
 
 <script>

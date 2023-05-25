@@ -6,11 +6,10 @@ import omit from 'lodash-es/omit'
 import pick from 'lodash-es/pick'
 import buildTimeConfig from 'config'
 import { AsyncDataLoader } from '@vue-storefront/core/lib/async-data-loader'
-import config from 'config'
 import { Logger } from '@vue-storefront/core/lib/logger'
 import { RouterManager } from './lib/router-manager';
 import queryString from 'query-string'
-import purgeConfig from './build/purge-config/purgeConfig';
+import purgeConfig from './build/purge-config/purgeConfig'
 
 function _commonErrorHandler (err, reject) {
   if (err.message.indexOf('query returned empty result') > 0) {
@@ -64,7 +63,7 @@ function getHostFromHeader (headers: string[]): string {
 
 export default async context => {
   let storeCode = context.vs.storeCode
-  if (config.storeViews.multistore === true) {
+  if (buildTimeConfig.storeViews.multistore === true) {
     if (!storeCode) { // this is from url
       const currentRoute = Object.assign({ path: queryString.parseUrl(context.url).url/* this gets just the url path part */, host: getHostFromHeader(context.server.request.headers) })
       storeCode = storeCodeFromRoute(currentRoute)

@@ -1,38 +1,41 @@
 <template>
   <div
-    class="notification t-text-white t-text-base t-cursor-pointer"
+    class="notification t-cursor-pointer t-text-base t-text-white"
     :class="[type, backgroundColor]"
     data-test-id="NotificationItem"
   >
     <div
-      @click="execAction(action1, index)"
       class="message t-p-4 t-pb-1"
       data-test-id="NotificationItemMessage"
+      @click="execAction(action1, index)"
     >
       {{ message }}
     </div>
-    <div class="actions t-flex t-flex-wrap t-px-4 t-pt-2" :class="[ isLast ? 't-pb-8 lg:t-pb-2' : 't-pb-2' ]">
-      <button-component
+    <div
+      class="actions t-flex t-flex-wrap t-px-4 t-pt-2"
+      :class="[ isLast ? 't-pb-8 lg:t-pb-2' : 't-pb-2' ]"
+    >
+      <ButtonComponent
+        id="notificationAction1"
         type="white-custom"
         :class="[ 't-mb-2', 't-text-' + colorCode, { 't-mr-2': action2 } ]"
         size="sm"
-        id="notificationAction1"
         data-test-id="NotificationItemAction1"
         @click="execAction(action1, index)"
       >
         {{ action1 ? action1.label : $t('OK') }}
-      </button-component>
-      <button-component
+      </ButtonComponent>
+      <ButtonComponent
+        v-if="action2"
+        id="notificationAction2"
         type="white-custom"
         :class="[ 't-mb-2', 't-text-' + colorCode ]"
         size="sm"
-        id="notificationAction2"
         data-test-id="NotificationItemAction2"
         @click="execAction(action2, index)"
-        v-if="action2"
       >
         {{ action2.label }}
-      </button-component>
+      </ButtonComponent>
     </div>
   </div>
 </template>

@@ -1,9 +1,17 @@
 <template>
-  <div class="product-listing t-px-4 t-mb-8">
+  <div class="product-listing t-mb-8 t-px-4">
     <ul>
       <template v-for="(product, i) in products">
-        <product-tile-ticket :product="product" :key="`product-${i}`" class="t-mb-1" />
-        <list-banner v-if="i === 7 || i%28 === 27" :key="`listbanner-${i}`" class="t-w-full t-mb-1" />
+        <ProductTileTicket
+          :key="`product-${i}`"
+          :product="product"
+          class="t-mb-1"
+        />
+        <ListBanner
+          v-if="i === 7 || i%28 === 27"
+          :key="`listbanner-${i}`"
+          class="t-mb-1 t-w-full"
+        />
       </template>
     </ul>
   </div>

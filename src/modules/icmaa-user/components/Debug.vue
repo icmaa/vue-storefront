@@ -1,14 +1,20 @@
 <template>
-  <div class="t-flex t-w-full t-justify-end t-my-4">
-    <button-component
+  <div class="t-my-4 t-flex t-w-full t-justify-end">
+    <ButtonComponent
       v-for="(o, i) in values"
-      :key="i" @click="setValue(o.value)"
+      :key="i"
       :type="currentValue == o.value ? 'ghost' : 'second'"
       class="t-mr-2"
+      @click="setValue(o.value)"
     >
       {{ o.label }}
-    </button-component>
-    <button-component type="ghost" @click="setValue()" icon="delete" :icon-only="true" />
+    </ButtonComponent>
+    <ButtonComponent
+      type="ghost"
+      icon="delete"
+      :icon-only="true"
+      @click="setValue()"
+    />
   </div>
 </template>
 
@@ -18,6 +24,9 @@ import ButtonComponent from 'theme/components/core/blocks/Button'
 
 export default {
   name: 'SessionFilterDebug',
+  components: {
+    ButtonComponent
+  },
   props: {
     attribute: {
       type: String,
@@ -30,9 +39,6 @@ export default {
         { label: 'Girls', value: '8' }
       ]
     }
-  },
-  components: {
-    ButtonComponent
   },
   computed: {
     ...mapGetters({

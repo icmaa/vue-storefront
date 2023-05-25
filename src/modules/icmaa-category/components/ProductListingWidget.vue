@@ -1,7 +1,16 @@
 <template>
-  <div data-test-id="ProductListingWidget" class="product-listing t-flex t-flex-wrap t-justify-start lg:t--mx-2" :class="[ appearance ] ">
+  <div
+    data-test-id="ProductListingWidget"
+    class="product-listing t-flex t-flex-wrap t-justify-start lg:t--mx-2"
+    :class="[ appearance ] "
+  >
     <template v-for="(product) in products">
-      <product-tile :product="product" :key="`product-${product.sku}`" class="t-px-1 lg:t-px-2 t-mb-8" :class="['t-w-1/2 lg:t-w-1/' + columns]" />
+      <ProductTile
+        :key="`product-${product.sku}`"
+        :product="product"
+        class="t-mb-8 t-px-1 lg:t-px-2"
+        :class="['t-w-1/2 lg:t-w-1/' + columns]"
+      />
     </template>
   </div>
 </template>
@@ -65,14 +74,6 @@ export default {
       return this.getUserSessionData('gender')
     }
   },
-  methods: {
-    async fetchProducts (reload = false) {
-      await this.$store.dispatch(
-        'icmaaCategory/loadProductListingWidgetProducts',
-        { ...this.options, reload }
-      )
-    }
-  },
   watch: {
     cluster () {
       this.fetchProducts(true)
@@ -83,6 +84,14 @@ export default {
   },
   mounted () {
     this.fetchProducts()
+  },
+  methods: {
+    async fetchProducts (reload = false) {
+      await this.$store.dispatch(
+        'icmaaCategory/loadProductListingWidgetProducts',
+        { ...this.options, reload }
+      )
+    }
   }
 }
 </script>

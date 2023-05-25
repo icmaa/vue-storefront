@@ -1,16 +1,35 @@
 <template>
   <div class="t-text-sm">
-    <div class="description t-whitespace-pre-line" v-text="stripHTML(description)" />
-    <ul class="commonphrases" v-if="commonphrases">
-      <li v-for="(phrase, i) in commonphrases" :key="i" class="t-mt-2">
-        <span class="t-font-bold t-mr-1" v-if="i === 0">{{ $t('Notice:') }}</span>
+    <div
+      class="description t-whitespace-pre-line"
+      v-text="stripHTML(description)"
+    />
+    <ul
+      v-if="commonphrases"
+      class="commonphrases"
+    >
+      <li
+        v-for="(phrase, i) in commonphrases"
+        :key="i"
+        class="t-mt-2"
+      >
+        <span
+          v-if="i === 0"
+          class="t-mr-1 t-font-bold"
+        >{{ $t('Notice:') }}</span>
         {{ phrase }}
       </li>
     </ul>
-    <model :product="product" class="t-mt-2" />
-    <no-ssr>
-      <ul class="attributes t-mt-6" v-if="attributes.length > 0">
-        <product-attributes
+    <Model
+      :product="product"
+      class="t-mt-2"
+    />
+    <NoSsr>
+      <ul
+        v-if="attributes.length > 0"
+        class="attributes t-mt-6"
+      >
+        <ProductAttributes
           v-for="(attr, i) in attributes"
           :key="'product-attribute-' + attr.attribute_code + '-' + i"
           :product="product"
@@ -18,13 +37,29 @@
           class="t-mb-3"
         />
       </ul>
-    </no-ssr>
-    <div class="blank t-mt-6" v-if="blank">
-      <span class="t-font-bold t-block t-mb-2">{{ blank.label }}</span>
-      <img :src="blank.image" :srcset="`${blank.image} 1x, ${blank.imageAt2x} 2x`" :alt="blank.label + ' - ' + blank.optionLabel" width="100" height="50">
+    </NoSsr>
+    <div
+      v-if="blank"
+      class="blank t-mt-6"
+    >
+      <span class="t-mb-2 t-block t-font-bold">{{ blank.label }}</span>
+      <img
+        :src="blank.image"
+        :srcset="`${blank.image} 1x, ${blank.imageAt2x} 2x`"
+        :alt="blank.label + ' - ' + blank.optionLabel"
+        width="100"
+        height="50"
+      >
     </div>
-    <div class="department-advice t-text-base-lighter t-mt-8" v-if="departmentAdvice">
-      <material-icon icon="asterisk" icon-set="icmaa" size="icon" /> {{ $t('This is a merch product of the above-named band. We want to point out that the article description is a paraphrasing specification in consideration of the imprinted motif.') }}
+    <div
+      v-if="departmentAdvice"
+      class="department-advice t-mt-8 t-text-base-lighter"
+    >
+      <MaterialIcon
+        icon="asterisk"
+        icon-set="icmaa"
+        size="icon"
+      /> {{ $t('This is a merch product of the above-named band. We want to point out that the article description is a paraphrasing specification in consideration of the imprinted motif.') }}
     </div>
   </div>
 </template>
@@ -39,17 +74,17 @@ import MaterialIcon from 'theme/components/core/blocks/MaterialIcon'
 import NoSSR from 'vue-no-ssr'
 
 export default {
+  components: {
+    Model,
+    ProductAttributes,
+    MaterialIcon,
+    NoSsr: NoSSR
+  },
   props: {
     product: {
       type: Object,
       required: true
     }
-  },
-  components: {
-    Model,
-    ProductAttributes,
-    MaterialIcon,
-    'no-ssr': NoSSR
   },
   computed: {
     ...mapGetters({

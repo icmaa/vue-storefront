@@ -18,9 +18,6 @@ import { Logger } from '@vue-storefront/core/lib/logger'
 
 export default {
   name: 'InstantCheckoutButton',
-  beforeCreate () {
-    registerModule(OrderModule)
-  },
   data () {
     return {
       supported: false,
@@ -127,6 +124,15 @@ export default {
         shippingOptions: this.shippingOptions,
         total: this.total
       }
+    }
+  },
+  beforeCreate () {
+    registerModule(OrderModule)
+  },
+  mounted () {
+    if (window.PaymentRequest && !window.ApplePaySession) {
+      this.supported = true
+      this.updateShippingOptions()
     }
   },
   methods: {
@@ -308,12 +314,6 @@ export default {
       }
 
       return product.regular_price * product.qty
-    }
-  },
-  mounted () {
-    if (window.PaymentRequest && !window.ApplePaySession) {
-      this.supported = true
-      this.updateShippingOptions()
     }
   }
 }
