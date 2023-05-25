@@ -12,7 +12,9 @@
       class="t-mb-4 t-flex t-items-center t-justify-center"
     >
       <a
-        href="#"
+        :href="$router.resolve({
+          ...$route, query: { p: parseInt($route.query.p || '2') - 1 }
+        }).href"
         class="t-flex t-min-h-10 t-w-2/3 t-items-center t-justify-center t-rounded-sm t-border t-border-base-darkest t-bg-transparent t-px-4 t-text-xs t-uppercase t-text-base-darkest t-webkit-tap-transparent lg:t-w-1/4"
         @click.prevent="$emit('load-prev')"
       >
@@ -67,13 +69,18 @@
       v-if="showNextPagination"
       class="t-mb-8 t-flex t-items-center t-justify-center"
     >
-      <a
-        href="#"
+      <router-link
+        :to="{
+          ...$route,
+          query: {
+            p: parseInt($route.query.p || '1') + 1
+          }
+        }"
         class="t-flex t-min-h-10 t-w-2/3 t-items-center t-justify-center t-rounded-sm t-border t-border-base-darkest t-bg-transparent t-px-4 t-text-xs t-uppercase t-text-base-darkest t-webkit-tap-transparent lg:t-w-1/4"
-        @click.prevent="$emit('load-next')"
+        @click="$emit('load-next')"
       >
         {{ $t('Load more') }}
-      </a>
+      </router-link>
     </div>
     <div
       v-if="articles.length === 0"

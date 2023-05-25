@@ -33,7 +33,7 @@ export default {
             (window as any).twttr.widgets.createTweet(
               this.id,
               this.$el,
-              { conversation: 'none', align: 'center' }
+              { conversation: 'none', align: 'center', dnt: true }
             )
             break
 
@@ -47,7 +47,8 @@ export default {
               {
                 height: 400,
                 tweetLimit: 3,
-                chrome: 'nofooter'
+                chrome: 'nofooter',
+                dnt: true
               }
             )
             break

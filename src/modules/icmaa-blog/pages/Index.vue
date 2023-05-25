@@ -10,6 +10,7 @@
       :articles="articles"
       :headline="$t('Blog #{tag}', { tag })"
       :pagination="pagination"
+      @load-prev="loadPrev"
     />
     <List
       v-else
@@ -17,7 +18,6 @@
       :category="category"
       :pagination="pagination"
       @load-prev="loadPrev"
-      @load-next="loadNext"
     />
   </div>
 </template>
@@ -28,6 +28,7 @@ import { BlogArticle, BlogCategory, BlogUrlEntry } from 'icmaa-blog/types/BlogSt
 import { Route } from 'vue-router'
 
 import BlogMixin from 'icmaa-blog/mixins'
+import BlogMetaMixin from 'icmaa-blog/mixins/meta'
 import ArticleComponent from 'icmaa-blog/components/Article.vue'
 import List from 'icmaa-blog/components/List.vue'
 
@@ -37,7 +38,7 @@ export default {
     ArticleComponent,
     List
   },
-  mixins: [ BlogMixin ],
+  mixins: [ BlogMixin, BlogMetaMixin ],
   async asyncData (c) {
     c.context?.output.cacheTags
       .add('blog')
@@ -111,19 +112,29 @@ export default {
       }
       return this.$store.dispatch('icmaaBlog/resolveUrl', { route })
     },
-    loadNext () {
-      this.$router.push({
-        ...this.$route,
-        query: {
-          p: this.page + 1
-        }
-      })
-    },
     fetchData (route: Route) {
       return Promise.all([
         this.$store.dispatch('icmaaBlog/fetchCategories'),
         this.$store.dispatch('icmaaBlog/resolveUrl', { route: this.$route })
       ])
+    }
+  },
+  metaInfo () {
+    if (this.isArticle) {
+      const { title, preview } = this.article
+      return {
+        title: `${title} | ${this.$t('Magazine')}`,
+        meta: [
+          { vmid: 'description', name: 'description', content: preview }
+        ],
+        ...this.metaInfo(true)
+      }
+    } else if (this.isCategory || this.isTag) {
+      const title = this.isCategory
+        ? `${this.category.name} | ${this.$t('Magazine')}`
+        : `#${this.tag} | ${this.$t('Magazine')}`
+
+      return { title, ...this.metaInfo() }
     }
   }
 }
