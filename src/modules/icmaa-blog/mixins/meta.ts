@@ -8,11 +8,13 @@ export default Vue.extend({
      * For some reason the `metaInfo` method is not called when nested, so we need to call it manually as a method.
      * This also only works in production-mode – vue-meta seems to have some problems with HMR.
      */
-    metaInfo () {
+    metaInfo (isArticle = false) {
       const link = []
+
       const currentStoreCode = currentStoreView().storeCode
+      const allowedStores: string[] = isArticle ? [currentStoreCode] : config?.icmaa_blog?.allowedStores || []
       config.storeViews.mapStoreUrlsFor.forEach(storeCode => {
-        if (storeCode === currentStoreCode) return
+        if (!allowedStores.includes(storeCode)) return
         link.push({ vmid: 'hreflang-' + storeCode, skip: true })
       })
 

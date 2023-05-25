@@ -127,7 +127,7 @@ export default {
         meta: [
           { vmid: 'description', name: 'description', content: preview }
         ],
-        ...this.metaInfo()
+        ...this.metaInfo(true)
       }
     } else if (this.isCategory || this.isTag) {
       const title = this.isCategory
