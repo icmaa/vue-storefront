@@ -20,12 +20,14 @@
 import { mapGetters } from 'vuex'
 
 import List from 'icmaa-blog/components/ListWrapper.vue'
+import BlogMetaMixin from 'icmaa-blog/mixins/meta'
 
 export default {
   name: 'BlogHome',
   components: {
     List
   },
+  mixins: [ BlogMetaMixin ],
   async asyncData (c) {
     c.context?.output.cacheTags
       .add('blog')
@@ -51,13 +53,7 @@ export default {
   metaInfo () {
     return {
       title: this.$t('Magazine'),
-      meta: [
-        {
-          vmid: 'description',
-          name: 'description',
-          content: this.$t('Impericon Mag – your magazine with the latest news, albums & videos from metalcore, hardcore, deathcore, rock, metal & pop punk.')
-        }
-      ]
+      ...this.metaInfo()
     }
   }
 }

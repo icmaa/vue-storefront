@@ -28,6 +28,7 @@ import { BlogArticle, BlogCategory, BlogUrlEntry } from 'icmaa-blog/types/BlogSt
 import { Route } from 'vue-router'
 
 import BlogMixin from 'icmaa-blog/mixins'
+import BlogMetaMixin from 'icmaa-blog/mixins/meta'
 import ArticleComponent from 'icmaa-blog/components/Article.vue'
 import List from 'icmaa-blog/components/List.vue'
 
@@ -37,7 +38,7 @@ export default {
     ArticleComponent,
     List
   },
-  mixins: [ BlogMixin ],
+  mixins: [ BlogMixin, BlogMetaMixin ],
   async asyncData (c) {
     c.context?.output.cacheTags
       .add('blog')
@@ -125,22 +126,15 @@ export default {
         title: `${title} | ${this.$t('Magazine')}`,
         meta: [
           { vmid: 'description', name: 'description', content: preview }
-        ]
+        ],
+        ...this.metaInfo()
       }
     } else if (this.isCategory || this.isTag) {
-      const meta = [
-        {
-          vmid: 'description',
-          name: 'description',
-          content: this.$t('Impericon Mag – your magazine with the latest news, albums & videos from metalcore, hardcore, deathcore, rock, metal & pop punk.')
-        }
-      ]
-
       const title = this.isCategory
         ? `${this.category.name} | ${this.$t('Magazine')}`
         : `#${this.tag} | ${this.$t('Magazine')}`
 
-      return { title, meta }
+      return { title, ...this.metaInfo() }
     }
   }
 }
