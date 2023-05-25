@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import config from 'config'
-import { currentStoreView } from '@vue-storefront/core/lib/multistore'
 
 export default Vue.extend({
   methods: {
@@ -11,11 +10,13 @@ export default Vue.extend({
     metaInfo (isArticle = false) {
       const link = []
 
-      const currentStoreCode = currentStoreView().storeCode
-      const allowedStores: string[] = isArticle ? [currentStoreCode] : config?.icmaa_blog?.allowedStores || []
+      let allowedStores: string[] = isArticle
+        ? this?.article?.storeView || []
+        : config?.icmaa_blog?.allowedStores || []
+
       config.storeViews.mapStoreUrlsFor.forEach(storeCode => {
-        if (!allowedStores.includes(storeCode)) return
-        link.push({ vmid: 'hreflang-' + storeCode, skip: true })
+        if (allowedStores.includes(storeCode)) return
+        link.push({ vmid: `hreflang-${storeCode}`, skip: true })
       })
 
       const meta = [
