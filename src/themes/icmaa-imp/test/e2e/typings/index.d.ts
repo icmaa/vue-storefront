@@ -98,7 +98,7 @@ declare namespace Cypress {
      * @example
      * cy.get('img').checkImage()
      */
-    checkImage(): Chainable<any>,
+    checkImage(): Chainable<HTMLImageElement>,
 
     /**
      * Visit the given url.
@@ -480,6 +480,6 @@ declare namespace Cypress {
      * @example
      * cy.iframeLoaded('Modal')
      */
-    iframeLoaded<E extends Node = HTMLElement>(options?: Partial<Loggable & Timeoutable & Shadow>): Chainable<JQuery<E>>
+    iframeLoaded<E extends Node = HTMLIFrameElement>(): Chainable<JQuery<E>>
   }
 }

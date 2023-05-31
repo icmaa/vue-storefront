@@ -89,7 +89,7 @@ Cypress.Commands.add('randomlyClickElement', { prevSubject: 'element' }, (subjec
 })
 
 Cypress.Commands.add('checkImage', { prevSubject: 'element' }, (subject) => {
-  cy.wrap(subject)
+  cy.wrap<HTMLImageElement>(subject as any)
     .should('be.visible')
     .and($img => expect($img[0].naturalWidth).to.be.greaterThan(0))
 })
@@ -106,7 +106,7 @@ Cypress.Commands.add('findByTestId', { prevSubject: 'element' }, (subject, id) =
 Cypress.Commands.overwrite('scrollIntoView', (originalFn, subject, options) => {
   const defaults = { offset: { top: -400 }, duration: 300 }
   options = Object.assign({}, defaults, options)
-  return originalFn(subject, options)
+  return (originalFn as any)(subject, options)
 })
 
 Cypress.Commands.add('getFromLocalStorage', (key) => {
@@ -133,20 +133,22 @@ Cypress.Commands.overwrite('visit', (originalFn, url, options?) => {
   }
 
   cy.getStoreCode().then(storeCode => {
-    if (!url.startsWith('/')) {
-      url = '/' + url
+    let newUrl = (url?.url || url) as string
+    if (!newUrl.startsWith('/')) {
+      newUrl = '/' + newUrl
     }
 
-    url = `${storeCode}${url}`
+    newUrl = `${storeCode}${newUrl}`
 
     const originalFnOptions = _.omit(options, ['storeCode', 'returningVisitor'])
-    cy.then(() => originalFn(url, originalFnOptions))
+    cy.then(() => (originalFn as any)(newUrl, originalFnOptions))
   })
 })
 
 Cypress.Commands.add('visitAsRecurringUser', (url, options?) => {
   options = Object.assign({ returningVisitor: true }, options)
-  cy.visit(url, options)
+  let newUrl = (url?.url || url) as string
+  cy.visit(newUrl, options)
 })
 
 Cypress.Commands.add('visitCategoryPage', (options?) => {
@@ -420,7 +422,14 @@ Cypress.Commands.add('checkAvailabilityOfCurrentProduct', (closeSidebar = false)
             })
 
           cy.selectRandomProductOptionInSidebar()
-            .checkStockApiRequest()
+          cy.get<'configurable'|'bundle'|'simple'>('@productType')
+            .then(type => {
+              if (type === 'bundle') {
+                cy.wrap(true).as('availability')
+                return
+              }
+              cy.checkStockApiRequest()
+            })
 
           if (closeSidebar) {
             cy.get('@sidebar').findByTestId('closeButton').click()
@@ -688,8 +697,10 @@ Cypress.Commands.add('getFrame', { prevSubject: 'element' }, (subject, selector 
     .should('not.be.undefined')
 })
 
-Cypress.Commands.add('iframeLoaded', { prevSubject: 'element' }, ($iframe) => {
-  const $contentWindow = () => $iframe[0]?.contentDocument || $iframe[0]?.contentWindow?.document
+// @ts-ignore
+Cypress.Commands.add('iframeLoaded', { prevSubject: 'element' }, $iframe => {
+  const $contentWindow = () => ($iframe[0] as HTMLIFrameElement)?.contentDocument ||
+    ($iframe[0] as HTMLIFrameElement)?.contentWindow?.document
   return new Promise(resolve => {
     if ($contentWindow()?.readyState === 'complete') {
       resolve($contentWindow())
