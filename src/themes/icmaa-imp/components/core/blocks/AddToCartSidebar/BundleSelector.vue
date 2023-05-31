@@ -3,6 +3,7 @@
     <div
       v-if="isChildOutOfStock"
       class="t-mb-4 t-flex t-bg-alert t-p-4 t-text-sm t-text-white"
+      data-test-id="BundleOutOfStock"
     >
       <MaterialIcon
         icon="report_problem"
@@ -17,6 +18,7 @@
       :key="'bundleOption_' + option.option_id"
       class="t-flex t-w-full t-flex-col"
       :class="{ 't-mt-4': i !== 0 }"
+      data-test-id="BundleOption"
     >
       <h4 class="t-px-2 t-text-xs t-font-bold t-uppercase t-text-base-lighter">
         {{ option.title }}

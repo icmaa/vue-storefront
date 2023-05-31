@@ -1,5 +1,8 @@
 <template>
-  <Sidebar :title="productOptionsLabelPlaceholder">
+  <Sidebar
+    :title="productOptionsLabelPlaceholder"
+    :class="`type-${product.type_id}`"
+  >
     <div class="t-flex t-flex-wrap t-pb-20">
       <template v-if="product.type_id === 'configurable'">
         <div

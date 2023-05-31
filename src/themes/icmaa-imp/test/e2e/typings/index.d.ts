@@ -185,7 +185,7 @@ declare namespace Cypress {
      * cy.openSidebar('[data-test-id="HeaderButtonWishlist"]')
      * cy.openSidebar('[data-test-id="HeaderButtonAccount"]', '[data-test-id="Modal"]')
      */
-    openSidebar(triggerSelector?: string, overlaySelector?: string): Chainable<Window>,
+    openSidebar(triggerSelector?: string, overlaySelector?: string): Chainable<JQuery<any>>,
 
     /**
      * Close sidebar.

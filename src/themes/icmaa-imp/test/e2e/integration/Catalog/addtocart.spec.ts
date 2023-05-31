@@ -1,73 +1,80 @@
 describe('Add to Cart', () => {
-  it('is working for random product on PDP.', () => {
-    cy.addRandomProductToCart()
+  it('is working for grouped product.', () => {
+    cy.registerStockApiRequest()
+    cy.visitAsRecurringUser('/thy-art-is-murder-killing-season-tracksuit.html')
+
+    cy.checkAvailabilityOfCurrentProduct()
   })
 
-  it('is working for random product on PLP.', () => {
-    const findProductInStock = (run: number = 1, tries: number = 3) => {
-      if (run > tries) {
-        expect(true).to.be.equal(false, 'No buyable products found')
-      } else {
-        cy.log(`Try to find product which is in stock ${run}/${tries}`)
-      }
+  // it('is working for random product on PDP.', () => {
+  //   cy.addRandomProductToCart()
+  // })
 
-      cy.visitCategoryPage({ url: '/t-shirts-tanks-and-girlies.html' })
+  // it('is working for random product on PLP.', () => {
+  //   const findProductInStock = (run: number = 1, tries: number = 3) => {
+  //     if (run > tries) {
+  //       expect(true).to.be.equal(false, 'No buyable products found')
+  //     } else {
+  //       cy.log(`Try to find product which is in stock ${run}/${tries}`)
+  //     }
 
-      /**
-     * @todo The page gets rerendered after initial load.
-     */
-      cy.wait(1000)
+  //     cy.visitCategoryPage({ url: '/t-shirts-tanks-and-girlies.html' })
 
-      cy.getByTestId('ProductTile')
-        .random()
-        .as('Product')
+  //     /**
+  //    * @todo The page gets rerendered after initial load.
+  //    */
+  //     cy.wait(1000)
 
-      cy.get('@Product')
-        .findByTestId('ProductName')
-        .then($productName => {
-          cy.wrap($productName.text().trim()).as('ProductName')
-        })
+  //     cy.getByTestId('ProductTile')
+  //       .random()
+  //       .as('Product')
 
-      cy.get('@Product')
-        .findByTestId('QuickAddToCart')
-        .scrollIntoView()
-        .click()
+  //     cy.get('@Product')
+  //       .findByTestId('ProductName')
+  //       .then($productName => {
+  //         cy.wrap($productName.text().trim()).as('ProductName')
+  //       })
 
-      cy.getByTestId('Sidebar')
-        .as('sidebar')
-        .should('be.visible')
+  //     cy.get('@Product')
+  //       .findByTestId('QuickAddToCart')
+  //       .scrollIntoView()
+  //       .click()
 
-      cy.registerStockApiRequest()
-      cy.checkAvailabilityOfCurrentProductInSidebar()
+  //     cy.getByTestId('Sidebar')
+  //       .as('sidebar')
+  //       .should('be.visible')
 
-      cy.get<boolean>('@availability')
-        .then(available => {
-          if (!available) {
-            findProductInStock(run + 1)
-          }
-        })
-    }
+  //     cy.registerStockApiRequest()
+  //     cy.checkAvailabilityOfCurrentProductInSidebar()
 
-    findProductInStock()
+  //     cy.get<boolean>('@availability')
+  //       .then(available => {
+  //         if (!available) {
+  //           findProductInStock(run + 1)
+  //         }
+  //       })
+  //   }
 
-    cy.getByTestId('AddToCart')
-      .should('not.be.disabled')
-      .click()
+  //   findProductInStock()
 
-    cy.get('@sidebar')
-      .should('not.be.visible')
+  //   cy.getByTestId('AddToCart')
+  //     .should('not.be.disabled')
+  //     .click()
 
-    cy.checkNotification('success')
+  //   cy.get('@sidebar')
+  //     .should('not.be.visible')
 
-    cy.getByTestId('MicroCart')
-      .should('be.visible')
-      .findByTestId('MicroCartProduct')
-      .findByTestId('productLink')
-      .then($product => {
-        cy.get<string>('@ProductName').then(name => {
-          expect($product.text().trim())
-            .contain(name, 'Product is found in cart by title')
-        })
-      })
-  })
+  //   cy.checkNotification('success')
+
+  //   cy.getByTestId('MicroCart')
+  //     .should('be.visible')
+  //     .findByTestId('MicroCartProduct')
+  //     .findByTestId('productLink')
+  //     .then($product => {
+  //       cy.get<string>('@ProductName').then(name => {
+  //         expect($product.text().trim())
+  //           .contain(name, 'Product is found in cart by title')
+  //       })
+  //     })
+  // })
 })

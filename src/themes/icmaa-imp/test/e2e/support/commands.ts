@@ -409,8 +409,15 @@ Cypress.Commands.add('checkAvailabilityOfCurrentProduct', (closeSidebar = false)
     } else {
       cy.getByTestId('product').then($product => {
         if ($product.find('[data-test-id="AddToCartSize"]').length) {
-          cy.wrap('configurable').as('productType')
           cy.openSidebar('[data-test-id="AddToCartSize"]')
+            .then($sidebar => {
+              const menu = $sidebar.find('.sidebar-menu')
+              if (menu.hasClass('type-configurable')) {
+                cy.wrap('configurable').as('productType')
+              } else if (menu.hasClass('type-bundle')) {
+                cy.wrap('bundle').as('productType')
+              }
+            })
 
           cy.selectRandomProductOptionInSidebar()
             .checkStockApiRequest()
@@ -458,7 +465,7 @@ Cypress.Commands.add('addRandomProductToCart', (options?: { categoryUrl?: string
 })
 
 Cypress.Commands.add('selectRandomProductOptionInSidebar', () => {
-  cy.get<'configurable'|'simple'>('@productType')
+  cy.get<'configurable'|'bundle'|'simple'>('@productType')
     .then(type => {
       if (type === 'configurable') {
         cy.get('@sidebar').findByTestId('DefaultSelector')
@@ -469,6 +476,26 @@ Cypress.Commands.add('selectRandomProductOptionInSidebar', () => {
             cy.wrap($item)
           })
           .click({ force: true })
+      } else if (type === 'bundle') {
+        cy.get('@sidebar').findByTestId('BundleOutOfStock').should('not.exist')
+        const optionLabels: string[] = []
+        cy.get('@sidebar').findByTestId('BundleOption')
+          .each($bundle => {
+            cy.wrap($bundle).within(() => {
+              cy.getByTestId('DefaultSelector')
+                .filter('.available')
+                .random()
+                .then($item => {
+                  optionLabels.push($item.find('span').first().text().trim())
+                  cy.wrap($item)
+                })
+                .click({ force: true })
+            })
+          })
+          .then(() => {
+            const optionLabel = optionLabels.join(' + ')
+            cy.wrap<string>(optionLabel).as('optionLabel')
+          })
       }
     })
 })
@@ -480,9 +507,9 @@ Cypress.Commands.add('addCurrentProductToCart', (checkAvailability = true, enter
 
   cy.get('@availability').should('be.true')
 
-  cy.get<'configurable'|'simple'>('@productType')
+  cy.get<'configurable'|'bundle'|'simple'>('@productType')
     .then(type => {
-      if (type === 'configurable') {
+      if (type === 'configurable' || type === 'bundle') {
         cy.get<string>('@optionLabel').then(label => {
           if (!label) {
             cy.selectRandomProductOptionInSidebar()
