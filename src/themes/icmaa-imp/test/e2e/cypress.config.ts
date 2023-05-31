@@ -7,7 +7,7 @@ export default defineConfig({
     'specPattern': 'integration/**/*.spec.{js,jsx,ts,tsx}',
     'supportFile': 'support/index.ts',
     'trashAssetsBeforeRuns': true,
-    'video': false,
+    'videoCompression': false,
     'videosFolder': 'videos',
     'videoUploadOnPasses': false,
     'screenshotsFolder': 'screenshots',
