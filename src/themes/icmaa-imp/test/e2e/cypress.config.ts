@@ -17,7 +17,7 @@ export default defineConfig({
     'requestTimeout': 20000,
     'chromeWebSecurity': false,
     'env': {
-      'store_codes': ['de'],
+      'store_codes': ['de', 'fr', 'es', 'uk', 'nl'],
       'category_pages': ['new.html', 'clothing.html', 'shoes.html', 'accessories.html']
     }
   }
