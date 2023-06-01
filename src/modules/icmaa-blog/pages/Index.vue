@@ -12,17 +12,29 @@
       :pagination="pagination"
       @load-prev="loadPrev"
     />
-    <List
-      v-else
-      :articles="articles"
-      :category="category"
-      :pagination="pagination"
-      @load-prev="loadPrev"
-    />
+    <template v-else>
+      <h1
+        class="t-mb-4 t-pr-2 t-text-2xl t-font-light t-text-base-dark"
+      >
+        <router-link
+          :to="localizedRoute({ name: 'icmaa-blog-home' })"
+          class="hover:t-underline"
+        >
+          {{ $t('Magazine') }}
+        </router-link>
+      </h1>
+      <List
+        :articles="articles"
+        :category="category"
+        :pagination="pagination"
+        @load-prev="loadPrev"
+      />
+    </template>
   </div>
 </template>
 
 <script lang="ts">
+import i18n from '@vue-storefront/i18n'
 import { mapGetters } from 'vuex'
 import { BlogArticle, BlogCategory, BlogUrlEntry } from 'icmaa-blog/types/BlogState'
 import { Route } from 'vue-router'
@@ -51,11 +63,12 @@ export default {
       getArticle: 'icmaaBlog/getArticleByQuery',
       getResolvedUrl: 'icmaaBlog/getResolvedUrl',
       getResolvedUrlIds: 'icmaaBlog/getResolvedUrlIds',
-      getCategoryBy: 'icmaaBlog/getCategoryBy'
+      getCategoryBy: 'icmaaBlog/getCategoryBy',
+      getCategories: 'icmaaBlog/getCategories'
     }),
     identifier (): string | null {
       const { params } = this.$route
-      return params?.identifier
+      return params?.identifier || 'root'
     },
     page (): number | null {
       const { query } = this.$route
@@ -78,6 +91,14 @@ export default {
       return !!this.category
     },
     category (): BlogCategory {
+      if (this.isRoot) {
+        return {
+          name: i18n.t('Latest articles') as string,
+          url: 'root',
+          children: this.getCategories
+        }
+      }
+
       return this.getCategoryBy(this.identifier)
     },
     tag (): string {
@@ -86,6 +107,9 @@ export default {
     },
     isTag (): boolean {
       return !!this.tag
+    },
+    isRoot (): boolean {
+      return this.identifier === 'root'
     },
     pagination (): boolean | BlogUrlEntry {
       return this.getResolvedUrl(this.urlKey) || false
@@ -135,6 +159,11 @@ export default {
         : `#${this.tag} | ${this.$t('Magazine')}`
 
       return { title, ...this.metaInfo() }
+    }
+
+    return {
+      title: this.$t('Magazine'),
+      ...this.metaInfo()
     }
   }
 }

@@ -51,7 +51,7 @@ export default {
   },
   computed: {
     isBlogPage () {
-      return this.$route.name.endsWith('icmaa-blog') || this.$route.name.endsWith('icmaa-blog-tag')
+      return this.$route.name.endsWith('icmaa-blog') || this.$route.name.endsWith('icmaa-blog-tag') || this.$route.name.endsWith('icmaa-blog-home')
     }
   }
 }
