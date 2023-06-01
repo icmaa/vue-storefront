@@ -89,7 +89,7 @@ Cypress.Commands.add('randomlyClickElement', { prevSubject: 'element' }, (subjec
 })
 
 Cypress.Commands.add('checkImage', { prevSubject: 'element' }, (subject) => {
-  cy.wrap(subject)
+  cy.wrap<HTMLImageElement>(subject as any)
     .should('be.visible')
     .and($img => expect($img[0].naturalWidth).to.be.greaterThan(0))
 })
@@ -106,7 +106,7 @@ Cypress.Commands.add('findByTestId', { prevSubject: 'element' }, (subject, id) =
 Cypress.Commands.overwrite('scrollIntoView', (originalFn, subject, options) => {
   const defaults = { offset: { top: -400 }, duration: 300 }
   options = Object.assign({}, defaults, options)
-  return originalFn(subject, options)
+  return (originalFn as any)(subject, options)
 })
 
 Cypress.Commands.add('getFromLocalStorage', (key) => {
@@ -133,20 +133,22 @@ Cypress.Commands.overwrite('visit', (originalFn, url, options?) => {
   }
 
   cy.getStoreCode().then(storeCode => {
-    if (!url.startsWith('/')) {
-      url = '/' + url
+    let newUrl = (url?.url || url) as string
+    if (!newUrl.startsWith('/')) {
+      newUrl = '/' + newUrl
     }
 
-    url = `${storeCode}${url}`
+    newUrl = `${storeCode}${newUrl}`
 
     const originalFnOptions = _.omit(options, ['storeCode', 'returningVisitor'])
-    cy.then(() => originalFn(url, originalFnOptions))
+    cy.then(() => (originalFn as any)(newUrl, originalFnOptions))
   })
 })
 
 Cypress.Commands.add('visitAsRecurringUser', (url, options?) => {
   options = Object.assign({ returningVisitor: true }, options)
-  cy.visit(url, options)
+  let newUrl = (url?.url || url) as string
+  cy.visit(newUrl, options)
 })
 
 Cypress.Commands.add('visitCategoryPage', (options?) => {
@@ -201,7 +203,7 @@ Cypress.Commands.add('openSidebar', (trigger: string = '[data-test-id="HeaderBut
     .click()
 
   cy.get(overlaySelector)
-    .as('sidebar')
+    .as('sidebar', { type: 'static' })
     .should('be.visible')
 })
 
@@ -409,11 +411,25 @@ Cypress.Commands.add('checkAvailabilityOfCurrentProduct', (closeSidebar = false)
     } else {
       cy.getByTestId('product').then($product => {
         if ($product.find('[data-test-id="AddToCartSize"]').length) {
-          cy.wrap('configurable').as('productType')
           cy.openSidebar('[data-test-id="AddToCartSize"]')
+            .then($sidebar => {
+              const menu = $sidebar.find('.sidebar-menu')
+              if (menu.hasClass('type-configurable')) {
+                cy.wrap('configurable').as('productType')
+              } else if (menu.hasClass('type-bundle')) {
+                cy.wrap('bundle').as('productType')
+              }
+            })
 
           cy.selectRandomProductOptionInSidebar()
-            .checkStockApiRequest()
+          cy.get<'configurable'|'bundle'|'simple'>('@productType')
+            .then(type => {
+              if (type === 'bundle') {
+                cy.wrap(true).as('availability')
+                return
+              }
+              cy.checkStockApiRequest()
+            })
 
           if (closeSidebar) {
             cy.get('@sidebar').findByTestId('closeButton').click()
@@ -458,7 +474,7 @@ Cypress.Commands.add('addRandomProductToCart', (options?: { categoryUrl?: string
 })
 
 Cypress.Commands.add('selectRandomProductOptionInSidebar', () => {
-  cy.get<'configurable'|'simple'>('@productType')
+  cy.get<'configurable'|'bundle'|'simple'>('@productType')
     .then(type => {
       if (type === 'configurable') {
         cy.get('@sidebar').findByTestId('DefaultSelector')
@@ -469,6 +485,26 @@ Cypress.Commands.add('selectRandomProductOptionInSidebar', () => {
             cy.wrap($item)
           })
           .click({ force: true })
+      } else if (type === 'bundle') {
+        cy.get('@sidebar').findByTestId('BundleOutOfStock').should('not.exist')
+        const optionLabels: string[] = []
+        cy.get('@sidebar').findByTestId('BundleOption')
+          .each($bundle => {
+            cy.wrap($bundle).within(() => {
+              cy.getByTestId('DefaultSelector')
+                .filter('.available')
+                .random()
+                .then($item => {
+                  optionLabels.push($item.find('span').first().text().trim())
+                  cy.wrap($item)
+                })
+                .click({ force: true })
+            })
+          })
+          .then(() => {
+            const optionLabel = optionLabels.join(' + ')
+            cy.wrap<string>(optionLabel).as('optionLabel')
+          })
       }
     })
 })
@@ -480,9 +516,9 @@ Cypress.Commands.add('addCurrentProductToCart', (checkAvailability = true, enter
 
   cy.get('@availability').should('be.true')
 
-  cy.get<'configurable'|'simple'>('@productType')
+  cy.get<'configurable'|'bundle'|'simple'>('@productType')
     .then(type => {
-      if (type === 'configurable') {
+      if (type === 'configurable' || type === 'bundle') {
         cy.get<string>('@optionLabel').then(label => {
           if (!label) {
             cy.selectRandomProductOptionInSidebar()
@@ -661,8 +697,10 @@ Cypress.Commands.add('getFrame', { prevSubject: 'element' }, (subject, selector 
     .should('not.be.undefined')
 })
 
-Cypress.Commands.add('iframeLoaded', { prevSubject: 'element' }, ($iframe) => {
-  const $contentWindow = () => $iframe[0]?.contentDocument || $iframe[0]?.contentWindow?.document
+// @ts-ignore
+Cypress.Commands.add('iframeLoaded', { prevSubject: 'element' }, $iframe => {
+  const $contentWindow = () => ($iframe[0] as HTMLIFrameElement)?.contentDocument ||
+    ($iframe[0] as HTMLIFrameElement)?.contentWindow?.document
   return new Promise(resolve => {
     if ($contentWindow()?.readyState === 'complete') {
       resolve($contentWindow())

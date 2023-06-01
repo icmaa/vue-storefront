@@ -98,7 +98,7 @@ declare namespace Cypress {
      * @example
      * cy.get('img').checkImage()
      */
-    checkImage(): Chainable<any>,
+    checkImage(): Chainable<HTMLImageElement>,
 
     /**
      * Visit the given url.
@@ -185,7 +185,7 @@ declare namespace Cypress {
      * cy.openSidebar('[data-test-id="HeaderButtonWishlist"]')
      * cy.openSidebar('[data-test-id="HeaderButtonAccount"]', '[data-test-id="Modal"]')
      */
-    openSidebar(triggerSelector?: string, overlaySelector?: string): Chainable<Window>,
+    openSidebar(triggerSelector?: string, overlaySelector?: string): Chainable<JQuery<any>>,
 
     /**
      * Close sidebar.
@@ -480,6 +480,6 @@ declare namespace Cypress {
      * @example
      * cy.iframeLoaded('Modal')
      */
-    iframeLoaded<E extends Node = HTMLElement>(options?: Partial<Loggable & Timeoutable & Shadow>): Chainable<JQuery<E>>
+    iframeLoaded<E extends Node = HTMLIFrameElement>(): Chainable<JQuery<E>>
   }
 }
