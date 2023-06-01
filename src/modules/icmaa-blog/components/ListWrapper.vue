@@ -4,6 +4,7 @@
     :articles="articles"
     :category="category"
     :headline="headline"
+    :headline-level="headlineLevel"
   />
 </template>
 
@@ -52,7 +53,7 @@ export default {
     category (): BlogCategory {
       if (this.isRoot) {
         return {
-          name: i18n.t('Magazine') as string,
+          name: this.headline || i18n.t('Magazine') as string,
           url: 'root',
           children: this.getCategories
         }

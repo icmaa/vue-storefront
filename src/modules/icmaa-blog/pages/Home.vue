@@ -1,5 +1,13 @@
 <template>
   <div class="t-container t-my-8 t-px-4">
+    <h1 class="t-mb-4 t-pr-2 t-text-2xl t-font-light t-text-base-dark">
+      {{ $t('Magazine') }}
+    </h1>
+    <List
+      :query="{}"
+      :headline="$t('Latest articles')"
+      class="t-mb-8 t-border-b t-border-base-lighter"
+    />
     <template v-for="category in categories">
       <!--Teaser
         v-if="i === 1"

@@ -43,17 +43,17 @@
         />
       </div>
     </Lazyload>
-    <Lazyload data-test-id="ProductListingWidgetLoader">
-      <ProductListingWidget :category-id="3278" />
-    </Lazyload>
-    <Lazyload data-test-id="ProductListingWidgetLoader">
-      <ProductListingWidget :category-id="4251" />
-    </Lazyload>
     <Lazyload data-test-id="BlogWidgetLoader">
       <BlogList
         :query="{}"
         class="t-px-4"
       />
+    </Lazyload>
+    <Lazyload data-test-id="ProductListingWidgetLoader">
+      <ProductListingWidget :category-id="3278" />
+    </Lazyload>
+    <Lazyload data-test-id="ProductListingWidgetLoader">
+      <ProductListingWidget :category-id="4251" />
     </Lazyload>
     <CmsBlock
       identifier="home-seo"
