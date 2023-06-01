@@ -203,7 +203,7 @@ Cypress.Commands.add('openSidebar', (trigger: string = '[data-test-id="HeaderBut
     .click()
 
   cy.get(overlaySelector)
-    .as('sidebar')
+    .as('sidebar', { type: 'static' })
     .should('be.visible')
 })
 
