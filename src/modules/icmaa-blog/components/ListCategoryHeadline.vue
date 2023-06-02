@@ -5,7 +5,7 @@
   >
     <router-link
       v-if="!isBlogPage"
-      :to="category.url === 'root' ? localizedRoute({ name: 'icmaa-blog-home' }) : localizedRoute({ name: 'icmaa-blog', params: { identifier: category.url } })"
+      :to="localizedRoute(category.url === 'root' ? { name: 'icmaa-blog-home' } : { name: 'icmaa-blog', params: { identifier: category.url } })"
       :title="$t('Show all articles')"
       class="hover:t-underline"
     >
@@ -51,7 +51,7 @@ export default {
   },
   computed: {
     isBlogPage () {
-      return this.$route.name.endsWith('icmaa-blog') || this.$route.name.endsWith('icmaa-blog-tag')
+      return this.$route.name.endsWith('icmaa-blog') || this.$route.name.endsWith('icmaa-blog-tag') || this.$route.name.endsWith('icmaa-blog-home')
     }
   }
 }

@@ -123,6 +123,12 @@ export default {
       @apply t-max-w-3xl lg:t-mx-auto;
     }
   }
+
+  & > .asset {
+    .portrait, .square {
+      @apply lg:t-max-w-1/2 lg:t-mx-auto;
+    }
+  }
 }
 
 </style>

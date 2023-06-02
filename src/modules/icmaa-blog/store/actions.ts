@@ -57,9 +57,20 @@ const actions: ActionTree<BlogState, RootState> = {
             { url, ids: result.items.map(({ id }) => id), start, perPage, total }
           )
         })
+    } else if (route.name.endsWith('blog-home')) {
+      if (getters.isUrlResolved('root', start)) return
+
+      return dispatch('list', { queryOptions: { }, size, start })
+        .then((result) => {
+          const { start, perPage, total } = result
+          commit(
+            types.ICMAA_BLOG_URL_ADD,
+            { url: 'root', ids: result.items.map(({ id }) => id), start, perPage, total }
+          )
+        })
     }
 
-    return dispatch('list', { })
+    return dispatch('list', { size, start })
   }
 }
 

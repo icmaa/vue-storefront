@@ -11,6 +11,7 @@
     :placeholder="!!ratio"
     :ratio="ratio"
     :auto-reload="autoReload"
+    :img-class="[orientation]"
   />
 </template>
 
@@ -97,6 +98,10 @@ export default {
         }
       }
       return `${width}:${height}`
+    },
+    orientation () {
+      return this.imgWidth < this.imgHeight
+        ? 'portrait' : (this.imgWidth === this.imgHeight ? 'square' : 'landscape')
     }
   }
 }
