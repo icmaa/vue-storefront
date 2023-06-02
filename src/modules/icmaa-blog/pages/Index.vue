@@ -1,17 +1,12 @@
 <template>
   <div class="t-container t-mt-4 t-px-4 md:t-mt-8">
-    <ArticleComponent
-      v-if="isArticle"
-      :article="article"
-      class="t-mb-4"
-    />
-    <List
-      v-else-if="isTag"
-      :articles="articles"
-      :headline="$t('Blog #{tag}', { tag })"
-      :pagination="pagination"
-      @load-prev="loadPrev"
-    />
+    <template v-if="isArticle">
+      <Breadcrumbs class="t-my-4 t-w-full md:t-my-8" />
+      <ArticleComponent
+        :article="article"
+        class="t-mb-4"
+      />
+    </template>
     <template v-else>
       <h1
         class="t-mb-4 t-pr-2 t-text-2xl t-font-light t-text-base-dark"
@@ -24,6 +19,14 @@
         </router-link>
       </h1>
       <List
+        v-if="isTag"
+        :articles="articles"
+        :headline="$t('Blog #{tag}', { tag })"
+        :pagination="pagination"
+        @load-prev="loadPrev"
+      />
+      <List
+        v-else
         :articles="articles"
         :category="category"
         :pagination="pagination"
@@ -34,21 +37,21 @@
 </template>
 
 <script lang="ts">
-import i18n from '@vue-storefront/i18n'
 import { mapGetters } from 'vuex'
 import { BlogArticle, BlogCategory, BlogUrlEntry } from 'icmaa-blog/types/BlogState'
-import { Route } from 'vue-router'
 
 import BlogMixin from 'icmaa-blog/mixins'
 import BlogMetaMixin from 'icmaa-blog/mixins/meta'
 import ArticleComponent from 'icmaa-blog/components/Article.vue'
 import List from 'icmaa-blog/components/List.vue'
+import Breadcrumbs from 'theme/components/core/Breadcrumbs.vue'
 
 export default {
   name: 'BlogPage',
   components: {
     ArticleComponent,
-    List
+    List,
+    Breadcrumbs
   },
   mixins: [ BlogMixin, BlogMetaMixin ],
   async asyncData (c) {
@@ -57,6 +60,11 @@ export default {
   },
   async serverPrefetch () {
     return (this as any).fetchData()
+  },
+  data () {
+    return {
+      breadcrumbCategory: []
+    }
   },
   computed: {
     ...mapGetters({
@@ -88,12 +96,12 @@ export default {
         .map(id => this.getArticle({ id }))
     },
     isCategory (): boolean {
-      return !!this.category
+      return !!this.category && !this.isTag
     },
     category (): BlogCategory {
       if (this.isRoot) {
         return {
-          name: i18n.t('Latest articles') as string,
+          name: this.$t('Latest articles') as string,
           url: 'root',
           children: this.getCategories
         }
@@ -136,11 +144,26 @@ export default {
       }
       return this.$store.dispatch('icmaaBlog/resolveUrl', { route })
     },
-    fetchData (route: Route) {
-      return Promise.all([
+    async fetchData () {
+      await Promise.all([
         this.$store.dispatch('icmaaBlog/fetchCategories'),
         this.$store.dispatch('icmaaBlog/resolveUrl', { route: this.$route })
       ])
+
+      if (this.isArticle) {
+        const homeRoute = { name: this.$t('Magazine'), route_link: this.localizedRoute({ name: 'icmaa-blog-home' }) }
+        this.$store.dispatch(
+          'breadcrumbs/set',
+          { current: this.article.title, routes: [ homeRoute, ...this.breadcrumbCategory ] },
+          { root: true }
+        )
+        this.breadcrumbCategory = []
+      } else if (this.isCategory && !this.isRoot) {
+        this.breadcrumbCategory = [{
+          name: this.category.name,
+          route_link: this.localizedRoute({ name: 'icmaa-blog', params: { identifier: this.category.url } })
+        }]
+      }
     }
   },
   metaInfo () {
