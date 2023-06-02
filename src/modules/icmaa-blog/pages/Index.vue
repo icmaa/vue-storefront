@@ -147,23 +147,23 @@ export default {
     if (this.isArticle) {
       const { title, preview } = this.article
       return {
+        ...this.getMetaInfo(true),
         title: `${title} | ${this.$t('Magazine')}`,
         meta: [
           { vmid: 'description', name: 'description', content: preview }
-        ],
-        ...this.metaInfo(true)
+        ]
       }
     } else if (this.isCategory || this.isTag) {
       const title = this.isCategory
         ? `${this.category.name} | ${this.$t('Magazine')}`
         : `#${this.tag} | ${this.$t('Magazine')}`
 
-      return { title, ...this.metaInfo() }
+      return { ...this.getMetaInfo(), title }
     }
 
     return {
-      title: this.$t('Magazine'),
-      ...this.metaInfo()
+      ...this.getMetaInfo(),
+      title: this.$t('Magazine')
     }
   }
 }

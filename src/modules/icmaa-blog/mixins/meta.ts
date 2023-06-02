@@ -7,7 +7,7 @@ export default Vue.extend({
      * For some reason the `metaInfo` method is not called when nested, so we need to call it manually as a method.
      * This also only works in production-mode – vue-meta seems to have some problems with HMR.
      */
-    metaInfo (isArticle = false) {
+    getMetaInfo (isArticle = false) {
       const link = []
 
       let allowedStores: string[] = isArticle
