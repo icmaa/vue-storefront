@@ -25,14 +25,17 @@ export default {
     type: {
       type: String,
       required: true,
-      validator: v => ['artist', 'track'].includes(v)
+      validator: v => ['artist', 'track', 'playlist'].includes(v)
     }
   },
   computed: {
     src () {
       if (this.type === 'artist') {
         return `https://open.spotify.com/embed/artist/${this.id}?utm_source=generator&theme=0`
+      } else if (this.type === 'playlist') {
+        return `https://open.spotify.com/embed/playlist/${this.id}?utm_source=generator&theme=0`
       }
+
       return `https://open.spotify.com/embed/track/${this.id}?utm_source=generator&theme=0`
     }
   }
