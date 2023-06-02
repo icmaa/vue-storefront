@@ -45,7 +45,8 @@
     </Lazyload>
     <Lazyload data-test-id="BlogWidgetLoader">
       <BlogList
-        :query="{}"
+        :is-root="true"
+        :query="{ firstPublishedAt: { gte: blogFromDate } }"
         class="t-px-4"
       />
     </Lazyload>
@@ -65,6 +66,7 @@
 <script>
 import config from 'config'
 import { mapGetters } from 'vuex'
+import { getCurrentStoreviewDayjsDatetime, intDateFormat } from 'icmaa-config/helpers/datetime'
 import Lazyload from 'icmaa-cms/components/Lazyload'
 import Teaser from 'theme/components/core/blocks/Teaser/Teaser'
 import LinkList from 'theme/components/core/blocks/CategoryExtras/LinkList'
@@ -117,6 +119,11 @@ export default {
 
         return Object.assign(line, { logos })
       })
+    },
+    blogFromDate () {
+      return getCurrentStoreviewDayjsDatetime()
+        .subtract(2, 'month')
+        .format(intDateFormat)
     }
   },
   mounted () {
