@@ -4,6 +4,7 @@
     :articles="articles"
     :category="category"
     :headline="headline"
+    :headline-level="headlineLevel"
   />
 </template>
 
@@ -24,6 +25,10 @@ export default {
       type: Object,
       required: true
     },
+    isRoot: {
+      type: Boolean,
+      default: false
+    },
     size: {
       type: Number,
       default: 3
@@ -37,31 +42,29 @@ export default {
       default: 2
     }
   },
+  data () {
+    return {
+      articles: []
+    }
+  },
   computed: {
     ...mapGetters({
       getCategories: 'icmaaBlog/getCategories',
-      getCategoryBy: 'icmaaBlog/getCategoryBy',
-      getArticlesByQuery: 'icmaaBlog/getArticlesByQuery'
+      getCategoryBy: 'icmaaBlog/getCategoryBy'
     }),
-    isRoot (): boolean {
-      return Object.keys(this.query).length === 0
-    },
     isCategory (): boolean {
       return (this.query?.categories || this.isRoot) && !!this.category
     },
     category (): BlogCategory {
       if (this.isRoot) {
         return {
-          name: i18n.t('Magazine') as string,
+          name: this.headline || i18n.t('Magazine') as string,
           url: 'root',
           children: this.getCategories
         }
       }
 
       return this.getCategoryBy(this.query?.categories)
-    },
-    articles (): any {
-      return this.getArticlesByQuery(this.query).slice(0, this.size)
     }
   },
   async mounted () {
@@ -72,9 +75,16 @@ export default {
   },
   methods: {
     fetchData () {
+      const articlePromise = this.$store.dispatch(
+        'icmaaBlog/list',
+        { queryOptions: this.query, size: this.size }
+      ).then(r => {
+        this.articles = r.items
+      })
+
       return Promise.all([
         this.$store.dispatch('icmaaBlog/fetchCategories'),
-        this.$store.dispatch('icmaaBlog/list', { queryOptions: this.query, size: this.size })
+        articlePromise
       ])
     }
   }

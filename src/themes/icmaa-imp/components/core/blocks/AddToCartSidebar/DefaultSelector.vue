@@ -1,7 +1,16 @@
 <template>
   <div
-    class="t-flex t-cursor-pointer t-items-center t-border-base-lightest t-px-4 t-text-sm t-text-base-tone t-webkit-tap-transparent"
-    :class="[ optionLabel.length > 45 ? 't-py-2' : 't-h-12', {'t-flex t-text-base-light': !option.available}, {'t-relative t-bg-base-lightest t-text-black': isActive && isLoading}, {'t-text-base-light': !isActive && isLoading}, isLast ? 't-border-b-0' : 't-border-b', option.available ? 'available' : 'unavailable']"
+    class="t-flex t-cursor-pointer t-items-center t-border-base-lightest t-px-4 t-text-sm t-webkit-tap-transparent"
+    :class="[
+      optionLabel.length > 45 ? 't-py-2' : 't-h-12',
+      {
+        't-flex t-text-base-light': !option.available,
+        't-relative t-bg-base-lightest t-text-black': isActive && isLoading,
+      },
+      (!isActive && isLoading) || !option.available ? 't-text-base-light' : 't-text-base-tone',
+      isLast ? 't-border-b-0' : 't-border-b',
+      option.available ? 'available' : 'unavailable'
+    ]"
     :aria-label="$t('Select') + ' ' + optionLabel"
     data-test-id="DefaultSelector"
     @click="selectVariant"

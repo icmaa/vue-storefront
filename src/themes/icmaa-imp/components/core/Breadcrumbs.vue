@@ -6,7 +6,7 @@
         :key="index"
         :to="link.route_link"
         class="t-text-base-tone hover:t-text-base-dark"
-        :class="{ 't-hidden md:t-inline': !link.visible }"
+        :class="{ 't-hidden md:t-inline': !link.visible, 't-flex t-items-center': index === 0 }"
       >
         <template v-if="index === 0">
           <MaterialIcon

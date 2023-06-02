@@ -7,10 +7,11 @@ export type QueryOptions = {
   accounts?: number,
   cluster?: number,
   clusterFashion?: number,
-  resolveUrl?: boolean
+  resolveUrl?: boolean,
+  firstPublishedAt?: Record<string, string>
 }
 
-const applyOptionalFilter = (query: SearchQuery, resolveUrl: boolean, key: string, value?: (string|number)|(string|number)[]) => {
+const applyOptionalFilter = (query: SearchQuery, resolveUrl: boolean, key: string, value?: (string|number)|(string|number)[]|Record<string, string>) => {
   if (value) {
     if (resolveUrl) {
       query.applyFilter({ key, value: { or: value } })
@@ -20,7 +21,7 @@ const applyOptionalFilter = (query: SearchQuery, resolveUrl: boolean, key: strin
   }
 }
 
-export default ({ resolveUrl = false, identifier, tags, categories, accounts, cluster, clusterFashion }: QueryOptions): SearchQuery => {
+export default ({ resolveUrl = false, identifier, tags, categories, accounts, cluster, clusterFashion, firstPublishedAt }: QueryOptions): SearchQuery => {
   const query = new SearchQuery()
   query
     .applyFilter({ key: 'active', value: true })
@@ -34,6 +35,7 @@ export default ({ resolveUrl = false, identifier, tags, categories, accounts, cl
     applyOptionalFilter(query, false, 'accounts', accounts)
     applyOptionalFilter(query, false, 'cluster', cluster)
     applyOptionalFilter(query, false, 'clusterFashion', clusterFashion)
+    applyOptionalFilter(query, false, 'firstPublishedAt', firstPublishedAt)
   }
 
   query.applySort({ field: 'firstPublishedAt', options: 'desc' })
