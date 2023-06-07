@@ -6,7 +6,7 @@
     <Teaser
       tags="2"
       :show-split="false"
-      class="t-pb-8 sm:t-pt-4"
+      class="t-pb-8 t-pt-4 md:t-pt-8"
     />
     <Teaser
       tags="21"

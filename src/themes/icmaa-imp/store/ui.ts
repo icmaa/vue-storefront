@@ -120,7 +120,7 @@ export const uiStore = {
        * @see https://tailwindcss.com/docs/breakpoints/#app
        */
       type Viewport = [string, number]
-      const viewports: Viewport[] = Object.entries(viewportSizes).map(([key, value]) => [key, value])
+      const viewports: Viewport[] = Object.entries(viewportSizes).reverse().map(([key, value]) => [key, value])
       let viewport: Viewport = viewports.find(vp => window.matchMedia(`(min-width: ${vp[1]}px)`).matches)
 
       /** If no viewport is found because its the smallest viewport */

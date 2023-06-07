@@ -1,7 +1,7 @@
 <template>
   <div
     data-test-id="TeaserFullsize"
-    class="teaser-fullsize t-mx-0 t-cursor-pointer t-webkit-tap-transparent sm:t-mx-4"
+    class="teaser-fullsize t-mx-4 t-cursor-pointer t-webkit-tap-transparent"
     @click="redirect"
     @mouseover="onHover"
     @mouseleave="onHover"
