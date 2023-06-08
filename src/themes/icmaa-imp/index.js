@@ -10,6 +10,7 @@ import { once } from '@vue-storefront/core/helpers'
 
 import { claimsStore } from 'theme/store/claims'
 import { uiStore } from 'theme/store/ui'
+import { registerUserCentricsStore } from 'theme/store/userCentrics'
 import { StorageManager } from '@vue-storefront/core/lib/storage-manager'
 
 once('__VUE_EXTEND_THEME__', () => {
@@ -30,9 +31,11 @@ function initTheme (app, router, store, config, ssrContext) {
   // The 4th parameter is the route priority - a higher number will ensure the theme routes override any module routes. The default is 0.
   setupMultistoreRoutes(config, router, routes, 10)
 
-  StorageManager.init('claims');
-  store.registerModule('claims', claimsStore);
-  store.registerModule('ui', uiStore);
+  StorageManager.init('claims')
+  store.registerModule('claims', claimsStore)
+  store.registerModule('ui', uiStore)
+
+  registerUserCentricsStore()
 }
 
 export {
