@@ -1,22 +1,33 @@
 <template>
   <div>
-    <iframe
-      style="border-radius:12px"
-      :src="src"
-      width="100%"
-      height="352"
-      frameBorder="0"
-      allowfullscreen=""
-      allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-      loading="lazy"
+    <Placeholder
+      service="spotify"
+      ratio="16:11"
+      icon="spotify"
+      icon-set="icmaa"
       class="t-mx-auto t-max-w-lg"
-    />
+    >
+      <iframe
+        style="border-radius:12px"
+        :src="src"
+        width="100%"
+        height="352"
+        frameBorder="0"
+        allowfullscreen=""
+        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+        loading="lazy"
+        class="t-mx-auto t-max-w-lg"
+      />
+    </Placeholder>
   </div>
 </template>
 
 <script lang="ts">
+import Placeholder from 'icmaa-cms/components/Storyblok/UserCentricsPlaceholder.vue'
+
 export default {
   name: 'Spotify',
+  components: { Placeholder },
   props: {
     id: {
       type: String,
