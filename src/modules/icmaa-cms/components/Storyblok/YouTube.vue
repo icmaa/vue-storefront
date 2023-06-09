@@ -1,19 +1,30 @@
 <template>
   <div>
-    <iframe
-      class="youtube-video t-mx-auto t-max-w-lg"
-      :src="src"
-      title="YouTube video player"
-      frameborder="0"
-      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-      allowfullscreen
-    />
+    <Placeholder
+      service="you-tube-video"
+      ratio="16:9"
+      icon="youtube"
+      icon-set="icmaa"
+      class="t-mx-auto t-max-w-lg"
+    >
+      <iframe
+        class="youtube-video t-mx-auto t-max-w-lg"
+        :src="src"
+        title="YouTube video player"
+        frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        allowfullscreen
+      />
+    </Placeholder>
   </div>
 </template>
 
 <script lang="ts">
+import Placeholder from 'icmaa-cms/components/Storyblok/UserCentricsPlaceholder.vue'
+
 export default {
   name: 'YouTube',
+  components: { Placeholder },
   props: {
     id: {
       type: String,

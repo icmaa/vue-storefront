@@ -113,7 +113,7 @@ export default {
 
 .block-article__content {
   p, ul, ol, blockquote {
-    &:not(:last-child) {
+    &:not(:last-child):not([class*="t-"]) {
       @apply t-mb-4;
     }
   }

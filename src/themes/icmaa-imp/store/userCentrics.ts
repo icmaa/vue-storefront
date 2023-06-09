@@ -34,6 +34,12 @@ export const userCentricsStore: Module<UserCentricsState, RootState> = {
 
         commit('setServices', UC.getServicesBaseInfo())
       })
+    },
+    showMarketingLayer ({ getters }) {
+      if (getters.isInitialized) {
+        const UC = (window as any)?.UC_UI
+        UC.showSecondLayer()
+      }
     }
   },
   mutations: {
@@ -46,14 +52,14 @@ export const userCentricsStore: Module<UserCentricsState, RootState> = {
   },
   getters: {
     isInitialized: state => state.isInit,
-    isServiceEnabled: state => (service: string) => state.services[service] || false,
+    isServiceAllowed: (state, getters) => (service: string) => getters.isInitialized && (state.services[service] || false),
     getServices: state => state.services
   }
 }
 
 export function registerUserCentricsStore () {
+  store.registerModule('userCentrics', userCentricsStore)
   if (!isServer) {
-    store.registerModule('userCentrics', userCentricsStore)
     store.dispatch('userCentrics/init', null, { root: true })
   }
 }

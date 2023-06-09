@@ -1,13 +1,23 @@
 <template>
-  <div class="twitter t-mx-auto t-max-w-lg" />
+  <Placeholder
+    service="twitter-plugin"
+    :script="script"
+    ratio="32:25"
+    icon="twitter"
+    icon-set="icmaa"
+    class="t-mx-auto t-max-w-lg"
+    @script-loaded="afterScriptLoaded"
+  >
+    <div class="twitter t-mx-auto t-max-w-lg" />
+  </Placeholder>
 </template>
 
 <script lang="ts">
-import LoadSdkMixin from 'icmaa-cms/mixins/LoadSdk'
+import Placeholder from 'icmaa-cms/components/Storyblok/UserCentricsPlaceholder.vue'
 
 export default {
   name: 'Twitter',
-  mixins: [LoadSdkMixin],
+  components: { Placeholder },
   props: {
     url: {
       type: String,
@@ -15,6 +25,12 @@ export default {
     }
   },
   computed: {
+    script () {
+      return {
+        src: '//platform.twitter.com/widgets.js',
+        id: 'twttr'
+      }
+    },
     screenName () {
       return this.getFromUrl(this.url, 'screenName')
     },
@@ -25,37 +41,34 @@ export default {
       return this.getFromUrl(this.url, 'id')
     }
   },
-  mounted () {
-    this.loadSdkScript('//platform.twitter.com/widgets.js', 'twttr')
-      .then(() => {
-        switch (this.sourceType) {
-          case 'status':
-            (window as any).twttr.widgets.createTweet(
-              this.id,
-              this.$el,
-              { conversation: 'none', align: 'center', dnt: true }
-            )
-            break
-
-          case 'profile':
-            (window as any).twttr.widgets.createTimeline(
-              {
-                sourceType: this.sourceType,
-                screenName: this.screenName
-              },
-              this.$el,
-              {
-                height: 400,
-                tweetLimit: 3,
-                chrome: 'nofooter',
-                dnt: true
-              }
-            )
-            break
-        }
-      })
-  },
   methods: {
+    afterScriptLoaded () {
+      switch (this.sourceType) {
+        case 'status':
+          (window as any).twttr.widgets.createTweet(
+            this.id,
+            this.$el,
+            { conversation: 'none', align: 'center', dnt: true }
+          )
+          break
+
+        case 'profile':
+          (window as any).twttr.widgets.createTimeline(
+            {
+              sourceType: this.sourceType,
+              screenName: this.screenName
+            },
+            this.$el,
+            {
+              height: 400,
+              tweetLimit: 3,
+              chrome: 'nofooter',
+              dnt: true
+            }
+          )
+          break
+      }
+    },
     getFromUrl (url: string, key: 'screenName' | 'sourceType' | 'id'): string | boolean {
       const regex = /twitter\.com\/(?<screenName>[\w\-_]+)(\/(?<sourceType>\w+)\/(?<id>\d+))*/
       const result = regex.exec(url)
