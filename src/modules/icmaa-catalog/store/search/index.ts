@@ -11,7 +11,9 @@ export const storageKey = 'search'
 export const SearchStore: Module<SearchState, RootState> = {
   namespaced: true,
   state: {
-    currentTerm: ''
+    currentTerm: '',
+    client: undefined,
+    collections: {}
   },
   getters,
   actions,

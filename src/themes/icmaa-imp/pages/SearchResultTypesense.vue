@@ -12,17 +12,12 @@
               <ButtonComponent
                 style="second"
                 align="center"
-                :icon="activeFilterCount > 0 ? 'check' : 'filter_list'"
+                icon="filter_list"
                 class="t-w-full lg:t-w-auto"
                 data-test-id="ButtonFilter"
                 @click.native="openFilters"
               >
                 {{ $t('Filters') }}
-                <span
-                  v-if="activeFilterCount > 0"
-                  class="t-grow t-pl-2 t-text-left t-opacity-75"
-                  v-text="`(${activeFilterCount})`"
-                />
               </ButtonComponent>
               <div class="t-mt-2 t-flex t-w-full t-items-center t-overflow-x-auto t-hide-scrollbar md:t-mt-0 md:t-flex-1">
                 <FilterPresets class="t-flex t-items-center md:t-ml-2" />
@@ -63,7 +58,10 @@
         />
       </LazyHydrate>
       <div v-else>
-        <ProductListing :products="getCategoryProducts" />
+        <ProductListing
+          :products="getCategoryProducts"
+          :show-add-to-cart="true"
+        />
       </div>
       <div
         v-if="moreProductsInSearchResults"
@@ -103,11 +101,6 @@
     </div>
 
     <AsyncSidebar
-      :state-key="'categoryfilter'"
-      :async-component="FilterSidebar"
-      direction="left"
-    />
-    <AsyncSidebar
       :state-key="'addtocart'"
       :async-component="AddToCartSidebar"
       :async-component-props="{ showAddToCartButton: true, closeOnSelect: false }"
@@ -132,9 +125,7 @@ import Breadcrumbs from 'theme/components/core/Breadcrumbs'
 import ButtonComponent from 'theme/components/core/blocks/Button'
 import LoaderBackground from 'theme/components/core/LoaderBackground'
 
-const FilterSidebar = () => import(/* webpackChunkName: "vsf-sidebar-categoryfilter" */ 'theme/components/core/blocks/Category/Sidebar')
 const AddToCartSidebar = () => import(/* webpackChunkName: "vsf-addtocart-sidebar" */ 'theme/components/core/blocks/AddToCartSidebar/AddToCartSidebar')
-const ProductListingTicket = () => import(/* webpackChunkName: "vsf-product-listing-ticket" */ 'theme/components/core/ProductListingTicket')
 
 export default {
   name: 'SearchResult',
@@ -158,9 +149,7 @@ export default {
       pageSize: this.$route && this.$route.query.pagesize ? this.$route.query.pagesize : 16,
       loadingProducts: false,
       loading: true,
-      FilterSidebar,
-      AddToCartSidebar,
-      ProductListingTicket
+      AddToCartSidebar
     }
   },
   computed: {
@@ -197,9 +186,6 @@ export default {
     moreProductsInSearchResults () {
       const { perPage, page, total } = this.productsStats
       return (page * perPage < total)
-    },
-    activeFilterCount () {
-      return Object.keys(this.getCurrentFilters).length
     }
   },
   watch: {
@@ -216,23 +202,8 @@ export default {
     ...mapMutations('product', {
       resetCurrentProduct: productMutationTypes.PRODUCT_RESET_CURRENT
     }),
-    async changeFilter (filterVariants) {
-      if (!Array.isArray(filterVariants)) {
-        filterVariants = [filterVariants]
-      }
-
-      this.$store.dispatch('category-next/switchSearchFilters', filterVariants)
-    },
-    openFilters () {
-      this.$store.dispatch('ui/setSidebar', { key: 'categoryfilter' })
-      IcmaaGoogleTagManagerExecutors.openProductListFilterSidebar()
-    },
     onAddToCartSidebarClose () {
       this.resetCurrentProduct({})
-    },
-    changePageSize (size) {
-      this.pageSize = size
-      this.$store.dispatch('category-next/switchSearchFilters', [ { type: 'pagesize', id: size } ])
     },
     async loadMoreProducts (prev = false) {
       if (this.loadingProducts) {

@@ -96,10 +96,10 @@ const getters: GetterTree<CategoryState, RootState> = {
    */
   separateSelectedVariantInProductList: () => !icmaa_catalog.entities.category.configureChildProductsInCategoryList || false,
   isGenericSubcategory: (state, getters) => getters.getCurrentCategory?.isGenericSubcategory === true,
-  getGenericSubcategory: (state, getters, rootState): boolean | any => {
+  getGenericSubcategory: (state, getters): boolean | any => {
     return getters.getGenericSubcategoryByCategory(getters.getCurrentCategory)
   },
-  getGenericSubcategoryByCategory: (state, getters, rootState) => (category: any): boolean | any => {
+  getGenericSubcategoryByCategory: () => (category: any): boolean | any => {
     if (!category.isGenericSubcategory) return false
     const subcategory = category.subcategory
     subcategory.query = queryString.parse('?' + subcategory.queryPath)
