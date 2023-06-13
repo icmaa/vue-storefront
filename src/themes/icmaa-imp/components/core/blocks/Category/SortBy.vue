@@ -64,9 +64,7 @@ export default {
       return Object.assign(products.sortByAttributes, this.customConfigOptions)
     },
     customConfigOptions () {
-      /** Simulate category if we are on search-page to make use of universal `getCustomCategorySort` method. */
-      const category = this.isSearchResultPage ? { id: 'search', parent_id: 'search' } : this.category
-      return getCustomCategorySort(category) || {}
+      return getCustomCategorySort(this.category) || {}
     },
     hasCustomConfigOptions () {
       return !isEmpty(this.customConfigOptions)

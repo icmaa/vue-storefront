@@ -17,17 +17,6 @@ const getters: GetterTree<CategoryState, RootState> = {
   getDefaultCategorySort: (state, getters, rootState, rootGetters) => {
     return getDefaultCategorySort(getters.getCurrentCategory as Category)
   },
-  /**
-   * Overwrite parent to be able to search for search-filters of search-result page.
-   */
-  getAvailableFilters: (state, getters, rootState, rootGetters) => {
-    if (rootGetters['icmaaSearch/isSearchResultPage']) {
-      return state.filtersMap[rootGetters['icmaaSearch/getCurrentResultsPageTermHash']] || {}
-    }
-
-    const categoryUrlKey = get(getters.getCurrentCategory, 'url_key', null)
-    return state.filtersMap[categoryUrlKey] || {}
-  },
   isActiveFilterAttribute: (state, getters) => (attributeKey: string) => {
     return (getters.getCurrentFilters[attributeKey])
   },

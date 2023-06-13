@@ -3,7 +3,8 @@ import { icmaa_search } from 'config'
 import { SearchClient } from 'typesense'
 
 import * as types from './mutation-types'
-import SearchState, { Collection, SearchResponse } from '../../types/SearchState'
+import SearchState from '../../types/SearchState'
+import i18n from '@vue-storefront/i18n'
 import RootState from '@vue-storefront/core/types/RootState'
 import { currentStoreView } from '@vue-storefront/core/lib/multistore'
 
@@ -14,27 +15,14 @@ export type SearchOptions = {
   page?: number
 }
 
-const actions: ActionTree<SearchState, RootState> = {
-  initClient: ({ getters, commit }) => {
-    if (getters.getClient) return
-    const client = new SearchClient(icmaa_search?.typesense?.config || {})
-    commit(types.ICMAA_SEARCH_INIT_CLIENT, client)
-  },
-  getCollection: ({ dispatch, commit, getters }, key): Collection => {
-    let collection = getters.getCollection(key)
-    if (!collection) {
-      dispatch('initClient')
-      collection = getters.getClient?.collections(key + '-' + currentStoreView().storeCode)
-      commit(types.ICMAA_SEARCH_SET_COLLECTION, { key, collection })
-    }
+const client = new SearchClient(icmaa_search?.typesense?.config || {})
 
-    return collection
-  },
+const actions: ActionTree<SearchState, RootState> = {
   setCurrentTerm: ({ commit }, term: string) => {
     commit(types.ICMAA_SEARCH_SET_CURRENT_TERM, term)
   },
-  search: ({ dispatch }, { type = 'product', term, size = 16 }: SearchOptions): Promise<SearchResponse> => {
-    const collection = dispatch('getCollection', type) as unknown as Collection
+  search: async (context, { type = 'product', term, size = 16 }: SearchOptions): Promise<any> => {
+    const collection = client.collections(type + '-' + currentStoreView().storeCode)
     return collection.documents()
       .search({
         q: term,
@@ -42,6 +30,11 @@ const actions: ActionTree<SearchState, RootState> = {
         per_page: size,
         use_cache: true
       } as any, {})
+  },
+  loadSearchBreadcrumbs: async ({ dispatch, rootGetters }) => {
+    const routes = [ { name: i18n.t('Search') } ]
+    const current = rootGetters['icmaaSearch/getCurrentResultsPageTerm']
+    await dispatch('breadcrumbs/set', { current, routes }, { root: true })
   }
 }
 

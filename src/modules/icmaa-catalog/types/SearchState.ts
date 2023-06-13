@@ -7,7 +7,5 @@ export interface Collection<T = {}> extends SearchOnlyCollection<T> {}
 export interface SearchResponse<T = {}> extends TSSearchResponse<T> {}
 
 export default interface SearchState {
-  currentTerm: string,
-  client: SearchClient,
-  collections: Record<string, Collection>
+  currentTerm: string
 }

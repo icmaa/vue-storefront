@@ -210,6 +210,7 @@ export default {
   computed: {
     ...mapGetters({
       currentTerm: 'icmaaSearch/getCurrentTerm',
+      cleanTerm: 'icmaaSearch/cleanTerm',
       currentCategory: 'category-next/getCurrentCategory',
       getJsonBlockByIdentifier: 'icmaaCmsBlock/getJsonBlockByIdentifier'
     }),
@@ -221,18 +222,8 @@ export default {
         this.$store.dispatch('icmaaSearch/setCurrentTerm', value)
       }
     },
-    settings () {
-      return this.getJsonBlockByIdentifier('search-settings') || { stopWords: [] }
-    },
     searchStringWithoutStopWords () {
-      const { stopWords } = this.settings
-      return this.searchString
-        .replace(/[&/\\#,+()[\]~%.'":*?<>{}]/g, '')
-        .replace(/\s{1,}/gm, ' ')
-        .split(' ')
-        .filter(w => !stopWords.includes(w.toLowerCase()))
-        .join(' ')
-        .trim()
+      return this.cleanTerm(this.searchString)
     },
     getNoResultsMessage () {
       let msg = ''

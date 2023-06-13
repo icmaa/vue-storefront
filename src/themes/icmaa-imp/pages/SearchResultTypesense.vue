@@ -53,13 +53,13 @@
         :trigger-hydration="!loading"
       >
         <ProductListing
-          :products="getCategoryProducts"
+          :products="products"
           :show-add-to-cart="true"
         />
       </LazyHydrate>
       <div v-else>
         <ProductListing
-          :products="getCategoryProducts"
+          :products="products"
           :show-add-to-cart="true"
         />
       </div>
@@ -145,43 +145,35 @@ export default {
   },
   data () {
     return {
-      pageSizes: [16, 24, 48, 60, 100],
-      pageSize: this.$route && this.$route.query.pagesize ? this.$route.query.pagesize : 16,
       loadingProducts: false,
       loading: true,
+      products: [],
       AddToCartSidebar
     }
   },
   computed: {
     ...mapGetters({
-      viewport: 'ui/getViewport',
       getCurrentSearchQuery: 'category-next/getCurrentSearchQuery',
-      getCategoryProducts: 'category-next/getCategoryProducts',
-      getCurrentCategory: 'category-next/getCurrentCategory',
-      getCurrentFilters: 'category-next/getCurrentFilters',
       productsStats: 'category-next/getCategorySearchProductsStats',
-      productsTotal: 'category-next/getCategoryProductsTotal',
-      contentHeader: 'icmaaCategoryExtras/getContentHeaderByCurrentCategory',
       term: 'icmaaSearch/getCurrentResultsPageTerm',
-      termHash: 'icmaaSearch/getCurrentResultsPageTermHash',
       prevRoute: 'url/getPrevRouteDispatcher'
     }),
     isLazyHydrateEnabled () {
       return config.ssr.lazyHydrateFor.includes('category-next.products')
     },
+    productsTotal () {
+      return this.products.length
+    },
     isCategoryEmpty () {
       return this.productsTotal === 0
-    },
-    pageSizeOptions () {
-      return this.pageSizes.map(s => { return { value: s, label: s } })
     },
     prevProductsInSearchResults () {
       const currentPage = this.$route.query.p || 1
       const { perPage, start, total } = this.productsStats
       return currentPage > 1 &&
         start + perPage > perPage &&
-        this.getCategoryProducts.length < (currentPage * perPage) &&
-        this.getCategoryProducts.length < total
+        this.products.length < (currentPage * perPage) &&
+        this.products.length < total
     },
     moreProductsInSearchResults () {
       const { perPage, page, total } = this.productsStats
@@ -191,12 +183,12 @@ export default {
   watch: {
     '$route': function (a, b) {
       if (a.query?.p !== b.query?.p) return
-      this.fetchAsyncData(this.$route)
+      this.fetchAsyncData()
     }
   },
   async mounted () {
     await this.fetchAsyncData()
-    IcmaaGoogleTagManagerExecutors.searchResultVisited({ term: this.term, products: this.getCategoryProducts })
+    IcmaaGoogleTagManagerExecutors.searchResultVisited({ term: this.term, products: this.products })
   },
   methods: {
     ...mapMutations('product', {
@@ -221,12 +213,17 @@ export default {
     },
     async fetchAsyncData (newRoute) {
       try {
-        const route = newRoute || this.$route
-        const pageSize = route.params.pagesize || this.pageSize
-        const category = { url_key: this.termHash, term: this.term.toLowerCase() }
+        const term = newRoute?.params.term || this.term
+        this.$store.dispatch('icmaaSearch/setCurrentTerm', term)
 
-        await this.$store.dispatch('category-next/loadSearchProducts', { route, category, pageSize })
-        this.$store.dispatch('category-next/loadSearchBreadcrumbs')
+        await this.$store.dispatch('icmaaCmsBlock/single', { value: 'search-settings' })
+        await this.$store.dispatch('icmaaSearch/search', { type: 'product', term: this.term })
+          .then(response => {
+            const { hits, found } = response
+            this.products = hits.map(h => h.document)
+          })
+
+        this.$store.dispatch('icmaaSearch/loadSearchBreadcrumbs')
 
         this.loading = false
       } catch (e) {
