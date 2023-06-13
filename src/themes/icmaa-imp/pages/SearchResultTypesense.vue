@@ -117,6 +117,7 @@ import { mapGetters, mapMutations } from 'vuex'
 import { Logger } from '@vue-storefront/core/lib/logger'
 import { IcmaaGoogleTagManagerExecutors } from 'icmaa-google-tag-manager/hooks'
 import * as productMutationTypes from '@vue-storefront/core/modules/catalog/store/product/mutation-types'
+import * as categoryMutationTypes from '@vue-storefront/core/modules/catalog-next/store/category/mutation-types'
 
 import AsyncSidebar from 'theme/components/core/blocks/AsyncSidebar/AsyncSidebar.vue'
 import FilterPresets from 'theme/components/core/blocks/Category/FilterPresets'
@@ -155,14 +156,12 @@ export default {
     ...mapGetters({
       getCurrentSearchQuery: 'category-next/getCurrentSearchQuery',
       productsStats: 'category-next/getCategorySearchProductsStats',
+      productsTotal: 'category-next/getCategoryProductsTotal',
       term: 'icmaaSearch/getCurrentResultsPageTerm',
       prevRoute: 'url/getPrevRouteDispatcher'
     }),
     isLazyHydrateEnabled () {
       return config.ssr.lazyHydrateFor.includes('category-next.products')
-    },
-    productsTotal () {
-      return this.products.length
     },
     isCategoryEmpty () {
       return this.productsTotal === 0
@@ -194,6 +193,9 @@ export default {
     ...mapMutations('product', {
       resetCurrentProduct: productMutationTypes.PRODUCT_RESET_CURRENT
     }),
+    ...mapMutations('category-next', {
+      setProductsStats: categoryMutationTypes.CATEGORY_SET_SEARCH_PRODUCTS_STATS
+    }),
     onAddToCartSidebarClose () {
       this.resetCurrentProduct({})
     },
@@ -219,8 +221,16 @@ export default {
         await this.$store.dispatch('icmaaCmsBlock/single', { value: 'search-settings' })
         await this.$store.dispatch('icmaaSearch/search', { type: 'product', term: this.term })
           .then(response => {
-            const { hits, found } = response
+            const { hits, found, page, request_params } = response
             this.products = hits.map(h => h.document)
+
+            this.setProductsStats({
+              page,
+              perPage: request_params.per_page,
+              start: 0,
+              visible: this.products.length,
+              total: found
+            })
           })
 
         this.$store.dispatch('icmaaSearch/loadSearchBreadcrumbs')
