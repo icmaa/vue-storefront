@@ -10,10 +10,6 @@
       >
     </div>
 
-    <!-- description -->
-    <div class="t-mb-8 t-mt-4">
-      {{ content.description }}
-    </div>
     <div class="t-mb-8 t-flex t-w-full t-justify-center">
       <MaterialIcon
         icon="arrow_drop_down_circle"
@@ -21,14 +17,68 @@
         class=""
       />
     </div>
-    <div class="t-mb-8 t-font-semibold">
-      {{ content.subheading }}
+
+    <!-- description -->
+    <div class="t-mb-8 t-mt-4">
+      {{ content.aboutustext1 }}
     </div>
 
-    <!-- gallery -->
+    <div class="t-mb-8 t-mt-4">
+      {{ content.aboutustext2 }}
+    </div>
+
+    <div class="t-mb-8 t-mt-4">
+      {{ content.aboutustext3 }}
+    </div>
+
+    <div>
+      <button class="rounded-full t-flex t-justify-center">
+        {{ content.applybutton }}
+      </button>
+    </div>
+
+    <hr>
+
+    <!-- Creator-Programm Images -->
+    <div class="t-flex t-justify-center">
+      <img
+        :src="getMediaThumbnail(content.creatorprogramm.img, 0, 0)"
+        :alt="content.creatorprogramm.alt"
+        :title="content.creatorprogramm.alt"
+        class="t-mb-4 t-mt-8 t-w-2/3 t-border-b t-border-base-lightest t-pb-8"
+      >
+    </div>
+
+    <div class="t-mb-16 t-flex t-justify-center t-font-normal t-leading-snug">
+      <div class="t-w-3/4">
+        {{ content.creatortext }}
+      </div>
+    </div>
+
+    <hr>
+
+    <div class="t-mb-16 t-flex t-justify-center t-font-bold t-leading-snug">
+      <div class="t-w-3/4">
+        {{ content.applyheadline }}
+      </div>
+    </div>
+
+    <div class="t-mb-16 t-flex t-justify-center t-font-normal t-leading-snug">
+      <div class="t-w-3/4">
+        {{ content.applytext }}
+      </div>
+    </div>
+
+    <div>
+      <button class="rounded-full t-flex t-justify-center">
+        {{ content.registerbutton }}
+      </button>
+    </div>
+
+    <!-- Apllication process -->
     <div class="t-mb-16 t-flex t-flex-wrap t-items-center t-justify-center">
       <div
-        v-for="img in content.img"
+        v-for="img in content.processimg"
         :key="img.link"
         class="t-mb-6 t-w-full md:t-mr-6 md:t-w-2/5"
       >
@@ -41,16 +91,18 @@
       </div>
     </div>
 
-    <div class="t-mb-16 t-flex t-justify-center t-font-semibold t-leading-snug">
+    <div class="t-mb-16 t-flex t-justify-center t-font-normal t-leading-snug">
       <div class="t-w-3/4">
-        {{ content.headline2 }}
+        {{ content.processtext }}
       </div>
     </div>
 
-    <!-- list -->
+    <hr>
+
+    <!-- List of advantages  -->
     <div class="t-mb-8 t-flex t-flex-wrap t-justify-center">
       <div
-        v-for="(block, index) in content.table"
+        v-for="(block, index) in content.advantages"
         :key="index"
         class="t-mb-4 t-w-full md:t-mr-6 md:t-w-2/5"
       >
@@ -76,19 +128,29 @@
       </div>
     </div>
 
-    <!-- affilinet -->
+    <hr>
+
+    <!-- AWIN -->
     <div class="t-mb-8 t-flex t-flex-wrap t-justify-center">
       <a
-        :href="content.affilinet.link"
+        :href="content.awin.link"
         class="t-cursor-pointer lg:t-w-2/3"
       >
         <img
-          :src="getMediaThumbnail(content.affilinet.img, 0, 0)"
-          :alt="content.affilinet.alt"
-          :title="content.affilinet.alt"
+          :src="getMediaThumbnail(content.awin.img, 0, 0)"
+          :alt="content.awin.alt"
+          :title="content.awin.alt"
           class="t-w-full"
         >
       </a>
+    </div>
+
+    <hr>
+
+    <div class="t-mb-16 t-flex t-justify-center t-font-bold t-leading-snug">
+      <div class="t-w-3/4">
+        {{ content.questionheadline }}
+      </div>
     </div>
 
     <!-- footer -->
