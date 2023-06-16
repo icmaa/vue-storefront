@@ -121,7 +121,7 @@
           </ul>
         </template>
         <template v-else>
-          <div class="t-flex t-justify-center t-px-4">
+          <div class="t-flex t-justify-center t-px-4 ">
             <img :src="getMediaThumbnail(block.img.link, 0, 0)">
           </div>
         </template>
