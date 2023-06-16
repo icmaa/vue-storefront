@@ -1,5 +1,5 @@
 <template>
-  <div class="t-container t-bg-base-dark t-text-center t-uppercase t-text-white">
+  <div class="t-container t-bg-base-dark t-text-center t-text-white">
     <!-- banner -->
     <div class="t-flex t-justify-center">
       <img
@@ -27,7 +27,7 @@
       <LinkComponent
         :to="content.applybutton.link"
         :title="content.applybutton.link"
-        class="t-block t-text-sm t-leading-tight t-text-primary"
+        class="t-mb-5 t-flex t-justify-center t-pb-5 t-text-sm t-leading-tight t-text-primary"
       >
         <ButtonComponent
           type="primary"
@@ -40,12 +40,12 @@
 
       <hr>
 
-      <!-- Apllication process -->
-      <div class="t-mb-16 t-flex t-flex-wrap t-items-center t-justify-center">
+      <!-- Creator-Programm Images -->
+      <div class="t-mb-16 t-mt-5 t-flex t-flex-wrap t-items-center t-justify-center t-pt-5">
         <div
-          v-for="img in content.processimg"
+          v-for="img in content.creatorprogrammimg"
           :key="img.link"
-          class="t-w-1/2 md:t-w-1/4"
+          class="t-w-1/2 t-p-4 md:t-w-1/4"
         >
           <img
             :src="getMediaThumbnail(img.link, 0, 0)"
@@ -56,16 +56,6 @@
         </div>
       </div>
 
-      <!-- Creator-Programm Images -->
-      <div class="t-flex t-justify-center">
-        <img
-          :src="getMediaThumbnail(content.creatorprogramm.img, 0, 0)"
-          :alt="content.creatorprogramm.alt"
-          :title="content.creatorprogramm.alt"
-          class="t-mb-4 t-mt-8 t-w-2/3 t-border-b t-border-base-lightest t-pb-8"
-        >
-      </div>
-
       <div class="t-mb-16 t-flex t-justify-center t-font-normal t-leading-snug">
         <div class="t-w-3/4">
           {{ content.creatortext }}
@@ -74,7 +64,7 @@
 
       <hr>
 
-      <div class="t-mb-16 t-flex t-justify-center t-font-bold t-leading-snug">
+      <div class="t-mb-16 t-mt-5 t-flex t-justify-center t-pt-5 t-font-bold t-leading-snug">
         <div class="t-w-3/4">
           {{ content.applyheadline }}
         </div>
@@ -86,10 +76,33 @@
         </div>
       </div>
 
-      <div>
-        <button class="rounded-full t-flex t-justify-center">
+      <LinkComponent
+        :to="content.applybutton.link"
+        :title="content.applybutton.link"
+        class="t-mb-5 t-flex t-justify-center t-pb-5 t-text-sm t-leading-tight t-text-primary"
+      >
+        <ButtonComponent
+          type="primary"
+          size="sm"
+          class="t-mt-2"
+        >
           {{ content.registerbutton }}
-        </button>
+        </ButtonComponent>
+      </LinkComponent>
+
+      <div class="t-mb-16 t-mt-5 t-flex t-flex-wrap t-items-center t-justify-center t-pt-5">
+        <div
+          v-for="img in content.processimg"
+          :key="img.link"
+          class="t-w-1/5 md:t-w-1/5"
+        >
+          <img
+            :src="getMediaThumbnail(img.link, 0, 0)"
+            :alt="img.alt"
+            :title="img.alt"
+            class="t-w-full"
+          >
+        </div>
       </div>
 
       <div class="t-mb-16 t-flex t-justify-center t-font-normal t-leading-snug">
@@ -101,13 +114,13 @@
       <hr>
 
       <!-- List of advantages  -->
-      <div class="t-mb-8 t-flex t-flex-wrap t-justify-center">
+      <div class="t-mb-8 t-mt-5 t-flex t-flex-wrap t-justify-center t-pt-5">
         <div
           v-for="(block, index) in content.advantages"
           :key="index"
           class="t-mb-4 t-w-full md:t-mr-6 md:t-w-2/5"
         >
-          <div class="t-mb-4 t-border t-p-1">
+          <div class="t-mb-4 t-p-1 t-font-bold t-uppercase">
             {{ block.headline }}
           </div>
           <template v-if="!hasImage(block)">
@@ -122,7 +135,7 @@
             </ul>
           </template>
           <template v-else>
-            <div class="t-flex t-justify-center t-px-4 ">
+            <div class=" t-px-4 ">
               <img :src="getMediaThumbnail(block.img.link, 0, 0)">
             </div>
           </template>
@@ -132,7 +145,7 @@
       <hr>
 
       <!-- AWIN -->
-      <div class="t-mb-8 t-flex t-flex-wrap t-justify-center">
+      <div class="t-mb-8 t-mt-5 t-flex t-flex-wrap t-justify-center t-pt-5">
         <a
           :href="content.awin.link"
           class="t-cursor-pointer lg:t-w-2/3"
@@ -145,10 +158,15 @@
           >
         </a>
       </div>
+      <div class="t-mb-16 t-flex t-justify-center t-font-normal t-leading-snug">
+        <div class="t-w-3/4">
+          {{ content.awin.text }}
+        </div>
+      </div>
 
       <hr>
 
-      <div class="t-mb-16 t-flex t-justify-center t-font-bold t-leading-snug">
+      <div class="t-mb-16 t-mt-5 t-flex t-justify-center t-pt-5 t-font-bold t-leading-snug">
         <div class="t-w-3/4">
           {{ content.questionheadline }}
         </div>
@@ -162,8 +180,7 @@
         <a
           class="t-font-semibold t-text-white"
           :href="content.footer.link"
-          :title="content.footer.title"
-        >{{ content.footer.title }}</a>
+        />
       </div>
     </div>
   </div>
@@ -171,7 +188,6 @@
 
 <script>
 import Page from 'icmaa-cms/mixins/Page'
-import MaterialIcon from 'theme/components/core/blocks/MaterialIcon'
 import ButtonComponent from 'theme/components/core/blocks/Button';
 import LinkComponent from 'theme/components/core/blocks/Link';
 
@@ -180,7 +196,6 @@ import { mapGetters } from 'vuex'
 export default {
   name: 'Affiliates',
   components: {
-    MaterialIcon,
     ButtonComponent,
     LinkComponent
   },
