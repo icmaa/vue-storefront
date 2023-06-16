@@ -9,18 +9,21 @@
               <span data-test-id="productsTotal">{{ productsTotal }}</span> {{ $t('Search results for: {term}', { term }) }}
             </h1>
             <div class="t-flex t-w-full t-flex-wrap t-items-stretch t-px-1 md:t-px-2">
-              <ButtonComponent
+              <!--ButtonComponent
                 style="second"
                 align="center"
                 icon="filter_list"
-                class="t-w-full lg:t-w-auto"
+                class="t-w-full lg:t-w-auto lg:t-mr-2"
                 data-test-id="ButtonFilter"
                 @click.native="openFilters"
               >
                 {{ $t('Filters') }}
-              </ButtonComponent>
+              </ButtonComponent-->
               <div class="t-mt-2 t-flex t-w-full t-items-center t-overflow-x-auto t-hide-scrollbar md:t-mt-0 md:t-flex-1">
-                <FilterPresets class="t-flex t-items-center md:t-ml-2" />
+                <CategoryLinks
+                  :categories="categories"
+                  class="t-flex t-items-center"
+                />
               </div>
             </div>
           </div>
@@ -109,7 +112,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import LazyHydrate from 'vue-lazy-hydration'
 
 import config from 'config'
@@ -120,13 +123,13 @@ import * as productMutationTypes from '@vue-storefront/core/modules/catalog/stor
 import * as categoryMutationTypes from '@vue-storefront/core/modules/catalog-next/store/category/mutation-types'
 
 import AsyncSidebar from 'theme/components/core/blocks/AsyncSidebar/AsyncSidebar.vue'
-import FilterPresets from 'theme/components/core/blocks/Category/FilterPresets'
-import ProductListing from 'theme/components/core/ProductListing'
-import Breadcrumbs from 'theme/components/core/Breadcrumbs'
-import ButtonComponent from 'theme/components/core/blocks/Button'
-import LoaderBackground from 'theme/components/core/LoaderBackground'
+import CategoryLinks from 'theme/components/core/blocks/Category/CategoryLinks.vue'
+import ProductListing from 'theme/components/core/ProductListing.vue'
+import Breadcrumbs from 'theme/components/core/Breadcrumbs.vue'
+import ButtonComponent from 'theme/components/core/blocks/Button.vue'
+import LoaderBackground from 'theme/components/core/LoaderBackground.vue'
 
-const AddToCartSidebar = () => import(/* webpackChunkName: "vsf-addtocart-sidebar" */ 'theme/components/core/blocks/AddToCartSidebar/AddToCartSidebar')
+const AddToCartSidebar = () => import(/* webpackChunkName: "vsf-addtocart-sidebar" */ 'theme/components/core/blocks/AddToCartSidebar/AddToCartSidebar.vue')
 
 export default {
   name: 'SearchResult',
@@ -135,7 +138,7 @@ export default {
     LazyHydrate,
     ButtonComponent,
     LoaderBackground,
-    FilterPresets,
+    CategoryLinks,
     ProductListing,
     Breadcrumbs
   },
@@ -149,6 +152,7 @@ export default {
       loadingProducts: false,
       loading: true,
       products: [],
+      categories: [],
       AddToCartSidebar
     }
   },
@@ -187,7 +191,7 @@ export default {
   },
   async mounted () {
     await this.fetchAsyncData()
-    IcmaaGoogleTagManagerExecutors.searchResultVisited({ term: this.term, products: this.products })
+    IcmaaGoogleTagManagerExecutors.searchResultVisited({ term: this.term, results: this.products })
   },
   methods: {
     ...mapMutations('product', {
@@ -219,6 +223,19 @@ export default {
         this.$store.dispatch('icmaaSearch/setCurrentTerm', term)
 
         await this.$store.dispatch('icmaaCmsBlock/single', { value: 'search-settings' })
+        await this.$store.dispatch('icmaaSearch/search', { type: 'category', term: this.term })
+          .then(response => {
+            const { hits } = response
+            this.categories = hits.map(h => {
+              const { document } = h
+              const { url_path, url_key: slug, name: label } = document
+              return { label, slug, url_path }
+            })
+          })
+          .catch(() => {
+            this.categories = []
+          })
+
         await this.$store.dispatch('icmaaSearch/search', { type: 'product', term: this.term })
           .then(response => {
             const { hits, found, page, request_params } = response
@@ -231,6 +248,9 @@ export default {
               visible: this.products.length,
               total: found
             })
+          })
+          .catch(() => {
+            this.products = []
           })
 
         this.$store.dispatch('icmaaSearch/loadSearchBreadcrumbs')
