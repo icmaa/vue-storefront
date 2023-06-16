@@ -168,13 +168,6 @@ import { Logger } from '@vue-storefront/core/lib/logger'
 import debounce from 'lodash-es/debounce'
 import pick from 'lodash-es/pick'
 
-import { icmaa_search } from 'config'
-import { SearchClient } from 'typesense'
-
-const client = new SearchClient(icmaa_search?.typesense?.config || {})
-const productIndex = client.collections('product-' + currentStoreView().storeCode)
-const categoryIndex = client.collections('category-' + currentStoreView().storeCode)
-
 export default {
   name: 'SearchPanel',
   components: {
@@ -202,9 +195,7 @@ export default {
       loadingProducts: false,
       showPleaseWait: false,
       categories: [],
-      history: [],
-      productIndex,
-      categoryIndex
+      history: []
     }
   },
   computed: {
@@ -307,16 +298,12 @@ export default {
     },
     searchDebounced: debounce(async function () {
       if (!this.$v.searchString.$invalid) {
+        const term = this.searchStringWithoutStopWords
+        const size = this.size
         this.loadingProducts = true
         this.page = 1
 
-        this.categoryIndex.documents()
-          .search({
-            q: this.searchStringWithoutStopWords,
-            preset: 'category-default',
-            per_page: this.size,
-            use_cache: true
-          })
+        this.$store.dispatch('icmaaSearch/search', { type: 'category', term, size })
           .then(response => {
             const { hits } = response
             this.categories = hits.map(h => h.document)
@@ -325,13 +312,7 @@ export default {
             this.categories = []
           })
 
-        this.productIndex.documents()
-          .search({
-            q: this.searchStringWithoutStopWords,
-            preset: 'product-default',
-            per_page: this.size,
-            use_cache: true
-          })
+        this.$store.dispatch('icmaaSearch/search', { type: 'product', term, size })
           .then(response => {
             const { hits, found, page } = response
             this.products = hits.map(h => h.document)
@@ -367,17 +348,12 @@ export default {
     loadMore () {
       if (!this.moreProducts) return
 
+      const term = this.searchStringWithoutStopWords
+      const size = this.size
       this.page += 1
 
       /** @todo Add pagination */
-      this.productIndex.documents()
-        .search({
-          q: this.searchStringWithoutStopWords,
-          preset: 'product-default',
-          per_page: this.size,
-          page: this.page,
-          use_cache: true
-        })
+      this.$store.dispatch('icmaaSearch/search', { type: 'product', term, size, page: this.page })
         .then(response => {
           const { hits, found, page } = response
           this.products.push(...hits.map(h => h.document))
