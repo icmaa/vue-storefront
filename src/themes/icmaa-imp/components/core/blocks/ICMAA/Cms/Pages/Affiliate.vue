@@ -133,7 +133,7 @@
                 :key="row"
                 class="t-mb-2"
               >
-                {{ entry.textg }}
+                {{ entry.text }}
               </li>
             </ul>
             <div
