@@ -59,6 +59,9 @@
       <div class="t-mb-16 t-flex t-justify-center t-font-normal t-leading-snug">
         <div class="t-w-3/4">
           {{ content.creatortext }}
+          <LinkComponent :to="content.creatortextlink">
+            <u>{{ content.creatortextlinktext }}</u>
+          </LinkComponent>
         </div>
       </div>
 
@@ -123,7 +126,7 @@
           <div class="t-mb-4 t-p-1 t-font-bold t-uppercase">
             {{ block.headline }}
           </div>
-          <template v-if="!hasImage(block)">
+          <div>
             <ul class="t-list-disc t-pl-16 t-text-left t-text-xs">
               <li
                 v-for="(entry, row) in block.list"
@@ -133,12 +136,13 @@
                 {{ entry.text }}
               </li>
             </ul>
-          </template>
-          <template v-else>
-            <div class=" t-px-4 ">
+            <div
+              v-if="(block.img)"
+              class=" t-px-4 "
+            >
               <img :src="getMediaThumbnail(block.img.link, 0, 0)">
             </div>
-          </template>
+          </div>
         </div>
       </div>
 
@@ -190,7 +194,6 @@
 import Page from 'icmaa-cms/mixins/Page'
 import ButtonComponent from 'theme/components/core/blocks/Button';
 import LinkComponent from 'theme/components/core/blocks/Link';
-
 import { mapGetters } from 'vuex'
 
 export default {
