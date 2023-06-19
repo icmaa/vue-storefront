@@ -80,8 +80,8 @@
       </div>
 
       <LinkComponent
-        :to="content.applybutton.link"
-        :title="content.applybutton.link"
+        :to="content.registerbutton.link"
+        :title="content.registerbutton.text"
         class="t-mb-5 t-flex t-justify-center t-pb-5 t-text-sm t-leading-tight t-text-primary"
       >
         <ButtonComponent
@@ -89,7 +89,7 @@
           size="sm"
           class="t-mt-2"
         >
-          {{ content.registerbutton }}
+          {{ content.registerbutton.text }}
         </ButtonComponent>
       </LinkComponent>
 
@@ -113,6 +113,20 @@
           {{ content.processtext }}
         </div>
       </div>
+
+      <LinkComponent
+        :to="content.awinhelp"
+        :title="content.awinhelptext"
+        class="t-mb-5 t-flex t-justify-center t-pb-5 t-text-sm t-leading-tight t-text-primary"
+      >
+        <ButtonComponent
+          type="primary"
+          size="sm"
+          class="t-mt-2"
+        >
+          {{ content.awinhelptext }}
+        </ButtonComponent>
+      </LinkComponent>
 
       <hr class="t-mx-96">
 
@@ -184,7 +198,10 @@
         <a
           class="t-font-semibold t-text-white"
           :href="content.footer.link"
-        />
+          :title="content.footer.linktext"
+        >
+          {{ content.footer.linktext }}
+        </a>
       </div>
     </div>
   </div>
