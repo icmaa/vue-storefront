@@ -11,17 +11,13 @@
     </div>
 
     <div class="md:t-p-8 lg:t-p-16">
-      <!-- description -->
-      <div class="t-mb-8 t-mt-4">
-        {{ content.aboutustext1 }}
-      </div>
-
-      <div class="t-mb-8 t-mt-4">
-        {{ content.aboutustext2 }}
-      </div>
-
-      <div class="t-mb-8 t-mt-4">
-        {{ content.aboutustext3 }}
+      <div
+        v-for="about in content.aboutus"
+        :key="about.text"
+      >
+        <div class="t-mb-8 t-mt-4">
+          {{ about.text }}
+        </div>
       </div>
 
       <LinkComponent
@@ -59,9 +55,6 @@
       <div class="t-mb-16 t-flex t-justify-center t-font-normal t-leading-snug">
         <div class="t-w-3/4">
           {{ content.creatortext }}
-          <LinkComponent :to="content.creatortextlink">
-            <u>{{ content.creatortextlinktext }}</u>
-          </LinkComponent>
         </div>
       </div>
 
@@ -108,15 +101,15 @@
         </div>
       </div>
 
-      <div class="t-mb-16 t-flex t-justify-center t-font-normal t-leading-snug">
+      <div class="t-mb-8 t-flex t-justify-center t-font-normal t-leading-snug">
         <div class="t-w-3/4">
           {{ content.processtext }}
         </div>
       </div>
 
       <LinkComponent
-        :to="content.awinhelp"
-        :title="content.awinhelptext"
+        :to="content.awinhelp.link"
+        :title="content.awinhelp.text"
         class="t-mb-5 t-flex t-justify-center t-pb-5 t-text-sm t-leading-tight t-text-primary"
       >
         <ButtonComponent
@@ -124,7 +117,7 @@
           size="sm"
           class="t-mt-2"
         >
-          {{ content.awinhelptext }}
+          {{ content.awinhelp.text }}
         </ButtonComponent>
       </LinkComponent>
 
@@ -135,13 +128,13 @@
         <div
           v-for="(block, index) in content.advantages"
           :key="index"
-          class="t-mb-4 t-w-full md:t-mr-6 md:t-w-2/5"
+          class="t-mb-4 t-w-full t-text-left md:t-mr-6 md:t-w-2/5"
         >
-          <div class="t-mb-4 t-p-1 t-font-bold t-uppercase">
+          <div class="t-mb-4 t-p-1 t-text-xl t-font-bold t-uppercase">
             {{ block.headline }}
           </div>
           <div>
-            <ul class="t-list-disc t-pl-16 t-text-left">
+            <ul class="t-list-disc t-pl-6">
               <li
                 v-for="(entry, row) in block.list"
                 :key="row"
@@ -185,7 +178,7 @@
       <hr class="t-mx-96">
 
       <div class="t-mb-16 t-mt-5 t-flex t-justify-center t-pt-5 t-font-bold t-leading-snug">
-        <div class="t-w-3/4">
+        <div class="t-w-3/4 t-text-xl">
           {{ content.questionheadline }}
         </div>
       </div>
