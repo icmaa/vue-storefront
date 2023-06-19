@@ -52,7 +52,7 @@
         </div>
       </div>
 
-      <div class="t-mb-16 t-flex t-justify-center t-font-normal t-leading-snug">
+      <div class="t-mb-10 t-flex t-justify-center t-font-normal t-leading-snug">
         <div class="t-w-3/4">
           {{ content.creatortext }}
         </div>
@@ -60,13 +60,13 @@
 
       <hr class="t-mx-96">
 
-      <div class="t-mb-16 t-mt-5 t-flex t-justify-center t-pt-5 t-font-bold t-leading-snug">
+      <div class="t-mb-10 t-mt-5 t-flex t-justify-center t-pt-5 t-font-bold t-leading-snug">
         <div class="t-w-3/4">
           {{ content.applyheadline }}
         </div>
       </div>
 
-      <div class="t-mb-16 t-flex t-justify-center t-font-normal t-leading-snug">
+      <div class="t-mb-10 t-flex t-justify-center t-font-normal t-leading-snug">
         <div class="t-w-3/4">
           {{ content.applytext }}
         </div>
@@ -123,7 +123,7 @@
 
       <hr class="t-mx-96">
 
-      <!-- List of advantages  -->
+      <!--List of advantages-->
       <div class="t-mb-8 t-mt-5 t-flex t-flex-wrap t-justify-center t-pt-5">
         <div
           v-for="(block, index) in content.advantages"
@@ -169,7 +169,7 @@
           >
         </a>
       </div>
-      <div class="t-mb-16 t-flex t-justify-center t-font-normal t-leading-snug">
+      <div class="t-mb-10 t-flex t-justify-center t-font-normal t-leading-snug">
         <div class="t-w-3/4 t-text-[9px]">
           {{ content.awin.text }}
         </div>
