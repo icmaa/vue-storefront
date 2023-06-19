@@ -10,17 +10,17 @@
       >
     </div>
 
-    <div class="md:t-p-8 lg:t-p-16">
+    <div class="sm:t-p-8 md:t-p-8 ">
       <!-- description -->
-      <div class="t-mb-8 t-mt-4">
+      <div class="t-mb-8 ">
         {{ content.aboutustext1 }}
       </div>
 
-      <div class="t-mb-8 t-mt-4">
+      <div class="t-mb-8 ">
         {{ content.aboutustext2 }}
       </div>
 
-      <div class="t-mb-8 t-mt-4">
+      <div class="t-mb-8 ">
         {{ content.aboutustext3 }}
       </div>
 
@@ -56,7 +56,7 @@
         </div>
       </div>
 
-      <div class="t-mb-16 t-flex t-justify-center t-font-normal t-leading-snug">
+      <div class="t-mb-10 t-flex t-justify-center t-font-normal t-leading-snug">
         <div class="t-w-3/4">
           {{ content.creatortext }}
           <LinkComponent :to="content.creatortextlink">
@@ -67,13 +67,13 @@
 
       <hr class="t-mx-96">
 
-      <div class="t-mb-16 t-mt-5 t-flex t-justify-center t-pt-5 t-font-bold t-leading-snug">
+      <div class="t-mb-10 t-mt-5 t-flex t-justify-center t-pt-5 t-font-bold t-leading-snug">
         <div class="t-w-3/4">
           {{ content.applyheadline }}
         </div>
       </div>
 
-      <div class="t-mb-16 t-flex t-justify-center t-font-normal t-leading-snug">
+      <div class="t-mb-10 t-flex t-justify-center t-font-normal t-leading-snug">
         <div class="t-w-3/4">
           {{ content.applytext }}
         </div>
@@ -108,7 +108,7 @@
         </div>
       </div>
 
-      <div class="t-mb-16 t-flex t-justify-center t-font-normal t-leading-snug">
+      <div class="t-mb-8 t-flex t-justify-center t-font-normal t-leading-snug">
         <div class="t-w-3/4">
           {{ content.processtext }}
         </div>
@@ -130,14 +130,14 @@
 
       <hr class="t-mx-96">
 
-      <!-- List of advantages  -->
+      <!--List of advantages-->
       <div class="t-mb-8 t-mt-5 t-flex t-flex-wrap t-justify-center t-pt-5">
         <div
           v-for="(block, index) in content.advantages"
           :key="index"
           class="t-mb-4 t-w-full md:t-mr-6 md:t-w-2/5"
         >
-          <div class="t-mb-4 t-p-1 t-font-bold t-uppercase">
+          <div class="t-justify-left  t-mb-4 t-ml-8 t-flex t-pl-4 t-text-xl/[50px] t-font-bold">
             {{ block.headline }}
           </div>
           <div>
@@ -176,7 +176,7 @@
           >
         </a>
       </div>
-      <div class="t-mb-16 t-flex t-justify-center t-font-normal t-leading-snug">
+      <div class="t-mb-10 t-flex t-justify-center t-font-normal t-leading-snug">
         <div class="t-w-3/4 t-text-[9px]">
           {{ content.awin.text }}
         </div>
