@@ -38,7 +38,7 @@
         </ButtonComponent>
       </LinkComponent>
 
-      <hr>
+      <hr class="t-mx-96">
 
       <!-- Creator-Programm Images -->
       <div class="t-mb-16 t-mt-5 t-flex t-flex-wrap t-items-center t-justify-center t-pt-5">
@@ -65,7 +65,7 @@
         </div>
       </div>
 
-      <hr>
+      <hr class="t-mx-96">
 
       <div class="t-mb-16 t-mt-5 t-flex t-justify-center t-pt-5 t-font-bold t-leading-snug">
         <div class="t-w-3/4">
@@ -114,7 +114,7 @@
         </div>
       </div>
 
-      <hr>
+      <hr class="t-mx-96">
 
       <!-- List of advantages  -->
       <div class="t-mb-8 t-mt-5 t-flex t-flex-wrap t-justify-center t-pt-5">
@@ -127,7 +127,7 @@
             {{ block.headline }}
           </div>
           <div>
-            <ul class="t-list-disc t-pl-16 t-text-left t-text-xs">
+            <ul class="t-list-disc t-pl-16 t-text-left">
               <li
                 v-for="(entry, row) in block.list"
                 :key="row"
@@ -138,7 +138,7 @@
             </ul>
             <div
               v-if="(block.img)"
-              class=" t-px-4 "
+              class=" t-mx-16 t-mt-10"
             >
               <img :src="getMediaThumbnail(block.img.link, 0, 0)">
             </div>
@@ -146,7 +146,7 @@
         </div>
       </div>
 
-      <hr>
+      <hr class="t-mx-96">
 
       <!-- AWIN -->
       <div class="t-mb-8 t-mt-5 t-flex t-flex-wrap t-justify-center t-pt-5">
@@ -163,12 +163,12 @@
         </a>
       </div>
       <div class="t-mb-16 t-flex t-justify-center t-font-normal t-leading-snug">
-        <div class="t-w-3/4">
+        <div class="t-w-3/4 t-text-[9px]">
           {{ content.awin.text }}
         </div>
       </div>
 
-      <hr>
+      <hr class="t-mx-96">
 
       <div class="t-mb-16 t-mt-5 t-flex t-justify-center t-pt-5 t-font-bold t-leading-snug">
         <div class="t-w-3/4">
