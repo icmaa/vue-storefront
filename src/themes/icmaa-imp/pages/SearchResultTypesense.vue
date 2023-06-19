@@ -32,25 +32,6 @@
     </header>
 
     <div class="t-container">
-      <div
-        v-if="prevProductsInSearchResults"
-        class="t-mb-8 t-flex t-items-center t-justify-center"
-      >
-        <ButtonComponent
-          type="ghost"
-          :disabled="loadingProducts"
-          class="t-w-2/3 lg:t-w-1/4"
-          :class="{ 't-relative t-opacity-60': loadingProducts }"
-          @click.native="loadMoreProducts(true)"
-        >
-          {{ $t('Load previous') }}
-          <LoaderBackground
-            v-if="loadingProducts"
-            bar="t-bg-base-darkest"
-            class="t-bottom-0"
-          />
-        </ButtonComponent>
-      </div>
       <LazyHydrate
         v-if="isLazyHydrateEnabled"
         :trigger-hydration="!loading"
@@ -170,14 +151,6 @@ export default {
     isCategoryEmpty () {
       return this.productsTotal === 0
     },
-    prevProductsInSearchResults () {
-      const currentPage = this.$route.query.p || 1
-      const { perPage, start, total } = this.productsStats
-      return currentPage > 1 &&
-        start + perPage > perPage &&
-        this.products.length < (currentPage * perPage) &&
-        this.products.length < total
-    },
     moreProductsInSearchResults () {
       const { perPage, page, total } = this.productsStats
       return (page * perPage < total)
@@ -203,20 +176,6 @@ export default {
     onAddToCartSidebarClose () {
       this.resetCurrentProduct({})
     },
-    async loadMoreProducts (prev = false) {
-      if (this.loadingProducts) {
-        return
-      }
-
-      try {
-        this.loadingProducts = true
-        await this.$store.dispatch('category-next/loadMoreSearchProducts', { router: this.$router, prev })
-      } catch (e) {
-        Logger.error('Problem with fetching more products', 'search', e)()
-      } finally {
-        this.loadingProducts = false
-      }
-    },
     async fetchAsyncData (newRoute) {
       try {
         const term = newRoute?.params.term || this.term
@@ -238,16 +197,7 @@ export default {
 
         await this.$store.dispatch('icmaaSearch/search', { type: 'product', term: this.term })
           .then(response => {
-            const { hits, found, page, request_params } = response
-            this.products = hits.map(h => h.document)
-
-            this.setProductsStats({
-              page,
-              perPage: request_params.per_page,
-              start: 0,
-              visible: this.products.length,
-              total: found
-            })
+            this.mapProductResponse(response, false)
           })
           .catch(() => {
             this.products = []
@@ -259,6 +209,46 @@ export default {
       } catch (e) {
         Logger.error('Problem with setting SearchResult initial data!', 'search', e)()
       }
+    },
+    async loadMoreProducts () {
+      if (this.loadingProducts) {
+        return
+      }
+
+      try {
+        this.loadingProducts = true
+
+        await this.$store.dispatch(
+          'icmaaSearch/search',
+          { type: 'product', term: this.term, page: this.productsStats.page + 1 }
+        ).then(response => {
+          this.mapProductResponse(response, true)
+        })
+          .catch(() => {
+            this.products = []
+          })
+      } catch (e) {
+        Logger.error('Problem with fetching more products', 'search', e)()
+      } finally {
+        this.loadingProducts = false
+      }
+    },
+    mapProductResponse (response, append = false) {
+      const { hits, found, page, request_params } = response
+      const products = hits.map(h => h.document)
+      if (append) {
+        this.products.push(...products)
+      } else {
+        this.products = products
+      }
+
+      this.setProductsStats({
+        page,
+        perPage: request_params.per_page,
+        start: 0,
+        visible: this.products.length,
+        total: found
+      })
     }
   },
   serverPrefetch () {
