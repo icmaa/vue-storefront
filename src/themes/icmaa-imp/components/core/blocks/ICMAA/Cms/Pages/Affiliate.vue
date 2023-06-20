@@ -52,29 +52,23 @@
         </div>
       </div>
 
-      <div class="t-mb-10 t-flex t-justify-center t-font-normal t-leading-snug">
-        <div class="t-w-3/4">
-          {{ content.creatortext }}
-        </div>
-      </div>
-
       <hr class="t-mx-96">
 
       <div class="t-mb-10 t-mt-5 t-flex t-justify-center t-pt-5 t-font-bold t-leading-snug">
         <div class="t-w-3/4">
-          {{ content.applyheadline }}
+          {{ content.creator.headline }}
         </div>
       </div>
 
       <div class="t-mb-10 t-flex t-justify-center t-font-normal t-leading-snug">
         <div class="t-w-3/4">
-          {{ content.applytext }}
+          {{ content.creator.text }}
         </div>
       </div>
 
       <LinkComponent
-        :to="content.registerbutton.link"
-        :title="content.registerbutton.text"
+        :to="content.creator.button.link"
+        :title="content.creator.button.text"
         class="t-mb-5 t-flex t-justify-center t-pb-5 t-text-sm t-leading-tight t-text-primary"
       >
         <ButtonComponent
@@ -82,9 +76,11 @@
           size="sm"
           class="t-mt-2"
         >
-          {{ content.registerbutton.text }}
+          {{ content.creator.button.text }}
         </ButtonComponent>
       </LinkComponent>
+
+      <hr class="t-mx-96">
 
       <div class="t-mb-16 t-mt-5 t-flex t-flex-wrap t-items-center t-justify-center t-pt-5">
         <div
