@@ -277,7 +277,7 @@ export default {
   },
   async mounted () {
     if (!this.order.products) {
-      this.$store.dispatch('user/loadProductsForOrders', [ this.order ])
+      await this.$store.dispatch('user/loadProductsForOrders', [ this.order ])
     }
 
     this.$store.dispatch('attribute/list', { filterValues: this.attributeCodes })
