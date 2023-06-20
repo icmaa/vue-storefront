@@ -31,9 +31,10 @@ csvDirectories.push(path.resolve(__dirname, themeResources + '/i18n/'));
 const translationPreprocessor = require('@vue-storefront/i18n/scripts/translation.preprocessor.js')
 translationPreprocessor(csvDirectories, config)
 
-const tsconfig = require('../../tsconfig.json');
-tsconfig.compilerOptions.paths['theme/*'] = [
-  `${themeRoot}/*`
-];
+// Don't change path of theme in `tsconfig.json` because it's always inside in our repo and not in an extra package
+// const tsconfig = require('../../tsconfig.json');
+// tsconfig.compilerOptions.paths['theme/*'] = [
+//   `${themeRoot}/*`
+// ];
 
-require('fs').writeFileSync('tsconfig.json', JSON.stringify(tsconfig, null, 2));
+// require('fs').writeFileSync('tsconfig.json', JSON.stringify(tsconfig, null, 2));
