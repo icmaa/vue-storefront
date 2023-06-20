@@ -23,7 +23,7 @@
         "core/*"
       ],
       "theme/*": [
-        "/workspaces/vue-storefront/node_modules/@icmaa/vsf-theme-imp/*"
+        "/workspace/node_modules/@icmaa/vsf-theme-imp/*"
       ],
       "core/modules/*": [
         "./core/modules/*"
