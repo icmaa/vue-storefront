@@ -17,17 +17,6 @@ const getters: GetterTree<CategoryState, RootState> = {
   getDefaultCategorySort: (state, getters, rootState, rootGetters) => {
     return getDefaultCategorySort(getters.getCurrentCategory as Category)
   },
-  /**
-   * Overwrite parent to be able to search for search-filters of search-result page.
-   */
-  getAvailableFilters: (state, getters, rootState, rootGetters) => {
-    if (rootGetters['icmaaSearch/isSearchResultPage']) {
-      return state.filtersMap[rootGetters['icmaaSearch/getCurrentResultsPageTermHash']] || {}
-    }
-
-    const categoryUrlKey = get(getters.getCurrentCategory, 'url_key', null)
-    return state.filtersMap[categoryUrlKey] || {}
-  },
   isActiveFilterAttribute: (state, getters) => (attributeKey: string) => {
     return (getters.getCurrentFilters[attributeKey])
   },
@@ -96,10 +85,10 @@ const getters: GetterTree<CategoryState, RootState> = {
    */
   separateSelectedVariantInProductList: () => !icmaa_catalog.entities.category.configureChildProductsInCategoryList || false,
   isGenericSubcategory: (state, getters) => getters.getCurrentCategory?.isGenericSubcategory === true,
-  getGenericSubcategory: (state, getters, rootState): boolean | any => {
+  getGenericSubcategory: (state, getters): boolean | any => {
     return getters.getGenericSubcategoryByCategory(getters.getCurrentCategory)
   },
-  getGenericSubcategoryByCategory: (state, getters, rootState) => (category: any): boolean | any => {
+  getGenericSubcategoryByCategory: () => (category: any): boolean | any => {
     if (!category.isGenericSubcategory) return false
     const subcategory = category.subcategory
     subcategory.query = queryString.parse('?' + subcategory.queryPath)

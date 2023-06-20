@@ -5,7 +5,7 @@ const PageNotFound = () => import(/* webpackChunkName: "vsf-not-found" */ 'theme
 const ErrorPage = () => import(/* webpackChunkName: "vsf-error" */ 'theme/pages/Error.vue')
 const Product = () => import(/* webpackChunkName: "vsf-product" */ 'theme/pages/Product.vue')
 const Category = () => import(/* webpackChunkName: "vsf-category" */ 'theme/pages/Category.vue')
-const SearchResult = () => import(/* webpackChunkName: "vsf-searchresult" */ 'theme/pages/SearchResult.vue')
+const SearchResult = () => import(/* webpackChunkName: "vsf-searchresult" */ 'theme/pages/SearchResultTypesense.vue')
 const MyAccount = () => import(/* webpackChunkName: "vsf-my-account" */ 'theme/pages/MyAccount.vue')
 const ResetPassword = () => import(/* webpackChunkName: "vsf-reset-password" */ 'theme/pages/ResetPassword.vue')
 const Tracking = () => import(/* webpackChunkName: "vsf-order-tracking" */ 'theme/pages/Tracking.vue')

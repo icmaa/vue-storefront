@@ -125,7 +125,7 @@ export default {
         return
       }
 
-      await this.$store.dispatch('product/loadProduct', { parentSku: this.product.parentSku, childSku: null })
+      await this.$store.dispatch('product/loadProduct', { parentSku: this.product?.parentSku || this.product?.sku, childSku: null })
       this.$store.dispatch('ui/setSidebar', { key: 'addtocart' })
     }
   }
