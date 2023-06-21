@@ -20,6 +20,7 @@
 </template>
 
 <script>
+import { icmaa_meta } from 'config'
 import { isServer } from '@vue-storefront/core/helpers'
 import MaterialIcon from 'theme/components/core/blocks/MaterialIcon'
 
@@ -40,7 +41,10 @@ export default {
   },
   computed: {
     url () {
-      return encodeURIComponent(isServer ? this.$route.query.page : window.location.href)
+      if (isServer) {
+        return encodeURIComponent(icmaa_meta?.base_url + this.$route.fullPath)
+      }
+      return encodeURIComponent(window.location.href)
     },
     text () {
       return encodeURIComponent(this.webshareText)
