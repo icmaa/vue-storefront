@@ -67,3 +67,11 @@ jobs:
             ${{ github.repository }}:${{ env.ENV == 'production' && 'prod' || 'test' }}-latest
             ${{ github.repository }}:${{ env.ENV == 'production' && 'prod' || 'test' }}-${{ env.VERSION_NAME }}
           push: true
+          
+      - name: Trigger ScaleCommerce GitLab-Pipeline
+        run: |
+          curl \
+          --location 'https://gitlab.scale.sc/api/v4/projects/${{ secrets.SC_GITLAB_PROJECT_ID }}/trigger/pipeline' \
+          --form 'token="${{ secrets.SC_GITLAB_TOKEN }}"' \
+          --form 'variables[BRANCH]="${{ env.ENV == 'production' && 'prod' || 'test' }}"' \
+          --form 'ref="main"'
