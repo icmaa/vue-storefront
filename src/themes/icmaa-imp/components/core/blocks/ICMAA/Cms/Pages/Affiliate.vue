@@ -10,7 +10,7 @@
       >
     </div>
 
-    <div class="md:t-p-8 lg:t-p-16">
+    <div class="t-p-4 md:t-p-8 lg:t-p-16">
       <div
         v-for="about in content.aboutus"
         :key="about.text"
@@ -34,7 +34,7 @@
         </ButtonComponent>
       </LinkComponent>
 
-      <hr class="t-mx-96">
+      <hr class="t-mx-16 md:t-mx-24 lg:t-mx-96">
 
       <!-- Creator-Programm Images -->
       <div class="t-mb-16 t-mt-5 t-flex t-flex-wrap t-items-center t-justify-center t-pt-5">
@@ -52,7 +52,7 @@
         </div>
       </div>
 
-      <hr class="t-mx-96">
+      <hr class="t-mx-16 md:t-mx-24 lg:t-mx-96">
 
       <div class="t-mb-10 t-mt-5 t-flex t-justify-center t-pt-5 t-font-bold t-leading-snug">
         <div class="t-w-3/4">
@@ -80,7 +80,7 @@
         </ButtonComponent>
       </LinkComponent>
 
-      <hr class="t-mx-96">
+      <hr class="t-mx-16 md:t-mx-24 lg:t-mx-96">
 
       <div class="t-mb-16 t-mt-5 t-flex t-flex-wrap t-items-center t-justify-center t-pt-5">
         <div
@@ -117,7 +117,7 @@
         </ButtonComponent>
       </LinkComponent>
 
-      <hr class="t-mx-96">
+      <hr class="t-mx-16 md:t-mx-24 lg:t-mx-96">
 
       <!--List of advantages-->
       <div class="t-mb-8 t-mt-5 t-flex t-flex-wrap t-justify-center t-pt-5">
@@ -149,7 +149,7 @@
         </div>
       </div>
 
-      <hr class="t-mx-96">
+      <hr class="t-mx-16 md:t-mx-24 lg:t-mx-96">
 
       <!-- AWIN -->
       <div class="t-mb-8 t-mt-5 t-flex t-flex-wrap t-justify-center t-pt-5">
@@ -171,7 +171,7 @@
         </div>
       </div>
 
-      <hr class="t-mx-96">
+      <hr class="t-mx-16 md:t-mx-24 lg:t-mx-96">
 
       <div class="t-mb-16 t-mt-5 t-flex t-justify-center t-pt-5 t-font-bold t-leading-snug">
         <div class="t-w-3/4 t-text-xl">
