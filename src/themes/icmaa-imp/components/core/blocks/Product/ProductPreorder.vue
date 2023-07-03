@@ -1,15 +1,21 @@
 <template>
-  <div class="t--mx-8 t--mb-8 t-mt-4 t-bg-base-tone t-px-8 t-py-4 t-text-sm t-text-white">
+  <div class="t--mx-8 t--mt-8 t-mb-8 t-bg-base-tone t-px-8 t-py-4 t-text-sm t-text-white">
     <MaterialIcon
       icon="alarm"
       size="sm"
       class="t-absolute t--ml-6"
     />
     <span class="t-font-bold">{{ $t('Notice') }}: </span>
-    <span
-      class="description"
-      v-text="preorderText"
-    />
+    <span class="description t-mr-2">
+      {{ preorderText }}
+      {{ $t('This also applies to all other items in your order that would be directly available.') }}
+    </span>
+    <router-link
+      :to="localizedRoute('service-preorder')"
+      class="t-underline"
+    >
+      {{ $t('Read more') }}
+    </router-link>
   </div>
 </template>
 
@@ -31,9 +37,9 @@ export default {
   computed: {
     preorderText () {
       if (this.hasPreorderDate) {
-        return i18n.t('Delivery of your complete order not before {date}. The preorder date is the release date for Germany, as we were told by the record label or distributor. There is no guarantee for a delivery on that date. In exceptional cases, especially for imported products, there might be delays. As soon as we receive the article, we will ship it.', { date: this.preorderDate })
+        return i18n.t('Delivery of your complete order not before {date}.', { date: this.preorderDate })
       }
-      return i18n.t('Delivery of your complete order not before official release. The preorder date is the release or delivery date for Germany, as we were told by the record label,the producer or the shipping company. There is no guarantee for a delivery on that date. In exceptional cases, especially for US imported products, there might be delays. As soon as we receive the article, we will ship it.')
+      return i18n.t('Delivery of your complete order not before official release.')
     },
     hasPreorderDate () {
       return this.product.preorder_date || false

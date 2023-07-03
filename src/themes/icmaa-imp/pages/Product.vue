@@ -37,6 +37,10 @@
               </ButtonComponent>
             </div>
           </CategoryExtrasHeader>
+          <ProductPreorder
+            v-if="isPreorder"
+            :product="product"
+          />
           <div class="t-flex t-flex-wrap">
             <h1
               data-test-id="productName"
@@ -140,10 +144,6 @@
               <ProductTrustSignals />
             </div>
           </div>
-          <ProductPreorder
-            v-if="isPreorder"
-            :product="product"
-          />
         </div>
       </div>
     </div>
