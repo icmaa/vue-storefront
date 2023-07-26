@@ -64,7 +64,7 @@ describe('buildFilterProductsQuery method', () => {
     const result = buildFilterProductsQuery(currentCategory)
     const categoryFilter = result.getAppliedFilters().find(filter => filter.attribute === 'category_ids')
     expect(categoryFilter).toBeDefined()
-    expect(categoryFilter.value.in).toEqual([20, 21, 23, 24, 25, 26, 22, 27, 28])
+    expect(categoryFilter?.value).toEqual(20)
   });
 
   it('should build query with color filters', () => {
@@ -87,7 +87,7 @@ describe('buildFilterProductsQuery method', () => {
     const result = buildFilterProductsQuery(currentCategory, filters)
     const categoryFilter = result.getAppliedFilters().find(filter => filter.attribute === 'color')
     expect(categoryFilter).toBeDefined()
-    expect(categoryFilter.value.in).toEqual(['49', '50'])
+    expect(categoryFilter?.value.in).toEqual(['49', '50'])
   });
 
   it('should build query with single price from 0 filter', () => {
@@ -104,7 +104,7 @@ describe('buildFilterProductsQuery method', () => {
     const result = buildFilterProductsQuery(currentCategory, filters)
     const categoryFilter = result.getAppliedFilters().find(filter => filter.attribute === 'price')
     expect(categoryFilter).toBeDefined()
-    expect(categoryFilter.value.lte).toEqual(50)
+    expect(categoryFilter?.value.lte).toEqual(50)
   });
 
   it('should build query with single price between 50-100 filter', () => {
@@ -121,8 +121,8 @@ describe('buildFilterProductsQuery method', () => {
     const result = buildFilterProductsQuery(currentCategory, filters)
     const categoryFilter = result.getAppliedFilters().find(filter => filter.attribute === 'price')
     expect(categoryFilter).toBeDefined()
-    expect(categoryFilter.value.gte).toEqual(50)
-    expect(categoryFilter.value.lte).toEqual(100)
+    expect(categoryFilter?.value.gte).toEqual(50)
+    expect(categoryFilter?.value.lte).toEqual(100)
   });
 
   it('should build query with price filters', () => {
@@ -170,9 +170,9 @@ describe('buildFilterProductsQuery method', () => {
     const result = buildFilterProductsQuery(currentCategory, filters)
     const colorFilter = result.getAppliedFilters().find(filter => filter.attribute === 'color')
     expect(colorFilter).toBeDefined()
-    expect(colorFilter.value.in).toEqual(['49', '50'])
+    expect(colorFilter?.value.in).toEqual(['49', '50'])
     const erinFilter = result.getAppliedFilters().find(filter => filter.attribute === 'erin_recommends')
     expect(erinFilter).toBeDefined()
-    expect(erinFilter.value.in).toEqual(['1'])
+    expect(erinFilter?.value.in).toEqual(['1'])
   });
 });

@@ -131,27 +131,8 @@ export function baseFilterProductsQuery (parentCategory, filters = []) { // TODO
     return searchProductQuery
   }
 
-  let childCats = [parentCategory.id]
-  if (parentCategory.children_data) {
-    let recurCatFinderBuilder = (category) => {
-      if (!category) {
-        return
-      }
+  searchProductQuery = searchProductQuery.applyFilter({ key: 'category_ids', value: parentCategory.id })
 
-      if (!category.children_data) {
-        return
-      }
-
-      for (let sc of category.children_data) {
-        if (sc && sc.id) {
-          childCats.push(sc.id)
-        }
-        recurCatFinderBuilder(sc)
-      }
-    }
-    recurCatFinderBuilder(parentCategory)
-  }
-  searchProductQuery = searchProductQuery.applyFilter({ key: 'category_ids', value: { 'in': childCats } })
   return searchProductQuery
 }
 
