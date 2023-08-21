@@ -64,7 +64,7 @@ export const getPostcodeRegex = (code: string = 'XX') => {
     'BR': [/(^\d{5}[-]\d{3}$)/, '12345-123'],
     'BN': [/(^[A-Z]{2}\d{4}$)/, 'AB1234'],
     'BG': [/(^\d{4}$)/, '1234'],
-    'CA': [/(^[ABCEGHJKLMNPRSTVXY]\d[ABCEGHJKLMNPRSTVWXYZ]( )\d[ABCEGHJKLMNPRSTVWXYZ]\d$)/, 'A1B2C3'],
+    'CA': [/(^[ABCEGHJKLMNPRSTVXY]\d[ABCEGHJKLMNPRSTVWXYZ]( )\d[ABCEGHJKLMNPRSTVWXYZ]\d$)/, 'A1B 2C3'],
     'CL': [/(^\d{7}$)/, '21234567'],
     'CN': [/(^\d{6}$)/, '123456'],
     'HR': [/(^\d{2}\s\d{3}$)/, '12 123'],
