@@ -29,9 +29,13 @@ export default {
     ProductTile
   },
   props: {
-    type: {
+    eventType: {
       type: String,
-      default: 'crosssell'
+      default: 'detail-page-view'
+    },
+    servingConfigs: {
+      type: String,
+      default: 'recommended-for-you'
     },
     limit: {
       type: Number,
@@ -45,10 +49,11 @@ export default {
   computed: {
     ...mapGetters({
       currentProduct: 'product/getCurrentProduct',
-      getRecommendations: 'icmaaRecommendations/getByTypeAndProductId'
+      getRecommendations: 'icmaaRecommendations/getByTypeAndProductId',
+      visitorId: 'icmaaRecommendations/getGAVisitorId'
     }),
     recommendations () {
-      return this.getRecommendations(this.product.id, this.type)
+      return this.getRecommendations(this.product.id, this.eventType, this.servingConfigs)
     },
     product () {
       return this.currentProduct
