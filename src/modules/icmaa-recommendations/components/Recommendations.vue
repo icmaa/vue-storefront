@@ -53,10 +53,10 @@ export default {
       visitorId: 'icmaaRecommendations/getGAVisitorId'
     }),
     recommendations () {
-      return this.getRecommendations(this.product.id, this.eventType, this.servingConfigs)
+      return this.getRecommendations(this.product?.id || null, this.eventType, this.servingConfigs)
     },
     product () {
-      return this.currentProduct
+      return this.currentProduct || null
     },
     products () {
       return this.recommendations ? this.recommendations.products : []
@@ -74,7 +74,12 @@ export default {
     async fetchRelated () {
       await this.$store.dispatch(
         'icmaaRecommendations/single',
-        { product: this.product, type: this.type, size: this.limit }
+        {
+          eventType: this.eventType,
+          servingConfigs: this.servingConfigs,
+          product: this.product,
+          size: this.limit
+        }
       )
     }
   }

@@ -51,10 +51,22 @@
       />
     </Lazyload>
     <Lazyload data-test-id="ProductListingWidgetLoader">
-      <ProductListingWidget :category-id="3278" />
+      <Recommendations
+        key="recently-viewed"
+        :title="$t('Recently viewed')"
+        event-type="home-page-view"
+        serving-configs="recently_viewed_default"
+        class="lg:t-mb-8"
+      />
     </Lazyload>
     <Lazyload data-test-id="ProductListingWidgetLoader">
-      <ProductListingWidget :category-id="4251" />
+      <Recommendations
+        key="recommended-for-you"
+        :title="$t('Recommended for you')"
+        event-type="home-page-view"
+        serving-configs="recommended-for-you"
+        class="lg:t-mb-8"
+      />
     </Lazyload>
     <CmsBlock
       identifier="home-seo"
@@ -71,7 +83,7 @@ import Lazyload from 'icmaa-cms/components/Lazyload'
 import Teaser from 'theme/components/core/blocks/Teaser/Teaser'
 import LinkList from 'theme/components/core/blocks/CategoryExtras/LinkList'
 import LogoLine from 'theme/components/core/blocks/CategoryExtras/LogoLineBlock'
-import ProductListingWidget from 'icmaa-category/components/ProductListingWidget'
+import Recommendations from 'icmaa-recommendations/components/Recommendations'
 import CmsBlock from 'icmaa-cms/components/Block'
 import BlogList from 'icmaa-blog/components/ListWrapper'
 
@@ -83,7 +95,7 @@ export default {
     Teaser,
     LinkList,
     LogoLine,
-    ProductListingWidget,
+    Recommendations,
     CmsBlock,
     BlogList
   },

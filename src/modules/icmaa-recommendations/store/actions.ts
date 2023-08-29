@@ -11,17 +11,22 @@ import * as types from './mutation-types'
 const actions: ActionTree<RecommendationsState, RootState> = {
   async single ({ commit, dispatch, getters, rootGetters }, { product, eventType, servingConfigs, size }): Promise<Recommendations|boolean> {
     eventType = eventType || 'detail-page-view'
+
+    const productDetails = []
+    const productDetailsTypes = ['detail-page-view', 'add-to-cart', 'purchase-complete']
+    if (product && productDetailsTypes.includes(eventType)) {
+      productDetails.push({
+        product: {
+          'id': product.sku
+        }
+      })
+    }
+
     const fetchRecommendationProductSkus = await RecommendationsService.listRecommendations({
       eventType,
       'servingConfigs': servingConfigs || 'recommended-for-you',
       'visitorId': getters.getGAVisitorId,
-      'userEvent': {
-        'productDetails': [{
-          'product': {
-            'id': product.sku
-          }
-        }]
-      },
+      'userEvent': { productDetails },
       'pageSize': size
     }).then(resp => {
       if (resp.code !== 200) return []
@@ -38,7 +43,7 @@ const actions: ActionTree<RecommendationsState, RootState> = {
     const result = await dispatch('product/findProducts', { query, includeFields, excludeFields, options }, { root: true })
     const products: Product[] = result.items
 
-    const productId: string = product.id
+    const productId: string = product?.id || null
     const payload = { productId, eventType, servingConfigs, products }
     commit(types.ICMAA_RECOMMENDATIONS_ADD, payload)
 
