@@ -10,6 +10,9 @@ import * as types from './mutation-types'
 
 const actions: ActionTree<RecommendationsState, RootState> = {
   async single ({ commit, dispatch, getters, rootGetters }, { product, eventType, servingConfigs, size }): Promise<Recommendations|boolean> {
+    const visitorId = getters.getGAVisitorId
+    if (!visitorId) return false
+
     eventType = eventType || 'detail-page-view'
 
     const productDetails = []
@@ -23,15 +26,19 @@ const actions: ActionTree<RecommendationsState, RootState> = {
     }
 
     const fetchRecommendationProductSkus = await RecommendationsService.listRecommendations({
+      visitorId,
       eventType,
-      'servingConfigs': servingConfigs || 'recommended-for-you',
-      'visitorId': getters.getGAVisitorId,
-      'userEvent': { productDetails },
-      'pageSize': size
+      servingConfigs: servingConfigs || 'recommended-for-you',
+      userEvent: { productDetails },
+      pageSize: size
     }).then(resp => {
       if (resp.code !== 200) return []
       return resp.result || []
+    }).catch(() => {
+      return false
     })
+
+    if (!fetchRecommendationProductSkus) return false
 
     const query = addDefaultProductFilter(new SearchQuery())
     query.applyFilter({ key: 'sku', value: { in: fetchRecommendationProductSkus } })
