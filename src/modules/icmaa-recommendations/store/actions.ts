@@ -20,7 +20,7 @@ const actions: ActionTree<RecommendationsState, RootState> = {
     if (product && productDetailsTypes.includes(eventType)) {
       productDetails.push({
         product: {
-          'id': product.sku
+          'id': product?.parentSku || product.sku
         }
       })
     }
@@ -42,7 +42,6 @@ const actions: ActionTree<RecommendationsState, RootState> = {
 
     const query = addDefaultProductFilter(new SearchQuery())
     query.applyFilter({ key: 'sku', value: { in: fetchRecommendationProductSkus } })
-    query.applySort({ field: 'random', options: {} })
 
     const options = { separateSelectedVariant: rootGetters['category-next/separateSelectedVariantInProductList'] }
     const { includeFields, excludeFields } = entities.productList
