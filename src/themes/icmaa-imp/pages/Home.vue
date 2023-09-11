@@ -37,6 +37,7 @@
         :title="$t('Recently viewed')"
         event-type="home-page-view"
         serving-configs="recently_viewed_default"
+        :use-current-product="false"
         class="t-px-4 lg:t-mb-8"
       />
     </Lazyload>
@@ -65,6 +66,7 @@
         :title="$t('Recommended for you')"
         event-type="home-page-view"
         serving-configs="recommended-for-you"
+        :use-current-product="false"
         class="t-px-4 lg:t-mb-8"
       />
     </Lazyload>

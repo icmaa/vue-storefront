@@ -37,6 +37,10 @@ export default {
       type: String,
       default: 'recommended-for-you'
     },
+    useCurrentProduct: {
+      type: Boolean,
+      default: true
+    },
     limit: {
       type: Number,
       default: 4
@@ -56,7 +60,7 @@ export default {
       return this.getRecommendations(this.product?.id || null, this.eventType, this.servingConfigs)
     },
     product () {
-      return this.currentProduct || null
+      return this.useCurrentProduct ? this.currentProduct || null : null
     },
     products () {
       return this.recommendations ? this.recommendations.products : []
@@ -72,6 +76,7 @@ export default {
   },
   methods: {
     async fetchRelated () {
+      if (!!this.useCurrentProduct && !this.product?.id) return
       await this.$store.dispatch(
         'icmaaRecommendations/single',
         {

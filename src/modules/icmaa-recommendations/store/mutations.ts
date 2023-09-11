@@ -11,8 +11,7 @@ const mutations: MutationTree<RecommendationsState> = {
       )
 
     if (list) {
-      const newProductids = payload.products.map(p => p.id).filter(id => !list.products.map(p => p.id).includes(id))
-      list.products.push(...payload.products.filter(p => newProductids.includes(p.id)))
+      list.products = payload.products
       return
     }
 
