@@ -30,7 +30,7 @@ const actions: ActionTree<RecommendationsState, RootState> = {
       eventType,
       servingConfigs: servingConfigs || 'recommended-for-you',
       userEvent: { productDetails },
-      pageSize: size
+      pageSize: size + 4
     }).then(resp => {
       if (resp.code !== 200) return []
       return resp.result || []
@@ -48,6 +48,15 @@ const actions: ActionTree<RecommendationsState, RootState> = {
 
     const result = await dispatch('product/findProducts', { query, includeFields, excludeFields, options }, { root: true })
     const products: Product[] = result.items
+
+    if (Array.isArray(fetchRecommendationProductSkus)) {
+      const sortArray = fetchRecommendationProductSkus
+      products.sort((a, b) => sortArray.indexOf(a.sku) - sortArray.indexOf(b.sku))
+    }
+
+    if (products.length > size) {
+      products.splice(size)
+    }
 
     const productId: string = product?.id || null
     const payload = { productId, eventType, servingConfigs, products }
