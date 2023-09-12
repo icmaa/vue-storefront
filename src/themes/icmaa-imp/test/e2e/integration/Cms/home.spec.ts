@@ -16,9 +16,9 @@ describe('Homepage', () => {
     cy.getByTestId('LogoLine').should('have.length', 3)
     // 24 LogoItems
     cy.getByTestId('DepartmentLogo').should('have.length', 27)
-    // 2 ProductListings
-    cy.getByTestId('ProductListingWidget').should('have.length', 2)
-    // 2x4 ProductTiles
-    cy.getByTestId('ProductListingWidget').findByTestId('ProductTile').should('have.length', 8)
+    // At least 1 ProductListings (as the second might be hidden)
+    cy.getByTestId('ProductListingWidget').should('have.length.least', 1)
+    // At least 1x4 ProductTiles
+    cy.getByTestId('ProductListingWidget').findByTestId('ProductTile').should('have.length.least', 8)
   })
 })
