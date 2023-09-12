@@ -10,9 +10,9 @@
     />
     <div class="t--mx-2 t-flex t-flex-wrap">
       <ProductTile
-        v-for="(recommended, i) in products"
-        :key="i"
-        :product="recommended"
+        v-for="reco in products"
+        :key="[eventType, servingConfigs, reco.id].join('-')"
+        :product="reco"
         class="product t-mb-8 t-w-1/2 t-cursor-pointer t-px-1 lg:t-mb-0 lg:t-w-1/4 lg:t-px-2"
       />
     </div>
