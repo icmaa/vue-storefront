@@ -59,7 +59,7 @@ const AsyncTikTokPost = () => import(/* webpackChunkName: "vsf-content-block-tik
 const AsyncTwitter = () => import(/* webpackChunkName: "vsf-content-block-twitter" */ 'icmaa-cms/components/Storyblok/Twitter')
 const AsyncYouTube = () => import(/* webpackChunkName: "vsf-content-block-youtube" */ 'icmaa-cms/components/Storyblok/YouTube')
 const AsyncYouTube1 = () => import(/* webpackChunkName: "vsf-content-block-youtube1" */ 'icmaa-cms/components/Storyblok/YouTube1')
-const AsyncStaedteNavigation = () => import(/* webpackChunkName: "vsf-content-block-staedtenavigation" */ 'icmaa-cms/components/Storyblok/StaedteNavigation')
+const AsyncTabs = () => import(/* webpackChunkName: "vsf-content-block-tabs" */ 'icmaa-cms/components/Storyblok/Tabs')
 const AsyncSpotify = () => import(/* webpackChunkName: "vsf-content-block-spotify" */ 'icmaa-cms/components/Storyblok/Spotify')
 const AsyncBlogList = () => import(/* webpackChunkName: "vsf-content-block-blog-list" */ 'icmaa-blog/components/ListWrapper')
 const AsyncStoryblokAsset = () => import(/* webpackChunkName: "vsf-content-block-storyblog-asset" */ 'icmaa-cms/components/Storyblok/Asset')
@@ -225,8 +225,8 @@ export default {
           cssClass: 't-mb-4',
           padding: true
         },
-        'component_staedtenavigation': {
-          component: AsyncStaedteNavigation,
+        'component_tabs': {
+          component: AsyncTabs,
           propsTypes: {},
           propsDefaults: {},
           cssClass: 't-mb-4',
