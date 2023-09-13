@@ -1,5 +1,3 @@
-
-import Vue from 'vue'
 import rootStore from '@vue-storefront/core/store'
 import { Logger } from '@vue-storefront/core/lib/logger'
 import { execute as taskExecute, _prepareTask } from './task'

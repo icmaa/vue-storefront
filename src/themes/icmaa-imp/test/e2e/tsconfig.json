@@ -1,9 +1,5 @@
 {
   "compilerOptions": {
-    // There is a bug in Cypress.io vs TypeScript
-    // @see https://github.com/cypress-io/cypress/issues/16188
-    // "baseUrl": "../../../../../node_modules",
-    "typeRoots": [ "../../../../../node_modules/@types", "./typings" ],
     "outDir": "./dist/",
     "noImplicitAny": true,
     "module": "es6",
@@ -11,7 +7,7 @@
     "allowJs": true,
     "allowSyntheticDefaultImports": true,
     "lib": ["es2017", "es2016", "DOM" ],
-    "types": ["cypress", "faker", "node"]
+    "types": ["node", "cypress", "mocha", "faker"]
   },
   "include": ["**/*.ts", "**/*.js"]
 }
