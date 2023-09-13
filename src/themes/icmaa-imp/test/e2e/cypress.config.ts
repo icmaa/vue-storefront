@@ -1,5 +1,7 @@
 import { defineConfig } from 'cypress'
 
+const webpackPreprocessor = require('@cypress/webpack-preprocessor')
+
 export default defineConfig({
   e2e: {
     'baseUrl': 'http://localhost:3000',
@@ -9,7 +11,6 @@ export default defineConfig({
     'trashAssetsBeforeRuns': true,
     'videoCompression': false,
     'videosFolder': 'videos',
-    'videoUploadOnPasses': false,
     'screenshotsFolder': 'screenshots',
     'viewportWidth': 375,
     'viewportHeight': 812,
@@ -19,6 +20,12 @@ export default defineConfig({
     'env': {
       'store_codes': ['de', 'fr', 'es', 'uk', 'nl'],
       'category_pages': ['new.html', 'clothing.html', 'shoes.html', 'accessories.html']
+    },
+    setupNodeEvents (on, config) {
+      const options = {
+        webpackOptions: require('./webpack.config.js')
+      }
+      on('file:preprocessor', webpackPreprocessor(options))
     }
   }
 })

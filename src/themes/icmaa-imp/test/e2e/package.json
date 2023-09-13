@@ -12,6 +12,7 @@
     "@types/node": "^16.9.1",
     "cypress": "^13.2.0",
     "eslint-plugin-cypress": "^2.14.0",
-    "faker": "^5.5.3"
+    "faker": "^5.5.3",
+    "webpack": "^4.47.0"
   }
 }
