@@ -50,6 +50,7 @@ const AsyncHeadline = () => import(/* webpackChunkName: "vsf-content-block-headl
 const AsyncText = () => import(/* webpackChunkName: "vsf-content-block-text" */ 'theme/components/core/blocks/RichText')
 const AsyncPicture = () => import(/* webpackChunkName: "vsf-content-block-picture" */ 'theme/components/core/blocks/Picture')
 const AsyncProductlisting = () => import(/* webpackChunkName: "vsf-content-block-productlisting" */ 'icmaa-category/components/ProductListingWidget')
+const AsyncTicketlisting = () => import(/* webpackChunkName: "vsf-content-block-ticketlisting" */ 'icmaa-category/components/TicketListingWidget')
 const AsyncProductlistingticketposter = () => import(/* webpackChunkName: "vsf-content-block-productlistingticketposter" */ 'icmaa-category/components/ProductListingTicketWidget')
 const AsyncCategorylist = () => import(/* webpackChunkName: "vsf-content-block-categorylist" */ 'icmaa-category/components/List/List')
 const AsyncLinkList = () => import(/* webpackChunkName: "vsf-content-block-linklist" */ 'theme/components/core/blocks/CategoryExtras/LinkList')
@@ -140,6 +141,19 @@ export default {
         },
         'component_productlisting': {
           component: AsyncProductlisting,
+          propsTypes: {
+            limit: 'number',
+            categoryId: 'number',
+            filter: 'json'
+          },
+          propsDefaults: {
+            filter: {}
+          },
+          cssClass: 't-mb-4',
+          padding: false
+        },
+        'component_ticketlisting': {
+          component: AsyncTicketlisting,
           propsTypes: {
             limit: 'number',
             categoryId: 'number',
