@@ -10,9 +10,9 @@
     />
     <div class="t--mx-2 t-flex t-flex-wrap">
       <ProductTile
-        v-for="(recommended, i) in products"
-        :key="i"
-        :product="recommended"
+        v-for="reco in products"
+        :key="[eventType, servingConfigs, reco.id].join('-')"
+        :product="reco"
         class="product t-mb-8 t-w-1/2 t-cursor-pointer t-px-1 lg:t-mb-0 lg:t-w-1/4 lg:t-px-2"
       />
     </div>
@@ -29,9 +29,17 @@ export default {
     ProductTile
   },
   props: {
-    type: {
+    eventType: {
       type: String,
-      default: 'crosssell'
+      default: 'detail-page-view'
+    },
+    servingConfigs: {
+      type: String,
+      default: 'recommended-for-you'
+    },
+    useCurrentProduct: {
+      type: Boolean,
+      default: true
     },
     limit: {
       type: Number,
@@ -45,13 +53,14 @@ export default {
   computed: {
     ...mapGetters({
       currentProduct: 'product/getCurrentProduct',
-      getRecommendations: 'icmaaRecommendations/getByTypeAndProductId'
+      getRecommendations: 'icmaaRecommendations/getByTypeAndProductId',
+      visitorId: 'icmaaRecommendations/getGAVisitorId'
     }),
     recommendations () {
-      return this.getRecommendations(this.product.id, this.type)
+      return this.getRecommendations(this.product?.id || null, this.eventType, this.servingConfigs)
     },
     product () {
-      return this.currentProduct
+      return this.useCurrentProduct ? this.currentProduct || null : null
     },
     products () {
       return this.recommendations ? this.recommendations.products : []
@@ -67,9 +76,15 @@ export default {
   },
   methods: {
     async fetchRelated () {
+      if (!!this.useCurrentProduct && !this.product?.id) return
       await this.$store.dispatch(
         'icmaaRecommendations/single',
-        { product: this.product, type: this.type, size: this.limit }
+        {
+          eventType: this.eventType,
+          servingConfigs: this.servingConfigs,
+          product: this.product,
+          size: this.limit
+        }
       )
     }
   }

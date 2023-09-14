@@ -195,7 +195,8 @@
         <Recommendations
           :key="'crosssell-' + product.id"
           :title="$t('You may like these too')"
-          type="crosssell"
+          event-type="detail-page-view"
+          serving-configs="others-you-may-like"
           class="lg:t-mb-8"
         />
       </Lazyload>
@@ -203,7 +204,8 @@
         <Recommendations
           :key="'upsell-' + product.id"
           :title="$t('Similar products')"
-          type="upsell"
+          event-type="detail-page-view"
+          serving-configs="similar_products"
           class="lg:t-mb-8"
         />
       </Lazyload>
