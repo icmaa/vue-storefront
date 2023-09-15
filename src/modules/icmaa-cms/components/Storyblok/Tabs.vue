@@ -1,42 +1,36 @@
 <template>
   <div>
-    <!--Tabs navigation-->
-    <ul
-      class="mb-5 flex list-none flex-row flex-wrap border-b-0 pl-0"
-      role="tablist"
-      data-te-nav-ref
-    >
+    <ul class="t-m-0 t-list-none t-bg-primary t-px-2.5 t-py-0 t-text-center">
       <li
-      v-for="(tab, index) in block"
-      :key="index"
-      role="presentation">
-        <a
-          href="#tabs-home"
-          class="my-2 block border-x-0 border-b-2 border-t-0 border-transparent px-7 pb-3.5 pt-4 text-xs font-medium uppercase leading-tight text-neutral-500 hover:isolate hover:border-transparent hover:bg-neutral-100 focus:isolate focus:border-transparent data-[te-nav-active]:border-primary data-[te-nav-active]:text-primary dark:text-neutral-400 dark:hover:bg-transparent dark:data-[te-nav-active]:border-primary-400 dark:data-[te-nav-active]:text-primary-400"
-          data-te-toggle="pill"
-          data-te-target="#tabs-home"
-          data-te-nav-active
-          role="tab"
-          aria-controls="tabs-home"
-          aria-selected="true"
-        >{{ tab.headline }}</a>
+        v-for="(item, index) in headlineItems"
+        :key="index"
+        class="t-inline-block t-text-white"
+      >
+        <input
+          :id="'tab-' + item._uid"
+          v-model="selectedTab"
+          type="radio"
+          class="tab-input t-hidden"
+          name="tabs"
+          :value="index"
+        >
+        <label
+          :for="'tab-' + item._uid"
+          class="tab-label t-inline-block t-cursor-pointer t-p-5"
+        >{{ item.headline }}</label>
       </li>
     </ul>
 
-    <!--Tabs content-->
-
-    <div class="mb-6">
-      <div
-        v-for="(tab, _uid) in block"
-        :key="_uid"
-        id="tabs-home"
-        class="hidden opacity-100 transition-opacity duration-150 ease-linear data-[te-tab-active]:block"
-        role="tabpanel"
-        aria-labelledby="tabs-home-tab"
-        data-te-tab-active
-      >
-        <img :src="tab.asset.filename"/>
-      </div>
+    <div class="image-container">
+      <router-link :to="block[selectedTab + 1].component_link">
+        <img
+          v-if="selectedTab !== null"
+          class="t-h-auto t-max-w-full"
+          :src="block[selectedTab + 1].asset.filename"
+          :alt="block[selectedTab + 1].asset.alt"
+          :title="block[selectedTab + 1].asset.title"
+        >
+      </router-link>
     </div>
   </div>
 </template>
@@ -44,12 +38,6 @@
 <script lang="
     ts"
   >
-/* import {
-  Tab,
-  initTE
-} from 'tw-elements';
-
-initTE({ Tab }); */
 
 export default {
   name: 'Tabs',
@@ -62,7 +50,24 @@ export default {
       type: Array,
       required: true
     }
+  },
+  data () {
+    return {
+      selectedTab: 0 // show first tab
+    };
+  },
+  computed: {
+    headlineItems () {
+      return this.block.filter(item => item.component === 'component_headline');
+    }
   }
+};
 
-}
 </script>
+
+<style>
+.tab-input:checked + .tab-label,
+.tab-label:hover {
+  background-color: rgb(77, 7, 22) ;
+}
+</style>
