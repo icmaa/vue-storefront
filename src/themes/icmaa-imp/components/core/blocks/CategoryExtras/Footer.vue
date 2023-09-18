@@ -8,9 +8,9 @@
       class="t-mb-8 t-px-4 md:t-mb-0"
     >
       <h2
-        v-if="categoryExtras.title"
+        v-if="description && category.title"
         class="t-any category-footer__headline"
-        v-text="categoryExtras.title"
+        v-text="category.title"
       />
       <component
         :is="descriptionComponent"

@@ -15,7 +15,7 @@
           <div class="t--mx-1 t-flex t-flex-wrap t-items-center lg:t--mx-2">
             <div class="t-mb-4 t-flex t-w-full t-items-baseline t-px-1 md:t-px-2">
               <h1 class="category-title t-pr-2 t-text-2xl t-font-light t-text-base-dark">
-                {{ category.name | htmlDecode }}
+                {{ category.title || category.name | htmlDecode }}
               </h1>
               <span class="t-inline-block t-text-sm t-font-extralight t-leading-7 t-text-base-light">
                 <span data-test-id="productsTotal">{{ productsTotal }}</span> {{ $t('items') }}
