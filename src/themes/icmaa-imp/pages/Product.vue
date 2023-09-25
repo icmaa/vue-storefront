@@ -197,6 +197,7 @@
           :title="$t('You may like these too')"
           event-type="detail-page-view"
           serving-configs="others-you-may-like"
+          :filter="genderRecoFilter"
           class="lg:t-mb-8"
         />
       </Lazyload>
@@ -206,6 +207,7 @@
           :title="$t('Similar products')"
           event-type="detail-page-view"
           serving-configs="similar_products"
+          :filter="genderRecoFilter"
           class="lg:t-mb-8"
         />
       </Lazyload>
@@ -404,6 +406,12 @@ export default {
         { media: 'xs', width: 640 },
         { width: 415 }
       ]
+    },
+    genderRecoFilter () {
+      if (this.product?.gender) {
+        return `genders: ANY("${this.product?.gender}")`
+      }
+      return ''
     }
   },
   watch: {

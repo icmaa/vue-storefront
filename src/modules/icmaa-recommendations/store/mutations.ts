@@ -7,7 +7,8 @@ const mutations: MutationTree<RecommendationsState> = {
     let list: Recommendations = state.list
       .find(i => i.productId === payload.productId &&
           i.eventType === payload.eventType &&
-          i.servingConfigs === payload.servingConfigs
+          i.servingConfigs === payload.servingConfigs &&
+          i.filter === payload.filter
       )
 
     if (list) {

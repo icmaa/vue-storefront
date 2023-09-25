@@ -37,6 +37,7 @@
         :title="$t('Recently viewed')"
         event-type="home-page-view"
         serving-configs="recently_viewed_default"
+        :filter="genderRecoFilter"
         :use-current-product="false"
         class="t-px-4 lg:t-mb-8"
       />
@@ -66,6 +67,7 @@
         :title="$t('Recommended for you')"
         event-type="home-page-view"
         serving-configs="recommended-for-you"
+        :filter="genderRecoFilter"
         :use-current-product="false"
         class="t-px-4 lg:t-mb-8"
       />
@@ -114,6 +116,7 @@ export default {
     ...mapGetters({
       isLoggedIn: 'user/isLoggedIn',
       cluster: 'user/getCluster',
+      gender: 'user/getGender',
       getJsonBlockByIdentifier: 'icmaaCmsBlock/getJsonBlockByIdentifier'
     }),
     topCategories () {
@@ -133,6 +136,14 @@ export default {
 
         return Object.assign(line, { logos })
       })
+    },
+    genderRecoFilter () {
+      const { genderProductMap } = config.icmaa.user
+      const gender = genderProductMap[this.gender]
+      if (gender) {
+        return `genders: ANY("${gender}")`
+      }
+      return ''
     },
     blogFromDate () {
       return getCurrentStoreviewDayjsDatetime()
