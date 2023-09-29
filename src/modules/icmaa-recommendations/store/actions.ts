@@ -9,7 +9,7 @@ import addDefaultProductFilter from 'icmaa-catalog/helpers/defaultProductFilter'
 import * as types from './mutation-types'
 
 const actions: ActionTree<RecommendationsState, RootState> = {
-  async single ({ commit, dispatch, getters, rootGetters }, { product, eventType, servingConfigs, size }): Promise<Recommendations|boolean> {
+  async single ({ commit, dispatch, getters, rootGetters }, { product, eventType, servingConfigs, size = 4, filter = '' }): Promise<Recommendations|boolean> {
     const visitorId = getters.getGAVisitorId
     if (!visitorId) return false
 
@@ -30,7 +30,8 @@ const actions: ActionTree<RecommendationsState, RootState> = {
       eventType,
       servingConfigs: servingConfigs || 'recommended-for-you',
       userEvent: { productDetails },
-      pageSize: size + 4
+      pageSize: size + 4,
+      filter
     }).then(resp => {
       if (resp.code !== 200) return []
       return resp.result || []
@@ -59,7 +60,7 @@ const actions: ActionTree<RecommendationsState, RootState> = {
     }
 
     const productId: string = product?.id || null
-    const payload = { productId, eventType, servingConfigs, products }
+    const payload = { productId, eventType, servingConfigs, products, filter }
     commit(types.ICMAA_RECOMMENDATIONS_ADD, payload)
 
     return payload

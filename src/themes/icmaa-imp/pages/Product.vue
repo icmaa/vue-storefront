@@ -197,6 +197,7 @@
           :title="$t('You may like these too')"
           event-type="detail-page-view"
           serving-configs="others-you-may-like"
+          :filter="genderRecoFilter"
           class="lg:t-mb-8"
         />
       </Lazyload>
@@ -206,6 +207,7 @@
           :title="$t('Similar products')"
           event-type="detail-page-view"
           serving-configs="similar_products"
+          :filter="genderRecoFilter"
           class="lg:t-mb-8"
         />
       </Lazyload>
@@ -320,6 +322,7 @@ export default {
       configuration: 'product/getCurrentProductConfiguration',
       isCurrentBundleOptionsSelection: 'product/isCurrentBundleOptionsSelection',
       currentBundleOptions: 'product/getCurrentBundleOptions',
+      getGenderByProductId: 'user/getGenderByProductId',
       viewport: 'ui/getViewport'
     }),
     image () {
@@ -404,6 +407,13 @@ export default {
         { media: 'xs', width: 640 },
         { width: 415 }
       ]
+    },
+    genderRecoFilter () {
+      if (this.product?.gender) {
+        const gender = this.getGenderByProductId(this.product.gender)
+        if (gender) return `genders: ANY("${gender.toUpperCase()}")`
+      }
+      return ''
     }
   },
   watch: {
