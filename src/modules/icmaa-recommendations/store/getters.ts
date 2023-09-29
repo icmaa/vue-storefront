@@ -12,9 +12,9 @@ const getters: GetterTree<RecommendationsState, RootState> = {
     }
   },
   getList: (state): Recommendations[] => state.list,
-  getByTypeAndProductId: (state, getters) => (productId: string | null, eventType: string, servingConfigs: string): Recommendations =>
+  getByTypeAndProductId: (state, getters) => (productId: string | null, eventType: string, servingConfigs: string, filter: string): Recommendations =>
     getters.getList
-      .find(r => (r.productId === productId) && r.eventType === eventType && r.servingConfigs === servingConfigs)
+      .find(r => (r.productId === productId) && r.eventType === eventType && r.servingConfigs === servingConfigs && r.filter === filter)
 }
 
 export default getters

@@ -37,6 +37,10 @@ export default {
       type: String,
       default: 'recommended-for-you'
     },
+    filter: {
+      type: String,
+      default: ''
+    },
     useCurrentProduct: {
       type: Boolean,
       default: true
@@ -57,7 +61,7 @@ export default {
       visitorId: 'icmaaRecommendations/getGAVisitorId'
     }),
     recommendations () {
-      return this.getRecommendations(this.product?.id || null, this.eventType, this.servingConfigs)
+      return this.getRecommendations(this.product?.id || null, this.eventType, this.servingConfigs, this.filter)
     },
     product () {
       return this.useCurrentProduct ? this.currentProduct || null : null
@@ -67,7 +71,10 @@ export default {
     }
   },
   watch: {
-    async product (product) {
+    async product () {
+      return this.fetchRelated()
+    },
+    async filter () {
       return this.fetchRelated()
     }
   },
@@ -83,7 +90,8 @@ export default {
           eventType: this.eventType,
           servingConfigs: this.servingConfigs,
           product: this.product,
-          size: this.limit
+          size: this.limit,
+          filter: this.filter
         }
       )
     }
