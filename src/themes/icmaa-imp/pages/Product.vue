@@ -322,6 +322,7 @@ export default {
       configuration: 'product/getCurrentProductConfiguration',
       isCurrentBundleOptionsSelection: 'product/isCurrentBundleOptionsSelection',
       currentBundleOptions: 'product/getCurrentBundleOptions',
+      getGenderByProductId: 'user/getGenderByProductId',
       viewport: 'ui/getViewport'
     }),
     image () {
@@ -409,7 +410,8 @@ export default {
     },
     genderRecoFilter () {
       if (this.product?.gender) {
-        return `genders: ANY("${this.product?.gender}")`
+        const gender = this.getGenderByProductId(this.product.gender)
+        if (gender) return `genders: ANY("${gender.toUpperCase()}")`
       }
       return ''
     }

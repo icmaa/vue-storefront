@@ -71,7 +71,10 @@ export default {
     }
   },
   watch: {
-    async product (product) {
+    async product () {
+      return this.fetchRelated()
+    },
+    async filter () {
       return this.fetchRelated()
     }
   },

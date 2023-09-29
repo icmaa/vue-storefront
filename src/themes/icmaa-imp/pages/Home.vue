@@ -138,10 +138,9 @@ export default {
       })
     },
     genderRecoFilter () {
-      const { genderProductMap } = config.icmaa.user
-      const gender = genderProductMap[this.gender]
+      const gender = this.gender || null
       if (gender) {
-        return `genders: ANY("${gender}")`
+        return `genders: ANY("${gender.toUpperCase()}")`
       }
       return ''
     },

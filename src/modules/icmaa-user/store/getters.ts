@@ -34,6 +34,10 @@ const getters: GetterTree<UserState, RootState> = {
     const currentGenderId = getters.getSessionData('gender')
     const { genderProductMap: genderMap } = icmaa.user
     return invert(genderMap)[currentGenderId] || false
+  },
+  getGenderByProductId: () => (id: number): string|false => {
+    const { genderProductMap: genderMap } = icmaa.user
+    return invert(genderMap)[id] || false
   }
 }
 
