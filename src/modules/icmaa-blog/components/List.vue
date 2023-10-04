@@ -2,8 +2,8 @@
   <div>
     <slot>
       <CategoryHeadline
-        v-if="category || headline"
-        :category="category || { name: headline }"
+        v-if="aggrHeadline"
+        :category="aggrHeadline"
         :level="headlineLevel"
       />
     </slot>
@@ -124,6 +124,11 @@ export default {
     }
   },
   computed: {
+    aggrHeadline () {
+      if (this.headline && this.headline !== '') return { ...this.category, name: this.headline }
+      if (this.category) return this.category
+      return null
+    },
     showPrevPagination (): boolean {
       if (!this.pagination) return false
       const { start } = this.pagination

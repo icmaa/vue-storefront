@@ -4,7 +4,7 @@
     class="t-mb-4 t-flex t-flex-wrap t-items-baseline t-pr-2 t-text-xl t-text-base-dark"
   >
     <router-link
-      v-if="!isBlogPage"
+      v-if="!isBlogPage && category.url"
       :to="localizedRoute(category.url === 'root' ? { name: 'icmaa-blog-home' } : { name: 'icmaa-blog', params: { identifier: category.url } })"
       :title="$t('Show all articles')"
       class="hover:t-underline"
