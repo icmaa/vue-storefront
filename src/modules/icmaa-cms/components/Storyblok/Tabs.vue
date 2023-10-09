@@ -16,7 +16,7 @@
         >
         <label
           :for="'tab-' + item._uid"
-          class="tab-label t-inline-block t-cursor-pointer t-p-5"
+          class="tab-label t-inline-block t-cursor-pointer t-p-2 md:t-p-5"
         >{{ item.headline }}</label>
       </li>
     </ul>
