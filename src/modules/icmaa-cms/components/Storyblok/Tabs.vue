@@ -22,22 +22,20 @@
     </ul>
 
     <div class="image-container">
-      <router-link :to="block[selectedTab + 1].component_link">
-        <img
-          v-if="selectedTab !== null"
-          class="t-h-auto t-max-w-full"
-          :src="block[selectedTab + 1].asset.filename"
-          :alt="block[selectedTab + 1].asset.alt"
-          :title="block[selectedTab + 1].asset.title"
-        >
-      </router-link>
+      <div v-if="selectedTab !== null">
+        <router-link :to="block[getTabIndex(selectedTab)].component_link">
+          <img
+            class="t-h-auto t-max-w-full"
+            :src="block[getTabIndex(selectedTab)].asset.filename"
+            :alt="block[getTabIndex(selectedTab)].asset.alt"
+            :title="block[getTabIndex(selectedTab)].asset.title"
+          >
+        </router-link>
+      </div>
     </div>
   </div>
 </template>
-
-<script lang="
-    ts"
-  >
+<script>
 
 export default {
   name: 'Tabs',
@@ -59,6 +57,11 @@ export default {
   computed: {
     headlineItems () {
       return this.block.filter(item => item.component === 'component_headline');
+    }
+  },
+  methods: {
+    getTabIndex (tabIndex) {
+      return tabIndex * 2 + 1;
     }
   }
 };
