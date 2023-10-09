@@ -57,6 +57,12 @@ export default {
   computed: {
     headlineItems () {
       return this.block.filter(item => item.component === 'component_headline');
+    },
+    defaultImage () {
+      return {
+        src: this.getImageWithSize(this.image, this.width, this.height),
+        srcAt2x: this.getImageWithSize(this.image, this.width * 2, this.height * 2)
+      }
     }
   },
   methods: {

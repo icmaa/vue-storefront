@@ -58,7 +58,6 @@ const AsyncInstagramPost = () => import(/* webpackChunkName: "vsf-content-block-
 const AsyncTikTokPost = () => import(/* webpackChunkName: "vsf-content-block-tiktok-post" */ 'icmaa-cms/components/Storyblok/TikTokPost')
 const AsyncTwitter = () => import(/* webpackChunkName: "vsf-content-block-twitter" */ 'icmaa-cms/components/Storyblok/Twitter')
 const AsyncYouTube = () => import(/* webpackChunkName: "vsf-content-block-youtube" */ 'icmaa-cms/components/Storyblok/YouTube')
-const AsyncYouTube1 = () => import(/* webpackChunkName: "vsf-content-block-youtube1" */ 'icmaa-cms/components/Storyblok/YouTube1')
 const AsyncTabs = () => import(/* webpackChunkName: "vsf-content-block-tabs" */ 'icmaa-cms/components/Storyblok/Tabs')
 const AsyncSpotify = () => import(/* webpackChunkName: "vsf-content-block-spotify" */ 'icmaa-cms/components/Storyblok/Spotify')
 const AsyncBlogList = () => import(/* webpackChunkName: "vsf-content-block-blog-list" */ 'icmaa-blog/components/ListWrapper')
@@ -213,13 +212,6 @@ export default {
         },
         'component_youtube': {
           component: AsyncYouTube,
-          propsTypes: {},
-          propsDefaults: {},
-          cssClass: 't-mb-4',
-          padding: true
-        },
-        'component_youtube1': {
-          component: AsyncYouTube1,
           propsTypes: {},
           propsDefaults: {},
           cssClass: 't-mb-4',

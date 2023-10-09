@@ -5,10 +5,12 @@
       ratio="16:9"
       icon="youtube"
       icon-set="icmaa"
-      class="t-mx-auto t-max-w-lg"
+      class="t-mx-auto"
+      :class="{'t-max-w-lg': !size }"
     >
       <iframe
-        class="youtube-video t-mx-auto t-max-w-lg"
+        class="youtube-video t-mx-auto"
+        :class="{ 't-max-w-lg': !size }"
         :src="src"
         title="YouTube video player"
         frameborder="0"
@@ -29,6 +31,10 @@ export default {
     id: {
       type: String,
       required: true
+    },
+    size: {
+      type: Boolean,
+      default: false
     }
   },
   computed: {
