@@ -50,7 +50,6 @@ const AsyncHeadline = () => import(/* webpackChunkName: "vsf-content-block-headl
 const AsyncText = () => import(/* webpackChunkName: "vsf-content-block-text" */ 'theme/components/core/blocks/RichText')
 const AsyncPicture = () => import(/* webpackChunkName: "vsf-content-block-picture" */ 'theme/components/core/blocks/Picture')
 const AsyncProductlisting = () => import(/* webpackChunkName: "vsf-content-block-productlisting" */ 'icmaa-category/components/ProductListingWidget')
-const AsyncTicketlisting = () => import(/* webpackChunkName: "vsf-content-block-ticketlisting" */ 'icmaa-category/components/TicketListingWidget')
 const AsyncProductlistingticketposter = () => import(/* webpackChunkName: "vsf-content-block-productlistingticketposter" */ 'icmaa-category/components/ProductListingTicketWidget')
 const AsyncCategorylist = () => import(/* webpackChunkName: "vsf-content-block-categorylist" */ 'icmaa-category/components/List/List')
 const AsyncLinkList = () => import(/* webpackChunkName: "vsf-content-block-linklist" */ 'theme/components/core/blocks/CategoryExtras/LinkList')
@@ -58,7 +57,6 @@ const AsyncInstagramPost = () => import(/* webpackChunkName: "vsf-content-block-
 const AsyncTikTokPost = () => import(/* webpackChunkName: "vsf-content-block-tiktok-post" */ 'icmaa-cms/components/Storyblok/TikTokPost')
 const AsyncTwitter = () => import(/* webpackChunkName: "vsf-content-block-twitter" */ 'icmaa-cms/components/Storyblok/Twitter')
 const AsyncYouTube = () => import(/* webpackChunkName: "vsf-content-block-youtube" */ 'icmaa-cms/components/Storyblok/YouTube')
-const AsyncTabs = () => import(/* webpackChunkName: "vsf-content-block-tabs" */ 'icmaa-cms/components/Storyblok/Tabs')
 const AsyncSpotify = () => import(/* webpackChunkName: "vsf-content-block-spotify" */ 'icmaa-cms/components/Storyblok/Spotify')
 const AsyncBlogList = () => import(/* webpackChunkName: "vsf-content-block-blog-list" */ 'icmaa-blog/components/ListWrapper')
 const AsyncStoryblokAsset = () => import(/* webpackChunkName: "vsf-content-block-storyblog-asset" */ 'icmaa-cms/components/Storyblok/Asset')
@@ -143,20 +141,9 @@ export default {
           propsTypes: {
             limit: 'number',
             categoryId: 'number',
-            filter: 'json'
-          },
-          propsDefaults: {
-            filter: {}
-          },
-          cssClass: 't-mb-4',
-          padding: false
-        },
-        'component_ticketlisting': {
-          component: AsyncTicketlisting,
-          propsTypes: {
-            limit: 'number',
-            categoryId: 'number',
-            filter: 'json'
+            filter: 'json',
+            lazyload: 'boolean',
+            showAsTicketList: 'boolean'
           },
           propsDefaults: {
             filter: {}
@@ -212,13 +199,6 @@ export default {
         },
         'component_youtube': {
           component: AsyncYouTube,
-          propsTypes: {},
-          propsDefaults: {},
-          cssClass: 't-mb-4',
-          padding: true
-        },
-        'component_tabs': {
-          component: AsyncTabs,
           propsTypes: {},
           propsDefaults: {},
           cssClass: 't-mb-4',
