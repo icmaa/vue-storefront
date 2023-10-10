@@ -96,6 +96,7 @@
           :is="ProductListingTicket"
           v-if="isInTicketWhitelist"
           :products="getCategoryProducts"
+          class="t-mb-8 t-px-4"
         />
         <ProductListing
           v-else

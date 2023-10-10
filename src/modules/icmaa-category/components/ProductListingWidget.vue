@@ -4,6 +4,7 @@
     v-if="showAsTicketList"
     data-test-id="TicketListingWidget"
     :products="products"
+    class="t-px-4"
   />
   <div
     v-else

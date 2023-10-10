@@ -111,7 +111,7 @@ export default {
             placeholder: true,
             columnClass: 't-w-1/3 md:t-w-1/6 lg:t-w-1/4 t-pb-2'
           },
-          cssClass: 't-mb-4 lg:t-mb-6',
+          cssClass: 't-mb-4',
           padding: true
         },
         'component_headline': {
