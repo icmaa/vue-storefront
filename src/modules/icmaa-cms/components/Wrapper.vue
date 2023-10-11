@@ -60,6 +60,7 @@ const AsyncYouTube = () => import(/* webpackChunkName: "vsf-content-block-youtub
 const AsyncSpotify = () => import(/* webpackChunkName: "vsf-content-block-spotify" */ 'icmaa-cms/components/Storyblok/Spotify')
 const AsyncBlogList = () => import(/* webpackChunkName: "vsf-content-block-blog-list" */ 'icmaa-blog/components/ListWrapper')
 const AsyncStoryblokAsset = () => import(/* webpackChunkName: "vsf-content-block-storyblog-asset" */ 'icmaa-cms/components/Storyblok/Asset')
+const AsyncStoryblokImageTabs = () => import(/* webpackChunkName: "vsf-content-block-storyblog-image-tabs" */ 'icmaa-cms/components/Storyblok/ImageTabs')
 
 const rteComponentOptions = {
   component: AsyncText,
@@ -230,6 +231,15 @@ export default {
             sizes: 'json',
             width: 'number',
             height: 'number'
+          },
+          propsDefaults: {},
+          cssClass: 't-mb-4',
+          padding: true
+        },
+        'component_image_tabs': {
+          component: AsyncStoryblokImageTabs,
+          propsTypes: {
+            images: 'json'
           },
           propsDefaults: {},
           cssClass: 't-mb-4',
