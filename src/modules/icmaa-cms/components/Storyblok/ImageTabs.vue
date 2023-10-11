@@ -18,26 +18,33 @@
         </div>
       </div>
     </div>
-    <div class="images">
+    <div class="images t-overflow-hidden">
       <div
-        v-for="(img, i) in images"
-        :key="'image-' + i"
-        :class="{ 't-hidden': current !== i}"
+        class="scroller t-flex"
+        :style="{'--index': current }"
       >
-        <router-link :to="localizedRoute(img.link)">
-          <PictureComponent
-            :key="img.src"
-            :src="img.src"
-            :width="size.width"
-            :height="size.height"
-            :sizes="getSizes(img.srcMobile)"
-            :placeholder="true"
-            :preload-in-header="true"
-            :preload-in-header-prefix="'image-tab-' + i + '-'"
-            :ratio="`${size.width}:${size.height}`"
-            :alt="img.title | htmlDecode"
-          />
-        </router-link>
+        <div
+          v-for="(img, i) in images"
+          :key="'image-' + i"
+          class="t-flex-full"
+        >
+          <router-link
+            :to="localizedRoute(img.link)"
+          >
+            <PictureComponent
+              :key="img.src"
+              :src="img.src"
+              :width="size.width"
+              :height="size.height"
+              :sizes="getSizes(img.srcMobile)"
+              :placeholder="true"
+              :preload-in-header="true"
+              :preload-in-header-prefix="'image-tab-' + i + '-'"
+              :ratio="`${size.width}:${size.height}`"
+              :alt="img.title | htmlDecode"
+            />
+          </router-link>
+        </div>
       </div>
     </div>
   </div>
@@ -100,3 +107,10 @@ export default {
   }
 }
 </script>
+
+<style lang="scss">
+.scroller {
+  transform: translateX(calc(var(--index) * -100%));
+  transition: transform 300ms ease-in-out;
+}
+</style>
