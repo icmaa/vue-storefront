@@ -1,7 +1,7 @@
 <template>
   <div>
     <div
-      class="t-flex t-w-full t-flex-col t-items-center t-overflow-scroll t-hide-scrollbar t-scrolling-touch"
+      class="t-flex t-w-full t-flex-col t-overflow-scroll t-hide-scrollbar t-scrolling-touch md:t-items-center"
       :class="[ tabBackgroundStyle ]"
     >
       <div
