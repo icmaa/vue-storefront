@@ -80,7 +80,7 @@
               </template>
             </div>
           </div>
-          <Newsletter class="t-px-4 md:t-mb-0 md:t-w-1/3" />
+          <Newsletter class="t-mb-4 t-px-4 md:t-mb-0 md:t-w-1/3" />
         </div>
       </div>
     </div>
