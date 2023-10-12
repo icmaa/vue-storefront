@@ -1,7 +1,6 @@
 <template>
   <div
     id="newsletter-page"
-    :headline="content.headline"
   >
     <div class="t-container">
       <div class="t--mx-4 t-mb-8 t-flex t-flex-wrap t-px-4 md:t-mx-0 md:t-mt-4 lg:t-w-full">
@@ -54,21 +53,24 @@
           <span class="t-sr-only">{{ $t('Submit') }}</span>
         </button>
       </div>
-      <p
-        class="t-mt-4 t-text-xs t-text-base-light lg:t-mt-2"
-        v-html="content.hint"
-      />
       <i18n
         path="Data is not given to third parties and unsubscription is possible at any time. {policy}"
         tag="p"
-        class="t-mb-4 t-text-xs t-leading-none t-text-base-light"
+        class="t-mb-2 t-mt-4 t-text-xs t-leading-none t-text-base-light"
       >
         <template #policy>
-          <router-link :to="localizedRoute('/service-privacy')">
+          <router-link
+            :to="localizedRoute('/service-privacy')"
+            class="t-underline"
+          >
             {{ $t('Privacy Policy') }}
           </router-link>
         </template>
       </i18n>
+      <p
+        class="t-text-xs t-leading-none t-text-base-light"
+        v-html="content.hint"
+      />
       <NewsletterPopup v-if="loadNewsletterPopup" />
     </div>
   </div>
@@ -77,7 +79,6 @@
 <script>
 import Page from 'icmaa-cms/mixins/Page'
 import NewsletterMixin from 'theme/mixins/newsletterMixin'
-import SubscriptionStatus from '@vue-storefront/core/modules/newsletter/mixins/SubscriptionStatus'
 import MaterialIcon from 'theme/components/core/blocks/MaterialIcon'
 import PictureComponent from 'theme/components/core/blocks/Picture'
 
@@ -90,7 +91,7 @@ export default {
     NewsletterPopup,
     PictureComponent
   },
-  mixins: [ Page, NewsletterMixin, SubscriptionStatus ],
+  mixins: [ Page, NewsletterMixin ],
   data () {
     return {
       loadNewsletterPopup: false,

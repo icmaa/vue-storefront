@@ -4,10 +4,10 @@
     data-test-id="Newsletter"
   >
     <h2 class="t-mb-2 t-text-lg t-font-bold t-text-primary">
-      {{ $t('Get your {voucher_value} Voucher', { voucher_value: newsletterVoucherValue }) }}
+      {{ headline || $t('Get your {voucher_value} Voucher', { voucher_value: newsletterVoucherValue }) }}
     </h2>
     <p class="t-mb-3 t-text-sm t-leading-tight">
-      {{ $t('Get the Impericon Newsletter & and get yourself a {voucher_value} gift.', { voucher_value: newsletterVoucherValue }) }}
+      {{ description || $t('Get the Impericon Newsletter & and get yourself a {voucher_value} gift.', { voucher_value: newsletterVoucherValue }) }}
     </p>
     <div class="t-mb-2 t-flex ">
       <label
@@ -24,7 +24,7 @@
       >
       <button
         type="submit"
-        class="t-flex t-items-center t-rounded-none t-rounded-r-sm t-border t-border-l-0 t-border-base-light t-pr-2 t-text-base-tone"
+        class="t-flex t-items-center t-rounded-none t-rounded-r-sm t-border t-border-l-0 t-border-base-light t-bg-white t-pr-2 t-text-base-tone"
         @click="showNewsletterPopup"
       >
         <MaterialIcon icon="send" />
@@ -34,10 +34,13 @@
     <i18n
       path="Data is not given to third parties and unsubscription is possible at any time. {policy}"
       tag="p"
-      class="t-mb-4 t-text-xs t-leading-none t-text-base-light"
+      class="t-text-xs t-leading-none t-text-base-light"
     >
       <template #policy>
-        <router-link :to="localizedRoute('/service-privacy')">
+        <router-link
+          :to="localizedRoute('/service-privacy')"
+          class="t-underline"
+        >
           {{ $t('Privacy Policy') }}
         </router-link>
       </template>
@@ -47,7 +50,6 @@
 </template>
 
 <script>
-import SubscriptionStatus from '@vue-storefront/core/modules/newsletter/mixins/SubscriptionStatus'
 import NewsletterMixin from 'theme/mixins/newsletterMixin'
 import MaterialIcon from 'theme/components/core/blocks/MaterialIcon'
 
@@ -59,7 +61,17 @@ export default {
     MaterialIcon,
     NewsletterPopup
   },
-  mixins: [ NewsletterMixin, SubscriptionStatus ],
+  mixins: [ NewsletterMixin ],
+  props: {
+    headline: {
+      type: String,
+      default: ''
+    },
+    description: {
+      type: String,
+      default: ''
+    }
+  },
   data () {
     return {
       loadNewsletterPopup: false

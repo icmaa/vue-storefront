@@ -59,7 +59,9 @@ const AsyncTwitter = () => import(/* webpackChunkName: "vsf-content-block-twitte
 const AsyncYouTube = () => import(/* webpackChunkName: "vsf-content-block-youtube" */ 'icmaa-cms/components/Storyblok/YouTube')
 const AsyncSpotify = () => import(/* webpackChunkName: "vsf-content-block-spotify" */ 'icmaa-cms/components/Storyblok/Spotify')
 const AsyncBlogList = () => import(/* webpackChunkName: "vsf-content-block-blog-list" */ 'icmaa-blog/components/ListWrapper')
+const AsyncNewsletter = () => import(/* webpackChunkName: "vsf-content-block-newsletter" */ 'icmaa-cms/components/Storyblok/NewsletterSubscription')
 const AsyncStoryblokAsset = () => import(/* webpackChunkName: "vsf-content-block-storyblog-asset" */ 'icmaa-cms/components/Storyblok/Asset')
+const AsyncStoryblokImageTabs = () => import(/* webpackChunkName: "vsf-content-block-storyblog-image-tabs" */ 'icmaa-cms/components/Storyblok/ImageTabs')
 
 const rteComponentOptions = {
   component: AsyncText,
@@ -111,7 +113,7 @@ export default {
             placeholder: true,
             columnClass: 't-w-1/3 md:t-w-1/6 lg:t-w-1/4 t-pb-2'
           },
-          cssClass: 't-mb-4 lg:t-mb-6',
+          cssClass: 't-mb-4',
           padding: true
         },
         'component_headline': {
@@ -141,7 +143,9 @@ export default {
           propsTypes: {
             limit: 'number',
             categoryId: 'number',
-            filter: 'json'
+            filter: 'json',
+            lazyload: 'boolean',
+            showAsTicketList: 'boolean'
           },
           propsDefaults: {
             filter: {}
@@ -221,6 +225,13 @@ export default {
           cssClass: 't-mb-4',
           padding: true
         },
+        'component_newsletter': {
+          component: AsyncNewsletter,
+          propsTypes: {},
+          propsDefaults: {},
+          cssClass: 't-mb-4',
+          padding: true
+        },
         'component_asset': {
           component: AsyncStoryblokAsset,
           propsTypes: {
@@ -228,6 +239,15 @@ export default {
             sizes: 'json',
             width: 'number',
             height: 'number'
+          },
+          propsDefaults: {},
+          cssClass: 't-mb-4',
+          padding: true
+        },
+        'component_image_tabs': {
+          component: AsyncStoryblokImageTabs,
+          propsTypes: {
+            images: 'json'
           },
           propsDefaults: {},
           cssClass: 't-mb-4',

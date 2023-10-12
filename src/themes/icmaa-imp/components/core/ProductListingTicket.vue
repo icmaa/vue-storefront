@@ -1,5 +1,5 @@
 <template>
-  <div class="product-listing t-mb-8 t-px-4">
+  <div class="product-listing">
     <ul>
       <template v-for="(product, i) in products">
         <ProductTileTicket

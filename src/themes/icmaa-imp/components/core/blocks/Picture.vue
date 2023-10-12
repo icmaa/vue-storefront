@@ -90,6 +90,10 @@ export default {
     preloadInHeader: {
       type: Boolean,
       default: false
+    },
+    preloadInHeaderPrefix: {
+      type: String,
+      default: 'category-header-image-'
     }
   },
   data () {
@@ -211,7 +215,7 @@ export default {
     if (!this.preloadInHeader) return {}
 
     const link = []
-    const sourceImages = this.sourceImages.map(img => {
+    const sourceImages = cloneDeep(this.sourceImages).map(img => {
       const regex = /(min-width|max-width):\s([0-9]+)(\w+)/gm
       img.media = [...img.media.matchAll(regex)].map(([txt, scale, value, unit]) => ({ scale, value, unit }))
       return img
@@ -230,7 +234,7 @@ export default {
       mediaStr = mediaStr.map(m => `(${m.scale}: ${m.value}${m.unit})`).join(' and ')
 
       link.push({
-        vmid: 'category-header-image-' + (i + 1),
+        vmid: this.preloadInHeaderPrefix + (i + 1),
         rel: 'preload',
         as: 'image',
         imagesrcset: srcset,

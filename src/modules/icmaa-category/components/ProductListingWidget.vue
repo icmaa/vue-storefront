@@ -1,8 +1,16 @@
 <template>
+  <component
+    :is="AsyncProductListingTicket"
+    v-if="showAsTicketList"
+    data-test-id="TicketListingWidget"
+    :products="products"
+    class="t-px-4"
+  />
   <div
+    v-else
     data-test-id="ProductListingWidget"
     class="product-listing t-flex t-flex-wrap t-justify-start lg:t--mx-2"
-    :class="[ appearance ] "
+    :class="[ appearance ]"
   >
     <template v-for="(product) in products">
       <ProductTile
@@ -18,6 +26,8 @@
 <script>
 import ProductTile from 'theme/components/core/ProductTile'
 import { mapGetters } from 'vuex'
+
+const AsyncProductListingTicket = () => import(/* webpackChunkName: "vsf-product-listing-ticket" */ 'theme/components/core/ProductListingTicket')
 
 export default {
   name: 'ProductListingWidget',
@@ -49,6 +59,15 @@ export default {
     appearance: {
       type: String,
       default: 't-px-3 lg:t-px-4'
+    },
+    showAsTicketList: {
+      type: Boolean,
+      default: false
+    }
+  },
+  data () {
+    return {
+      AsyncProductListingTicket
     }
   },
   computed: {
