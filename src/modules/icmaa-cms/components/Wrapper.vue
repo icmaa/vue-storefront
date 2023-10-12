@@ -59,6 +59,7 @@ const AsyncTwitter = () => import(/* webpackChunkName: "vsf-content-block-twitte
 const AsyncYouTube = () => import(/* webpackChunkName: "vsf-content-block-youtube" */ 'icmaa-cms/components/Storyblok/YouTube')
 const AsyncSpotify = () => import(/* webpackChunkName: "vsf-content-block-spotify" */ 'icmaa-cms/components/Storyblok/Spotify')
 const AsyncBlogList = () => import(/* webpackChunkName: "vsf-content-block-blog-list" */ 'icmaa-blog/components/ListWrapper')
+const AsyncNewsletter = () => import(/* webpackChunkName: "vsf-content-block-newsletter" */ 'icmaa-cms/components/Storyblok/NewsletterSubscription')
 const AsyncStoryblokAsset = () => import(/* webpackChunkName: "vsf-content-block-storyblog-asset" */ 'icmaa-cms/components/Storyblok/Asset')
 const AsyncStoryblokImageTabs = () => import(/* webpackChunkName: "vsf-content-block-storyblog-image-tabs" */ 'icmaa-cms/components/Storyblok/ImageTabs')
 
@@ -221,6 +222,13 @@ export default {
           propsDefaults: {
             query: {}
           },
+          cssClass: 't-mb-4',
+          padding: true
+        },
+        'component_newsletter': {
+          component: AsyncNewsletter,
+          propsTypes: {},
+          propsDefaults: {},
           cssClass: 't-mb-4',
           padding: true
         },
