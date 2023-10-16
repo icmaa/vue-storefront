@@ -22,9 +22,9 @@
 
 <script>
 import Page from 'icmaa-cms/mixins/Page'
-import Layout from 'theme/components/core/blocks/ICMAA/Cms/Pages/Service/Layout'
-import SizeLayout from 'theme/components/core/blocks/ICMAA/Cms/Pages/Service/Size/SizeLayout'
-import ShoeLayout from 'theme/components/core/blocks/ICMAA/Cms/Pages/Service/Size/ShoeLayout'
+import Layout from 'theme/pages/Cms/Service/Layout'
+import SizeLayout from 'theme/pages/Cms/Service/Size/SizeLayout'
+import ShoeLayout from 'theme/pages/Cms/Service/Size/ShoeLayout'
 
 import omit from 'lodash-es/omit'
 
