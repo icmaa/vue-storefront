@@ -90,12 +90,12 @@
     >
       <div class="t-container t-px-4">
         <div class="t--mx-4 lg:t-flex">
-          <div class="t-flex t-w-full t-flex-wrap t-items-center t-justify-center t-leading-looser">
+          <div class="t-flex t-w-full t-flex-wrap t-items-center t-justify-center">
             <template v-for="(link, index) in metaNavigation">
               <router-link
                 :key="index"
                 :to="localizedRoute(link.route)"
-                class="t-flex-initial t-px-4 t-text-xs t-uppercase t-text-white"
+                class="t-flex-initial t-px-4 t-text-xs t-uppercase t-leading-loose t-text-white"
               >
                 {{ link.name }}
               </router-link>
@@ -103,13 +103,13 @@
             <a
               href="#"
               onClick="UC_UI.showSecondLayer(); return false;"
-              class="t-flex-initial t-px-4 t-text-xs t-uppercase t-text-white"
+              class="t-flex-initial t-px-4 t-text-xs t-uppercase t-leading-loose t-text-white"
             >
               {{ $t("Privacy Settings") }}
             </a>
             <div class="t-hidden t-flex-expand lg:t-flex" />
             <div
-              class="copyright t-hidden t-px-4 t-text-xs t-uppercase t-text-white lg:t-flex"
+              class="copyright t-hidden t-px-4 t-text-xs t-uppercase t-leading-loose t-text-white lg:t-flex"
               v-html="copyright"
             />
           </div>
