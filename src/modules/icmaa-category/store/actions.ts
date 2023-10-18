@@ -53,7 +53,7 @@ const actions: ActionTree<CategoryState, RootState> = {
 
     if (filter !== false) {
       forEach(filter, (value, key) => {
-        value = { in: [value] }
+        value = Array.isArray(value) ? { in: [...value] } : { in: [value] }
         query.applyFilter({ key, value })
       })
     }
