@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import Navigation from 'theme/components/core/blocks/ICMAA/Cms/Pages/Service/Navigation'
+import Navigation from 'theme/pages/Cms/Service/Navigation'
 
 export default {
   name: 'ServiceLayout',

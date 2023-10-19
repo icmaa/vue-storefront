@@ -47,8 +47,8 @@
 </template>
 
 <script>
-import SizeTable from 'theme/components/core/blocks/ICMAA/Cms/Pages/Service/Size/SizeTable'
-import SizeNavigation from 'theme/components/core/blocks/ICMAA/Cms/Pages/Service/Size/SizeNavigation'
+import SizeTable from 'theme/pages/Cms/Service/Size/SizeTable'
+import SizeNavigation from 'theme/pages/Cms/Service/Size/SizeNavigation'
 
 export default {
   name: 'ServiceShoeLayout',

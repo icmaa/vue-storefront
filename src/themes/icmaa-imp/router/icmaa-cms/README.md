@@ -8,7 +8,7 @@ This means that there must be a rendered component registered to specific route 
 
 ### 01. Add a new single-file-component
 
-Add a new single-file-component with a decent name in `theme/components/core/blocks/ICMAA/Cms/Pages/`.
+Add a new single-file-component with a decent name in `theme/pages/Cms/`.
 
 It's recommended to implement the default `page` mixins to your new component to have default methods and default meta-data already applied. A sample components could look like:
 ```html
@@ -50,7 +50,7 @@ body {
 Now we need to add our new single-file-component on top of `theme/router/icmaa-cms/router.ts` like:
 
 ```javascript
-const ServiceComponent = () => import(/* webpackChunkName: "vsf-icmaa-cms-page-custom-service" */ 'theme/components/core/blocks/ICMAA/Cms/Pages/Service.vue')
+const ServiceComponent = () => import(/* webpackChunkName: "vsf-icmaa-cms-page-custom-service" */ 'theme/pages/Cms/Service.vue')
 ```
 
 It's important to have a custom `webpackChunkName`, thats why we use a prefix like `vsf-icmaa-cms-page-custom-` for each new component.
