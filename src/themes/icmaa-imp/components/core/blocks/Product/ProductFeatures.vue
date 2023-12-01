@@ -70,9 +70,8 @@ export default {
 
       // Content values
       this.contentValues.forEach(option => {
-        const label = this.getAttributeLabel({ attributeKey: option.attributeCode })
         const optionLabels = option.values.map(optionId => this.getOptionLabel({ attributeKey: option.attributeCode, optionId }))
-        features.push(`${label}: ${optionLabels.join(', ')}`)
+        features.push(optionLabels.join(', '))
       })
 
       // Default features
