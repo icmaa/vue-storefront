@@ -292,19 +292,19 @@ export default {
 
 <style lang="scss" scoped>
 .t-bg-insd-container {
-  background-color: #1B1634
+  background-color: #000000
 }
 
 .t-bg-insd-box {
-  background-color: #3A2359
+  background-color: #1c1819
 }
 
 .t-bg-insd {
-  background-color: #D4BFFF
+  background-color: #cd5352
 }
 
 .t-text-insd {
-  color: #cfc8b6
+  color: #eeeeee
 }
 
 </style>
