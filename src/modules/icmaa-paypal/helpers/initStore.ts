@@ -3,8 +3,8 @@ import { Store } from 'vuex'
 
 export default async ($store: Store<PayPalState>) => {
   if (!$store.hasModule('icmaaPayPal')) {
-    const store = await import(/* webpackChunkName: "icmaa-paypal-store" */ '../store')
-    $store.registerModule('icmaaPayPal', store.icmaaPayPalStore)
+    const store = await import(/* webpackChunkName: "icmaa-payment-method-paypal" */ '../store')
+    $store.registerModule('icmaaPayPal', store.icmaaPayPalStore as any)
   }
   return $store.dispatch('icmaaPayPal/loadSdk')
 }
