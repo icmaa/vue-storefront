@@ -26,11 +26,11 @@ export default {
   },
   computed: {
     ...mapGetters({
-      currency: 'icmaaPayPal/getCurrency',
-      locale: 'icmaaPayPal/getLocale',
-      brandName: 'icmaaPayPal/getBrandName',
-      softDescriptor: 'icmaaPayPal/getSoftDescriptor',
-      referenceId: 'icmaaPayPal/getReferenceId',
+      currency: 'icmaa_paypal_checkout/getCurrency',
+      locale: 'icmaa_paypal_checkout/getLocale',
+      brandName: 'icmaa_paypal_checkout/getBrandName',
+      softDescriptor: 'icmaa_paypal_checkout/getSoftDescriptor',
+      referenceId: 'icmaa_paypal_checkout/getReferenceId',
       cartItems: 'cart/getCartItems',
       totals: 'cart/getTotals'
     }),
@@ -126,7 +126,7 @@ export default {
       }
 
       const methodCode = data?.selected_shipping_option?.id
-      let shippingMethods = await this.$store.dispatch('icmaaPayPal/getShipping', { address, methodCode })
+      let shippingMethods = await this.$store.dispatch('icmaa_paypal_checkout/getShipping', { address, methodCode })
       if (shippingMethods?.error) {
         throw Error(shippingMethods?.error)
       }
@@ -196,7 +196,7 @@ export default {
       }
 
       const { orderID: orderId, payerID: payerId } = data
-      const result = await this.$store.dispatch('icmaaPayPal/approve', { orderId, payerId })
+      const result = await this.$store.dispatch('icmaa_paypal_checkout/approve', { orderId, payerId })
       if (result?.error) {
         throw Error(result?.error)
       }
@@ -244,7 +244,7 @@ export default {
       const address = { firstname, lastname, street, city, postcode, state, country_id }
 
       const response = await this.$store.dispatch(
-        'icmaaPayPal/capture',
+        'icmaa_paypal_checkout/capture',
         { email, address, captureResponse: resp }
       )
 
@@ -261,7 +261,7 @@ export default {
       Logger.error('An error appeared during checkout:', 'icmaa-paypal', error)()
 
       let { message } = error
-      await this.$store.dispatch('icmaaPayPal/fail', { error: message })
+      await this.$store.dispatch('icmaa_paypal_checkout/fail', { error: message })
 
       this.$store.dispatch('notification/spawnNotification', {
         type: 'error',

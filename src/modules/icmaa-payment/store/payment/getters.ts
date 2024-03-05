@@ -16,6 +16,10 @@ const getters: GetterTree<PaymentState, RootState> = {
   getInfoComponentByCode: (state, getters, rootState, rootGetters) => (code: string): any => {
     if (!getters.isMethod(code)) return false
     return rootGetters[`${code}/getInfoComponent`]
+  },
+  getOrderButtonComponentByCode: (state, getters, rootState, rootGetters) => (code: string): any => {
+    if (!getters.isMethod(code)) return false
+    return rootGetters[`${code}/getOrderButtonComponent`]
   }
 }
 

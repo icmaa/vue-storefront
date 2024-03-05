@@ -11,6 +11,10 @@ export const icmaaPayPalStore = createPaymentStore<PayPalState>({
       /* webpackChunkName: "icmaa-paypal-info" */
       'icmaa-paypal/components/Checkout/Info.vue'
     ),
+    orderButtonComponent: () => import(
+      /* webpackChunkName: "icmaa-paypal-place-order-button" */
+      'icmaa-paypal/components/Checkout/PlaceOrderButton.vue'
+    ),
     isSdkLoaded: false,
     clientId: null,
     brandName: null,
