@@ -1,5 +1,9 @@
 <template>
-  <PaypalCheckoutButton class="t-mt-8" />
+  <PaypalCheckoutButton
+    class="t-mt-8"
+    :is-in-context="true"
+    :form-validation="formValidation"
+  />
 </template>
 
 <script>
@@ -9,6 +13,12 @@ export default {
   name: 'PayPalPlaceOrderButton',
   components: {
     PaypalCheckoutButton
+  },
+  props: {
+    formValidation: {
+      type: Function,
+      default: () => true
+    }
   }
 }
 </script>

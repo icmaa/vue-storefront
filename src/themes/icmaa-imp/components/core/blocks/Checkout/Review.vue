@@ -71,6 +71,7 @@
       <component
         :is="orderButtonComponent"
         v-if="orderButtonComponent"
+        :form-validation="() => { $v.$touch(); return !$v.$invalid }"
       />
       <ButtonComponent
         v-else

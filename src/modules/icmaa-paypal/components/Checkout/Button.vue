@@ -17,6 +17,14 @@ export default {
       type: String,
       default: 'gold',
       validator: (v) => ['gold', 'blue', 'silver', 'white', 'black'].includes(v)
+    },
+    isInContext: {
+      type: Boolean,
+      default: false
+    },
+    formValidation: {
+      type: Function,
+      default: () => true
     }
   },
   data () {
@@ -77,6 +85,17 @@ export default {
             action: this.goToCheckout
           },
           timeToLive: 8000
+        })
+
+        return actions.reject()
+      } else if (!this.formValidation()) {
+        this.$store.dispatch('notification/spawnNotification', {
+          type: 'warning',
+          message: this.$t(
+            'Please fill out all required fields before you can proceed with the payment.'
+          ),
+          action1: { label: this.$t('OK') },
+          timeToLive: 5000
         })
 
         return actions.reject()
