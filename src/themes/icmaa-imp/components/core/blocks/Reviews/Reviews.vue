@@ -32,6 +32,12 @@
       :product-name="productName"
       :per-page="4"
     />
+    <div
+      class="t-my-4 t-rounded-sm t-bg-white t-p-4 t-text-sm t-text-base-light"
+    >
+      <b>{{ $t('Information on the authenticity of the ratings') }}</b>
+      <p>{{ $t('We appreciate every review. To ensure that the published reviews only come from customers who have actually bought and used the products, our customer service team checks every single product review. If it is not possible to verify the purchase due to missing information (e.g. e-mail address), we decide on a case-by-case basis whether the review is helpful for other customers.') }}</p>
+    </div>
   </section>
 </template>
 
