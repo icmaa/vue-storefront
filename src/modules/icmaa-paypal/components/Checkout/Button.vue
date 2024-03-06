@@ -39,10 +39,14 @@ export default {
       brandName: 'icmaa_paypal_checkout/getBrandName',
       softDescriptor: 'icmaa_paypal_checkout/getSoftDescriptor',
       referenceId: 'icmaa_paypal_checkout/getReferenceId',
+      paymentDetails: 'checkout/getPaymentDetails',
       cartItems: 'cart/getCartItems',
       totals: 'cart/getTotals'
     }),
     grandTotal () {
+      return this.totals.find(t => t.code === 'grand_total')?.value || 0
+    },
+    grandTotalMinusShipping () {
       const shipping = this.totals.find(t => t.code === 'shipping')?.value_incl_tax || 0
       return this.totals.find(t => t.code === 'grand_total')?.value - shipping || 0
     },
@@ -61,7 +65,7 @@ export default {
             shape: 'rect',
             color: this.color,
             layout: 'horizontal',
-            label: 'checkout',
+            label: this.isInContext ? 'pay' : 'checkout',
             tagline: false
           },
           onClick: this.onClick,
@@ -104,23 +108,57 @@ export default {
       }
     },
     createOrder (data, actions) {
-      return actions.order.create({
-        application_context: {
-          brand_name: this.brandName,
-          locale: this.locale,
-          shipping_preference: 'GET_FROM_FILE'
-        },
-        purchase_units: [
-          {
-            amount: {
-              currency_code: this.currency,
-              value: round(this.grandTotal)
-            },
-            soft_descriptor: this.softDescriptor,
-            invoice_id: this.referenceId
-          }
-        ]
-      })
+      if (this.isInContext) {
+        const { firstname, lastname, street, city, postcode, region, country_id } = this.paymentDetails
+        return actions.order.create({
+          application_context: {
+            brand_name: this.brandName,
+            locale: this.locale,
+            shipping_preference: 'SET_PROVIDED_ADDRESS'
+          },
+          purchase_units: [
+            {
+              soft_descriptor: this.softDescriptor,
+              invoice_id: this.referenceId,
+              amount: {
+                currency_code: this.currency,
+                value: round(this.grandTotal)
+              },
+              shipping: {
+                name: {
+                  full_name: `${firstname} ${lastname}`
+                },
+                address: {
+                  address_line_1: street[0],
+                  address_line_2: street[1],
+                  admin_area_2: city,
+                  admin_area_1: region,
+                  postal_code: postcode,
+                  country_code: country_id
+                }
+              }
+            }
+          ]
+        })
+      } else {
+        return actions.order.create({
+          application_context: {
+            brand_name: this.brandName,
+            locale: this.locale,
+            shipping_preference: 'GET_FROM_FILE'
+          },
+          purchase_units: [
+            {
+              amount: {
+                currency_code: this.currency,
+                value: round(this.grandTotalMinusShipping)
+              },
+              soft_descriptor: this.softDescriptor,
+              invoice_id: this.referenceId
+            }
+          ]
+        })
+      }
     },
     async onShippingChange (data, actions) {
       const patchActions = []
@@ -175,7 +213,7 @@ export default {
 
       if (data?.selected_shipping_option) {
         const shippingAmount = parseFloat(data.selected_shipping_option.amount.value)
-        const totalInclShipping = this.grandTotal + shippingAmount
+        const totalInclShipping = this.grandTotalMinusShipping + shippingAmount
 
         patchActions.push({
           op: 'replace',
@@ -186,7 +224,7 @@ export default {
             breakdown: {
               item_total: {
                 currency_code: this.currency,
-                value: round(this.grandTotal)
+                value: round(this.grandTotalMinusShipping)
               },
               shipping: {
                 currency_code: this.currency,
@@ -210,7 +248,7 @@ export default {
         })
     },
     async onApprove (data, actions) {
-      if (!this.shippingMethodsLoaded) {
+      if (!this.shippingMethodsLoaded && !this.isInContext) {
         return
       }
 
