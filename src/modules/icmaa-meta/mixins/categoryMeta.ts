@@ -63,11 +63,15 @@ export default {
     }
 
     if (this.$route?.query?.p) {
-      link.push({
-        vmid: 'canonical',
-        rel: 'canonical',
-        href: config.icmaa_meta.base_url + this.$route.fullPath
-      })
+      /**
+       * #302646 We remove the pagination-param from canonical URL for an experiment
+       * @see https://www.icmaa.info/redmine/issues/302646
+       */
+      // link.push({
+      //   vmid: 'canonical',
+      //   rel: 'canonical',
+      //   href: config.icmaa_meta.base_url + this.$route.fullPath
+      // })
 
       const { page } = this.stats
       if (page > 1) {
