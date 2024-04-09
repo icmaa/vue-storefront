@@ -8,7 +8,8 @@ interface PaymentActionTree<S, R> extends ActionTree<S, R> {
 }
 
 interface PaymentGetterTree<S, R> extends GetterTree<S, R> {
-  getInfoComponent?: any
+  getInfoComponent?: any,
+  getOrderButton?: any
 }
 
 export interface PaymentStore<S, R> extends Module<S, R> {
@@ -19,5 +20,6 @@ export interface PaymentStore<S, R> extends Module<S, R> {
 
 export default interface AbstractState {
   infoComponent?: (() => Promise<any>) | boolean,
+  orderButtonComponent?: (() => Promise<any>),
   [key: string]: any
 }

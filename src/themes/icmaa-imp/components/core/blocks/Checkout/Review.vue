@@ -68,7 +68,13 @@
           </i18n>
         </BaseCheckbox>
       </template>
+      <component
+        :is="orderButtonComponent"
+        v-if="orderButtonComponent"
+        :form-validation="() => { $v.$touch(); return !$v.$invalid }"
+      />
       <ButtonComponent
+        v-else
         class="t-mt-8 t-w-full lg:t-w-auto"
         :class="{ 't-opacity-50': $v.$dirty && $v.$invalid }"
         type="primary"
