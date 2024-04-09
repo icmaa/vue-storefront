@@ -27,11 +27,16 @@ export default {
     ...mapGetters({
       shippingDetails: 'checkout/getShippingDetails',
       personalDetails: 'checkout/getPersonalDetails',
+      orderButtonComponentByCode: 'payment/getOrderButtonComponentByCode',
+      paymentMethod: 'checkout/getPaymentMethod',
       hasAgreements: 'checkout/hasAgreements',
       viewport: 'ui/getViewport'
     }),
     isMobile () {
       return ['xs', 'sm', 'md'].includes(this.viewport)
+    },
+    orderButtonComponent () {
+      return this.orderButtonComponentByCode(this.paymentMethod.code)
     }
   },
   methods: {

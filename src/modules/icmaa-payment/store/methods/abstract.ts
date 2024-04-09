@@ -16,7 +16,8 @@ const AbstractPaymentStore: Module<State, RootState> = {
     afterPlaceOrder () { }
   },
   getters: {
-    getInfoComponent: () => false
+    getInfoComponent: () => false,
+    getOrderButtonComponent: () => false
   }
 }
 
