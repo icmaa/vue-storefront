@@ -467,6 +467,7 @@
 "orderStatus_canceled","statut de commande_annulée"
 "orderStatus_complete","statut de commande_complete"
 "orderStatus_pending","statut de commande_en attente"
+"orderStatus_pending_payment","statut de commande_en attente"
 "orderStatus_preorder","statut de commande_précommande"
 "orderStatus_processing","statut de commande_en cours de traitement"
 "our search","notre recherche"

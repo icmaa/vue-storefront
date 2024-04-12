@@ -464,6 +464,7 @@
 "orderStatus_canceled","Peruttu"
 "orderStatus_complete","Lähetetty"
 "orderStatus_pending","Käsittelyssä"
+"orderStatus_pending_payment","Käsittelyssä"
 "orderStatus_preorder","Ennakkotilauksessa"
 "orderStatus_processing","Käsittelyssä"
 "our search","meidän haku"

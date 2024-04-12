@@ -467,6 +467,7 @@
 "orderStatus_canceled","Zrušeno"
 "orderStatus_complete","Odesláno"
 "orderStatus_pending","čekající"
+"orderStatus_pending_payment","čekající"
 "orderStatus_preorder","Předobjednávka"
 "orderStatus_processing","zpracovává se"
 "our search","naše hledání"

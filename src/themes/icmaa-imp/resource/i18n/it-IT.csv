@@ -466,6 +466,7 @@
 "orderStatus_canceled","Cancellato"
 "orderStatus_complete","Completato"
 "orderStatus_pending","In attesa"
+"orderStatus_pending_payment","In attesa"
 "orderStatus_preorder","In pre-order"
 "orderStatus_processing","In elaborazione"
 "our search","la nostra ricerca"

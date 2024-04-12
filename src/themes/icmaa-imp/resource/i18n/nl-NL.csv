@@ -463,6 +463,7 @@
 "orderStatus_canceled","Geannuleerd"
 "orderStatus_complete","verzonden"
 "orderStatus_pending","Wachtend"
+"orderStatus_pending_payment","Wachtend"
 "orderStatus_preorder","Pre-Order"
 "orderStatus_processing","Verwerken"
 "our search","onze zoekfunctie"

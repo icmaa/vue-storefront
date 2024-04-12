@@ -35,6 +35,7 @@ export default {
         canceled: 't-text-base-light',
         complete: 't-text-alt-3',
         pending: 't-text-alert',
+        pending_payment: 't-text-alert',
         preorder: 't-text-alt-1',
         processing: 't-text-alt-2'
       }
