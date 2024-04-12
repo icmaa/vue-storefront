@@ -9,6 +9,7 @@
 import { mapGetters } from 'vuex'
 import { round } from 'icmaa-config/helpers/price'
 import { Logger } from '@vue-storefront/core/lib/logger'
+import * as userMutationTypes from '@vue-storefront/core/modules/user/store/mutation-types'
 
 export default {
   name: 'PayPalButton',
@@ -256,6 +257,13 @@ export default {
       const result = await this.$store.dispatch('icmaa_paypal_checkout/approve', { orderId, payerId })
       if (result?.error) {
         throw Error(result?.error)
+      }
+
+      if (result?.token && result?.token !== null) {
+        this.$store.commit(
+          'user/' + userMutationTypes.USER_TOKEN_CHANGED,
+          { newToken: result.token }
+        )
       }
 
       await actions.order.patch([

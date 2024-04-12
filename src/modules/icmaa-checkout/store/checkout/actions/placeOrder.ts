@@ -55,7 +55,7 @@ const actions: ActionTree<CheckoutState, RootState> = {
       return false
     }
   },
-  async finishPlaceOrder ({ dispatch }, { order, response }) {
+  async finishPlaceOrder ({ dispatch, rootGetters }, { order, response }) {
     orderHooksExecutors.afterPlaceOrder({ order, task: response })
     EventBus.$emit('checkout-after-place-order', { order, task: response })
 
@@ -70,6 +70,8 @@ const actions: ActionTree<CheckoutState, RootState> = {
 
       const { email: username, password } = order.personalDetails
       await dispatch('user/login', { username, password }, { root: true })
+    } else if (response?.result?.token && !rootGetters['user/isLoggedIn']) {
+      await dispatch('user/startSessionWithToken', { token: response?.result?.token }, { root: true })
     }
 
     await dispatch('user/loadOrderByToken', { token: response.result.orderToken }, { root: true })
