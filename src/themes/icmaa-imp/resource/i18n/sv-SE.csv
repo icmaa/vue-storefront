@@ -464,6 +464,7 @@
 "orderStatus_canceled","avbeställd"
 "orderStatus_complete","fraktad"
 "orderStatus_pending","Väntande"
+"orderStatus_pending_payment","Väntande"
 "orderStatus_preorder","Förbeställ"
 "orderStatus_processing","Processar"
 "our search","vår sökning"

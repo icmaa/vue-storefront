@@ -460,6 +460,7 @@
 "orderStatus_canceled","Anulowane"
 "orderStatus_complete","Wysłane"
 "orderStatus_pending","W oczekiwaniu"
+"orderStatus_pending_payment","W oczekiwaniu"
 "orderStatus_preorder","Przedsprzedaż"
 "orderStatus_processing","Przetwarzanie"
 "our search","nasze wyszukiwanie"

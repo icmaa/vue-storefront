@@ -479,6 +479,7 @@
 "orderStatus_canceled","Storniert"
 "orderStatus_complete","Versandt"
 "orderStatus_pending","Ausstehend"
+"orderStatus_pending_payment","Ausstehend"
 "orderStatus_preorder","Vorbestellt"
 "orderStatus_processing","In Bearbeitung"
 "our search","unsere Suche"
